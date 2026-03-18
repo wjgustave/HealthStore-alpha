@@ -4,6 +4,7 @@
   "app_name": "COPDhub",
   "supplier_name": "Institute of Clinical Science and Technology (ICST)",
   "short_name": "COPDhub",
+  "logo_path": "/logos/copdhub.svg",
   "condition_tags": [
     "copd"
   ],
@@ -231,5 +232,31 @@
     }
   ],
   "supplier_contact_email": "support@icst.org.uk",
-  "supplier_contact_name": "ICST NHS team"
+  "supplier_contact_name": "ICST NHS team",
+  "nhs_app_integration": false,
+  "nhs_login_integration": false,
+  "nhs_notify_integration": false,
+  "monitoring_model": "Self-management with clinician dashboard for population-level oversight.",
+  "minimum_conditions_for_success": "GP practice engagement, respiratory pathway lead, integration into prescribing review workflow.",
+  "procurement_notes": "Available via direct contract with ICST. Confirm G-Cloud availability.",
+  "content_confidence": "Confirmed",
+  "cyber_notes": "Confirm current security certifications with ICST.",
+  "linked_funding_ids": ["nice-evidence-gen"],
+  "technical_integrations": {
+    "fhir": "Not confirmed",
+    "emis": "Not confirmed",
+    "nhs_app": false,
+    "population_health_dashboard": true,
+    "device_integration": "No device integration required",
+    "languages": ["English", "Welsh"],
+    "data_hosting": "UK-based servers"
+  },
+  "context_of_use": {
+    "population": "Adults with COPD across all severity levels",
+    "pathways": ["Self-management", "Inhaler technique", "Prescribing optimisation"],
+    "care_settings": ["Primary care"],
+    "therapeutic_purpose": "Self-management education, inhaler technique training, prescribing decision support",
+    "hcp_involvement": "Minimal — clinician dashboard available for population oversight",
+    "nice_scope": "NICE HTE19 (HTG736) — recommended during 3-year evidence generation period"
+  }
 }

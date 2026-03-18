@@ -72,6 +72,28 @@
 
 @layer utilities {
   .fade-up { animation: fadeUp 0.4s ease forwards; }
+
+  /* Glass-card effects (opt-in — evaluate with team before widespread adoption) */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
+  }
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glass-card:hover {
+    box-shadow: 0 8px 32px rgba(0, 94, 184, 0.12);
+    transform: translateY(-2px);
+    border-color: rgba(0, 94, 184, 0.15);
+  }
 }
 
 @keyframes fadeUp {
@@ -83,3 +105,55 @@
 ::-webkit-scrollbar-track { background: var(--surface); }
 ::-webkit-scrollbar-thumb { background: #C5CDD4; border-radius: 3px; }
 :focus-visible { outline: 3px solid #FFD800; outline-offset: 2px; border-radius: 3px; }
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: #FFD800;
+  color: #1A2332;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 0 0 6px 6px;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  html { scroll-behavior: auto; }
+  .fade-up { animation: none; opacity: 1; transform: none; }
+  .app-card:hover { transform: none; }
+}
+
+@media print {
+  header, footer, .skip-link, nav, button, [data-express-interest] { display: none !important; }
+  body { background: #fff !important; color: #000 !important; font-size: 12pt; }
+  main { padding: 0 !important; }
+  .app-card, .rounded-xl, .rounded-2xl { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
+  a[href]::after { content: " (" attr(href) ")"; font-size: 10pt; color: #666; }
+  a[href^="mailto"]::after, a[href^="/"]::after, a[href^="#"]::after { content: ""; }
+  .badge { border: 1px solid #ccc; }
+  @page { margin: 2cm; }
+}

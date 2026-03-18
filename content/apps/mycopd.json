@@ -4,6 +4,7 @@
   "app_name": "myCOPD",
   "supplier_name": "my mhealth Limited",
   "short_name": "myCOPD",
+  "logo_path": "/logos/mycopd.svg",
   "condition_tags": [
     "copd"
   ],
@@ -330,5 +331,31 @@
     }
   ],
   "supplier_contact_email": "nhs@mymhealth.com",
-  "supplier_contact_name": "my mhealth NHS team"
+  "supplier_contact_name": "my mhealth NHS team",
+  "nhs_app_integration": false,
+  "nhs_login_integration": false,
+  "nhs_notify_integration": false,
+  "monitoring_model": "Essentials: patient self-managed. Pro: clinician dashboard with remote monitoring — not 24/7.",
+  "minimum_conditions_for_success": "Respiratory clinical lead, pathway agreement with clinical teams, minimum 500 patient cohort for meaningful outcome data.",
+  "procurement_notes": "G-Cloud and direct ICB procurement routes available. 3-year contract typical.",
+  "content_confidence": "Confirmed",
+  "cyber_notes": "Cyber Essentials held (annual renewal). ISO 27001 not confirmed in reviewed sources.",
+  "linked_funding_ids": ["nhse-copd-wave2", "nice-evidence-gen"],
+  "technical_integrations": {
+    "fhir": "Not confirmed",
+    "emis": "Not confirmed",
+    "nhs_app": false,
+    "population_health_dashboard": true,
+    "device_integration": "No device integration required for Essentials tier. Pro tier supports clinician dashboard.",
+    "languages": ["English"],
+    "data_hosting": "UK/EU-based servers"
+  },
+  "context_of_use": {
+    "population": "Adults aged 18+ with COPD (all GOLD grades A–E)",
+    "pathways": ["Self-management", "Pulmonary rehabilitation", "Post-exacerbation support", "Remote monitoring (Pro)"],
+    "care_settings": ["Primary care", "Community", "Secondary care outpatients"],
+    "therapeutic_purpose": "Self-management education, inhaler technique training, home PR programme, remote symptom monitoring",
+    "hcp_involvement": "Essentials: minimal. Pro: clinician dashboard review required",
+    "nice_scope": "NICE HTE19 (HTG736) — recommended during 3-year evidence generation period"
+  }
 }

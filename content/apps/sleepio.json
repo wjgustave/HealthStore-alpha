@@ -4,6 +4,7 @@
   "app_name": "Sleepio",
   "supplier_name": "Big Health",
   "short_name": "Sleepio",
+  "logo_path": "/logos/sleepio.svg",
   "condition_tags": ["insomnia"],
   "pathway_tags": ["cbt-i", "self-management", "sleep", "mental-health-adjacent"],
   "outcome_tags": ["sleep-improvement", "self-management", "mental-health", "wellbeing"],
@@ -74,5 +75,33 @@
   "demo_notes": "Contact Big Health for a demonstration or trial access.",
   "last_reviewed_date": "2026-03-17",
   "source_summary": "NICE HTG624, Freeman et al. BMJ 2017, Big Health website.",
-  "confidence_note": "Content based on publicly available information. Verify current assurance and pricing status with Big Health before use in procurement documentation."
+  "confidence_note": "Content based on publicly available information. Verify current assurance and pricing status with Big Health before use in procurement documentation.",
+  "nhs_app_integration": true,
+  "nhs_login_integration": true,
+  "nhs_notify_integration": false,
+  "monitoring_model": "Self-management tool. Not a monitored clinical service.",
+  "minimum_conditions_for_success": "Self-referral pathway or clinician referral process. Clinician awareness of programme scope. Minimum 200 patient cohort.",
+  "procurement_notes": "Contact Big Health for NHS procurement options. Some NHS organisations have accessed via existing contracts.",
+  "content_confidence": "Confirmed",
+  "cyber_notes": "US-based company — confirm data residency and DPA terms for NHS use.",
+  "linked_funding_ids": [],
+  "supplier_contact_email": "nhs@bighealth.com",
+  "supplier_contact_name": "Big Health NHS team",
+  "technical_integrations": {
+    "fhir": "Not confirmed",
+    "emis": "Not confirmed",
+    "nhs_app": true,
+    "population_health_dashboard": false,
+    "device_integration": "No device integration required",
+    "languages": ["English"],
+    "data_hosting": "Confirm with Big Health — US-based company"
+  },
+  "context_of_use": {
+    "population": "Adults with insomnia disorder or insomnia symptoms",
+    "pathways": ["Self-management", "CBT-I", "Mental health support"],
+    "care_settings": ["Primary care", "Community", "Self-referral"],
+    "therapeutic_purpose": "Digital CBT for insomnia — structured 6-week programme",
+    "hcp_involvement": "Minimal — self-management programme",
+    "nice_scope": "NICE HTG624 (migrated from MTG70) — formal recommendation"
+  }
 }

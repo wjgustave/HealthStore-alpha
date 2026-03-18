@@ -16,8 +16,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-screen" style={{ background: 'var(--surface)' }}>
+        <a href="#main-content" className="skip-link">Skip to main content</a>
         <Nav />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <footer className="mt-20 border-t py-10 px-6" style={{ borderColor: 'var(--border)', background: '#fff' }}>
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>

@@ -4,6 +4,7 @@
   "app_name": "Clinitouch",
   "supplier_name": "Spirit Health",
   "short_name": "Clinitouch",
+  "logo_path": "/logos/clinitouch.svg",
   "condition_tags": [
     "copd"
   ],
@@ -227,5 +228,31 @@
     }
   ],
   "supplier_contact_email": "clinitouch@spirit-health.com",
-  "supplier_contact_name": "Spirit Health NHS team"
+  "supplier_contact_name": "Spirit Health NHS team",
+  "nhs_app_integration": false,
+  "nhs_login_integration": false,
+  "nhs_notify_integration": false,
+  "monitoring_model": "Active remote monitoring with clinician dashboard and automated alerts.",
+  "minimum_conditions_for_success": "Dedicated clinical monitoring team, respiratory clinical lead, minimum 200 patient cohort.",
+  "procurement_notes": "Available via NHSE ICB COPD Digital Technology Fund. G-Cloud and direct procurement routes.",
+  "content_confidence": "Confirmed",
+  "cyber_notes": "ISO 27001 certified. Cyber Essentials Plus held.",
+  "linked_funding_ids": ["nhse-copd-wave2", "nice-evidence-gen"],
+  "technical_integrations": {
+    "fhir": "Not confirmed",
+    "emis": "Integration available via Spirit Health",
+    "nhs_app": false,
+    "population_health_dashboard": true,
+    "device_integration": "Pulse oximetry, spirometry, blood pressure via connected devices",
+    "languages": ["English"],
+    "data_hosting": "UK-based servers"
+  },
+  "context_of_use": {
+    "population": "Adults with moderate-severe COPD requiring remote monitoring",
+    "pathways": ["Remote monitoring", "Post-exacerbation support", "High-risk patient management"],
+    "care_settings": ["Secondary care", "Community", "Primary care"],
+    "therapeutic_purpose": "Active remote monitoring, symptom tracking, clinical alerts, exacerbation prevention",
+    "hcp_involvement": "Active — clinician monitoring dashboard required",
+    "nice_scope": "NICE HTE19 (HTG736) — recommended during 3-year evidence generation period"
+  }
 }

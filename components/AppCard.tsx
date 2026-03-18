@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import type { App } from '@/lib/data'
 import { DtacBadge, MaturityBadge, EvidenceBadge, EffortBadge, SupervisionBadge, ConditionTag } from './Badges'
 
@@ -19,17 +20,21 @@ export default function AppCard({ app, selected, onSelect }: {
         boxShadow: selected ? `0 0 0 2px ${accentColor}33, var(--shadow-md)` : 'var(--shadow-sm)',
       }}
     >
-      {/* Accent top stripe */}
       <div className="rounded-t-xl h-1.5" style={{ background: accentColor }} />
 
       <div className="p-5 flex flex-col flex-1">
-        {/* Header */}
         <div className="flex items-start justify-between gap-2 mb-3">
-          <div>
-            <h3 className="font-bold text-base leading-tight" style={{ fontFamily: 'DM Serif Display, serif', color: 'var(--text-primary)' }}>
-              {app.app_name}
-            </h3>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{app.supplier_name}</p>
+          <div className="flex items-center gap-3">
+            {app.logo_path && (
+              <Image src={app.logo_path} alt={`${app.app_name} logo`} width={36} height={36}
+                className="rounded-lg flex-shrink-0" />
+            )}
+            <div>
+              <h3 className="font-bold text-base leading-tight" style={{ fontFamily: 'DM Serif Display, serif', color: 'var(--text-primary)' }}>
+                {app.app_name}
+              </h3>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{app.supplier_name}</p>
+            </div>
           </div>
           {onSelect && (
             <button

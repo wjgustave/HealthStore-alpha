@@ -4,6 +4,7 @@
   "app_name": "Luscii",
   "supplier_name": "Luscii Healthtech B.V. (OMRON Healthcare service)",
   "short_name": "Luscii",
+  "logo_path": "/logos/luscii.svg",
   "condition_tags": [
     "copd"
   ],
@@ -330,5 +331,31 @@
     }
   ],
   "supplier_contact_email": "nhs@luscii.com",
-  "supplier_contact_name": "Luscii NHS team"
+  "supplier_contact_name": "Luscii NHS team",
+  "nhs_app_integration": true,
+  "nhs_login_integration": false,
+  "nhs_notify_integration": false,
+  "monitoring_model": "Active remote monitoring with automated triage and clinical escalation pathways.",
+  "minimum_conditions_for_success": "Dedicated monitoring hub or virtual ward team, OMRON devices distributed to patients, IT infrastructure for device connectivity.",
+  "procurement_notes": "Available via SBRI Healthcare contract. Direct procurement with Luscii/OMRON also possible.",
+  "content_confidence": "Confirmed",
+  "cyber_notes": "Netherlands-based company — confirm data residency and DPA terms for NHS use. ISO 27001 certified.",
+  "linked_funding_ids": ["sbri-healthcare", "nice-evidence-gen"],
+  "technical_integrations": {
+    "fhir": "FHIR R4 compatible",
+    "emis": "Integration available",
+    "nhs_app": true,
+    "population_health_dashboard": true,
+    "device_integration": "OMRON pulse oximeters, blood pressure monitors, spirometers via Bluetooth",
+    "languages": ["English", "Dutch"],
+    "data_hosting": "EU-based servers (Netherlands) — confirm DPA terms"
+  },
+  "context_of_use": {
+    "population": "Adults with moderate-severe COPD or post-hospitalisation COPD patients",
+    "pathways": ["Remote monitoring", "Virtual ward", "Post-discharge support", "Population health management"],
+    "care_settings": ["Secondary care", "Virtual ward", "Community"],
+    "therapeutic_purpose": "Active remote monitoring, automated triage, early exacerbation detection, population health management",
+    "hcp_involvement": "Active — monitoring hub team required for triage and escalation",
+    "nice_scope": "NICE HTE19 (HTG736) — recommended during 3-year evidence generation period"
+  }
 }
