@@ -1,0 +1,42 @@
+[
+  {
+    "id": "copd",
+    "label": "COPD",
+    "description": "Chronic Obstructive Pulmonary Disease — self-management, exacerbation prevention and pulmonary rehabilitation",
+    "icon": "lungs",
+    "app_count": 4,
+    "colour": "#005EB8"
+  },
+  {
+    "id": "insomnia",
+    "label": "Insomnia",
+    "description": "Digital cognitive behavioural therapy for insomnia and sleep disorders",
+    "icon": "moon",
+    "app_count": 1,
+    "colour": "#330072"
+  },
+  {
+    "id": "weight_management",
+    "label": "Weight management",
+    "description": "Digital multidisciplinary weight-management services including tier 2 and tier 3 pathways",
+    "icon": "activity",
+    "app_count": 3,
+    "colour": "#007F3B"
+  },
+  {
+    "id": "msk",
+    "label": "MSK / Osteoarthritis",
+    "description": "Digital self-management and rehabilitation for hip and knee osteoarthritis",
+    "icon": "zap",
+    "app_count": 3,
+    "colour": "#D5840D"
+  },
+  {
+    "id": "eating_disorders",
+    "label": "Eating disorders",
+    "description": "Digital self-help for bulimia nervosa and related eating disorder presentations",
+    "icon": "heart",
+    "app_count": 1,
+    "colour": "#DA291C"
+  }
+]

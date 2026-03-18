@@ -1,0 +1,57 @@
+{
+  "maturity_levels": ["pilot", "limited_live", "multi_site_live", "scaled"],
+  "maturity_labels": {
+    "pilot": "Pilot",
+    "limited_live": "Limited live",
+    "multi_site_live": "Multi-site live",
+    "scaled": "Scaled"
+  },
+  "local_wraparound": ["low", "medium", "high"],
+  "supervision_models": ["self_management_only", "guided_self_help", "non_continuous_review", "active_remote_management"],
+  "supervision_labels": {
+    "self_management_only": "Self-management only",
+    "guided_self_help": "Guided self-help",
+    "non_continuous_review": "Non-continuous review",
+    "active_remote_management": "Active remote management"
+  },
+  "referral_modes": ["self_referral", "clinician_referral", "hybrid"],
+  "referral_labels": {
+    "self_referral": "Self-referral",
+    "clinician_referral": "Clinician referral",
+    "hybrid": "Hybrid"
+  },
+  "onboarding_intensity": ["minimal", "light_touch", "clinician_led"],
+  "onboarding_labels": {
+    "minimal": "Minimal",
+    "light_touch": "Light-touch",
+    "clinician_led": "Clinician-led"
+  },
+  "evidence_strength": ["emerging", "promising", "established", "scaled"],
+  "evidence_labels": {
+    "emerging": "Emerging",
+    "promising": "Promising",
+    "established": "Established",
+    "scaled": "Scaled evidence"
+  },
+  "dtac_statuses": ["passed", "passed_refresh_required", "required_not_confirmed", "not_applicable"],
+  "dtac_labels": {
+    "passed": "DTAC Passed",
+    "passed_refresh_required": "DTAC Passed – refresh required",
+    "required_not_confirmed": "DTAC required – not confirmed",
+    "not_applicable": "N/A"
+  },
+  "pricing_models": ["national_flat", "local_licence", "per_patient", "free_pilot", "bundled_service", "unknown"],
+  "pricing_labels": {
+    "national_flat": "National flat rate",
+    "local_licence": "Local licence",
+    "per_patient": "Per patient",
+    "free_pilot": "Free (pilot)",
+    "bundled_service": "Bundled service",
+    "unknown": "Not disclosed"
+  },
+  "confidence_labels": {
+    "confirmed": "Confirmed",
+    "indicative": "Indicative",
+    "not_stated": "Not stated"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "hero": {
+    "headline": "Find the right digital therapeutic for your population",
+    "subheadline": "A commissioner decision-support tool for NHS digital health technology procurement. Filter, compare and assess DTx by condition, evidence, assurance and deployment effort — in one place.",
+    "cta_label": "Browse all apps",
+    "cta_path": "/apps"
+  },
+  "value_props": [
+    { "icon": "search", "title": "Faster down-selection", "description": "Filter by condition, NICE status, DTAC, supervision model and local effort — without trawling supplier websites." },
+    { "icon": "shield", "title": "Clearer assurance view", "description": "See supplier assurance and commissioner deployment responsibilities side by side — not conflated." },
+    { "icon": "bar-chart", "title": "Business-case ready", "description": "Each app page includes evidence summary, deployment footprint, cost model, financial considerations and funding links." },
+    { "icon": "compare", "title": "Side-by-side comparison", "description": "Compare up to 4 apps at once across the dimensions that matter to commissioners — not marketing claims." }
+  ],
+  "stats": [
+    { "value": "12", "label": "Apps in catalogue", "sublabel": "across 5 condition areas" },
+    { "value": "5", "label": "NICE guidance references", "sublabel": "HTG and EVA recommendations" },
+    { "value": "4", "label": "COPD apps", "sublabel": "all NICE HTE19 recommended" },
+    { "value": "3", "label": "Funding opportunities", "sublabel": "currently open or periodic" }
+  ],
+  "featured_impact": {
+    "headline": "Real-world impact, not just theory",
+    "examples": [
+      { "metric": "6,000", "unit": "COPD patients", "detail": "enrolled in NWL ICS remote monitoring programme — 12 months ahead of target", "app_slug": "luscii" },
+      { "metric": "100%", "unit": "of Welsh GP practices", "detail": "using COPDhub — 20,303 tonnes CO₂ reduction from inhaler prescribing shift", "app_slug": "copdhub" },
+      { "metric": "67.5%", "unit": "admission reduction", "detail": "in Leicester COPD programme with Clinitouch (observational, Spirit Health affiliation declared)", "app_slug": "clinitouch" },
+      { "metric": "£86k", "unit": "per-ICB saving modelled", "detail": "by NICE MTG68 EAG for myCOPD in AECOPD pathway (CCG-era model)", "app_slug": "mycopd" }
+    ]
+  },
+  "about_note": "This prototype is a demonstration tool containing curated content based on publicly available information as of March 2026. It is not a procurement framework, a national endorsement list or a live assurance database. All information should be verified with suppliers before use in formal commissioning or procurement processes.",
+  "last_updated": "2026-03-17"
+}

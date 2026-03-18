@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@source "../app/**/*.tsx";
+@source "../components/**/*.tsx";
+
+@layer base {
+  :root {
+    --nhs-blue: #005EB8;
+    --nhs-dark: #003087;
+    --nhs-green: #007F3B;
+    --nhs-purple: #330072;
+    --nhs-red: #DA291C;
+    --nhs-amber: #D5840D;
+    --nhs-grey: #425563;
+    --surface: #F7F9FC;
+    --card: #FFFFFF;
+    --border: #DEE4EA;
+    --text-primary: #1A2332;
+    --text-secondary: #485768;
+    --text-muted: #768692;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.10);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', Arial, sans-serif;
+    background-color: var(--surface);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 { font-family: 'DM Serif Display', serif; }
+}
+
+@layer components {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    font-family: 'DM Sans', Arial, sans-serif;
+  }
+  .badge-blue { background: #E6F0FB; color: #003087; }
+  .badge-green { background: #E6F5EC; color: #004B22; }
+  .badge-purple { background: #EDE8F5; color: #1C003C; }
+  .badge-amber { background: #FEF5E6; color: #7A4800; }
+  .badge-red { background: #FDECEA; color: #7A1210; }
+  .badge-grey { background: #EEF1F3; color: #2E3F4A; }
+  .badge-teal { background: #E1F4F5; color: #004B50; }
+
+  .effort-low { background: #E6F5EC; color: #004B22; }
+  .effort-medium { background: #FEF5E6; color: #7A4800; }
+  .effort-high { background: #FDECEA; color: #7A1210; }
+
+  .app-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  .app-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: #005EB8;
+  }
+}
+
+@layer utilities {
+  .fade-up { animation: fadeUp 0.4s ease forwards; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: #C5CDD4; border-radius: 3px; }
+:focus-visible { outline: 3px solid #FFD800; outline-offset: 2px; border-radius: 3px; }
