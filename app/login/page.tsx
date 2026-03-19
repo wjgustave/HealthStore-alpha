@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff } from 'lucide-react'
 
@@ -52,13 +53,9 @@ export default function LoginPage() {
             {/* Logo and heading */}
             <div className="flex flex-col items-center mb-8">
               <div className="flex items-center gap-2.5 mb-3">
-                <svg width="36" height="36" viewBox="0 0 28 28" fill="none">
-                  <rect width="28" height="28" rx="5" fill="#005EB8"/>
-                  <path d="M7 8h3.2l2.4 8.4L15 8h3l-4 12h-3L7 8z" fill="white"/>
-                  <path d="M18.5 8H22v12h-3.5V8z" fill="white"/>
-                </svg>
+                <Image src="/logos/nhs-blue-alt.svg" alt="" width={90} height={36} className="flex-shrink-0" />
                 <span style={{ fontFamily: 'DM Serif Display, serif', fontWeight: 700, fontSize: '1.15rem', color: '#003087' }}>
-                  Commissioner DTx Store
+                  HealthStore
                 </span>
               </div>
               <span className="badge badge-blue">Prototype</span>

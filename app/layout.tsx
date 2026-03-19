@@ -3,7 +3,7 @@ import './globals.css'
 import AppShell from '@/components/AppShell'
 
 export const metadata: Metadata = {
-  title: 'NHS Commissioner DTx Store',
+  title: 'HealthStore',
   description: 'Decision-support tool for NHS digital health technology procurement',
 }
 

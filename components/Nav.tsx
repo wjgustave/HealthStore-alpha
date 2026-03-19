@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { LogOut } from 'lucide-react'
 
@@ -26,12 +27,8 @@ export default function Nav() {
       <div style={{ background: 'var(--nhs-blue)', height: 6 }} />
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
         <Link href="/" className="flex items-center gap-2 font-bold text-base" style={{ color: 'var(--nhs-dark)', fontFamily: 'DM Serif Display, serif' }}>
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <rect width="28" height="28" rx="5" fill="#005EB8"/>
-            <path d="M7 8h3.2l2.4 8.4L15 8h3l-4 12h-3L7 8z" fill="white"/>
-            <path d="M18.5 8H22v12h-3.5V8z" fill="white"/>
-          </svg>
-          <span>Commissioner DTx Store</span>
+          <Image src="/logos/nhs-blue-alt.svg" alt="" width={56} height={22} className="flex-shrink-0" />
+          <span>HealthStore</span>
         </Link>
         <div className="hidden md:flex items-center gap-1">
           {links.map(l => (

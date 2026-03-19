@@ -20,7 +20,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="font-bold text-sm" style={{ color: 'var(--nhs-blue)' }}>NHS Commissioner DTx Store</span>
+              <span className="font-bold text-sm" style={{ color: 'var(--nhs-blue)' }}>HealthStore</span>
               <span className="badge badge-blue">Prototype</span>
             </div>
             <p className="text-xs" style={{ color: 'var(--text-muted)' }}>

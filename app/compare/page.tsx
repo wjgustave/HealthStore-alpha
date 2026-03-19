@@ -2,7 +2,7 @@ import { getAllApps } from '@/lib/data'
 import CompareClient from './CompareClient'
 import { Suspense } from 'react'
 
-export const metadata = { title: 'Compare apps — NHS Commissioner DTx Store' }
+export const metadata = { title: 'Compare apps — HealthStore' }
 
 function CompareSkeleton() {
   return (

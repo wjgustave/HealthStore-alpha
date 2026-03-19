@@ -2,7 +2,7 @@ import { getAllApps } from '@/lib/data'
 import CatalogueClient from './CatalogueClient'
 import { Suspense } from 'react'
 
-export const metadata = { title: 'Browse apps — NHS Commissioner DTx Store' }
+export const metadata = { title: 'Browse apps — HealthStore' }
 
 function CatalogueSkeleton() {
   return (

@@ -2,7 +2,7 @@ import { getAllFunding, getAllApps, VISIBLE_CONDITIONS } from '@/lib/data'
 import { FundingStatusBadge, ConditionTag } from '@/components/Badges'
 import Link from 'next/link'
 
-export const metadata = { title: 'Funding directory — NHS Commissioner DTx Store' }
+export const metadata = { title: 'Funding directory — HealthStore' }
 
 export default function FundingPage() {
   const funding = getAllFunding()

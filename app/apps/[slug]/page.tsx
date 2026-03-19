@@ -15,7 +15,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const app = getAppBySlug(slug)
-  return { title: app ? `${app.app_name} — NHS Commissioner DTx Store` : 'Not found' }
+  return { title: app ? `${app.app_name} — HealthStore` : 'Not found' }
 }
 
 function Row({ label, value }: { label: string; value: string | null }) {
