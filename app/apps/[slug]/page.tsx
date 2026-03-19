@@ -313,7 +313,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                       className="rounded-lg flex-shrink-0" />
                   )}
                   <div>
-                    <h1 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '2.2rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+                    <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2.2rem', fontWeight: 700, marginBottom: '0.25rem' }}>
                       {app.app_name}
                     </h1>
                     <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>{app.supplier_name}</p>

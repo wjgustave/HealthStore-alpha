@@ -24,7 +24,7 @@ export default function HomePage() {
               <span style={{ width: 8, height: 8, background: '#4ade80', borderRadius: '50%', display: 'inline-block' }} />
               Prototype — March 2026
             </div>
-            <h1 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '2.8rem', lineHeight: 1.15, fontWeight: 700, color: '#fff', marginBottom: '1.25rem' }}>
+            <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2.8rem', lineHeight: 1.15, fontWeight: 700, color: '#fff', marginBottom: '1.25rem' }}>
               {dash.hero.headline}
             </h1>
             <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.82)', lineHeight: 1.7, marginBottom: '2rem' }}>
@@ -49,7 +49,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((s) => (
             <div key={s.label}>
-              <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '2rem', fontWeight: 700, color: '#fff' }}>{s.value}</div>
+              <div style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, color: '#fff' }}>{s.value}</div>
               <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#fff' }}>{s.label}</div>
               <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.55)' }}>{s.sublabel}</div>
             </div>
@@ -61,7 +61,7 @@ export default function HomePage() {
 
         {/* Condition shortcuts */}
         <section className="mt-12 mb-10">
-          <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+          <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>
             Browse by condition
           </h2>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
@@ -85,7 +85,7 @@ export default function HomePage() {
 
         {/* How commissioners use this tool */}
         <section className="rounded-2xl border p-8 mb-10" style={{ borderColor: 'var(--border)', background: '#fff' }}>
-          <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+          <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>
             How commissioners use this tool
           </h2>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
@@ -144,7 +144,7 @@ export default function HomePage() {
 
         {/* Featured apps */}
         <div style={{ marginBottom: '0.75rem' }}>
-          <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.4rem' }}>
+          <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.4rem' }}>
             Featured apps
           </h2>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
@@ -170,7 +170,7 @@ export default function HomePage() {
                         <Image src={app.logo_path} alt="" width={32} height={32} className="rounded-md flex-shrink-0" />
                       )}
                       <div>
-                        <div style={{ fontFamily: 'DM Serif Display, serif', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: 2 }}>{app.app_name}</div>
+                        <div style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: 2 }}>{app.app_name}</div>
                         <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{app.supplier_name}</div>
                       </div>
                     </div>
@@ -221,7 +221,7 @@ export default function HomePage() {
 
         {/* Impact section */}
         <section className="rounded-2xl p-8" style={{ background: 'linear-gradient(135deg,#003087,#00449E)', marginBottom: '3rem' }}>
-          <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.5rem', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>
+          <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.5rem', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>
             Real-world impact, not just theory
           </h2>
           <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.7)', marginBottom: '2rem' }}>
@@ -231,7 +231,7 @@ export default function HomePage() {
             {(dash.featured_impact as any).examples.map((ex: any) => (
               <Link key={ex.app_slug} href={`/apps/${ex.app_slug}`}
                 style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 12, padding: '1rem', textDecoration: 'none', display: 'block' }}>
-                <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '2rem', fontWeight: 700, color: '#fff' }}>{ex.metric}</div>
+                <div style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, color: '#fff' }}>{ex.metric}</div>
                 <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#fff', marginBottom: '0.25rem' }}>{ex.unit}</div>
                 <div style={{ fontSize: '0.72rem', lineHeight: 1.5, color: 'rgba(255,255,255,0.7)' }}>{ex.detail}</div>
               </Link>
@@ -244,7 +244,7 @@ export default function HomePage() {
           <section className="mb-10">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+                <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.25rem' }}>
                   Funding opportunities
                 </h2>
                 <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
@@ -275,7 +275,7 @@ export default function HomePage() {
         {/* Removed / decommissioned apps */}
         {removedApps.length > 0 && (
           <section className="mb-10">
-            <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+            <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>
               Removed or decommissioned apps
             </h2>
             <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>

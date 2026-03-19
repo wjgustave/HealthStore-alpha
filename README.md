@@ -39,7 +39,7 @@ cd out && npx serve -s .
 - **Next.js 16** (App Router, static export)
 - **Tailwind CSS v4** 
 - **TypeScript**
-- **DM Sans + DM Serif Display** (Google Fonts)
+- **Frutiger** (Light, Regular, Bold — local font files)
 
 ## Content
 
@@ -68,4 +68,4 @@ This project uses **Tailwind CSS v4**. The `globals.css` uses the v4 syntax:
 @source "../app/**/*.tsx";
 @source "../components/**/*.tsx";
 ```
-Google Fonts are loaded via `<link>` tags in `layout.tsx` (not CSS `@import`).
+Frutiger is loaded via `@font-face` in `globals.css` from `public/fonts/`.

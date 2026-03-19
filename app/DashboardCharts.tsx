@@ -28,7 +28,7 @@ export default function DashboardCharts({ apps, conditions }: Props) {
 
   return (
     <section className="mb-10">
-      <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+      <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>
         Dataset overview
       </h2>
       <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
@@ -94,7 +94,7 @@ export default function DashboardCharts({ apps, conditions }: Props) {
                   strokeLinecap="round" />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <div style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                   {nicePercent}%
                 </div>
                 <div className="text-xs" style={{ color: 'var(--text-muted)' }}>with NICE</div>

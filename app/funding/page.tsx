@@ -34,7 +34,7 @@ export default function FundingPage() {
       <div className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)', boxShadow: 'var(--shadow-sm)' }}>
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex-1">
-            <h3 className="font-bold text-base" style={{ fontFamily: 'DM Serif Display, serif', color: 'var(--text-primary)' }}>
+            <h3 className="font-bold text-base" style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}>
               {f.title}
             </h3>
             <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{f.sponsoring_body}</p>
@@ -82,7 +82,7 @@ export default function FundingPage() {
     return (
       <section className="mb-12">
         <div className="flex items-center gap-3 mb-5">
-          <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+          <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             {title}
           </h2>
           <span className="badge" style={{ background: color + '22', color }}>{items.length}</span>
@@ -97,7 +97,7 @@ export default function FundingPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
       <div className="mb-10">
-        <h1 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+        <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
           Funding directory
         </h1>
         <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', maxWidth: 600, lineHeight: 1.6 }}>

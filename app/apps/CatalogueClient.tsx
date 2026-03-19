@@ -129,7 +129,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div className="mb-8">
-        <h1 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+        <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
           Browse digital therapeutics
         </h1>
         <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
@@ -214,7 +214,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                             <Image src={app.logo_path} alt="" width={32} height={32} className="rounded-md flex-shrink-0" />
                           )}
                           <div>
-                            <h3 style={{ fontFamily: 'DM Serif Display, serif', fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)', marginBottom: 2 }}>
+                            <h3 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)', marginBottom: 2 }}>
                               {app.app_name}
                             </h3>
                             <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', margin: 0 }}>{app.supplier_name}</p>

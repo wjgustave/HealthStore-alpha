@@ -61,7 +61,7 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
               style={{ background: '#E6F5EC' }}>
               <CheckCircle className="w-8 h-8" style={{ color: 'var(--nhs-green)' }} />
             </div>
-            <h2 className="text-xl font-bold mb-2" style={{ fontFamily: 'DM Serif Display, serif', color: 'var(--nhs-dark)' }}>
+            <h2 className="text-xl font-bold mb-2" style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--nhs-dark)' }}>
               Interest registered
             </h2>
             <p className="text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
@@ -79,7 +79,7 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
         ) : (
           <>
             <h2 className="text-lg font-bold mb-1 pr-8"
-              style={{ fontFamily: 'DM Serif Display, serif', color: 'var(--nhs-dark)' }}>
+              style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--nhs-dark)' }}>
               Express interest in {appName}
             </h2>
             <p className="text-sm mb-5" style={{ color: 'var(--text-muted)' }}>

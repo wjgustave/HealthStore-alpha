@@ -76,7 +76,7 @@ export default function CompareClient({ allApps }: Props) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div className="mb-8">
-        <h1 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+        <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
           Compare apps
         </h1>
         <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Select up to 4 apps to compare side by side</p>
@@ -127,7 +127,7 @@ export default function CompareClient({ allApps }: Props) {
                     <th key={app.id} className="p-4 border-b border-r text-left" style={{ borderColor: 'var(--border)', background: '#FAFBFC' }}>
                       <div style={{ height: 3, background: accent, borderRadius: 2, marginBottom: 8, marginLeft: -4, marginRight: -4 }} />
                       <Link href={`/apps/${app.slug}`} className="font-bold hover:underline"
-                        style={{ fontFamily: 'DM Serif Display, serif', color: 'var(--text-primary)', fontSize: '1rem' }}>
+                        style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)', fontSize: '1rem' }}>
                         {app.app_name}
                       </Link>
                       <div className="text-xs font-normal mt-0.5" style={{ color: 'var(--text-muted)' }}>{app.supplier_name}</div>

@@ -54,7 +54,7 @@ export default function LoginPage() {
             <div className="flex flex-col items-center mb-8">
               <div className="flex items-center gap-2.5 mb-3">
                 <Image src="/logos/nhs-blue-alt.svg" alt="" width={90} height={36} className="flex-shrink-0" />
-                <span style={{ fontFamily: 'DM Serif Display, serif', fontWeight: 700, fontSize: '1.15rem', color: '#003087' }}>
+                <span style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: '#003087' }}>
                   HealthStore
                 </span>
               </div>
@@ -63,7 +63,7 @@ export default function LoginPage() {
 
             {/* Heading */}
             <h1 className="text-center mb-1"
-              style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.5rem', fontWeight: 700, color: '#1A2332' }}>
+              style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.5rem', fontWeight: 700, color: '#1A2332' }}>
               Sign in
             </h1>
             <p className="text-center text-sm mb-6" style={{ color: '#768692' }}>

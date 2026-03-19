@@ -26,7 +26,7 @@ export default function Nav() {
     <header className="sticky top-0 z-50 bg-white border-b" style={{ borderColor: 'var(--border)' }}>
       <div style={{ background: 'var(--nhs-blue)', height: 6 }} />
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
-        <Link href="/" className="flex items-center gap-2 font-bold text-base" style={{ color: 'var(--nhs-dark)', fontFamily: 'DM Serif Display, serif' }}>
+        <Link href="/" className="flex items-center gap-2 font-bold text-base" style={{ color: 'var(--nhs-dark)', fontFamily: 'Frutiger, Arial, sans-serif' }}>
           <Image src="/logos/nhs-blue-alt.svg" alt="" width={56} height={22} className="flex-shrink-0" />
           <span>HealthStore</span>
         </Link>
