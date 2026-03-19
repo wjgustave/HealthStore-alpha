@@ -121,10 +121,6 @@
   "tariff_considerations": "NICE MTG68 modelled \u00a386,297 cost saving per CCG (AECOPD, 74% probability) and \u00a322,779 per CCG (PR, 86% probability). These are CCG-era models \u2014 CCGs dissolved July 2022. Commissioners should recalculate using current ICB/PCN population size and local COPD prevalence. No live tariff calculator is available in this prototype.",
   "provider_income_note": "Not stated. Confirm locally whether any activity shift affects provider block or CQUIN arrangements.",
   "roi_note": "NHS Grampian service evaluation showed reduction in unscheduled GP visits and admissions following deployment. Independent peer-reviewed cost data is limited.",
-  "funding_ids": [
-    "nhse-copd-wave2",
-    "nice-evidence-gen"
-  ],
   "nhse_125k_eligible": false,
   "nhse_125k_note": "Clinitouch is explicitly named in NHSE winter 2024 COPD funding. myCOPD eligibility not confirmed \u2014 verify with NHSE before including in business case.",
   "demo_variants": [

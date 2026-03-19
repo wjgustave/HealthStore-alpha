@@ -36,9 +36,9 @@
     },
     {
       "ref": "NICE ARI guidance",
-      "url": "https://www.nice.org.uk",
+      "url": "https://www.nice.org.uk/guidance/ng237",
       "type": "EVA",
-      "date": "2024",
+      "date": "March 2024",
       "note": "Separate recommendation for Acute Respiratory Infection remote monitoring"
     }
   ],
