@@ -24,8 +24,14 @@ export type Condition = any
 
 const otherApps = otherAppsData as App[]
 
+export const VISIBLE_CONDITIONS = ['copd', 'cardiac_rehab']
+
+const allAppsUnfiltered: App[] = [myCOPD, clinitouch, copdhub, luscii, sleepio, ...otherApps, jointAcademy, w8buddy, overcomingAnorexia, activateYourHeart, dReachHf, digitalHeartManual, groHealthHeartbuddy, kiactiv, myheart, pumpingMarvellous]
+
 export function getAllApps(): App[] {
-  return [myCOPD, clinitouch, copdhub, luscii, sleepio, ...otherApps, jointAcademy, w8buddy, overcomingAnorexia, activateYourHeart, dReachHf, digitalHeartManual, groHealthHeartbuddy, kiactiv, myheart, pumpingMarvellous]
+  return allAppsUnfiltered.filter((a: App) =>
+    a.condition_tags.some((t: string) => VISIBLE_CONDITIONS.includes(t))
+  )
 }
 
 export function getRemovedApps() {
@@ -37,13 +43,15 @@ export function getRemovedApps() {
 
 export function getConditionAreas(): { id: string; label: string; colour: string; count: number; icon: string }[] {
   const apps = getAllApps()
-  return (conditionsData as Condition[]).map(c => ({
-    id: c.id,
-    label: c.label,
-    colour: c.colour,
-    icon: c.icon,
-    count: apps.filter((a: App) => a.condition_tags.includes(c.id)).length,
-  }))
+  return (conditionsData as Condition[])
+    .filter(c => VISIBLE_CONDITIONS.includes(c.id))
+    .map(c => ({
+      id: c.id,
+      label: c.label,
+      colour: c.colour,
+      icon: c.icon,
+      count: apps.filter((a: App) => a.condition_tags.includes(c.id)).length,
+    }))
 }
 
 export function getOpenFunding(): Funding[] {
@@ -73,6 +81,24 @@ export function getAllConditions(): Condition[] {
 
 export function getDashboardContent() {
   return dashboardData
+}
+
+export function getDashboardStats() {
+  const apps = getAllApps()
+  const conditions = getConditionAreas()
+  const openFunding = getOpenFunding()
+
+  const niceRefs = new Set<string>()
+  apps.forEach((a: App) => {
+    (a.nice_guidance_refs ?? []).forEach((r: any) => niceRefs.add(r.ref))
+  })
+
+  return [
+    { value: String(apps.length), label: 'Apps in catalogue', sublabel: `across ${conditions.length} condition areas` },
+    { value: String(niceRefs.size), label: 'NICE guidance references', sublabel: 'HTG and EVA recommendations' },
+    { value: String(apps.filter((a: App) => a.condition_tags.includes('copd')).length), label: 'COPD apps', sublabel: 'all NICE HTE19 recommended' },
+    { value: String(openFunding.length), label: 'Funding opportunities', sublabel: 'currently open or periodic' },
+  ]
 }
 
 export const supervisionLabels: Record<string, string> = {

@@ -31,10 +31,6 @@ const dtacOptions = [
 const conditionOptions = [
   { id: 'all', label: 'All conditions' },
   { id: 'copd', label: 'COPD' },
-  { id: 'insomnia', label: 'Insomnia' },
-  { id: 'weight_management', label: 'Weight management' },
-  { id: 'msk', label: 'MSK' },
-  { id: 'eating_disorders', label: 'Eating disorders' },
   { id: 'cardiac_rehab', label: 'Cardiac rehabilitation' },
 ]
 

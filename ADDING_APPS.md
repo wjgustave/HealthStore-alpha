@@ -4,6 +4,23 @@ This guide explains how to add a new app (and optionally a new condition area) t
 
 ---
 
+## Condition Visibility
+
+Not all conditions are visible in the live catalogue. Visibility is controlled by the `VISIBLE_CONDITIONS` array in `lib/data.ts`:
+
+```typescript
+export const VISIBLE_CONDITIONS = ['copd', 'cardiac_rehab']
+```
+
+Apps belonging to hidden conditions still exist in the codebase (JSON files, imports, logos) but are filtered out of `getAllApps()` and `getConditionAreas()`. This means they do not appear in the catalogue, homepage, compare page, charts, or generated detail routes.
+
+**Currently visible:** COPD, Cardiac rehabilitation
+**Currently hidden:** Insomnia, Weight management, MSK / Osteoarthritis, Eating disorders
+
+To show a hidden condition, add its id to the `VISIBLE_CONDITIONS` array. No other changes are needed — dashboard stats, condition shortcuts, catalogue filters, and charts all derive from the filtered data automatically.
+
+---
+
 ## Step 1: Create the app JSON file
 
 Create a new file at `content/apps/{slug}.json`. Use lowercase, hyphenated slugs (e.g. `my-new-app.json`).
@@ -213,13 +230,13 @@ Replace `X` with the first letter of the app name, and the fill colour with the 
 import myNewApp from '@/content/apps/my-new-app.json'
 ```
 
-2. Add the variable to the `getAllApps()` return array:
+2. Add the variable to the `allAppsUnfiltered` array in `lib/data.ts`:
 
 ```typescript
-export function getAllApps(): App[] {
-  return [myCOPD, clinitouch, /* ...existing... */, myNewApp]
-}
+const allAppsUnfiltered: App[] = [myCOPD, clinitouch, /* ...existing... */, myNewApp]
 ```
+
+The app will only appear in the live catalogue if its `condition_tags` include a condition listed in `VISIBLE_CONDITIONS`. See the **Condition Visibility** section above.
 
 ---
 
@@ -248,7 +265,7 @@ Add the new condition id and hex colour to the `conditionColours` object in each
 
 - `components/AppCard.tsx`
 - `app/apps/[slug]/page.tsx`
-- `app/apps/CatalogueClient.tsx` (also add to `conditionOptions`)
+- `app/apps/CatalogueClient.tsx` (also add to `conditionOptions` if the condition is visible)
 - `app/page.tsx`
 - `app/compare/CompareClient.tsx`
 

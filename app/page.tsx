@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { getAllApps, getDashboardContent, getConditionAreas, getRemovedApps, getOpenFunding } from '@/lib/data'
+import { getAllApps, getDashboardContent, getDashboardStats, getConditionAreas, getRemovedApps, getOpenFunding, VISIBLE_CONDITIONS } from '@/lib/data'
 import { EvidenceBadge, MaturityBadge, DtacBadge, EffortBadge, FundingStatusBadge, ConditionTag } from '@/components/Badges'
 import DashboardCharts from './DashboardCharts'
 import { ConditionIcon } from '@/components/HealthIcons'
@@ -8,6 +8,7 @@ import { ConditionIcon } from '@/components/HealthIcons'
 export default function HomePage() {
   const apps = getAllApps()
   const dash = getDashboardContent()
+  const stats = getDashboardStats()
   const conditions = getConditionAreas()
   const removedApps = getRemovedApps()
   const openFunding = getOpenFunding()
@@ -46,7 +47,7 @@ export default function HomePage() {
       {/* Stats */}
       <section style={{ background: '#003087' }}>
         <div className="max-w-7xl mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {(dash.stats as any[]).map((s: any) => (
+          {stats.map((s) => (
             <div key={s.label}>
               <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '2rem', fontWeight: 700, color: '#fff' }}>{s.value}</div>
               <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#fff' }}>{s.label}</div>
@@ -66,7 +67,7 @@ export default function HomePage() {
           <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
             Select a condition area to view relevant digital therapeutics.
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             {conditions.map(c => (
               <Link key={c.id} href={`/apps?condition=${c.id}`}
                 className="app-card rounded-xl bg-white border p-4 text-center flex flex-col items-center gap-2"
@@ -263,7 +264,7 @@ export default function HomePage() {
                   </div>
                   <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>{f.description}</p>
                   <div className="flex flex-wrap gap-1">
-                    {f.condition_tags?.slice(0, 3).map((t: string) => <ConditionTag key={t} tag={t} />)}
+                    {f.condition_tags?.filter((t: string) => VISIBLE_CONDITIONS.includes(t)).map((t: string) => <ConditionTag key={t} tag={t} />)}
                   </div>
                 </div>
               ))}

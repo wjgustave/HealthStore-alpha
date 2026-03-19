@@ -1,4 +1,4 @@
-import { getAllFunding, getAllApps } from '@/lib/data'
+import { getAllFunding, getAllApps, VISIBLE_CONDITIONS } from '@/lib/data'
 import { FundingStatusBadge, ConditionTag } from '@/components/Badges'
 import Link from 'next/link'
 
@@ -58,7 +58,7 @@ export default function FundingPage() {
         )}
 
         <div className="flex flex-wrap gap-1 mb-3">
-          {f.condition_tags.map(t => <ConditionTag key={t} tag={t} />)}
+          {f.condition_tags.filter(t => VISIBLE_CONDITIONS.includes(t)).map(t => <ConditionTag key={t} tag={t} />)}
         </div>
 
         <AppTags appTags={f.app_tags} />
