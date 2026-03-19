@@ -65,19 +65,19 @@ export default function AppCard({ app, selected, onSelect }: {
 
         {/* Status grid */}
         <div className="grid grid-cols-2 gap-y-2 gap-x-3 mb-4 text-xs" style={{ color: 'var(--text-secondary)' }}>
-          <div>
+          <div className="min-w-0">
             <span className="block" style={{ color: 'var(--text-muted)', fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase' }}>Maturity</span>
             <MaturityBadge level={app.maturity_level} />
           </div>
-          <div>
+          <div className="min-w-0">
             <span className="block" style={{ color: 'var(--text-muted)', fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase' }}>Evidence</span>
             <EvidenceBadge strength={app.evidence_strength} />
           </div>
-          <div>
+          <div className="min-w-0">
             <span className="block" style={{ color: 'var(--text-muted)', fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase' }}>Local effort</span>
             <EffortBadge level={app.local_wraparound} />
           </div>
-          <div>
+          <div className="min-w-0">
             <span className="block" style={{ color: 'var(--text-muted)', fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase' }}>DTAC</span>
             <DtacBadge status={app.dtac_status} />
           </div>

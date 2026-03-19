@@ -331,7 +331,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                   { label: 'Local effort', badge: <EffortBadge level={app.local_wraparound} /> },
                   { label: 'DTAC', badge: <DtacBadge status={app.dtac_status} /> },
                 ].map(({ label, badge }) => (
-                  <div key={label} className="rounded-xl p-3 text-center" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
+                  <div key={label} className="rounded-xl p-3 text-center min-w-0" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
                     <div className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>{label}</div>
                     {badge}
                   </div>

@@ -245,7 +245,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                           { label: 'Local effort', badge: <EffortBadge level={app.local_wraparound} /> },
                           { label: 'DTAC', badge: <DtacBadge status={app.dtac_status} /> },
                         ].map(({ label, badge }) => (
-                          <div key={label}>
+                          <div key={label} style={{ minWidth: 0 }}>
                             <div style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted)', marginBottom: 3 }}>{label}</div>
                             {badge}
                           </div>
