@@ -265,7 +265,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
   if (!app) notFound()
 
   const conditionColour: Record<string, string> = {
-    copd: '#005EB8', insomnia: '#330072', weight_management: '#007F3B', msk: '#D5840D', eating_disorders: '#DA291C',
+    copd: '#005EB8', insomnia: '#330072', weight_management: '#007F3B', msk: '#D5840D', eating_disorders: '#DA291C', cardiac_rehab: '#AE2573',
   }
   const accent = conditionColour[app.condition_tags[0]] ?? '#005EB8'
   const hasDetailedEvidence = app.clinical_evidence_detailed?.length > 0

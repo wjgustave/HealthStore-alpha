@@ -35,6 +35,7 @@ const conditionOptions = [
   { id: 'weight_management', label: 'Weight management' },
   { id: 'msk', label: 'MSK' },
   { id: 'eating_disorders', label: 'Eating disorders' },
+  { id: 'cardiac_rehab', label: 'Cardiac rehabilitation' },
 ]
 
 const sortOptions = [
@@ -49,7 +50,7 @@ const maturityOrder: Record<string, number> = { scaled: 0, multi_site_live: 1, l
 const evidenceOrder: Record<string, number> = { established: 0, promising: 1, scaled: 0, emerging: 2 }
 const effortOrder: Record<string, number> = { low: 0, medium: 1, high: 2 }
 const conditionColours: Record<string, string> = {
-  copd: '#005EB8', insomnia: '#330072', weight_management: '#007F3B', msk: '#D5840D', eating_disorders: '#DA291C',
+  copd: '#005EB8', insomnia: '#330072', weight_management: '#007F3B', msk: '#D5840D', eating_disorders: '#DA291C', cardiac_rehab: '#AE2573',
 }
 
 function FilterSelect({ label, value, onChange, options }: {

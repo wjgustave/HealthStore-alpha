@@ -80,12 +80,22 @@ export function BriefcaseIcon({ className = 'w-6 h-6' }: IconProps) {
   )
 }
 
+export function HeartPulseIcon({ className = 'w-6 h-6' }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0L12 5.36l-.77-.78a5.4 5.4 0 0 0-7.65 7.65l1.06 1.06L12 20.71l7.36-7.36 1.06-1.06a5.4 5.4 0 0 0 0-7.65z" />
+      <path d="M7 12h2l1.5-3 3 6 1.5-3h2" />
+    </svg>
+  )
+}
+
 const conditionIcons: Record<string, (props: IconProps) => React.ReactNode> = {
   copd: LungsIcon,
   insomnia: BrainIcon,
   weight_management: ScaleIcon,
   msk: JointIcon,
   eating_disorders: HeartCareIcon,
+  cardiac_rehab: HeartPulseIcon,
 }
 
 export function ConditionIcon({ condition, className }: { condition: string; className?: string }) {

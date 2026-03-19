@@ -7,6 +7,13 @@ import otherAppsData from '@/content/apps/other-apps.json'
 import jointAcademy from '@/content/apps/joint-academy.json'
 import w8buddy from '@/content/apps/w8buddy.json'
 import overcomingAnorexia from '@/content/apps/overcoming-anorexia.json'
+import activateYourHeart from '@/content/apps/activate-your-heart.json'
+import dReachHf from '@/content/apps/d-reach-hf.json'
+import digitalHeartManual from '@/content/apps/digital-heart-manual.json'
+import groHealthHeartbuddy from '@/content/apps/gro-health-heartbuddy.json'
+import kiactiv from '@/content/apps/kiactiv.json'
+import myheart from '@/content/apps/myheart.json'
+import pumpingMarvellous from '@/content/apps/pumping-marvellous.json'
 import fundingData from '@/content/funding/funding.json'
 import conditionsData from '@/content/conditions/conditions.json'
 import dashboardData from '@/content/dashboard/dashboard.json'
@@ -18,7 +25,7 @@ export type Condition = any
 const otherApps = otherAppsData as App[]
 
 export function getAllApps(): App[] {
-  return [myCOPD, clinitouch, copdhub, luscii, sleepio, ...otherApps, jointAcademy, w8buddy, overcomingAnorexia]
+  return [myCOPD, clinitouch, copdhub, luscii, sleepio, ...otherApps, jointAcademy, w8buddy, overcomingAnorexia, activateYourHeart, dReachHf, digitalHeartManual, groHealthHeartbuddy, kiactiv, myheart, pumpingMarvellous]
 }
 
 export function getRemovedApps() {

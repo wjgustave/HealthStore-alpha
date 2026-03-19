@@ -38,5 +38,13 @@
     "icon": "heart",
     "app_count": 1,
     "colour": "#DA291C"
+  },
+  {
+    "id": "cardiac_rehab",
+    "label": "Cardiac rehabilitation",
+    "description": "Digital platforms supporting cardiac rehabilitation for heart failure, post-MI and post-surgery recovery",
+    "icon": "heart-pulse",
+    "app_count": 7,
+    "colour": "#AE2573"
   }
 ]

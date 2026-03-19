@@ -70,7 +70,7 @@ export default function CompareClient({ allApps }: Props) {
   }
 
   const conditionColours: Record<string, string> = {
-    copd: '#005EB8', insomnia: '#330072', weight_management: '#007F3B', msk: '#D5840D', eating_disorders: '#DA291C',
+    copd: '#005EB8', insomnia: '#330072', weight_management: '#007F3B', msk: '#D5840D', eating_disorders: '#DA291C', cardiac_rehab: '#AE2573',
   }
 
   return (

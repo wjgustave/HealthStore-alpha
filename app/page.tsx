@@ -154,7 +154,7 @@ export default function HomePage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem', marginBottom: '3rem' }}>
           {apps.slice(0, 8).map((app: any) => {
             const conditionColours: Record<string, string> = {
-              copd: '#005EB8', insomnia: '#330072', weight_management: '#007F3B', msk: '#D5840D', eating_disorders: '#DA291C',
+              copd: '#005EB8', insomnia: '#330072', weight_management: '#007F3B', msk: '#D5840D', eating_disorders: '#DA291C', cardiac_rehab: '#AE2573',
             }
             const accent = conditionColours[app.condition_tags[0]] ?? '#005EB8'
             return (

@@ -50,7 +50,7 @@ export function NiceTypeBadge({ type }: { type: string }) {
 export function ConditionTag({ tag }: { tag: string }) {
   const labels: Record<string, string> = {
     copd: 'COPD', insomnia: 'Insomnia', weight_management: 'Weight management',
-    msk: 'MSK', eating_disorders: 'Eating disorders',
+    msk: 'MSK', eating_disorders: 'Eating disorders', cardiac_rehab: 'Cardiac rehab',
   }
   return <span className="badge badge-grey">{labels[tag] ?? tag}</span>
 }
