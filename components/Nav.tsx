@@ -1,10 +1,12 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { LogOut } from 'lucide-react'
 
 export default function Nav() {
   const path = usePathname()
+  const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const links = [
@@ -12,6 +14,12 @@ export default function Nav() {
     { href: '/apps', label: 'Browse apps' },
     { href: '/funding', label: 'Funding' },
   ]
+
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST' })
+    router.push('/login')
+    router.refresh()
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b" style={{ borderColor: 'var(--border)' }}>
@@ -34,6 +42,12 @@ export default function Nav() {
             </Link>
           ))}
           <span className="ml-2 badge badge-blue">Prototype</span>
+          <button onClick={handleLogout}
+            className="ml-3 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors hover:bg-gray-100"
+            style={{ color: 'var(--text-muted)' }}>
+            <LogOut className="w-3.5 h-3.5" />
+            Sign out
+          </button>
         </div>
         <button className="md:hidden p-2 rounded" onClick={() => setMobileOpen(o => !o)} aria-label="Toggle menu">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -53,6 +67,12 @@ export default function Nav() {
               {l.label}
             </Link>
           ))}
+          <button onClick={handleLogout}
+            className="px-3 py-2 rounded-md text-sm font-medium text-left flex items-center gap-1.5"
+            style={{ color: 'var(--text-muted)' }}>
+            <LogOut className="w-3.5 h-3.5" />
+            Sign out
+          </button>
         </div>
       )}
     </header>
