@@ -4,7 +4,7 @@
   "app_name": "Digital Heart Manual",
   "supplier_name": "NHS Lothian",
   "short_name": "Digital Heart Manual",
-  "logo_path": "/logos/digital-heart-manual.svg",
+  "logo_path": "/logos/digital-heart-manual.png",
   "condition_tags": ["cardiac_rehab"],
   "pathway_tags": ["cardiac-rehabilitation", "post-mi", "post-revascularisation", "home-based-cr", "self-management"],
   "outcome_tags": ["self-management", "quality-of-life", "exercise-capacity", "psychological-wellbeing"],

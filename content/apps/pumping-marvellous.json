@@ -4,7 +4,7 @@
   "app_name": "Pumping Marvellous Cardiac Rehab Platform",
   "supplier_name": "Pumping Marvellous Foundation",
   "short_name": "Pumping Marvellous",
-  "logo_path": "/logos/pumping-marvellous.svg",
+  "logo_path": "/logos/pumping-marvellous.jpeg",
   "condition_tags": ["cardiac_rehab"],
   "pathway_tags": ["cardiac-rehabilitation", "heart-failure", "peer-support", "self-management", "charity"],
   "outcome_tags": ["self-management", "peer-support", "quality-of-life", "health-equity"],

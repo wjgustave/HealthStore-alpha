@@ -4,7 +4,7 @@
   "app_name": "COPDhub",
   "supplier_name": "Institute of Clinical Science and Technology (ICST)",
   "short_name": "COPDhub",
-  "logo_path": "/logos/copdhub.svg",
+  "logo_path": "/logos/copdhub.png",
   "condition_tags": [
     "copd"
   ],

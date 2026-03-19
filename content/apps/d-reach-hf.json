@@ -4,7 +4,7 @@
   "app_name": "D REACH-HF",
   "supplier_name": "Health & Care Innovations Ltd / University of Exeter & Plymouth",
   "short_name": "D REACH-HF",
-  "logo_path": "/logos/d-reach-hf.svg",
+  "logo_path": "/logos/d-reach-hf.png",
   "condition_tags": ["cardiac_rehab"],
   "pathway_tags": ["cardiac-rehabilitation", "heart-failure", "home-based-cr", "hfref", "hfpef", "caregiver-support"],
   "outcome_tags": ["quality-of-life", "self-management", "caregiver-support", "exercise-capacity"],

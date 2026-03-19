@@ -4,7 +4,7 @@
   "app_name": "myHeart",
   "supplier_name": "my mhealth Limited",
   "short_name": "myHeart",
-  "logo_path": "/logos/myheart.svg",
+  "logo_path": "/logos/myheart.png",
   "condition_tags": ["cardiac_rehab"],
   "pathway_tags": ["cardiac-rehabilitation", "heart-failure", "post-cardiac-event", "remote-monitoring", "self-management"],
   "outcome_tags": ["self-management", "quality-of-life", "exercise-capacity", "cr-uptake"],

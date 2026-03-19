@@ -4,7 +4,7 @@
   "app_name": "myCOPD",
   "supplier_name": "my mhealth Limited",
   "short_name": "myCOPD",
-  "logo_path": "/logos/mycopd.svg",
+  "logo_path": "/logos/mycopd.png",
   "condition_tags": [
     "copd"
   ],

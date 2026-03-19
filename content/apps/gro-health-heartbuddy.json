@@ -4,7 +4,7 @@
   "app_name": "Gro Health HeartBuddy",
   "supplier_name": "DDM Health",
   "short_name": "HeartBuddy",
-  "logo_path": "/logos/gro-health-heartbuddy.svg",
+  "logo_path": "/logos/gro-health-heartbuddy.png",
   "condition_tags": ["cardiac_rehab"],
   "pathway_tags": ["cardiac-rehabilitation", "heart-failure", "post-mi", "post-surgery", "af", "self-management"],
   "outcome_tags": ["cv-risk-reduction", "self-management", "behaviour-change", "quality-of-life"],

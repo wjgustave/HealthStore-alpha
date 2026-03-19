@@ -4,7 +4,7 @@
   "app_name": "KiActiv",
   "supplier_name": "Ki Performance Lifestyle Ltd",
   "short_name": "KiActiv",
-  "logo_path": "/logos/kiactiv.svg",
+  "logo_path": "/logos/kiactiv.png",
   "condition_tags": ["cardiac_rehab"],
   "pathway_tags": ["cardiac-rehabilitation", "physical-activity", "heart-failure", "wearable-technology", "remote-monitoring"],
   "outcome_tags": ["physical-activity", "cv-risk-reduction", "quality-of-life", "self-management"],
