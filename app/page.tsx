@@ -17,10 +17,26 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section style={{ background: 'linear-gradient(135deg, #003087 0%, #005EB8 60%, #0072CE 100%)' }}>
-        <div className="max-w-7xl mx-auto px-6" style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_30%] md:gap-12 md:items-stretch md:min-h-[min(28rem,58vh)]">
-            <div className="min-w-0 self-start" style={{ maxWidth: 680 }}>
+      <section className="relative overflow-x-clip" style={{ background: 'linear-gradient(135deg, #003087 0%, #005EB8 60%, #0072CE 100%)' }}>
+        {/* Full section height; bleeds past content: 30vw + 200px from the right edge */}
+        <div
+          className="pointer-events-none absolute inset-y-0 right-0 z-0 hidden w-[calc(30vw+200px)] overflow-hidden md:block [clip-path:polygon(18%_0,100%_0,100%_100%,0_100%)]"
+        >
+          <Image
+            src="/images/home-hero.jpg"
+            alt="Healthcare professionals collaborating with digital health tools"
+            fill
+            className="object-cover"
+            sizes="calc(30vw + 200px)"
+            priority
+          />
+        </div>
+        <div
+          className="relative z-10 mx-auto max-w-7xl px-6 md:min-h-[min(28rem,58vh)]"
+          style={{ paddingTop: '5rem', paddingBottom: '5rem' }}
+        >
+          <div className="grid grid-cols-1 gap-10">
+            <div className="min-w-0 md:max-w-[min(42.5rem,calc(70vw-200px-(100vw-min(100vw,80rem))/2-3rem))]">
               <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold mb-6"
                 style={{ background: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)' }}>
                 <span style={{ width: 8, height: 8, background: '#4ade80', borderRadius: '50%', display: 'inline-block' }} />
@@ -43,16 +59,13 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
-            <div
-              className="relative mx-auto min-h-[14rem] w-full overflow-hidden rounded-xl md:mx-0 md:h-full md:min-h-0 md:rounded-r-xl md:rounded-l-none [clip-path:polygon(0_0,100%_0,100%_100%,0_100%)] md:[clip-path:polygon(18%_0,100%_0,100%_100%,0_100%)]"
-            >
+            <div className="relative mx-auto min-h-[14rem] w-full overflow-hidden rounded-xl md:hidden [clip-path:polygon(0_0,100%_0,100%_100%,0_100%)]">
               <Image
                 src="/images/home-hero.jpg"
                 alt="Healthcare professionals collaborating with digital health tools"
                 fill
                 className="object-cover"
-                sizes="(max-width: 768px) 100vw, 30vw"
-                priority
+                sizes="100vw"
               />
             </div>
           </div>
