@@ -6,7 +6,7 @@ import {
   MaturityBadge,
   SectionHeader,
 } from '@/components/Badges'
-import { getLinkedFunding, maturityLabels, evidenceLabels } from '@/lib/data'
+import { getLinkedFunding } from '@/lib/data'
 
 export function TechnicalIntegrationTable({ app }: { app: any }) {
   const ti = app.technical_integrations
@@ -38,25 +38,26 @@ export function TechnicalIntegrationTable({ app }: { app: any }) {
 }
 
 export function ScaleAndMaturitySection({ app }: { app: any }) {
-  const maturityLabel = maturityLabels[app.maturity_level] ?? app.maturity_level
-  const evidenceLabel = evidenceLabels[app.evidence_strength] ?? app.evidence_strength
-
   return (
     <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
       <SectionHeader
         title="Scale and maturity"
         description="Deployment reach, evidence posture, and where the product is in use."
       />
-      <div className="flex flex-wrap gap-3 mb-5">
-        <div className="rounded-lg px-3 py-2 text-sm" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
+      <div className="flex flex-col sm:flex-row sm:flex-nowrap gap-3 mb-5">
+        <div
+          className="rounded-lg px-3 py-2 text-sm flex-1 min-w-0"
+          style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}
+        >
           <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Maturity </span>
           <MaturityBadge level={app.maturity_level} />
-          <span className="text-xs ml-2" style={{ color: 'var(--text-secondary)' }}>({maturityLabel})</span>
         </div>
-        <div className="rounded-lg px-3 py-2 text-sm" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
+        <div
+          className="rounded-lg px-3 py-2 text-sm flex-1 min-w-0"
+          style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}
+        >
           <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Evidence strength </span>
           <EvidenceBadge strength={app.evidence_strength} />
-          <span className="text-xs ml-2" style={{ color: 'var(--text-secondary)' }}>({evidenceLabel})</span>
         </div>
       </div>
       <dl className="space-y-3 text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
