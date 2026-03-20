@@ -5,11 +5,10 @@ import ExpressInterestModal from '@/components/ExpressInterestModal'
 
 interface Props {
   app: { app_name: string }
-  accent: string
   children: React.ReactNode
 }
 
-export default function AppDetailClient({ app, accent, children }: Props) {
+export default function AppDetailClient({ app, children }: Props) {
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {

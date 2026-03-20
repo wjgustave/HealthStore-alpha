@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import type { App } from '@/lib/data'
+import { STORE_ACCENT } from '@/lib/storeAccent'
 import { DtacBadge, MaturityBadge, EvidenceBadge, EffortBadge, SupervisionBadge } from '@/components/Badges'
 
 type Props = { allApps: App[] }
@@ -69,10 +70,6 @@ export default function CompareClient({ allApps }: Props) {
     })
   }
 
-  const conditionColours: Record<string, string> = {
-    copd: '#005EB8', insomnia: '#330072', weight_management: '#007F3B', msk: '#D5840D', eating_disorders: '#DA291C', cardiac_rehab: '#AE2573',
-  }
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div className="mb-8">
@@ -90,13 +87,12 @@ export default function CompareClient({ allApps }: Props) {
         <div className="flex flex-wrap gap-2">
           {allApps.map(app => {
             const sel = selectedIds.includes(app.id)
-            const accent = conditionColours[app.condition_tags[0]] ?? '#005EB8'
             return (
               <button key={app.id} onClick={() => toggleApp(app.id)}
                 className="px-3 py-1.5 rounded-lg text-sm font-medium border transition-all"
                 style={{
-                  borderColor: sel ? accent : 'var(--border)',
-                  background: sel ? accent : '#fff',
+                  borderColor: sel ? STORE_ACCENT : 'var(--border)',
+                  background: sel ? STORE_ACCENT : '#fff',
                   color: sel ? '#fff' : 'var(--text-secondary)',
                 }}>
                 {sel ? '✓ ' : ''}{app.app_name}
@@ -121,19 +117,15 @@ export default function CompareClient({ allApps }: Props) {
                   style={{ fontSize: 'var(--text-label)', borderColor: 'var(--border)', color: 'var(--text-muted)', width: 180, background: '#F7F9FC' }}>
                   Dimension
                 </th>
-                {selected.map(app => {
-                  const accent = conditionColours[app.condition_tags[0]] ?? '#005EB8'
-                  return (
+                {selected.map(app => (
                     <th key={app.id} className="p-4 border-b border-r text-left" style={{ borderColor: 'var(--border)', background: '#FAFBFC' }}>
-                      <div style={{ height: 3, background: accent, borderRadius: 2, marginBottom: 8, marginLeft: -4, marginRight: -4 }} />
                       <Link href={`/apps/${app.slug}`} className="font-bold hover:underline"
                         style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)', fontSize: 'var(--text-card-title-sm)' }}>
                         {app.app_name}
                       </Link>
                       <div className="font-normal mt-0.5" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>{app.supplier_name}</div>
                     </th>
-                  )
-                })}
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -167,18 +159,15 @@ export default function CompareClient({ allApps }: Props) {
               {/* CTA row */}
               <tr>
                 <td className="p-4" style={{ background: '#F7F9FC' }} />
-                {selected.map(app => {
-                  const accent = conditionColours[app.condition_tags[0]] ?? '#005EB8'
-                  return (
+                {selected.map(app => (
                     <td key={app.id} className="p-4">
                       <Link href={`/apps/${app.slug}`}
                         className="block text-center text-sm font-semibold rounded-lg py-2"
-                        style={{ background: accent, color: '#fff' }}>
+                        style={{ background: STORE_ACCENT, color: '#fff' }}>
                         Full assessment →
                       </Link>
                     </td>
-                  )
-                })}
+                ))}
               </tr>
             </tbody>
           </table>
