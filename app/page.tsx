@@ -24,10 +24,10 @@ export default function HomePage() {
               <span style={{ width: 8, height: 8, background: '#4ade80', borderRadius: '50%', display: 'inline-block' }} />
               Prototype — March 2026
             </div>
-            <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2.8rem', lineHeight: 1.15, fontWeight: 700, color: '#fff', marginBottom: '1.25rem' }}>
+            <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-hero)', lineHeight: 1.15, fontWeight: 700, color: '#fff', marginBottom: '1.25rem' }}>
               {dash.hero.headline}
             </h1>
-            <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.82)', lineHeight: 1.7, marginBottom: '2rem' }}>
+            <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.82)', lineHeight: 1.7, marginBottom: '2rem' }}>
               {dash.hero.subheadline}
             </p>
             <div className="flex flex-wrap gap-3">
@@ -51,7 +51,7 @@ export default function HomePage() {
             <div key={s.label}>
               <div style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, color: '#fff' }}>{s.value}</div>
               <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#fff' }}>{s.label}</div>
-              <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.55)' }}>{s.sublabel}</div>
+              <div style={{ fontSize: 'var(--text-label)', color: 'rgba(255,255,255,0.55)' }}>{s.sublabel}</div>
             </div>
           ))}
         </div>
@@ -61,10 +61,10 @@ export default function HomePage() {
 
         {/* Condition shortcuts */}
         <section className="mt-12 mb-10">
-          <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+          <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section)', fontWeight: 700, marginBottom: '0.5rem' }}>
             Browse by condition
           </h2>
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
+          <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
             Select a condition area to view relevant digital therapeutics.
           </p>
           <div className="grid grid-cols-2 gap-3">
@@ -76,8 +76,8 @@ export default function HomePage() {
                   style={{ background: `${c.colour}15`, color: c.colour }}>
                   <ConditionIcon condition={c.id} className="w-5 h-5" />
                 </div>
-                <div className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{c.label}</div>
-                <div className="text-xs" style={{ color: 'var(--text-muted)' }}>{c.count} {c.count === 1 ? 'app' : 'apps'}</div>
+                <div className="font-semibold" style={{ fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)' }}>{c.label}</div>
+                <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>{c.count} {c.count === 1 ? 'app' : 'apps'}</div>
               </Link>
             ))}
           </div>
@@ -85,10 +85,10 @@ export default function HomePage() {
 
         {/* How commissioners use this tool */}
         <section className="rounded-2xl border p-8 mb-10" style={{ borderColor: 'var(--border)', background: '#fff' }}>
-          <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+          <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', fontWeight: 700, marginBottom: '0.5rem' }}>
             How commissioners use this tool
           </h2>
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+          <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
             A three-step process from identifying local need to building a commissioning case.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
@@ -102,7 +102,7 @@ export default function HomePage() {
               {
                 step: '2',
                 title: 'Review DTx options',
-                description: 'Browse and compare apps by condition, evidence strength, NICE status, assurance, deployment effort and cost model.',
+                description: 'Browse apps by condition, evidence strength, NICE status, assurance, deployment effort and cost model.',
                 colour: '#007F3B',
               },
               {
@@ -117,8 +117,8 @@ export default function HomePage() {
                   style={{ background: item.colour }}>
                   {item.step}
                 </div>
-                <h3 className="font-bold text-sm mb-2" style={{ color: 'var(--text-primary)' }}>{item.title}</h3>
-                <p className="text-xs" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>{item.description}</p>
+                <h3 className="font-bold mb-2" style={{ fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)' }}>{item.title}</h3>
+                <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>{item.description}</p>
               </div>
             ))}
           </div>
@@ -128,15 +128,15 @@ export default function HomePage() {
         <div className="rounded-xl border mb-10 p-5" style={{ borderColor: '#005EB8', background: '#E6F0FB' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '0.875rem', color: '#003087', marginBottom: 4 }}>
+              <div style={{ fontWeight: 700, fontSize: 'var(--text-label)', color: '#003087', marginBottom: 4 }}>
                 NICE Health Technology Evaluation HTE19 (HTG736) — COPD digital therapeutics
               </div>
-              <p style={{ fontSize: '0.8rem', color: '#003087', lineHeight: 1.6, margin: 0 }}>
+              <p style={{ fontSize: 'var(--text-body)', color: '#003087', lineHeight: 1.6, margin: 0 }}>
                 Published December 2024, updated September 2025. All four COPD apps are recommended for NHS use during a 3-year evidence generation period. Commissioning organisations must: (1) confirm DTAC approval, (2) have evidence generation agreements with NICE, and (3) submit annual reports to NICE.
               </p>
             </div>
             <a href="https://www.nice.org.uk/guidance/htg736" target="_blank" rel="noreferrer"
-              className="badge badge-blue" style={{ whiteSpace: 'nowrap', flexShrink: 0, fontSize: 12 }}>
+              className="badge badge-blue" style={{ whiteSpace: 'nowrap', flexShrink: 0, fontSize: 'var(--text-badge)' }}>
               NICE HTG736 ↗
             </a>
           </div>
@@ -144,10 +144,10 @@ export default function HomePage() {
 
         {/* Featured apps */}
         <div style={{ marginBottom: '0.75rem' }}>
-          <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.4rem' }}>
+          <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section)', fontWeight: 700, marginBottom: '0.4rem' }}>
             Featured apps
           </h2>
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+          <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
             {apps.length} apps across {conditions.length} condition areas. Select any app for the full commissioner assessment.
           </p>
         </div>
@@ -170,18 +170,18 @@ export default function HomePage() {
                         <Image src={app.logo_path} alt="" width={32} height={32} className="rounded-md flex-shrink-0" />
                       )}
                       <div>
-                        <div style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: 2 }}>{app.app_name}</div>
-                        <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{app.supplier_name}</div>
+                        <div style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontWeight: 700, fontSize: 'var(--text-card-title)', color: 'var(--text-primary)', marginBottom: 2 }}>{app.app_name}</div>
+                        <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>{app.supplier_name}</div>
                       </div>
                     </div>
                     {app.nhse_125k_eligible && (
-                      <span className="badge badge-green" style={{ flexShrink: 0, fontSize: 10 }}>★ NHSE £125k</span>
+                      <span className="badge badge-green" style={{ flexShrink: 0 }}>★ NHSE £125k</span>
                     )}
                   </div>
                   <div className="flex flex-wrap gap-1 mb-2">
                     {app.condition_tags.map((t: string) => <ConditionTag key={t} tag={t} />)}
                   </div>
-                  <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.6, flex: 1, marginBottom: '1rem' }}>
+                  <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.6, flex: 1, marginBottom: '1rem' }}>
                     {app.one_line_value_proposition}
                   </p>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem 0.75rem', marginBottom: '1rem' }}>
@@ -192,7 +192,7 @@ export default function HomePage() {
                       { label: 'DTAC', badge: <DtacBadge status={app.dtac_status} /> },
                     ].map(({ label, badge }) => (
                       <div key={label} style={{ minWidth: 0 }}>
-                        <div style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted)', marginBottom: 3 }}>{label}</div>
+                        <div style={{ fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted)', marginBottom: 3 }}>{label}</div>
                         {badge}
                       </div>
                     ))}
@@ -224,7 +224,7 @@ export default function HomePage() {
           <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.5rem', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>
             Real-world impact, not just theory
           </h2>
-          <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.7)', marginBottom: '2rem' }}>
+          <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.7)', marginBottom: '2rem' }}>
             Key metrics from NHS deployments — caveats noted on each app page.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
@@ -233,7 +233,7 @@ export default function HomePage() {
                 style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 12, padding: '1rem', textDecoration: 'none', display: 'block' }}>
                 <div style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, color: '#fff' }}>{ex.metric}</div>
                 <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#fff', marginBottom: '0.25rem' }}>{ex.unit}</div>
-                <div style={{ fontSize: '0.72rem', lineHeight: 1.5, color: 'rgba(255,255,255,0.7)' }}>{ex.detail}</div>
+                <div style={{ fontSize: 'var(--text-label)', lineHeight: 1.5, color: 'rgba(255,255,255,0.7)' }}>{ex.detail}</div>
               </Link>
             ))}
           </div>
@@ -244,10 +244,10 @@ export default function HomePage() {
           <section className="mb-10">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+                <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', fontWeight: 700, marginBottom: '0.25rem' }}>
                   Funding opportunities
                 </h2>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+                <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
                   Open and periodic funding relevant to digital therapeutics commissioning.
                 </p>
               </div>
@@ -259,10 +259,10 @@ export default function HomePage() {
               {openFunding.slice(0, 4).map((f: any) => (
                 <div key={f.id} className="rounded-xl bg-white border p-5" style={{ borderColor: 'var(--border)' }}>
                   <div className="flex items-start justify-between gap-2 mb-2">
-                    <div className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{f.title}</div>
+                    <div className="font-semibold" style={{ fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)' }}>{f.title}</div>
                     <FundingStatusBadge status={f.status} />
                   </div>
-                  <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>{f.description}</p>
+                  <p className="mb-3" style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{f.description}</p>
                   <div className="flex flex-wrap gap-1">
                     {f.condition_tags?.filter((t: string) => VISIBLE_CONDITIONS.includes(t)).map((t: string) => <ConditionTag key={t} tag={t} />)}
                   </div>
@@ -275,21 +275,21 @@ export default function HomePage() {
         {/* Removed / decommissioned apps */}
         {removedApps.length > 0 && (
           <section className="mb-10">
-            <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+            <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', fontWeight: 700, marginBottom: '0.5rem' }}>
               Removed or decommissioned apps
             </h2>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+            <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', marginBottom: '1rem' }}>
               Previously listed apps that have been removed from the catalogue.
             </p>
             <div className="rounded-xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-              <table className="w-full text-sm">
+              <table className="w-full" style={{ fontSize: 'var(--text-body)' }}>
                 <thead>
                   <tr style={{ background: '#F7F9FC' }}>
-                    <th className="text-left p-3 font-semibold text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>App</th>
-                    <th className="text-left p-3 font-semibold text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Supplier</th>
-                    <th className="text-left p-3 font-semibold text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Condition</th>
-                    <th className="text-left p-3 font-semibold text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Removed</th>
-                    <th className="text-left p-3 font-semibold text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Reason</th>
+                    <th className="text-left p-3 font-semibold uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>App</th>
+                    <th className="text-left p-3 font-semibold uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>Supplier</th>
+                    <th className="text-left p-3 font-semibold uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>Condition</th>
+                    <th className="text-left p-3 font-semibold uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>Removed</th>
+                    <th className="text-left p-3 font-semibold uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>Reason</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -299,7 +299,7 @@ export default function HomePage() {
                       <td className="p-3" style={{ color: 'var(--text-secondary)' }}>{app.supplier_name}</td>
                       <td className="p-3" style={{ color: 'var(--text-secondary)' }}>{app.condition}</td>
                       <td className="p-3" style={{ color: 'var(--text-muted)' }}>{app.removal_date}</td>
-                      <td className="p-3 text-xs" style={{ color: 'var(--text-secondary)' }}>{app.reason}</td>
+                      <td className="p-3" style={{ fontSize: 'var(--text-label)', color: 'var(--text-secondary)' }}>{app.reason}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -310,7 +310,7 @@ export default function HomePage() {
 
         {/* Disclaimer */}
         <div className="rounded-xl p-5 border" style={{ borderColor: 'var(--border)', background: '#F7F9FC', marginBottom: '4rem' }}>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
+          <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
             <strong style={{ color: 'var(--text-secondary)' }}>About this prototype: </strong>
             {dash.about_note}
           </p>
