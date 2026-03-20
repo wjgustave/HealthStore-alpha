@@ -1,70 +1,135 @@
-# HealthStore Typography Design Guide
+# Design Guide: Frutiger Typography (HealthStore)
 
-Frutiger is the primary typeface used throughout HealthStore. This guide defines how and where each weight should be used.
+Frutiger is the **only** brand typeface for HealthStore. This document is the single source of truth for font files, weights, size scale, and how to apply them in code.
 
-## Font Stack
+---
 
-| File | Weight | Use |
-|------|--------|-----|
-| Frutiger-Light.ttf | 300 | Secondary, muted, captions |
-| Frutiger-Regular.ttf | 400 | Body text |
-| Frutiger-Bold.ttf | 700 | Headings, titles, emphasis |
+## 1. Font files
 
-## Font Hierarchy
+| File | Weight | CSS `font-weight` | Location |
+|------|--------|-------------------|----------|
+| `Frutiger-Light.ttf` | Light | `300` | `public/fonts/Frutiger-Light.ttf` |
+| `Frutiger-Regular.ttf` | Regular | `400` | `public/fonts/Frutiger-Regular.ttf` |
+| `Frutiger-Bold.ttf` | Bold | `700` | `public/fonts/Frutiger-Bold.ttf` |
 
-| Role | Font | Weight | Usage |
-|------|------|--------|--------|
-| **Display / headings** | Frutiger | Bold (700) | Page titles (h1), section headings (h2, h3), brand name, stats |
-| **Body** | Frutiger | Regular (400) | Paragraphs, descriptions, labels, form inputs |
-| **Secondary** | Frutiger | Light (300) | Optional: captions, sublabels, muted helper text |
-| **Emphasis** | Frutiger | Bold (700) | Inline emphasis, table headers, badges |
-| **Labels** | Frutiger | Semibold (600) or Bold | Form labels, filter labels, uppercase labels |
+`@font-face` rules and global typography live in [`app/globals.css`](../app/globals.css). Fonts are **not** loaded from Google Fonts.
 
-## Usage by Component
+**Fallback stack:** `'Frutiger', Arial, sans-serif`
 
-| Component | Element | Font | Weight |
-|-----------|---------|------|--------|
-| **Nav** | Brand | Frutiger | Bold |
-| **Nav** | Links | Frutiger | Regular (medium) |
-| **Hero** | h1 | Frutiger | Bold |
-| **Hero** | Subtitle | Frutiger | Regular |
-| **Stats** | Number | Frutiger | Bold |
-| **Stats** | Label | Frutiger | Semibold (600) |
-| **Stats** | Sublabel | Frutiger | Regular or Light |
-| **Section** | h2 | Frutiger | Bold |
-| **Section** | Description | Frutiger | Regular |
-| **Cards** | App name | Frutiger | Bold |
-| **Cards** | Supplier | Frutiger | Regular |
-| **Badges** | Text | Frutiger | Semibold (600) |
-| **Forms** | Labels | Frutiger | Semibold |
-| **Forms** | Inputs | Frutiger | Regular |
-| **Tables** | Headers | Frutiger | Semibold |
-| **Tables** | Cells | Frutiger | Regular (medium for emphasis) |
+---
 
-## CSS Variables
+## 2. Font hierarchy (role → weight)
 
-Use these in `globals.css` for consistency:
+| Role | Weight | Typical use |
+|------|--------|-------------|
+| **Display / headings** | **700 (Bold)** | Page h1, section h2/h3, brand name, large stats |
+| **Body (default)** | **300 (Light)** | Paragraphs, descriptions, inherited copy, inputs — `body` uses `--font-body-weight: 300` |
+| **Labels & UI chrome** | **600 (semibold)** or **700** | Form labels, filter labels, uppercase table headers, badges |
+| **Stronger than body** | **400 (Regular)** or **700** | Use `font-medium` / `font-semibold` / `font-bold` where you need more weight than Light |
+
+`h1`, `h2`, and `h3` in global CSS use Frutiger Bold by default and override body weight.
+
+---
+
+## 3. Type scale (size tokens)
+
+Assume `html` root **16px** unless you change it. All rem values below are relative to that root.
+
+| Token | CSS variable | Value | Approx. px |
+|-------|----------------|-------|------------|
+| Hero title | `--text-hero` | `2.8rem` | ~45px |
+| Page title | `--text-page-title` | `2rem` | 32px |
+| Section heading (primary) | `--text-section` | `1.5rem` | 24px |
+| Section heading (secondary) | `--text-section-alt` | `1.4rem` | ~22px |
+| Card / featured title | `--text-card-title` | `1.05rem` | ~17px |
+| Card title (compact) | `--text-card-title-sm` | `1rem` | 16px |
+| **Body (default)** | `--text-body` | `1rem` | **16px** at weight **300** (Frutiger Light) |
+| Extra small / labels | `--text-xs` | `0.875rem` | **14px** (14÷16 rem at 16px root) |
+| Labels / meta | `--text-label` | `var(--text-xs)` | Same as **`--text-xs`** |
+| Badges (component) | `--text-badge` | `13px` | 13px (within 12–14px band) |
+
+**Usage in React / inline styles:**
+
+```tsx
+style={{ fontSize: 'var(--text-body)' }}
+style={{ fontSize: 'var(--text-xs)' }}
+style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-page-title)', fontWeight: 700 }}
+```
+
+`--text-xs` is **0.875rem** (14px when the root is 16px). `--text-label` is an alias: `var(--text-xs)`.
+
+**Do not** hard-code sizes that fight this scale (e.g. `10px` body copy) unless there is a documented exception.
+
+---
+
+## 4. Usage by component
+
+| Area | Element | Size token | Weight |
+|------|---------|------------|--------|
+| **Nav** | Brand text | `--text-card-title-sm`–`--text-card-title` | Bold |
+| **Nav** | Links | inherits body | Medium (500) via Tailwind |
+| **Hero** | Headline | `--text-hero` | Bold |
+| **Hero** | Subtitle | `--text-body` | Light (inherits body) |
+| **Home stats** | Value | `2rem` (large numeral) | Bold |
+| **Home stats** | Label | `--text-label` | Semibold |
+| **Sections** | h2 | `--text-section` or `--text-section-alt` | Bold |
+| **Sections** | Intro paragraph | `--text-body` | Light (inherits body) |
+| **App cards** | App name | `--text-card-title` | Bold |
+| **App cards** | Supplier | `--text-label` | Light unless `font-semibold` |
+| **App cards** | Value prop | `--text-body` | Light (inherits body) |
+| **Badges** | `.badge` | `--text-badge` | Semibold (600) |
+| **Forms** | Labels | `--text-label` | Semibold |
+| **Forms** | Inputs | `text-sm` / body | Light (inherits body) |
+| **Tables** | Headers | `--text-label` | Semibold, uppercase where needed |
+| **Tables** | Cells | `--text-body` | Light unless `font-medium` / semibold |
+| **Modals** | Title | `--text-section-alt` | Bold |
+| **Modals** | Body copy | `--text-body` | Light (inherits body) |
+
+---
+
+## 5. CSS variables reference (`:root`)
+
+Copy for quick reference (authoritative list is in `globals.css`):
 
 ```css
 :root {
   --font-display: 'Frutiger', Arial, sans-serif;
   --font-body: 'Frutiger', Arial, sans-serif;
+  --font-body-weight: 300;
+  --text-hero: 2.8rem;
+  --text-page-title: 2rem;
+  --text-section: 1.5rem;
+  --text-section-alt: 1.4rem;
+  --text-card-title: 1.05rem;
+  --text-card-title-sm: 1rem;
+  --text-body: 1rem;
+  --text-xs: 0.875rem;
+  --text-label: var(--text-xs);
+  --text-badge: 13px;
 }
 ```
 
-## Size Scale
+`body` uses `font-family: 'Frutiger', Arial, sans-serif`, `font-size: var(--text-body)`, and `font-weight: var(--font-body-weight)` (**300** = Frutiger Light).
 
-- Hero h1: 2.8rem
-- Page h1: 2rem
-- Section h2: 1.4–1.5rem
-- Card titles: 1rem–1.05rem
-- Body: 0.875rem (14px)
-- Labels: 0.75rem (12px)
-- Badges: 10–11px
+---
 
-## Do Not
+## 6. Do not
 
-- Use DM Sans or DM Serif Display
-- Use system serif fonts (e.g. Georgia) for headings
-- Use font-weight 500 for headings (use 700 for Bold)
-- Use Frutiger Light for body text (use Regular)
+- Use **DM Sans**, **DM Serif Display**, or other brand fonts for UI text.
+- Use **serif system fonts** (e.g. Georgia) for headings.
+- Use **`font-weight: 500`** for heading styles meant to read as Frutiger Bold — use **700** with the Bold font file.
+- Switch **body** back to Regular (400) without updating `--font-body-weight` and this guide.
+- Override **`.badge`** with a font size smaller than **12px** without design sign-off.
+- Add **inline `fontSize` on badges** unless necessary; prefer the global `.badge` rule.
+
+---
+
+## 7. Related files
+
+| File | Purpose |
+|------|---------|
+| `app/globals.css` | `@font-face`, `:root` tokens, `body`, `h1–h3`, `.badge` |
+| `app/layout.tsx` | No Google Fonts links |
+| `docs/TYPOGRAPHY.md` | This design guide |
+
+When adding new screens, reuse **`var(--text-*)`** for sizes and **Frutiger + weight** for hierarchy before introducing new magic numbers.

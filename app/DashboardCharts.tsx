@@ -31,20 +31,20 @@ export default function DashboardCharts({ apps, conditions }: Props) {
       <h2 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.5rem' }}>
         Dataset overview
       </h2>
-      <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
+      <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
         Summary of the {apps.length} apps currently in the catalogue.
       </p>
 
       <div className="grid md:grid-cols-3 gap-5">
         {/* Condition distribution */}
         <div className="rounded-xl bg-white border p-5" style={{ borderColor: 'var(--border)' }}>
-          <div className="text-xs font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>
+          <div className="font-bold uppercase tracking-wide mb-4" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
             By condition area
           </div>
           <div className="space-y-3">
             {conditions.map(c => (
               <div key={c.id}>
-                <div className="flex justify-between text-xs mb-1">
+                <div className="flex justify-between mb-1" style={{ fontSize: 'var(--text-label)' }}>
                   <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>{c.label}</span>
                   <span style={{ color: 'var(--text-muted)' }}>{c.count}</span>
                 </div>
@@ -59,13 +59,13 @@ export default function DashboardCharts({ apps, conditions }: Props) {
 
         {/* Maturity breakdown */}
         <div className="rounded-xl bg-white border p-5" style={{ borderColor: 'var(--border)' }}>
-          <div className="text-xs font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>
+          <div className="font-bold uppercase tracking-wide mb-4" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
             By maturity level
           </div>
           <div className="space-y-3">
             {Object.entries(maturityCounts).map(([level, count]) => (
               <div key={level}>
-                <div className="flex justify-between text-xs mb-1">
+                <div className="flex justify-between mb-1" style={{ fontSize: 'var(--text-label)' }}>
                   <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>
                     {maturityLabels[level] ?? level}
                   </span>
@@ -82,7 +82,7 @@ export default function DashboardCharts({ apps, conditions }: Props) {
 
         {/* NICE coverage */}
         <div className="rounded-xl bg-white border p-5" style={{ borderColor: 'var(--border)' }}>
-          <div className="text-xs font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>
+          <div className="font-bold uppercase tracking-wide mb-4" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
             NICE guidance coverage
           </div>
           <div className="flex items-center justify-center py-4">
@@ -97,11 +97,11 @@ export default function DashboardCharts({ apps, conditions }: Props) {
                 <div style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                   {nicePercent}%
                 </div>
-                <div className="text-xs" style={{ color: 'var(--text-muted)' }}>with NICE</div>
+                <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>with NICE</div>
               </div>
             </div>
           </div>
-          <div className="flex justify-center gap-4 text-xs mt-2">
+          <div className="flex justify-center gap-4 mt-2" style={{ fontSize: 'var(--text-label)' }}>
             <div className="flex items-center gap-1.5">
               <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#330072' }} />
               <span style={{ color: 'var(--text-secondary)' }}>NICE referenced ({niceCoverage.withNice})</span>

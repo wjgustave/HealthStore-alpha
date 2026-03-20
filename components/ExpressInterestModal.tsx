@@ -15,7 +15,7 @@ function Field({ label, value, onChange, required, type = 'text', placeholder }:
 }) {
   return (
     <div>
-      <label className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--text-secondary)' }}>
+      <label className="block font-semibold mb-1.5" style={{ fontSize: 'var(--text-label)', color: 'var(--text-secondary)' }}>
         {label}{required && <span style={{ color: 'var(--nhs-red)' }} className="ml-0.5">*</span>}
       </label>
       <input type={type} value={value} onChange={e => onChange(e.target.value)} required={required}
@@ -61,13 +61,13 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
               style={{ background: '#E6F5EC' }}>
               <CheckCircle className="w-8 h-8" style={{ color: 'var(--nhs-green)' }} />
             </div>
-            <h2 className="text-xl font-bold mb-2" style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--nhs-dark)' }}>
+            <h2 className="font-bold mb-2" style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--nhs-dark)' }}>
               Interest registered
             </h2>
-            <p className="text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
+            <p className="mb-2" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
               Your expression of interest in {appName} has been recorded.
             </p>
-            <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
+            <p className="mb-6" style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)' }}>
               A member of the commissioning support team will be in touch within 5 working days to discuss next steps.
             </p>
             <button onClick={onClose}
@@ -78,11 +78,11 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
           </div>
         ) : (
           <>
-            <h2 className="text-lg font-bold mb-1 pr-8"
-              style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--nhs-dark)' }}>
+            <h2 className="font-bold mb-1 pr-8"
+              style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--nhs-dark)' }}>
               Express interest in {appName}
             </h2>
-            <p className="text-sm mb-5" style={{ color: 'var(--text-muted)' }}>
+            <p className="mb-5" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
               Complete this form and a commissioning support team member will contact you.
             </p>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -104,7 +104,7 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
                   onChange={v => handleChange('population_estimate', v)}
                   placeholder="e.g. 2,000 COPD patients" />
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--text-secondary)' }}>
+                  <label className="block font-semibold mb-1.5" style={{ fontSize: 'var(--text-label)', color: 'var(--text-secondary)' }}>
                     Desired timeline
                   </label>
                   <select value={formData.timeline} onChange={e => handleChange('timeline', e.target.value)}
@@ -119,7 +119,7 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--text-secondary)' }}>
+                <label className="block font-semibold mb-1.5" style={{ fontSize: 'var(--text-label)', color: 'var(--text-secondary)' }}>
                   Additional context (optional)
                 </label>
                 <textarea value={formData.notes} onChange={e => handleChange('notes', e.target.value)}

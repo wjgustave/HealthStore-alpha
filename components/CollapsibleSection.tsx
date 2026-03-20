@@ -23,8 +23,8 @@ export default function CollapsibleSection({ title, defaultOpen = true, children
         {accent && (
           <div className="w-1 h-6 rounded-full flex-shrink-0" style={{ background: accent }} />
         )}
-        <h2 className="text-lg font-bold flex-1"
-          style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}>
+        <h2 className="font-bold flex-1"
+          style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--text-primary)' }}>
           {title}
         </h2>
         <ChevronDown

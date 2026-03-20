@@ -55,7 +55,7 @@ function FilterSelect({ label, value, onChange, options }: {
 }) {
   return (
     <div>
-      <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+      <label className="block font-semibold mb-1.5 uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
         {label}
       </label>
       <select value={value} onChange={e => onChange(e.target.value)}
@@ -132,7 +132,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
         <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
           Browse digital therapeutics
         </h1>
-        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+        <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
           {apps.length} apps across {conditionOptions.length - 1} condition areas · Last reviewed March 2026
         </p>
       </div>
@@ -143,7 +143,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
         <aside className="md:w-64 flex-shrink-0">
           <div className="rounded-xl bg-white border p-5 space-y-4" style={{ borderColor: 'var(--border)' }}>
             <div>
-              <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+              <label className="block font-semibold mb-1.5 uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
                 Search
               </label>
               <input type="text" placeholder="App name, supplier…"
@@ -166,11 +166,11 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
         {/* Results */}
         <div className="flex-1">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+            <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
               {resultText}
             </div>
             <div className="flex items-center gap-2">
-              <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Sort:</label>
+              <label className="font-semibold uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>Sort:</label>
               <select value={sort} onChange={e => setSort(e.target.value)}
                 className="text-sm rounded-lg border px-2 py-1.5 bg-white"
                 style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}>
@@ -197,7 +197,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
             <div className="text-center py-16 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
               <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>🔍</div>
               <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>No apps match your filters</div>
-              <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Try adjusting your filter criteria</div>
+              <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>Try adjusting your filter criteria</div>
             </div>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.25rem' }}>
@@ -214,14 +214,14 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                             <Image src={app.logo_path} alt="" width={32} height={32} className="rounded-md flex-shrink-0" />
                           )}
                           <div>
-                            <h3 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)', marginBottom: 2 }}>
+                            <h3 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontWeight: 700, fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)', marginBottom: 2 }}>
                               {app.app_name}
                             </h3>
-                            <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', margin: 0 }}>{app.supplier_name}</p>
+                            <p style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', margin: 0 }}>{app.supplier_name}</p>
                           </div>
                         </div>
                         {app.nhse_125k_eligible && (
-                          <span className="badge badge-green" style={{ fontSize: 10, flexShrink: 0 }}>★ NHSE £125k</span>
+                          <span className="badge badge-green" style={{ flexShrink: 0 }}>★ NHSE £125k</span>
                         )}
                       </div>
 
@@ -230,7 +230,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                         <SupervisionBadge model={app.supervision_model} />
                       </div>
 
-                      <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: 1.55, flex: 1, marginBottom: '1rem' }}>
+                      <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.55, flex: 1, marginBottom: '1rem' }}>
                         {app.one_line_value_proposition}
                       </p>
 
@@ -242,7 +242,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                           { label: 'DTAC', badge: <DtacBadge status={app.dtac_status} /> },
                         ].map(({ label, badge }) => (
                           <div key={label} style={{ minWidth: 0 }}>
-                            <div style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted)', marginBottom: 3 }}>{label}</div>
+                            <div style={{ fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted)', marginBottom: 3 }}>{label}</div>
                             {badge}
                           </div>
                         ))}

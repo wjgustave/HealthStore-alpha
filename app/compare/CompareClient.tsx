@@ -32,12 +32,12 @@ function CellValue({ app, dim }: { app: App; dim: string }) {
     case 'evidence': return <EvidenceBadge strength={app.evidence_strength} />
     case 'effort': return <EffortBadge level={app.local_wraparound} />
     case 'dtac': return <DtacBadge status={app.dtac_status} />
-    case 'device_class': return <span className="text-xs">{app.device_class}</span>
-    case 'dcb0129_status': return <span className="text-xs">{app.dcb0129_status}</span>
-    case 'gdpr': return <span className="text-xs">{app.gdpr_note.split('.')[0]}</span>
-    case 'iso27001': return <span className="text-xs">{app.iso27001}</span>
-    case 'fhir': return <span className="text-xs">{(app as any).technical_information?.fhir_api_status ?? 'See app page'}</span>
-    case 'pricing': return <span className="text-xs">{app.indicative_price_text.slice(0, 80)}</span>
+    case 'device_class': return <span style={{ fontSize: 'var(--text-label)' }}>{app.device_class}</span>
+    case 'dcb0129_status': return <span style={{ fontSize: 'var(--text-label)' }}>{app.dcb0129_status}</span>
+    case 'gdpr': return <span style={{ fontSize: 'var(--text-label)' }}>{app.gdpr_note.split('.')[0]}</span>
+    case 'iso27001': return <span style={{ fontSize: 'var(--text-label)' }}>{app.iso27001}</span>
+    case 'fhir': return <span style={{ fontSize: 'var(--text-label)' }}>{(app as any).technical_information?.fhir_api_status ?? 'See app page'}</span>
+    case 'pricing': return <span style={{ fontSize: 'var(--text-label)' }}>{app.indicative_price_text.slice(0, 80)}</span>
     case 'nhse_125k':
       return app.nhse_125k_eligible === true
         ? <span className="badge badge-green">Eligible</span>
@@ -45,11 +45,11 @@ function CellValue({ app, dim }: { app: App; dim: string }) {
         ? <span className="badge badge-grey">Not eligible</span>
         : <span className="badge badge-amber">Unconfirmed</span>
     case 'nice_refs':
-      return <div className="space-y-1">{app.nice_guidance_refs.map(r => <span key={r.ref} className="block text-xs">{r.ref} ({r.date})</span>)}</div>
-    case 'target_patients': return <span className="text-xs">{app.target_patients.slice(0, 100)}</span>
+      return <div className="space-y-1">{app.nice_guidance_refs.map(r => <span key={r.ref} className="block" style={{ fontSize: 'var(--text-label)' }}>{r.ref} ({r.date})</span>)}</div>
+    case 'target_patients': return <span style={{ fontSize: 'var(--text-label)' }}>{app.target_patients.slice(0, 100)}</span>
     case 'prerequisites':
-      return <ul className="space-y-1">{(app.implementation_prerequisites ?? []).slice(0, 3).map((p, i) => <li key={i} className="text-xs">• {p}</li>)}</ul>
-    default: return <span className="text-xs text-gray-400">—</span>
+      return <ul className="space-y-1">{(app.implementation_prerequisites ?? []).slice(0, 3).map((p, i) => <li key={i} style={{ fontSize: 'var(--text-label)' }}>• {p}</li>)}</ul>
+    default: return <span className="text-gray-400" style={{ fontSize: 'var(--text-label)' }}>—</span>
   }
 }
 
@@ -79,7 +79,7 @@ export default function CompareClient({ allApps }: Props) {
         <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
           Compare apps
         </h1>
-        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Select up to 4 apps to compare side by side</p>
+        <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>Select up to 4 apps to compare side by side</p>
       </div>
 
       {/* App selector */}
@@ -110,15 +110,15 @@ export default function CompareClient({ allApps }: Props) {
         <div className="text-center py-20 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
           <div className="text-4xl mb-4">⚖️</div>
           <div className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Select at least 2 apps to compare</div>
-          <div className="text-sm" style={{ color: 'var(--text-muted)' }}>Use the selector above</div>
+          <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>Use the selector above</div>
         </div>
       ) : (
         <div className="overflow-x-auto rounded-xl border bg-white" style={{ borderColor: 'var(--border)' }}>
-          <table className="w-full text-sm border-collapse">
+          <table className="w-full border-collapse" style={{ fontSize: 'var(--text-body)' }}>
             <thead>
               <tr>
-                <th className="text-left p-4 border-b border-r font-semibold text-xs uppercase tracking-wide"
-                  style={{ borderColor: 'var(--border)', color: 'var(--text-muted)', width: 180, background: '#F7F9FC' }}>
+                <th className="text-left p-4 border-b border-r font-semibold uppercase tracking-wide"
+                  style={{ fontSize: 'var(--text-label)', borderColor: 'var(--border)', color: 'var(--text-muted)', width: 180, background: '#F7F9FC' }}>
                   Dimension
                 </th>
                 {selected.map(app => {
@@ -127,10 +127,10 @@ export default function CompareClient({ allApps }: Props) {
                     <th key={app.id} className="p-4 border-b border-r text-left" style={{ borderColor: 'var(--border)', background: '#FAFBFC' }}>
                       <div style={{ height: 3, background: accent, borderRadius: 2, marginBottom: 8, marginLeft: -4, marginRight: -4 }} />
                       <Link href={`/apps/${app.slug}`} className="font-bold hover:underline"
-                        style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)', fontSize: '1rem' }}>
+                        style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)', fontSize: 'var(--text-card-title-sm)' }}>
                         {app.app_name}
                       </Link>
-                      <div className="text-xs font-normal mt-0.5" style={{ color: 'var(--text-muted)' }}>{app.supplier_name}</div>
+                      <div className="font-normal mt-0.5" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>{app.supplier_name}</div>
                     </th>
                   )
                 })}
@@ -139,8 +139,8 @@ export default function CompareClient({ allApps }: Props) {
             <tbody>
               {DIMENSIONS.map((dim, i) => (
                 <tr key={dim.key} style={{ background: i % 2 === 0 ? '#fff' : '#FAFBFC' }}>
-                  <td className="p-4 border-b border-r font-medium text-xs uppercase tracking-wide"
-                    style={{ borderColor: 'var(--border)', color: 'var(--text-muted)', background: '#F7F9FC' }}>
+                  <td className="p-4 border-b border-r font-medium uppercase tracking-wide"
+                    style={{ fontSize: 'var(--text-label)', borderColor: 'var(--border)', color: 'var(--text-muted)', background: '#F7F9FC' }}>
                     {dim.label}
                   </td>
                   {selected.map(app => (
@@ -152,13 +152,13 @@ export default function CompareClient({ allApps }: Props) {
               ))}
               {/* Evidence summary row */}
               <tr>
-                <td className="p-4 border-b border-r font-medium text-xs uppercase tracking-wide"
-                  style={{ borderColor: 'var(--border)', color: 'var(--text-muted)', background: '#F7F9FC' }}>
+                <td className="p-4 border-b border-r font-medium uppercase tracking-wide"
+                  style={{ fontSize: 'var(--text-label)', borderColor: 'var(--border)', color: 'var(--text-muted)', background: '#F7F9FC' }}>
                   Evidence summary
                 </td>
                 {selected.map(app => (
                   <td key={app.id} className="p-4 border-b border-r align-top" style={{ borderColor: 'var(--border)' }}>
-                    <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                    <p className="leading-relaxed" style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)' }}>
                       {app.evidence_summary.slice(0, 200)}…
                     </p>
                   </td>
