@@ -1,13 +1,24 @@
-import { getAllApps, getAppBySlug, getLinkedFunding } from '@/lib/data'
+import { getAllApps, getAppBySlug } from '@/lib/data'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
   DtacBadge, MaturityBadge, EvidenceBadge, EffortBadge,
-  SupervisionBadge, NiceTypeBadge, AlertBox, SectionHeader, ConditionTag, FundingStatusBadge
+  SupervisionBadge, NiceTypeBadge, AlertBox, SectionHeader, ConditionTag
 } from '@/components/Badges'
 import AppDetailClient from './AppDetailClient'
 import { STORE_ACCENT } from '@/lib/storeAccent'
+import { CollapsibleSection, CollapsibleInline } from '@/components/CollapsibleSection'
+import {
+  ScaleAndMaturitySection,
+  WhatItTakesLocallySection,
+  ImpactAndCaseStudiesSection,
+  DemoAccessSection,
+  TechnicalIntegrationTable,
+  FinancialCommercialBody,
+  RelatedFundingSection,
+  IndicativeFinancialGlance,
+} from '@/components/AppDetailSections'
 
 export async function generateStaticParams() {
   return getAllApps().map(a => ({ slug: a.slug }))
@@ -17,17 +28,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const app = getAppBySlug(slug)
   return { title: app ? `${app.app_name} — HealthStore` : 'Not found' }
-}
-
-function Row({ label, value }: { label: string; value: string | null }) {
-  return (
-    <div className="flex gap-3 py-3 border-b last:border-0 text-sm" style={{ borderColor: 'var(--border)' }}>
-      <dt className="w-48 flex-shrink-0 font-medium" style={{ color: 'var(--text-muted)' }}>{label}</dt>
-      <dd style={{ color: value ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-        {value ?? 'Information not available'}
-      </dd>
-    </div>
-  )
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -157,36 +157,6 @@ function EvidenceCard({ study, accent }: { study: any; accent: string }) {
   )
 }
 
-function TechnicalIntegrationTable({ app }: { app: any }) {
-  const ti = app.technical_integrations
-  if (!ti) return null
-  const rows = [
-    { label: 'FHIR', value: ti.fhir },
-    { label: 'EMIS', value: ti.emis },
-    { label: 'NHS App', value: ti.nhs_app ? 'Yes' : 'No' },
-    { label: 'Population health dashboard', value: ti.population_health_dashboard ? 'Yes' : 'No' },
-    { label: 'Device integration', value: ti.device_integration },
-    { label: 'Languages', value: ti.languages?.join(', ') },
-    { label: 'Data hosting', value: ti.data_hosting },
-  ]
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm">
-        <tbody>
-          {rows.map(r => (
-            <tr key={r.label} className="border-b last:border-0" style={{ borderColor: 'var(--border)' }}>
-              <td className="py-2.5 pr-4 font-medium w-56" style={{ color: 'var(--text-muted)' }}>{r.label}</td>
-              <td className="py-2.5" style={{ color: r.value ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-                {r.value || 'Not confirmed'}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
-}
-
 function ContextOfUseGrid({ app }: { app: any }) {
   const ctx = app.context_of_use
   if (!ctx) return null
@@ -233,40 +203,12 @@ function NhsIntegrationBadges({ app }: { app: any }) {
   )
 }
 
-function RelatedFunding({ fundingIds }: { fundingIds: string[] }) {
-  const funding = getLinkedFunding(fundingIds)
-  if (!funding.length) return null
-  return (
-    <div className="space-y-3">
-      {funding.map((f: any) => (
-        <div key={f.id} className="rounded-lg border p-4" style={{ borderColor: 'var(--border)', background: '#F7F9FC' }}>
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <div className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{f.title}</div>
-            <FundingStatusBadge status={f.status} />
-          </div>
-          <p className="text-xs mb-2" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>{f.description}</p>
-          {f.total_value && (
-            <div className="text-xs" style={{ color: 'var(--text-muted)' }}>Value: {f.total_value}</div>
-          )}
-          {f.external_url && (
-            <a href={f.external_url} target="_blank" rel="noreferrer"
-              className="text-xs font-medium mt-2 inline-block" style={{ color: 'var(--nhs-blue)' }}>
-              {f.external_url_label ?? 'More info'} ↗
-            </a>
-          )}
-        </div>
-      ))}
-    </div>
-  )
-}
-
 export default async function AppPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const app = getAppBySlug(slug)
   if (!app) notFound()
 
   const accent = STORE_ACCENT
-  const hasDetailedEvidence = app.clinical_evidence_detailed?.length > 0
 
   const rcts = (app.clinical_evidence_detailed ?? []).filter((s: any) => s.type === 'RCT')
   const observational = (app.clinical_evidence_detailed ?? []).filter((s: any) => ['observational', 'real_world', 'service_eval'].includes(s.type))
@@ -278,14 +220,12 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
     <AppDetailClient app={app}>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
 
-        {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs mb-6" style={{ color: 'var(--text-muted)' }}>
           <Link href="/apps" className="hover:underline">Browse apps</Link>
           <span>›</span>
           <span>{app.app_name}</span>
         </div>
 
-        {/* App hero */}
         <div className="rounded-2xl bg-white border overflow-hidden mb-8" style={{ borderColor: 'var(--border)' }}>
           <div className="p-8">
             <div className="flex flex-col md:flex-row gap-6 items-start justify-between">
@@ -334,7 +274,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 ))}
               </div>
             </div>
-            {/* CTAs — NHSE pill left, Express interest right */}
             <div className="flex flex-wrap gap-3 items-center mt-6 pt-6 border-t" style={{ borderColor: 'var(--border)' }}>
               {app.nhse_125k_eligible === true && (
                 <span className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5"
@@ -350,7 +289,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
           </div>
         </div>
 
-        {/* Alerts */}
         {app.decommissioning_alert && <div className="mb-6"><AlertBox type="warning">{app.decommissioning_alert}</AlertBox></div>}
         {app.clinical_safety_alert && <div className="mb-6"><AlertBox type="danger"><strong>Clinical safety: </strong>{app.clinical_safety_alert}</AlertBox></div>}
         {app.dtac_status === 'passed_refresh_required' && <div className="mb-6"><AlertBox type="warning"><strong>DTAC refresh required: </strong>{app.dtac_note}</AlertBox></div>}
@@ -358,10 +296,8 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
         <div className="grid md:grid-cols-3 gap-6">
 
-          {/* Main column */}
           <div className="md:col-span-2 space-y-6">
 
-            {/* Why it matters */}
             <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
               <SectionHeader title="Why it matters locally" />
               <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}>{app.why_it_matters_locally}</p>
@@ -372,7 +308,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               )}
             </section>
 
-            {/* Context of Use */}
             {app.context_of_use && (
               <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
                 <SectionHeader title="Context of use" description="Population, pathways, care settings and therapeutic purpose." />
@@ -380,8 +315,13 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               </section>
             )}
 
-            {/* Clinical evidence */}
-            <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
+            <ScaleAndMaturitySection app={app} />
+
+            <WhatItTakesLocallySection app={app} accent={accent} />
+
+            <ImpactAndCaseStudiesSection app={app} />
+
+            <section id="clinical-evidence" className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
               <SectionHeader
                 title="Clinical evidence"
                 description="Full evidence record. Links to source publications provided where available."
@@ -416,23 +356,28 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                   {niceAndImpl.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
                 </div>
               )}
-
-              {!hasDetailedEvidence && app.case_studies?.map((cs: any, i: number) => (
-                <div key={i} className="rounded-xl border p-4 mb-3" style={{ borderColor: 'var(--border)', background: '#F7F9FC' }}>
-                  <div className="font-semibold text-sm mb-1" style={{ color: 'var(--text-primary)' }}>{cs.title}</div>
-                  <div className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-                    {cs.setting}{cs.sample_size ? ` · n=${cs.sample_size.toLocaleString()}` : ''}
-                  </div>
-                  <p className="text-sm mb-2" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>{cs.outcome}</p>
-                  <div className="text-xs p-2 rounded" style={{ background: '#FEF5E6', color: '#7A4800' }}>
-                    ⚠ Caveat: {cs.caveat}
-                  </div>
-                  {cs.source && <div className="text-xs mt-1.5" style={{ color: 'var(--text-muted)' }}>Source: {cs.source}</div>}
-                </div>
-              ))}
             </section>
 
-            {/* Data quality flags */}
+            <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
+              <SectionHeader title="NICE guidance" />
+              <div className="space-y-3">
+                {app.nice_guidance_refs.map((r: any) => (
+                  <div key={r.ref} className="flex items-start gap-3 p-3 rounded-lg" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
+                    <NiceTypeBadge type={r.type} />
+                    <div>
+                      <a href={r.url} target="_blank" rel="noreferrer"
+                        className="font-semibold text-sm hover:underline" style={{ color: accent }}>
+                        {r.ref} ↗
+                      </a>
+                      <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                        {r.date}{r.note ? ` · ${r.note}` : ''}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
             {app.contradictory_evidence?.length > 0 && (
               <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
                 <SectionHeader title="Data quality flags" description="Issues identified during review that commissioners should be aware of." />
@@ -455,90 +400,36 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               </section>
             )}
 
-            {/* NICE guidance */}
-            <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-              <SectionHeader title="NICE guidance" />
-              <div className="space-y-3">
-                {app.nice_guidance_refs.map((r: any) => (
-                  <div key={r.ref} className="flex items-start gap-3 p-3 rounded-lg" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
-                    <NiceTypeBadge type={r.type} />
-                    <div>
-                      <a href={r.url} target="_blank" rel="noreferrer"
-                        className="font-semibold text-sm hover:underline" style={{ color: accent }}>
-                        {r.ref} ↗
-                      </a>
-                      <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                        {r.date}{r.note ? ` · ${r.note}` : ''}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+            <DemoAccessSection app={app} accent={accent} />
 
-            {/* Deployments */}
-            {app.deployments?.length > 0 && (
-              <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-                <SectionHeader title="Deployment footprint" />
-                <div className="space-y-0 divide-y" style={{ borderColor: 'var(--border)' }}>
-                  {app.deployments.map((d: any, i: number) => (
-                    <div key={i} className="py-3 flex items-start gap-3 text-sm">
-                      <div className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${d.currently_active === false ? 'bg-red-400' : d.currently_active === null ? 'bg-gray-300' : 'bg-green-500'}`} />
-                      <div>
-                        <div className="font-medium" style={{ color: 'var(--text-primary)' }}>{d.organisation_name}</div>
-                        <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                          {d.region}{d.country !== 'United Kingdom' ? ` · ${d.country}` : ''}
-                          {d.patient_count ? ` · ${d.patient_count.toLocaleString()} patients` : ''}
-                          {d.currently_active === false ? ' · DECOMMISSIONED' : ''}
-                        </div>
-                        {d.deployment_scope && <div className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>{d.deployment_scope}</div>}
-                        {d.attribution_flag && d.attribution_note && (
-                          <div className="text-xs mt-1" style={{ color: '#D5840D' }}>⚠ {d.attribution_note}</div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Financial — collapsible */}
-            <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }} data-collapsible data-title="Financial and commercial considerations" data-default-open="true">
-              <SectionHeader title="Financial and commercial considerations" />
-              <dl className="divide-y" style={{ borderColor: 'var(--border)' }}>
-                <Row label="Pricing model" value={app.indicative_price_text} />
-                <Row label="Procurement routes" value={app.procurement_notes ?? app.contract_note} />
-                {app.nhse_125k_note && <Row label="NHSE £125k funding" value={app.nhse_125k_note} />}
-                <Row label="Expected benefit" value={app.expected_benefit_note} />
-                <Row label="Tariff considerations" value={app.tariff_considerations} />
-                <Row label="ROI notes" value={app.roi_note} />
-                {app.monitoring_model && <Row label="Monitoring model" value={app.monitoring_model} />}
-                {app.minimum_conditions_for_success && <Row label="Minimum conditions for success" value={app.minimum_conditions_for_success} />}
-              </dl>
-            </section>
-
-            {/* Technical integrations — collapsible */}
             {app.technical_integrations && (
-              <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }} data-collapsible data-title="Technical integrations" data-default-open="false">
-                <SectionHeader title="Technical integrations" description="System integration capabilities and technical specifications." />
+              <CollapsibleSection
+                title="NHS and care system integrations"
+                description="Technical integration detail. NHS App, NHS Login and NHS Notify are summarised in the product summary at the top of the page."
+                defaultOpen={false}
+              >
                 <TechnicalIntegrationTable app={app} />
-              </section>
+              </CollapsibleSection>
             )}
 
-            {/* Related funding */}
-            {linkedFundingIds.length > 0 && (
-              <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-                <SectionHeader title="Related funding opportunities" description="Funding that may be relevant to commissioning this technology." />
-                <RelatedFunding fundingIds={linkedFundingIds} />
-              </section>
-            )}
+            <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
+              <SectionHeader title="Financial and commercial considerations" />
+              <IndicativeFinancialGlance app={app} />
+              <CollapsibleInline
+                title="Procurement, tariff and ROI detail"
+                description="Contract routes, tariff, ROI and operational commercial notes."
+                defaultOpen
+              >
+                <FinancialCommercialBody app={app} />
+              </CollapsibleInline>
+            </section>
+
+            <RelatedFundingSection fundingIds={linkedFundingIds} />
 
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-5">
 
-            {/* Quick facts */}
             <div className="bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
               <div className="text-xs font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>Quick facts</div>
               <div className="space-y-3 text-sm">
@@ -555,17 +446,9 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                   <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Target patients</div>
                   <div className="text-xs" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>{app.target_patients}</div>
                 </div>
-                <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Deployment footprint</div>
-                  <div className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-                    {app.live_icbs} ICB/ICS sites
-                    {typeof app.live_sites === 'string' && app.live_sites && ` · ${app.live_sites.split(',')[0].trim()}`}
-                  </div>
-                </div>
               </div>
             </div>
 
-            {/* Assurance — collapsible in sidebar */}
             <div className="bg-white rounded-xl border p-5 space-y-3" style={{ borderColor: 'var(--border)' }}>
               <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Assurance</div>
               {[
@@ -588,37 +471,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               )}
             </div>
 
-            {/* Implementation */}
-            <div className="bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
-              <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>Implementation</div>
-              <div className="space-y-2 text-xs" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                <div><strong>Model:</strong> {app.onboarding_detail}</div>
-                {app.monitoring_note && (
-                  <div className="p-2 rounded" style={{ background: '#F7F9FC' }}>
-                    <strong>Monitoring:</strong> {app.monitoring_note}
-                  </div>
-                )}
-                {app.operating_hours_caveat && (
-                  <div className="p-2 rounded" style={{ background: '#FEF5E6', color: '#7A4800' }}>
-                    <strong>Hours caveat:</strong> {app.operating_hours_caveat}
-                  </div>
-                )}
-              </div>
-              {app.implementation_prerequisites?.length > 0 && (
-                <div className="mt-3">
-                  <div className="text-xs font-semibold mb-2" style={{ color: 'var(--text-muted)' }}>Prerequisites</div>
-                  <ul className="space-y-1">
-                    {app.implementation_prerequisites.map((p: string, i: number) => (
-                      <li key={i} className="flex items-start gap-1.5 text-xs" style={{ color: 'var(--text-secondary)' }}>
-                        <span className="mt-0.5" style={{ color: accent }}>✓</span>{p}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            {/* Product tiers */}
             {app.product_tiers?.length > 0 && (
               <div className="bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
                 <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>Product tiers</div>
@@ -631,7 +483,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               </div>
             )}
 
-            {/* Resources + Contact + Express Interest */}
             <div className="rounded-xl border overflow-hidden" style={{ borderColor: accent }}>
               <div style={{ background: accent, padding: '16px 18px' }}>
                 <div style={{ fontWeight: 700, fontSize: 'var(--text-label)', color: '#fff', marginBottom: 4 }}>
@@ -661,23 +512,9 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                     {app.supplier_contact_email ?? app.contact_email}
                   </a>
                 )}
-                {app.demo_variants?.length > 0 && (
-                  <div style={{ borderTop: '1px solid var(--border)', paddingTop: 10, marginTop: 2 }}>
-                    <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--text-muted)' }}>Resources</div>
-                    <div className="space-y-2">
-                      {app.demo_variants.map((d: any) => (
-                        <a key={d.url} href={d.url} target="_blank" rel="noreferrer"
-                          className="block text-sm font-medium hover:underline" style={{ color: accent, fontSize: 'var(--text-body)' }}>
-                          {d.label} ↗
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
 
-            {/* Source note */}
             <div className="rounded-lg p-4 text-xs" style={{ background: '#F7F9FC', border: '1px solid var(--border)', color: 'var(--text-muted)', lineHeight: 1.5 }}>
               <strong style={{ color: 'var(--text-secondary)' }}>Sources: </strong>{app.source_summary}
               <br /><br />

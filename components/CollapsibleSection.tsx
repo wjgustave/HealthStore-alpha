@@ -1,44 +1,75 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { SectionHeader } from '@/components/Badges'
 
-interface Props {
+export function CollapsibleSection({
+  title,
+  description,
+  defaultOpen = true,
+  children,
+}: {
   title: string
+  description?: string
   defaultOpen?: boolean
   children: React.ReactNode
-  accent?: string
-}
-
-export default function CollapsibleSection({ title, defaultOpen = true, children, accent }: Props) {
+}) {
   const [open, setOpen] = useState(defaultOpen)
 
   return (
-    <section className="bg-white rounded-xl border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center gap-3 p-5 text-left hover:bg-gray-50 transition-colors"
-        aria-expanded={open}
-      >
-        {accent && (
-          <div className="w-1 h-6 rounded-full flex-shrink-0" style={{ background: accent }} />
-        )}
-        <h2 className="font-bold flex-1"
-          style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--text-primary)' }}>
-          {title}
-        </h2>
-        <ChevronDown
-          className="w-5 h-5 transition-transform duration-200 flex-shrink-0"
-          style={{ color: 'var(--text-muted)', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
-        />
-      </button>
-      {open && (
-        <div className="px-5 pb-5">
-          <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
-            {children}
-          </div>
+    <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
+      <div className="flex items-start justify-between gap-3 mb-0">
+        <div className="flex-1 min-w-0">
+          <SectionHeader title={title} description={description} />
         </div>
-      )}
+        <button
+          type="button"
+          onClick={() => setOpen(o => !o)}
+          className="flex-shrink-0 mt-1 px-2 py-1 text-xs font-semibold rounded-md border"
+          style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
+          aria-expanded={open}
+        >
+          {open ? 'Hide' : 'Show'}
+        </button>
+      </div>
+      {open ? <div className="pt-2">{children}</div> : null}
     </section>
+  )
+}
+
+export function CollapsibleInline({
+  title,
+  description,
+  defaultOpen = true,
+  children,
+}: {
+  title: string
+  description?: string
+  defaultOpen?: boolean
+  children: React.ReactNode
+}) {
+  const [open, setOpen] = useState(defaultOpen)
+
+  return (
+    <div className="border-t pt-5 mt-5" style={{ borderColor: 'var(--border)' }}>
+      <div className="flex items-start justify-between gap-3 mb-0">
+        <div className="flex-1 min-w-0">
+          <h3 className="font-bold text-sm mb-0.5" style={{ color: 'var(--text-primary)' }}>{title}</h3>
+          {description && (
+            <p className="text-xs mb-0" style={{ color: 'var(--text-muted)', lineHeight: 1.5 }}>{description}</p>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={() => setOpen(o => !o)}
+          className="flex-shrink-0 px-2 py-1 text-xs font-semibold rounded-md border"
+          style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
+          aria-expanded={open}
+        >
+          {open ? 'Hide' : 'Show'}
+        </button>
+      </div>
+      {open ? <div className="mt-4">{children}</div> : null}
+    </div>
   )
 }

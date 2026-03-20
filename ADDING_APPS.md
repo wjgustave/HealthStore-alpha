@@ -23,6 +23,25 @@ To show a hidden condition, add its id to the `VISIBLE_CONDITIONS` array. No oth
 
 The ICB £125k technology funding scheme referenced in the UI is **COPD-context**. For apps whose primary condition is **`cardiac_rehab`**, set **`nhse_125k_note` to `null`** (and keep `nhse_125k_eligible` as `null`) so the “NHSE £125k funding” row does not appear under Financial and commercial considerations. Use non-null `nhse_125k_note` only where the scheme is relevant (typically COPD apps).
 
+### App detail page: where fields appear
+
+The product detail template (`app/apps/[slug]/page.tsx` and `components/AppDetailSections.tsx`) maps JSON to these **main-column** sections (in order):
+
+| Section | Key fields (typical) |
+|---------|----------------------|
+| **Why it matters locally** | `why_it_matters_locally`, `sustainability_highlight` |
+| **Context of use** | `context_of_use` |
+| **Scale and maturity** | `maturity_level`, `evidence_strength`, `live_icbs`, `live_sites`, `patients_covered_note`, `deployments` |
+| **What it takes locally** | `local_wraparound`, `local_wraparound_detail`, `onboarding_model`, `onboarding_detail`, `training_required`, `training_note`, `supplier_wrap`, `service_wrap_included`, `service_wrap_note`, `monitoring_note`, `escalation_note`, `operating_hours_caveat`, `implementation_prerequisites` |
+| **Expected impact and case studies** | `expected_benefit_note`, `case_studies` (shown whenever `case_studies` has entries — not gated on `clinical_evidence_detailed`) |
+| **Clinical evidence** | `evidence_summary`, `clinical_evidence_detailed` |
+| **NICE guidance** | `nice_guidance_refs` |
+| **Data quality flags** | `contradictory_evidence` |
+| **Demo access** | `demo_notes`, `demo_variants` (both render when present) |
+| **NHS and care system integrations** | Collapsible block from `technical_integrations` (NHS App / Login / Notify use the **hero** flags `nhs_app_integration`, `nhs_login_integration`, `nhs_notify_integration`; the table omits a duplicate NHS App row) |
+| **Financial and commercial** | **Indicative financial cost** callout: `indicative_price_text`, `pricing_confidence`. Collapsible **Procurement, tariff and ROI detail**: `procurement_notes` / `contract_note`, `nhse_125k_note`, `tariff_considerations`, `roi_note`, `monitoring_model`, `minimum_conditions_for_success` |
+| **Related funding opportunities** | `linked_funding_ids` (or legacy `funding_ids`). If empty, the page shows a short message with a link to `/funding`. |
+
 ---
 
 ## Step 1: Create the app JSON file
