@@ -60,10 +60,10 @@ export default function SelectEntityForm() {
 
             <h1 className="text-center mb-1"
               style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-page-title)', fontWeight: 700, color: '#1A2332' }}>
-              Choose commissioning entity
+              Select an ICB
             </h1>
             <p className="text-center mb-6" style={{ fontSize: 'var(--text-body)', color: '#768692' }}>
-              Select which organisation you are accessing the store for.
+              This is the ICB you are accessing the store for.
             </p>
 
             {error && (
