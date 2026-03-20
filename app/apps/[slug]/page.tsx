@@ -337,18 +337,18 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 ))}
               </div>
             </div>
-            {/* CTAs */}
-            <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t" style={{ borderColor: 'var(--border)' }}>
-              <button data-express-interest className="px-4 py-2 rounded-lg text-sm font-semibold text-white"
-                style={{ background: accent }}>
-                Express interest
-              </button>
+            {/* CTAs — NHSE pill left, Express interest right */}
+            <div className="flex flex-wrap gap-3 items-center mt-6 pt-6 border-t" style={{ borderColor: 'var(--border)' }}>
               {app.nhse_125k_eligible === true && (
                 <span className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5"
                   style={{ background: '#E6F5EC', color: '#004B22' }}>
                   ★ NHSE £125k funding eligible
                 </span>
               )}
+              <button data-express-interest className="ml-auto px-4 py-2 rounded-lg text-sm font-semibold text-white"
+                style={{ background: accent }}>
+                Express interest
+              </button>
             </div>
           </div>
         </div>
