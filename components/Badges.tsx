@@ -57,7 +57,7 @@ export function ConditionTag({ tag }: { tag: string }) {
     <span
       className="badge"
       style={{
-        background: '#99BFE3',
+        background: '#CCDFF1',
         color: '#005eb8',
         border: 'none',
       }}
