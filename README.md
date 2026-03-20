@@ -16,7 +16,17 @@ A commissioner decision-support tool for NHS digital health technology procureme
 
 ## Authentication (prototype)
 
-Access is gated by middleware. Set these in `.env.local` (see [`.env.example`](.env.example)):
+**Local development:** generate a working `.env.local` (session secret + bcrypt hash) in one step:
+
+```bash
+npm run auth:setup
+# default: username `dev` / password `dev` — then restart `npm run dev`
+
+# custom password (and optional username as third arg):
+# npm run auth:setup "your-secure-password" "yourname"
+```
+
+Access is gated by middleware. You can also set variables manually in `.env.local` (see [`.env.example`](.env.example)):
 
 | Variable | Purpose |
 |----------|---------|

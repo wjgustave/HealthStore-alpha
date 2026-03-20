@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "auth:setup": "node scripts/create-local-env.cjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
