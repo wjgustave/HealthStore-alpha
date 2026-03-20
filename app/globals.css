@@ -42,6 +42,16 @@
     --shadow-lg: 0 10px 30px rgba(0,0,0,0.10);
     --font-display: 'Frutiger', Arial, sans-serif;
     --font-body: 'Frutiger', Arial, sans-serif;
+    /* Type scale */
+    --text-hero: 2.8rem;
+    --text-page-title: 2rem;
+    --text-section: 1.5rem;
+    --text-section-alt: 1.4rem;
+    --text-card-title: 1.05rem;
+    --text-card-title-sm: 1rem;
+    --text-body: 1rem;
+    --text-label: 0.875rem;
+    --text-badge: 13px;
   }
 
   * { box-sizing: border-box; }
@@ -49,6 +59,7 @@
 
   body {
     font-family: 'Frutiger', Arial, sans-serif;
+    font-size: var(--text-body);
     background-color: var(--surface);
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
@@ -63,7 +74,7 @@
     align-items: center;
     padding: 3px 8px;
     border-radius: 20px;
-    font-size: 11px;
+    font-size: var(--text-badge);
     font-weight: 600;
     letter-spacing: 0.3px;
     line-height: 1.3;

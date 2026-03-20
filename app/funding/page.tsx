@@ -37,7 +37,7 @@ export default function FundingPage() {
             <h3 className="font-bold text-base" style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}>
               {f.title}
             </h3>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{f.sponsoring_body}</p>
+            <p className="mt-0.5" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>{f.sponsoring_body}</p>
           </div>
           <FundingStatusBadge status={f.status} />
         </div>
@@ -49,7 +49,7 @@ export default function FundingPage() {
           </div>
         )}
 
-        <p className="text-sm mb-3 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{f.description}</p>
+        <p className="mb-3 leading-relaxed" style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)' }}>{f.description}</p>
 
         {f.closing_date_note && (
           <div className="text-xs mb-3 p-2 rounded" style={{ background: '#FEF5E6', color: '#7A4800' }}>
@@ -64,7 +64,7 @@ export default function FundingPage() {
         <AppTags appTags={f.app_tags} />
 
         {f.notes && (
-          <p className="text-xs mt-3 leading-relaxed" style={{ color: 'var(--text-muted)' }}>{f.notes}</p>
+          <p className="mt-3 leading-relaxed" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>{f.notes}</p>
         )}
 
         {f.external_url && (
@@ -100,7 +100,7 @@ export default function FundingPage() {
         <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
           Funding directory
         </h1>
-        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', maxWidth: 600, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', maxWidth: 600, lineHeight: 1.6 }}>
           Funding opportunities and obligations relevant to NHS commissioners procuring digital therapeutics.
           Confirm current availability with sponsoring organisations before submitting business cases.
         </p>
@@ -108,8 +108,8 @@ export default function FundingPage() {
 
       {/* Mandatory obligations note */}
       <div className="rounded-xl border p-5 mb-10" style={{ borderColor: '#005EB8', background: '#E6F0FB' }}>
-        <div className="font-semibold text-sm mb-1" style={{ color: '#003087' }}>📋 NICE HTE19 — mandatory evidence generation obligations</div>
-        <p className="text-sm" style={{ color: '#003087', lineHeight: 1.6 }}>
+        <div className="font-semibold mb-1" style={{ fontSize: 'var(--text-label)', color: '#003087' }}>📋 NICE HTE19 — mandatory evidence generation obligations</div>
+        <p style={{ fontSize: 'var(--text-body)', color: '#003087', lineHeight: 1.6 }}>
           All commissioners deploying NICE HTE19-recommended COPD apps must have evidence generation agreements with NICE and submit annual reports.
           This is a condition of the recommendation — not optional. See the NICE HTE19 evidence generation entry below.
         </p>

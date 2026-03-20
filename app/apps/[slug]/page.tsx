@@ -57,20 +57,20 @@ function EvidenceCard({ study, accent }: { study: any; accent: string }) {
               {TYPE_LABELS[study.type] ?? study.type}
             </span>
             {study.peer_reviewed && (
-              <span className="badge badge-green" style={{ fontSize: 10 }}>Peer-reviewed</span>
+              <span className="badge badge-green">Peer-reviewed</span>
             )}
             {study.coi && (
-              <span className="badge badge-amber" style={{ fontSize: 10 }}>⚠ COI declared</span>
+              <span className="badge badge-amber">⚠ COI declared</span>
             )}
             {study.data_quality_flag && (
-              <span className="badge badge-amber" style={{ fontSize: 10 }}>⚠ Data quality flag</span>
+              <span className="badge badge-amber">⚠ Data quality flag</span>
             )}
           </div>
-          <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text-primary)', marginBottom: 2 }}>
+          <div style={{ fontWeight: 600, fontSize: 'var(--text-label)', color: 'var(--text-primary)', marginBottom: 2 }}>
             {study.ref}
           </div>
           {study.authors && (
-            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+            <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
               {study.authors}
               {study.journal && <span> · <em>{study.journal}</em></span>}
               {study.year && <span> · {study.year}</span>}
@@ -81,37 +81,37 @@ function EvidenceCard({ study, accent }: { study: any; accent: string }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flexShrink: 0 }}>
           {study.url_doi && (
             <a href={study.url_doi} target="_blank" rel="noreferrer"
-              style={{ fontSize: 11, color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               DOI ↗
             </a>
           )}
           {study.url_pubmed && (
             <a href={study.url_pubmed} target="_blank" rel="noreferrer"
-              style={{ fontSize: 11, color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               PubMed ↗
             </a>
           )}
           {study.url_pmc && (
             <a href={study.url_pmc} target="_blank" rel="noreferrer"
-              style={{ fontSize: 11, color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               PMC (open) ↗
             </a>
           )}
           {study.url_full_text && !study.url_doi && !study.url_pubmed && (
             <a href={study.url_full_text} target="_blank" rel="noreferrer"
-              style={{ fontSize: 11, color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               {study.source_label ?? 'Source ↗'}
             </a>
           )}
           {study.url_trial_reg && (
             <a href={study.url_trial_reg} target="_blank" rel="noreferrer"
-              style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+              style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               Trial reg ↗
             </a>
           )}
           {study.url_case_study && (
             <a href={study.url_case_study} target="_blank" rel="noreferrer"
-              style={{ fontSize: 11, color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               Case study ↗
             </a>
           )}
@@ -119,7 +119,7 @@ function EvidenceCard({ study, accent }: { study: any; accent: string }) {
       </div>
 
       {(study.doi || study.pmid || study.pmc || study.trial_reg || study.n) && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', fontSize: 10, color: 'var(--text-muted)', marginBottom: 8, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', fontSize: 'var(--text-label)', color: 'var(--text-muted)', marginBottom: 8, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>
           {study.doi && <span>DOI: {study.doi}</span>}
           {study.pmid && <span>PMID: {study.pmid}</span>}
           {study.pmc && <span>PMC: {study.pmc}</span>}
@@ -130,25 +130,25 @@ function EvidenceCard({ study, accent }: { study: any; accent: string }) {
       )}
 
       {study.key_results && (
-        <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 6 }}>
+        <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 6 }}>
           <strong style={{ color: 'var(--text-primary)' }}>Key results: </strong>
           {study.key_results}
         </p>
       )}
 
       {study.study_limitation && (
-        <p style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: study.data_quality_note ? 6 : 0 }}>
+        <p style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: study.data_quality_note ? 6 : 0 }}>
           <strong>Limitation: </strong>{study.study_limitation}
         </p>
       )}
 
       {study.data_quality_note && (
-        <div style={{ fontSize: 11, background: '#FEF5E6', borderLeft: '3px solid #D5840D', color: '#7A4800', borderRadius: 4, padding: '6px 8px', marginTop: 6, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 'var(--text-label)', background: '#FEF5E6', borderLeft: '3px solid #D5840D', color: '#7A4800', borderRadius: 4, padding: '6px 8px', marginTop: 6, lineHeight: 1.5 }}>
           <strong>⚠ Commissioner note: </strong>{study.data_quality_note}
         </div>
       )}
       {study.coi_note && !study.data_quality_note && (
-        <div style={{ fontSize: 11, background: '#FEF5E6', borderLeft: '3px solid #D5840D', color: '#7A4800', borderRadius: 4, padding: '6px 8px', marginTop: 6, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 'var(--text-label)', background: '#FEF5E6', borderLeft: '3px solid #D5840D', color: '#7A4800', borderRadius: 4, padding: '6px 8px', marginTop: 6, lineHeight: 1.5 }}>
           <strong>⚠ COI note: </strong>{study.coi_note}
         </div>
       )}
@@ -224,7 +224,7 @@ function NhsIntegrationBadges({ app }: { app: any }) {
   return (
     <div className="flex flex-wrap gap-2 mt-3">
       {integrations.filter(i => app[i.key]).map(i => (
-        <span key={i.key} className="badge badge-blue" style={{ fontSize: 10 }}>
+        <span key={i.key} className="badge badge-blue">
           ✓ {i.label}
         </span>
       ))}
@@ -301,8 +301,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                     </a>
                   ))}
                   {app.content_confidence && (
-                    <span className={`badge ${app.content_confidence === 'Confirmed' ? 'badge-green' : app.content_confidence === 'Supplier-reported' ? 'badge-blue' : 'badge-amber'}`}
-                      style={{ fontSize: 10 }}>
+                    <span className={`badge ${app.content_confidence === 'Confirmed' ? 'badge-green' : app.content_confidence === 'Supplier-reported' ? 'badge-blue' : 'badge-amber'}`}>
                       {app.content_confidence}
                     </span>
                   )}
@@ -313,13 +312,13 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                       className="rounded-lg flex-shrink-0" />
                   )}
                   <div>
-                    <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2.2rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+                    <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-page-title)', fontWeight: 700, marginBottom: '0.25rem' }}>
                       {app.app_name}
                     </h1>
-                    <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>{app.supplier_name}</p>
+                    <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{app.supplier_name}</p>
                   </div>
                 </div>
-                <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--text-secondary)', maxWidth: 640 }}>
+                <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)', maxWidth: 640 }}>
                   {app.one_line_value_proposition}
                 </p>
                 <NhsIntegrationBadges app={app} />
@@ -372,7 +371,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             {/* Why it matters */}
             <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
               <SectionHeader title="Why it matters locally" />
-              <p style={{ fontSize: '0.9rem', lineHeight: 1.7, color: 'var(--text-secondary)' }}>{app.why_it_matters_locally}</p>
+              <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}>{app.why_it_matters_locally}</p>
               {app.sustainability_highlight && (
                 <div className="mt-4 rounded-lg p-3 text-sm" style={{ background: '#E6F5EC', color: '#004B22' }}>
                   🌿 {app.sustainability_highlight}
@@ -394,13 +393,13 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 title="Clinical evidence"
                 description="Full evidence record. Links to source publications provided where available."
               />
-              <p style={{ fontSize: '0.875rem', lineHeight: 1.7, color: 'var(--text-secondary)', marginBottom: 20 }}>
+              <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)', marginBottom: 20 }}>
                 {app.evidence_summary}
               </p>
 
               {rcts.length > 0 && (
                 <div style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
+                  <div style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
                     Randomised controlled trials ({rcts.length})
                   </div>
                   {rcts.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
@@ -409,7 +408,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
               {observational.length > 0 && (
                 <div style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
+                  <div style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
                     Real-world, observational & service evaluation evidence ({observational.length})
                   </div>
                   {observational.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
@@ -418,7 +417,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
               {niceAndImpl.length > 0 && (
                 <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
+                  <div style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
                     NICE assessments, implementation science & other sources ({niceAndImpl.length})
                   </div>
                   {niceAndImpl.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
@@ -642,17 +641,17 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             {/* Resources + Contact + Express Interest */}
             <div className="rounded-xl border overflow-hidden" style={{ borderColor: accent }}>
               <div style={{ background: accent, padding: '16px 18px' }}>
-                <div style={{ fontWeight: 700, fontSize: 14, color: '#fff', marginBottom: 4 }}>
+                <div style={{ fontWeight: 700, fontSize: 'var(--text-label)', color: '#fff', marginBottom: 4 }}>
                   Express interest
                 </div>
-                <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.85)', lineHeight: 1.5, margin: '0 0 12px' }}>
+                <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.85)', lineHeight: 1.5, margin: '0 0 12px' }}>
                   Contact {app.supplier_contact_name ?? app.supplier_name} to discuss deployment in your ICB.
                 </p>
                 <button data-express-interest
                   style={{
                     display: 'block', width: '100%', textAlign: 'center', background: '#fff',
                     color: accent, borderRadius: 8, padding: '9px 16px',
-                    fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer',
+                    fontSize: 'var(--text-label)', fontWeight: 700, border: 'none', cursor: 'pointer',
                   }}>
                   ✉ Express interest
                 </button>
@@ -660,12 +659,12 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
               <div style={{ background: '#fff', padding: '14px 18px' }}>
                 <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>Contact</div>
-                <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+                <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', marginBottom: 8 }}>
                   <strong style={{ color: 'var(--text-primary)' }}>{app.supplier_contact_name ?? app.supplier_name}</strong>
                 </div>
                 {(app.supplier_contact_email ?? app.contact_email) && (
                   <a href={`mailto:${app.supplier_contact_email ?? app.contact_email}`}
-                    style={{ fontSize: 12, color: accent, display: 'block', marginBottom: 10, wordBreak: 'break-all' }}>
+                    style={{ fontSize: 'var(--text-body)', color: accent, display: 'block', marginBottom: 10, wordBreak: 'break-all' }}>
                     {app.supplier_contact_email ?? app.contact_email}
                   </a>
                 )}
@@ -675,7 +674,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                     <div className="space-y-2">
                       {app.demo_variants.map((d: any) => (
                         <a key={d.url} href={d.url} target="_blank" rel="noreferrer"
-                          className="block text-sm font-medium hover:underline" style={{ color: accent, fontSize: 12 }}>
+                          className="block text-sm font-medium hover:underline" style={{ color: accent, fontSize: 'var(--text-body)' }}>
                           {d.label} ↗
                         </a>
                       ))}
