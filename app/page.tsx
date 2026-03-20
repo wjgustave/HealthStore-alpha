@@ -4,6 +4,7 @@ import { getAllApps, getDashboardContent, getDashboardStats, getConditionAreas, 
 import { EvidenceBadge, MaturityBadge, DtacBadge, EffortBadge, FundingStatusBadge, ConditionTag } from '@/components/Badges'
 import DashboardCharts from './DashboardCharts'
 import { ConditionIcon } from '@/components/HealthIcons'
+import { STORE_ACCENT } from '@/lib/storeAccent'
 
 export default function HomePage() {
   const apps = getAllApps()
@@ -153,16 +154,10 @@ export default function HomePage() {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem', marginBottom: '3rem' }}>
-          {apps.slice(0, 8).map((app: any) => {
-            const conditionColours: Record<string, string> = {
-              copd: '#005EB8', insomnia: '#330072', weight_management: '#007F3B', msk: '#D5840D', eating_disorders: '#DA291C', cardiac_rehab: '#AE2573',
-            }
-            const accent = conditionColours[app.condition_tags[0]] ?? '#005EB8'
-            return (
+          {apps.slice(0, 8).map((app: any) => (
               <Link key={app.id} href={`/apps/${app.slug}`}
                 className="app-card rounded-xl bg-white border flex flex-col"
                 style={{ borderColor: 'var(--border)', textDecoration: 'none' }}>
-                <div style={{ height: 5, background: accent, borderRadius: '10px 10px 0 0' }} />
                 <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                     <div className="flex items-center gap-3">
@@ -198,13 +193,12 @@ export default function HomePage() {
                     ))}
                   </div>
                   <div className="rounded-lg py-2 text-sm font-semibold text-center"
-                    style={{ background: accent, color: '#fff' }}>
+                    style={{ background: STORE_ACCENT, color: '#fff' }}>
                     View full assessment →
                   </div>
                 </div>
               </Link>
-            )
-          })}
+          ))}
         </div>
 
         {apps.length > 8 && (

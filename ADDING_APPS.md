@@ -263,14 +263,13 @@ Add a new entry:
 }
 ```
 
-### 4b. Condition colour maps (5 files)
+### 4b. App UI accent (no per-condition TSX maps)
 
-Add the new condition id and hex colour to the `conditionColours` object in each file:
+App cards, detail-page CTAs/links, and catalogue CTAs use a **single** NHS blue accent: `STORE_ACCENT` in [`lib/storeAccent.ts`](lib/storeAccent.ts) (aligned with `--nhs-blue` in `globals.css`). **Adding a new condition does not require editing colour maps** in `page.tsx`, `CatalogueClient.tsx`, or `[slug]/page.tsx`.
 
-- `components/AppCard.tsx`
-- `app/apps/[slug]/page.tsx`
-- `app/apps/CatalogueClient.tsx` (also add to `conditionOptions` if the condition is visible)
-- `app/page.tsx`
+For **Browse by condition** tiles and **dashboard chart** segments, colours still come from `content/conditions/conditions.json` (`colour` on each condition). Set an appropriate hex when you add a condition there.
+
+For the **catalogue condition filter**, add the new condition to `conditionOptions` in `app/apps/CatalogueClient.tsx` when the condition is visible in `VISIBLE_CONDITIONS`.
 
 ### 4c. `components/Badges.tsx`
 
@@ -314,9 +313,6 @@ Confirm:
 | 2 | `public/logos/{slug}.svg` | Add logo SVG |
 | 3 | `lib/data.ts` | Add import + register in `getAllApps()` |
 | 4a | `content/conditions/conditions.json` | Add condition (new condition only) |
-| 4b | `components/AppCard.tsx` | Add colour (new condition only) |
-| 4b | `app/apps/[slug]/page.tsx` | Add colour (new condition only) |
-| 4b | `app/apps/CatalogueClient.tsx` | Add colour + filter option (new condition only) |
-| 4b | `app/page.tsx` | Add colour (new condition only) |
+| 4b | `app/apps/CatalogueClient.tsx` | Add filter option in `conditionOptions` if visible |
 | 4c | `components/Badges.tsx` | Add label (new condition only) |
 | 4d | `components/HealthIcons.tsx` | Add icon (new condition only) |

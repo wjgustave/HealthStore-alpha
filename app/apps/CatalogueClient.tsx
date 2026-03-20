@@ -3,6 +3,7 @@ import { useState, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { App } from '@/lib/data'
+import { STORE_ACCENT } from '@/lib/storeAccent'
 import { DtacBadge, MaturityBadge, EvidenceBadge, EffortBadge, SupervisionBadge, ConditionTag } from '@/components/Badges'
 import { X } from 'lucide-react'
 
@@ -45,10 +46,6 @@ const sortOptions = [
 const maturityOrder: Record<string, number> = { scaled: 0, multi_site_live: 1, limited_live: 2, pilot: 3 }
 const evidenceOrder: Record<string, number> = { established: 0, promising: 1, scaled: 0, emerging: 2 }
 const effortOrder: Record<string, number> = { low: 0, medium: 1, high: 2 }
-const conditionColours: Record<string, string> = {
-  copd: '#005EB8', insomnia: '#330072', weight_management: '#007F3B', msk: '#D5840D', eating_disorders: '#DA291C', cardiac_rehab: '#AE2573',
-}
-
 function FilterSelect({ label, value, onChange, options }: {
   label: string; value: string; onChange: (v: string) => void
   options: { id: string; label: string }[]
@@ -201,12 +198,9 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
             </div>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.25rem' }}>
-              {filtered.map((app: App) => {
-                const accent = conditionColours[app.condition_tags[0]] ?? '#005EB8'
-                return (
+              {filtered.map((app: App) => (
                   <div key={app.id} className="app-card rounded-xl bg-white border flex flex-col"
                     style={{ borderColor: 'var(--border)' }}>
-                    <div style={{ height: 4, background: accent, borderRadius: '10px 10px 0 0' }} />
                     <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: '0.75rem' }}>
                         <div className="flex items-center gap-2.5">
@@ -250,13 +244,12 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
 
                       <Link href={`/apps/${app.slug}`}
                         className="rounded-lg py-2.5 text-sm font-semibold text-center block"
-                        style={{ background: accent, color: '#fff' }}>
+                        style={{ background: STORE_ACCENT, color: '#fff' }}>
                         View full assessment →
                       </Link>
                     </div>
                   </div>
-                )
-              })}
+              ))}
             </div>
           )}
         </div>

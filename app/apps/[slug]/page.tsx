@@ -7,6 +7,7 @@ import {
   SupervisionBadge, NiceTypeBadge, AlertBox, SectionHeader, ConditionTag, FundingStatusBadge
 } from '@/components/Badges'
 import AppDetailClient from './AppDetailClient'
+import { STORE_ACCENT } from '@/lib/storeAccent'
 
 export async function generateStaticParams() {
   return getAllApps().map(a => ({ slug: a.slug }))
@@ -264,10 +265,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
   const app = getAppBySlug(slug)
   if (!app) notFound()
 
-  const conditionColour: Record<string, string> = {
-    copd: '#005EB8', insomnia: '#330072', weight_management: '#007F3B', msk: '#D5840D', eating_disorders: '#DA291C', cardiac_rehab: '#AE2573',
-  }
-  const accent = conditionColour[app.condition_tags[0]] ?? '#005EB8'
+  const accent = STORE_ACCENT
   const hasDetailedEvidence = app.clinical_evidence_detailed?.length > 0
 
   const rcts = (app.clinical_evidence_detailed ?? []).filter((s: any) => s.type === 'RCT')
@@ -277,7 +275,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
   const linkedFundingIds = app.linked_funding_ids ?? app.funding_ids ?? []
 
   return (
-    <AppDetailClient app={app} accent={accent}>
+    <AppDetailClient app={app}>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
 
         {/* Breadcrumb */}
@@ -289,7 +287,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
         {/* App hero */}
         <div className="rounded-2xl bg-white border overflow-hidden mb-8" style={{ borderColor: 'var(--border)' }}>
-          <div style={{ height: 8, background: accent }} />
           <div className="p-8">
             <div className="flex flex-col md:flex-row gap-6 items-start justify-between">
               <div className="flex-1">
