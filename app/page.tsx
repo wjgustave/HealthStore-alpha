@@ -19,27 +19,41 @@ export default function HomePage() {
       {/* Hero */}
       <section style={{ background: 'linear-gradient(135deg, #003087 0%, #005EB8 60%, #0072CE 100%)' }}>
         <div className="max-w-7xl mx-auto px-6" style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
-          <div style={{ maxWidth: 680 }}>
-            <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold mb-6"
-              style={{ background: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)' }}>
-              <span style={{ width: 8, height: 8, background: '#4ade80', borderRadius: '50%', display: 'inline-block' }} />
-              Prototype — March 2026
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_30%] md:gap-12 md:items-center">
+            <div className="min-w-0" style={{ maxWidth: 680 }}>
+              <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold mb-6"
+                style={{ background: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)' }}>
+                <span style={{ width: 8, height: 8, background: '#4ade80', borderRadius: '50%', display: 'inline-block' }} />
+                Prototype — March 2026
+              </div>
+              <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-hero)', lineHeight: 1.15, fontWeight: 700, color: '#fff', marginBottom: '1.25rem' }}>
+                {dash.hero.headline}
+              </h1>
+              <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.82)', lineHeight: 1.7, marginBottom: '2rem' }}>
+                {dash.hero.subheadline}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/apps" className="px-6 py-3 rounded-lg text-sm font-semibold"
+                  style={{ background: '#fff', color: '#003087' }}>
+                  Browse all {apps.length} apps
+                </Link>
+                <Link href="/funding" className="px-6 py-3 rounded-lg text-sm font-semibold border"
+                  style={{ borderColor: 'rgba(255,255,255,0.3)', color: '#fff' }}>
+                  View funding
+                </Link>
+              </div>
             </div>
-            <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-hero)', lineHeight: 1.15, fontWeight: 700, color: '#fff', marginBottom: '1.25rem' }}>
-              {dash.hero.headline}
-            </h1>
-            <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.82)', lineHeight: 1.7, marginBottom: '2rem' }}>
-              {dash.hero.subheadline}
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/apps" className="px-6 py-3 rounded-lg text-sm font-semibold"
-                style={{ background: '#fff', color: '#003087' }}>
-                Browse all {apps.length} apps
-              </Link>
-              <Link href="/funding" className="px-6 py-3 rounded-lg text-sm font-semibold border"
-                style={{ borderColor: 'rgba(255,255,255,0.3)', color: '#fff' }}>
-                View funding
-              </Link>
+            <div
+              className="relative mx-auto aspect-[4/3] w-full max-w-md overflow-hidden rounded-xl md:mx-0 md:max-w-none md:rounded-r-xl md:rounded-l-none [clip-path:polygon(0_0,100%_0,100%_100%,0_100%)] md:[clip-path:polygon(18%_0,100%_0,100%_100%,0_100%)]"
+            >
+              <Image
+                src="/images/home-hero.jpg"
+                alt="Healthcare professionals collaborating with digital health tools"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 30vw"
+                priority
+              />
             </div>
           </div>
         </div>
