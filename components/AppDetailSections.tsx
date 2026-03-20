@@ -46,14 +46,14 @@ export function ScaleAndMaturitySection({ app }: { app: any }) {
       />
       <div className="flex flex-col sm:flex-row sm:flex-nowrap gap-3 mb-5">
         <div
-          className="rounded-lg px-3 py-2 text-sm flex-1 min-w-0"
+          className="rounded-lg px-3 py-2 text-sm w-fit"
           style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}
         >
           <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Maturity </span>
           <MaturityBadge level={app.maturity_level} />
         </div>
         <div
-          className="rounded-lg px-3 py-2 text-sm flex-1 min-w-0"
+          className="rounded-lg px-3 py-2 text-sm w-fit"
           style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}
         >
           <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Evidence strength </span>
