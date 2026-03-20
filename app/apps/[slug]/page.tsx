@@ -426,6 +426,28 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
             <RelatedFundingSection fundingIds={linkedFundingIds} />
 
+            <div className="rounded-xl border overflow-hidden" style={{ borderColor: accent }}>
+              <div style={{ background: accent, padding: '20px 24px' }}>
+                <div style={{ fontWeight: 700, fontSize: 'var(--text-section-alt)', color: '#fff', marginBottom: 8 }}>
+                  Express interest
+                </div>
+                <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.9)', lineHeight: 1.6, margin: '0 0 16px', maxWidth: 640 }}>
+                  Contact {app.supplier_contact_name ?? app.supplier_name} to discuss deployment in your ICB.
+                </p>
+                <button
+                  type="button"
+                  data-express-interest
+                  className="w-full sm:w-auto min-w-[200px]"
+                  style={{
+                    display: 'block', textAlign: 'center', background: '#fff',
+                    color: accent, borderRadius: 8, padding: '12px 24px',
+                    fontSize: 'var(--text-label)', fontWeight: 700, border: 'none', cursor: 'pointer',
+                  }}>
+                  ✉ Express interest
+                </button>
+              </div>
+            </div>
+
           </div>
 
           <div className="space-y-5">
@@ -482,38 +504,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 ))}
               </div>
             )}
-
-            <div className="rounded-xl border overflow-hidden" style={{ borderColor: accent }}>
-              <div style={{ background: accent, padding: '16px 18px' }}>
-                <div style={{ fontWeight: 700, fontSize: 'var(--text-label)', color: '#fff', marginBottom: 4 }}>
-                  Express interest
-                </div>
-                <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.85)', lineHeight: 1.5, margin: '0 0 12px' }}>
-                  Contact {app.supplier_contact_name ?? app.supplier_name} to discuss deployment in your ICB.
-                </p>
-                <button data-express-interest
-                  style={{
-                    display: 'block', width: '100%', textAlign: 'center', background: '#fff',
-                    color: accent, borderRadius: 8, padding: '9px 16px',
-                    fontSize: 'var(--text-label)', fontWeight: 700, border: 'none', cursor: 'pointer',
-                  }}>
-                  ✉ Express interest
-                </button>
-              </div>
-
-              <div style={{ background: '#fff', padding: '14px 18px' }}>
-                <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>Contact</div>
-                <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', marginBottom: 8 }}>
-                  <strong style={{ color: 'var(--text-primary)' }}>{app.supplier_contact_name ?? app.supplier_name}</strong>
-                </div>
-                {(app.supplier_contact_email ?? app.contact_email) && (
-                  <a href={`mailto:${app.supplier_contact_email ?? app.contact_email}`}
-                    style={{ fontSize: 'var(--text-body)', color: accent, display: 'block', marginBottom: 10, wordBreak: 'break-all' }}>
-                    {app.supplier_contact_email ?? app.contact_email}
-                  </a>
-                )}
-              </div>
-            </div>
 
             <div className="rounded-lg p-4 text-xs" style={{ background: '#F7F9FC', border: '1px solid var(--border)', color: 'var(--text-muted)', lineHeight: 1.5 }}>
               <strong style={{ color: 'var(--text-secondary)' }}>Sources: </strong>{app.source_summary}

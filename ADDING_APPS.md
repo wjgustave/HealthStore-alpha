@@ -41,6 +41,7 @@ The product detail template (`app/apps/[slug]/page.tsx` and `components/AppDetai
 | **NHS and care system integrations** | Collapsible block from `technical_integrations` (NHS App / Login / Notify use the **hero** flags `nhs_app_integration`, `nhs_login_integration`, `nhs_notify_integration`; the table omits a duplicate NHS App row) |
 | **Financial and commercial** | **Indicative financial cost** callout: `indicative_price_text`, `pricing_confidence`. Collapsible **Procurement, tariff and ROI detail**: `procurement_notes` / `contract_note`, `nhse_125k_note`, `tariff_considerations`, `roi_note`, `monitoring_model`, `minimum_conditions_for_success` |
 | **Related funding opportunities** | `linked_funding_ids` (or legacy `funding_ids`). If empty, the page shows a short message with a link to `/funding`. |
+| **Express interest** (main column, last) | CTA copy uses `supplier_contact_name` / `supplier_name`; opens the interest modal (`data-express-interest`). Supplier email is not shown on the page (use modal / supplier directly). |
 
 ---
 
