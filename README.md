@@ -75,7 +75,7 @@ To add or update an app, edit the relevant JSON file and run `npm run build`.
 
 ## Important note
 
-This is a prototype based on publicly available information as of March 2026. It is not a procurement framework, national endorsement list, or live assurance database. All information should be verified with suppliers before use in formal commissioning or procurement processes.
+This is a prototype based on publicly available information as of March 2026. All information should be verified with suppliers before use in formal commissioning or procurement processes.
 
 ## CSS note
 

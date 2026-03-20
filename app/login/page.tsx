@@ -152,7 +152,7 @@ export default function LoginPage() {
 
         {/* Footer text */}
         <p className="text-center text-xs mt-6" style={{ color: 'rgba(255,255,255,0.55)' }}>
-          Based on publicly available information as of March 2026. Not a procurement framework.
+          Based on publicly available information as of March 2026.
         </p>
       </div>
     </div>

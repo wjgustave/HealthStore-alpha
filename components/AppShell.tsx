@@ -26,7 +26,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <span className="badge badge-blue">Prototype</span>
             </div>
             <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-              Based on publicly available information as of March 2026. Not a procurement framework or national endorsement list.
+              Based on publicly available information as of March 2026.
             </p>
           </div>
           <div className="flex gap-6 text-xs" style={{ color: 'var(--text-muted)' }}>
