@@ -320,16 +320,16 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 </p>
                 <NhsIntegrationBadges app={app} />
               </div>
-              <div className="flex-shrink-0 grid grid-cols-2 gap-3 md:w-56">
+              <div className="flex-shrink-0 grid grid-cols-2 gap-3 md:w-72">
                 {[
                   { label: 'Maturity', badge: <MaturityBadge level={app.maturity_level} /> },
                   { label: 'Evidence', badge: <EvidenceBadge strength={app.evidence_strength} /> },
                   { label: 'Local effort', badge: <EffortBadge level={app.local_wraparound} /> },
                   { label: 'DTAC', badge: <DtacBadge status={app.dtac_status} /> },
                 ].map(({ label, badge }) => (
-                  <div key={label} className="rounded-xl p-3 text-center min-w-0" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
+                  <div key={label} className="rounded-xl p-4 text-center min-w-0" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
                     <div className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>{label}</div>
-                    {badge}
+                    <span className="inline-flex justify-center whitespace-nowrap">{badge}</span>
                   </div>
                 ))}
               </div>

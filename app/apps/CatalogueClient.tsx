@@ -197,7 +197,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
               <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>Try adjusting your filter criteria</div>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.25rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
               {filtered.map((app: App) => (
                   <div key={app.id} className="app-card rounded-xl bg-white border flex flex-col"
                     style={{ borderColor: 'var(--border)' }}>
@@ -245,7 +245,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                       <Link href={`/apps/${app.slug}`}
                         className="rounded-lg py-2.5 text-sm font-semibold text-center block"
                         style={{ background: STORE_ACCENT, color: '#fff' }}>
-                        View full assessment →
+                        View details →
                       </Link>
                     </div>
                   </div>

@@ -116,9 +116,9 @@ export const maturityLabels: Record<string, string> = {
 }
 
 export const effortLabels: Record<string, string> = {
-  low: 'Low effort',
-  medium: 'Medium effort',
-  high: 'High effort',
+  low: 'Low',
+  medium: 'Medium',
+  high: 'High',
 }
 
 export const evidenceLabels: Record<string, string> = {
@@ -129,8 +129,8 @@ export const evidenceLabels: Record<string, string> = {
 }
 
 export const dtacLabels: Record<string, string> = {
-  passed: 'DTAC Passed',
-  passed_refresh_required: 'DTAC Passed – refresh required',
-  required_not_confirmed: 'DTAC required – not confirmed',
+  passed: 'Passed',
+  passed_refresh_required: 'Passed – refresh required',
+  required_not_confirmed: 'Required – not confirmed',
   not_applicable: 'N/A',
 }

@@ -164,7 +164,7 @@ export default function CompareClient({ allApps }: Props) {
                       <Link href={`/apps/${app.slug}`}
                         className="block text-center text-sm font-semibold rounded-lg py-2"
                         style={{ background: STORE_ACCENT, color: '#fff' }}>
-                        Full assessment →
+                        View details →
                       </Link>
                     </td>
                 ))}
