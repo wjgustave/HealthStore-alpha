@@ -4,7 +4,13 @@ import { usePathname } from 'next/navigation'
 import Nav from './Nav'
 import BackToTop from './BackToTop'
 
-export default function AppShell({ children }: { children: React.ReactNode }) {
+export default function AppShell({
+  children,
+  commissioningContextLabel = '',
+}: {
+  children: React.ReactNode
+  commissioningContextLabel?: string
+}) {
   const pathname = usePathname()
   const isLoginPage = pathname === '/login'
 
@@ -15,7 +21,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <a href="#main-content" className="skip-link">Skip to main content</a>
-      <Nav />
+      <Nav commissioningContextLabel={commissioningContextLabel} />
       <main id="main-content">{children}</main>
       <BackToTop />
       <footer className="mt-20 border-t py-10 px-6" style={{ borderColor: 'var(--border)', background: '#fff' }}>

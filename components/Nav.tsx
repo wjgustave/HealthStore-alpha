@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { LogOut } from 'lucide-react'
 
-export default function Nav() {
+export default function Nav({ commissioningContextLabel }: { commissioningContextLabel: string }) {
   const path = usePathname()
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -55,6 +55,20 @@ export default function Nav() {
           </svg>
         </button>
       </nav>
+      {commissioningContextLabel ? (
+        <div
+          className="border-t px-4 sm:px-6 py-2"
+          style={{ borderColor: 'var(--border)', background: '#F0F4F5' }}
+        >
+          <p
+            className="max-w-7xl mx-auto text-sm leading-snug"
+            style={{ color: '#425563', fontFamily: 'Frutiger, Arial, sans-serif' }}
+          >
+            <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>Accessing as: </span>
+            {commissioningContextLabel}
+          </p>
+        </div>
+      ) : null}
       {mobileOpen && (
         <div className="md:hidden border-t px-4 py-3 flex flex-col gap-1" style={{ borderColor: 'var(--border)', background: '#fff' }}>
           {links.map(l => (
