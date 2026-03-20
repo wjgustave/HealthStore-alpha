@@ -6,16 +6,23 @@ export const DEVICE_CLASS_IIA_EXPLAINER =
 export const DEVICE_CLASS_I_EXPLAINER =
   "Software that supports clinical decisions but doesn't directly drive them: for example, a tool that records or displays patient data. It's low-risk, so manufacturer can self-certify compliance. No UK approved body assessment is required, though MHRA registration and technical documentation are still mandatory."
 
+export const DEVICE_CLASS_IIA_SUMMARY = 'What is a Class IIa device'
+export const DEVICE_CLASS_I_SUMMARY = 'What is a Class I device'
+
 /**
- * Returns explainer body for Class IIa or Class I device_class strings; null otherwise.
+ * Returns summary label + body for Class IIa or Class I device_class strings; null otherwise.
  * Class IIa must be checked before Class I — "Class IIa" shares a prefix with "Class I".
  */
-export function getDeviceClassExplainerBody(deviceClass: string): string | null {
+export function getDeviceClassExplainer(deviceClass: string): { summary: string; body: string } | null {
   const s = deviceClass.trim()
   if (!s) return null
 
-  if (/class\s*iia/i.test(s)) return DEVICE_CLASS_IIA_EXPLAINER
-  if (/\bclass\s+i\b/i.test(s)) return DEVICE_CLASS_I_EXPLAINER
+  if (/class\s*iia/i.test(s)) {
+    return { summary: DEVICE_CLASS_IIA_SUMMARY, body: DEVICE_CLASS_IIA_EXPLAINER }
+  }
+  if (/\bclass\s+i\b/i.test(s)) {
+    return { summary: DEVICE_CLASS_I_SUMMARY, body: DEVICE_CLASS_I_EXPLAINER }
+  }
 
   return null
 }
