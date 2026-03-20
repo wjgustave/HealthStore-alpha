@@ -42,6 +42,7 @@
     --shadow-lg: 0 10px 30px rgba(0,0,0,0.10);
     --font-display: 'Frutiger', Arial, sans-serif;
     --font-body: 'Frutiger', Arial, sans-serif;
+    --font-body-weight: 300;
     /* Type scale */
     --text-hero: 2.8rem;
     --text-page-title: 2rem;
@@ -60,6 +61,7 @@
   body {
     font-family: 'Frutiger', Arial, sans-serif;
     font-size: var(--text-body);
+    font-weight: var(--font-body-weight);
     background-color: var(--surface);
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
