@@ -44,16 +44,19 @@ Assume `html` root **16px** unless you change it. All rem values below are relat
 | Card / featured title | `--text-card-title` | `1.05rem` | ~17px |
 | Card title (compact) | `--text-card-title-sm` | `1rem` | 16px |
 | **Body (default)** | `--text-body` | `1rem` | **16px** at weight **300** (Frutiger Light) |
-| Labels / meta | `--text-label` | `0.875rem` | **14px** |
+| Extra small / labels | `--text-xs` | `0.875rem` | **14px** (14÷16 rem at 16px root) |
+| Labels / meta | `--text-label` | `var(--text-xs)` | Same as **`--text-xs`** |
 | Badges (component) | `--text-badge` | `13px` | 13px (within 12–14px band) |
 
 **Usage in React / inline styles:**
 
 ```tsx
 style={{ fontSize: 'var(--text-body)' }}
-style={{ fontSize: 'var(--text-label)' }}
+style={{ fontSize: 'var(--text-xs)' }}
 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-page-title)', fontWeight: 700 }}
 ```
+
+`--text-xs` is **0.875rem** (14px when the root is 16px). `--text-label` is an alias: `var(--text-xs)`.
 
 **Do not** hard-code sizes that fight this scale (e.g. `10px` body copy) unless there is a documented exception.
 
@@ -100,7 +103,8 @@ Copy for quick reference (authoritative list is in `globals.css`):
   --text-card-title: 1.05rem;
   --text-card-title-sm: 1rem;
   --text-body: 1rem;
-  --text-label: 0.875rem;
+  --text-xs: 0.875rem;
+  --text-label: var(--text-xs);
   --text-badge: 13px;
 }
 ```

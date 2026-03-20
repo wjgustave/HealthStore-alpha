@@ -51,7 +51,9 @@
     --text-card-title: 1.05rem;
     --text-card-title-sm: 1rem;
     --text-body: 1rem;
-    --text-label: 0.875rem;
+    /* 14px at 16px root: 14 ÷ 16 = 0.875rem */
+    --text-xs: 0.875rem;
+    --text-label: var(--text-xs);
     --text-badge: 13px;
   }
 
