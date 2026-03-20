@@ -243,7 +243,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                       </div>
 
                       <Link href={`/apps/${app.slug}`}
-                        className="rounded-lg py-2.5 text-sm font-semibold text-center block"
+                        className="rounded-lg py-4 text-sm font-semibold text-center block"
                         style={{ background: STORE_ACCENT, color: '#fff' }}>
                         View details →
                       </Link>
