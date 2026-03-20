@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import Nav from './Nav'
+import BackToTop from './BackToTop'
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -16,6 +17,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
       <main id="main-content">{children}</main>
+      <BackToTop />
       <footer className="mt-20 border-t py-10 px-6" style={{ borderColor: 'var(--border)', background: '#fff' }}>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
