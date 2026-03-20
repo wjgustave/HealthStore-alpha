@@ -1,4 +1,4 @@
-import { dtacLabels, maturityLabels, effortLabels, evidenceLabels, supervisionLabels, conditionColours } from '@/lib/data'
+import { dtacLabels, maturityLabels, effortLabels, evidenceLabels, supervisionLabels } from '@/lib/data'
 
 export function DtacBadge({ status }: { status: string }) {
   const label = dtacLabels[status] ?? status
@@ -52,23 +52,19 @@ export function ConditionTag({ tag }: { tag: string }) {
     copd: 'COPD', insomnia: 'Insomnia', weight_management: 'Weight management',
     msk: 'MSK', eating_disorders: 'Eating disorders', cardiac_rehab: 'Cardiac rehab',
   }
-  const colour = conditionColours[tag]
   const label = labels[tag] ?? tag
-  if (colour) {
-    return (
-      <span
-        className="badge"
-        style={{
-          background: colour,
-          color: '#fff',
-          border: 'none',
-        }}
-      >
-        {label}
-      </span>
-    )
-  }
-  return <span className="badge badge-grey">{label}</span>
+  return (
+    <span
+      className="badge"
+      style={{
+        background: '#99BFE3',
+        color: '#005eb8',
+        border: 'none',
+      }}
+    >
+      {label}
+    </span>
+  )
 }
 
 export function FundingStatusBadge({ status }: { status: string }) {

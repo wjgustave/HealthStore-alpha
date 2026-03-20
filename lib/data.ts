@@ -79,10 +79,6 @@ export function getAllConditions(): Condition[] {
   return conditionsData as Condition[]
 }
 
-export const conditionColours: Record<string, string> = Object.fromEntries(
-  ((conditionsData as Condition[]).map((c: { id: string; colour?: string }) => [c.id, c.colour ?? '#425563']))
-)
-
 export function getDashboardContent() {
   return dashboardData
 }
