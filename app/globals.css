@@ -36,8 +36,9 @@
     --border: #DEE4EA;
     --text-primary: #1A2332;
     --text-secondary: #485768;
-    /* ~4.6:1 on white (AA normal text); was #768692 (~4.54:1) */
-    --text-muted: #5f6b76;
+    --text-muted: #68757c;
+    /** Lighter grey for non–body-line contexts only (lower contrast vs white). */
+    --text-muted-low-con: #768692;
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
     --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
     --shadow-lg: 0 10px 30px rgba(0,0,0,0.10);
@@ -140,6 +141,10 @@
 }
 
 @layer utilities {
+  .text-muted-low-con {
+    color: var(--text-muted-low-con);
+  }
+
   .fade-up { animation: fadeUp 0.4s ease forwards; }
 
   /* Glass-card effects (opt-in — evaluate with team before widespread adoption) */
