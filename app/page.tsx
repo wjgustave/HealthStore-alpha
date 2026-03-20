@@ -153,7 +153,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem', marginBottom: '3rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem', marginBottom: '3rem' }}>
           {apps.slice(0, 8).map((app: any) => (
               <Link key={app.id} href={`/apps/${app.slug}`}
                 className="app-card rounded-xl bg-white border flex flex-col"
@@ -194,7 +194,7 @@ export default function HomePage() {
                   </div>
                   <div className="rounded-lg py-2 text-sm font-semibold text-center"
                     style={{ background: STORE_ACCENT, color: '#fff' }}>
-                    View full assessment →
+                    View details →
                   </div>
                 </div>
               </Link>

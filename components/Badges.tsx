@@ -4,7 +4,7 @@ export function DtacBadge({ status }: { status: string }) {
   const label = dtacLabels[status] ?? status
   const cls = status === 'passed' ? 'badge-green'
     : status === 'passed_refresh_required' ? 'badge-amber'
-    : status === 'required_not_confirmed' ? 'badge-red'
+    : status === 'required_not_confirmed' ? 'badge-green'
     : 'badge-grey'
   return <span className={`badge ${cls}`}>{label}</span>
 }
