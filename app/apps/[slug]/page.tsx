@@ -281,7 +281,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                   ★ NHSE £125k funding eligible
                 </span>
               )}
-              <button data-express-interest className="ml-auto px-4 py-2 rounded-lg text-sm font-semibold text-white"
+              <button data-express-interest className="ml-auto px-4 py-4 rounded-lg text-sm font-semibold text-white"
                 style={{ background: accent }}>
                 Express interest
               </button>

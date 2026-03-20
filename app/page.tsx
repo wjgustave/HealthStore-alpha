@@ -219,7 +219,7 @@ export default function HomePage() {
                       </div>
                     ))}
                   </div>
-                  <div className="rounded-lg py-2 text-sm font-semibold text-center"
+                  <div className="rounded-lg py-4 text-sm font-semibold text-center"
                     style={{ background: STORE_ACCENT, color: '#fff' }}>
                     View details →
                   </div>
