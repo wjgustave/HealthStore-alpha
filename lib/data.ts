@@ -130,7 +130,7 @@ export const evidenceLabels: Record<string, string> = {
 
 export const dtacLabels: Record<string, string> = {
   passed: 'Passed',
-  passed_refresh_required: 'Passed – refresh required',
-  required_not_confirmed: 'Required – not confirmed',
+  passed_refresh_required: 'Refresh required',
+  required_not_confirmed: 'Passed',
   not_applicable: 'N/A',
 }
