@@ -1,14 +1,43 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { LogOut } from 'lucide-react'
 
+const SUBHEADER_SCROLL_THRESHOLD_PX = 300
+const SCROLL_IDLE_MS = 150
+
 export default function Nav({ commissioningContextLabel }: { commissioningContextLabel: string }) {
   const path = usePathname()
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [scrollY, setScrollY] = useState(0)
+  const [isScrolling, setIsScrolling] = useState(false)
+  const scrollIdleRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrollY(window.scrollY)
+      setIsScrolling(true)
+      if (scrollIdleRef.current) clearTimeout(scrollIdleRef.current)
+      scrollIdleRef.current = setTimeout(() => {
+        setIsScrolling(false)
+        scrollIdleRef.current = null
+      }, SCROLL_IDLE_MS)
+    }
+    setScrollY(window.scrollY)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (scrollIdleRef.current) clearTimeout(scrollIdleRef.current)
+    }
+  }, [])
+
+  const subheaderHiddenWhileScrolling =
+    commissioningContextLabel &&
+    scrollY > SUBHEADER_SCROLL_THRESHOLD_PX &&
+    isScrolling
 
   const links = [
     { href: '/', label: 'Home' },
@@ -57,14 +86,19 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
       </nav>
       {commissioningContextLabel ? (
         <div
-          className="border-t px-4 sm:px-6 py-2"
-          style={{ borderColor: 'var(--border)', background: '#F0F4F5' }}
+          className="border-t px-4 sm:px-6 py-2 transition-opacity duration-200 ease-out"
+          style={{
+            borderColor: 'var(--border)',
+            background: 'rgba(240, 244, 245, 0.95)',
+            opacity: subheaderHiddenWhileScrolling ? 0 : 1,
+            pointerEvents: subheaderHiddenWhileScrolling ? 'none' : 'auto',
+          }}
+          aria-hidden={subheaderHiddenWhileScrolling}
         >
           <p
             className="max-w-7xl mx-auto text-sm leading-snug"
             style={{ color: '#425563', fontFamily: 'Frutiger, Arial, sans-serif' }}
           >
-            <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>Accessing as: </span>
             {commissioningContextLabel}
           </p>
         </div>

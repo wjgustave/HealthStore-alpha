@@ -11,14 +11,15 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession()
-  const commissioningContextLabel = session.isLoggedIn ? getCommissioningContextLabel(session) : ''
+  const isLoggedIn = session.isLoggedIn
+  const commissioningContextLabel = isLoggedIn ? getCommissioningContextLabel(session) : ''
 
   return (
     <html lang="en">
       <head>
       </head>
       <body className="min-h-screen" style={{ background: 'var(--surface)' }}>
-        <AppShell commissioningContextLabel={commissioningContextLabel}>{children}</AppShell>
+        <AppShell isLoggedIn={isLoggedIn} commissioningContextLabel={commissioningContextLabel}>{children}</AppShell>
       </body>
     </html>
   )

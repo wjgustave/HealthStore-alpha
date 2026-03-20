@@ -6,13 +6,17 @@ import BackToTop from './BackToTop'
 
 export default function AppShell({
   children,
+  isLoggedIn = false,
   commissioningContextLabel = '',
 }: {
   children: React.ReactNode
+  isLoggedIn?: boolean
   commissioningContextLabel?: string
 }) {
   const pathname = usePathname()
   const isLoginPage = pathname === '/login'
+  /** Subheader only when logged in (login route renders no Nav here) */
+  const icbSubheaderLabel = isLoggedIn && commissioningContextLabel ? commissioningContextLabel : ''
 
   if (isLoginPage) {
     return <>{children}</>
@@ -21,7 +25,7 @@ export default function AppShell({
   return (
     <>
       <a href="#main-content" className="skip-link">Skip to main content</a>
-      <Nav commissioningContextLabel={commissioningContextLabel} />
+      <Nav commissioningContextLabel={icbSubheaderLabel} />
       <main id="main-content">{children}</main>
       <BackToTop />
       <footer className="mt-20 border-t py-10 px-6" style={{ borderColor: 'var(--border)', background: '#fff' }}>
