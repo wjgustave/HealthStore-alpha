@@ -19,6 +19,10 @@ Apps belonging to hidden conditions still exist in the codebase (JSON files, imp
 
 To show a hidden condition, add its id to the `VISIBLE_CONDITIONS` array. No other changes are needed — dashboard stats, condition shortcuts, catalogue filters, and charts all derive from the filtered data automatically.
 
+### NHSE £125k funding fields (`nhse_125k_eligible`, `nhse_125k_note`)
+
+The ICB £125k technology funding scheme referenced in the UI is **COPD-context**. For apps whose primary condition is **`cardiac_rehab`**, set **`nhse_125k_note` to `null`** (and keep `nhse_125k_eligible` as `null`) so the “NHSE £125k funding” row does not appear under Financial and commercial considerations. Use non-null `nhse_125k_note` only where the scheme is relevant (typically COPD apps).
+
 ---
 
 ## Step 1: Create the app JSON file

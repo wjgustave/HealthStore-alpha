@@ -322,7 +322,7 @@
   "roi_note": "NICE EAG model found cost-saving vs conventional rehabilitation. Key ROI driver is increasing CR uptake without proportional increase in staffing costs.",
   "funding_ids": [],
   "nhse_125k_eligible": null,
-  "nhse_125k_note": "Not applicable — cardiac rehabilitation product.",
+  "nhse_125k_note": null,
   "nhs_app_integration": false,
   "nhs_login_integration": false,
   "nhs_notify_integration": false,
