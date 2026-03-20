@@ -6,13 +6,31 @@ A commissioner decision-support tool for NHS digital health technology procureme
 
 - **Homepage** — hero, condition browser, NICE HTE19 COPD app grid, real-world impact metrics
 - **App catalogue** (`/apps`) — filterable by condition, supervision model, local effort, DTAC status
-- **App detail pages** (`/apps/[slug]`) — commissioner assessment: why it matters, scale and maturity, what it takes locally, expected impact and case studies, clinical evidence, NICE guidance, demo access, NHS/system integrations, indicative cost and commercial detail, related funding (see `ADDING_APPS.md` for field mapping)
+- **App detail pages** (`/apps/[slug]`) — commissioner assessment: why it matters, scale and maturity, what it takes locally, expected impact and case studies, clinical evidence, NICE guidance, demo access, NHS/system integrations, indicative cost and commercial detail, related funding (see `ADDING_APPS.md` for field mapping; `docs/PDP_SECTIONS_DEV_PLAN.md` for implementation spec)
 - **Funding directory** (`/funding`) — 5 funding opportunities with condition/app links
 
 ## Apps in catalogue
 
 **NICE HTE19 COPD (HTG736):** myCOPD · Clinitouch · COPDhub · Luscii  
 **Other conditions:** Sleepio (insomnia) · Oviva · Second Nature (weight management) · getUBetter (MSK) · Overcoming Bulimia Online (eating disorders)
+
+## Authentication (prototype)
+
+Access is gated by middleware. Set these in `.env.local` (see [`.env.example`](.env.example)):
+
+| Variable | Purpose |
+|----------|---------|
+| `SESSION_SECRET` | Secret for encrypted session cookies (iron-session) |
+| `AUTH_USERNAME` / `AUTH_PASSWORD_HASH` | Primary user — bcrypt hash of the password (sign in → home) |
+| `AUTH_MULTI_USERNAME` / `AUTH_MULTI_PASSWORD_HASH` | Optional second user — after sign in they must choose a commissioning entity on `/select-entity` |
+
+Generate a bcrypt hash (run from project root after `npm install`):
+
+```bash
+node -e "require('bcryptjs').hash('your-password', 10).then(console.log)"
+```
+
+On **Vercel**, add the same variables under Project → Settings → Environment Variables. `SESSION_SECRET` must be set for production.
 
 ## Quick start
 

@@ -26,7 +26,9 @@ export default function LoginPage() {
       })
 
       if (res.ok) {
-        router.push('/')
+        const data = await res.json()
+        const next = typeof data.redirect === 'string' ? data.redirect : '/'
+        router.push(next)
         router.refresh()
       } else {
         const data = await res.json()

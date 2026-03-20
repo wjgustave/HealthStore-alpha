@@ -3,6 +3,9 @@ import { cookies } from 'next/headers'
 
 export interface SessionData {
   isLoggedIn: boolean
+  /** True after multi-user login until they choose an ICB */
+  requiresCommissioningEntitySelection?: boolean
+  commissioningEntityId?: string
 }
 
 export const sessionOptions: SessionOptions = {

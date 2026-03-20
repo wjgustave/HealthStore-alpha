@@ -13,6 +13,9 @@ export async function middleware(req: NextRequest) {
 
   if (pathname === '/login') {
     if (session.isLoggedIn) {
+      if (session.requiresCommissioningEntitySelection) {
+        return NextResponse.redirect(new URL('/select-entity', req.url))
+      }
       return NextResponse.redirect(new URL('/', req.url))
     }
     return res
@@ -20,6 +23,14 @@ export async function middleware(req: NextRequest) {
 
   if (!session.isLoggedIn) {
     return NextResponse.redirect(new URL('/login', req.url))
+  }
+
+  if (pathname === '/select-entity' && !session.requiresCommissioningEntitySelection) {
+    return NextResponse.redirect(new URL('/', req.url))
+  }
+
+  if (session.requiresCommissioningEntitySelection && pathname !== '/select-entity') {
+    return NextResponse.redirect(new URL('/select-entity', req.url))
   }
 
   return res
