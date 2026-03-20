@@ -40,7 +40,9 @@ Generate a bcrypt hash (run from project root after `npm install`):
 node -e "require('bcryptjs').hash('your-password', 10).then(console.log)"
 ```
 
-On **Vercel**, add the same variables under Project → Settings → Environment Variables. `SESSION_SECRET` must be set for production.
+On **Vercel**, add the same variables under Project → Settings → Environment Variables. `SESSION_SECRET` must be set for production (at least **32 characters** — `npm run auth:setup` generates a valid value).
+
+Auth API routes use **iron-session** with an explicit response object so the session cookie is set correctly in the App Router after sign-in.
 
 ## Quick start
 
