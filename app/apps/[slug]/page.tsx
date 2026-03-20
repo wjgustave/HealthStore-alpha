@@ -343,10 +343,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 style={{ background: accent }}>
                 Express interest
               </button>
-              <a href={`/compare?ids=${app.id}`} className="px-4 py-2 rounded-lg text-sm font-medium border"
-                style={{ borderColor: accent, color: accent }}>
-                Add to comparison
-              </a>
               {app.nhse_125k_eligible === true && (
                 <span className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5"
                   style={{ background: '#E6F5EC', color: '#004B22' }}>

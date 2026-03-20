@@ -102,7 +102,7 @@ export default function HomePage() {
               {
                 step: '2',
                 title: 'Review DTx options',
-                description: 'Browse and compare apps by condition, evidence strength, NICE status, assurance, deployment effort and cost model.',
+                description: 'Browse apps by condition, evidence strength, NICE status, assurance, deployment effort and cost model.',
                 colour: '#007F3B',
               },
               {

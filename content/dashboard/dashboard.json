@@ -1,15 +1,14 @@
 {
   "hero": {
     "headline": "Find the right digital therapeutic for your population",
-    "subheadline": "A commissioner decision-support tool for NHS digital health technology procurement. Filter, compare and assess DTx by condition, evidence, assurance and deployment effort — in one place.",
+    "subheadline": "A commissioner decision-support tool for NHS digital health technology procurement. Filter and assess DTx by condition, evidence, assurance and deployment effort — in one place.",
     "cta_label": "Browse all apps",
     "cta_path": "/apps"
   },
   "value_props": [
     { "icon": "search", "title": "Faster down-selection", "description": "Filter by condition, NICE status, DTAC, supervision model and local effort — without trawling supplier websites." },
     { "icon": "shield", "title": "Clearer assurance view", "description": "See supplier assurance and commissioner deployment responsibilities side by side — not conflated." },
-    { "icon": "bar-chart", "title": "Business-case ready", "description": "Each app page includes evidence summary, deployment footprint, cost model, financial considerations and funding links." },
-    { "icon": "compare", "title": "Side-by-side comparison", "description": "Compare up to 4 apps at once across the dimensions that matter to commissioners — not marketing claims." }
+    { "icon": "bar-chart", "title": "Business-case ready", "description": "Each app page includes evidence summary, deployment footprint, cost model, financial considerations and funding links." }
   ],
   "stats": [
     { "value": "12", "label": "Apps in catalogue", "sublabel": "across 5 condition areas" },

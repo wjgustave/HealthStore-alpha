@@ -12,7 +12,7 @@ Not all conditions are visible in the live catalogue. Visibility is controlled b
 export const VISIBLE_CONDITIONS = ['copd', 'cardiac_rehab']
 ```
 
-Apps belonging to hidden conditions still exist in the codebase (JSON files, imports, logos) but are filtered out of `getAllApps()` and `getConditionAreas()`. This means they do not appear in the catalogue, homepage, compare page, charts, or generated detail routes.
+Apps belonging to hidden conditions still exist in the codebase (JSON files, imports, logos) but are filtered out of `getAllApps()` and `getConditionAreas()`. This means they do not appear in the catalogue, homepage, charts, or generated detail routes.
 
 **Currently visible:** COPD, Cardiac rehabilitation
 **Currently hidden:** Insomnia, Weight management, MSK / Osteoarthritis, Eating disorders
@@ -267,7 +267,6 @@ Add the new condition id and hex colour to the `conditionColours` object in each
 - `app/apps/[slug]/page.tsx`
 - `app/apps/CatalogueClient.tsx` (also add to `conditionOptions` if the condition is visible)
 - `app/page.tsx`
-- `app/compare/CompareClient.tsx`
 
 ### 4c. `components/Badges.tsx`
 
@@ -315,6 +314,5 @@ Confirm:
 | 4b | `app/apps/[slug]/page.tsx` | Add colour (new condition only) |
 | 4b | `app/apps/CatalogueClient.tsx` | Add colour + filter option (new condition only) |
 | 4b | `app/page.tsx` | Add colour (new condition only) |
-| 4b | `app/compare/CompareClient.tsx` | Add colour (new condition only) |
 | 4c | `components/Badges.tsx` | Add label (new condition only) |
 | 4d | `components/HealthIcons.tsx` | Add icon (new condition only) |
