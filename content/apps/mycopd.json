@@ -40,13 +40,6 @@
       "url": "https://www.nice.org.uk/guidance/mtg68",
       "type": "MTG",
       "date": "March 2022"
-    },
-    {
-      "ref": "NICE HTE18 (HTG718)",
-      "url": "https://www.nice.org.uk/guidance/htg718",
-      "type": "EVA",
-      "date": "December 2024",
-      "note": "Pulmonary rehabilitation component"
     }
   ],
   "evidence_summary": "Two RCTs (RESCUE n=41, EARLY n=60), five real-world studies including NHS Grampian (n=64) and NHS Highland (n=113), and a NICE MTG68 health economics review. NICE MTG68 modelled \u00a386,297 cost saving per CCG for AECOPD (74% probability) and \u00a322,779 per CCG for PR (86% probability). Note: CCG-era model \u2014 recalculate using current ICB population sizes.",
