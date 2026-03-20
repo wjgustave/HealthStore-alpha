@@ -163,7 +163,7 @@ export default function HomePage() {
                 Published December 2024, updated September 2025. All four COPD apps are recommended for NHS use during a 3-year evidence generation period. Commissioning organisations must: (1) confirm DTAC approval, (2) have evidence generation agreements with NICE, and (3) submit annual reports to NICE.
               </p>
             </div>
-            <a href="https://www.nice.org.uk/guidance/htg736" target="_blank" rel="noreferrer"
+            <a href="https://www.nice.org.uk/guidance/htg736" target="_blank" rel="noopener noreferrer"
               className="badge badge-blue" style={{ whiteSpace: 'nowrap', flexShrink: 0, fontSize: 'var(--text-badge)' }}>
               NICE HTG736 ↗
             </a>

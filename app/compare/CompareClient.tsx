@@ -73,9 +73,7 @@ export default function CompareClient({ allApps }: Props) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div className="mb-8">
-        <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-          Compare apps
-        </h1>
+        <h1 className="page-title-h1">Compare apps</h1>
         <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>Select up to 4 apps to compare side by side</p>
       </div>
 
@@ -88,14 +86,20 @@ export default function CompareClient({ allApps }: Props) {
           {allApps.map(app => {
             const sel = selectedIds.includes(app.id)
             return (
-              <button key={app.id} onClick={() => toggleApp(app.id)}
+              <button
+                key={app.id}
+                type="button"
+                onClick={() => toggleApp(app.id)}
+                aria-pressed={sel}
                 className="px-3 py-1.5 rounded-lg text-sm font-medium border transition-all"
                 style={{
                   borderColor: sel ? STORE_ACCENT : 'var(--border)',
                   background: sel ? STORE_ACCENT : '#fff',
                   color: sel ? '#fff' : 'var(--text-secondary)',
-                }}>
-                {sel ? '✓ ' : ''}{app.app_name}
+                }}
+              >
+                <span aria-hidden>{sel ? '✓ ' : ''}</span>
+                {app.app_name}
               </button>
             )
           })}
@@ -104,13 +108,16 @@ export default function CompareClient({ allApps }: Props) {
 
       {selected.length < 2 ? (
         <div className="text-center py-20 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
-          <div className="text-4xl mb-4">⚖️</div>
+          <div className="text-4xl mb-4" aria-hidden>⚖️</div>
           <div className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Select at least 2 apps to compare</div>
           <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>Use the selector above</div>
         </div>
       ) : (
         <div className="overflow-x-auto rounded-xl border bg-white" style={{ borderColor: 'var(--border)' }}>
           <table className="w-full border-collapse" style={{ fontSize: 'var(--text-body)' }}>
+            <caption className="sr-only">
+              Comparison of selected apps by dimension; each column is one product.
+            </caption>
             <thead>
               <tr>
                 <th className="text-left p-4 border-b border-r font-semibold uppercase tracking-wide"
@@ -131,10 +138,10 @@ export default function CompareClient({ allApps }: Props) {
             <tbody>
               {DIMENSIONS.map((dim, i) => (
                 <tr key={dim.key} style={{ background: i % 2 === 0 ? '#fff' : '#FAFBFC' }}>
-                  <td className="p-4 border-b border-r font-medium uppercase tracking-wide"
+                  <th scope="row" className="p-4 border-b border-r font-medium uppercase tracking-wide text-left"
                     style={{ fontSize: 'var(--text-label)', borderColor: 'var(--border)', color: 'var(--text-muted)', background: '#F7F9FC' }}>
                     {dim.label}
-                  </td>
+                  </th>
                   {selected.map(app => (
                     <td key={app.id} className="p-4 border-b border-r align-top" style={{ borderColor: 'var(--border)' }}>
                       <CellValue app={app} dim={dim.key} />
@@ -144,10 +151,10 @@ export default function CompareClient({ allApps }: Props) {
               ))}
               {/* Evidence summary row */}
               <tr>
-                <td className="p-4 border-b border-r font-medium uppercase tracking-wide"
+                <th scope="row" className="p-4 border-b border-r font-medium uppercase tracking-wide text-left"
                   style={{ fontSize: 'var(--text-label)', borderColor: 'var(--border)', color: 'var(--text-muted)', background: '#F7F9FC' }}>
                   Evidence summary
-                </td>
+                </th>
                 {selected.map(app => (
                   <td key={app.id} className="p-4 border-b border-r align-top" style={{ borderColor: 'var(--border)' }}>
                     <p className="leading-relaxed" style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)' }}>

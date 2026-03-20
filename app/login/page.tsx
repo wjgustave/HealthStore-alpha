@@ -77,7 +77,7 @@ export default function LoginPage() {
               <div role="alert" aria-live="assertive"
                 className="rounded-lg p-3 mb-4 text-sm font-medium flex items-center gap-2"
                 style={{ background: '#FDECEA', color: '#7A1210', border: '1px solid #DA291C33' }}>
-                <span className="font-bold flex-shrink-0">✕</span>
+                <span className="font-bold flex-shrink-0" aria-hidden>✕</span>
                 {error}
               </div>
             )}

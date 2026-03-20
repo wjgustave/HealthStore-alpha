@@ -268,7 +268,7 @@ export function DemoAccessSection({ app, accent }: { app: any; accent: string })
         <ul className="space-y-2">
           {app.demo_variants.map((d: any) => (
             <li key={d.url}>
-              <a href={d.url} target="_blank" rel="noreferrer" className="text-sm font-medium hover:underline" style={{ color: accent }}>
+              <a href={d.url} target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:underline" style={{ color: accent }}>
                 {d.label} ↗
               </a>
             </li>
@@ -372,7 +372,7 @@ export function RelatedFundingSection({ fundingIds }: { fundingIds: string[] }) 
                 <div className="text-xs" style={{ color: 'var(--text-muted)' }}>Value: {f.total_value}</div>
               )}
               {f.external_url && (
-                <a href={f.external_url} target="_blank" rel="noreferrer"
+                <a href={f.external_url} target="_blank" rel="noopener noreferrer"
                   className="text-xs font-medium mt-2 inline-block" style={{ color: 'var(--nhs-blue)' }}>
                   {f.external_url_label ?? 'More info'} ↗
                 </a>

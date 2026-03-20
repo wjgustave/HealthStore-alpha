@@ -68,7 +68,7 @@ export default function FundingPage() {
         )}
 
         {f.external_url && (
-          <a href={f.external_url} target="_blank" rel="noreferrer"
+          <a href={f.external_url} target="_blank" rel="noopener noreferrer"
             className="inline-block mt-4 text-sm font-medium hover:underline" style={{ color: 'var(--nhs-blue)' }}>
             {f.external_url_label} ↗
           </a>
@@ -97,9 +97,7 @@ export default function FundingPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
       <div className="mb-10">
-        <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-          Funding directory
-        </h1>
+        <h1 className="page-title-h1">Funding directory</h1>
         <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', maxWidth: 600, lineHeight: 1.6 }}>
           Funding opportunities and obligations relevant to NHS commissioners procuring digital therapeutics.
           Confirm current availability with sponsoring organisations before submitting business cases.

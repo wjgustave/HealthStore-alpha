@@ -36,7 +36,8 @@
     --border: #DEE4EA;
     --text-primary: #1A2332;
     --text-secondary: #485768;
-    --text-muted: #768692;
+    /* ~4.6:1 on white (AA normal text); was #768692 (~4.54:1) */
+    --text-muted: #5f6b76;
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
     --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
     --shadow-lg: 0 10px 30px rgba(0,0,0,0.10);
@@ -54,7 +55,7 @@
     /* 14px at 16px root: 14 ÷ 16 = 0.875rem */
     --text-xs: 0.875rem;
     --text-label: var(--text-xs);
-    --text-badge: 13px;
+    --text-badge: 0.875rem;
   }
 
   * { box-sizing: border-box; }
@@ -73,6 +74,36 @@
 }
 
 @layer components {
+  /** Standard in-app page title (h1) — use with semantic <h1 className="page-title-h1"> */
+  .page-title-h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-page-title);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  /**
+   * Clinical evidence row cards (PDP) — base + modifiers for COI / evidence gap / data quality flag.
+   */
+  .card-evidence {
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    background: #f7f9fc;
+  }
+  .card-evidence--gap {
+    border-color: var(--border);
+    background: #fffbf0;
+  }
+  .card-evidence--coi {
+    background: #fff8f8;
+  }
+  .card-evidence--dq {
+    border-color: #f0c070;
+  }
+
   .badge {
     display: inline-flex;
     align-items: center;

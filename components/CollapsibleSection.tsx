@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { SectionHeader } from '@/components/Badges'
 
 export function CollapsibleSection({
@@ -15,6 +15,7 @@ export function CollapsibleSection({
   children: React.ReactNode
 }) {
   const [open, setOpen] = useState(defaultOpen)
+  const panelId = useId()
 
   return (
     <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
@@ -28,11 +29,14 @@ export function CollapsibleSection({
           className="flex-shrink-0 mt-1 px-2 py-1 text-xs font-semibold rounded-md border"
           style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
           aria-expanded={open}
+          aria-controls={panelId}
         >
           {open ? 'Hide' : 'Show'}
         </button>
       </div>
-      {open ? <div className="pt-2">{children}</div> : null}
+      <div id={panelId} hidden={!open} className="pt-2">
+        {children}
+      </div>
     </section>
   )
 }
@@ -49,6 +53,7 @@ export function CollapsibleInline({
   children: React.ReactNode
 }) {
   const [open, setOpen] = useState(defaultOpen)
+  const panelId = useId()
 
   return (
     <div className="border-t pt-5 mt-5" style={{ borderColor: 'var(--border)' }}>
@@ -65,11 +70,14 @@ export function CollapsibleInline({
           className="flex-shrink-0 px-2 py-1 text-xs font-semibold rounded-md border"
           style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
           aria-expanded={open}
+          aria-controls={panelId}
         >
           {open ? 'Hide' : 'Show'}
         </button>
       </div>
-      {open ? <div className="mt-4">{children}</div> : null}
+      <div id={panelId} hidden={!open} className="mt-4">
+        {children}
+      </div>
     </div>
   )
 }

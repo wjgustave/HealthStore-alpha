@@ -126,7 +126,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div className="mb-8">
-        <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+        <h1 className="page-title-h1">
           Browse digital therapeutics
         </h1>
         <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>

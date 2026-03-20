@@ -82,10 +82,16 @@ export function AlertBox({ type, children }: { type: 'warning' | 'info' | 'dange
     danger: { bg: '#FDECEA', border: '#DA291C', text: '#7A1210', icon: '✕' },
   }
   const s = styles[type]
+  const role = type === 'danger' ? 'alert' : 'status'
   return (
-    <div className="rounded-lg p-4 flex gap-3 text-sm"
-      style={{ background: s.bg, borderLeft: `4px solid ${s.border}`, color: s.text }}>
-      <span className="font-bold flex-shrink-0">{s.icon}</span>
+    <div
+      role={role}
+      className="rounded-lg p-4 flex gap-3 text-sm"
+      style={{ background: s.bg, borderLeft: `4px solid ${s.border}`, color: s.text }}
+    >
+      <span className="font-bold flex-shrink-0" aria-hidden>
+        {s.icon}
+      </span>
       <div>{children}</div>
     </div>
   )

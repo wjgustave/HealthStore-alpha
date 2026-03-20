@@ -45,13 +45,15 @@ const TYPE_COLOURS: Record<string, string> = {
 
 function EvidenceCard({ study, accent }: { study: any; accent: string }) {
   const isEvidenceGap = study.type === 'evidence_gap'
+  const evidenceCardClass = [
+    'card-evidence',
+    study.data_quality_flag ? 'card-evidence--dq' : '',
+    isEvidenceGap ? 'card-evidence--gap' : study.coi ? 'card-evidence--coi' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
   return (
-    <div className="rounded-xl border" style={{
-      borderColor: study.data_quality_flag ? '#F0C070' : (isEvidenceGap ? '#DEE4EA' : 'var(--border)'),
-      background: isEvidenceGap ? '#FFFBF0' : study.coi ? '#FFF8F8' : '#F7F9FC',
-      padding: '14px 16px',
-      marginBottom: 10,
-    }}>
+    <div className={evidenceCardClass}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10, marginBottom: 8 }}>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 4 }}>
@@ -62,10 +64,14 @@ function EvidenceCard({ study, accent }: { study: any; accent: string }) {
               <span className="badge badge-green">Peer-reviewed</span>
             )}
             {study.coi && (
-              <span className="badge badge-amber">⚠ COI declared</span>
+              <span className="badge badge-amber">
+                <span aria-hidden>⚠ </span>COI declared
+              </span>
             )}
             {study.data_quality_flag && (
-              <span className="badge badge-amber">⚠ Data quality flag</span>
+              <span className="badge badge-amber">
+                <span aria-hidden>⚠ </span>Data quality flag
+              </span>
             )}
           </div>
           <div style={{ fontWeight: 600, fontSize: 'var(--text-label)', color: 'var(--text-primary)', marginBottom: 2 }}>
@@ -82,37 +88,37 @@ function EvidenceCard({ study, accent }: { study: any; accent: string }) {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flexShrink: 0 }}>
           {study.url_doi && (
-            <a href={study.url_doi} target="_blank" rel="noreferrer"
+            <a href={study.url_doi} target="_blank" rel="noopener noreferrer"
               style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               DOI ↗
             </a>
           )}
           {study.url_pubmed && (
-            <a href={study.url_pubmed} target="_blank" rel="noreferrer"
+            <a href={study.url_pubmed} target="_blank" rel="noopener noreferrer"
               style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               PubMed ↗
             </a>
           )}
           {study.url_pmc && (
-            <a href={study.url_pmc} target="_blank" rel="noreferrer"
+            <a href={study.url_pmc} target="_blank" rel="noopener noreferrer"
               style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               PMC (open) ↗
             </a>
           )}
           {study.url_full_text && !study.url_doi && !study.url_pubmed && (
-            <a href={study.url_full_text} target="_blank" rel="noreferrer"
+            <a href={study.url_full_text} target="_blank" rel="noopener noreferrer"
               style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               {study.source_label ?? 'Source ↗'}
             </a>
           )}
           {study.url_trial_reg && (
-            <a href={study.url_trial_reg} target="_blank" rel="noreferrer"
+            <a href={study.url_trial_reg} target="_blank" rel="noopener noreferrer"
               style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               Trial reg ↗
             </a>
           )}
           {study.url_case_study && (
-            <a href={study.url_case_study} target="_blank" rel="noreferrer"
+            <a href={study.url_case_study} target="_blank" rel="noopener noreferrer"
               style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               Case study ↗
             </a>
@@ -234,7 +240,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 <div className="flex flex-wrap gap-2 mb-3">
                   {app.condition_tags.map((t: string) => <ConditionTag key={t} tag={t} />)}
                   {app.nice_guidance_refs.map((r: any) => (
-                    <a key={r.ref} href={r.url} target="_blank" rel="noreferrer">
+                    <a key={r.ref} href={r.url} target="_blank" rel="noopener noreferrer">
                       <NiceTypeBadge type={r.type} />
                     </a>
                   ))}
@@ -250,9 +256,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                       className="rounded-lg flex-shrink-0" />
                   )}
                   <div>
-                    <h1 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-page-title)', fontWeight: 700, marginBottom: '0.25rem' }}>
-                      {app.app_name}
-                    </h1>
+                    <h1 className="page-title-h1 mb-1">{app.app_name}</h1>
                     <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{app.supplier_name}</p>
                   </div>
                 </div>
@@ -366,7 +370,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                   <div key={r.ref} className="flex items-start gap-3 p-3 rounded-lg" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
                     <NiceTypeBadge type={r.type} />
                     <div>
-                      <a href={r.url} target="_blank" rel="noreferrer"
+                      <a href={r.url} target="_blank" rel="noopener noreferrer"
                         className="font-semibold text-sm hover:underline" style={{ color: accent }}>
                         {r.ref} ↗
                       </a>

@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Nav from './Nav'
 import BackToTop from './BackToTop'
@@ -18,8 +19,16 @@ export default function AppShell({
   /** Subheader only when logged in (login route renders no Nav here) */
   const icbSubheaderLabel = isLoggedIn && commissioningContextLabel ? commissioningContextLabel : ''
 
+  /** Auth routes render without global nav/footer but still need landmarks + skip link (WCAG 2.4.1, 1.3.1). */
   if (isLoginPage) {
-    return <>{children}</>
+    return (
+      <>
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
+        <main id="main-content">{children}</main>
+      </>
+    )
   }
 
   return (
@@ -40,8 +49,8 @@ export default function AppShell({
             </p>
           </div>
           <div className="flex gap-6 text-xs" style={{ color: 'var(--text-muted)' }}>
-            <a href="/apps" className="hover:underline">Browse apps</a>
-            <a href="/funding" className="hover:underline">Funding</a>
+            <Link href="/apps" className="hover:underline">Browse apps</Link>
+            <Link href="/funding" className="hover:underline">Funding</Link>
           </div>
         </div>
       </footer>
