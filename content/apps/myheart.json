@@ -286,7 +286,7 @@
   "patients_covered_note": "Over 20,800 myHeart users in the UK. In use since 2018/2019. 275,000+ rehabilitation/education sessions delivered in 2020 across the mymhealth platform.",
   "dtac_status": "passed_refresh_required",
   "dtac_note": "my mhealth platform centrally DTAC assessed and passed. Refresh required. QISMET accredited.",
-  "device_class": "Covered by mymhealth platform assessment",
+  "device_class": "Class I SaMD",
   "dcb0129_status": "Covered by mymhealth platform",
   "dcb0160_boilerplate_available": true,
   "dspt_status": "Covered by mymhealth platform",

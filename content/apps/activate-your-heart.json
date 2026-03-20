@@ -34,7 +34,7 @@
   "patients_covered_note": "Approximately 2,000 patients/year referred through the Leicester CR service overall. Platform-specific user numbers not publicly available.",
   "dtac_status": "required_not_confirmed",
   "dtac_note": "Did not submit for central DTAC assessment (pre-submission stage). DTAC approval is a condition of the NICE EVA recommendation and must be obtained before commissioning.",
-  "device_class": "Digital platform supporting cardiac rehabilitation — assessed under NICE EVA",
+  "device_class": "Class I SaMD",
   "dcb0129_status": "Information not available",
   "dcb0160_boilerplate_available": false,
   "dspt_status": "Operates within UHL NHS Trust IG framework",

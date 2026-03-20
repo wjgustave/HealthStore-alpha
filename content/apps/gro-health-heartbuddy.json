@@ -174,7 +174,7 @@
   "patients_covered_note": "Gro Health platform deployed across NHS. HeartBuddy-specific cardiac rehab user numbers not publicly available.",
   "dtac_status": "passed_refresh_required",
   "dtac_note": "Gro Health platform centrally DTAC assessed and passed — scored 100% on usability and accessibility. Refresh required.",
-  "device_class": "EU CE marked medical device",
+  "device_class": "Class I SaMD",
   "dcb0129_status": "Compliant (DSCN 14/2009, DCB0129, DCB0160)",
   "dcb0160_boilerplate_available": true,
   "dspt_status": "Compliant (ODS: 8K787)",

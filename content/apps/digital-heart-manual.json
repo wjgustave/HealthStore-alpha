@@ -34,7 +34,7 @@
   "patients_covered_note": "Paper Heart Manual: approximately 14,000 patients/year. Digital Heart Manual-specific adoption data not publicly available.",
   "dtac_status": "required_not_confirmed",
   "dtac_note": "Not within central DTAC records. DTAC approval is a condition of the NICE EVA recommendation.",
-  "device_class": "Digital platform supporting cardiac rehabilitation — assessed under NICE EVA",
+  "device_class": "Class I SaMD",
   "dcb0129_status": "Information not available",
   "dcb0160_boilerplate_available": false,
   "dspt_status": "Information not available",

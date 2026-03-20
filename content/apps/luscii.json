@@ -69,7 +69,6 @@
   "dtac_status": "passed",
   "dtac_note": "DTAC passed \u2014 confirmed in G-Cloud 14 Service Definition (April 2024). Most recently confirmed DTAC status of the four HTE19-recommended COPD apps.",
   "device_class": "Class IIa SaMD",
-  "device_class_note": "Classification sourced from Luscii asthma product description and NICE context. Confirm COPD-specific CE certificate directly with Luscii before citing in procurement documentation.",
   "dcb0129_status": "Confirmed",
   "dcb0160_boilerplate_available": true,
   "dspt_status": "Compliant",

@@ -181,7 +181,7 @@
   "patients_covered_note": "673 registrants in first year (Aug 2024 - Jul 2025). Platform is free and open access — not contracted to specific NHS trusts.",
   "dtac_status": "required_not_confirmed",
   "dtac_note": "Information not available. DTAC approval is a condition of the NICE EVA recommendation.",
-  "device_class": "Web-based platform. Registered UK charity, not a commercial medical device company.",
+  "device_class": "Class I SaMD",
   "dcb0129_status": "Information not available",
   "dcb0160_boilerplate_available": false,
   "dspt_status": "Information not available",

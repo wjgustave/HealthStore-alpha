@@ -19,6 +19,7 @@ import {
   RelatedFundingSection,
   IndicativeFinancialGlance,
 } from '@/components/AppDetailSections'
+import { DeviceClassDetails } from '@/components/DeviceClassDetails'
 
 export async function generateStaticParams() {
   return getAllApps().map(a => ({ slug: a.slug }))
@@ -459,6 +460,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                   <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Device class</div>
                   <div style={{ fontWeight: 600 }}>{app.device_class}</div>
                   {app.device_class_note && <div className="text-xs mt-0.5" style={{ color: '#D5840D' }}>⚠ {app.device_class_note}</div>}
+                  <DeviceClassDetails deviceClass={app.device_class} />
                 </div>
                 <div>
                   <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Supervision model</div>

@@ -251,7 +251,7 @@
   "patients_covered_note": "Deployed across 13 NHS ICS regions. Aggregate user numbers not publicly available.",
   "dtac_status": "required_not_confirmed",
   "dtac_note": "Not within central DTAC records. DTAC approval is a condition of the NICE EVA recommendation.",
-  "device_class": "Uses a validated wearable activity monitor. Platform classification under NICE EVA.",
+  "device_class": "Class I SaMD",
   "dcb0129_status": "Information not available",
   "dcb0160_boilerplate_available": false,
   "dspt_status": "Information not available",
