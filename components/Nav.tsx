@@ -62,7 +62,7 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
           className="border-t px-4 sm:px-6 py-2"
           style={{
             borderColor: 'var(--border)',
-            background: '#F0F4F5',
+            background: 'rgba(240, 244, 245, 0.9)',
           }}
         >
           <p
