@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "id": "ev-htg736",
+      "title": "NICE HTG736 — COPD digital therapeutics (HTE19)",
+      "dek": "Health technology evaluation recommending four COPD DTx for NHS use with evidence generation conditions.",
+      "date": "2025-09-15",
+      "href": "https://www.nice.org.uk/guidance/htg736",
+      "evidence_type": "Guidance",
+      "condition_tags": ["copd"]
+    },
+    {
+      "id": "ev-cardiac-rehab-digital",
+      "title": "Systematic review: digitally enabled cardiac rehabilitation adherence",
+      "dek": "Illustrative spotlight — verify against your local evidence synthesis and NICE pathways before business case use.",
+      "date": "2026-01-08",
+      "href": "https://www.nice.org.uk/guidance/ng185",
+      "evidence_type": "RWE",
+      "condition_tags": ["cardiac_rehab"]
+    },
+    {
+      "id": "ev-weight-digital-support",
+      "title": "Commissioning considerations for tiered weight management and digital adjuncts",
+      "dek": "Illustrative summary for multidisciplinary board discussions — not a substitute for local needs assessment.",
+      "date": "2025-11-22",
+      "href": "https://www.england.nhs.uk/",
+      "evidence_type": "Policy",
+      "condition_tags": []
+    }
+  ]
+}

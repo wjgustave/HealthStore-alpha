@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": "news-nice-htg736-update",
+      "title": "NICE updates evidence generation reporting expectations for COPD digital therapeutics",
+      "summary": "Commissioners are reminded of annual reporting requirements under HTG736 during the three-year evidence generation window.",
+      "date": "2026-03-12",
+      "href": "https://www.nice.org.uk/guidance/htg736",
+      "topic_tags": ["NICE", "Policy"],
+      "condition_tags": ["copd"],
+      "image_key": "abstract-a"
+    },
+    {
+      "id": "news-dcb-programme",
+      "title": "Digital Clinical Blueprints: ICB planning windows for digitally enabled pathways",
+      "summary": "National guidance encourages alignment between remote monitoring programmes and local cardiovascular and respiratory pathways.",
+      "date": "2026-03-05",
+      "href": "https://www.england.nhs.uk/",
+      "topic_tags": ["NHS England", "Pathways"],
+      "condition_tags": ["cardiac_rehab", "copd"]
+    },
+    {
+      "id": "news-mhra-safer-apps",
+      "title": "MHRA emphasises vigilance for software as a medical device in community settings",
+      "summary": "Useful context for DTAC, clinical safety and governance conversations with provider collaboratives.",
+      "date": "2026-02-20",
+      "href": "https://www.gov.uk/government/organisations/medicines-and-healthcare-products-regulatory-agency",
+      "topic_tags": ["Regulation", "Safety"],
+      "condition_tags": []
+    }
+  ]
+}

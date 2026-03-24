@@ -6,7 +6,7 @@ This guide explains how to add a new app (and optionally a new condition area) t
 
 ## Condition Visibility
 
-Not all conditions are visible in the live catalogue. Visibility is controlled by the `VISIBLE_CONDITIONS` array in `lib/data.ts`:
+Not all conditions are visible in the live catalogue. Visibility is controlled by the `VISIBLE_CONDITIONS` array in `lib/visibleConditions.ts`:
 
 ```typescript
 export const VISIBLE_CONDITIONS = ['copd', 'cardiac_rehab']
@@ -17,7 +17,7 @@ Apps belonging to hidden conditions still exist in the codebase (JSON files, imp
 **Currently visible:** COPD, Cardiac rehabilitation
 **Currently hidden:** Insomnia, Weight management, MSK / Osteoarthritis, Eating disorders
 
-To show a hidden condition, add its id to the `VISIBLE_CONDITIONS` array. No other changes are needed — dashboard stats, condition shortcuts, catalogue filters, and charts all derive from the filtered data automatically.
+To show a hidden condition, add its id to `VISIBLE_CONDITIONS` in `lib/visibleConditions.ts`. No other changes are needed — dashboard stats, condition shortcuts, catalogue filters, and charts all derive from the filtered data automatically.
 
 ### NHSE £125k funding fields (`nhse_125k_eligible`, `nhse_125k_note`)
 

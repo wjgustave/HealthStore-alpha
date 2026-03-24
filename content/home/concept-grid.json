@@ -1,0 +1,54 @@
+{
+  "story": {
+    "image": "/images/home/west-yorkshire-aire-river.png",
+    "title": "How West Yorkshire reduced COPD admissions by over 67%",
+    "href": "https://www.england.nhs.uk/",
+    "alt": "River Aire and cityscape in West Yorkshire — illustrative commissioning story"
+  },
+  "promos": [
+    {
+      "id": "dtx-ready",
+      "variant": "navy",
+      "title": "Check if your ICB is DTx delivery ready",
+      "description": "Self-assessment themes for governance, workforce and data before scaling digital therapeutics.",
+      "href": "https://www.england.nhs.uk/",
+      "image": "/images/home/promo-icb-dtx-ready.png",
+      "image_alt": "Clinician supporting a patient — human connection in a medical consultation"
+    },
+    {
+      "id": "patient-help",
+      "variant": "purple",
+      "title": "How digital therapeutics can help your patients",
+      "description": "Plain-language overview for clinical boards and patient groups.",
+      "href": "https://www.england.nhs.uk/",
+      "image": "/images/home/promo-digital-therapeutics-patients.png",
+      "image_alt": "Older adult using a smartphone at home with a dog on her lap"
+    }
+  ],
+  "commissioned": {
+    "title": "Commissioned apps",
+    "illustrative_note": "Illustrative metrics for prototype demonstration — not live data.",
+    "app_display_name": "OmniCOPD",
+    "status_label": "Live",
+    "status_variant": "live",
+    "metrics": [
+      {
+        "label": "Referrals",
+        "value": "322",
+        "sublabel": "Referrals in February 23"
+      },
+      {
+        "label": "Adoption rate",
+        "value": "21%",
+        "sublabel": "Condition average 18%"
+      },
+      {
+        "label": "Active users",
+        "value": "4,156",
+        "sublabel": "Cohort context 8,360"
+      }
+    ],
+    "dashboard_label": "Reporting dashboard",
+    "dashboard_href": "/apps"
+  }
+}

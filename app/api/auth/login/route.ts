@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { getIronSession } from 'iron-session'
+import { resolveBcryptHashFromEnv } from '@/lib/authEnv'
 import { sessionOptions, type SessionData } from '@/lib/session'
 
 function jsonWithSession(body: object, res: NextResponse, status = 200) {
@@ -18,9 +19,11 @@ export async function POST(req: NextRequest) {
       typeof raw.password === 'string' ? raw.password : ''
 
     const validUsername = process.env.AUTH_USERNAME?.trim()
-    const passwordHash = process.env.AUTH_PASSWORD_HASH?.trim()
+    const passwordHash = resolveBcryptHashFromEnv(process.env.AUTH_PASSWORD_HASH)
     const multiUsername = process.env.AUTH_MULTI_USERNAME?.trim()
-    const multiPasswordHash = process.env.AUTH_MULTI_PASSWORD_HASH?.trim()
+    const multiPasswordHash = resolveBcryptHashFromEnv(
+      process.env.AUTH_MULTI_PASSWORD_HASH
+    )
 
     if (!validUsername || !passwordHash) {
       return NextResponse.json(

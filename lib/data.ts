@@ -17,21 +17,48 @@ import pumpingMarvellous from '@/content/apps/pumping-marvellous.json'
 import fundingData from '@/content/funding/funding.json'
 import conditionsData from '@/content/conditions/conditions.json'
 import dashboardData from '@/content/dashboard/dashboard.json'
+import homeNewsData from '@/content/home/news.json'
+import homeEvidenceData from '@/content/home/evidence-spotlights.json'
+import homeCampaignsData from '@/content/home/campaigns.json'
+import conceptGridData from '@/content/home/concept-grid.json'
+import conceptFeaturedData from '@/content/home/concept-featured.json'
+import type { ConceptFeaturedContent, ConceptGridContent } from '@/lib/conceptHomeTypes'
+import type { HomeCampaignItem, HomeEvidenceSpotlight, HomeNewsItem } from '@/lib/homeContentTypes'
+import { isVisibleCondition } from '@/lib/visibleConditions'
 
 export type App = any
 export type Funding = any
 export type Condition = any
 
-const otherApps = otherAppsData as App[]
+export type { HomeCampaignItem, HomeEvidenceSpotlight, HomeNewsItem } from '@/lib/homeContentTypes'
+export { VISIBLE_CONDITIONS } from '@/lib/visibleConditions'
 
-export const VISIBLE_CONDITIONS = ['copd', 'cardiac_rehab']
+export function getHomeNews(): HomeNewsItem[] {
+  return (homeNewsData as { items: HomeNewsItem[] }).items ?? []
+}
+
+export function getHomeEvidenceSpotlights(): HomeEvidenceSpotlight[] {
+  return (homeEvidenceData as { items: HomeEvidenceSpotlight[] }).items ?? []
+}
+
+export function getHomeCampaigns(): HomeCampaignItem[] {
+  return (homeCampaignsData as { items: HomeCampaignItem[] }).items ?? []
+}
+
+export function getConceptGridContent(): ConceptGridContent {
+  return conceptGridData as ConceptGridContent
+}
+
+export function getConceptFeaturedContent(): ConceptFeaturedContent {
+  return conceptFeaturedData as ConceptFeaturedContent
+}
+
+const otherApps = otherAppsData as App[]
 
 const allAppsUnfiltered: App[] = [myCOPD, clinitouch, copdhub, luscii, sleepio, ...otherApps, jointAcademy, w8buddy, overcomingAnorexia, activateYourHeart, dReachHf, digitalHeartManual, groHealthHeartbuddy, kiactiv, myheart, pumpingMarvellous]
 
 export function getAllApps(): App[] {
-  return allAppsUnfiltered.filter((a: App) =>
-    a.condition_tags.some((t: string) => VISIBLE_CONDITIONS.includes(t))
-  )
+  return allAppsUnfiltered.filter((a: App) => a.condition_tags.some((t: string) => isVisibleCondition(t)))
 }
 
 export function getRemovedApps() {
@@ -44,7 +71,7 @@ export function getRemovedApps() {
 export function getConditionAreas(): { id: string; label: string; colour: string; count: number; icon: string }[] {
   const apps = getAllApps()
   return (conditionsData as Condition[])
-    .filter(c => VISIBLE_CONDITIONS.includes(c.id))
+    .filter((c) => isVisibleCondition(c.id))
     .map(c => ({
       id: c.id,
       label: c.label,

@@ -31,13 +31,13 @@ Access is gated by middleware. You can also set variables manually in `.env.loca
 | Variable | Purpose |
 |----------|---------|
 | `SESSION_SECRET` | Secret for encrypted session cookies (iron-session) |
-| `AUTH_USERNAME` / `AUTH_PASSWORD_HASH` | Primary user — bcrypt hash of the password (sign in → home) |
-| `AUTH_MULTI_USERNAME` / `AUTH_MULTI_PASSWORD_HASH` | Optional second user — after sign in they must choose a commissioning entity on `/select-entity` |
+| `AUTH_USERNAME` / `AUTH_PASSWORD_HASH` | Primary user — bcrypt hash of the password (sign in → home). Prefer **base64** of the bcrypt string in `.env` (what `auth:setup` writes) so `$` is not mangled by env parsers. Plain bcrypt (`$2b$…`) also works if the value is **quoted** in `.env`. |
+| `AUTH_MULTI_USERNAME` / `AUTH_MULTI_PASSWORD_HASH` | Optional second user — after sign in they must choose a commissioning entity on `/select-entity` (same hash format as above) |
 
-Generate a bcrypt hash (run from project root after `npm install`):
+Generate a hash manually (run from project root after `npm install`):
 
 ```bash
-node -e "require('bcryptjs').hash('your-password', 10).then(console.log)"
+node -e "const b=require('bcryptjs');const h=b.hashSync('your-password',10);console.log(Buffer.from(h,'utf8').toString('base64'))"
 ```
 
 On **Vercel**, add the same variables under Project → Settings → Environment Variables. `SESSION_SECRET` must be set for production (at least **32 characters** — `npm run auth:setup` generates a valid value).

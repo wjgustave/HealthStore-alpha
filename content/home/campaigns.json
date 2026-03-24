@@ -1,0 +1,33 @@
+{
+  "items": [
+    {
+      "id": "camp-nhs-long-term",
+      "featured": true,
+      "title": "NHS Long Term Plan — personalised care and digitally enabled services",
+      "summary": "National direction relevant to how ICBs prioritise remote monitoring and self-management support.",
+      "href": "https://www.longtermplan.nhs.uk/",
+      "organisation": "NHS England",
+      "topic_tags": ["National strategy"],
+      "condition_tags": [],
+      "image_key": "nhs-ltp-banner"
+    },
+    {
+      "id": "camp-nice-copd",
+      "title": "NICE COPD pathway refresh — digital options in shared decision-making",
+      "summary": "Aligns with commissioner conversations on where DTx fits alongside pulmonary rehabilitation and routine review.",
+      "href": "https://www.nice.org.uk/guidance/ng115",
+      "organisation": "NICE",
+      "topic_tags": ["Guidance"],
+      "condition_tags": ["copd"]
+    },
+    {
+      "id": "camp-who-digital-health",
+      "title": "WHO digital health and innovation — global evidence standards",
+      "summary": "Useful reference for clinical leads comparing international evidence grading with UK assurance frameworks.",
+      "href": "https://www.who.int/",
+      "organisation": "WHO",
+      "topic_tags": ["International"],
+      "condition_tags": []
+    }
+  ]
+}

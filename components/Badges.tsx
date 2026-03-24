@@ -47,6 +47,22 @@ export function NiceTypeBadge({ type }: { type: string }) {
   return <span className={`badge ${cls}`}>{type}</span>
 }
 
+export function TopicPill({ label }: { label: string }) {
+  return (
+    <span
+      className="badge"
+      style={{
+        background: '#F0F4F8',
+        color: '#1E293B',
+        border: '1px solid #CBD5E1',
+        fontWeight: 600,
+      }}
+    >
+      {label}
+    </span>
+  )
+}
+
 export function ConditionTag({ tag }: { tag: string }) {
   const labels: Record<string, string> = {
     copd: 'COPD', insomnia: 'Insomnia', weight_management: 'Weight management',
