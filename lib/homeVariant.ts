@@ -5,5 +5,5 @@ export function parseHomeVariant(raw: string | string[] | undefined): HomeLayout
   const v = Array.isArray(raw) ? raw[0] : raw
   if (v === 'v1' || v === 'v2') return v
   if (v === 'v3' || v === 'v4') return 'v2'
-  return 'v2'
+  return 'v1'
 }

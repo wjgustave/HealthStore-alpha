@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff } from 'lucide-react'
+import { setHomeLayoutPreferenceAfterAuth } from '@/lib/homeLayoutStorage'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -27,7 +28,11 @@ export default function LoginPage() {
 
       if (res.ok) {
         const data = await res.json()
-        const next = typeof data.redirect === 'string' ? data.redirect : '/'
+        setHomeLayoutPreferenceAfterAuth('v1')
+        let next = typeof data.redirect === 'string' ? data.redirect : '/'
+        if (next === '/') {
+          next = '/?home=v1'
+        }
         router.push(next)
         router.refresh()
       } else {

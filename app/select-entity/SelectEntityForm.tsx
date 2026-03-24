@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { COMMISSIONING_ENTITIES } from '@/lib/commissioningEntities'
+import { setHomeLayoutPreferenceAfterAuth } from '@/lib/homeLayoutStorage'
 
 export default function SelectEntityForm() {
   const router = useRouter()
@@ -26,7 +27,8 @@ export default function SelectEntityForm() {
         body: JSON.stringify({ entityId }),
       })
       if (res.ok) {
-        router.push('/')
+        setHomeLayoutPreferenceAfterAuth('v1')
+        router.push('/?home=v1')
         router.refresh()
       } else {
         const data = await res.json()
