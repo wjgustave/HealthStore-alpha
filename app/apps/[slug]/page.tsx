@@ -237,7 +237,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
           <span>{app.app_name}</span>
         </div>
 
-        <div className="hs-surface-card rounded-2xl bg-white border overflow-hidden mb-8" style={{ borderColor: 'var(--border)' }}>
+        <div className="hs-surface-card-sm rounded-2xl bg-white border overflow-hidden mb-8" style={{ borderColor: 'var(--border)' }}>
           <div className="p-8">
             <div className="flex flex-col md:flex-row gap-6 items-start justify-between">
               <div className="flex-1">
@@ -474,7 +474,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 <RelatedFundingSection fundingIds={linkedFundingIds} />
               </ProductPageExpander>
 
-            <div className="hs-surface-card rounded-xl border overflow-hidden" style={{ borderColor: accent }}>
+            <div className="hs-surface-card-sm rounded-xl border overflow-hidden" style={{ borderColor: accent }}>
               <div style={{ background: accent, padding: '20px 24px' }}>
                 <div style={{ fontWeight: 700, fontSize: 'var(--text-section-alt)', color: '#fff', marginBottom: 8 }}>
                   Express interest
@@ -500,7 +500,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
           <div className="space-y-5">
 
-            <div className="hs-surface-card bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
+            <div className="hs-surface-card-sm bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
               <div className="text-xs font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>Quick facts</div>
               <div className="space-y-3 text-sm">
                 <div>
@@ -520,7 +520,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               </div>
             </div>
 
-            <div className="hs-surface-card bg-white rounded-xl border p-5 space-y-3" style={{ borderColor: 'var(--border)' }}>
+            <div className="hs-surface-card-sm bg-white rounded-xl border p-5 space-y-3" style={{ borderColor: 'var(--border)' }}>
               <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Assurance</div>
               {[
                 { label: 'DTAC', val: <DtacBadge status={app.dtac_status} /> },
@@ -543,7 +543,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             </div>
 
             {app.product_tiers?.length > 0 && (
-              <div className="hs-surface-card bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
+              <div className="hs-surface-card-sm bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
                 <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>Product tiers</div>
                 {app.product_tiers.map((t: any) => (
                   <div key={t.tier_name} className="mb-3 last:mb-0">
@@ -554,7 +554,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               </div>
             )}
 
-            <div className="hs-surface-card rounded-lg p-4 text-xs" style={{ background: '#F7F9FC', border: '1px solid var(--border)', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+            <div className="hs-surface-card-sm rounded-lg p-4 text-xs" style={{ background: '#F7F9FC', border: '1px solid var(--border)', color: 'var(--text-muted)', lineHeight: 1.5 }}>
               <strong style={{ color: 'var(--text-secondary)' }}>Sources: </strong>{app.source_summary}
               <br /><br />
               {app.confidence_note}

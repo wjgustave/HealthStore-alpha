@@ -12,8 +12,8 @@ export function ProductPageExpanderGroup({ children }: { children: ReactNode }) 
 }
 
 /**
- * Per-section collapsible card: title + optional description + chevron;
- * White bordered card with `hs-surface-card` elevation; vertical rhythm via parent `space-y-3`.
+ * Per-section collapsible card: title + optional description + chevron.
+ * Elevation: `hs-surface-card-sm` when collapsed, `hs-surface-card` (md) when expanded.
  */
 export function ProductPageExpander({
   title,
@@ -50,7 +50,7 @@ export function ProductPageExpander({
   return (
     <section
       id={id}
-      className="hs-surface-card overflow-hidden rounded-xl border bg-white"
+      className={`overflow-hidden rounded-xl border bg-white transition-shadow duration-200 ease-out ${open ? 'hs-surface-card' : 'hs-surface-card-sm'}`}
       style={{ borderColor: 'var(--border)' }}
     >
       <button

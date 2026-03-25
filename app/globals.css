@@ -131,11 +131,16 @@
   .effort-high { background: #FDECEA; color: #7A1210; }
 
   /**
-   * Soft elevation — aligns with home v2 (HomeLayoutV4) white cards (Tailwind shadow-md).
-   * Use on bordered rounded surfaces: catalogue toolbar, PDP hero/sidebar, compare shell, etc.
+   * Soft elevation — aligns with home v2 white cards (md ≈ Tailwind shadow-md).
+   * Use on bordered rounded surfaces: catalogue, compare shell, funding, etc. PDP uses `.hs-surface-card-sm`.
    */
   .hs-surface-card {
     box-shadow: var(--shadow-md);
+  }
+
+  /** Lighter elevation (Tailwind shadow-sm analogue) — product detail page cards. */
+  .hs-surface-card-sm {
+    box-shadow: var(--shadow-sm);
   }
 
   .app-card {
@@ -235,7 +240,7 @@
   header, footer, .skip-link, nav, button, [data-express-interest] { display: none !important; }
   body { background: #fff !important; color: #000 !important; font-size: 12pt; }
   main { padding: 0 !important; }
-  .app-card, .hs-surface-card, .rounded-xl, .rounded-2xl { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
+  .app-card, .hs-surface-card, .hs-surface-card-sm, .rounded-xl, .rounded-2xl { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
   a[href]::after { content: " (" attr(href) ")"; font-size: 10pt; color: #666; }
   a[href^="mailto"]::after, a[href^="/"]::after, a[href^="#"]::after { content: ""; }
   .badge { border: 1px solid #ccc; }
