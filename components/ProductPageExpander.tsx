@@ -13,7 +13,7 @@ export function ProductPageExpanderGroup({ children }: { children: ReactNode }) 
 
 /**
  * Per-section collapsible card: title + optional description + chevron;
- * alpha chrome (`bg-white rounded-xl border p-6`-equivalent) and vertical rhythm via parent `space-y-6`.
+ * White bordered card with `hs-surface-card` elevation; vertical rhythm via parent `space-y-3`.
  */
 export function ProductPageExpander({
   title,
@@ -50,7 +50,7 @@ export function ProductPageExpander({
   return (
     <section
       id={id}
-      className="overflow-hidden rounded-xl border bg-white"
+      className="hs-surface-card overflow-hidden rounded-xl border bg-white"
       style={{ borderColor: 'var(--border)' }}
     >
       <button

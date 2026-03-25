@@ -109,7 +109,7 @@ export default function ProductVideosSection({ videos, embedded = false }: Props
           {videoList}
         </div>
       ) : (
-        <section className="rounded-xl border bg-white p-6" style={{ borderColor: 'var(--border)' }} aria-labelledby={headingId}>
+        <section className="hs-surface-card rounded-xl border bg-white p-6" style={{ borderColor: 'var(--border)' }} aria-labelledby={headingId}>
           <SectionHeader
             id={headingId}
             title="Product videos"

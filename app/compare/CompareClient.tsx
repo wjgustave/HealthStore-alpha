@@ -80,7 +80,7 @@ function CompareAppHeaderColumn({
     <div className="relative inline-block shrink-0">
       {app.logo_path ? (
         <div
-          className="relative rounded-xl bg-white border"
+          className="hs-surface-card relative rounded-xl bg-white border"
           style={{
             width: w,
             height: h,
@@ -206,7 +206,7 @@ export default function CompareClient({ allApps }: Props) {
             </button>
           </div>
 
-          <div className="bg-white rounded-xl border p-5 mb-8" style={{ borderColor: 'var(--border)' }}>
+          <div className="hs-surface-card bg-white rounded-xl border p-5 mb-8" style={{ borderColor: 'var(--border)' }}>
             <div className="md:hidden flex flex-col gap-5">
               {selected.map(app => (
                 <CompareAppHeaderColumn
@@ -241,7 +241,7 @@ export default function CompareClient({ allApps }: Props) {
       )}
 
       {selected.length === 0 ? (
-        <div className="text-center py-20 px-4 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
+        <div className="hs-surface-card text-center py-20 px-4 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
           <div className="text-4xl mb-4" aria-hidden>⚖️</div>
           <p className="font-semibold mb-3 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
             No applications selected for comparison. Browse the catalogue and add applications to compare them side by side.
@@ -255,7 +255,7 @@ export default function CompareClient({ allApps }: Props) {
           </Link>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border bg-white" style={{ borderColor: 'var(--border)' }}>
+        <div className="hs-surface-card overflow-x-auto rounded-xl border bg-white" style={{ borderColor: 'var(--border)' }}>
           <table className="w-full border-collapse" style={{ fontSize: 'var(--text-body)' }}>
             <caption className="sr-only">
               {selected.length === 1

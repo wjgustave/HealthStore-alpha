@@ -45,7 +45,7 @@ The main column renders sections in this order:
 | `app/apps/[slug]/AppDetailClient.tsx` | Express interest modal |
 | `components/AppDetailSections.tsx` | Reusable section bodies (no outer card chrome on PDP) |
 | `components/ProductPageExpander.tsx` | `ProductPageExpander` (client; chevron; `#clinical-evidence` hash) |
-| `app/globals.css` | Design tokens (`:root`); PDP expander chrome lives on `ProductPageExpander` (inline + Tailwind) |
+| `app/globals.css` | Design tokens (`:root`); `.hs-surface-card` (`var(--shadow-md)`) on PDP cards; `.app-card` default shadow + hover lift |
 | `components/CollapsibleSection.tsx` | `CollapsibleSection`, `CollapsibleInline` (not used on PDP) |
 | `components/Badges.tsx` | `SectionHeader`, badges |
 | `content/apps/*.json` | App content (see field mapping below) |

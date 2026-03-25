@@ -128,7 +128,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
       </div>
 
       {/* Toolbar: result count + filters + sort — full width above grid */}
-      <div className="rounded-xl bg-white border p-4 mb-4" style={{ borderColor: 'var(--border)' }}>
+      <div className="hs-surface-card rounded-xl bg-white border p-4 mb-4" style={{ borderColor: 'var(--border)' }}>
         <div className="flex flex-col gap-4">
           <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{resultText}</p>
           <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:gap-3">
@@ -188,7 +188,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-16 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
+        <div className="hs-surface-card text-center py-16 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
           <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }} aria-hidden>
             🔍
           </div>

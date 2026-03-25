@@ -51,7 +51,7 @@ export default function DashboardCharts({ apps, conditions, hideOuterHeading, hi
 
       <div className={`grid gap-5 ${hideNiceGuidance ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}>
         {/* Condition distribution */}
-        <div className="rounded-xl bg-white border p-5" style={{ borderColor: 'var(--border)' }}>
+        <div className="hs-surface-card rounded-xl bg-white border p-5" style={{ borderColor: 'var(--border)' }}>
           <div className="font-bold uppercase tracking-wide mb-4" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
             By condition area
           </div>
@@ -72,7 +72,7 @@ export default function DashboardCharts({ apps, conditions, hideOuterHeading, hi
         </div>
 
         {/* Maturity breakdown */}
-        <div className="rounded-xl bg-white border p-5" style={{ borderColor: 'var(--border)' }}>
+        <div className="hs-surface-card rounded-xl bg-white border p-5" style={{ borderColor: 'var(--border)' }}>
           <div className="font-bold uppercase tracking-wide mb-4" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
             By maturity level
           </div>
@@ -95,7 +95,7 @@ export default function DashboardCharts({ apps, conditions, hideOuterHeading, hi
         </div>
 
         {!hideNiceGuidance && (
-          <div className="rounded-xl bg-white border p-5" style={{ borderColor: 'var(--border)' }}>
+          <div className="hs-surface-card rounded-xl bg-white border p-5" style={{ borderColor: 'var(--border)' }}>
             <div className="font-bold uppercase tracking-wide mb-4" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
               NICE guidance coverage
             </div>

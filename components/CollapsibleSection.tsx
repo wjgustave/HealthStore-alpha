@@ -18,7 +18,7 @@ export function CollapsibleSection({
   const panelId = useId()
 
   return (
-    <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
+    <section className="hs-surface-card bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
       <div className="flex items-start justify-between gap-3 mb-0">
         <div className="flex-1 min-w-0">
           <SectionHeader title={title} description={description} />

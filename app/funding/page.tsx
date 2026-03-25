@@ -31,7 +31,7 @@ export default function FundingPage() {
 
   function FundingCard({ f }: { f: ReturnType<typeof getAllFunding>[0] }) {
     return (
-      <div className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)', boxShadow: 'var(--shadow-sm)' }}>
+      <div className="hs-surface-card bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex-1">
             <h3 className="font-bold text-base" style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}>
@@ -105,7 +105,7 @@ export default function FundingPage() {
       </div>
 
       {/* Mandatory obligations note */}
-      <div className="rounded-xl border p-5 mb-10" style={{ borderColor: '#005EB8', background: '#E6F0FB' }}>
+      <div className="hs-surface-card rounded-xl border p-5 mb-10" style={{ borderColor: '#005EB8', background: '#E6F0FB' }}>
         <div className="font-semibold mb-1" style={{ fontSize: 'var(--text-label)', color: '#003087' }}>📋 NICE HTE19 — mandatory evidence generation obligations</div>
         <p style={{ fontSize: 'var(--text-body)', color: '#003087', lineHeight: 1.6 }}>
           All commissioners deploying NICE HTE19-recommended COPD apps must have evidence generation agreements with NICE and submit annual reports.
@@ -117,7 +117,7 @@ export default function FundingPage() {
       <Section title="Periodic / recurring" items={periodic} color="#005EB8" />
       <Section title="Closed (confirm current status)" items={closed} color="#D5840D" />
 
-      <div className="mt-10 rounded-xl p-5 border text-sm" style={{ borderColor: 'var(--border)', background: '#F7F9FC', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+      <div className="hs-surface-card mt-10 rounded-xl p-5 border text-sm" style={{ borderColor: 'var(--border)', background: '#F7F9FC', color: 'var(--text-muted)', lineHeight: 1.6 }}>
         <strong style={{ color: 'var(--text-secondary)' }}>Disclaimer: </strong>
         Funding information is based on publicly available information as of March 2026.
         Deadlines and eligibility criteria change — verify with the sponsoring organisation before use in business cases.

@@ -11,7 +11,7 @@ function CompareSkeleton() {
         <div style={{ height: 36, width: 220, background: 'var(--border)', borderRadius: 6, marginBottom: 8 }} />
         <div style={{ height: 18, width: 360, background: 'var(--border)', borderRadius: 4 }} />
       </div>
-      <div className="rounded-xl border p-5 mb-8 bg-white" style={{ borderColor: 'var(--border)' }}>
+      <div className="hs-surface-card rounded-xl border p-5 mb-8 bg-white" style={{ borderColor: 'var(--border)' }}>
         <div style={{ height: 16, width: 200, background: 'var(--border)', borderRadius: 4, marginBottom: 16 }} />
         <div className="flex flex-wrap gap-2">
           {[...Array(8)].map((_, i) => (
