@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-The product detail page (`/apps/[slug]`) was restructured to align with seven section themes requested by the Product Owner. This document describes the implementation, data mapping, and conventions for future changes.
+The product detail page (`/apps/[slug]`) aligns with section themes requested by the Product Owner. From **Why it matters locally** through **Related funding opportunities**, each main-column block is its own **card** (`ProductPageExpander`): `bg-white rounded-xl border` with **`space-y-3`** between sections (half the previous `space-y-6` rhythm). The header is a full-width control: title (and optional description), **chevron** that rotates when open. **Hero, alerts, sidebar, and Express interest** stay outside this stack. **Default:** all sections start **collapsed** except **Commercial model and cost** (`defaultOpen`). **`#clinical-evidence`:** that section uses `id="clinical-evidence"`; `ProductPageExpander` opens it on load or `hashchange` when the hash matches. `CollapsibleSection` is **not** used on the PDP (component remains for `CollapsibleInline` or other pages).
 
 ---
 
@@ -18,19 +18,20 @@ The main column renders sections in this order:
 
 | Order | Section | Component / Location |
 |-------|---------|----------------------|
-| 1 | Why it matters locally | Inline in `page.tsx` |
-| 2 | Context of use | Inline `ContextOfUseGrid` |
-| 3 | Scale and maturity | `ScaleAndMaturitySection` |
-| 4 | What it takes locally | `WhatItTakesLocallySection` |
-| 5 | Expected impact and case studies | `ImpactAndCaseStudiesSection` |
-| 6 | Clinical evidence | Inline `EvidenceCard` loop |
-| 7 | NICE guidance | Inline |
-| 8 | Data quality flags | Inline (conditional) |
-| 9 | Demo access | `DemoAccessSection` |
-| 10 | NHS and care system integrations | `CollapsibleSection` + `TechnicalIntegrationTable` |
-| 11 | Financial and commercial | `IndicativeFinancialGlance` + `CollapsibleInline` + `FinancialCommercialBody` |
-| 12 | Related funding opportunities | `RelatedFundingSection` |
-| 13 | Express interest | Inline CTA card (last) |
+| 1 | Why it matters locally | `ProductPageExpander` + inline body in `page.tsx` |
+| 2 | Context of use | `ProductPageExpander` + `ContextOfUseGrid` (conditional) |
+| 3 | Scale and maturity | `ProductPageExpander` + `ScaleAndMaturitySection` |
+| 4 | What it takes locally | `ProductPageExpander` + `WhatItTakesLocallySection` (conditional; `hasWhatItTakesContent`) |
+| 5 | Expected impact and case studies | `ProductPageExpander` + `ImpactAndCaseStudiesSection` (conditional; `shouldShowImpactSection`) |
+| 6 | Clinical evidence | `ProductPageExpander` (`id="clinical-evidence"`) + `EvidenceCard` loops in `page.tsx` |
+| 7 | NICE guidance | `ProductPageExpander` + inline list |
+| 8 | Data quality flags | `ProductPageExpander` + inline (conditional) |
+| 9 | Demo access | `ProductPageExpander` + `DemoAccessSection` (conditional; `shouldShowDemoAccess`) |
+| 10 | NHS and care system integrations | `ProductPageExpander` + `TechnicalIntegrationTable` (conditional) |
+| 11 | Commercial model and cost | `ProductPageExpander` (`defaultOpen`) + `CommercialModelAndCostSection` |
+| 12 | Indicative financial context | `ProductPageExpander` + `IndicativeFinancialContextSection` (body only; no nested collapsible) |
+| 13 | Related funding opportunities | `ProductPageExpander` + `RelatedFundingSection` |
+| 14 | Express interest | Inline CTA card below the section stack (last in main column) |
 
 **Important:** "Why it matters locally" and "What it takes locally" are **separate** sections. Do not merge them.
 
@@ -40,9 +41,12 @@ The main column renders sections in this order:
 
 | File | Purpose |
 |------|---------|
-| `app/apps/[slug]/page.tsx` | Page layout, section order, hero, inline blocks |
-| `components/AppDetailSections.tsx` | Reusable section components |
-| `components/CollapsibleSection.tsx` | `CollapsibleSection`, `CollapsibleInline` (client) |
+| `app/apps/[slug]/page.tsx` | Page layout, section order, hero, expander wiring |
+| `app/apps/[slug]/AppDetailClient.tsx` | Express interest modal |
+| `components/AppDetailSections.tsx` | Reusable section bodies (no outer card chrome on PDP) |
+| `components/ProductPageExpander.tsx` | `ProductPageExpander` (client; chevron; `#clinical-evidence` hash) |
+| `app/globals.css` | Design tokens (`:root`); PDP expander chrome lives on `ProductPageExpander` (inline + Tailwind) |
+| `components/CollapsibleSection.tsx` | `CollapsibleSection`, `CollapsibleInline` (not used on PDP) |
 | `components/Badges.tsx` | `SectionHeader`, badges |
 | `content/apps/*.json` | App content (see field mapping below) |
 
@@ -58,7 +62,8 @@ The main column renders sections in this order:
 | **Expected impact** | `expected_benefit_note`, `case_studies` |
 | **Demo access** | `demo_notes`, `demo_variants` |
 | **NHS integrations** | `technical_integrations` (FHIR, EMIS, etc.); hero uses `nhs_app_integration`, `nhs_login_integration`, `nhs_notify_integration` |
-| **Financial** | `indicative_price_text`, `pricing_confidence`, `procurement_notes`, `contract_note`, `nhse_125k_note`, `tariff_considerations`, `roi_note`, `monitoring_model`, `minimum_conditions_for_success` |
+| **Commercial model and cost** | `pricing_model` (see `content/common/enums.json` `pricing_labels`), `national_price_available`, `indicative_price_text`, `pricing_confidence` (muted subline under indicative price), `service_wrap_included`, `service_wrap_description` or `service_wrap_note`, `procurement_notes` or `contract_note`, optional `nhse_125k_note`, optional `monitoring_model`, `free_offer_flag` (warning callout when true) |
+| **Indicative financial context** | `expected_benefit_note`, `tariff_considerations`, `provider_income_note`, `roi_note`, optional `minimum_conditions_for_success`; fixed disclaimer copy in component |
 | **Related funding** | `linked_funding_ids` or `funding_ids` |
 | **Express interest** | `supplier_contact_name`, `supplier_name` (CTA copy only; no contact email on page) |
 
@@ -69,9 +74,9 @@ The main column renders sections in this order:
 - **Case studies:** Always render when `case_studies` has entries. Do not gate on `clinical_evidence_detailed`.
 - **Demo section:** Show when `demo_variants?.length > 0` or `demo_notes` is present.
 - **NHS integrations table:** Omit NHS App row (hero badges cover it). Table shows FHIR, EMIS, population health dashboard, device integration, languages, data hosting.
-- **Related funding:** Always show section. If no linked IDs, render empty-state copy with link to `/funding`.
-- **Indicative cost:** Always visible at top of financial block (not inside collapsible).
-- **Express interest:** Main column only, last section. No sidebar contact block.
+- **Related funding:** Always show an expander row. If no linked IDs, body renders empty-state copy with link to `/funding`.
+- **Commercial / financial:** Indicative price and procurement sit in **Commercial model and cost** (expander row, **open by default**). Tariff, ROI and related rows sit in **Indicative financial context** (separate expander row, **collapsed** by default).
+- **Express interest:** Main column only, **below** the section stack. No sidebar contact block.
 
 ---
 
@@ -84,10 +89,13 @@ The main column renders sections in this order:
 
 ---
 
-## 7. Collapsible Usage
+## 7. Expander behaviour (main column)
 
-- **NHS integrations:** `CollapsibleSection` with `defaultOpen={false}`.
-- **Procurement/tariff detail:** `CollapsibleInline` with `defaultOpen={true}` inside financial section.
+- **Layout:** Separate bordered cards with **`space-y-3`** between them (not one shared group container).
+- **Closed state:** Full-width header `<button>` with `p-6`, title at `var(--text-section-alt)`, optional description, **ChevronDown** (muted) rotating **180°** when open.
+- **Open state:** `border-t` then panel body with `pt-4` (healthstore-m pattern).
+- **Defaults:** All sections `defaultOpen={false}` except **Commercial model and cost** (`defaultOpen` / `true`).
+- **Deep link:** `#clinical-evidence` opens that section (client `hashchange` + initial check); `id="clinical-evidence"` is on the outer `<section>`.
 
 ---
 
@@ -97,7 +105,8 @@ See `ADDING_APPS.md` for the full JSON template and field mapping. Ensure new ap
 
 - `demo_notes` and/or `demo_variants` for Demo access
 - `linked_funding_ids` for Related funding
-- `pricing_confidence` for indicative cost (optional: `not_stated`, `supplier_reported`, `confirmed`)
+- `pricing_confidence` for indicative price subline (see `content/common/enums.json` `confidence_labels`)
+- Prefer `service_wrap_description`; `service_wrap_note` is merged in UI if description is absent (`lib/data.ts` comment on `App` type)
 
 ---
 
@@ -106,11 +115,13 @@ See `ADDING_APPS.md` for the full JSON template and field mapping. Ensure new ap
 When changing PDP logic, verify:
 
 - [ ] Apps with full `clinical_evidence_detailed` still show `case_studies` in Impact section
-- [ ] Apps with no `technical_integrations` do not break
-- [ ] Apps with empty `linked_funding_ids` show funding empty state
+- [ ] Apps with no `technical_integrations` do not break (integrations row omitted)
+- [ ] Apps with empty `linked_funding_ids` show funding empty state inside expander
 - [ ] `demo_notes` renders when present (even without `demo_variants`)
-- [ ] Express interest button opens modal (`data-express-interest`)
-- [ ] Clinical evidence section has `id="clinical-evidence"` for anchor links
+- [ ] Express interest button opens modal (`data-express-interest`); CTA remains outside the collapsible section stack
+- [ ] Clinical evidence row has `id="clinical-evidence"`; `#clinical-evidence` opens the row
+- [ ] Commercial model and cost is **open** on first load; other sections **closed**; keyboard toggles via header button; chevron reflects state
+- [ ] Indicative financial context is a single expander (no nested collapsible); `free_offer_flag` callout still shows inside Commercial body when true
 
 ---
 

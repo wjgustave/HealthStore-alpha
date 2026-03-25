@@ -5,6 +5,7 @@ import Image from 'next/image'
 import type { App } from '@/lib/data'
 import { STORE_ACCENT } from '@/lib/storeAccent'
 import { DtacBadge, MaturityBadge, EvidenceBadge, EffortBadge, SupervisionBadge, ConditionTag } from '@/components/Badges'
+import { CompareToggleButton } from '@/components/CompareToggleButton'
 import { X } from 'lucide-react'
 
 const supervisionOptions = [
@@ -262,13 +263,16 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                   ))}
                 </div>
 
-                <Link
-                  href={`/apps/${app.slug}`}
-                  className="rounded-lg py-4 text-sm font-semibold text-center block"
-                  style={{ background: STORE_ACCENT, color: '#fff' }}
-                >
-                  View details →
-                </Link>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <Link
+                    href={`/apps/${app.slug}`}
+                    className="rounded-lg py-4 text-sm font-semibold text-center block sm:col-span-2"
+                    style={{ background: STORE_ACCENT, color: '#fff' }}
+                  >
+                    View details →
+                  </Link>
+                  <CompareToggleButton appId={app.id} className="w-full sm:col-span-1" />
+                </div>
               </div>
             </div>
           ))}

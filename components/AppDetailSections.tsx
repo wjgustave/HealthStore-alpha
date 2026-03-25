@@ -1,11 +1,12 @@
 import Link from 'next/link'
 import {
+  AlertBox,
   EffortBadge,
   EvidenceBadge,
   FundingStatusBadge,
   MaturityBadge,
-  SectionHeader,
 } from '@/components/Badges'
+import enumsData from '@/content/common/enums.json'
 import ProductVideosSection from '@/components/ProductVideosSection'
 import { getLinkedFunding } from '@/lib/data'
 
@@ -40,11 +41,7 @@ export function TechnicalIntegrationTable({ app }: { app: any }) {
 
 export function ScaleAndMaturitySection({ app }: { app: any }) {
   return (
-    <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-      <SectionHeader
-        title="Scale and maturity"
-        description="Deployment reach, evidence posture, and where the product is in use."
-      />
+    <div>
       <div className="flex flex-col sm:flex-row sm:flex-nowrap gap-3 mb-5">
         <div
           className="rounded-lg px-3 py-2 text-sm w-fit"
@@ -103,11 +100,11 @@ export function ScaleAndMaturitySection({ app }: { app: any }) {
           </div>
         </>
       )}
-    </section>
+    </div>
   )
 }
 
-function hasWhatItTakesContent(app: any) {
+export function hasWhatItTakesContent(app: any) {
   return !!(
     app.onboarding_detail ||
     app.onboarding_model ||
@@ -129,11 +126,7 @@ export function WhatItTakesLocallySection({ app, accent }: { app: any; accent: s
   if (!hasWhatItTakesContent(app)) return null
 
   return (
-    <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-      <SectionHeader
-        title="What it takes locally"
-        description="Operational effort, onboarding, training, and prerequisites for a successful deployment."
-      />
+    <div>
       {app.local_wraparound && (
         <div className="mb-4 flex flex-wrap items-center gap-2 text-sm">
           <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Local effort</span>
@@ -201,7 +194,7 @@ export function WhatItTakesLocallySection({ app, accent }: { app: any; accent: s
           </ul>
         </div>
       )}
-    </section>
+    </div>
   )
 }
 
@@ -225,6 +218,13 @@ function CaseStudyCards({ caseStudies }: { caseStudies: any[] }) {
   )
 }
 
+export function shouldShowImpactSection(app: any) {
+  const hasImpact = !!(app.expected_benefit_note && String(app.expected_benefit_note).trim())
+  const hasCases = app.case_studies?.length > 0
+  const hasVideos = app.product_videos?.length > 0
+  return !!(hasImpact || hasCases || hasVideos)
+}
+
 export function ImpactAndCaseStudiesSection({ app }: { app: any }) {
   const hasImpact = !!(app.expected_benefit_note && String(app.expected_benefit_note).trim())
   const hasCases = app.case_studies?.length > 0
@@ -232,11 +232,7 @@ export function ImpactAndCaseStudiesSection({ app }: { app: any }) {
   if (!hasImpact && !hasCases && !hasVideos) return null
 
   return (
-    <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-      <SectionHeader
-        title="Expected impact and case studies"
-        description="Outcomes commissioners should expect and illustrative deployments. Distinct from the formal clinical evidence record below."
-      />
+    <div>
       {hasImpact && (
         <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}>{app.expected_benefit_note}</p>
       )}
@@ -250,8 +246,12 @@ export function ImpactAndCaseStudiesSection({ app }: { app: any }) {
         </>
       )}
       {hasVideos && <ProductVideosSection videos={app.product_videos} embedded />}
-    </section>
+    </div>
   )
+}
+
+export function shouldShowDemoAccess(app: any) {
+  return (app.demo_variants?.length > 0) || !!(app.demo_notes && String(app.demo_notes).trim())
 }
 
 export function DemoAccessSection({ app, accent }: { app: any; accent: string }) {
@@ -259,11 +259,7 @@ export function DemoAccessSection({ app, accent }: { app: any; accent: string })
   if (!hasDemo) return null
 
   return (
-    <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-      <SectionHeader
-        title="Demo access"
-        description="How to view the product or request a demonstration."
-      />
+    <div>
       {app.demo_notes && (
         <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>{app.demo_notes}</p>
       )}
@@ -278,90 +274,185 @@ export function DemoAccessSection({ app, accent }: { app: any; accent: string })
           ))}
         </ul>
       )}
-    </section>
+    </div>
   )
 }
 
-const PRICING_CONFIDENCE_LABELS: Record<string, string> = {
-  not_stated: 'Not stated',
-  supplier_reported: 'Supplier-reported',
-  confirmed: 'Confirmed',
-}
+const PRICING_MODEL_LABELS = (enumsData as { pricing_labels?: Record<string, string> }).pricing_labels ?? {}
 
 export function formatPricingConfidence(raw: string | undefined): string | null {
   if (!raw) return null
-  return PRICING_CONFIDENCE_LABELS[raw] ?? raw.replace(/_/g, ' ')
+  const map: Record<string, string> = {
+    not_stated: 'Not stated',
+    supplier_reported: 'Supplier-reported',
+    confirmed: 'Confirmed',
+  }
+  return map[raw] ?? raw.replace(/_/g, ' ')
 }
 
-export function IndicativeFinancialGlance({ app }: { app: any }) {
-  const conf = formatPricingConfidence(app.pricing_confidence)
+function formatPricingModelDisplay(raw: string | undefined): string {
+  if (!raw || String(raw).trim() === '') return 'Information not available'
+  const key = String(raw).trim()
+  if (PRICING_MODEL_LABELS[key]) return PRICING_MODEL_LABELS[key]
+  return key
+}
+
+function yesNo(value: boolean | undefined | null): string {
+  if (value === true) return 'Yes'
+  if (value === false) return 'No'
+  return 'Information not available'
+}
+
+function CommercialDlRow({
+  label,
+  value,
+  mutedWhenEmpty,
+  children,
+}: {
+  label: string
+  value?: string | null
+  mutedWhenEmpty?: boolean
+  children?: React.ReactNode
+}) {
+  const has = children != null ? true : !!(value && String(value).trim())
+  const content = children ?? value
   return (
-    <div className="rounded-lg p-4" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
-      <div className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--text-muted)' }}>Indicative financial cost</div>
-      <p className="text-sm mb-0" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-        {app.indicative_price_text ?? 'Information not available'}
-      </p>
-      {conf && (
-        <div className="text-xs mt-2" style={{ color: 'var(--text-muted)' }}>
-          Pricing confidence: {conf}
+    <div
+      className="flex flex-col sm:flex-row sm:gap-4 gap-1 py-3 border-b last:border-0 text-sm"
+      style={{ borderColor: 'var(--border)' }}
+    >
+      <dt className="w-full sm:w-52 flex-shrink-0 font-medium" style={{ color: 'var(--text-muted)' }}>
+        {label}
+      </dt>
+      <dd
+        className="min-w-0 flex-1 leading-relaxed"
+        style={{
+          color: has || !mutedWhenEmpty ? 'var(--text-primary)' : 'var(--text-muted)',
+        }}
+      >
+        {has ? content : 'Information not available'}
+      </dd>
+    </div>
+  )
+}
+
+/** Pricing, procurement, service wrap — mirrors healthstore-m “Commercial model and cost”. */
+export function CommercialModelAndCostSection({ app }: { app: any }) {
+  const procurement = app.procurement_notes ?? app.contract_note
+  const serviceWrapDetail = app.service_wrap_description ?? app.service_wrap_note
+  const conf = formatPricingConfidence(app.pricing_confidence)
+
+  return (
+    <div>
+      <dl className="mt-0">
+        <CommercialDlRow label="Pricing model" value={formatPricingModelDisplay(app.pricing_model)} />
+        <CommercialDlRow
+          label="National price"
+          value={
+            app.national_price_available === true
+              ? 'Available'
+              : app.national_price_available === false
+                ? 'Not available'
+                : null
+          }
+          mutedWhenEmpty
+        />
+        <div
+          className="flex flex-col sm:flex-row sm:gap-4 gap-1 py-3 border-b text-sm"
+          style={{ borderColor: 'var(--border)' }}
+        >
+          <dt className="w-full sm:w-52 flex-shrink-0 font-medium" style={{ color: 'var(--text-muted)' }}>
+            Indicative price
+          </dt>
+          <dd className="min-w-0 flex-1 leading-relaxed" style={{ color: 'var(--text-primary)' }}>
+            {app.indicative_price_text ?? 'Information not available'}
+            {conf ? (
+              <div className="text-xs mt-1.5" style={{ color: 'var(--text-muted)' }}>
+                Pricing confidence: {conf}
+              </div>
+            ) : null}
+          </dd>
+        </div>
+        <CommercialDlRow label="Service wrap included" value={yesNo(app.service_wrap_included)} />
+        <CommercialDlRow label="Service wrap details" value={serviceWrapDetail} mutedWhenEmpty />
+        <CommercialDlRow label="Procurement notes" value={procurement} mutedWhenEmpty />
+        {app.nhse_125k_note && (
+          <CommercialDlRow label="NHSE £125k funding" value={app.nhse_125k_note} />
+        )}
+        {app.monitoring_model && (
+          <CommercialDlRow label="Monitoring / ongoing service model" value={app.monitoring_model} />
+        )}
+      </dl>
+      {app.free_offer_flag === true && (
+        <div className="mt-4">
+          <AlertBox type="warning">
+            <strong>Free-tier access: </strong>
+            Free-tier access typically does not include a full supplier service wrap. The ICB should expect to
+            provide local onboarding, training and support independently unless otherwise agreed in contract.
+          </AlertBox>
         </div>
       )}
     </div>
   )
 }
 
-/** Procurement, tariff and ROI rows only — indicative cost is shown in the always-visible glance block. */
-export function FinancialCommercialBody({ app }: { app: any }) {
+function FinancialContextDlRow({
+  label,
+  value,
+}: {
+  label: string
+  value?: string | null
+}) {
+  const has = !!(value && String(value).trim())
   return (
-    <dl className="divide-y" style={{ borderColor: 'var(--border)' }}>
-      <div className="flex gap-3 py-3 border-b last:border-0 text-sm" style={{ borderColor: 'var(--border)' }}>
-        <dt className="w-48 flex-shrink-0 font-medium" style={{ color: 'var(--text-muted)' }}>Procurement routes</dt>
-        <dd style={{ color: (app.procurement_notes ?? app.contract_note) ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-          {app.procurement_notes ?? app.contract_note ?? 'Information not available'}
-        </dd>
-      </div>
-      {app.nhse_125k_note && (
-        <div className="flex gap-3 py-3 border-b last:border-0 text-sm" style={{ borderColor: 'var(--border)' }}>
-          <dt className="w-48 flex-shrink-0 font-medium" style={{ color: 'var(--text-muted)' }}>NHSE £125k funding</dt>
-          <dd style={{ color: 'var(--text-primary)' }}>{app.nhse_125k_note}</dd>
-        </div>
-      )}
-      <div className="flex gap-3 py-3 border-b last:border-0 text-sm" style={{ borderColor: 'var(--border)' }}>
-        <dt className="w-48 flex-shrink-0 font-medium" style={{ color: 'var(--text-muted)' }}>Tariff considerations</dt>
-        <dd style={{ color: app.tariff_considerations ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-          {app.tariff_considerations ?? 'Information not available'}
-        </dd>
-      </div>
-      <div className="flex gap-3 py-3 border-b last:border-0 text-sm" style={{ borderColor: 'var(--border)' }}>
-        <dt className="w-48 flex-shrink-0 font-medium" style={{ color: 'var(--text-muted)' }}>ROI notes</dt>
-        <dd style={{ color: app.roi_note ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-          {app.roi_note ?? 'Information not available'}
-        </dd>
-      </div>
-      {app.monitoring_model && (
-        <div className="flex gap-3 py-3 border-b last:border-0 text-sm" style={{ borderColor: 'var(--border)' }}>
-          <dt className="w-48 flex-shrink-0 font-medium" style={{ color: 'var(--text-muted)' }}>Monitoring model</dt>
-          <dd style={{ color: 'var(--text-primary)' }}>{app.monitoring_model}</dd>
-        </div>
-      )}
-      {app.minimum_conditions_for_success && (
-        <div className="flex gap-3 py-3 border-b last:border-0 text-sm" style={{ borderColor: 'var(--border)' }}>
-          <dt className="w-48 flex-shrink-0 font-medium" style={{ color: 'var(--text-muted)' }}>Minimum conditions for success</dt>
-          <dd style={{ color: 'var(--text-primary)' }}>{app.minimum_conditions_for_success}</dd>
-        </div>
-      )}
-    </dl>
+    <div
+      className="flex flex-col sm:flex-row sm:gap-4 gap-1 py-3 border-b last:border-0 text-sm"
+      style={{ borderColor: 'var(--border)' }}
+    >
+      <dt className="w-full sm:w-52 flex-shrink-0 font-medium" style={{ color: 'var(--text-muted)' }}>
+        {label}
+      </dt>
+      <dd
+        className="min-w-0 flex-1 leading-relaxed"
+        style={{ color: has ? 'var(--text-primary)' : 'var(--text-muted)' }}
+      >
+        {has ? value : 'Information not available'}
+      </dd>
+    </div>
   )
+}
+
+function IndicativeFinancialContextBody({ app }: { app: any }) {
+  return (
+    <div>
+      <dl>
+        <FinancialContextDlRow label="Expected benefit" value={app.expected_benefit_note} />
+        <FinancialContextDlRow label="Tariff considerations" value={app.tariff_considerations} />
+        <FinancialContextDlRow label="Provider income impact" value={app.provider_income_note} />
+        <FinancialContextDlRow label="ROI note" value={app.roi_note} />
+        {app.minimum_conditions_for_success && (
+          <FinancialContextDlRow label="Minimum conditions for success" value={app.minimum_conditions_for_success} />
+        )}
+      </dl>
+      <div className="mt-4 rounded-lg p-4" style={{ background: '#E6F0FB', border: '1px solid #A2C8E8' }}>
+        <p className="text-xs leading-relaxed" style={{ color: '#003087' }}>
+          These are directional indicators only. Local finance modelling using actual baseline activity,
+          population size and pathway design is required before any business case submission.
+        </p>
+      </div>
+    </div>
+  )
+}
+
+/** Tariff, ROI, benefit context — title lives on PDP expander row. */
+export function IndicativeFinancialContextSection({ app }: { app: any }) {
+  return <IndicativeFinancialContextBody app={app} />
 }
 
 export function RelatedFundingSection({ fundingIds }: { fundingIds: string[] }) {
   const funding = getLinkedFunding(fundingIds)
   return (
-    <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-      <SectionHeader
-        title="Related funding opportunities"
-        description="Funding that may be relevant to commissioning this technology."
-      />
+    <div>
       {funding.length > 0 ? (
         <div className="space-y-3">
           {funding.map((f: any) => (
@@ -390,6 +481,6 @@ export function RelatedFundingSection({ fundingIds }: { fundingIds: string[] }) 
           {' '}for current opportunities.
         </p>
       )}
-    </section>
+    </div>
   )
 }

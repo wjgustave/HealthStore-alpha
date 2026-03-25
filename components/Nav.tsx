@@ -5,6 +5,45 @@ import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { LogOut } from 'lucide-react'
 import HomeHeroLayoutToggle from '@/components/home/HomeHeroLayoutToggle'
+import { useCompareBasket } from '@/components/CompareBasketProvider'
+
+function CompareNavLink({
+  path,
+  onNavigate,
+  className,
+}: {
+  path: string
+  onNavigate?: () => void
+  className: string
+}) {
+  const { ids, count } = useCompareBasket()
+  const href =
+    ids.length > 0 ? `/compare?ids=${ids.map(id => encodeURIComponent(id)).join(',')}` : '/compare'
+  const active = path === '/compare'
+  return (
+    <Link
+      href={href}
+      onClick={onNavigate}
+      className={`inline-flex items-center gap-1.5 ${className}`}
+      aria-label={count > 0 ? `Compare apps, ${count} selected` : 'Compare apps'}
+      style={{
+        color: active ? 'var(--nhs-blue)' : 'var(--text-secondary)',
+        background: active ? '#E6F0FB' : 'transparent',
+      }}
+    >
+      Compare
+      {count > 0 ? (
+        <span
+          className="min-w-[1.25rem] h-5 px-1 rounded-full text-[11px] font-bold leading-none inline-flex items-center justify-center"
+          style={{ background: 'var(--nhs-blue)', color: '#fff' }}
+          aria-hidden
+        >
+          {count}
+        </span>
+      ) : null}
+    </Link>
+  )
+}
 
 export default function Nav({ commissioningContextLabel }: { commissioningContextLabel: string }) {
   const path = usePathname()
@@ -33,13 +72,19 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
             <span>HealthStore</span>
           </Link>
           <div className="hidden md:flex items-center gap-1">
-            {links.map(l => (
+            {links.slice(0, 2).map(l => (
               <Link key={l.href} href={l.href}
                 className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
                 style={{ color: path === l.href ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === l.href ? '#E6F0FB' : 'transparent' }}>
                 {l.label}
               </Link>
             ))}
+            <CompareNavLink path={path} className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors" />
+            <Link href={links[2].href}
+              className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+              style={{ color: path === links[2].href ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === links[2].href ? '#E6F0FB' : 'transparent' }}>
+              {links[2].label}
+            </Link>
             <span className="ml-2 badge badge-blue">Prototype</span>
             <button onClick={handleLogout}
               className="ml-3 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors hover:bg-gray-100"
@@ -87,13 +132,23 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
       ) : null}
       {mobileOpen && (
         <div className="md:hidden border-t px-4 py-3 flex flex-col gap-1" style={{ borderColor: 'var(--border)', background: '#fff' }}>
-          {links.map(l => (
+          {links.slice(0, 2).map(l => (
             <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}
               className="px-3 py-2 rounded-md text-sm font-medium"
               style={{ color: path === l.href ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === l.href ? '#E6F0FB' : 'transparent' }}>
               {l.label}
             </Link>
           ))}
+          <CompareNavLink
+            path={path}
+            onNavigate={() => setMobileOpen(false)}
+            className="px-3 py-2 rounded-md text-sm font-medium"
+          />
+          <Link href={links[2].href} onClick={() => setMobileOpen(false)}
+            className="px-3 py-2 rounded-md text-sm font-medium"
+            style={{ color: path === links[2].href ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === links[2].href ? '#E6F0FB' : 'transparent' }}>
+            {links[2].label}
+          </Link>
           <button onClick={handleLogout}
             className="px-3 py-2 rounded-md text-sm font-medium text-left flex items-center gap-1.5"
             style={{ color: 'var(--text-muted)' }}>

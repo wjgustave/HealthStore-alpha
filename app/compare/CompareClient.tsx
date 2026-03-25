@@ -1,10 +1,17 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
+import { X } from 'lucide-react'
 import type { App } from '@/lib/data'
 import { STORE_ACCENT } from '@/lib/storeAccent'
 import { DtacBadge, MaturityBadge, EvidenceBadge, EffortBadge, SupervisionBadge } from '@/components/Badges'
+import { useCompareBasket } from '@/components/CompareBasketProvider'
+import {
+  formatConditionLabels,
+  sharedConditionTags,
+} from '@/lib/compareConditions'
 
 type Props = { allApps: App[] }
 
@@ -54,84 +61,212 @@ function CellValue({ app, dim }: { app: App; dim: string }) {
   }
 }
 
+const LOGO_DESKTOP = { w: 140, h: 72 }
+const LOGO_MOBILE = { w: 112, h: 60 }
+
+/** App logo + name + corner remove control (pattern from healthstore-m compare). */
+function CompareAppHeaderColumn({
+  app,
+  onRemove,
+  layout,
+}: {
+  app: App
+  onRemove: () => void
+  layout: 'mobile' | 'desktop'
+}) {
+  const { w, h } = layout === 'desktop' ? LOGO_DESKTOP : LOGO_MOBILE
+
+  const logoBox = (
+    <div className="relative inline-block shrink-0">
+      {app.logo_path ? (
+        <div
+          className="relative rounded-xl bg-white border"
+          style={{
+            width: w,
+            height: h,
+            borderColor: 'var(--border)',
+          }}
+        >
+          <Image
+            src={app.logo_path}
+            alt=""
+            fill
+            sizes={`${w}px`}
+            className="object-contain p-3"
+          />
+        </div>
+      ) : (
+        <div
+          className="rounded-xl bg-[#F7F9FC] border flex items-center justify-center"
+          style={{
+            width: w,
+            height: h,
+            borderColor: 'var(--border)',
+          }}
+          aria-hidden
+        />
+      )}
+      <button
+        type="button"
+        onClick={onRemove}
+        className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 z-10 w-8 h-8 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-colors hover:opacity-90 shadow-sm"
+        style={{ background: '#FEE2E2', color: '#DC2626' }}
+        aria-label={`Remove ${app.app_name}`}
+      >
+        <X className="w-4 h-4 sm:w-3.5 sm:h-3.5" strokeWidth={2} aria-hidden />
+      </button>
+    </div>
+  )
+
+  if (layout === 'mobile') {
+    return (
+      <div className="flex items-center gap-4">
+        {logoBox}
+        <div className="min-w-0 flex-1 text-left">
+          <Link
+            href={`/apps/${app.slug}`}
+            className="text-sm font-bold hover:underline block"
+            style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
+          >
+            {app.app_name}
+          </Link>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+            {app.supplier_name}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="text-center">
+      {logoBox}
+      <Link
+        href={`/apps/${app.slug}`}
+        className="block mt-2 text-sm font-bold hover:underline"
+        style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
+      >
+        {app.app_name}
+      </Link>
+      <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+        {app.supplier_name}
+      </p>
+    </div>
+  )
+}
+
 export default function CompareClient({ allApps }: Props) {
   const searchParams = useSearchParams()
-  const initIds = searchParams?.get('ids')?.split(',').filter(Boolean) ?? []
+  const { ids: selectedIds, remove, clear, setFromUrlIds } = useCompareBasket()
 
-  const [selectedIds, setSelectedIds] = useState<string[]>(initIds.slice(0, 4))
+  const idsParam = searchParams?.get('ids') ?? ''
+  useEffect(() => {
+    if (!idsParam) return
+    const urlIds = idsParam.split(',').map(s => s.trim()).filter(Boolean)
+    if (urlIds.length > 0) setFromUrlIds(urlIds)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idsParam])
 
   const selected = selectedIds.map(id => allApps.find(a => a.id === id)).filter(Boolean) as App[]
 
-  const toggleApp = (id: string) => {
-    setSelectedIds(prev => {
-      if (prev.includes(id)) return prev.filter(i => i !== id)
-      if (prev.length >= 4) return prev
-      return [...prev, id]
-    })
-  }
+  const sharedTags = useMemo(() => sharedConditionTags(selected), [selected])
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div className="mb-8">
         <h1 className="page-title-h1">Compare apps</h1>
-        <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>Select up to 4 apps to compare side by side</p>
+        <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
+          Add up to four apps from the catalogue in the <strong>same condition area</strong>. Remove apps here or clear the list to compare a different condition.
+        </p>
       </div>
 
-      {/* App selector */}
-      <div className="bg-white rounded-xl border p-5 mb-8" style={{ borderColor: 'var(--border)' }}>
-        <div className="text-sm font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>
-          Select apps to compare ({selectedIds.length}/4)
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {allApps.map(app => {
-            const sel = selectedIds.includes(app.id)
-            return (
-              <button
-                key={app.id}
-                type="button"
-                onClick={() => toggleApp(app.id)}
-                aria-pressed={sel}
-                className="px-3 py-1.5 rounded-lg text-sm font-medium border transition-all"
+      {selected.length > 0 && (
+        <>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-4">
+            <div>
+              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                {selected.length} application{selected.length !== 1 ? 's' : ''} selected
+              </p>
+              {sharedTags.length > 0 && (
+                <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+                  Shared condition{sharedTags.length > 1 ? 's' : ''}:{' '}
+                  <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>
+                    {formatConditionLabels(sharedTags)}
+                  </span>
+                </p>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={() => clear()}
+              className="self-start text-sm transition-colors hover:text-red-600 sm:shrink-0"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              Clear all
+            </button>
+          </div>
+
+          <div className="bg-white rounded-xl border p-5 mb-8" style={{ borderColor: 'var(--border)' }}>
+            <div className="md:hidden flex flex-col gap-5">
+              {selected.map(app => (
+                <CompareAppHeaderColumn
+                  key={app.id}
+                  app={app}
+                  layout="mobile"
+                  onRemove={() => remove(app.id)}
+                />
+              ))}
+            </div>
+            {/* Padding so corner remove controls are not clipped by overflow-x */}
+            <div className="hidden md:block overflow-x-auto py-2 px-2 -mx-2">
+              <div
+                className="grid gap-4 mx-auto"
                 style={{
-                  borderColor: sel ? STORE_ACCENT : 'var(--border)',
-                  background: sel ? STORE_ACCENT : '#fff',
-                  color: sel ? '#fff' : 'var(--text-secondary)',
+                  gridTemplateColumns: `180px repeat(${selected.length}, minmax(136px, 1fr))`,
                 }}
               >
-                <span aria-hidden>{sel ? '✓ ' : ''}</span>
-                {app.app_name}
-              </button>
-            )
-          })}
-        </div>
-      </div>
+                <div aria-hidden />
+                {selected.map(app => (
+                  <CompareAppHeaderColumn
+                    key={app.id}
+                    app={app}
+                    layout="desktop"
+                    onRemove={() => remove(app.id)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
-      {selected.length < 2 ? (
-        <div className="text-center py-20 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
+      {selected.length === 0 ? (
+        <div className="text-center py-20 px-4 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
           <div className="text-4xl mb-4" aria-hidden>⚖️</div>
-          <div className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Select at least 2 apps to compare</div>
-          <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>Use the selector above</div>
+          <p className="font-semibold mb-3 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
+            No applications selected for comparison. Browse the catalogue and add applications to compare them side by side.
+          </p>
+          <Link
+            href="/apps"
+            className="inline-flex items-center justify-center text-sm font-semibold rounded-lg px-5 py-3 min-h-[44px]"
+            style={{ background: STORE_ACCENT, color: '#fff' }}
+          >
+            Browse all apps
+          </Link>
         </div>
       ) : (
         <div className="overflow-x-auto rounded-xl border bg-white" style={{ borderColor: 'var(--border)' }}>
           <table className="w-full border-collapse" style={{ fontSize: 'var(--text-body)' }}>
             <caption className="sr-only">
-              Comparison of selected apps by dimension; each column is one product.
+              {selected.length === 1
+                ? 'Application details by dimension.'
+                : 'Comparison of selected apps by dimension; each column is one product.'}
             </caption>
-            <thead>
+            <thead className="sr-only">
               <tr>
-                <th className="text-left p-4 border-b border-r font-semibold uppercase tracking-wide"
-                  style={{ fontSize: 'var(--text-label)', borderColor: 'var(--border)', color: 'var(--text-muted)', width: 180, background: '#F7F9FC' }}>
-                  Dimension
-                </th>
+                <th scope="col">Dimension</th>
                 {selected.map(app => (
-                    <th key={app.id} className="p-4 border-b border-r text-left" style={{ borderColor: 'var(--border)', background: '#FAFBFC' }}>
-                      <Link href={`/apps/${app.slug}`} className="font-bold hover:underline"
-                        style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)', fontSize: 'var(--text-card-title-sm)' }}>
-                        {app.app_name}
-                      </Link>
-                      <div className="font-normal mt-0.5" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>{app.supplier_name}</div>
-                    </th>
+                  <th key={app.id} scope="col">{app.app_name}</th>
                 ))}
               </tr>
             </thead>
@@ -149,7 +284,6 @@ export default function CompareClient({ allApps }: Props) {
                   ))}
                 </tr>
               ))}
-              {/* Evidence summary row */}
               <tr>
                 <th scope="row" className="p-4 border-b border-r font-medium uppercase tracking-wide text-left"
                   style={{ fontSize: 'var(--text-label)', borderColor: 'var(--border)', color: 'var(--text-muted)', background: '#F7F9FC' }}>
@@ -163,7 +297,6 @@ export default function CompareClient({ allApps }: Props) {
                   </td>
                 ))}
               </tr>
-              {/* CTA row */}
               <tr>
                 <td className="p-4" style={{ background: '#F7F9FC' }} />
                 {selected.map(app => (

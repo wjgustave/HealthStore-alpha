@@ -26,6 +26,7 @@ import type { ConceptFeaturedContent, ConceptGridContent } from '@/lib/conceptHo
 import type { HomeCampaignItem, HomeEvidenceSpotlight, HomeNewsItem } from '@/lib/homeContentTypes'
 import { isVisibleCondition } from '@/lib/visibleConditions'
 
+/** App JSON: `service_wrap_description` is preferred; `service_wrap_note` is legacy — PDP merges both for “Service wrap details”. */
 export type App = any
 export type Funding = any
 export type Condition = any

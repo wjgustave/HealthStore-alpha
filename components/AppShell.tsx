@@ -2,17 +2,21 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import type { App } from '@/lib/data'
 import Nav from './Nav'
 import BackToTop from './BackToTop'
+import { CompareBasketProvider } from './CompareBasketProvider'
 
 export default function AppShell({
   children,
   isLoggedIn = false,
   commissioningContextLabel = '',
+  allApps,
 }: {
   children: React.ReactNode
   isLoggedIn?: boolean
   commissioningContextLabel?: string
+  allApps: App[]
 }) {
   const pathname = usePathname()
   const isLoginPage = pathname === '/login'
@@ -34,8 +38,10 @@ export default function AppShell({
   return (
     <>
       <a href="#main-content" className="skip-link">Skip to main content</a>
-      <Nav commissioningContextLabel={icbSubheaderLabel} />
-      <main id="main-content">{children}</main>
+      <CompareBasketProvider allApps={allApps}>
+        <Nav commissioningContextLabel={icbSubheaderLabel} />
+        <main id="main-content">{children}</main>
+      </CompareBasketProvider>
       <BackToTop />
       <footer className="mt-20 border-t py-10 px-6" style={{ borderColor: 'var(--border)', background: '#fff' }}>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">

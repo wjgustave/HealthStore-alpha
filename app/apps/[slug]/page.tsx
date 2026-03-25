@@ -4,21 +4,25 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {
   DtacBadge, MaturityBadge, EvidenceBadge, EffortBadge,
-  SupervisionBadge, NiceTypeBadge, AlertBox, SectionHeader, ConditionTag
+  SupervisionBadge, NiceTypeBadge, AlertBox, ConditionTag
 } from '@/components/Badges'
 import AppDetailClient from './AppDetailClient'
+import { CompareToggleButton } from '@/components/CompareToggleButton'
 import { STORE_ACCENT } from '@/lib/storeAccent'
-import { CollapsibleSection, CollapsibleInline } from '@/components/CollapsibleSection'
 import {
   ScaleAndMaturitySection,
   WhatItTakesLocallySection,
   ImpactAndCaseStudiesSection,
   DemoAccessSection,
   TechnicalIntegrationTable,
-  FinancialCommercialBody,
+  CommercialModelAndCostSection,
+  IndicativeFinancialContextSection,
   RelatedFundingSection,
-  IndicativeFinancialGlance,
+  hasWhatItTakesContent,
+  shouldShowImpactSection,
+  shouldShowDemoAccess,
 } from '@/components/AppDetailSections'
+import { ProductPageExpander } from '@/components/ProductPageExpander'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
 
 export async function generateStaticParams() {
@@ -279,17 +283,22 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 ))}
               </div>
             </div>
-            <div className="flex flex-wrap gap-3 items-center mt-6 pt-6 border-t" style={{ borderColor: 'var(--border)' }}>
-              {app.nhse_125k_eligible === true && (
-                <span className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5"
-                  style={{ background: '#E6F5EC', color: '#004B22' }}>
-                  ★ NHSE £125k funding eligible
-                </span>
-              )}
-              <button data-express-interest className="ml-auto px-4 py-4 rounded-lg text-sm font-semibold text-white"
-                style={{ background: accent }}>
-                Express interest
-              </button>
+            <div className="flex flex-wrap gap-3 items-center justify-between mt-6 pt-6 border-t" style={{ borderColor: 'var(--border)' }}>
+              <div className="flex flex-wrap gap-3 items-center min-w-0">
+                {app.nhse_125k_eligible === true && (
+                  <span className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5"
+                    style={{ background: '#E6F5EC', color: '#004B22' }}>
+                    ★ NHSE £125k funding eligible
+                  </span>
+                )}
+              </div>
+              <div className="flex flex-wrap gap-2 items-center shrink-0">
+                <CompareToggleButton appId={app.id} className="px-4 py-4 shrink-0" />
+                <button data-express-interest className="px-4 py-4 rounded-lg text-sm font-semibold text-white"
+                  style={{ background: accent }}>
+                  Express interest
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -301,134 +310,169 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
         <div className="grid md:grid-cols-3 gap-6">
 
-          <div className="md:col-span-2 space-y-6">
-            <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-              <SectionHeader title="Why it matters locally" />
-              <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}>{app.why_it_matters_locally}</p>
-              {app.sustainability_highlight && (
-                <div className="mt-4 rounded-lg p-3 text-sm" style={{ background: '#E6F5EC', color: '#004B22' }}>
-                  🌿 {app.sustainability_highlight}
-                </div>
+          <div className="md:col-span-2 space-y-3">
+              <ProductPageExpander title="Why it matters locally">
+                <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}>{app.why_it_matters_locally}</p>
+                {app.sustainability_highlight && (
+                  <div className="mt-4 rounded-lg p-3 text-sm" style={{ background: '#E6F5EC', color: '#004B22' }}>
+                    🌿 {app.sustainability_highlight}
+                  </div>
+                )}
+              </ProductPageExpander>
+
+              {app.context_of_use && (
+                <ProductPageExpander
+                  title="Context of use"
+                  description="Population, pathways, care settings and therapeutic purpose."
+                >
+                  <ContextOfUseGrid app={app} />
+                </ProductPageExpander>
               )}
-            </section>
 
-            {app.context_of_use && (
-              <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-                <SectionHeader title="Context of use" description="Population, pathways, care settings and therapeutic purpose." />
-                <ContextOfUseGrid app={app} />
-              </section>
-            )}
+              <ProductPageExpander
+                title="Scale and maturity"
+                description="Deployment reach, evidence posture, and where the product is in use."
+              >
+                <ScaleAndMaturitySection app={app} />
+              </ProductPageExpander>
 
-            <ScaleAndMaturitySection app={app} />
+              {hasWhatItTakesContent(app) && (
+                <ProductPageExpander
+                  title="What it takes locally"
+                  description="Operational effort, onboarding, training, and prerequisites for a successful deployment."
+                >
+                  <WhatItTakesLocallySection app={app} accent={accent} />
+                </ProductPageExpander>
+              )}
 
-            <WhatItTakesLocallySection app={app} accent={accent} />
+              {shouldShowImpactSection(app) && (
+                <ProductPageExpander
+                  title="Expected impact and case studies"
+                  description="Outcomes commissioners should expect and illustrative deployments. Distinct from the formal clinical evidence record below."
+                >
+                  <ImpactAndCaseStudiesSection app={app} />
+                </ProductPageExpander>
+              )}
 
-            <ImpactAndCaseStudiesSection app={app} />
-
-            <section id="clinical-evidence" className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-              <SectionHeader
+              <ProductPageExpander
+                id="clinical-evidence"
                 title="Clinical evidence"
                 description="Full evidence record. Links to source publications provided where available."
-              />
-              <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)', marginBottom: 20 }}>
-                {app.evidence_summary}
-              </p>
+              >
+                <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)', marginBottom: 20 }}>
+                  {app.evidence_summary}
+                </p>
 
-              {rcts.length > 0 && (
-                <div style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
-                    Randomised controlled trials ({rcts.length})
-                  </div>
-                  {rcts.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
-                </div>
-              )}
-
-              {observational.length > 0 && (
-                <div style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
-                    Real-world, observational & service evaluation evidence ({observational.length})
-                  </div>
-                  {observational.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
-                </div>
-              )}
-
-              {niceAndImpl.length > 0 && (
-                <div>
-                  <div style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
-                    NICE assessments, implementation science & other sources ({niceAndImpl.length})
-                  </div>
-                  {niceAndImpl.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
-                </div>
-              )}
-            </section>
-
-            <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-              <SectionHeader title="NICE guidance" />
-              <div className="space-y-3">
-                {app.nice_guidance_refs.map((r: any) => (
-                  <div key={r.ref} className="flex items-start gap-3 p-3 rounded-lg" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
-                    <NiceTypeBadge type={r.type} />
-                    <div>
-                      <a href={r.url} target="_blank" rel="noopener noreferrer"
-                        className="font-semibold text-sm hover:underline" style={{ color: accent }}>
-                        {r.ref} ↗
-                      </a>
-                      <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                        {r.date}{r.note ? ` · ${r.note}` : ''}
-                      </div>
+                {rcts.length > 0 && (
+                  <div style={{ marginBottom: 16 }}>
+                    <div style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
+                      Randomised controlled trials ({rcts.length})
                     </div>
+                    {rcts.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
                   </div>
-                ))}
-              </div>
-            </section>
+                )}
 
-            {app.contradictory_evidence?.length > 0 && (
-              <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-                <SectionHeader title="Data quality flags" description="Issues identified during review that commissioners should be aware of." />
-                <div className="space-y-4">
-                  {app.contradictory_evidence.map((c: any, i: number) => (
-                    <div key={i} className="rounded-xl border p-4" style={{ background: '#FDECEA', borderColor: '#DA291C33' }}>
-                      <div className="font-semibold text-sm mb-2" style={{ color: '#7A1210' }}>{c.domain}</div>
-                      <div className="text-xs space-y-1.5" style={{ color: '#5A1010' }}>
-                        <div><strong>Company claim:</strong> {c.claim_a}</div>
-                        <div><strong>Issue:</strong> {c.claim_b}</div>
-                        {c.commissioner_impact && (
-                          <div className="mt-2 p-2 rounded" style={{ background: 'rgba(255,255,255,0.5)' }}>
-                            <strong>Commissioner action:</strong> {c.commissioner_impact}
-                          </div>
-                        )}
+                {observational.length > 0 && (
+                  <div style={{ marginBottom: 16 }}>
+                    <div style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
+                      Real-world, observational & service evaluation evidence ({observational.length})
+                    </div>
+                    {observational.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
+                  </div>
+                )}
+
+                {niceAndImpl.length > 0 && (
+                  <div>
+                    <div style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
+                      NICE assessments, implementation science & other sources ({niceAndImpl.length})
+                    </div>
+                    {niceAndImpl.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
+                  </div>
+                )}
+              </ProductPageExpander>
+
+              <ProductPageExpander title="NICE guidance">
+                <div className="space-y-3">
+                  {app.nice_guidance_refs.map((r: any) => (
+                    <div key={r.ref} className="flex items-start gap-3 p-3 rounded-lg" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
+                      <NiceTypeBadge type={r.type} />
+                      <div>
+                        <a href={r.url} target="_blank" rel="noopener noreferrer"
+                          className="font-semibold text-sm hover:underline" style={{ color: accent }}>
+                          {r.ref} ↗
+                        </a>
+                        <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                          {r.date}{r.note ? ` · ${r.note}` : ''}
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
-              </section>
-            )}
+              </ProductPageExpander>
 
-            <DemoAccessSection app={app} accent={accent} />
+              {app.contradictory_evidence?.length > 0 && (
+                <ProductPageExpander
+                  title="Data quality flags"
+                  description="Issues identified during review that commissioners should be aware of."
+                >
+                  <div className="space-y-4">
+                    {app.contradictory_evidence.map((c: any, i: number) => (
+                      <div key={i} className="rounded-xl border p-4" style={{ background: '#FDECEA', borderColor: '#DA291C33' }}>
+                        <div className="font-semibold text-sm mb-2" style={{ color: '#7A1210' }}>{c.domain}</div>
+                        <div className="text-xs space-y-1.5" style={{ color: '#5A1010' }}>
+                          <div><strong>Company claim:</strong> {c.claim_a}</div>
+                          <div><strong>Issue:</strong> {c.claim_b}</div>
+                          {c.commissioner_impact && (
+                            <div className="mt-2 p-2 rounded" style={{ background: 'rgba(255,255,255,0.5)' }}>
+                              <strong>Commissioner action:</strong> {c.commissioner_impact}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </ProductPageExpander>
+              )}
 
-            {app.technical_integrations && (
-              <CollapsibleSection
-                title="NHS and care system integrations"
-                description="Technical integration detail. NHS App, NHS Login and NHS Notify are summarised in the product summary at the top of the page."
-                defaultOpen={false}
-              >
-                <TechnicalIntegrationTable app={app} />
-              </CollapsibleSection>
-            )}
+              {shouldShowDemoAccess(app) && (
+                <ProductPageExpander
+                  title="Demo access"
+                  description="How to view the product or request a demonstration."
+                >
+                  <DemoAccessSection app={app} accent={accent} />
+                </ProductPageExpander>
+              )}
 
-            <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
-              <SectionHeader title="Financial and commercial considerations" />
-              <IndicativeFinancialGlance app={app} />
-              <CollapsibleInline
-                title="Procurement, tariff and ROI detail"
-                description="Contract routes, tariff, ROI and operational commercial notes."
+              {app.technical_integrations && (
+                <ProductPageExpander
+                  title="NHS and care system integrations"
+                  description="Technical integration detail. NHS App, NHS Login and NHS Notify are summarised in the product summary at the top of the page."
+                >
+                  <TechnicalIntegrationTable app={app} />
+                </ProductPageExpander>
+              )}
+
+              <ProductPageExpander
+                title="Commercial model and cost"
+                description="How the product is priced, what is included, and how to procure it."
                 defaultOpen
               >
-                <FinancialCommercialBody app={app} />
-              </CollapsibleInline>
-            </section>
+                <CommercialModelAndCostSection app={app} />
+              </ProductPageExpander>
 
-            <RelatedFundingSection fundingIds={linkedFundingIds} />
+              <ProductPageExpander
+                title="Indicative financial context"
+                description="Expected benefits, tariff, provider income and ROI considerations for local modelling."
+              >
+                <IndicativeFinancialContextSection app={app} />
+              </ProductPageExpander>
+
+              <ProductPageExpander
+                title="Related funding opportunities"
+                description="Funding that may be relevant to commissioning this technology."
+              >
+                <RelatedFundingSection fundingIds={linkedFundingIds} />
+              </ProductPageExpander>
 
             <div className="rounded-xl border overflow-hidden" style={{ borderColor: accent }}>
               <div style={{ background: accent, padding: '20px 24px' }}>
