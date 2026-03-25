@@ -113,10 +113,24 @@ export function AlertBox({ type, children }: { type: 'warning' | 'info' | 'dange
   )
 }
 
-export function SectionHeader({ title, description }: { title: string; description?: string }) {
+export function SectionHeader({
+  title,
+  description,
+  id,
+}: {
+  title: string
+  description?: string
+  id?: string
+}) {
   return (
     <div className="mb-6">
-      <h2 className="font-bold mb-1" style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--text-primary)' }}>{title}</h2>
+      <h2
+        id={id}
+        className="font-bold mb-1"
+        style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--text-primary)' }}
+      >
+        {title}
+      </h2>
       {description && <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{description}</p>}
       <div className="mt-3 h-0.5 rounded" style={{ background: 'linear-gradient(90deg, var(--nhs-blue), transparent)' }} />
     </div>

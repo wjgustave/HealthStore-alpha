@@ -25,6 +25,16 @@
     "clinician_referral",
     "self_referral"
   ],
+  "product_videos": [
+    {
+      "youtube_url": "https://www.youtube.com/watch?v=ZUprwdoaU9s",
+      "title": "myCOPD overview"
+    },
+    {
+      "youtube_url": "https://www.youtube.com/watch?v=bTDERxUfX-g",
+      "title": "myCOPD in use"
+    }
+  ],
   "one_line_value_proposition": "Structured COPD self-management, home pulmonary rehabilitation and remote monitoring \u2014 the only app in NICE HTE19 with a prior NICE MTG recommendation.",
   "why_it_matters_locally": "COPD drives high unplanned admissions and significant GP workload. myCOPD gives patients a structured self-management toolkit \u2014 including a 6-week home PR programme \u2014 without requiring face-to-face PR capacity. The Pro tier adds a clinician dashboard for remote monitoring at population scale.",
   "target_problem_statement": "Unplanned COPD admissions, low PR uptake, poor inhaler technique and inadequate post-exacerbation support between appointments.",
