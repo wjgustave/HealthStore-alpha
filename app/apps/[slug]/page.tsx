@@ -302,7 +302,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
         <div className="grid md:grid-cols-3 gap-6">
 
           <div className="md:col-span-2 space-y-6">
-
             <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
               <SectionHeader title="Why it matters locally" />
               <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}>{app.why_it_matters_locally}</p>

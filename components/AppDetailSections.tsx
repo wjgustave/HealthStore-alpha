@@ -6,6 +6,7 @@ import {
   MaturityBadge,
   SectionHeader,
 } from '@/components/Badges'
+import ProductVideosSection from '@/components/ProductVideosSection'
 import { getLinkedFunding } from '@/lib/data'
 
 export function TechnicalIntegrationTable({ app }: { app: any }) {
@@ -227,7 +228,8 @@ function CaseStudyCards({ caseStudies }: { caseStudies: any[] }) {
 export function ImpactAndCaseStudiesSection({ app }: { app: any }) {
   const hasImpact = !!(app.expected_benefit_note && String(app.expected_benefit_note).trim())
   const hasCases = app.case_studies?.length > 0
-  if (!hasImpact && !hasCases) return null
+  const hasVideos = app.product_videos?.length > 0
+  if (!hasImpact && !hasCases && !hasVideos) return null
 
   return (
     <section className="bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
@@ -247,6 +249,7 @@ export function ImpactAndCaseStudiesSection({ app }: { app: any }) {
           <CaseStudyCards caseStudies={app.case_studies} />
         </>
       )}
+      {hasVideos && <ProductVideosSection videos={app.product_videos} embedded />}
     </section>
   )
 }
