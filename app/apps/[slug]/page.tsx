@@ -23,7 +23,10 @@ import {
   shouldShowDemoAccess,
 } from '@/components/AppDetailSections'
 import { ProductPageExpander } from '@/components/ProductPageExpander'
+import { PdpSharePrintProvider, PdpShareRegion } from '@/components/PdpSharePrintContext'
+import { SharePagePanel } from '@/components/SharePagePanel'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
+import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges } from './pdpBlocks'
 
 export async function generateStaticParams() {
   return getAllApps().map(a => ({ slug: a.slug }))
@@ -33,185 +36,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const app = getAppBySlug(slug)
   return { title: app ? `${app.app_name} — HealthStore` : 'Not found' }
-}
-
-const TYPE_LABELS: Record<string, string> = {
-  RCT: 'RCT', observational: 'Observational', service_eval: 'Service evaluation',
-  grey_lit: 'Grey literature', nice_assessment: 'NICE assessment',
-  real_world: 'Real-world evidence', implementation_science: 'Implementation science',
-  evidence_gap: 'Evidence gap note',
-}
-const TYPE_COLOURS: Record<string, string> = {
-  RCT: 'badge-green', observational: 'badge-blue', service_eval: 'badge-grey',
-  grey_lit: 'badge-grey', nice_assessment: 'badge-teal', real_world: 'badge-blue',
-  implementation_science: 'badge-purple', evidence_gap: 'badge-amber',
-}
-
-function EvidenceCard({ study, accent }: { study: any; accent: string }) {
-  const isEvidenceGap = study.type === 'evidence_gap'
-  const evidenceCardClass = [
-    'card-evidence',
-    study.data_quality_flag ? 'card-evidence--dq' : '',
-    isEvidenceGap ? 'card-evidence--gap' : study.coi ? 'card-evidence--coi' : '',
-  ]
-    .filter(Boolean)
-    .join(' ')
-  return (
-    <div className={evidenceCardClass}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10, marginBottom: 8 }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 4 }}>
-            <span className={`badge ${TYPE_COLOURS[study.type] ?? 'badge-grey'}`}>
-              {TYPE_LABELS[study.type] ?? study.type}
-            </span>
-            {study.peer_reviewed && (
-              <span className="badge badge-green">Peer-reviewed</span>
-            )}
-            {study.coi && (
-              <span className="badge badge-amber">
-                <span aria-hidden>⚠ </span>COI declared
-              </span>
-            )}
-            {study.data_quality_flag && (
-              <span className="badge badge-amber">
-                <span aria-hidden>⚠ </span>Data quality flag
-              </span>
-            )}
-          </div>
-          <div style={{ fontWeight: 600, fontSize: 'var(--text-label)', color: 'var(--text-primary)', marginBottom: 2 }}>
-            {study.ref}
-          </div>
-          {study.authors && (
-            <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
-              {study.authors}
-              {study.journal && <span> · <em>{study.journal}</em></span>}
-              {study.year && <span> · {study.year}</span>}
-              {study.volume_issue && <span> · {study.volume_issue}</span>}
-            </div>
-          )}
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flexShrink: 0 }}>
-          {study.url_doi && (
-            <a href={study.url_doi} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
-              DOI ↗
-            </a>
-          )}
-          {study.url_pubmed && (
-            <a href={study.url_pubmed} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
-              PubMed ↗
-            </a>
-          )}
-          {study.url_pmc && (
-            <a href={study.url_pmc} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
-              PMC (open) ↗
-            </a>
-          )}
-          {study.url_full_text && !study.url_doi && !study.url_pubmed && (
-            <a href={study.url_full_text} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
-              {study.source_label ?? 'Source ↗'}
-            </a>
-          )}
-          {study.url_trial_reg && (
-            <a href={study.url_trial_reg} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
-              Trial reg ↗
-            </a>
-          )}
-          {study.url_case_study && (
-            <a href={study.url_case_study} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
-              Case study ↗
-            </a>
-          )}
-        </div>
-      </div>
-
-      {(study.doi || study.pmid || study.pmc || study.trial_reg || study.n) && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', fontSize: 'var(--text-label)', color: 'var(--text-muted)', marginBottom: 8, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>
-          {study.doi && <span>DOI: {study.doi}</span>}
-          {study.pmid && <span>PMID: {study.pmid}</span>}
-          {study.pmc && <span>PMC: {study.pmc}</span>}
-          {study.trial_reg && <span>Trial reg: {study.trial_reg}</span>}
-          {study.n && <span>n = {study.n.toLocaleString()}</span>}
-          {study.setting && <span>Setting: {study.setting}</span>}
-        </div>
-      )}
-
-      {study.key_results && (
-        <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 6 }}>
-          <strong style={{ color: 'var(--text-primary)' }}>Key results: </strong>
-          {study.key_results}
-        </p>
-      )}
-
-      {study.study_limitation && (
-        <p style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: study.data_quality_note ? 6 : 0 }}>
-          <strong>Limitation: </strong>{study.study_limitation}
-        </p>
-      )}
-
-      {study.data_quality_note && (
-        <div style={{ fontSize: 'var(--text-label)', background: '#FEF5E6', borderLeft: '3px solid #D5840D', color: '#7A4800', borderRadius: 4, padding: '6px 8px', marginTop: 6, lineHeight: 1.5 }}>
-          <strong>⚠ Commissioner note: </strong>{study.data_quality_note}
-        </div>
-      )}
-      {study.coi_note && !study.data_quality_note && (
-        <div style={{ fontSize: 'var(--text-label)', background: '#FEF5E6', borderLeft: '3px solid #D5840D', color: '#7A4800', borderRadius: 4, padding: '6px 8px', marginTop: 6, lineHeight: 1.5 }}>
-          <strong>⚠ COI note: </strong>{study.coi_note}
-        </div>
-      )}
-    </div>
-  )
-}
-
-function ContextOfUseGrid({ app }: { app: any }) {
-  const ctx = app.context_of_use
-  if (!ctx) return null
-  const items = [
-    { label: 'Target population', value: ctx.population },
-    { label: 'Clinical pathways', value: Array.isArray(ctx.pathways) ? ctx.pathways.join(', ') : ctx.pathways },
-    { label: 'Care settings', value: Array.isArray(ctx.care_settings) ? ctx.care_settings.join(', ') : ctx.care_settings },
-    { label: 'Therapeutic purpose', value: ctx.therapeutic_purpose },
-    { label: 'HCP involvement', value: ctx.hcp_involvement },
-    { label: 'NICE scope', value: ctx.nice_scope },
-  ]
-  return (
-    <div className="grid sm:grid-cols-2 gap-4">
-      {items.map(item => (
-        <div key={item.label} className="rounded-lg p-3" style={{ background: '#F7F9FC' }}>
-          <div className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
-            {item.label}
-          </div>
-          <div className="text-sm" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-            {item.value || 'Not specified'}
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function NhsIntegrationBadges({ app }: { app: any }) {
-  const integrations = [
-    { key: 'nhs_app_integration', label: 'NHS App' },
-    { key: 'nhs_login_integration', label: 'NHS Login' },
-    { key: 'nhs_notify_integration', label: 'NHS Notify' },
-  ]
-  const hasAny = integrations.some(i => app[i.key])
-  if (!hasAny) return null
-  return (
-    <div className="flex flex-wrap gap-2 mt-3">
-      {integrations.filter(i => app[i.key]).map(i => (
-        <span key={i.key} className="badge badge-blue">
-          ✓ {i.label}
-        </span>
-      ))}
-    </div>
-  )
 }
 
 export default async function AppPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -227,17 +51,32 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
   const linkedFundingIds = app.linked_funding_ids ?? app.funding_ids ?? []
 
+  const hasPdpAlerts =
+    !!app.decommissioning_alert ||
+    !!app.clinical_safety_alert ||
+    app.dtac_status === 'passed_refresh_required' ||
+    app.dtac_status === 'required_not_confirmed'
+
   return (
     <AppDetailClient app={app}>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
 
-        <div className="flex items-center gap-2 text-xs mb-6" style={{ color: 'var(--text-muted)' }}>
+        <PdpSharePrintProvider>
+        <PdpShareRegion shareKey="breadcrumb" label="Browse trail" excludeFromShareUi className="mb-6">
+        <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-muted)' }}>
           <Link href="/apps" className="hover:underline">Browse apps</Link>
           <span>›</span>
           <span>{app.app_name}</span>
         </div>
+        </PdpShareRegion>
 
-        <div className="hs-surface-card-sm rounded-2xl bg-white border overflow-hidden mb-8" style={{ borderColor: 'var(--border)' }}>
+        <PdpShareRegion
+          shareKey="hero"
+          label="Product summary"
+          description="Supplier, proposition, maturity and evidence badges, and key funding callouts."
+          className="mb-8"
+        >
+        <div className="hs-surface-card-sm rounded-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
           <div className="p-8">
             <div className="flex flex-col md:flex-row gap-6 items-start justify-between">
               <div className="flex-1">
@@ -293,6 +132,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 )}
               </div>
               <div className="flex flex-wrap gap-2 items-center shrink-0">
+                <SharePagePanel />
                 <CompareToggleButton appId={app.id} className="px-4 py-4 shrink-0" />
                 <button data-express-interest className="px-4 py-4 rounded-lg text-sm font-semibold text-white"
                   style={{ background: accent }}>
@@ -302,16 +142,25 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             </div>
           </div>
         </div>
+        </PdpShareRegion>
 
-        {app.decommissioning_alert && <div className="mb-6"><AlertBox type="warning">{app.decommissioning_alert}</AlertBox></div>}
-        {app.clinical_safety_alert && <div className="mb-6"><AlertBox type="danger"><strong>Clinical safety: </strong>{app.clinical_safety_alert}</AlertBox></div>}
-        {app.dtac_status === 'passed_refresh_required' && <div className="mb-6"><AlertBox type="warning"><strong>DTAC refresh required: </strong>{app.dtac_note}</AlertBox></div>}
-        {app.dtac_status === 'required_not_confirmed' && <div className="mb-6"><AlertBox type="danger"><strong>DTAC not confirmed: </strong>{app.dtac_note}</AlertBox></div>}
+        {hasPdpAlerts ? (
+          <PdpShareRegion shareKey="alerts" label="Alerts and notices" excludeFromShareUi className="mb-6 space-y-6">
+            {app.decommissioning_alert && <div><AlertBox type="warning">{app.decommissioning_alert}</AlertBox></div>}
+            {app.clinical_safety_alert && <div><AlertBox type="danger"><strong>Clinical safety: </strong>{app.clinical_safety_alert}</AlertBox></div>}
+            {app.dtac_status === 'passed_refresh_required' && <div><AlertBox type="warning"><strong>DTAC refresh required: </strong>{app.dtac_note}</AlertBox></div>}
+            {app.dtac_status === 'required_not_confirmed' && <div><AlertBox type="danger"><strong>DTAC not confirmed: </strong>{app.dtac_note}</AlertBox></div>}
+          </PdpShareRegion>
+        ) : null}
 
         <div className="grid md:grid-cols-3 gap-6">
 
           <div className="md:col-span-2 space-y-3">
-              <ProductPageExpander title="Why it matters locally">
+              <ProductPageExpander
+                shareKey="why-it-matters"
+                title="Why it matters locally"
+                description="Local commissioning angle: how this product connects to demand, outcomes, and priorities for your population and system."
+              >
                 <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}>{app.why_it_matters_locally}</p>
                 {app.sustainability_highlight && (
                   <div className="mt-4 rounded-lg p-3 text-sm" style={{ background: '#E6F5EC', color: '#004B22' }}>
@@ -322,6 +171,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
               {app.context_of_use && (
                 <ProductPageExpander
+                  shareKey="context-of-use"
                   title="Context of use"
                   description="Population, pathways, care settings and therapeutic purpose."
                 >
@@ -330,6 +180,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               )}
 
               <ProductPageExpander
+                shareKey="scale-and-maturity"
                 title="Scale and maturity"
                 description="Deployment reach, evidence posture, and where the product is in use."
               >
@@ -338,6 +189,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
               {hasWhatItTakesContent(app) && (
                 <ProductPageExpander
+                  shareKey="what-it-takes-locally"
                   title="What it takes locally"
                   description="Operational effort, onboarding, training, and prerequisites for a successful deployment."
                 >
@@ -347,6 +199,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
               {shouldShowImpactSection(app) && (
                 <ProductPageExpander
+                  shareKey="expected-impact"
                   title="Expected impact and case studies"
                   description="Outcomes commissioners should expect and illustrative deployments. Distinct from the formal clinical evidence record below."
                 >
@@ -356,6 +209,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
               <ProductPageExpander
                 id="clinical-evidence"
+                shareKey="clinical-evidence"
                 title="Clinical evidence"
                 description="Full evidence record. Links to source publications provided where available."
               >
@@ -391,7 +245,11 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 )}
               </ProductPageExpander>
 
-              <ProductPageExpander title="NICE guidance">
+              <ProductPageExpander
+                shareKey="nice-guidance"
+                title="NICE guidance"
+                description="NICE publications and programme references linked to this product, with dates and review notes where we hold them."
+              >
                 <div className="space-y-3">
                   {app.nice_guidance_refs.map((r: any) => (
                     <div key={r.ref} className="flex items-start gap-3 p-3 rounded-lg" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
@@ -412,6 +270,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
               {app.contradictory_evidence?.length > 0 && (
                 <ProductPageExpander
+                  shareKey="data-quality-flags"
                   title="Data quality flags"
                   description="Issues identified during review that commissioners should be aware of."
                 >
@@ -436,6 +295,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
               {shouldShowDemoAccess(app) && (
                 <ProductPageExpander
+                  shareKey="demo-access"
                   title="Demo access"
                   description="How to view the product or request a demonstration."
                 >
@@ -445,6 +305,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
               {app.technical_integrations && (
                 <ProductPageExpander
+                  shareKey="nhs-integrations"
                   title="NHS and care system integrations"
                   description="Technical integration detail. NHS App, NHS Login and NHS Notify are summarised in the product summary at the top of the page."
                 >
@@ -453,6 +314,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               )}
 
               <ProductPageExpander
+                shareKey="commercial-model"
                 title="Commercial model and cost"
                 description="How the product is priced, what is included, and how to procure it."
                 defaultOpen
@@ -461,6 +323,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               </ProductPageExpander>
 
               <ProductPageExpander
+                shareKey="indicative-financial"
                 title="Indicative financial context"
                 description="Expected benefits, tariff, provider income and ROI considerations for local modelling."
               >
@@ -468,12 +331,14 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               </ProductPageExpander>
 
               <ProductPageExpander
+                shareKey="related-funding"
                 title="Related funding opportunities"
                 description="Funding that may be relevant to commissioning this technology."
               >
                 <RelatedFundingSection fundingIds={linkedFundingIds} />
               </ProductPageExpander>
 
+            <PdpShareRegion shareKey="express-interest" label="Express interest callout" excludeFromShareUi>
             <div className="hs-surface-card-sm rounded-xl border overflow-hidden" style={{ borderColor: accent }}>
               <div style={{ background: accent, padding: '20px 24px' }}>
                 <div style={{ fontWeight: 700, fontSize: 'var(--text-section-alt)', color: '#fff', marginBottom: 8 }}>
@@ -495,10 +360,16 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 </button>
               </div>
             </div>
+            </PdpShareRegion>
 
           </div>
 
-          <div className="space-y-5">
+          <PdpShareRegion
+            shareKey="sidebar-summary"
+            label="Quick facts, assurance and sources"
+            description="Device class, assurance statements, product tiers, and how this profile was sourced."
+            className="space-y-5"
+          >
 
             <div className="hs-surface-card-sm bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
               <div className="text-xs font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>Quick facts</div>
@@ -559,8 +430,9 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               <br /><br />
               {app.confidence_note}
             </div>
-          </div>
+          </PdpShareRegion>
         </div>
+        </PdpSharePrintProvider>
       </div>
     </AppDetailClient>
   )

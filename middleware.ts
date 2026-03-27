@@ -38,6 +38,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api/auth|_next/static|_next/image|logos|favicon\\.ico|.*\\.svg|.*\\.png|.*\\.jpg).*)',
+    // Exclude api/apps so create-share returns JSON (401/403) instead of redirecting to /login for fetch clients.
+    '/((?!api/auth|api/apps|_next/static|_next/image|logos|favicon\\.ico|.*\\.svg|.*\\.png|.*\\.jpg).*)',
   ],
 }

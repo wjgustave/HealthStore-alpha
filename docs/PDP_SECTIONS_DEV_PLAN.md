@@ -44,7 +44,9 @@ The main column renders sections in this order:
 | `app/apps/[slug]/page.tsx` | Page layout, section order, hero, expander wiring |
 | `app/apps/[slug]/AppDetailClient.tsx` | Express interest modal |
 | `components/AppDetailSections.tsx` | Reusable section bodies (no outer card chrome on PDP) |
-| `components/ProductPageExpander.tsx` | `ProductPageExpander` (client; chevron; `#clinical-evidence` hash) |
+| `components/ProductPageExpander.tsx` | `ProductPageExpander` (`shareKey` on PDP); re-exports `PdpPrintExpandProvider` → `PdpSharePrintProvider` |
+| `components/PdpSharePrintContext.tsx` | `PdpSharePrintProvider`, `PdpShareRegion`, selective print + block registry |
+| `components/SharePagePanel.tsx` | Share modal in hero: two-step flow (link vs PDF), then sections for PDF only (client) |
 | `app/globals.css` | Design tokens (`:root`); `.hs-surface-card-sm` / `.hs-surface-card` on PDP shell cards; expanders toggle sm (closed) vs md (open); `.app-card` default shadow + hover lift |
 | `components/CollapsibleSection.tsx` | `CollapsibleSection`, `CollapsibleInline` (not used on PDP) |
 | `components/Badges.tsx` | `SectionHeader`, badges |
@@ -96,6 +98,7 @@ The main column renders sections in this order:
 - **Open state:** `border-t` then panel body with `pt-4` (healthstore-m pattern).
 - **Defaults:** All sections `defaultOpen={false}` except **Commercial model and cost** (`defaultOpen` / `true`).
 - **Deep link:** `#clinical-evidence` opens that section (client `hashchange` + initial check); `id="clinical-evidence"` is on the outer `<section>`.
+- **Share / print:** On the PDP, pass a stable **`shareKey`** on every `ProductPageExpander` so the Share modal can list and filter sections. New sections added to the page need a new key and label (title is used for registration by default). Also pass **`description`** (leading line) for every expander, and mirror the same string on the matching **`PdpReadOnlySection`** in `app/apps/[slug]/PdpSharedProductBody.tsx` so the shared excerpt view stays consistent.
 
 ---
 
@@ -122,10 +125,24 @@ When changing PDP logic, verify:
 - [ ] Clinical evidence row has `id="clinical-evidence"`; `#clinical-evidence` opens the row
 - [ ] Commercial model and cost is **open** on first load; other sections **closed**; keyboard toggles via header button; chevron reflects state
 - [ ] Indicative financial context is a single expander (no nested collapsible); `free_offer_flag` callout still shows inside Commercial body when true
+- [ ] **Share:** step 1 offers link vs PDF; PDF step shows checkboxes for visible blocks; partial selection prints only chosen regions; **Select all** + keyboard **Cmd/Ctrl+P** still print full page with all expanders open
+- [ ] **Share link path:** no section picker; copy works with feedback; user sees that the URL is still the **full** page for logged-in viewers
+- [ ] **Share auth:** copied URL behaviour matches middleware (login required for web view); PDF can be shared offline
 
 ---
 
-## 10. Future Enhancements (Optional)
+## 10. Share page (selective PDF + link)
+
+- **Components:** `components/SharePagePanel.tsx` (modal), `components/PdpSharePrintContext.tsx` (`PdpSharePrintProvider`, `PdpShareRegion`), `components/ProductPageExpander.tsx` (`shareKey`).
+- **Layout:** `PdpSharePrintProvider` wraps hero (`PdpShareRegion` `hero`), alerts, and the two-column grid (main column expanders, `PdpShareRegion` for sidebar + express CTA as registered blocks).
+- **Modal flow:** Step 1 — **Share as link** or **Print or save as a PDF**. Section checklists appear on both link and PDF paths. Link path: create token URL + optional full-page copy.
+- **Copy link:** Full page URL only — does **not** strip sections for recipients. See link step in modal and [`docs/SHARE.md`](SHARE.md).
+- **Print / PDF:** After choosing PDF, user selects blocks, then **Print or save as PDF** → `beginModalPrint` → `window.print()`. Excluded blocks use `.pdp-share-excluded-print`. **Cmd/Ctrl+P** without the modal uses `beforeprint` to print **all** registered content with expanders open.
+- **Detail + QA + follow-up:** [`docs/SHARE.md`](SHARE.md).
+
+---
+
+## 11. Future Enhancements (Optional)
 
 - In-page anchors / sticky subnav for long pages
 - Back-to-top button (if not already present)
