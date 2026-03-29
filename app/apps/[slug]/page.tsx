@@ -317,7 +317,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 shareKey="commercial-model"
                 title="Commercial model and cost"
                 description="How the product is priced, what is included, and how to procure it."
-                defaultOpen
               >
                 <CommercialModelAndCostSection app={app} />
               </ProductPageExpander>
