@@ -1,5 +1,17 @@
 import { formatPricingModelDisplay } from '@/components/AppDetailSections'
 
+/** Tri-state for prose fields (FHIR / EMIS); NHS rows use boolean only. */
+export type InteropIntegrationValue = boolean | null
+
+export type InteropSnapshotItem = {
+  key: string
+  /** Display label (NHS App / Notify / Login row, or FHIR / EMIS pill text). */
+  name: string
+  integrated: InteropIntegrationValue
+  /** When set, bottom-row FHIR / EMIS use bordered pill; NHS top row uses `name` as dark blue text. */
+  textLabel?: string
+}
+
 export type SnapshotFundingRow = { id: string; title: string; status: string }
 
 export type RegulationSnapshotPill = {
@@ -30,14 +42,15 @@ export type CommissioningSnapshotCard =
       label: string
       pills: string[]
       subline?: string
-      /** Replaces plain subline when present (e.g. link to /funding). */
+      /** Replaces plain subline when present (e.g. in-page anchor to Related funding). */
       opportunitiesLink?: { href: string; label: string }
     }
   | {
-      kind: 'guidance'
+      kind: 'interop'
       label: string
-      primary: string
-      subline?: string
+      items: InteropSnapshotItem[]
+      /** Shown when `technical_integrations` exists (anchor to integrations section). */
+      detailsLink?: { href: string; label: string }
     }
 
 /** Extract compact £–£ ranges from prose (e.g. £50–£100); returns up to two distinct ranges. */
@@ -50,6 +63,40 @@ function extractPriceRanges(text: string | undefined | null): string | null {
   const normalized = matches.map(m => m.replace(/\s+/g, ''))
   const uniq = [...new Set(normalized)]
   return uniq.slice(0, 2).join(' · ')
+}
+
+/**
+ * Infer yes / no / unknown from `technical_integrations` prose.
+ * Negatives → no; positives → yes; empty or ambiguous → unknown.
+ */
+function inferProseIntegration(value: string | undefined | null): InteropIntegrationValue {
+  const t = String(value ?? '').trim().toLowerCase()
+  if (!t) return null
+  const negatives = [
+    'not confirmed',
+    'information not available',
+    'not available',
+    'n/a',
+    'none',
+    'no integration',
+    'not integrated',
+  ]
+  if (negatives.some(n => t.includes(n))) return false
+  const positives = [
+    'available',
+    'compatible',
+    'integration',
+    'fhir',
+    'emis',
+    'r4',
+    'hl7',
+    'api',
+    'via ',
+    'supported',
+    'connect',
+  ]
+  if (positives.some(p => t.includes(p))) return true
+  return null
 }
 
 function regulationCard(app: any): CommissioningSnapshotCard {
@@ -92,7 +139,7 @@ function costCard(app: any): CommissioningSnapshotCard {
 
   return {
     kind: 'cost',
-    label: 'Cost & licensing',
+    label: 'Pricing',
     xlText,
     indicativeNote,
     modelPills,
@@ -102,9 +149,11 @@ function costCard(app: any): CommissioningSnapshotCard {
   }
 }
 
-function fundingCard(app: any, linked: SnapshotFundingRow[]): CommissioningSnapshotCard {
+function fundingCard(app: any, linked: SnapshotFundingRow[]): CommissioningSnapshotCard | null {
   const pills: string[] = []
-  if (app.nhse_125k_eligible === true) {
+  const showNhse125Pill =
+    app.nhse_125k_eligible === true && app.slug !== 'clinitouch'
+  if (showNhse125Pill) {
     pills.push('NHSE £125k — eligible')
   }
   for (const f of linked) {
@@ -114,42 +163,64 @@ function fundingCard(app: any, linked: SnapshotFundingRow[]): CommissioningSnaps
   }
 
   if (pills.length === 0) {
-    return {
-      kind: 'funding',
-      label: 'Funding & schemes',
-      pills: ['None linked in profile'],
-      subline: 'See Related funding for routes that may apply',
-    }
+    return null
   }
 
   return {
     kind: 'funding',
-    label: 'Funding & schemes',
+    label: 'Funding opportunities',
     pills,
-    opportunitiesLink: { href: '/funding', label: 'Funding opportunities' },
+    opportunitiesLink: { href: '#related-funding', label: 'Related funding opportunities' },
   }
 }
 
-function guidanceCard(app: any): CommissioningSnapshotCard {
-  const refs = app.nice_guidance_refs as { ref: string; url?: string; type?: string; date?: string }[] | undefined
-  if (!refs?.length) {
-    return {
-      kind: 'guidance',
-      label: 'National guidance',
-      primary: 'No NICE references in profile',
-      subline: 'Check sections below for other evidence and assurance context',
-    }
-  }
-  const r = refs[0]
-  const bits = [r.date, r.type].filter(Boolean).join(' · ')
+function interopCard(app: any): CommissioningSnapshotCard {
+  const ti = app.technical_integrations as { fhir?: string; emis?: string } | undefined
+  const fhirState = ti ? inferProseIntegration(ti.fhir) : null
+  const emisState = ti ? inferProseIntegration(ti.emis) : null
+  /** Optional per-app override: show NHS App logo in snapshot when `nhs_app_integration` is false (e.g. Luscii). */
+  const nhsAppInInteropSnapshot =
+    app.nhs_app_integration === true || app.interop_snapshot_show_nhs_app === true
+
+  const items: InteropSnapshotItem[] = [
+    {
+      key: 'nhs_app',
+      name: 'NHS App',
+      integrated: nhsAppInInteropSnapshot,
+    },
+    {
+      key: 'nhs_notify',
+      name: 'NHS Notify',
+      integrated: app.nhs_notify_integration === true,
+    },
+    {
+      key: 'nhs_login',
+      name: 'NHS Login',
+      integrated: app.nhs_login_integration === true,
+    },
+    {
+      key: 'fhir',
+      name: 'FHIR',
+      integrated: fhirState,
+      textLabel: 'FHIR',
+    },
+    {
+      key: 'emis',
+      name: 'EMIS',
+      integrated: emisState,
+      textLabel: 'EMIS',
+    },
+  ]
+
   return {
-    kind: 'guidance',
-    label: 'National guidance',
-    primary: r.ref,
-    subline: bits || 'See NICE guidance section for full list',
+    kind: 'interop',
+    label: 'Interoperability',
+    items,
+    detailsLink: { href: '#nhs-integrations', label: 'NHS and care system integrations' },
   }
 }
 
 export function getCommissioningSnapshot(app: any, linkedFunding: SnapshotFundingRow[]): CommissioningSnapshotCard[] {
-  return [regulationCard(app), costCard(app), fundingCard(app, linkedFunding), guidanceCard(app)]
+  const funding = fundingCard(app, linkedFunding)
+  return [regulationCard(app), costCard(app), ...(funding ? [funding] : []), interopCard(app)]
 }

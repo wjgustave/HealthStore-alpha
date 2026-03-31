@@ -1,7 +1,16 @@
-import type { ReactNode } from 'react'
-import Link from 'next/link'
-import type { CommissioningSnapshotCard } from '@/lib/commissioningSnapshot'
+import { Fragment, type ReactNode } from 'react'
+import type { CommissioningSnapshotCard, InteropSnapshotItem } from '@/lib/commissioningSnapshot'
 import { STORE_ACCENT } from '@/lib/storeAccent'
+
+const INTEROP_LOGO_KEYS = ['nhs_app', 'nhs_notify', 'nhs_login'] as const
+const INTEROP_BOTTOM_KEYS = ['fhir', 'emis'] as const
+
+function interopItemsInOrder(items: InteropSnapshotItem[], keys: readonly string[]): InteropSnapshotItem[] {
+  return keys.flatMap(k => {
+    const item = items.find(i => i.key === k)
+    return item && item.integrated === true ? [item] : []
+  })
+}
 
 function SnapshotPill({
   muted,
@@ -31,7 +40,9 @@ export function PdpCommissioningSnapshot({ cards }: { cards: CommissioningSnapsh
 
   return (
     <section className="m-0" aria-label="Commissioning snapshot">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 items-stretch">
+      <div
+        className={`grid grid-cols-2 gap-3 sm:gap-4 items-stretch ${cards.length >= 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}
+      >
         {cards.map(card => (
           <div
             key={card.kind}
@@ -114,13 +125,13 @@ export function PdpCommissioningSnapshot({ cards }: { cards: CommissioningSnapsh
                     ))}
                   </div>
                   {card.opportunitiesLink ? (
-                    <Link
+                    <a
                       href={card.opportunitiesLink.href}
                       className="text-[10px] font-normal hover:underline"
                       style={{ color: accent }}
                     >
                       {card.opportunitiesLink.label} →
-                    </Link>
+                    </a>
                   ) : card.subline ? (
                     <p className="text-[10px] leading-snug m-0" style={{ color: 'var(--text-muted)' }}>
                       {card.subline}
@@ -129,18 +140,78 @@ export function PdpCommissioningSnapshot({ cards }: { cards: CommissioningSnapsh
                 </>
               ) : null}
 
-              {card.kind === 'guidance' ? (
+              {card.kind === 'interop' ? (
                 <>
-                  <div
-                    className="text-base sm:text-lg font-bold leading-snug"
-                    style={{ color: 'var(--text-primary)' }}
-                  >
-                    {card.primary}
-                  </div>
-                  {card.subline ? (
-                    <p className="text-[10px] leading-snug m-0" style={{ color: 'var(--text-muted)' }}>
-                      {card.subline}
-                    </p>
+                  {(() => {
+                    const logoRow = interopItemsInOrder(card.items, INTEROP_LOGO_KEYS)
+                    const bottomRow = interopItemsInOrder(card.items, INTEROP_BOTTOM_KEYS)
+                    if (logoRow.length === 0 && bottomRow.length === 0) {
+                      return (
+                        <p className="text-[10px] leading-snug m-0 max-w-full" style={{ color: 'var(--text-muted)' }}>
+                          None listed in profile
+                        </p>
+                      )
+                    }
+                    return (
+                      <div className="flex w-full flex-col items-center gap-1.5" role="group" aria-label="Confirmed integrations">
+                        {logoRow.length > 0 ? (
+                          <div
+                            className="flex w-full min-w-0 max-w-full flex-wrap items-center justify-center gap-y-0.5 px-1"
+                            aria-label="NHS service integrations"
+                          >
+                            {logoRow.map((item, i) => (
+                              <Fragment key={item.key}>
+                                {i > 0 ? (
+                                  <span
+                                    className="text-[12px] font-semibold leading-none px-1.5 shrink-0"
+                                    style={{ color: '#003087' }}
+                                    aria-hidden
+                                  >
+                                    •
+                                  </span>
+                                ) : null}
+                                <span
+                                  className="text-[12px] font-semibold leading-tight text-center shrink-0"
+                                  style={{ color: '#003087' }}
+                                >
+                                  {item.name}
+                                </span>
+                              </Fragment>
+                            ))}
+                          </div>
+                        ) : null}
+                        {bottomRow.length > 0 ? (
+                          <div
+                            className="flex w-full flex-wrap justify-center gap-1"
+                            aria-label="FHIR and EMIS"
+                          >
+                            {bottomRow.map(item => (
+                              <div key={item.key} className="flex flex-col items-center">
+                                {item.textLabel ? (
+                                  <SnapshotPill>{item.textLabel}</SnapshotPill>
+                                ) : (
+                                  <span
+                                    className="text-[9px] font-semibold leading-tight text-center"
+                                    style={{ color: 'var(--text-primary)' }}
+                                  >
+                                    {item.name}
+                                  </span>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    )
+                  })()}
+                  {card.detailsLink ? (
+                    <a
+                      href={card.detailsLink.href}
+                      className="text-[10px] font-normal hover:underline"
+                      style={{ color: accent }}
+                    >
+                      {card.detailsLink.label} →
+                    </a>
                   ) : null}
                 </>
               ) : null}

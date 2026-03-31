@@ -28,7 +28,7 @@ import { ProductPageExpander } from '@/components/ProductPageExpander'
 import { PdpSharePrintProvider, PdpShareRegion } from '@/components/PdpSharePrintContext'
 import { SharePagePanel } from '@/components/SharePagePanel'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
-import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges } from './pdpBlocks'
+import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges, ProductHeroDemoBadge } from './pdpBlocks'
 
 export async function generateStaticParams() {
   return getAllApps().map(a => ({ slug: a.slug }))
@@ -137,7 +137,13 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 <NhsIntegrationBadges app={app} />
               </div>
             </div>
-            <div className="flex flex-wrap gap-3 items-center justify-end mt-3 pt-3 border-t" style={{ borderColor: 'var(--border)' }}>
+            <div
+              className="flex flex-wrap gap-3 items-center justify-between mt-3 pt-3 border-t"
+              style={{ borderColor: 'var(--border)' }}
+            >
+              <div className="flex flex-wrap items-center gap-2 min-w-0">
+                <ProductHeroDemoBadge app={app} />
+              </div>
               <div className="flex flex-wrap gap-2 items-center shrink-0">
                 <SharePagePanel borderlessTrigger />
                 <CompareToggleButton appId={app.id} borderless className="px-4 py-4 shrink-0" />
@@ -159,7 +165,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
         <PdpShareRegion
           shareKey="commissioning-snapshot"
           label="Commissioning snapshot"
-          description="Regulation, commercial shape, linked national funding programmes, and primary national guidance reference."
+          description="Regulation, pricing, funding opportunities, and interoperability summary."
           className="mb-6"
         >
           <PdpCommissioningSnapshot cards={commissioningCards} />
@@ -260,7 +266,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               <ProductPageExpander
                 shareKey="nice-guidance"
                 title="NICE guidance"
-                description="NICE publications and programme references linked to this product, with dates and review notes where we hold them. Where NICE lists a technology in an evidence-generation period, annual reporting to NICE is a compliance requirement — not ICB grant funding; use the links below and confirm with NICE."
+                description="NICE publications and programme references linked to this product."
               >
                 <div className="space-y-3">
                   {app.nice_guidance_refs.map((r: any) => (
@@ -315,15 +321,14 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 </ProductPageExpander>
               )}
 
-              {app.technical_integrations && (
-                <ProductPageExpander
-                  shareKey="nhs-integrations"
-                  title="NHS and care system integrations"
-                  description="Technical integration detail. NHS App, NHS Login and NHS Notify are summarised in the product summary at the top of the page."
-                >
-                  <TechnicalIntegrationTable app={app} />
-                </ProductPageExpander>
-              )}
+              <ProductPageExpander
+                id="nhs-integrations"
+                shareKey="nhs-integrations"
+                title="NHS and care system integrations"
+                description="Technical integration detail. NHS App, NHS Login and NHS Notify are summarised in the product summary at the top of the page."
+              >
+                <TechnicalIntegrationTable app={app} />
+              </ProductPageExpander>
 
               <ProductPageExpander
                 id="commercial-model"

@@ -22,7 +22,7 @@ export function sharedKeysWithVisibleContent(app: any, allowed: Set<string>): st
     k.push('data-quality-flags')
   }
   if (allowed.has('demo-access') && shouldShowDemoAccess(app)) k.push('demo-access')
-  if (allowed.has('nhs-integrations') && app.technical_integrations) k.push('nhs-integrations')
+  if (allowed.has('nhs-integrations')) k.push('nhs-integrations')
   if (allowed.has('commercial-model')) k.push('commercial-model')
   if (allowed.has('indicative-financial')) k.push('indicative-financial')
   if (allowed.has('related-funding')) k.push('related-funding')

@@ -251,7 +251,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                       <p style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', margin: 0 }}>{app.supplier_name}</p>
                     </div>
                   </div>
-                  {app.nhse_125k_eligible && (
+                  {app.nhse_125k_eligible && app.slug !== 'clinitouch' && (
                     <span className="badge badge-green" style={{ flexShrink: 0 }}>
                       ★ NHSE £125k
                     </span>
@@ -275,7 +275,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                     <div className="flex flex-row flex-wrap items-center gap-x-2 gap-y-1 mb-[10px] sm:mb-3 lg:mb-[15px] xl:flex-nowrap xl:gap-x-1.5 2xl:gap-x-2">
                       {priceLabel ? <CatalogueSignalDotRow tone="green" label={priceLabel} /> : null}
                       {showDemo ? <CatalogueSignalDotRow tone="orange" label="Demo available" /> : null}
-                      {showFunding ? <CatalogueSignalDotRow tone="blue" label="Funding linked" /> : null}
+                      {showFunding ? <CatalogueSignalDotRow tone="blue" label="Funding opportunities" /> : null}
                     </div>
                     <div
                       className="mb-[12px] sm:mb-4 lg:mb-5 border-t border-solid"

@@ -335,7 +335,7 @@
   "supplier_contact_email": "nhs@mymhealth.com",
   "supplier_contact_name": "my mhealth NHS team",
   "nhs_app_integration": false,
-  "nhs_login_integration": false,
+  "nhs_login_integration": true,
   "nhs_notify_integration": false,
   "monitoring_model": "Essentials: patient self-managed. Pro: clinician dashboard with remote monitoring — not 24/7.",
   "minimum_conditions_for_success": "Respiratory clinical lead, pathway agreement with clinical teams, minimum 500 patient cohort for meaningful outcome data.",

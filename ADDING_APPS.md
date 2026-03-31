@@ -50,7 +50,7 @@ The product detail template (`app/apps/[slug]/page.tsx` and `components/AppDetai
 | **Demo access** | `demo_notes`, `demo_variants` (both render when present) |
 | **NHS and care system integrations** | Collapsible block from `technical_integrations` (NHS App / Login / Notify use the **hero** flags `nhs_app_integration`, `nhs_login_integration`, `nhs_notify_integration`; the table omits a duplicate NHS App row) |
 | **Financial and commercial** | **Indicative financial cost** callout: `indicative_price_text`, `pricing_confidence`. Collapsible **Procurement, tariff and ROI detail**: `procurement_notes` / `contract_note`, `nhse_125k_note`, `tariff_considerations`, `roi_note`, `monitoring_model`, `minimum_conditions_for_success` |
-| **Related funding opportunities** | `linked_funding_ids` (or legacy `funding_ids`), filtered to [`commissioner_display: funding_and_adoption`](content/funding/funding.json) rows only. NICE evidence-generation obligations are described in the **NICE guidance** expander copy and on [**/funding**](/funding), not here. |
+| **Related funding opportunities** | `linked_funding_ids` (or legacy `funding_ids`), filtered to [`commissioner_display: funding_and_adoption`](content/funding/funding.json) rows only. NICE evidence-generation obligations are described on [**/funding**](/funding) and in the Funding directory intro, not here. The **NICE guidance** expander summarises linked NICE publications and programme references only. |
 | **Express interest** (main column, last) | CTA copy uses `supplier_contact_name` / `supplier_name`; opens the interest modal (`data-express-interest`). Supplier email is not shown on the page (use modal / supplier directly). |
 
 ---

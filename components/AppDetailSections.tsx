@@ -12,15 +12,37 @@ import { getCommissionerFacingFunding } from '@/lib/data'
 
 export function TechnicalIntegrationTable({ app }: { app: any }) {
   const ti = app.technical_integrations
-  if (!ti) return null
-  const rows = [
-    { label: 'FHIR', value: ti.fhir },
-    { label: 'EMIS', value: ti.emis },
-    { label: 'Population health dashboard', value: ti.population_health_dashboard ? 'Yes' : 'No' },
-    { label: 'Device integration', value: ti.device_integration },
-    { label: 'Languages', value: ti.languages?.join(', ') },
-    { label: 'Data hosting', value: ti.data_hosting },
-  ]
+  const nhsLoginDisplay =
+    app.nhs_login_integration === true
+      ? 'Yes'
+      : app.nhs_login_integration === false
+        ? 'No'
+        : 'Not confirmed'
+  const nhsNotifyDisplay =
+    app.nhs_notify_integration === true
+      ? 'Yes'
+      : app.nhs_notify_integration === false
+        ? 'No'
+        : 'Not confirmed'
+
+  const rows: { label: string; value: string | undefined }[] = []
+  if (ti) {
+    rows.push(
+      { label: 'FHIR', value: ti.fhir },
+      { label: 'EMIS', value: ti.emis },
+    )
+  }
+  rows.push({ label: 'NHS Login', value: nhsLoginDisplay })
+  rows.push({ label: 'NHS Notify', value: nhsNotifyDisplay })
+  if (ti) {
+    rows.push(
+      { label: 'Population health dashboard', value: ti.population_health_dashboard ? 'Yes' : 'No' },
+      { label: 'Device integration', value: ti.device_integration },
+      { label: 'Languages', value: ti.languages?.join(', ') },
+      { label: 'Data hosting', value: ti.data_hosting },
+    )
+  }
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">

@@ -1,3 +1,5 @@
+import { catalogueDemoAvailable } from '@/lib/catalogueCardSignals'
+
 const TYPE_LABELS: Record<string, string> = {
   RCT: 'RCT', observational: 'Observational', service_eval: 'Service evaluation',
   grey_lit: 'Grey literature', nice_assessment: 'NICE assessment',
@@ -158,21 +160,22 @@ export function ContextOfUseGrid({ app }: { app: any }) {
   )
 }
 
+/** White “Demo available” pill; same rules as /apps catalogue (`catalogue_demo_available` or stable hash). */
+export function ProductHeroDemoBadge({ app }: { app: any }) {
+  if (!catalogueDemoAvailable(app)) return null
+  return (
+    <span className="badge" style={{ background: '#fff', color: 'var(--text-primary)' }}>
+      Demo available
+    </span>
+  )
+}
+
+/** Hero / top product card only: NHS App (not Login/Notify — those stay in interop + integrations table). Demo badge lives in the hero footer row with Share/Compare on full PDP. */
 export function NhsIntegrationBadges({ app }: { app: any }) {
-  const integrations = [
-    { key: 'nhs_app_integration', label: 'NHS App' },
-    { key: 'nhs_login_integration', label: 'NHS Login' },
-    { key: 'nhs_notify_integration', label: 'NHS Notify' },
-  ]
-  const hasAny = integrations.some(i => app[i.key])
-  if (!hasAny) return null
+  if (app.nhs_app_integration !== true) return null
   return (
     <div className="flex flex-wrap gap-2 mt-3">
-      {integrations.filter(i => app[i.key]).map(i => (
-        <span key={i.key} className="badge badge-blue">
-          ✓ {i.label}
-        </span>
-      ))}
+      <span className="badge badge-blue">✓ NHS App</span>
     </div>
   )
 }

@@ -213,7 +213,7 @@
   "nhse_125k_eligible": null,
   "nhse_125k_note": null,
   "nhs_app_integration": false,
-  "nhs_login_integration": false,
+  "nhs_login_integration": true,
   "nhs_notify_integration": false,
   "minimum_conditions_for_success": "CR referral pathway, initial clinical assessment capacity, patients with smartphone access.",
   "procurement_notes": "Contact DDM Health for NHS procurement options.",

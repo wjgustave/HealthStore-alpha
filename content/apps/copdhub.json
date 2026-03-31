@@ -234,7 +234,7 @@
   "supplier_contact_email": "support@icst.org.uk",
   "supplier_contact_name": "ICST NHS team",
   "nhs_app_integration": false,
-  "nhs_login_integration": false,
+  "nhs_login_integration": true,
   "nhs_notify_integration": false,
   "monitoring_model": "Self-management with clinician dashboard for population-level oversight.",
   "minimum_conditions_for_success": "GP practice engagement, respiratory pathway lead, integration into prescribing review workflow.",

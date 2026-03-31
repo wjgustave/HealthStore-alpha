@@ -73,7 +73,7 @@
   "nhse_125k_eligible": null,
   "nhse_125k_note": null,
   "nhs_app_integration": false,
-  "nhs_login_integration": false,
+  "nhs_login_integration": true,
   "nhs_notify_integration": false,
   "minimum_conditions_for_success": "Dedicated CR clinical team, face-to-face assessment capacity for initial patient evaluation, staff trained on platform use.",
   "procurement_notes": "Information not available. NHS Trust-developed product — confirm procurement route with UHL.",

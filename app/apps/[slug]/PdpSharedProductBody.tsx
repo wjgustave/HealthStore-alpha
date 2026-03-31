@@ -19,10 +19,11 @@ import {
 } from '@/components/AppDetailSections'
 import { PdpCommissioningSnapshot } from '@/components/PdpCommissioningSnapshot'
 import { PdpReadOnlySection } from '@/components/PdpReadOnlySection'
+import { catalogueDemoAvailable } from '@/lib/catalogueCardSignals'
 import { getCommissioningSnapshot } from '@/lib/commissioningSnapshot'
 import { getCommissionerFacingFunding, getLinkedFunding } from '@/lib/data'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
-import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges } from './pdpBlocks'
+import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges, ProductHeroDemoBadge } from './pdpBlocks'
 
 export default function PdpSharedProductBody({
   app,
@@ -108,6 +109,11 @@ export default function PdpSharedProductBody({
                   {app.one_line_value_proposition}
                 </p>
                 <NhsIntegrationBadges app={app} />
+                {catalogueDemoAvailable(app) ? (
+                  <div className="mt-3 pt-3 border-t flex" style={{ borderColor: 'var(--border)' }}>
+                    <ProductHeroDemoBadge app={app} />
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
@@ -255,7 +261,7 @@ export default function PdpSharedProductBody({
           {a.has('nice-guidance') ? (
             <PdpReadOnlySection
               title="NICE guidance"
-              description="NICE publications and programme references linked to this product, with dates and review notes where we hold them. Where NICE lists a technology in an evidence-generation period, annual reporting to NICE is a compliance requirement — not ICB grant funding; use the links below and confirm with NICE."
+              description="NICE publications and programme references linked to this product."
             >
               <div className="space-y-3">
                 {app.nice_guidance_refs.map((r: any) => (
@@ -329,8 +335,9 @@ export default function PdpSharedProductBody({
             </PdpReadOnlySection>
           ) : null}
 
-          {a.has('nhs-integrations') && app.technical_integrations ? (
+          {a.has('nhs-integrations') ? (
             <PdpReadOnlySection
+              id="nhs-integrations"
               title="NHS and care system integrations"
               description="Technical integration detail. NHS App, NHS Login and NHS Notify are summarised in the product summary at the top of the page."
             >
