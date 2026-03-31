@@ -1,6 +1,7 @@
 'use client'
 
-import { Check, Eye } from 'lucide-react'
+import '@awesome.me/webawesome/dist/components/icon/icon.js'
+import { Check } from 'lucide-react'
 import { useCompareBasket } from '@/components/CompareBasketProvider'
 
 /** Matches `.badge-teal` (e.g. Self-management supervision badge). */
@@ -54,7 +55,13 @@ export function CompareToggleButton({
           </>
         ) : (
           <>
-            <Eye className="w-4 h-4 shrink-0" strokeWidth={2.25} aria-hidden />
+            <wa-icon
+              name="code-compare"
+              family="classic"
+              variant="solid"
+              className="shrink-0 text-base leading-none inline-block align-middle text-current"
+              aria-hidden
+            />
             Compare
           </>
         )}

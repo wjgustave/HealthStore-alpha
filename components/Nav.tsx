@@ -85,13 +85,13 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
               style={{ color: path === links[2].href ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === links[2].href ? '#E6F0FB' : 'transparent' }}>
               {links[2].label}
             </Link>
-            <span className="ml-2 badge badge-blue">Prototype</span>
             <button onClick={handleLogout}
-              className="ml-3 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors hover:bg-gray-100"
+              className="ml-2 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors hover:bg-gray-100"
               style={{ color: 'var(--text-muted)' }}>
               <LogOut className="w-3.5 h-3.5" />
               Sign out
             </button>
+            <span className="ml-2 badge badge-prototype">Prototype</span>
           </div>
           <button className="md:hidden p-2 rounded transition-colors hover:bg-gray-100" onClick={() => setMobileOpen(o => !o)} aria-label="Toggle menu">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">

@@ -2,7 +2,7 @@
 import { useState, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import type { App } from '@/lib/data'
+import { evidenceLabels, type App } from '@/lib/data'
 import { STORE_ACCENT } from '@/lib/storeAccent'
 import {
   catalogueDemoAvailable,
@@ -41,18 +41,9 @@ const supervisionOptions = [
   { id: 'active_remote_management', label: 'Active remote management' },
 ]
 
-const effortOptions = [
-  { id: 'all', label: 'Any effort level' },
-  { id: 'low', label: 'Low effort' },
-  { id: 'medium', label: 'Medium effort' },
-  { id: 'high', label: 'High effort' },
-]
-
-const dtacOptions = [
-  { id: 'all', label: 'Any DTAC status' },
-  { id: 'passed', label: 'DTAC Passed' },
-  { id: 'passed_refresh_required', label: 'Passed – refresh required' },
-  { id: 'required_not_confirmed', label: 'Not confirmed' },
+const evidenceOptions = [
+  { id: 'all', label: 'Any evidence level' },
+  ...Object.entries(evidenceLabels).map(([id, label]) => ({ id, label })),
 ]
 
 const conditionOptions = [
@@ -61,17 +52,6 @@ const conditionOptions = [
   { id: 'cardiac_rehab', label: 'Cardiac rehabilitation' },
 ]
 
-const sortOptions = [
-  { id: 'az', label: 'A–Z' },
-  { id: 'condition', label: 'By condition' },
-  { id: 'maturity', label: 'Most mature first' },
-  { id: 'evidence', label: 'Strongest evidence' },
-  { id: 'effort', label: 'Lowest effort first' },
-]
-
-const maturityOrder: Record<string, number> = { scaled: 0, multi_site_live: 1, limited_live: 2, pilot: 3 }
-const evidenceOrder: Record<string, number> = { established: 0, promising: 1, scaled: 0, emerging: 2 }
-const effortOrder: Record<string, number> = { low: 0, medium: 1, high: 2 }
 function FilterSelect({ label, value, onChange, options }: {
   label: string; value: string; onChange: (v: string) => void
   options: { id: string; label: string }[]
@@ -104,40 +84,30 @@ function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }
 
 export default function CatalogueClient({ apps }: { apps: App[] }) {
   const [supervision, setSupervision] = useState('all')
-  const [effort, setEffort] = useState('all')
-  const [dtac, setDtac] = useState('all')
+  const [evidence, setEvidence] = useState('all')
   const [condition, setCondition] = useState('all')
-  const [sort, setSort] = useState('az')
+  const [demoOnly, setDemoOnly] = useState(false)
   const liveRegion = useRef<HTMLDivElement>(null)
 
   const activeFilters: { label: string; clear: () => void }[] = []
   if (supervision !== 'all') activeFilters.push({ label: supervisionOptions.find(o => o.id === supervision)!.label, clear: () => setSupervision('all') })
-  if (effort !== 'all') activeFilters.push({ label: effortOptions.find(o => o.id === effort)!.label, clear: () => setEffort('all') })
-  if (dtac !== 'all') activeFilters.push({ label: dtacOptions.find(o => o.id === dtac)!.label, clear: () => setDtac('all') })
+  if (evidence !== 'all') activeFilters.push({ label: evidenceOptions.find(o => o.id === evidence)!.label, clear: () => setEvidence('all') })
   if (condition !== 'all') activeFilters.push({ label: conditionOptions.find(o => o.id === condition)!.label, clear: () => setCondition('all') })
+  if (demoOnly) activeFilters.push({ label: 'Demo available', clear: () => setDemoOnly(false) })
 
   const filtered = useMemo(() => {
-    let result = apps.filter(app => {
-      if (supervision !== 'all' && app.supervision_model !== supervision) return false
-      if (effort !== 'all' && app.local_wraparound !== effort) return false
-      if (dtac !== 'all' && app.dtac_status !== dtac) return false
-      if (condition !== 'all' && !app.condition_tags.includes(condition)) return false
-      return true
-    })
-
-    result = [...result].sort((a, b) => {
-      switch (sort) {
-        case 'az': return a.app_name.localeCompare(b.app_name)
-        case 'condition': return (a.condition_tags[0] ?? '').localeCompare(b.condition_tags[0] ?? '')
-        case 'maturity': return (maturityOrder[a.maturity_level] ?? 9) - (maturityOrder[b.maturity_level] ?? 9)
-        case 'evidence': return (evidenceOrder[a.evidence_strength] ?? 9) - (evidenceOrder[b.evidence_strength] ?? 9)
-        case 'effort': return (effortOrder[a.local_wraparound] ?? 9) - (effortOrder[b.local_wraparound] ?? 9)
-        default: return 0
-      }
-    })
+    const result = apps
+      .filter(app => {
+        if (supervision !== 'all' && app.supervision_model !== supervision) return false
+        if (evidence !== 'all' && app.evidence_strength !== evidence) return false
+        if (condition !== 'all' && !app.condition_tags.includes(condition)) return false
+        if (demoOnly && !catalogueDemoAvailable(app)) return false
+        return true
+      })
+      .sort((a, b) => a.app_name.localeCompare(b.app_name))
 
     return result
-  }, [apps, supervision, effort, dtac, condition, sort])
+  }, [apps, supervision, evidence, condition, demoOnly])
 
   const resultText = `Showing ${filtered.length} of ${apps.length} apps`
 
@@ -152,48 +122,47 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
         </p>
       </div>
 
-      {/* Toolbar: result count + filters + sort — full width above grid */}
+      {/* Toolbar: result count + filters — full width above grid */}
       <div className="hs-surface-card rounded-xl bg-white border p-4 mb-4" style={{ borderColor: 'var(--border)' }}>
         <div className="flex flex-col gap-4">
           <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{resultText}</p>
           <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:gap-3">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 flex-1 min-w-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 flex-1 min-w-0">
               <FilterSelect label="Condition" value={condition} onChange={setCondition} options={conditionOptions} />
               <FilterSelect label="Supervision model" value={supervision} onChange={setSupervision} options={supervisionOptions} />
-              <FilterSelect label="Local effort" value={effort} onChange={setEffort} options={effortOptions} />
-              <FilterSelect label="DTAC status" value={dtac} onChange={setDtac} options={dtacOptions} />
+              <FilterSelect label="Evidence level" value={evidence} onChange={setEvidence} options={evidenceOptions} />
             </div>
-            <div className="flex flex-wrap items-end gap-3 shrink-0 xl:ml-auto">
+            <div className="flex flex-wrap items-end gap-4 shrink-0 xl:ml-auto">
+              <div className="flex min-h-[44px] items-center gap-2.5">
+                <input
+                  id="catalogue-demo-only"
+                  type="checkbox"
+                  checked={demoOnly}
+                  onChange={e => setDemoOnly(e.target.checked)}
+                  className="h-4 w-4 shrink-0 rounded border accent-[#003087]"
+                  style={{ borderColor: 'var(--border)' }}
+                />
+                <label
+                  htmlFor="catalogue-demo-only"
+                  className="cursor-pointer select-none text-sm font-medium"
+                  style={{ color: 'var(--text-primary)' }}
+                >
+                  Demo available
+                </label>
+              </div>
               <button
                 type="button"
                 onClick={() => {
                   setSupervision('all')
-                  setEffort('all')
-                  setDtac('all')
+                  setEvidence('all')
                   setCondition('all')
+                  setDemoOnly(false)
                 }}
                 className="min-h-[44px] text-sm px-4 rounded-lg border transition-colors hover:bg-[#F7F9FC] hover:border-[var(--text-muted-low-con)]"
                 style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
               >
                 Clear filters
               </button>
-              <div className="flex items-center gap-2">
-                <label className="font-semibold uppercase tracking-wide whitespace-nowrap" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
-                  Sort
-                </label>
-                <select
-                  value={sort}
-                  onChange={e => setSort(e.target.value)}
-                  className="min-h-[44px] text-sm rounded-lg border px-3 py-2.5 bg-white min-w-[10rem]"
-                  style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
-                >
-                  {sortOptions.map(o => (
-                    <option key={o.id} value={o.id}>
-                      {o.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
             </div>
           </div>
         </div>
@@ -229,8 +198,8 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
             const showDemo = catalogueDemoAvailable(app)
             const showFunding = hasLinkedFunding(app)
             return (
-            <div key={app.id} className="app-card rounded-xl bg-white border flex flex-col" style={{ borderColor: 'var(--border)' }}>
-              <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <div key={app.id} className="app-card flex h-full min-h-0 flex-col rounded-xl border bg-white" style={{ borderColor: 'var(--border)' }}>
+              <div className="flex min-h-0 flex-1 flex-col" style={{ padding: '1.25rem' }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: '0.75rem' }}>
                   <div className="flex items-center gap-2.5">
                     {app.logo_path && (
@@ -266,36 +235,41 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                   <EvidenceBadge strength={app.evidence_strength} />
                 </div>
 
-                <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.55, flex: 1, marginBottom: '1rem' }}>
+                <p
+                  className="line-clamp-5"
+                  style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.55, marginBottom: '1rem' }}
+                >
                   {app.one_line_value_proposition}
                 </p>
 
-                {priceLabel || showDemo || showFunding ? (
-                  <>
-                    <div className="flex flex-row flex-wrap items-center gap-x-2 gap-y-1 mb-[10px] sm:mb-3 lg:mb-[15px] xl:flex-nowrap xl:gap-x-1.5 2xl:gap-x-2">
-                      {priceLabel ? <CatalogueSignalDotRow tone="green" label={priceLabel} /> : null}
-                      {showDemo ? <CatalogueSignalDotRow tone="orange" label="Demo available" /> : null}
-                      {showFunding ? <CatalogueSignalDotRow tone="blue" label="Funding opportunities" /> : null}
-                    </div>
-                    <div
-                      className="mb-[12px] sm:mb-4 lg:mb-5 border-t border-solid"
-                      style={{
-                        borderTopColor: 'color-mix(in srgb, var(--text-muted) 15%, var(--border))',
-                      }}
-                      aria-hidden
-                    />
-                  </>
-                ) : null}
+                <div className="mt-auto flex min-w-0 flex-col">
+                  {priceLabel || showDemo || showFunding ? (
+                    <>
+                      <div className="mb-[10px] flex flex-row flex-wrap items-center gap-x-2 gap-y-1 sm:mb-3 lg:mb-[15px] xl:flex-nowrap xl:gap-x-1.5 2xl:gap-x-2">
+                        {priceLabel ? <CatalogueSignalDotRow tone="green" label={priceLabel} /> : null}
+                        {showDemo ? <CatalogueSignalDotRow tone="orange" label="Demo available" /> : null}
+                        {showFunding ? <CatalogueSignalDotRow tone="blue" label="Funding opportunities" /> : null}
+                      </div>
+                      <div
+                        className="mb-[12px] border-t border-solid sm:mb-4 lg:mb-5"
+                        style={{
+                          borderTopColor: 'color-mix(in srgb, var(--text-muted) 15%, var(--border))',
+                        }}
+                        aria-hidden
+                      />
+                    </>
+                  ) : null}
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  <Link
-                    href={`/apps/${app.slug}`}
-                    className="rounded-lg py-4 text-sm font-semibold text-center block sm:col-span-2 transition-colors hover:!bg-[#004B8C]"
-                    style={{ background: STORE_ACCENT, color: '#fff' }}
-                  >
-                    View details →
-                  </Link>
-                  <CompareToggleButton appId={app.id} className="w-full sm:col-span-1" />
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                    <Link
+                      href={`/apps/${app.slug}`}
+                      className="block rounded-lg py-4 text-center text-sm font-semibold transition-colors hover:!bg-[#004B8C] sm:col-span-2"
+                      style={{ background: STORE_ACCENT, color: '#fff' }}
+                    >
+                      View details →
+                    </Link>
+                    <CompareToggleButton appId={app.id} className="w-full sm:col-span-1" />
+                  </div>
                 </div>
               </div>
             </div>

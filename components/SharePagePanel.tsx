@@ -1,5 +1,6 @@
 'use client'
 
+import '@awesome.me/webawesome/dist/components/icon/icon.js'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useParams } from 'next/navigation'
@@ -460,7 +461,16 @@ export function SharePagePanel({
         aria-expanded={modalOpen}
         onClick={openModal}
       >
-        Share
+        <span className="inline-flex items-center justify-center gap-1.5">
+          <wa-icon
+            name="share"
+            family="classic"
+            variant="solid"
+            className="shrink-0 text-base leading-none inline-block align-middle text-current"
+            aria-hidden
+          />
+          Share
+        </span>
       </button>
 
       {mounted && modal ? createPortal(modal, document.body) : null}

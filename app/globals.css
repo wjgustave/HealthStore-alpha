@@ -131,6 +131,7 @@
   .badge-red { background: #FDECEA; color: #7A1210; }
   .badge-grey { background: #EEF1F3; color: #2E3F4A; }
   .badge-teal { background: #E1F4F5; color: #004B50; border-color: #9bc9cd; }
+  .badge-prototype { background: #000; color: #fff; border-color: #000; }
 
   .effort-low { background: #E6F5EC; color: #004B22; }
   .effort-medium { background: #FEF5E6; color: #7A4800; }

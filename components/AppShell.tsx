@@ -48,7 +48,7 @@ export default function AppShell({
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="font-bold text-sm" style={{ color: 'var(--nhs-blue)' }}>HealthStore</span>
-              <span className="badge badge-blue">Prototype</span>
+              <span className="badge badge-prototype">Prototype</span>
             </div>
             <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
               Based on publicly available information as of March 2026.

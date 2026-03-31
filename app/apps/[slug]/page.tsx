@@ -29,6 +29,7 @@ import { PdpSharePrintProvider, PdpShareRegion } from '@/components/PdpSharePrin
 import { SharePagePanel } from '@/components/SharePagePanel'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
 import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges, ProductHeroDemoBadge } from './pdpBlocks'
+import { ExpressInterestWhiteButton } from '@/components/ExpressInterestWhiteButton'
 
 export async function generateStaticParams() {
   return getAllApps().map(a => ({ slug: a.slug }))
@@ -365,17 +366,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.9)', lineHeight: 1.6, margin: '0 0 16px', maxWidth: 640 }}>
                   Contact {app.supplier_contact_name ?? app.supplier_name} to discuss deployment in your ICB.
                 </p>
-                <button
-                  type="button"
-                  data-express-interest
-                  className="w-full sm:w-auto min-w-[200px] transition-colors hover:bg-[#E6F0FB]"
-                  style={{
-                    display: 'block', textAlign: 'center', background: '#fff',
-                    color: accent, borderRadius: 8, padding: '12px 24px',
-                    fontSize: 'var(--text-label)', fontWeight: 700, border: 'none', cursor: 'pointer',
-                  }}>
-                  ✉ Express interest
-                </button>
+                <ExpressInterestWhiteButton accent={accent} />
               </div>
             </div>
             </PdpShareRegion>
