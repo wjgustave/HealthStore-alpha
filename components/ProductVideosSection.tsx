@@ -133,7 +133,7 @@ export default function ProductVideosSection({ videos, embedded = false }: Props
             <button
               type="button"
               onClick={close}
-              className="absolute -top-10 right-0 rounded-md px-2 py-1 text-sm font-semibold text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="absolute -top-10 right-0 rounded-md px-2 py-1 text-sm font-semibold text-white transition-colors hover:bg-white/15 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Close
             </button>

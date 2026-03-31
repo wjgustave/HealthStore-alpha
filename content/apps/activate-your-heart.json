@@ -78,7 +78,7 @@
   "minimum_conditions_for_success": "Dedicated CR clinical team, face-to-face assessment capacity for initial patient evaluation, staff trained on platform use.",
   "procurement_notes": "Information not available. NHS Trust-developed product — confirm procurement route with UHL.",
   "content_confidence": "Confirmed",
-  "linked_funding_ids": [],
+  "linked_funding_ids": ["health-innovation-network"],
   "technical_integrations": {
     "fhir": "Information not available",
     "emis": "Information not available",

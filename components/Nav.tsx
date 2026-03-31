@@ -34,7 +34,7 @@ function CompareNavLink({
       Compare
       {count > 0 ? (
         <span
-          className="min-w-[1.25rem] h-5 px-1 rounded-full text-[11px] font-bold leading-none inline-flex items-center justify-center"
+          className="min-w-[1.25rem] h-5 px-1 rounded-md text-[11px] font-bold leading-none inline-flex items-center justify-center"
           style={{ background: 'var(--nhs-blue)', color: '#fff' }}
           aria-hidden
         >
@@ -93,7 +93,7 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
               Sign out
             </button>
           </div>
-          <button className="md:hidden p-2 rounded" onClick={() => setMobileOpen(o => !o)} aria-label="Toggle menu">
+          <button className="md:hidden p-2 rounded transition-colors hover:bg-gray-100" onClick={() => setMobileOpen(o => !o)} aria-label="Toggle menu">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
               {mobileOpen
                 ? <><path d="M4 4l12 12M16 4L4 16" stroke="#1A2332" strokeWidth="1.5" strokeLinecap="round"/></>
@@ -150,7 +150,7 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
             {links[2].label}
           </Link>
           <button onClick={handleLogout}
-            className="px-3 py-2 rounded-md text-sm font-medium text-left flex items-center gap-1.5"
+            className="px-3 py-2 rounded-md text-sm font-medium text-left flex items-center gap-1.5 transition-colors hover:bg-gray-100"
             style={{ color: 'var(--text-muted)' }}>
             <LogOut className="w-3.5 h-3.5" />
             Sign out

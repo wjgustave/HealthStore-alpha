@@ -14,7 +14,7 @@
     { "value": "12", "label": "Apps in catalogue", "sublabel": "across 5 condition areas" },
     { "value": "5", "label": "NICE guidance references", "sublabel": "HTG and EVA recommendations" },
     { "value": "4", "label": "COPD apps", "sublabel": "all NICE HTE19 recommended" },
-    { "value": "3", "label": "Funding opportunities", "sublabel": "currently open or periodic" }
+    { "value": "3", "label": "Funding opportunities", "sublabel": "currently open or upcoming" }
   ],
   "featured_impact": {
     "headline": "Real-world impact, not just theory",

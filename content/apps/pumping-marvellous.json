@@ -225,7 +225,7 @@
   "minimum_conditions_for_success": "Clinical assessment pathway for patients before offering the platform. Awareness among HF/CR teams.",
   "procurement_notes": "No procurement required. Free platform. Order booklets via NHS team forms.",
   "content_confidence": "Confirmed",
-  "linked_funding_ids": [],
+  "linked_funding_ids": ["health-innovation-network"],
   "technical_integrations": {
     "fhir": "Information not available",
     "emis": "Information not available",

@@ -78,7 +78,7 @@
   "minimum_conditions_for_success": "Facilitators trained by Heart Manual Department, established CR referral pathway, initial clinical assessment capacity.",
   "procurement_notes": "NHS Lothian public sector product. Contact Heart Manual Department for availability outside Scotland.",
   "content_confidence": "Confirmed",
-  "linked_funding_ids": [],
+  "linked_funding_ids": ["health-innovation-network"],
   "technical_integrations": {
     "fhir": "Information not available",
     "emis": "Information not available",

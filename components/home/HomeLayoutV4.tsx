@@ -152,7 +152,7 @@ function CommissionedWidget({ commissioned }: { commissioned: ConceptGridContent
           {commissioned.app_display_name}
         </span>
         <span
-          className="rounded-full px-2.5 py-0.5 text-xs font-bold text-white"
+          className="rounded-md px-2.5 py-0.5 text-xs font-bold text-white"
           style={{ background: commissioned.status_variant === 'live' ? '#007F3B' : '#005EB8' }}
         >
           {commissioned.status_label}
@@ -277,7 +277,7 @@ function FeaturedTherapeuticBand({
         <div className="order-2 flex flex-col gap-8 lg:order-1 lg:col-span-7 lg:pr-8">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
             <div className="w-full max-w-[340px] shrink-0 rounded-xl border bg-white p-5 shadow-lg" style={{ borderColor: 'var(--border)' }}>
-              <div className="mb-1 inline-block rounded-full bg-gradient-to-r from-[#005EB8] to-[#41B6E6] px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+              <div className="mb-1 inline-block rounded-md bg-gradient-to-r from-[#005EB8] to-[#41B6E6] px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
                 {concept.badge_label}
               </div>
               {app ? (

@@ -26,7 +26,7 @@ export default function BackToTop() {
     <button
       type="button"
       onClick={scrollToTop}
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-md transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2"
+      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-md transition-colors hover:!bg-[#004B8C] focus:outline-none focus:ring-2 focus:ring-offset-2"
       style={{
         background: 'var(--nhs-blue)',
         color: '#fff',

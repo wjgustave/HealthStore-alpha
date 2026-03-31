@@ -300,7 +300,7 @@
     "tariff_considerations": "Eating disorders treatment is typically block-contracted rather than tariff-based. The primary financial benefit is improved efficiency within existing eating disorders budgets rather than direct tariff savings.",
     "provider_income_note": "Providers delivering eating disorders services may see reduced caseload pressure if patients are effectively treated through guided self-help. This should be positioned as a pathway efficiency improvement rather than a cost reduction to the provider.",
     "roi_note": "Specialist eating disorders treatment is high-cost (\u00a35,000\u2013\u00a315,000+ per patient depending on intensity). If guided self-help prevents or defers 25\u201330% of onward specialist referrals, the programme can generate meaningful savings. Relatively small patient volumes in most areas mean absolute savings may be modest. Primary value is improved access and patient experience.",
-    "funding_ids": ["nice-evidence-gen"],
+    "funding_ids": [],
     "nhse_125k_eligible": null,
     "nhse_125k_note": "Not applicable — eating disorder product.",
     "demo_variants": [{ "label": "Overcoming website", "url": "https://www.overcoming.co.uk", "type": "website" }],
@@ -316,7 +316,7 @@
     "minimum_conditions_for_success": "Specialist eating disorder clinical lead, defined inclusion/exclusion criteria, active safety monitoring protocol.",
     "content_confidence": "Supplier-reported",
     "cyber_notes": "Confirm data hosting, DPA terms and security certifications with Overcoming.",
-    "linked_funding_ids": ["nice-evidence-gen"],
+    "linked_funding_ids": [],
     "supplier_contact_email": "nhs@overcoming.co.uk",
     "supplier_contact_name": "Overcoming NHS team"
   }

@@ -1,4 +1,6 @@
-import { getAllApps, getAppBySlug } from '@/lib/data'
+import { getAllApps, getAppBySlug, getCommissionerFacingFunding, getLinkedFunding } from '@/lib/data'
+import { getCommissioningSnapshot } from '@/lib/commissioningSnapshot'
+import { PdpCommissioningSnapshot } from '@/components/PdpCommissioningSnapshot'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -50,6 +52,16 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
   const niceAndImpl = (app.clinical_evidence_detailed ?? []).filter((s: any) => ['nice_assessment', 'implementation_science', 'grey_lit', 'evidence_gap'].includes(s.type))
 
   const linkedFundingIds = app.linked_funding_ids ?? app.funding_ids ?? []
+  const commissionerFunding = getCommissionerFacingFunding(linkedFundingIds)
+  const allLinkedFunding = getLinkedFunding(linkedFundingIds)
+  const commissioningCards = getCommissioningSnapshot(
+    app,
+    allLinkedFunding.map((f: { id: string; title: string; status: string }) => ({
+      id: f.id,
+      title: f.title,
+      status: f.status,
+    })),
+  )
 
   const hasPdpAlerts =
     !!app.decommissioning_alert ||
@@ -73,22 +85,26 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
         <PdpShareRegion
           shareKey="hero"
           label="Product summary"
-          description="Supplier, proposition, maturity and evidence badges, and key funding callouts."
-          className="mb-8"
+          description="Supplier, proposition, NHS integration badges, and actions."
+          className="mb-3"
         >
         <div className="hs-surface-card-sm rounded-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-          <div className="p-8">
-            <div className="flex flex-col md:flex-row gap-6 items-start justify-between">
-              <div className="flex-1">
+          <div className="px-8 pt-8 pb-3">
+            <div className="flex flex-col gap-6 items-start">
+              <div className="flex-1 w-full min-w-0">
                 <div className="flex flex-wrap gap-2 mb-3">
                   {app.condition_tags.map((t: string) => <ConditionTag key={t} tag={t} />)}
-                  {app.nice_guidance_refs.map((r: any) => (
-                    <a key={r.ref} href={r.url} target="_blank" rel="noopener noreferrer">
-                      <NiceTypeBadge type={r.type} />
-                    </a>
-                  ))}
-                  {app.content_confidence && (
-                    <span className={`badge ${app.content_confidence === 'Confirmed' ? 'badge-green' : app.content_confidence === 'Supplier-reported' ? 'badge-blue' : 'badge-amber'}`}>
+                  <SupervisionBadge model={app.supervision_model} />
+                  <EvidenceBadge strength={app.evidence_strength} />
+                  {app.nice_guidance_refs
+                    .filter((r: any) => r.type !== 'EVA' && r.type !== 'MTG')
+                    .map((r: any) => (
+                      <a key={r.ref} href={r.url} target="_blank" rel="noopener noreferrer">
+                        <NiceTypeBadge type={r.type} />
+                      </a>
+                    ))}
+                  {app.content_confidence && app.content_confidence !== 'Confirmed' && (
+                    <span className={`badge ${app.content_confidence === 'Supplier-reported' ? 'badge-blue' : 'badge-amber'}`}>
                       {app.content_confidence}
                     </span>
                   )}
@@ -103,41 +119,28 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                     <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{app.supplier_name}</p>
                   </div>
                 </div>
-                <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)', maxWidth: 640 }}>
-                  {app.one_line_value_proposition}
-                </p>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-6 mb-3">
+                  <p
+                    className="min-w-0 flex-1 max-w-[640px]"
+                    style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}
+                  >
+                    {app.one_line_value_proposition}
+                  </p>
+                  <button
+                    data-express-interest
+                    className="shrink-0 self-end sm:self-auto px-4 py-4 rounded-lg text-sm font-semibold text-white transition-colors hover:!bg-[#004B8C]"
+                    style={{ background: accent }}
+                  >
+                    Express interest
+                  </button>
+                </div>
                 <NhsIntegrationBadges app={app} />
               </div>
-              <div className="flex-shrink-0 grid grid-cols-2 gap-3 md:w-72">
-                {[
-                  { label: 'Maturity', badge: <MaturityBadge level={app.maturity_level} /> },
-                  { label: 'Evidence', badge: <EvidenceBadge strength={app.evidence_strength} /> },
-                  { label: 'Local effort', badge: <EffortBadge level={app.local_wraparound} /> },
-                  { label: 'DTAC', badge: <DtacBadge status={app.dtac_status} /> },
-                ].map(({ label, badge }) => (
-                  <div key={label} className="rounded-xl p-4 text-center min-w-0" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
-                    <div className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>{label}</div>
-                    <span className="inline-flex justify-center whitespace-nowrap">{badge}</span>
-                  </div>
-                ))}
-              </div>
             </div>
-            <div className="flex flex-wrap gap-3 items-center justify-between mt-6 pt-6 border-t" style={{ borderColor: 'var(--border)' }}>
-              <div className="flex flex-wrap gap-3 items-center min-w-0">
-                {app.nhse_125k_eligible === true && (
-                  <span className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5"
-                    style={{ background: '#E6F5EC', color: '#004B22' }}>
-                    ★ NHSE £125k funding eligible
-                  </span>
-                )}
-              </div>
+            <div className="flex flex-wrap gap-3 items-center justify-end mt-3 pt-3 border-t" style={{ borderColor: 'var(--border)' }}>
               <div className="flex flex-wrap gap-2 items-center shrink-0">
-                <SharePagePanel />
-                <CompareToggleButton appId={app.id} className="px-4 py-4 shrink-0" />
-                <button data-express-interest className="px-4 py-4 rounded-lg text-sm font-semibold text-white"
-                  style={{ background: accent }}>
-                  Express interest
-                </button>
+                <SharePagePanel borderlessTrigger />
+                <CompareToggleButton appId={app.id} borderless className="px-4 py-4 shrink-0" />
               </div>
             </div>
           </div>
@@ -152,6 +155,15 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             {app.dtac_status === 'required_not_confirmed' && <div><AlertBox type="danger"><strong>DTAC not confirmed: </strong>{app.dtac_note}</AlertBox></div>}
           </PdpShareRegion>
         ) : null}
+
+        <PdpShareRegion
+          shareKey="commissioning-snapshot"
+          label="Commissioning snapshot"
+          description="Regulation, commercial shape, linked national funding programmes, and primary national guidance reference."
+          className="mb-6"
+        >
+          <PdpCommissioningSnapshot cards={commissioningCards} />
+        </PdpShareRegion>
 
         <div className="grid md:grid-cols-3 gap-6">
 
@@ -248,7 +260,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               <ProductPageExpander
                 shareKey="nice-guidance"
                 title="NICE guidance"
-                description="NICE publications and programme references linked to this product, with dates and review notes where we hold them."
+                description="NICE publications and programme references linked to this product, with dates and review notes where we hold them. Where NICE lists a technology in an evidence-generation period, annual reporting to NICE is a compliance requirement — not ICB grant funding; use the links below and confirm with NICE."
               >
                 <div className="space-y-3">
                   {app.nice_guidance_refs.map((r: any) => (
@@ -314,6 +326,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               )}
 
               <ProductPageExpander
+                id="commercial-model"
                 shareKey="commercial-model"
                 title="Commercial model and cost"
                 description="How the product is priced, what is included, and how to procure it."
@@ -330,9 +343,10 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               </ProductPageExpander>
 
               <ProductPageExpander
+                id="related-funding"
                 shareKey="related-funding"
                 title="Related funding opportunities"
-                description="Funding that may be relevant to commissioning this technology."
+                description="Cash or adoption support for commissioners — not supplier R&D or NICE reporting obligations (see NICE guidance)."
               >
                 <RelatedFundingSection fundingIds={linkedFundingIds} />
               </ProductPageExpander>
@@ -349,7 +363,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 <button
                   type="button"
                   data-express-interest
-                  className="w-full sm:w-auto min-w-[200px]"
+                  className="w-full sm:w-auto min-w-[200px] transition-colors hover:bg-[#E6F0FB]"
                   style={{
                     display: 'block', textAlign: 'center', background: '#fff',
                     color: accent, borderRadius: 8, padding: '12px 24px',
@@ -373,6 +387,18 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             <div className="hs-surface-card-sm bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
               <div className="text-xs font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>Quick facts</div>
               <div className="space-y-3 text-sm">
+                <div>
+                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Maturity</div>
+                  <MaturityBadge level={app.maturity_level} />
+                </div>
+                <div>
+                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Evidence strength</div>
+                  <EvidenceBadge strength={app.evidence_strength} />
+                </div>
+                <div>
+                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Local effort</div>
+                  <EffortBadge level={app.local_wraparound} />
+                </div>
                 <div>
                   <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Device class</div>
                   <div style={{ fontWeight: 600 }}>{app.device_class}</div>

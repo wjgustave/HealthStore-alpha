@@ -29,7 +29,14 @@ function legacyCopyToClipboard(text: string): boolean {
 /**
  * PDP share: two-step modal — choose link vs PDF, then either section checklist + shareable link or PDF print.
  */
-export function SharePagePanel({ className = '' }: { className?: string }) {
+export function SharePagePanel({
+  className = '',
+  /** PDP hero: no outline on the trigger (Share still reads as a control via colour + hover). */
+  borderlessTrigger = false,
+}: {
+  className?: string
+  borderlessTrigger?: boolean
+}) {
   const params = useParams()
   const slug =
     typeof params?.slug === 'string' ? params.slug : Array.isArray(params?.slug) ? params.slug[0] ?? '' : ''
@@ -241,7 +248,7 @@ export function SharePagePanel({ className = '' }: { className?: string }) {
       <div className="mb-2 flex flex-wrap gap-2">
         <button
           type="button"
-          className="text-sm font-semibold underline decoration-slate-300 underline-offset-2"
+          className="text-sm font-semibold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#003087] hover:decoration-[#005EB8]"
           style={{ color: STORE_ACCENT }}
           onClick={selectAll}
         >
@@ -252,7 +259,7 @@ export function SharePagePanel({ className = '' }: { className?: string }) {
         </span>
         <button
           type="button"
-          className="text-sm font-semibold underline decoration-slate-300 underline-offset-2"
+          className="text-sm font-semibold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#003087] hover:decoration-[#005EB8]"
           style={{ color: STORE_ACCENT }}
           onClick={clearAll}
         >
@@ -327,7 +334,7 @@ export function SharePagePanel({ className = '' }: { className?: string }) {
             <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5 space-y-3">
               <button
                 type="button"
-                className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-slate-50 min-h-[44px]"
+                className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-slate-100 min-h-[44px]"
                 style={{ borderColor: 'var(--border)' }}
                 onClick={() => setShareFlow('link')}
               >
@@ -340,7 +347,7 @@ export function SharePagePanel({ className = '' }: { className?: string }) {
               </button>
               <button
                 type="button"
-                className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-slate-50 min-h-[44px]"
+                className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-slate-100 min-h-[44px]"
                 style={{ borderColor: 'var(--border)' }}
                 onClick={() => setShareFlow('pdf')}
               >
@@ -376,7 +383,7 @@ export function SharePagePanel({ className = '' }: { className?: string }) {
               {sectionChecklist}
               <button
                 type="button"
-                className="text-left text-sm font-semibold underline decoration-slate-300 underline-offset-2"
+                className="text-left text-sm font-semibold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[var(--text-primary)] hover:decoration-[var(--text-muted)]"
                 style={{ color: 'var(--text-muted)' }}
                 onClick={copyFullPageLink}
               >
@@ -391,8 +398,8 @@ export function SharePagePanel({ className = '' }: { className?: string }) {
                 {shareFlow !== 'method' ? (
                   <button
                     type="button"
-                    className="rounded-lg border px-4 py-3 text-sm font-semibold min-h-[44px]"
-                    style={{ borderColor: 'var(--border)', color: 'var(--text-primary)', background: '#fff' }}
+                    className="rounded-lg border px-4 py-3 text-sm font-semibold min-h-[44px] transition-colors hover:bg-[#E6F0FB]"
+                    style={{ borderColor: STORE_ACCENT, color: STORE_ACCENT, background: '#fff' }}
                     onClick={() => {
                       setAnnounce('')
                       setLinkError('')
@@ -404,8 +411,8 @@ export function SharePagePanel({ className = '' }: { className?: string }) {
                 ) : null}
                 <button
                   type="button"
-                  className="rounded-lg border px-4 py-3 text-sm font-semibold min-h-[44px]"
-                  style={{ borderColor: 'var(--border)', color: 'var(--text-primary)', background: '#fff' }}
+                  className="rounded-lg border px-4 py-3 text-sm font-semibold min-h-[44px] transition-colors hover:bg-[#E6F0FB]"
+                  style={{ borderColor: STORE_ACCENT, color: STORE_ACCENT, background: '#fff' }}
                   onClick={closeModal}
                 >
                   Cancel
@@ -415,7 +422,7 @@ export function SharePagePanel({ className = '' }: { className?: string }) {
                 {shareFlow === 'link' ? (
                   <button
                     type="button"
-                    className="rounded-lg px-4 py-3 text-sm font-semibold text-white min-h-[44px] disabled:opacity-50"
+                    className="rounded-lg px-4 py-3 text-sm font-semibold text-white min-h-[44px] transition-colors disabled:opacity-50 enabled:hover:!bg-[#004B8C]"
                     style={{ background: STORE_ACCENT }}
                     disabled={selectedKeys.size === 0 || linkBusy || !slug}
                     onClick={createAndCopyShareLink}
@@ -426,7 +433,7 @@ export function SharePagePanel({ className = '' }: { className?: string }) {
                 {shareFlow === 'pdf' ? (
                   <button
                     type="button"
-                    className="rounded-lg px-4 py-3 text-sm font-semibold text-white min-h-[44px] disabled:opacity-50"
+                    className="rounded-lg px-4 py-3 text-sm font-semibold text-white min-h-[44px] transition-colors disabled:opacity-50 enabled:hover:!bg-[#004B8C]"
                     style={{ background: STORE_ACCENT }}
                     disabled={selectedKeys.size === 0}
                     onClick={printWithSelection}
@@ -446,8 +453,9 @@ export function SharePagePanel({ className = '' }: { className?: string }) {
       <button
         ref={triggerRef}
         type="button"
-        className="px-4 py-4 rounded-lg text-sm font-semibold border min-h-[44px] min-w-[44px]"
-        style={{ borderColor: 'var(--border)', color: 'var(--text-primary)', background: '#fff' }}
+        className={`px-4 py-4 rounded-lg text-sm font-semibold min-h-[44px] min-w-[44px] bg-white text-[var(--nhs-blue)] transition-colors hover:bg-[#E6F0FB] hover:text-[var(--nhs-dark)] ${
+          borderlessTrigger ? 'border-0' : 'border border-[var(--nhs-blue)]'
+        }`}
         aria-haspopup="dialog"
         aria-expanded={modalOpen}
         onClick={openModal}

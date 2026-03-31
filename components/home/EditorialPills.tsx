@@ -20,10 +20,8 @@ const CONDITION_LABELS: Record<string, string> = {
   cardiac_rehab: 'Cardiac rehab',
 }
 
-const CONDITION_TINT: Record<string, { bg: string; color: string }> = {
-  copd: { bg: 'rgba(0, 94, 184, 0.14)', color: '#003d7a' },
-  cardiac_rehab: { bg: 'rgba(174, 37, 115, 0.14)', color: '#7a1a4a' },
-}
+const CONDITION_PILL_BG = 'rgba(0, 94, 182, 0.1)'
+const CONDITION_PILL_COLOR = 'rgb(0, 94, 184)'
 
 export function EditorialTopicPill({ label }: { label: string }) {
   return (
@@ -44,9 +42,8 @@ export function EditorialCategoryPill({ label }: { label: string }) {
 
 export function EditorialConditionPill({ tag }: { tag: string }) {
   const label = CONDITION_LABELS[tag] ?? tag
-  const tint = CONDITION_TINT[tag] ?? { bg: 'rgba(0, 48, 135, 0.1)', color: '#003087' }
   return (
-    <span style={{ ...pillText, background: tint.bg, color: tint.color }}>
+    <span style={{ ...pillText, background: CONDITION_PILL_BG, color: CONDITION_PILL_COLOR }}>
       {label}
     </span>
   )

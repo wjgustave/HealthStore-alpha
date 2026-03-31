@@ -72,6 +72,11 @@
   }
 
   h1, h2, h3 { font-family: 'Frutiger', Arial, sans-serif; font-weight: 700; }
+
+  /** Smooth hover feedback for native buttons (pair with hover:* utilities per control). */
+  button:not(:disabled) {
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+  }
 }
 
 @layer components {
@@ -109,7 +114,8 @@
     display: inline-flex;
     align-items: center;
     padding: 3px 8px;
-    border-radius: 20px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
     font-size: var(--text-badge);
     font-weight: 600;
     letter-spacing: 0.3px;
@@ -124,7 +130,7 @@
   .badge-amber { background: #FEF5E6; color: #7A4800; }
   .badge-red { background: #FDECEA; color: #7A1210; }
   .badge-grey { background: #EEF1F3; color: #2E3F4A; }
-  .badge-teal { background: #E1F4F5; color: #004B50; }
+  .badge-teal { background: #E1F4F5; color: #004B50; border-color: #9bc9cd; }
 
   .effort-low { background: #E6F5EC; color: #004B22; }
   .effort-medium { background: #FEF5E6; color: #7A4800; }

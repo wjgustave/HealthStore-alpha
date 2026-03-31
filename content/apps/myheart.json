@@ -8,7 +8,7 @@
   "condition_tags": ["cardiac_rehab"],
   "pathway_tags": ["cardiac-rehabilitation", "heart-failure", "post-cardiac-event", "remote-monitoring", "self-management"],
   "outcome_tags": ["self-management", "quality-of-life", "exercise-capacity", "cr-uptake"],
-  "supervision_model": "non_continuous_review",
+  "supervision_model": "self_management_only",
   "referral_modes": ["clinician_referral"],
   "one_line_value_proposition": "NICE HTG764-recommended cardiac rehabilitation app from the makers of myCOPD — over 20,800 UK users, DTAC passed, with the Dorset County Hospital case study showing 70% CR uptake (surpassing the 2028 NHS target).",
   "why_it_matters_locally": "myHeart has the largest documented NHS deployment among HTG764-recommended platforms, with over 20,800 UK users since 2018. The Dorset County Hospital case study demonstrated 70% CR uptake — surpassing the 2028 NHS Long-Term Plan target. Built on the my mhealth platform (which also powers myCOPD), it benefits from an established NHS relationship and DTAC approval.",
@@ -330,7 +330,7 @@
   "minimum_conditions_for_success": "Established CR service pathway, CR team trained on platform, minimum 200 patient cohort for meaningful outcome data.",
   "procurement_notes": "Contact my mhealth Limited. Same company as myCOPD — existing NHS relationships may facilitate procurement.",
   "content_confidence": "Confirmed",
-  "linked_funding_ids": [],
+  "linked_funding_ids": ["health-innovation-network"],
   "technical_integrations": {
     "fhir": "Information not available",
     "emis": "Information not available",

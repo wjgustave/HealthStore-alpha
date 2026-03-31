@@ -83,12 +83,22 @@ export function getConditionAreas(): { id: string; label: string; colour: string
 }
 
 export function getOpenFunding(): Funding[] {
-  return (fundingData as Funding[]).filter((f: Funding) => f.status === 'open' || f.status === 'periodic')
+  return (fundingData as Funding[]).filter(
+    (f: Funding) => f.status === 'open' || f.status === 'upcoming' || f.status === 'periodic',
+  )
 }
 
 export function getLinkedFunding(appFundingIds: string[]): Funding[] {
   if (!appFundingIds?.length) return []
   return (fundingData as Funding[]).filter((f: Funding) => appFundingIds.includes(f.id))
+}
+
+/** PDP / commissioner views: cash or adoption support for ICBs/ICS — excludes obligations and supplier R&D rows. */
+export function getCommissionerFacingFunding(appFundingIds: string[]): Funding[] {
+  return getLinkedFunding(appFundingIds).filter((f: Funding) => {
+    const d = (f as { commissioner_display?: string }).commissioner_display
+    return d === 'funding_and_adoption'
+  })
 }
 
 export function getAppBySlug(slug: string): App | undefined {
@@ -125,12 +135,12 @@ export function getDashboardStats() {
     { value: String(apps.length), label: 'Apps in catalogue', sublabel: `across ${conditions.length} condition areas` },
     { value: String(niceRefs.size), label: 'NICE guidance references', sublabel: 'HTG and EVA recommendations' },
     { value: String(apps.filter((a: App) => a.condition_tags.includes('copd')).length), label: 'COPD apps', sublabel: 'all NICE HTE19 recommended' },
-    { value: String(openFunding.length), label: 'Funding opportunities', sublabel: 'currently open or periodic' },
+    { value: String(openFunding.length), label: 'Funding opportunities', sublabel: 'currently open or upcoming' },
   ]
 }
 
 export const supervisionLabels: Record<string, string> = {
-  self_management_only: 'Self-management only',
+  self_management_only: 'Self-management',
   guided_self_help: 'Guided self-help',
   non_continuous_review: 'Non-continuous review',
   active_remote_management: 'Active remote management',

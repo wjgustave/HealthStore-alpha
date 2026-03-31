@@ -60,12 +60,12 @@ export function ProductPageExpander({
   const headingId = useId()
 
   useEffect(() => {
-    if (id !== 'clinical-evidence') return
+    if (!id) return
     function sync() {
-      if (typeof window !== 'undefined' && window.location.hash === '#clinical-evidence') {
+      if (typeof window !== 'undefined' && window.location.hash === `#${id}`) {
         setOpen(true)
         requestAnimationFrame(() => {
-          document.getElementById('clinical-evidence')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
         })
       }
     }

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useId, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { X, Send, CheckCircle } from 'lucide-react'
+import { STORE_ACCENT } from '@/lib/storeAccent'
 
 interface Props {
   appName: string
@@ -173,7 +174,7 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
           ref={closeBtnRef}
           type="button"
           onClick={handleClose}
-          className="absolute top-4 right-4 p-2 rounded-lg hover:bg-gray-100"
+          className="absolute top-4 right-4 p-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-[var(--text-primary)]"
           style={{ color: 'var(--text-muted)' }}
           aria-label="Close dialog"
         >
@@ -208,7 +209,7 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
             <button
               type="button"
               onClick={handleClose}
-              className="px-6 py-2.5 rounded-lg text-sm font-semibold text-white"
+              className="px-6 py-2.5 rounded-lg text-sm font-semibold text-white transition-colors hover:!bg-[#004B8C]"
               style={{ background: 'var(--nhs-blue)' }}
             >
               Close
@@ -324,7 +325,7 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
               <div className="pt-2 flex items-center gap-3">
                 <button
                   type="submit"
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold text-white transition-colors"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold text-white transition-colors hover:!bg-[#004B8C] disabled:hover:!bg-[var(--nhs-blue)]"
                   style={{ background: 'var(--nhs-blue)' }}
                 >
                   <Send className="w-4 h-4" aria-hidden />
@@ -333,8 +334,8 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="px-4 py-3 rounded-lg border text-sm transition-colors"
-                  style={{ borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
+                  className="px-4 py-3 rounded-lg border text-sm font-semibold transition-colors bg-white hover:bg-[#E6F0FB]"
+                  style={{ borderColor: STORE_ACCENT, color: STORE_ACCENT }}
                 >
                   Cancel
                 </button>

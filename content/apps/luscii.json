@@ -109,10 +109,7 @@
   "tariff_considerations": "Virtual ward activity may be funded under the national virtual ward programme. Commissioners should confirm local funding arrangements and whether technology costs are within scope. Remote monitoring does not currently attract a separate tariff outside virtual ward frameworks. Model locally using admission and cost data.",
   "provider_income_note": "Supports provider delivery of virtual ward targets, which may attract national funding. May reduce some inpatient and outpatient activity over time \u2014 factor into pathway economics.",
   "roi_note": "Supplier provides ROI modelling based on admission avoidance assumptions. Sunderland 50% respiratory admission reduction is cited in market materials but attribution is contested (see data quality note). Independent NHS evaluation data is still emerging. Commissioners should model locally.",
-  "funding_ids": [
-    "nhse-copd-wave2",
-    "nice-evidence-gen"
-  ],
+  "funding_ids": [],
   "nhse_125k_eligible": null,
   "nhse_125k_note": "Eligibility for NHSE ICB \u00a3125k COPD funding not confirmed for Luscii in reviewed sources. Verify with NHSE before including in business case.",
   "data_quality_note": "The 50% respiratory admission reduction cited for Sunderland is also claimed by Clinitouch/Spirit Health for the same geography. Attribution cannot be confirmed from public sources \u2014 do not use in comparative commissioning claims without verification from South Tyneside and Sunderland NHS Foundation Trust.",
@@ -341,7 +338,7 @@
   "procurement_notes": "Available via SBRI Healthcare contract. Direct procurement with Luscii/OMRON also possible.",
   "content_confidence": "Confirmed",
   "cyber_notes": "Netherlands-based company — confirm data residency and DPA terms for NHS use. ISO 27001 certified.",
-  "linked_funding_ids": ["sbri-healthcare", "nice-evidence-gen"],
+  "linked_funding_ids": [],
   "technical_integrations": {
     "fhir": "FHIR R4 compatible",
     "emis": "Integration available",

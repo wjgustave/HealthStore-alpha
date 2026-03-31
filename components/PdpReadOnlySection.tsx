@@ -8,14 +8,18 @@ export function PdpReadOnlySection({
   description,
   children,
   className = '',
+  id,
 }: {
   title: string
   description?: string
   children: ReactNode
   className?: string
+  /** Optional DOM id for in-page anchors (e.g. shared excerpt deep links). */
+  id?: string
 }) {
   return (
     <section
+      id={id}
       className={`rounded-xl border bg-white overflow-hidden ${className}`.trim()}
       style={{ borderColor: 'var(--border)' }}
     >

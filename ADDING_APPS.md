@@ -23,6 +23,16 @@ To show a hidden condition, add its id to `VISIBLE_CONDITIONS` in `lib/visibleCo
 
 The ICB £125k technology funding scheme referenced in the UI is **COPD-context**. For apps whose primary condition is **`cardiac_rehab`**, set **`nhse_125k_note` to `null`** (and keep `nhse_125k_eligible` as `null`) so the “NHSE £125k funding” row does not appear under Financial and commercial considerations. Use non-null `nhse_125k_note` only where the scheme is relevant (typically COPD apps).
 
+### `linked_funding_ids` and `content/funding/funding.json`
+
+Each row in [`content/funding/funding.json`](content/funding/funding.json) includes **`commissioner_display`**:
+
+- **`funding_and_adoption`** — ICB/ICS cash or regional adoption support (shown in **Related funding opportunities** and the commissioning snapshot).
+- **`obligation_only`** — reserved for non-grant compliance-style rows (e.g. reporting programmes): **not** a cash opportunity; do **not** link from apps for Related funding; explain obligations via **NICE guidance** and the **Funding directory** intro, not as a funding card.
+- **`provider_or_research`** — supplier R&D or research programmes (e.g. SBRI award to company, NIHR i4i): **not** shown in commissioner funding lists unless reclassified with clear ICB benefit.
+
+Only ids with `commissioner_display: "funding_and_adoption"` appear when the PDP resolves `linked_funding_ids`. The shared [**Funding directory**](/funding) lists rows from `funding.json` (adoption, grants, and research-style programmes as present in content — not duplicate NICE obligation callouts).
+
 ### App detail page: where fields appear
 
 The product detail template (`app/apps/[slug]/page.tsx` and `components/AppDetailSections.tsx`) maps JSON to these **main-column** sections (in order):
@@ -40,7 +50,7 @@ The product detail template (`app/apps/[slug]/page.tsx` and `components/AppDetai
 | **Demo access** | `demo_notes`, `demo_variants` (both render when present) |
 | **NHS and care system integrations** | Collapsible block from `technical_integrations` (NHS App / Login / Notify use the **hero** flags `nhs_app_integration`, `nhs_login_integration`, `nhs_notify_integration`; the table omits a duplicate NHS App row) |
 | **Financial and commercial** | **Indicative financial cost** callout: `indicative_price_text`, `pricing_confidence`. Collapsible **Procurement, tariff and ROI detail**: `procurement_notes` / `contract_note`, `nhse_125k_note`, `tariff_considerations`, `roi_note`, `monitoring_model`, `minimum_conditions_for_success` |
-| **Related funding opportunities** | `linked_funding_ids` (or legacy `funding_ids`). If empty, the page shows a short message with a link to `/funding`. |
+| **Related funding opportunities** | `linked_funding_ids` (or legacy `funding_ids`), filtered to [`commissioner_display: funding_and_adoption`](content/funding/funding.json) rows only. NICE evidence-generation obligations are described in the **NICE guidance** expander copy and on [**/funding**](/funding), not here. |
 | **Express interest** (main column, last) | CTA copy uses `supplier_contact_name` / `supplier_name`; opens the interest modal (`data-express-interest`). Supplier email is not shown on the page (use modal / supplier directly). |
 
 ---

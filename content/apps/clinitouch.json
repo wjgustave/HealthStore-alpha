@@ -239,7 +239,7 @@
   "procurement_notes": "Available via NHSE ICB COPD Digital Technology Fund. G-Cloud and direct procurement routes.",
   "content_confidence": "Confirmed",
   "cyber_notes": "ISO 27001 certified. Cyber Essentials Plus held.",
-  "linked_funding_ids": ["nhse-copd-wave2", "nice-evidence-gen"],
+  "linked_funding_ids": ["nhse-copd-wave2"],
   "technical_integrations": {
     "fhir": "Not confirmed",
     "emis": "Integration available via Spirit Health",

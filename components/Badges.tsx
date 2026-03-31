@@ -35,9 +35,23 @@ export function EffortBadge({ level }: { level: string }) {
 
 export function SupervisionBadge({ model }: { model: string }) {
   const label = supervisionLabels[model] ?? model
+  if (model === 'guided_self_help') {
+    return (
+      <span
+        className="badge"
+        style={{
+          background: '#fff',
+          color: '#2E3F4A',
+          border: '1px solid var(--border)',
+        }}
+      >
+        {label}
+      </span>
+    )
+  }
   const cls = model === 'active_remote_management' ? 'badge-purple'
     : model === 'non_continuous_review' ? 'badge-blue'
-    : model === 'guided_self_help' ? 'badge-teal'
+    : model === 'self_management_only' ? 'badge-teal'
     : 'badge-grey'
   return <span className={`badge ${cls}`}>{label}</span>
 }
@@ -73,7 +87,7 @@ export function ConditionTag({ tag }: { tag: string }) {
     <span
       className="badge"
       style={{
-        background: '#fff',
+        background: 'rgba(0, 94, 182, 0.1)',
         color: 'rgb(0, 94, 184)',
         border: '1px solid rgb(0, 94, 184)',
       }}
@@ -85,9 +99,15 @@ export function ConditionTag({ tag }: { tag: string }) {
 
 export function FundingStatusBadge({ status }: { status: string }) {
   const labels: Record<string, string> = {
-    open: 'Open', closed: 'Closed', closed_confirm: 'Closed – confirm', periodic: 'Periodic'
+    open: 'Open',
+    closed: 'Closed',
+    closed_confirm: 'Closed – confirm',
+    upcoming: 'Upcoming',
+    periodic: 'Upcoming',
   }
-  const cls = status === 'open' ? 'badge-green' : status === 'periodic' ? 'badge-blue' : 'badge-grey'
+  const isUpcoming = status === 'upcoming' || status === 'periodic'
+  const cls =
+    status === 'open' ? 'badge-green' : isUpcoming ? 'badge-amber' : 'badge-grey'
   return <span className={`badge ${cls}`}>{labels[status] ?? status}</span>
 }
 

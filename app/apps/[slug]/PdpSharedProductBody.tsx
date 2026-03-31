@@ -17,7 +17,10 @@ import {
   shouldShowImpactSection,
   shouldShowDemoAccess,
 } from '@/components/AppDetailSections'
+import { PdpCommissioningSnapshot } from '@/components/PdpCommissioningSnapshot'
 import { PdpReadOnlySection } from '@/components/PdpReadOnlySection'
+import { getCommissioningSnapshot } from '@/lib/commissioningSnapshot'
+import { getCommissionerFacingFunding, getLinkedFunding } from '@/lib/data'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
 import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges } from './pdpBlocks'
 
@@ -40,26 +43,40 @@ export default function PdpSharedProductBody({
   )
 
   const linkedFundingIds = app.linked_funding_ids ?? app.funding_ids ?? []
+  const commissionerFunding = getCommissionerFacingFunding(linkedFundingIds)
+  const allLinkedFunding = getLinkedFunding(linkedFundingIds)
+  const commissioningCards = getCommissioningSnapshot(
+    app,
+    allLinkedFunding.map((f: { id: string; title: string; status: string }) => ({
+      id: f.id,
+      title: f.title,
+      status: f.status,
+    })),
+  )
 
   return (
     <>
       {a.has('hero') ? (
-        <div className="mb-8 hs-surface-card-sm rounded-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-          <div className="p-8">
-            <div className="flex flex-col md:flex-row gap-6 items-start justify-between">
-              <div className="flex-1">
+        <div className="mb-3 hs-surface-card-sm rounded-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
+          <div className="px-8 pt-8 pb-3">
+            <div className="flex flex-col gap-6 items-start">
+              <div className="flex-1 w-full min-w-0">
                 <div className="flex flex-wrap gap-2 mb-3">
                   {app.condition_tags.map((t: string) => (
                     <ConditionTag key={t} tag={t} />
                   ))}
-                  {app.nice_guidance_refs.map((r: any) => (
-                    <a key={r.ref} href={r.url} target="_blank" rel="noopener noreferrer">
-                      <NiceTypeBadge type={r.type} />
-                    </a>
-                  ))}
-                  {app.content_confidence && (
+                  <SupervisionBadge model={app.supervision_model} />
+                  <EvidenceBadge strength={app.evidence_strength} />
+                  {app.nice_guidance_refs
+                    .filter((r: any) => r.type !== 'EVA' && r.type !== 'MTG')
+                    .map((r: any) => (
+                      <a key={r.ref} href={r.url} target="_blank" rel="noopener noreferrer">
+                        <NiceTypeBadge type={r.type} />
+                      </a>
+                    ))}
+                  {app.content_confidence && app.content_confidence !== 'Confirmed' && (
                     <span
-                      className={`badge ${app.content_confidence === 'Confirmed' ? 'badge-green' : app.content_confidence === 'Supplier-reported' ? 'badge-blue' : 'badge-amber'}`}
+                      className={`badge ${app.content_confidence === 'Supplier-reported' ? 'badge-blue' : 'badge-amber'}`}
                     >
                       {app.content_confidence}
                     </span>
@@ -92,37 +109,14 @@ export default function PdpSharedProductBody({
                 </p>
                 <NhsIntegrationBadges app={app} />
               </div>
-              <div className="flex-shrink-0 grid grid-cols-2 gap-3 md:w-72">
-                {[
-                  { label: 'Maturity', badge: <MaturityBadge level={app.maturity_level} /> },
-                  { label: 'Evidence', badge: <EvidenceBadge strength={app.evidence_strength} /> },
-                  { label: 'Local effort', badge: <EffortBadge level={app.local_wraparound} /> },
-                  { label: 'DTAC', badge: <DtacBadge status={app.dtac_status} /> },
-                ].map(({ label, badge }) => (
-                  <div
-                    key={label}
-                    className="rounded-xl p-4 text-center min-w-0"
-                    style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}
-                  >
-                    <div className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
-                      {label}
-                    </div>
-                    <span className="inline-flex justify-center whitespace-nowrap">{badge}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-3 items-center mt-6 pt-6 border-t" style={{ borderColor: 'var(--border)' }}>
-              {app.nhse_125k_eligible === true && (
-                <span
-                  className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5"
-                  style={{ background: '#E6F5EC', color: '#004B22' }}
-                >
-                  ★ NHSE £125k funding eligible
-                </span>
-              )}
             </div>
           </div>
+        </div>
+      ) : null}
+
+      {a.has('commissioning-snapshot') ? (
+        <div className="mb-8">
+          <PdpCommissioningSnapshot cards={commissioningCards} />
         </div>
       ) : null}
 
@@ -261,7 +255,7 @@ export default function PdpSharedProductBody({
           {a.has('nice-guidance') ? (
             <PdpReadOnlySection
               title="NICE guidance"
-              description="NICE publications and programme references linked to this product, with dates and review notes where we hold them."
+              description="NICE publications and programme references linked to this product, with dates and review notes where we hold them. Where NICE lists a technology in an evidence-generation period, annual reporting to NICE is a compliance requirement — not ICB grant funding; use the links below and confirm with NICE."
             >
               <div className="space-y-3">
                 {app.nice_guidance_refs.map((r: any) => (
@@ -346,6 +340,7 @@ export default function PdpSharedProductBody({
 
           {a.has('commercial-model') ? (
             <PdpReadOnlySection
+              id="commercial-model"
               title="Commercial model and cost"
               description="How the product is priced, what is included, and how to procure it."
             >
@@ -364,8 +359,9 @@ export default function PdpSharedProductBody({
 
           {a.has('related-funding') ? (
             <PdpReadOnlySection
+              id="related-funding"
               title="Related funding opportunities"
-              description="Funding that may be relevant to commissioning this technology."
+              description="Cash or adoption support for commissioners — not supplier R&D or NICE reporting obligations (see NICE guidance)."
             >
               <RelatedFundingSection fundingIds={linkedFundingIds} />
             </PdpReadOnlySection>
@@ -379,6 +375,24 @@ export default function PdpSharedProductBody({
                 Quick facts
               </div>
               <div className="space-y-3 text-sm">
+                <div>
+                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+                    Maturity
+                  </div>
+                  <MaturityBadge level={app.maturity_level} />
+                </div>
+                <div>
+                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+                    Evidence strength
+                  </div>
+                  <EvidenceBadge strength={app.evidence_strength} />
+                </div>
+                <div>
+                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+                    Local effort
+                  </div>
+                  <EffortBadge level={app.local_wraparound} />
+                </div>
                 <div>
                   <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
                     Device class

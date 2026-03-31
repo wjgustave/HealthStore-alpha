@@ -57,7 +57,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           <div className="grid grid-cols-1 gap-10">
             <div className="min-w-0 md:max-w-[min(42.5rem,calc(70vw-200px-(100vw-min(100vw,80rem))/2-3rem))]">
               <div
-                className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold mb-6"
+                className="inline-flex items-center gap-2 rounded-md px-3 py-1 text-xs font-semibold mb-6"
                 style={{ background: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)' }}
               >
                 <span style={{ width: 8, height: 8, background: '#4ade80', borderRadius: '50%', display: 'inline-block' }} />

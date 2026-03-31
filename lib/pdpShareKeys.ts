@@ -4,6 +4,7 @@
  */
 export const PDP_SHARE_KEYS = [
   'hero',
+  'commissioning-snapshot',
   'why-it-matters',
   'context-of-use',
   'scale-and-maturity',
@@ -61,6 +62,7 @@ export function normalizeAndValidateShareKeys(keys: unknown): string[] | null {
 /** Human labels for share modal, print, and shared-view summary (keep aligned with PDP). */
 export const PDP_SHARE_SECTION_LABELS: Record<PdpShareKey, string> = {
   hero: 'Product summary',
+  'commissioning-snapshot': 'Commissioning snapshot',
   'why-it-matters': 'Why it matters locally',
   'context-of-use': 'Context of use',
   'scale-and-maturity': 'Scale and maturity',

@@ -26,7 +26,7 @@ export function CollapsibleSection({
         <button
           type="button"
           onClick={() => setOpen(o => !o)}
-          className="flex-shrink-0 mt-1 px-2 py-1 text-xs font-semibold rounded-md border"
+          className="flex-shrink-0 mt-1 px-2 py-1 text-xs font-semibold rounded-md border transition-colors hover:bg-[#F7F9FC]"
           style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
           aria-expanded={open}
           aria-controls={panelId}
@@ -67,7 +67,7 @@ export function CollapsibleInline({
         <button
           type="button"
           onClick={() => setOpen(o => !o)}
-          className="flex-shrink-0 px-2 py-1 text-xs font-semibold rounded-md border"
+          className="flex-shrink-0 px-2 py-1 text-xs font-semibold rounded-md border transition-colors hover:bg-[#F7F9FC]"
           style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
           aria-expanded={open}
           aria-controls={panelId}

@@ -218,7 +218,7 @@
   "minimum_conditions_for_success": "CR referral pathway, initial clinical assessment capacity, patients with smartphone access.",
   "procurement_notes": "Contact DDM Health for NHS procurement options.",
   "content_confidence": "Confirmed",
-  "linked_funding_ids": [],
+  "linked_funding_ids": ["health-innovation-network"],
   "technical_integrations": {
     "fhir": "Information not available",
     "emis": "Information not available",

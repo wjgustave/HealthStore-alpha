@@ -20,7 +20,8 @@
     "self-management",
     "admissions-reduction"
   ],
-  "supervision_model": "non_continuous_review",
+  "supervision_model": "self_management_only",
+  "catalogue_demo_available": true,
   "referral_modes": [
     "clinician_referral",
     "self_referral"
@@ -341,7 +342,7 @@
   "procurement_notes": "G-Cloud and direct ICB procurement routes available. 3-year contract typical.",
   "content_confidence": "Confirmed",
   "cyber_notes": "Cyber Essentials held (annual renewal). ISO 27001 not confirmed in reviewed sources.",
-  "linked_funding_ids": ["nhse-copd-wave2", "nice-evidence-gen"],
+  "linked_funding_ids": ["nhse-copd-wave2"],
   "technical_integrations": {
     "fhir": "Not confirmed",
     "emis": "Not confirmed",

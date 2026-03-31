@@ -106,7 +106,7 @@ export default function SelectEntityForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-lg text-sm font-semibold text-white transition-colors disabled:opacity-60"
+                className="w-full py-3 rounded-lg text-sm font-semibold text-white transition-colors disabled:opacity-60 enabled:hover:!bg-[#004B8C]"
                 style={{ background: '#005EB8' }}
               >
                 {loading ? 'Continuing…' : 'Continue to store'}

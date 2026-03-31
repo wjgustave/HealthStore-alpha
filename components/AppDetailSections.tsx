@@ -8,7 +8,7 @@ import {
 } from '@/components/Badges'
 import enumsData from '@/content/common/enums.json'
 import ProductVideosSection from '@/components/ProductVideosSection'
-import { getLinkedFunding } from '@/lib/data'
+import { getCommissionerFacingFunding } from '@/lib/data'
 
 export function TechnicalIntegrationTable({ app }: { app: any }) {
   const ti = app.technical_integrations
@@ -290,7 +290,7 @@ export function formatPricingConfidence(raw: string | undefined): string | null 
   return map[raw] ?? raw.replace(/_/g, ' ')
 }
 
-function formatPricingModelDisplay(raw: string | undefined): string {
+export function formatPricingModelDisplay(raw: string | undefined): string {
   if (!raw || String(raw).trim() === '') return 'Information not available'
   const key = String(raw).trim()
   if (PRICING_MODEL_LABELS[key]) return PRICING_MODEL_LABELS[key]
@@ -450,7 +450,7 @@ export function IndicativeFinancialContextSection({ app }: { app: any }) {
 }
 
 export function RelatedFundingSection({ fundingIds }: { fundingIds: string[] }) {
-  const funding = getLinkedFunding(fundingIds)
+  const funding = getCommissionerFacingFunding(fundingIds)
   return (
     <div>
       {funding.length > 0 ? (
@@ -476,9 +476,10 @@ export function RelatedFundingSection({ fundingIds }: { fundingIds: string[] }) 
         </div>
       ) : (
         <p className="text-sm" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-          No linked funding entries for this product in the prototype. Browse the{' '}
+          No commissioner-facing cash or adoption-support schemes are linked to this product profile (supplier R&D routes
+          and NICE reporting obligations are listed elsewhere). Browse the{' '}
           <Link href="/funding" className="font-medium underline" style={{ color: 'var(--nhs-blue)' }}>funding directory</Link>
-          {' '}for current opportunities.
+          {' '}for wider opportunities.
         </p>
       )}
     </div>

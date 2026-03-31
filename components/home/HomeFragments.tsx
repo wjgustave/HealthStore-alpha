@@ -595,7 +595,7 @@ export function FundingSection({ openFunding }: Pick<HomeFragmentsProps, 'openFu
             Funding opportunities
           </h2>
           <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', margin: 0, maxWidth: '36rem' }}>
-            Open and periodic funding relevant to digital therapeutics commissioning.
+            Open and upcoming funding relevant to digital therapeutics commissioning.
           </p>
         </div>
         <Link href="/funding" className="text-sm font-semibold whitespace-nowrap text-[#005EB8] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2" style={{ outlineColor: '#005EB8' }}>

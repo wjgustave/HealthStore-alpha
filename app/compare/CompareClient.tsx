@@ -109,7 +109,7 @@ function CompareAppHeaderColumn({
       <button
         type="button"
         onClick={onRemove}
-        className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 z-10 w-8 h-8 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-colors hover:opacity-90 shadow-sm"
+        className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 z-10 w-8 h-8 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-colors hover:bg-[#fecaca] hover:opacity-100 shadow-sm"
         style={{ background: '#FEE2E2', color: '#DC2626' }}
         aria-label={`Remove ${app.app_name}`}
       >
@@ -199,7 +199,7 @@ export default function CompareClient({ allApps }: Props) {
             <button
               type="button"
               onClick={() => clear()}
-              className="self-start text-sm transition-colors hover:text-red-600 sm:shrink-0"
+              className="self-start text-sm rounded-md px-2 py-1 -mx-2 -my-1 transition-colors hover:bg-[#FEF2F2] hover:text-red-600 sm:shrink-0"
               style={{ color: 'var(--text-muted)' }}
             >
               Clear all

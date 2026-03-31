@@ -9,7 +9,7 @@
   "local_wraparound": ["low", "medium", "high"],
   "supervision_models": ["self_management_only", "guided_self_help", "non_continuous_review", "active_remote_management"],
   "supervision_labels": {
-    "self_management_only": "Self-management only",
+    "self_management_only": "Self-management",
     "guided_self_help": "Guided self-help",
     "non_continuous_review": "Non-continuous review",
     "active_remote_management": "Active remote management"

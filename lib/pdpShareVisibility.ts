@@ -10,6 +10,7 @@ import {
 export function sharedKeysWithVisibleContent(app: any, allowed: Set<string>): string[] {
   const k: string[] = []
   if (allowed.has('hero')) k.push('hero')
+  if (allowed.has('commissioning-snapshot')) k.push('commissioning-snapshot')
   if (allowed.has('why-it-matters')) k.push('why-it-matters')
   if (allowed.has('context-of-use') && app.context_of_use) k.push('context-of-use')
   if (allowed.has('scale-and-maturity')) k.push('scale-and-maturity')

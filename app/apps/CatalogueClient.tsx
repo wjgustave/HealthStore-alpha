@@ -4,15 +4,40 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { App } from '@/lib/data'
 import { STORE_ACCENT } from '@/lib/storeAccent'
-import { DtacBadge, MaturityBadge, EvidenceBadge, EffortBadge, SupervisionBadge, ConditionTag } from '@/components/Badges'
+import {
+  catalogueDemoAvailable,
+  getCataloguePriceLabel,
+  hasLinkedFunding,
+} from '@/lib/catalogueCardSignals'
+import { EvidenceBadge, SupervisionBadge, ConditionTag } from '@/components/Badges'
 import { CompareToggleButton } from '@/components/CompareToggleButton'
-import { X } from 'lucide-react'
+import { Check, X } from 'lucide-react'
+
+function CatalogueSignalDotRow({ tone, label }: { tone: 'green' | 'orange' | 'blue'; label: string }) {
+  const stroke =
+    tone === 'green' ? 'var(--nhs-green)' : tone === 'orange' ? 'var(--nhs-amber)' : 'var(--nhs-blue)'
+  return (
+    <div className="flex items-center gap-1 shrink-0 whitespace-nowrap">
+      <Check
+        className="shrink-0 w-3.5 h-3.5"
+        strokeWidth={3.25}
+        style={{ color: stroke }}
+        aria-hidden
+      />
+      <span
+        className="font-light leading-tight text-[12px] sm:text-[13px] lg:text-[14px]"
+        style={{ color: 'var(--text-muted)' }}
+      >
+        {label}
+      </span>
+    </div>
+  )
+}
 
 const supervisionOptions = [
   { id: 'all', label: 'All models' },
-  { id: 'self_management_only', label: 'Self-management only' },
+  { id: 'self_management_only', label: 'Self-management' },
   { id: 'guided_self_help', label: 'Guided self-help' },
-  { id: 'non_continuous_review', label: 'Non-continuous review' },
   { id: 'active_remote_management', label: 'Active remote management' },
 ]
 
@@ -67,10 +92,10 @@ function FilterSelect({ label, value, onChange, options }: {
 
 function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
+    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium"
       style={{ background: '#E6F0FB', color: '#003087' }}>
       {label}
-      <button type="button" onClick={onRemove} className="hover:opacity-70" aria-label={`Remove ${label} filter`}>
+      <button type="button" onClick={onRemove} className="rounded-sm p-0.5 transition-colors hover:bg-white/60 hover:opacity-90" aria-label={`Remove ${label} filter`}>
         <X className="w-3 h-3" />
       </button>
     </span>
@@ -147,7 +172,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                   setDtac('all')
                   setCondition('all')
                 }}
-                className="min-h-[44px] text-sm px-4 rounded-lg border"
+                className="min-h-[44px] text-sm px-4 rounded-lg border transition-colors hover:bg-[#F7F9FC] hover:border-[var(--text-muted-low-con)]"
                 style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
               >
                 Clear filters
@@ -196,8 +221,14 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
           <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>Try adjusting your filter criteria</div>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
-          {filtered.map((app: App) => (
+        <div
+          className="grid gap-5 [grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))] xl:[grid-template-columns:repeat(auto-fill,minmax(360px,1fr))] 2xl:[grid-template-columns:repeat(auto-fill,minmax(380px,1fr))]"
+        >
+          {filtered.map((app: App) => {
+            const priceLabel = getCataloguePriceLabel(app)
+            const showDemo = catalogueDemoAvailable(app)
+            const showFunding = hasLinkedFunding(app)
+            return (
             <div key={app.id} className="app-card rounded-xl bg-white border flex flex-col" style={{ borderColor: 'var(--border)' }}>
               <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: '0.75rem' }}>
@@ -232,41 +263,34 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                     <ConditionTag key={t} tag={t} />
                   ))}
                   <SupervisionBadge model={app.supervision_model} />
+                  <EvidenceBadge strength={app.evidence_strength} />
                 </div>
 
                 <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.55, flex: 1, marginBottom: '1rem' }}>
                   {app.one_line_value_proposition}
                 </p>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem 0.75rem', marginBottom: '1rem' }}>
-                  {[
-                    { label: 'Maturity', badge: <MaturityBadge level={app.maturity_level} /> },
-                    { label: 'Evidence', badge: <EvidenceBadge strength={app.evidence_strength} /> },
-                    { label: 'Local effort', badge: <EffortBadge level={app.local_wraparound} /> },
-                    { label: 'DTAC', badge: <DtacBadge status={app.dtac_status} /> },
-                  ].map(({ label, badge }) => (
-                    <div key={label} style={{ minWidth: 0 }}>
-                      <div
-                        style={{
-                          fontSize: 'var(--text-label)',
-                          fontWeight: 600,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.5px',
-                          color: 'var(--text-muted)',
-                          marginBottom: 3,
-                        }}
-                      >
-                        {label}
-                      </div>
-                      {badge}
+                {priceLabel || showDemo || showFunding ? (
+                  <>
+                    <div className="flex flex-row flex-wrap items-center gap-x-2 gap-y-1 mb-[10px] sm:mb-3 lg:mb-[15px] xl:flex-nowrap xl:gap-x-1.5 2xl:gap-x-2">
+                      {priceLabel ? <CatalogueSignalDotRow tone="green" label={priceLabel} /> : null}
+                      {showDemo ? <CatalogueSignalDotRow tone="orange" label="Demo available" /> : null}
+                      {showFunding ? <CatalogueSignalDotRow tone="blue" label="Funding linked" /> : null}
                     </div>
-                  ))}
-                </div>
+                    <div
+                      className="mb-[12px] sm:mb-4 lg:mb-5 border-t border-solid"
+                      style={{
+                        borderTopColor: 'color-mix(in srgb, var(--text-muted) 15%, var(--border))',
+                      }}
+                      aria-hidden
+                    />
+                  </>
+                ) : null}
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <Link
                     href={`/apps/${app.slug}`}
-                    className="rounded-lg py-4 text-sm font-semibold text-center block sm:col-span-2"
+                    className="rounded-lg py-4 text-sm font-semibold text-center block sm:col-span-2 transition-colors hover:!bg-[#004B8C]"
                     style={{ background: STORE_ACCENT, color: '#fff' }}
                   >
                     View details →
@@ -275,7 +299,8 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                 </div>
               </div>
             </div>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>
