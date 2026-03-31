@@ -52,9 +52,11 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
 
   const links = [
     { href: '/', label: 'Home' },
-    { href: '/apps', label: 'Browse apps' },
+    { href: '/apps', label: 'Find apps' },
     { href: '/funding', label: 'Funding' },
   ]
+
+  const browseAppsActive = path === '/apps' || path === '/apps/browse'
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' })
@@ -72,13 +74,16 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
             <span>HealthStore</span>
           </Link>
           <div className="hidden md:flex items-center gap-1">
-            {links.slice(0, 2).map(l => (
-              <Link key={l.href} href={l.href}
-                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-                style={{ color: path === l.href ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === l.href ? '#E6F0FB' : 'transparent' }}>
-                {l.label}
-              </Link>
-            ))}
+            {links.slice(0, 2).map(l => {
+              const active = l.href === '/apps' ? browseAppsActive : path === l.href
+              return (
+                <Link key={l.href} href={l.href}
+                  className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                  style={{ color: active ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: active ? '#E6F0FB' : 'transparent' }}>
+                  {l.label}
+                </Link>
+              )
+            })}
             <CompareNavLink path={path} className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors" />
             <Link href={links[2].href}
               className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
@@ -132,13 +137,16 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
       ) : null}
       {mobileOpen && (
         <div className="md:hidden border-t px-4 py-3 flex flex-col gap-1" style={{ borderColor: 'var(--border)', background: '#fff' }}>
-          {links.slice(0, 2).map(l => (
-            <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}
-              className="px-3 py-2 rounded-md text-sm font-medium"
-              style={{ color: path === l.href ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === l.href ? '#E6F0FB' : 'transparent' }}>
-              {l.label}
-            </Link>
-          ))}
+          {links.slice(0, 2).map(l => {
+            const active = l.href === '/apps' ? browseAppsActive : path === l.href
+            return (
+              <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}
+                className="px-3 py-2 rounded-md text-sm font-medium"
+                style={{ color: active ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: active ? '#E6F0FB' : 'transparent' }}>
+                {l.label}
+              </Link>
+            )
+          })}
           <CompareNavLink
             path={path}
             onNavigate={() => setMobileOpen(false)}

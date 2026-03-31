@@ -17,6 +17,7 @@ import {
 import { parseHomeVariant } from '@/lib/homeVariant'
 import ConceptStepsBand from '@/components/home/ConceptStepsBand'
 import HomeBelowHeroInteractive from '@/components/home/HomeBelowHeroInteractive'
+import HomeHeroSearch from '@/components/home/HomeHeroSearch'
 
 export default async function HomePage({ searchParams }: { searchParams: Promise<{ home?: string }> }) {
   const { home } = await searchParams
@@ -55,14 +56,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           style={{ paddingTop: '5rem', paddingBottom: '5rem' }}
         >
           <div className="grid grid-cols-1 gap-10">
-            <div className="min-w-0 md:max-w-[min(42.5rem,calc(70vw-200px-(100vw-min(100vw,80rem))/2-3rem))]">
-              <div
-                className="inline-flex items-center gap-2 rounded-md px-3 py-1 text-xs font-semibold mb-6"
-                style={{ background: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)' }}
-              >
-                <span style={{ width: 8, height: 8, background: '#4ade80', borderRadius: '50%', display: 'inline-block' }} />
-                Prototype — March 2026
-              </div>
+            <div className="min-w-0 md:max-w-[min(56rem,calc(70vw-200px-(100vw-min(100vw,80rem))/2-3rem))]">
               <h1
                 style={{
                   fontFamily: 'Frutiger, Arial, sans-serif',
@@ -75,21 +69,28 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
               >
                 {dash.hero.headline}
               </h1>
-              <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.82)', lineHeight: 1.7, marginBottom: '2rem' }}>
+              <p
+                className="text-pretty"
+                style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.82)', lineHeight: 1.7, marginBottom: '1.75rem' }}
+              >
                 {dash.hero.subheadline}
               </p>
-              <div className="flex flex-wrap gap-3">
-                <Link href="/apps" className="px-6 py-3 rounded-lg text-sm font-semibold" style={{ background: '#fff', color: '#003087' }}>
-                  Browse all {apps.length} apps
-                </Link>
+              <div className="mb-6">
                 <Link
-                  href="/funding"
-                  className="px-6 py-3 rounded-lg text-sm font-semibold border"
-                  style={{ borderColor: 'rgba(255,255,255,0.3)', color: '#fff' }}
+                  href="/apps"
+                  className="inline-flex min-h-[52px] items-center justify-center rounded-xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-95"
+                  style={{ background: '#fff', color: '#003087' }}
                 >
-                  View funding
+                  Find apps
                 </Link>
               </div>
+              <p
+                className="mb-2 text-base font-semibold"
+                style={{ color: 'rgba(255,255,255,0.92)' }}
+              >
+                Or search
+              </p>
+              <HomeHeroSearch />
             </div>
             <div className="relative mx-auto min-h-[14rem] w-full overflow-hidden rounded-xl md:hidden [clip-path:polygon(0_0,100%_0,100%_100%,0_100%)]">
               <Image

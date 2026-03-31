@@ -247,7 +247,7 @@ export default function CompareClient({ allApps }: Props) {
             No applications selected for comparison. Browse the catalogue and add applications to compare them side by side.
           </p>
           <Link
-            href="/apps"
+            href="/apps/browse"
             className="inline-flex items-center justify-center text-sm font-semibold rounded-lg px-5 py-3 min-h-[44px]"
             style={{ background: STORE_ACCENT, color: '#fff' }}
           >

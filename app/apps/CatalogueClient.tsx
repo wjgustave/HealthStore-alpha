@@ -1,7 +1,8 @@
 'use client'
-import { useState, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { evidenceLabels, type App } from '@/lib/data'
 import { STORE_ACCENT } from '@/lib/storeAccent'
 import {
@@ -12,6 +13,7 @@ import {
 import { EvidenceBadge, SupervisionBadge, ConditionTag } from '@/components/Badges'
 import { CompareToggleButton } from '@/components/CompareToggleButton'
 import { Check, X } from 'lucide-react'
+import { buildBrowseSearchParams, filterAppsBySearchQuery, parseBrowseConditionParam } from '@/lib/catalogueSearch'
 
 function CatalogueSignalDotRow({ tone, label }: { tone: 'green' | 'orange' | 'blue'; label: string }) {
   const stroke =
@@ -83,36 +85,124 @@ function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }
 }
 
 export default function CatalogueClient({ apps }: { apps: App[] }) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [supervision, setSupervision] = useState('all')
   const [evidence, setEvidence] = useState('all')
   const [condition, setCondition] = useState('all')
   const [demoOnly, setDemoOnly] = useState(false)
+  const [searchInput, setSearchInput] = useState('')
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const conditionRef = useRef(condition)
   const liveRegion = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    conditionRef.current = condition
+  }, [condition])
+
+  const replaceBrowseUrl = useCallback(
+    (nextCondition: string, nextQ: string) => {
+      const suffix = buildBrowseSearchParams(nextCondition, nextQ)
+      router.replace(`/apps/browse${suffix}`, { scroll: false })
+    },
+    [router],
+  )
+
+  useEffect(() => {
+    const c = parseBrowseConditionParam(searchParams.get('condition'))
+    const q = searchParams.get('q') ?? ''
+    setCondition(c)
+    setSearchInput(q)
+  }, [searchParams])
+
+  const scheduleUrlFromSearch = useCallback(
+    (q: string) => {
+      if (debounceTimer.current) clearTimeout(debounceTimer.current)
+      debounceTimer.current = setTimeout(() => {
+        replaceBrowseUrl(conditionRef.current, q)
+      }, 350)
+    },
+    [replaceBrowseUrl],
+  )
+
+  useEffect(() => () => {
+    if (debounceTimer.current) clearTimeout(debounceTimer.current)
+  }, [])
+
+  const onConditionChange = (v: string) => {
+    if (debounceTimer.current) clearTimeout(debounceTimer.current)
+    setCondition(v)
+    replaceBrowseUrl(v, searchInput)
+  }
+
+  const onSearchInputChange = (v: string) => {
+    setSearchInput(v)
+    scheduleUrlFromSearch(v)
+  }
+
+  const clearSearchOnly = () => {
+    if (debounceTimer.current) clearTimeout(debounceTimer.current)
+    setSearchInput('')
+    replaceBrowseUrl(condition, '')
+  }
 
   const activeFilters: { label: string; clear: () => void }[] = []
   if (supervision !== 'all') activeFilters.push({ label: supervisionOptions.find(o => o.id === supervision)!.label, clear: () => setSupervision('all') })
   if (evidence !== 'all') activeFilters.push({ label: evidenceOptions.find(o => o.id === evidence)!.label, clear: () => setEvidence('all') })
-  if (condition !== 'all') activeFilters.push({ label: conditionOptions.find(o => o.id === condition)!.label, clear: () => setCondition('all') })
+  if (condition !== 'all') activeFilters.push({ label: conditionOptions.find(o => o.id === condition)!.label, clear: () => {
+    setCondition('all')
+    replaceBrowseUrl('all', searchInput)
+  } })
   if (demoOnly) activeFilters.push({ label: 'Demo available', clear: () => setDemoOnly(false) })
+  if (searchInput.trim()) {
+    const st = searchInput.trim()
+    activeFilters.push({
+      label: `Search: “${st.length > 28 ? `${st.slice(0, 28)}…` : st}”`,
+      clear: clearSearchOnly,
+    })
+  }
 
-  const filtered = useMemo(() => {
-    const result = apps
-      .filter(app => {
-        if (supervision !== 'all' && app.supervision_model !== supervision) return false
-        if (evidence !== 'all' && app.evidence_strength !== evidence) return false
-        if (condition !== 'all' && !app.condition_tags.includes(condition)) return false
-        if (demoOnly && !catalogueDemoAvailable(app)) return false
-        return true
-      })
-      .sort((a, b) => a.app_name.localeCompare(b.app_name))
-
-    return result
+  const attrFiltered = useMemo(() => {
+    return apps.filter((app: App) => {
+      if (supervision !== 'all' && app.supervision_model !== supervision) return false
+      if (evidence !== 'all' && app.evidence_strength !== evidence) return false
+      if (condition !== 'all' && !app.condition_tags.includes(condition)) return false
+      if (demoOnly && !catalogueDemoAvailable(app)) return false
+      return true
+    })
   }, [apps, supervision, evidence, condition, demoOnly])
 
-  const resultText = `Showing ${filtered.length} of ${apps.length} apps`
+  const filtered = useMemo(
+    () => filterAppsBySearchQuery(attrFiltered, searchInput),
+    [attrFiltered, searchInput],
+  )
+
+  const filteredSorted = useMemo(
+    () => [...filtered].sort((a, b) => a.app_name.localeCompare(b.app_name)),
+    [filtered],
+  )
+
+  const resultText = `Showing ${filteredSorted.length} of ${apps.length} apps`
+
+  const hasAttrResults = attrFiltered.length > 0
+  const searchOnlyEmpty = hasAttrResults && filteredSorted.length === 0 && searchInput.trim().length > 0
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <nav aria-label="Breadcrumb" className="mb-4 text-sm">
+        <ol className="flex flex-wrap items-center gap-1.5" style={{ color: 'var(--text-muted)' }}>
+          <li>
+            <Link href="/apps" className="font-medium transition-colors hover:underline" style={{ color: '#005EB8' }}>
+              Browse apps
+            </Link>
+          </li>
+          <li aria-hidden>/</li>
+          <li style={{ color: 'var(--text-primary)' }} aria-current="page">
+            Digital therapeutics
+          </li>
+        </ol>
+      </nav>
+
       <div className="mb-8">
         <h1 className="page-title-h1">
           Browse digital therapeutics
@@ -122,57 +212,75 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
         </p>
       </div>
 
-      {/* Toolbar: result count + filters — full width above grid */}
       <div className="hs-surface-card rounded-xl bg-white border p-4 mb-4" style={{ borderColor: 'var(--border)' }}>
         <div className="flex flex-col gap-4">
           <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{resultText}</p>
-          <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:gap-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 flex-1 min-w-0">
-              <FilterSelect label="Condition" value={condition} onChange={setCondition} options={conditionOptions} />
-              <FilterSelect label="Supervision model" value={supervision} onChange={setSupervision} options={supervisionOptions} />
-              <FilterSelect label="Evidence level" value={evidence} onChange={setEvidence} options={evidenceOptions} />
+          <div className="flex flex-col gap-3">
+            <div>
+              <label htmlFor="catalogue-search" className="block font-semibold mb-1.5 uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
+                Search
+              </label>
+              <input
+                id="catalogue-search"
+                type="search"
+                value={searchInput}
+                onChange={e => onSearchInputChange(e.target.value)}
+                placeholder="Filter by app name, supplier, or condition"
+                className="w-full min-h-[44px] text-sm rounded-lg border px-3 py-2.5 bg-white"
+                style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
+                autoComplete="off"
+              />
             </div>
-            <div className="flex flex-wrap items-end gap-4 shrink-0 xl:ml-auto">
-              <div className="flex min-h-[44px] items-center gap-2.5">
-                <input
-                  id="catalogue-demo-only"
-                  type="checkbox"
-                  checked={demoOnly}
-                  onChange={e => setDemoOnly(e.target.checked)}
-                  className="h-4 w-4 shrink-0 rounded border accent-[#003087]"
-                  style={{ borderColor: 'var(--border)' }}
-                />
-                <label
-                  htmlFor="catalogue-demo-only"
-                  className="cursor-pointer select-none text-sm font-medium"
-                  style={{ color: 'var(--text-primary)' }}
-                >
-                  Demo available
-                </label>
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 flex-1 min-w-0">
+                <FilterSelect label="Condition" value={condition} onChange={onConditionChange} options={conditionOptions} />
+                <FilterSelect label="Supervision model" value={supervision} onChange={setSupervision} options={supervisionOptions} />
+                <FilterSelect label="Evidence level" value={evidence} onChange={setEvidence} options={evidenceOptions} />
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setSupervision('all')
-                  setEvidence('all')
-                  setCondition('all')
-                  setDemoOnly(false)
-                }}
-                className="min-h-[44px] text-sm px-4 rounded-lg border transition-colors hover:bg-[#F7F9FC] hover:border-[var(--text-muted-low-con)]"
-                style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
-              >
-                Clear filters
-              </button>
+              <div className="flex flex-wrap items-end gap-4 shrink-0 xl:ml-auto">
+                <div className="flex min-h-[44px] items-center gap-2.5">
+                  <input
+                    id="catalogue-demo-only"
+                    type="checkbox"
+                    checked={demoOnly}
+                    onChange={e => setDemoOnly(e.target.checked)}
+                    className="h-4 w-4 shrink-0 rounded border accent-[#003087]"
+                    style={{ borderColor: 'var(--border)' }}
+                  />
+                  <label
+                    htmlFor="catalogue-demo-only"
+                    className="cursor-pointer select-none text-sm font-medium"
+                    style={{ color: 'var(--text-primary)' }}
+                  >
+                    Demo available
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (debounceTimer.current) clearTimeout(debounceTimer.current)
+                    setSupervision('all')
+                    setEvidence('all')
+                    setCondition('all')
+                    setDemoOnly(false)
+                    setSearchInput('')
+                    router.replace('/apps/browse', { scroll: false })
+                  }}
+                  className="min-h-[44px] text-sm px-4 rounded-lg border transition-colors hover:bg-[#F7F9FC] hover:border-[var(--text-muted-low-con)]"
+                  style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
+                >
+                  Clear filters
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Active filter pills */}
       {activeFilters.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-4">
-          {activeFilters.map(f => (
-            <FilterPill key={f.label} label={f.label} onRemove={f.clear} />
+          {activeFilters.map((f, i) => (
+            <FilterPill key={`${i}-${f.label}`} label={f.label} onRemove={f.clear} />
           ))}
         </div>
       )}
@@ -181,19 +289,44 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
         {resultText}
       </div>
 
-      {filtered.length === 0 ? (
+      {filteredSorted.length === 0 ? (
         <div className="hs-surface-card text-center py-16 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
           <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }} aria-hidden>
             🔍
           </div>
-          <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>No apps match your filters</div>
-          <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>Try adjusting your filter criteria</div>
+          <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>
+            {searchOnlyEmpty ? 'No apps match your search' : 'No apps match your filters'}
+          </div>
+          <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', marginBottom: searchOnlyEmpty ? 16 : 0 }}>
+            {searchOnlyEmpty
+              ? 'Try different words, clear the search box, or browse all apps.'
+              : 'Try adjusting your filter criteria'}
+          </div>
+          {searchOnlyEmpty ? (
+            <div className="flex flex-wrap justify-center gap-3">
+              <button
+                type="button"
+                className="rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:!bg-[#004B8C]"
+                style={{ background: STORE_ACCENT }}
+                onClick={clearSearchOnly}
+              >
+                Clear search
+              </button>
+              <Link
+                href="/apps/browse"
+                className="inline-flex items-center rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-[#F7F9FC]"
+                style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
+              >
+                Browse all apps
+              </Link>
+            </div>
+          ) : null}
         </div>
       ) : (
         <div
           className="grid gap-5 [grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))] xl:[grid-template-columns:repeat(auto-fill,minmax(360px,1fr))] 2xl:[grid-template-columns:repeat(auto-fill,minmax(380px,1fr))]"
         >
-          {filtered.map((app: App) => {
+          {filteredSorted.map((app: App) => {
             const priceLabel = getCataloguePriceLabel(app)
             const showDemo = catalogueDemoAvailable(app)
             const showFunding = hasLinkedFunding(app)

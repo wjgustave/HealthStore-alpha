@@ -1,43 +1,26 @@
-import { getAllApps } from '@/lib/data'
-import CatalogueClient from './CatalogueClient'
-import { Suspense } from 'react'
+import { redirect } from 'next/navigation'
+import { getAllApps, getConditionAreas } from '@/lib/data'
+import AppsDiscoveryClient from './AppsDiscoveryClient'
 
-export const metadata = { title: 'Browse apps — HealthStore' }
-
-function CatalogueSkeleton() {
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-      <div className="mb-8">
-        <div style={{ height: 32, width: 280, background: 'var(--border)', borderRadius: 6, marginBottom: 8 }} />
-        <div style={{ height: 16, width: 200, background: 'var(--border)', borderRadius: 4 }} />
-      </div>
-      {/* Toolbar placeholder (matches full-width filter bar above grid) */}
-      <div className="rounded-xl border p-4 mb-4" style={{ borderColor: 'var(--border)', background: '#fff' }}>
-        <div style={{ height: 20, width: 220, background: 'var(--border)', borderRadius: 4, marginBottom: 16 }} />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} style={{ height: 72, background: 'var(--border)', borderRadius: 8, opacity: 0.45 }} />
-          ))}
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <div style={{ height: 44, width: 120, background: 'var(--border)', borderRadius: 8, opacity: 0.45 }} />
-          <div style={{ height: 44, width: 180, background: 'var(--border)', borderRadius: 8, opacity: 0.45 }} />
-        </div>
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
-        {[...Array(6)].map((_, i) => (
-          <div key={i} style={{ height: 240, background: 'var(--border)', borderRadius: 12, opacity: 0.4 }} />
-        ))}
-      </div>
-    </div>
-  )
+export const metadata = {
+  title: 'Browse apps — HealthStore',
+  description: 'Search or choose a condition to explore digital therapeutics in the HealthStore catalogue.',
 }
 
-export default function AppsPage() {
+export default async function AppsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ condition?: string; q?: string }>
+}) {
+  const sp = await searchParams
+  if (sp.condition || sp.q) {
+    const p = new URLSearchParams()
+    if (sp.condition) p.set('condition', sp.condition)
+    if (sp.q) p.set('q', sp.q)
+    redirect(`/apps/browse?${p.toString()}`)
+  }
+
+  const conditionAreas = getConditionAreas()
   const apps = getAllApps()
-  return (
-    <Suspense fallback={<CatalogueSkeleton />}>
-      <CatalogueClient apps={apps} />
-    </Suspense>
-  )
+  return <AppsDiscoveryClient conditionAreas={conditionAreas} apps={apps} totalAppCount={apps.length} />
 }
