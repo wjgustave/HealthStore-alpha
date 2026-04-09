@@ -231,6 +231,37 @@
   border-width: 0;
 }
 
+/* ── AI Advisor animations ── */
+
+.ai-thinking-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--nhs-blue);
+  animation: ai-think-pulse 1.4s ease-in-out infinite;
+}
+
+.ai-pulse-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nhs-blue);
+  opacity: 0.6;
+  animation: ai-dot-blink 1s ease-in-out infinite;
+}
+
+@keyframes ai-think-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+
+@keyframes ai-dot-blink {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

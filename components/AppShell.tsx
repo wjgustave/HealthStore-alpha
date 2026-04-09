@@ -20,6 +20,7 @@ export default function AppShell({
 }) {
   const pathname = usePathname()
   const isLoginPage = pathname === '/login'
+  const isAiPage = pathname === '/ai'
   /** Subheader only when logged in (login route renders no Nav here) */
   const icbSubheaderLabel = isLoggedIn && commissioningContextLabel ? commissioningContextLabel : ''
 
@@ -36,14 +37,16 @@ export default function AppShell({
   }
 
   return (
-    <>
+    <div className={isAiPage ? 'flex flex-col h-screen overflow-hidden' : ''}>
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <CompareBasketProvider allApps={allApps}>
         <Nav commissioningContextLabel={icbSubheaderLabel} />
-        <main id="main-content">{children}</main>
+        <main id="main-content" className={isAiPage ? 'flex-1 overflow-hidden' : ''}>
+          {children}
+        </main>
       </CompareBasketProvider>
-      <BackToTop />
-      <footer className="mt-20 border-t py-10 px-6" style={{ borderColor: 'var(--border)', background: '#fff' }}>
+      {!isAiPage && <BackToTop />}
+      {!isAiPage && <footer className="mt-20 border-t py-10 px-6" style={{ borderColor: 'var(--border)', background: '#fff' }}>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -59,7 +62,7 @@ export default function AppShell({
             <Link href="/funding" className="hover:underline">Funding</Link>
           </div>
         </div>
-      </footer>
-    </>
+      </footer>}
+    </div>
   )
 }

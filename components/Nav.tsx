@@ -3,7 +3,7 @@ import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { LogOut } from 'lucide-react'
+import { LogOut, BotMessageSquare } from 'lucide-react'
 import HomeHeroLayoutToggle from '@/components/home/HomeHeroLayoutToggle'
 import { useCompareBasket } from '@/components/CompareBasketProvider'
 
@@ -90,6 +90,12 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
               style={{ color: path === links[2].href ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === links[2].href ? '#E6F0FB' : 'transparent' }}>
               {links[2].label}
             </Link>
+            <Link href="/ai"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+              style={{ color: path === '/ai' ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === '/ai' ? '#E6F0FB' : 'transparent' }}>
+              <BotMessageSquare className="w-3.5 h-3.5" />
+              AI Advisor
+            </Link>
             <button onClick={handleLogout}
               className="ml-2 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors hover:bg-gray-100"
               style={{ color: 'var(--text-muted)' }}>
@@ -156,6 +162,12 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
             className="px-3 py-2 rounded-md text-sm font-medium"
             style={{ color: path === links[2].href ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === links[2].href ? '#E6F0FB' : 'transparent' }}>
             {links[2].label}
+          </Link>
+          <Link href="/ai" onClick={() => setMobileOpen(false)}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium"
+            style={{ color: path === '/ai' ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === '/ai' ? '#E6F0FB' : 'transparent' }}>
+            <BotMessageSquare className="w-3.5 h-3.5" />
+            AI Advisor
           </Link>
           <button onClick={handleLogout}
             className="px-3 py-2 rounded-md text-sm font-medium text-left flex items-center gap-1.5 transition-colors hover:bg-gray-100"
