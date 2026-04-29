@@ -253,6 +253,22 @@ export default function CompareClient({ allApps }: Props) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <nav aria-label="Breadcrumb" className="mb-6">
+        <ol className="m-0 flex list-none flex-wrap items-center gap-2 p-0 text-xs" style={{ color: 'var(--text-muted)' }}>
+          <li>
+            <Link href="/apps" className="hover:underline">
+              Browse apps
+            </Link>
+          </li>
+          <li aria-hidden className="select-none">
+            ›
+          </li>
+          <li style={{ color: 'var(--text-secondary)' }} aria-current="page">
+            Compare apps
+          </li>
+        </ol>
+      </nav>
+
       <div className="mb-8">
         <h1 className="page-title-h1">Compare apps</h1>
         <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>

@@ -7,6 +7,13 @@ export const metadata = { title: 'Compare apps — HealthStore' }
 function CompareSkeleton() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <div className="mb-6 flex items-center gap-2">
+        <div style={{ height: 14, width: 72, background: 'var(--border)', borderRadius: 4 }} aria-hidden />
+        <span className="text-xs text-[var(--text-muted)]" aria-hidden>
+          ›
+        </span>
+        <div style={{ height: 14, width: 88, background: 'var(--border)', borderRadius: 4 }} aria-hidden />
+      </div>
       <div className="mb-8">
         <div style={{ height: 36, width: 220, background: 'var(--border)', borderRadius: 6, marginBottom: 8 }} />
         <div style={{ height: 18, width: 360, background: 'var(--border)', borderRadius: 4 }} />
