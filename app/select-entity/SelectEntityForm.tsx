@@ -116,7 +116,7 @@ export default function SelectEntityForm() {
         </div>
 
         <p className="text-center text-xs mt-6" style={{ color: 'rgba(255,255,255,0.55)' }}>
-          Based on publicly available information as of March 2026.
+          Prototype based on publicly available information as of March 2026.
         </p>
       </div>
     </div>

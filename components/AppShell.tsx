@@ -51,7 +51,7 @@ export default function AppShell({
               <span className="badge badge-prototype">Prototype</span>
             </div>
             <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-              Based on publicly available information as of March 2026.
+              Prototype based on publicly available information as of March 2026.
             </p>
           </div>
           <div className="flex gap-6 text-xs" style={{ color: 'var(--text-muted)' }}>
