@@ -16,40 +16,44 @@ const STEPS = [
   },
 ] as const
 
-/** Step badge fills: NHS blue, NHS green, NHS purple — V2 concept band only. */
+/** Step badge fills: NHS blue, NHS green, NHS purple. */
 const STEP_BADGE_BG = ['#005EB8', '#007F3B', '#330072'] as const
 
 const fr = { fontFamily: 'Frutiger, Arial, sans-serif' } as const
 
-/** V2-only: replaces the stats strip; sits directly under the hero. */
+/** Three commissioning steps; sits below featured therapeutic band on V2 home (light surface). */
 export default function ConceptStepsBand() {
   return (
-    <section className="py-5 md:py-6" style={{ background: '#003087' }} aria-labelledby="concept-steps-heading">
-      <div className="mx-auto max-w-7xl px-6">
+    <section
+      className="rounded-2xl border bg-white py-10 shadow-sm md:py-12"
+      style={{ borderColor: 'var(--border)' }}
+      aria-labelledby="concept-steps-heading"
+    >
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
         <h2
           id="concept-steps-heading"
-          className="mb-4 text-center text-sm font-semibold md:mb-5 md:text-base"
-          style={{ ...fr, color: 'rgba(255,255,255,0.92)' }}
+          className="mb-8 max-w-3xl text-xl font-bold leading-snug md:text-2xl"
+          style={{ ...fr, color: 'var(--text-primary)' }}
         >
           Simple steps to building a commissioning business case
         </h2>
-        <div className="grid gap-3 md:grid-cols-3 md:gap-4">
+        <div className="grid gap-4 md:grid-cols-3 md:gap-6">
           {STEPS.map((item, index) => (
             <div
               key={item.step}
-              className="rounded-lg px-4 py-4 md:px-5 md:py-4"
-              style={{ background: 'rgba(0, 94, 184, 0.28)', border: '1px solid rgba(255,255,255,0.1)' }}
+              className="flex flex-col rounded-xl border bg-[#F7F9FC] px-5 py-5 md:px-6 md:py-5"
+              style={{ borderColor: 'var(--border)' }}
             >
               <div
-                className="mb-2.5 flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white md:h-9 md:w-9 md:text-sm"
+                className="mb-3 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white md:h-10 md:w-10 md:text-base"
                 style={{ background: STEP_BADGE_BG[index] }}
               >
                 {item.step}
               </div>
-              <h3 className="mb-1.5 text-sm font-bold text-white md:text-base" style={fr}>
+              <h3 className="mb-2 text-base font-bold md:text-lg" style={{ ...fr, color: 'var(--text-primary)' }}>
                 {item.title}
               </h3>
-              <p className="m-0 text-xs leading-relaxed md:text-sm" style={{ color: 'rgba(255,255,255,0.82)' }}>
+              <p className="m-0 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                 {item.description}
               </p>
             </div>

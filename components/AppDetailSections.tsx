@@ -8,6 +8,7 @@ import {
 } from '@/components/Badges'
 import enumsData from '@/content/common/enums.json'
 import ProductVideosSection from '@/components/ProductVideosSection'
+import { NamedSitesStructuredList, type NamedSiteRow } from '@/components/LiveSitesStructuredList'
 import { getCommissionerFacingFunding } from '@/lib/data'
 
 export function TechnicalIntegrationTable({ app }: { app: any }) {
@@ -62,6 +63,12 @@ export function TechnicalIntegrationTable({ app }: { app: any }) {
 }
 
 export function ScaleAndMaturitySection({ app }: { app: any }) {
+  const namedSitesRaw: NamedSiteRow[] = Array.isArray(app.named_sites) ? app.named_sites : []
+  const namedSites = namedSitesRaw.filter((s) => typeof s?.name === 'string' && s.name.trim().length > 0)
+  const hasStructuredNamedSites = namedSites.length > 0
+  const legacyLiveSites = typeof app.live_sites === 'string' ? app.live_sites.trim() : ''
+  const showLiveSitesRow = hasStructuredNamedSites || !!legacyLiveSites
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:flex-nowrap gap-3 mb-5">
@@ -81,14 +88,22 @@ export function ScaleAndMaturitySection({ app }: { app: any }) {
         </div>
       </div>
       <dl className="space-y-3 text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
-        <div>
-          <dt className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>ICB / ICS sites (reported)</dt>
-          <dd>{typeof app.live_icbs === 'number' ? `${app.live_icbs} ICB/ICS sites` : 'Information not available'}</dd>
-        </div>
-        {app.live_sites && (
+        {showLiveSitesRow && (
           <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Named sites</dt>
-            <dd style={{ lineHeight: 1.6 }}>{app.live_sites}</dd>
+            <dt className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Live sites</dt>
+            <dd className="overflow-visible" style={{ lineHeight: 1.6 }}>
+              {hasStructuredNamedSites ? (
+                <NamedSitesStructuredList rows={namedSites} />
+              ) : (
+                legacyLiveSites
+              )}
+            </dd>
+          </div>
+        )}
+        {app.evidence_strength_rationale && (
+          <div>
+            <dt className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Evidence overview</dt>
+            <dd className="text-sm" style={{ lineHeight: 1.6 }}>{app.evidence_strength_rationale}</dd>
           </div>
         )}
         {app.patients_covered_note && (
@@ -98,7 +113,7 @@ export function ScaleAndMaturitySection({ app }: { app: any }) {
           </div>
         )}
       </dl>
-      {app.deployments?.length > 0 && (
+      {app.deployments?.length > 0 && !hasStructuredNamedSites && (
         <>
           <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>Deployment footprint</div>
           <div className="space-y-0 divide-y" style={{ borderColor: 'var(--border)' }}>

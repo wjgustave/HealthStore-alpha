@@ -41,7 +41,7 @@ The product detail template (`app/apps/[slug]/page.tsx` and `components/AppDetai
 |---------|----------------------|
 | **Why it matters locally** | `why_it_matters_locally`, `sustainability_highlight` |
 | **Context of use** | `context_of_use` |
-| **Scale and maturity** | `maturity_level`, `evidence_strength`, `live_icbs`, `live_sites`, `patients_covered_note`, `deployments` |
+| **Scale and maturity** | `maturity_level`, `evidence_strength`, optional `evidence_strength_rationale`, **`named_sites`** (preferred PDP label **Live sites**), legacy `live_sites`, `patients_covered_note`, optional `deployments` (only shown when `named_sites` is absent). (`live_icbs` remains in JSON for compare / snippets — not shown on PDP Scale.) |
 | **What it takes locally** | `local_wraparound`, `local_wraparound_detail`, `onboarding_model`, `onboarding_detail`, `training_required`, `training_note`, `supplier_wrap`, `service_wrap_included`, `service_wrap_note`, `monitoring_note`, `escalation_note`, `operating_hours_caveat`, `implementation_prerequisites` |
 | **Expected impact and case studies** | `expected_benefit_note`, `case_studies` (shown whenever `case_studies` has entries — not gated on `clinical_evidence_detailed`) |
 | **Clinical evidence** | `evidence_summary`, `clinical_evidence_detailed` |
@@ -92,7 +92,8 @@ Below is the full JSON template with every field annotated. Fields marked **(req
   ],
 
   "evidence_summary": "Summary of the evidence base — RCTs, service evaluations, NICE assessments.",
-  "evidence_strength": "established",
+  "evidence_strength": "strong",
+  "evidence_strength_rationale": "Optional short prose shown under Evidence strength on the PDP (editorial overview aligned to Servita scoring).",
 
   "case_studies": [
     {
@@ -135,7 +136,11 @@ Below is the full JSON template with every field annotated. Fields marked **(req
   ],
 
   "maturity_level": "scaled",
-  "live_sites": "NHS Trust A, NHS Trust B",
+  "live_sites": "Optional legacy prose — use named_sites for structured listings.",
+  "named_sites": [
+    { "name": "NHS Trust A", "status": "active" },
+    { "name": "Example pilot trust", "status": "active" }
+  ],
   "live_icbs": 5,
   "patients_covered_note": "Number of patients or deployments.",
 
@@ -231,12 +236,15 @@ Below is the full JSON template with every field annotated. Fields marked **(req
 |-------|---------------|
 | `supervision_model` | `self_management_only`, `guided_self_help`, `non_continuous_review`, `active_remote_management` |
 | `maturity_level` | `scaled`, `multi_site_live`, `limited_live`, `pilot` |
-| `evidence_strength` | `established`, `promising`, `emerging`, `scaled` |
+| `evidence_strength` | `low`, `moderate`, `strong` |
 | `dtac_status` | `passed`, `passed_refresh_required`, `required_not_confirmed`, `not_applicable` |
 | `local_wraparound` | `low`, `medium`, `high` |
 | `content_confidence` | `Confirmed`, `Supplier-reported`, `Illustrative` |
 | `condition_tags` | Must match an `id` in `content/conditions/conditions.json` |
 | `clinical_evidence_detailed[].type` | `RCT`, `observational`, `service_eval`, `grey_lit`, `nice_assessment`, `real_world`, `implementation_science`, `evidence_gap` |
+| `named_sites[].status` | `active`, `decommissioned`, `unknown` — use `unknown` when deployment status is not evidenced in catalogue sources |
+
+**Live sites (`named_sites`):** Prefer an array of `{ "name": string, "status": ... }` rows for the PDP **Live sites** list (with Active / Decommissioned / Unknown indicators). **`live_sites`** remains supported as legacy free-text; if **`named_sites`** is non-empty, the PDP renders the structured list only (not both). Aggregate copy without discrete organisations may be modelled as a single row — commonly **`active`** when treated as current catalogue deployment scope; use **`unknown`** only when status genuinely cannot be classified. **`deployments`** (extended footprint metadata) renders only when **`named_sites`** is absent, to avoid duplicate lists. **Editorial note:** Use **`decommissioned`** when a site is evidenced as no longer live; prefer **`active`** for current deployments listed in the catalogue unless you need **`unknown`** for ambiguous cases. **PDP contact:** Each structured row has an info control with a **placeholder** email derived from the site `name` as `{slug}.pulmonary.sleep@nhs.net` (`lib/liveSiteContact.ts`); adjust slug logic there if editorial needs a different pattern.
 
 ---
 

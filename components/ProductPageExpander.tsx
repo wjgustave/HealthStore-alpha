@@ -77,7 +77,7 @@ export function ProductPageExpander({
   return (
     <section
       id={id}
-      className={`overflow-hidden rounded-xl border bg-white transition-shadow duration-200 ease-out ${effectiveOpen ? 'hs-surface-card' : 'hs-surface-card-sm'} ${hideForPrint ? 'pdp-share-excluded-print' : ''}`.trim()}
+      className={`overflow-visible rounded-xl border bg-white transition-shadow duration-200 ease-out ${effectiveOpen ? 'hs-surface-card' : 'hs-surface-card-sm'} ${hideForPrint ? 'pdp-share-excluded-print' : ''}`.trim()}
       style={{ borderColor: 'var(--border)' }}
     >
       <button

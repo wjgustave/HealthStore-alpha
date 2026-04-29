@@ -26,7 +26,7 @@ import type { ConceptFeaturedContent, ConceptGridContent } from '@/lib/conceptHo
 import type { HomeCampaignItem, HomeEvidenceSpotlight, HomeNewsItem } from '@/lib/homeContentTypes'
 import { isVisibleCondition } from '@/lib/visibleConditions'
 
-/** App JSON: `service_wrap_description` is preferred; `service_wrap_note` is legacy — PDP merges both for “Service wrap details”. */
+/** App JSON: `service_wrap_description` is preferred; `service_wrap_note` is legacy — PDP merges both for “Service wrap details”. Optional `named_sites`: `{ name, status: active|decommissioned|unknown }[]` for **Live sites** on PDP (info tooltip derives placeholder email via `lib/liveSiteContact.ts`); legacy `live_sites` string when structured rows absent. */
 export type App = any
 export type Funding = any
 export type Condition = any
@@ -59,7 +59,18 @@ const otherApps = otherAppsData as App[]
 const allAppsUnfiltered: App[] = [myCOPD, clinitouch, copdhub, luscii, sleepio, ...otherApps, jointAcademy, w8buddy, overcomingAnorexia, activateYourHeart, dReachHf, digitalHeartManual, groHealthHeartbuddy, kiactiv, myheart, pumpingMarvellous]
 
 export function getAllApps(): App[] {
-  return allAppsUnfiltered.filter((a: App) => a.condition_tags.some((t: string) => isVisibleCondition(t)))
+  return allAppsUnfiltered.filter((a: App) => {
+    const hasVisibleCondition = a.condition_tags.some((t: string) => isVisibleCondition(t))
+    if (!hasVisibleCondition) return false
+
+    const isCardiacRehabApp = a.condition_tags.includes('cardiac_rehab')
+    if (isCardiacRehabApp && a.slug !== 'myheart') return false
+
+    const isCopdApp = a.condition_tags.includes('copd')
+    if (isCopdApp && !['luscii', 'mycopd'].includes(a.slug)) return false
+
+    return true
+  })
 }
 
 export function getRemovedApps() {
@@ -101,8 +112,16 @@ export function getCommissionerFacingFunding(appFundingIds: string[]): Funding[]
   })
 }
 
+/**
+ * Every product loaded from JSON, ignoring catalogue visibility rules (COPD/CR slice, condition gates).
+ * Use for PDP resolution by slug and static generation so hidden/filtered apps share the same UI as visible ones.
+ */
+export function getAllAppsUnfiltered(): App[] {
+  return allAppsUnfiltered
+}
+
 export function getAppBySlug(slug: string): App | undefined {
-  return getAllApps().find((a: App) => a.slug === slug)
+  return allAppsUnfiltered.find((a: App) => a.slug === slug)
 }
 
 export function getAppsByCondition(conditionId: string): App[] {
@@ -143,13 +162,13 @@ export const supervisionLabels: Record<string, string> = {
   self_management_only: 'Self-management',
   guided_self_help: 'Guided self-help',
   non_continuous_review: 'Non-continuous review',
-  active_remote_management: 'Active remote management',
+  active_remote_management: 'Remote management',
 }
 
 export const maturityLabels: Record<string, string> = {
-  scaled: 'Scaled',
-  multi_site_live: 'Multi-site live',
-  limited_live: 'Limited live',
+  scaled: 'Established',
+  multi_site_live: 'Established',
+  limited_live: 'Emerging',
   pilot: 'Pilot',
 }
 
@@ -160,15 +179,14 @@ export const effortLabels: Record<string, string> = {
 }
 
 export const evidenceLabels: Record<string, string> = {
-  emerging: 'Emerging',
-  promising: 'Promising',
-  established: 'Established',
-  scaled: 'Scaled evidence',
+  strong: 'Strong',
+  moderate: 'Moderate',
+  low: 'Low',
 }
 
 export const dtacLabels: Record<string, string> = {
-  passed: 'Passed',
-  passed_refresh_required: 'Refresh required',
-  required_not_confirmed: 'Passed',
+  passed: 'Completed',
+  passed_refresh_required: 'Completed – refresh required',
+  required_not_confirmed: 'Not confirmed',
   not_applicable: 'N/A',
 }

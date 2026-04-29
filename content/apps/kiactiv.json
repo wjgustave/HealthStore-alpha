@@ -17,7 +17,8 @@
     { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — one of four platforms with direct CV event risk reduction evidence" }
   ],
   "evidence_summary": "RCT conducted with Liverpool University Hospitals NHS Foundation Trust, presented at ESC Congress Amsterdam and published in the European Heart Journal. Liverpool NHS CR pilot (17 patients) showed 1.10-2.92 MET CRF improvements, equating to 14-38% reductions in all-cause mortality. HF virtual ward pilot: 78% of patients improved everyday physical activity. NICE identifies KiActiv as one of four platforms with direct clinical evidence suggesting potential reduction in secondary CV event risk.",
-  "evidence_strength": "established",
+  "evidence_strength": "moderate",
+  "evidence_strength_rationale": "One UK open-label RCT plus a small before-after study. The RCT improved likelihood of meeting daily-activity recommendations, but fitness change was not statistically significant and follow-up was only 8 weeks.",
   "clinical_evidence_detailed": [
     {
       "id": "kiactiv-rct-esc",
@@ -247,6 +248,14 @@
   ],
   "maturity_level": "multi_site_live",
   "live_sites": "Liverpool University Hospitals NHS FT, Suffolk and North East Essex ICS, NHS Gloucestershire ICS, Wiltshire Health and Care, Bath Centre for Fatigue Services. Deployed across 13 NHS ICS regions.",
+  "named_sites": [
+    { "name": "Liverpool University Hospitals NHS FT", "status": "active" },
+    { "name": "Suffolk and North East Essex ICS", "status": "active" },
+    { "name": "NHS Gloucestershire ICS", "status": "active" },
+    { "name": "Wiltshire Health and Care", "status": "active" },
+    { "name": "Bath Centre for Fatigue Services", "status": "active" },
+    { "name": "Additional ICS regions (13 NHS ICS regions reported)", "status": "active" }
+  ],
   "live_icbs": 13,
   "patients_covered_note": "Deployed across 13 NHS ICS regions. Aggregate user numbers not publicly available.",
   "dtac_status": "required_not_confirmed",

@@ -20,9 +20,9 @@ export function MaturityBadge({ level }: { level: string }) {
 
 export function EvidenceBadge({ strength }: { strength: string }) {
   const label = evidenceLabels[strength] ?? strength
-  const cls = strength === 'established' ? 'badge-green'
-    : strength === 'promising' ? 'badge-blue'
-    : strength === 'scaled' ? 'badge-teal'
+  const cls = strength === 'strong' ? 'badge-green'
+    : strength === 'moderate' ? 'badge-blue'
+    : strength === 'low' ? 'badge-grey'
     : 'badge-grey'
   return <span className={`badge ${cls}`}>{label}</span>
 }

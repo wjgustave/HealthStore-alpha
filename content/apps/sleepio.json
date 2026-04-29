@@ -17,7 +17,8 @@
     { "ref": "NICE HTG624", "url": "https://www.nice.org.uk/guidance/htg624", "type": "HTG", "date": "2023", "note": "Migrated from MTG70" }
   ],
   "evidence_summary": "Multiple RCTs including the OASIS trial (n=1,711, general population, BMJ 2017). Formal NICE guidance via HTG624 (migrated from MTG70). Strong evidence base across general population, cancer, chronic pain and mental health comorbidity settings.",
-  "evidence_strength": "established",
+  "evidence_strength": "strong",
+  "evidence_strength_rationale": "Evidence rationale not yet aligned to Servita scoring document.",
   "case_studies": [
     {
       "title": "OASIS trial — large-scale general population RCT",
@@ -30,6 +31,10 @@
   ],
   "maturity_level": "scaled",
   "live_sites": "Multiple NHS trusts, national deployments internationally. Formally recommended by NICE.",
+  "named_sites": [
+    { "name": "Multiple NHS trusts (specific organisations not listed in catalogue)", "status": "active" },
+    { "name": "International deployments", "status": "active" }
+  ],
   "live_icbs": 10,
   "patients_covered_note": "Millions of users globally. Deployed across multiple NHS organisations since NICE MTG70 recommendation.",
   "dtac_status": "passed",

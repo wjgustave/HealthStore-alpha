@@ -54,7 +54,8 @@
     }
   ],
   "evidence_summary": "Two RCTs (RESCUE n=41, EARLY n=60), five real-world studies including NHS Grampian (n=64) and NHS Highland (n=113), and a NICE MTG68 health economics review. NICE MTG68 modelled \u00a386,297 cost saving per CCG for AECOPD (74% probability) and \u00a322,779 per CCG for PR (86% probability). Note: CCG-era model \u2014 recalculate using current ICB population sizes.",
-  "evidence_strength": "established",
+  "evidence_strength": "strong",
+  "evidence_strength_rationale": "NICE/EAG found multiple myCOPD RCTs, and the PR guidance says myCOPD had well-designed RCT evidence supporting digital-vs-face-to-face non-inferiority. Real-world NHS use is mixed but materially broad.",
   "case_studies": [
     {
       "title": "NHS Grampian \u2014 inhaler technique and admission reduction",
@@ -83,10 +84,19 @@
   ],
   "maturity_level": "scaled",
   "live_sites": "NHS Grampian, NHS Dorset ICS, NHS Highland, Kent Community Health NHS FT, Southend University Hospital, Portsmouth Hospitals NHS Trust, Jersey",
+  "named_sites": [
+    { "name": "NHS Grampian", "status": "active" },
+    { "name": "NHS Dorset ICS", "status": "active" },
+    { "name": "NHS Highland", "status": "active" },
+    { "name": "Kent Community Health NHS FT", "status": "active" },
+    { "name": "Southend University Hospital", "status": "active" },
+    { "name": "Portsmouth Hospitals NHS Trust", "status": "active" },
+    { "name": "Jersey", "status": "active" }
+  ],
   "live_icbs": 5,
   "patients_covered_note": "100,000+ patients across all my mhealth conditions globally. Multiple named NHS sites active.",
   "dtac_status": "passed_refresh_required",
-  "dtac_note": "Central DTAC pass is over 3 years old. Updated DTAC form (February 2026) applies from April 2026. Commissioning organisations must request the current form from my mhealth and complete local due diligence.",
+  "dtac_note": "Central DTAC completion is over 3 years old. Updated DTAC form (February 2026) applies from April 2026. Commissioning organisations must request the current form from my mhealth and complete local due diligence.",
   "device_class": "Class I SaMD",
   "dcb0129_status": "Confirmed",
   "dcb0160_boilerplate_available": true,

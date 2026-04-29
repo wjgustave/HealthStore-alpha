@@ -21,79 +21,97 @@ export function EvidenceCard({ study, accent }: { study: any; accent: string }) 
   ]
     .filter(Boolean)
     .join(' ')
+  const linkStyle = {
+    fontSize: 'var(--text-label)',
+    fontWeight: 500,
+    textDecoration: 'none',
+    whiteSpace: 'nowrap' as const,
+  }
+
   return (
     <div className={evidenceCardClass}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10, marginBottom: 8 }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 4 }}>
-            <span className={`badge ${TYPE_COLOURS[study.type] ?? 'badge-grey'}`}>
-              {TYPE_LABELS[study.type] ?? study.type}
-            </span>
-            {study.peer_reviewed && (
-              <span className="badge badge-green">Peer-reviewed</span>
-            )}
-            {study.coi && (
-              <span className="badge badge-amber">
-                <span aria-hidden>⚠ </span>COI declared
-              </span>
-            )}
-            {study.data_quality_flag && (
-              <span className="badge badge-amber">
-                <span aria-hidden>⚠ </span>Data quality flag
-              </span>
-            )}
-          </div>
-          <div style={{ fontWeight: 600, fontSize: 'var(--text-label)', color: 'var(--text-primary)', marginBottom: 2 }}>
-            {study.ref}
-          </div>
-          {study.authors && (
-            <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
-              {study.authors}
-              {study.journal && <span> · <em>{study.journal}</em></span>}
-              {study.year && <span> · {study.year}</span>}
-              {study.volume_issue && <span> · {study.volume_issue}</span>}
-            </div>
-          )}
+      {/* Full-width rows so title/authors are not squeezed beside link column */}
+      <div className="mb-2 flex flex-wrap items-center gap-2">
+        <span
+          className={`badge shrink-0 whitespace-nowrap ${TYPE_COLOURS[study.type] ?? 'badge-grey'}`}
+        >
+          {TYPE_LABELS[study.type] ?? study.type}
+        </span>
+        {study.peer_reviewed && (
+          <span className="badge badge-green whitespace-nowrap shrink-0">Peer-reviewed</span>
+        )}
+        {study.coi && (
+          <span className="badge badge-amber whitespace-nowrap shrink-0">
+            <span aria-hidden>⚠ </span>COI declared
+          </span>
+        )}
+        {study.data_quality_flag && (
+          <span className="badge badge-amber whitespace-nowrap shrink-0">
+            <span aria-hidden>⚠ </span>Data quality flag
+          </span>
+        )}
+      </div>
+
+      <div className="mb-3 min-w-0 w-full">
+        <div
+          style={{ fontWeight: 600, fontSize: 'var(--text-label)', color: 'var(--text-primary)', marginBottom: study.authors ? 4 : 0 }}
+        >
+          {study.ref}
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flexShrink: 0 }}>
+        {study.authors && (
+          <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
+            {study.authors}
+            {study.journal && (
+              <span>
+                {' '}
+                · <em>{study.journal}</em>
+              </span>
+            )}
+            {study.year && <span> · {study.year}</span>}
+            {study.volume_issue && <span> · {study.volume_issue}</span>}
+          </div>
+        )}
+      </div>
+
+      {(study.url_doi ||
+        study.url_pubmed ||
+        study.url_pmc ||
+        (study.url_full_text && !study.url_doi && !study.url_pubmed) ||
+        study.url_trial_reg ||
+        study.url_case_study) && (
+        <div className="mb-3 flex min-w-0 w-full flex-wrap gap-x-4 gap-y-2">
           {study.url_doi && (
-            <a href={study.url_doi} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            <a href={study.url_doi} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: accent }}>
               DOI ↗
             </a>
           )}
           {study.url_pubmed && (
-            <a href={study.url_pubmed} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            <a href={study.url_pubmed} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: accent }}>
               PubMed ↗
             </a>
           )}
           {study.url_pmc && (
-            <a href={study.url_pmc} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            <a href={study.url_pmc} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: accent }}>
               PMC (open) ↗
             </a>
           )}
           {study.url_full_text && !study.url_doi && !study.url_pubmed && (
-            <a href={study.url_full_text} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            <a href={study.url_full_text} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: accent }}>
               {study.source_label ?? 'Source ↗'}
             </a>
           )}
           {study.url_trial_reg && (
-            <a href={study.url_trial_reg} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            <a href={study.url_trial_reg} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: 'var(--text-muted)' }}>
               Trial reg ↗
             </a>
           )}
           {study.url_case_study && (
-            <a href={study.url_case_study} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 'var(--text-label)', color: accent, fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            <a href={study.url_case_study} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: accent }}>
               Case study ↗
             </a>
           )}
         </div>
-      </div>
+      )}
 
       {(study.doi || study.pmid || study.pmc || study.trial_reg || study.n) && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', fontSize: 'var(--text-label)', color: 'var(--text-muted)', marginBottom: 8, paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>

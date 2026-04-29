@@ -59,7 +59,7 @@ The main column renders sections in this order:
 | Section | JSON fields |
 |---------|-------------|
 | **Why it matters** | `why_it_matters_locally`, `sustainability_highlight` |
-| **Scale and maturity** | `maturity_level`, `evidence_strength`, `live_icbs`, `live_sites`, `patients_covered_note`, `deployments` |
+| **Scale and maturity** | `maturity_level`, `evidence_strength`, optional `evidence_strength_rationale` (Scale section copy), **`named_sites`** (PDP label **Live sites**; info icon + tooltip with derived placeholder contact email), legacy `live_sites`, `patients_covered_note`, optional `deployments` (shown only when `named_sites` is absent); `live_icbs` not shown on PDP (compare/snippets only) |
 | **What it takes locally** | `local_wraparound`, `local_wraparound_detail`, `onboarding_model`, `onboarding_detail`, `training_required`, `training_note`, `supplier_wrap`, `service_wrap_included`, `service_wrap_note`, `monitoring_note`, `escalation_note`, `operating_hours_caveat`, `implementation_prerequisites` |
 | **Expected impact** | `expected_benefit_note`, `case_studies` |
 | **Demo access** | `demo_notes`, `demo_variants` |
@@ -123,7 +123,7 @@ When changing PDP logic, verify:
 - [ ] `demo_notes` renders when present (even without `demo_variants`)
 - [ ] Express interest button opens modal (`data-express-interest`); CTA remains outside the collapsible section stack
 - [ ] Clinical evidence row has `id="clinical-evidence"`; `#clinical-evidence` opens the row
-- [ ] Commercial model and cost is **open** on first load; other sections **closed**; keyboard toggles via header button; chevron reflects state
+- [ ] **Live sites** shows structured **`named_sites`** rows with status labels when present; info icon tooltip + **`mailto:`** link use derived placeholder email; **`deployments`** footprint hidden when structured named sites exist
 - [ ] Indicative financial context is a single expander (no nested collapsible); `free_offer_flag` callout still shows inside Commercial body when true
 - [ ] **Share:** step 1 offers link vs PDF; PDF step shows checkboxes for visible blocks; partial selection prints only chosen regions; **Select all** + keyboard **Cmd/Ctrl+P** still print full page with all expanders open
 - [ ] **Share link path:** no section picker; copy works with feedback; user sees that the URL is still the **full** page for logged-in viewers

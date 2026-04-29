@@ -9,8 +9,8 @@ import {
   ConditionTag,
   DtacBadge,
   EffortBadge,
-  EvidenceBadge,
   MaturityBadge,
+  SupervisionBadge,
 } from '@/components/Badges'
 import { EditorialImage } from './EditorialImage'
 import { EditorialPillRow } from './EditorialPills'
@@ -23,6 +23,7 @@ import {
   RemovedAppsSection,
   type HomeFragmentsProps,
 } from './HomeFragments'
+import ConceptStepsBand from './ConceptStepsBand'
 import { OriginalBrowseByCondition } from './HomeLayoutOriginal'
 import { STORE_ACCENT } from '@/lib/storeAccent'
 
@@ -304,15 +305,15 @@ function FeaturedTherapeuticBand({
                   <div className="mb-4 grid grid-cols-2 gap-2 text-xs">
                     <div>
                       <div className="mb-0.5 font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
-                        Maturity
+                        Supervision
                       </div>
-                      <MaturityBadge level={app.maturity_level} />
+                      <SupervisionBadge model={app.supervision_model} />
                     </div>
                     <div>
                       <div className="mb-0.5 font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
-                        Evidence
+                        Deployment maturity
                       </div>
-                      <EvidenceBadge strength={app.evidence_strength} />
+                      <MaturityBadge level={app.maturity_level} />
                     </div>
                     <div>
                       <div className="mb-0.5 font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
@@ -392,6 +393,8 @@ export function HomeLayoutV4(props: HomeLayoutV4Props) {
       </div>
 
       <FeaturedTherapeuticBand concept={conceptFeatured} app={featuredApp} />
+
+      <ConceptStepsBand />
 
       <DatasetOverviewBand apps={rest.apps} conditions={rest.conditions} hideNiceGuidance />
       <ImpactSection dash={rest.dash} />

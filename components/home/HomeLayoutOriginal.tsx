@@ -6,8 +6,8 @@ import {
   ConditionTag,
   DtacBadge,
   EffortBadge,
-  EvidenceBadge,
   MaturityBadge,
+  SupervisionBadge,
 } from '@/components/Badges'
 import type { App } from '@/lib/data'
 import { STORE_ACCENT } from '@/lib/storeAccent'
@@ -171,13 +171,13 @@ function FeaturedAppsOriginal({ apps }: Pick<HomeFragmentsProps, 'apps'>) {
             <div className="mt-auto grid grid-cols-2 gap-2 border-t pt-3" style={{ borderColor: 'var(--border)' }}>
               <div>
                 <div className="mb-0.5 text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
-                  Evidence
+                  Supervision
                 </div>
-                <EvidenceBadge strength={app.evidence_strength} />
+                <SupervisionBadge model={app.supervision_model} />
               </div>
               <div>
                 <div className="mb-0.5 text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
-                  Maturity
+                  Deployment maturity
                 </div>
                 <MaturityBadge level={app.maturity_level} />
               </div>

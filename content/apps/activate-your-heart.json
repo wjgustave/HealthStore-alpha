@@ -17,7 +17,8 @@
     { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — digital platforms to support cardiac rehabilitation" }
   ],
   "evidence_summary": "Two RCTs evaluating exercise capacity, cardiovascular risk factors and health-related quality of life. One of four HTG764 platforms with direct clinical evidence suggesting potential reduction in secondary CV event risk. Pilot of 68 patients showed 90% would not have attended conventional CR. NICE EAG economic model found the platform cost-saving vs conventional rehabilitation.",
-  "evidence_strength": "established",
+  "evidence_strength": "moderate",
+  "evidence_strength_rationale": "Two UK RCTs plus one pilot were prioritised by NICE; the Devi RCT showed short-term physical-activity/QoL benefits. Follow-up was short, uptake/completion evidence varied, and implementation maturity did not reach 4.5.",
   "case_studies": [
     {
       "title": "Health Foundation Shine programme pilot",
@@ -30,6 +31,10 @@
   ],
   "maturity_level": "limited_live",
   "live_sites": "University Hospitals of Leicester NHS Trust, Leicestershire",
+  "named_sites": [
+    { "name": "University Hospitals of Leicester NHS Trust", "status": "active" },
+    { "name": "Leicestershire", "status": "active" }
+  ],
   "live_icbs": 1,
   "patients_covered_note": "Approximately 2,000 patients/year referred through the Leicester CR service overall. Platform-specific user numbers not publicly available.",
   "dtac_status": "required_not_confirmed",

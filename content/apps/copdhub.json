@@ -37,7 +37,8 @@
     }
   ],
   "evidence_summary": "Population-scale real-world evidence from 8-year NHS Wales national deployment (100% GP practice coverage). No standalone peer-reviewed RCT for COPDhub identified. Implementation science publication in Clinical Medicine (RCP) 2025 (Barry & Davies, PMC12395526). NICE HTE19 reviewed and recommended with conditions. ICST outcomes data shows 36% GP visit reduction and 19% A&E reduction among regular users.",
-  "evidence_strength": "promising",
+  "evidence_strength": "low",
+  "evidence_strength_rationale": "NICE recommends self-management use during evidence generation. Evidence is early: a retrospective case series had no comparator, and an addendum before-after Welsh winter comparison reported lower ED visits and steroid courses. No COPD RCT or robust controlled study was found.",
   "case_studies": [
     {
       "title": "NHS Wales national deployment \u2014 population-level outcomes",
@@ -58,10 +59,16 @@
   ],
   "maturity_level": "scaled",
   "live_sites": "NHS Wales (national \u2014 100% GP practices), West Yorkshire ICB, NHS England expansion in progress, Hong Kong (Long COVID programme)",
+  "named_sites": [
+    { "name": "NHS Wales (national — 100% GP practices)", "status": "active" },
+    { "name": "West Yorkshire ICB", "status": "active" },
+    { "name": "NHS England expansion", "status": "active" },
+    { "name": "Hong Kong (Long COVID programme)", "status": "active" }
+  ],
   "live_icbs": 2,
   "patients_covered_note": "20,000+ downloads in Wales. 99% of Welsh GP practices have patients using ICST respiratory app. NHS England expansion scope not publicly confirmed.",
   "dtac_status": "required_not_confirmed",
-  "dtac_note": "DTAC required for NHS commissioning. COPDhub-specific central DTAC pass not confirmed in reviewed public sources. Commissioners must request the DTAC form from ICST and complete local assessment.",
+  "dtac_note": "DTAC required for NHS commissioning. COPDhub-specific central DTAC completion not confirmed in reviewed public sources. Commissioners must request the DTAC form from ICST and complete local assessment.",
   "device_class": "Class I SaMD",
   "dcb0129_status": "Required \u2014 confirm with ICST",
   "dcb0160_boilerplate_available": true,

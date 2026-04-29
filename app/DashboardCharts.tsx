@@ -1,8 +1,7 @@
 'use client'
 
-const maturityLabels: Record<string, string> = {
-  scaled: 'Scaled', multi_site_live: 'Multi-site live', limited_live: 'Limited live', pilot: 'Pilot',
-}
+import { maturityLabels } from '@/lib/data'
+
 const maturityColours: Record<string, string> = {
   scaled: '#007F3B', multi_site_live: '#005EB8', limited_live: '#D5840D', pilot: '#768692',
 }

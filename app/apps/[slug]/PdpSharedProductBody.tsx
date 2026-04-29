@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import {
-  DtacBadge, MaturityBadge, EvidenceBadge, EffortBadge,
+  DtacBadge, MaturityBadge, EffortBadge,
   SupervisionBadge, NiceTypeBadge, ConditionTag,
 } from '@/components/Badges'
 import { STORE_ACCENT } from '@/lib/storeAccent'
@@ -67,7 +67,7 @@ export default function PdpSharedProductBody({
                     <ConditionTag key={t} tag={t} />
                   ))}
                   <SupervisionBadge model={app.supervision_model} />
-                  <EvidenceBadge strength={app.evidence_strength} />
+                  <MaturityBadge level={app.maturity_level} />
                   {app.nice_guidance_refs
                     .filter((r: any) => r.type !== 'EVA' && r.type !== 'MTG')
                     .map((r: any) => (
@@ -387,12 +387,6 @@ export default function PdpSharedProductBody({
                     Maturity
                   </div>
                   <MaturityBadge level={app.maturity_level} />
-                </div>
-                <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
-                    Evidence strength
-                  </div>
-                  <EvidenceBadge strength={app.evidence_strength} />
                 </div>
                 <div>
                   <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>

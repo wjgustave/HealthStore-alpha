@@ -1,11 +1,11 @@
-import { getAllApps, getAppBySlug, getCommissionerFacingFunding, getLinkedFunding } from '@/lib/data'
+import { getAllAppsUnfiltered, getAppBySlug, getCommissionerFacingFunding, getLinkedFunding } from '@/lib/data'
 import { getCommissioningSnapshot } from '@/lib/commissioningSnapshot'
 import { PdpCommissioningSnapshot } from '@/components/PdpCommissioningSnapshot'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
-  DtacBadge, MaturityBadge, EvidenceBadge, EffortBadge,
+  DtacBadge, MaturityBadge, EffortBadge,
   SupervisionBadge, NiceTypeBadge, AlertBox, ConditionTag
 } from '@/components/Badges'
 import AppDetailClient from './AppDetailClient'
@@ -32,7 +32,7 @@ import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges, ProductHeroDemoBa
 import { ExpressInterestWhiteButton } from '@/components/ExpressInterestWhiteButton'
 
 export async function generateStaticParams() {
-  return getAllApps().map(a => ({ slug: a.slug }))
+  return getAllAppsUnfiltered().map(a => ({ slug: a.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -96,7 +96,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 <div className="flex flex-wrap gap-2 mb-3">
                   {app.condition_tags.map((t: string) => <ConditionTag key={t} tag={t} />)}
                   <SupervisionBadge model={app.supervision_model} />
-                  <EvidenceBadge strength={app.evidence_strength} />
+                  <MaturityBadge level={app.maturity_level} />
                   {app.nice_guidance_refs
                     .filter((r: any) => r.type !== 'EVA' && r.type !== 'MTG')
                     .map((r: any) => (
@@ -386,10 +386,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 <div>
                   <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Maturity</div>
                   <MaturityBadge level={app.maturity_level} />
-                </div>
-                <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Evidence strength</div>
-                  <EvidenceBadge strength={app.evidence_strength} />
                 </div>
                 <div>
                   <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Local effort</div>

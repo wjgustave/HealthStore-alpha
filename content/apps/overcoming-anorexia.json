@@ -18,10 +18,14 @@
     { "ref": "NICE NG69", "url": "https://www.nice.org.uk/guidance/ng69", "type": "NG", "date": "2017", "note": "Eating disorders guideline" }
   ],
   "evidence_summary": "NICE HTG768 recommendation during evidence generation. CBT-based guided self-help with clinical evidence base. Strict pathway controls and clinical inclusion/exclusion criteria are essential — NICE guidance specifies conditions of use.",
-  "evidence_strength": "emerging",
+  "evidence_strength": "low",
+  "evidence_strength_rationale": "Evidence rationale not yet aligned to Servita scoring document.",
   "case_studies": [],
   "maturity_level": "pilot",
   "live_sites": "Limited NHS eating disorder services — pilot deployments",
+  "named_sites": [
+    { "name": "Limited NHS eating disorder services — pilot deployments (sites not listed in catalogue)", "status": "active" }
+  ],
   "live_icbs": 1,
   "patients_covered_note": "Very limited NHS deployment at present. Evidence generation in early stages.",
   "dtac_status": "passed",

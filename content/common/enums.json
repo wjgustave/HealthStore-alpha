@@ -2,9 +2,9 @@
   "maturity_levels": ["pilot", "limited_live", "multi_site_live", "scaled"],
   "maturity_labels": {
     "pilot": "Pilot",
-    "limited_live": "Limited live",
-    "multi_site_live": "Multi-site live",
-    "scaled": "Scaled"
+    "limited_live": "Emerging",
+    "multi_site_live": "Established",
+    "scaled": "Established"
   },
   "local_wraparound": ["low", "medium", "high"],
   "supervision_models": ["self_management_only", "guided_self_help", "non_continuous_review", "active_remote_management"],
@@ -12,7 +12,7 @@
     "self_management_only": "Self-management",
     "guided_self_help": "Guided self-help",
     "non_continuous_review": "Non-continuous review",
-    "active_remote_management": "Active remote management"
+    "active_remote_management": "Remote management"
   },
   "referral_modes": ["self_referral", "clinician_referral", "hybrid"],
   "referral_labels": {
@@ -26,17 +26,16 @@
     "light_touch": "Light-touch",
     "clinician_led": "Clinician-led"
   },
-  "evidence_strength": ["emerging", "promising", "established", "scaled"],
+  "evidence_strength": ["low", "moderate", "strong"],
   "evidence_labels": {
-    "emerging": "Emerging",
-    "promising": "Promising",
-    "established": "Established",
-    "scaled": "Scaled evidence"
+    "low": "Low",
+    "moderate": "Moderate",
+    "strong": "Strong"
   },
   "dtac_statuses": ["passed", "passed_refresh_required", "required_not_confirmed", "not_applicable"],
   "dtac_labels": {
-    "passed": "DTAC Passed",
-    "passed_refresh_required": "DTAC Passed – refresh required",
+    "passed": "DTAC Completed",
+    "passed_refresh_required": "DTAC Completed – refresh required",
     "required_not_confirmed": "DTAC required – not confirmed",
     "not_applicable": "N/A"
   },

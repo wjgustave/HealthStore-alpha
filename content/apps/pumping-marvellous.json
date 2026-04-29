@@ -17,7 +17,8 @@
     { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — moved from 'research only' (Aug 2025 draft) to recommended (Dec 2025 final)" }
   ],
   "evidence_summary": "Service evaluation: Sankaranarayanan et al. (2025, medRxiv preprint), n=673 registrants (Aug 2024 - Jul 2025). 63% women, one-third from top 20 most deprived English cities. Referral sources: ~30% from HF/CR teams, 29% via social media, ~25% from PMF groups, 4% from GPs. NICE noted clinical evidence for the platform is uncertain, but clinical and financial risk judged low. Designed using evidence-based NHS programmes for heart failure.",
-  "evidence_strength": "emerging",
+  "evidence_strength": "low",
+  "evidence_strength_rationale": "No direct clinical-effectiveness evidence, RCT or controlled study. NICE included it because risk/cost was low and it may widen heart-failure rehab access; use may grow because there is no licence fee.",
   "clinical_evidence_detailed": [
     {
       "id": "sankaranarayanan-2025-preprint",
@@ -177,6 +178,9 @@
   ],
   "maturity_level": "limited_live",
   "live_sites": "UK-wide, free access. 673 registrants in first year (launched August 2024).",
+  "named_sites": [
+    { "name": "UK-wide programme (free access)", "status": "active" }
+  ],
   "live_icbs": 0,
   "patients_covered_note": "673 registrants in first year (Aug 2024 - Jul 2025). Platform is free and open access — not contracted to specific NHS trusts.",
   "dtac_status": "required_not_confirmed",

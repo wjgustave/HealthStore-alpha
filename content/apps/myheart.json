@@ -10,14 +10,15 @@
   "outcome_tags": ["self-management", "quality-of-life", "exercise-capacity", "cr-uptake"],
   "supervision_model": "self_management_only",
   "referral_modes": ["clinician_referral"],
-  "one_line_value_proposition": "NICE HTG764-recommended cardiac rehabilitation app from the makers of myCOPD — over 20,800 UK users, DTAC passed, with the Dorset County Hospital case study showing 70% CR uptake (surpassing the 2028 NHS target).",
-  "why_it_matters_locally": "myHeart has the largest documented NHS deployment among HTG764-recommended platforms, with over 20,800 UK users since 2018. The Dorset County Hospital case study demonstrated 70% CR uptake — surpassing the 2028 NHS Long-Term Plan target. Built on the my mhealth platform (which also powers myCOPD), it benefits from an established NHS relationship and DTAC approval.",
+  "one_line_value_proposition": "NICE HTG764-recommended cardiac rehabilitation app from the makers of myCOPD — over 20,800 UK users, DTAC completed, with the Dorset County Hospital case study showing 70% CR uptake (surpassing the 2028 NHS target).",
+  "why_it_matters_locally": "myHeart has the largest documented NHS deployment among HTG764-recommended platforms, with over 20,800 UK users since 2018. The Dorset County Hospital case study demonstrated 70% CR uptake — surpassing the 2028 NHS Long-Term Plan target. Built on the my mhealth platform (which also powers myCOPD), it benefits from an established NHS relationship and DTAC completion.",
   "target_problem_statement": "Low national CR uptake rates, limited capacity for home-based CR delivery, and the 2028 NHS Long-Term Plan target to increase CR uptake to 85%.",
   "nice_guidance_refs": [
     { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — one of four platforms with direct clinical evidence" }
   ],
   "evidence_summary": "Large real-world evidence base: UH Derby & Burton evaluation (721 patients) showed significantly lower drop-out rates with myHeart vs without. COVID-19 multi-site evaluation (5 NHS services): 89.7% of users accessed CR videos, 99.7% within first 6 weeks. Dorset County Hospital: 70% CR uptake achieved, surpassing 2028 NHS target. CUOREMA Eurostars Grant (€2.5M) for international research collaboration. NICE identifies myHeart as one of four platforms with direct clinical evidence.",
-  "evidence_strength": "established",
+  "evidence_strength": "moderate",
+  "evidence_strength_rationale": "NICE identified one small UK three-way RCT and a 434-person real-world evaluation. Evidence supports NICE evidence generation, but the RCT is small, some evidence is observational/conference-based.",
   "clinical_evidence_detailed": [
     {
       "id": "uh-derby-burton-eval",
@@ -282,17 +283,23 @@
   ],
   "maturity_level": "scaled",
   "live_sites": "Dorset County Hospital NHSFT, Leeds Community Healthcare NHS Trust, University Hospitals of Derby and Burton NHSFT, multiple NHS secondary care CR services.",
+  "named_sites": [
+    { "name": "Dorset County Hospital NHSFT", "status": "active" },
+    { "name": "Leeds Community Healthcare NHS Trust", "status": "active" },
+    { "name": "University Hospitals of Derby and Burton NHSFT", "status": "active" },
+    { "name": "Additional NHS secondary care cardiac rehabilitation services", "status": "active" }
+  ],
   "live_icbs": 5,
   "patients_covered_note": "Over 20,800 myHeart users in the UK. In use since 2018/2019. 275,000+ rehabilitation/education sessions delivered in 2020 across the mymhealth platform.",
   "dtac_status": "passed_refresh_required",
-  "dtac_note": "my mhealth platform centrally DTAC assessed and passed. Refresh required. QISMET accredited.",
+  "dtac_note": "my mhealth platform centrally DTAC assessed and completed. Refresh required. QISMET accredited.",
   "device_class": "Class I SaMD",
   "dcb0129_status": "Covered by mymhealth platform",
   "dcb0160_boilerplate_available": true,
   "dspt_status": "Covered by mymhealth platform",
   "iso27001": "Information not available",
   "cyber_essentials": "Information not available",
-  "cyber_notes": "DTAC passed, QISMET accredited. Confirm current security certifications with my mhealth.",
+  "cyber_notes": "DTAC completed, QISMET accredited. Confirm current security certifications with my mhealth.",
   "gdpr_note": "Confirm data hosting and DPA terms with my mhealth Limited.",
   "target_patients": "Adults with heart failure, post-cardiac event, or post-cardiac surgery requiring cardiac rehabilitation.",
   "exclusions": "CR team assessment required. Confirm clinical exclusion criteria with my mhealth.",
@@ -357,5 +364,5 @@
   "supplier_contact_name": "my mhealth NHS team",
   "last_reviewed_date": "2026-03-18",
   "source_summary": "NICE HTG764, UH Derby & Burton evaluation, Dorset County Hospital case study, mymhealth.com/studies, CUOREMA Eurostars announcement.",
-  "confidence_note": "myHeart has the largest documented NHS deployment among HTG764 platforms. DTAC passed (refresh required). Verify current assurance and pricing with my mhealth before procurement."
+  "confidence_note": "myHeart has the largest documented NHS deployment among HTG764 platforms. DTAC completed (refresh required). Verify current assurance and pricing with my mhealth before procurement."
 }

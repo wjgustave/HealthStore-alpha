@@ -10,14 +10,15 @@
   "outcome_tags": ["cv-risk-reduction", "self-management", "behaviour-change", "quality-of-life"],
   "supervision_model": "self_management_only",
   "referral_modes": ["clinician_referral"],
-  "one_line_value_proposition": "NICE HTG764-recommended app-based cardiac rehabilitation platform from DDM Health — one of four platforms with direct CV event risk reduction evidence, DTAC passed, ORCHA 97% rated, and CE marked as a medical device.",
-  "why_it_matters_locally": "HeartBuddy is a mobile app offering personalised education, exercise programmes, health tracking and psychosocial support across multiple cardiac conditions. Built on the broader Gro Health platform which is already NICE-recommended for weight management and DTAC-approved, it provides a mature technical foundation with strong assurance credentials.",
-  "target_problem_statement": "Low CR uptake, limited access to personalised cardiac rehabilitation across heart failure, post-MI and AF pathways, and need for a DTAC-approved digital CR option.",
+  "one_line_value_proposition": "NICE HTG764-recommended app-based cardiac rehabilitation platform from DDM Health — one of four platforms with direct CV event risk reduction evidence, DTAC completed, ORCHA 97% rated, and CE marked as a medical device.",
+  "why_it_matters_locally": "HeartBuddy is a mobile app offering personalised education, exercise programmes, health tracking and psychosocial support across multiple cardiac conditions. Built on the broader Gro Health platform which is already NICE-recommended for weight management and has DTAC completion, it provides a mature technical foundation with strong assurance credentials.",
+  "target_problem_statement": "Low CR uptake, limited access to personalised cardiac rehabilitation across heart failure, post-MI and AF pathways, and need for a digital CR option with DTAC completion.",
   "nice_guidance_refs": [
     { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — one of four platforms with direct clinical evidence" }
   ],
   "evidence_summary": "One study identified by NICE evaluating HeartBuddy for cardiac rehabilitation. NICE identifies it as one of four platforms with direct clinical evidence suggesting potential reduction in secondary CV event risk. Five additional research studies reportedly underway. The broader Gro Health platform is separately NICE-recommended for weight management.",
-  "evidence_strength": "promising",
+  "evidence_strength": "low",
+  "evidence_strength_rationale": "NICE prioritised one UK real-world service evaluation, not an RCT or controlled study. Engagement/follow-up looked promising, but evidence remains early/submitted, short-term and weakly comparative.",
   "clinical_evidence_detailed": [
     {
       "id": "nice-htg764-heartbuddy",
@@ -99,7 +100,7 @@
       "url_case_study": null,
       "n": null,
       "setting": "Multiple NHS organisations — diabetes and weight management",
-      "key_results": "Broader Gro Health platform separately NICE-recommended for weight management, demonstrating platform maturity and NHS adoption. ORCHA rating 97% (highest-ever rated health app). DTAC passed with 100% on usability and accessibility.",
+      "key_results": "Broader Gro Health platform separately NICE-recommended for weight management, demonstrating platform maturity and NHS adoption. ORCHA rating 97% (highest-ever rated health app). DTAC completed with 100% on usability and accessibility.",
       "study_limitation": "Weight management evidence is for the broader Gro Health platform, not HeartBuddy cardiac rehab specifically. Not directly transferable to cardiac rehabilitation outcomes.",
       "peer_reviewed": false,
       "coi": false,
@@ -170,10 +171,14 @@
   "case_studies": [],
   "maturity_level": "limited_live",
   "live_sites": "Gro Health platform used across multiple NHS organisations for diabetes and weight management. HeartBuddy-specific deployment sites not publicly confirmed.",
+  "named_sites": [
+    { "name": "Gro Health platform (multiple NHS organisations — diabetes/weight)", "status": "active" },
+    { "name": "HeartBuddy cardiac rehab module — discrete NHS sites not publicly confirmed", "status": "active" }
+  ],
   "live_icbs": 0,
   "patients_covered_note": "Gro Health platform deployed across NHS. HeartBuddy-specific cardiac rehab user numbers not publicly available.",
   "dtac_status": "passed_refresh_required",
-  "dtac_note": "Gro Health platform centrally DTAC assessed and passed — scored 100% on usability and accessibility. Refresh required.",
+  "dtac_note": "Gro Health platform centrally DTAC assessed and completed — scored 100% on usability and accessibility. Refresh required.",
   "device_class": "Class I SaMD",
   "dcb0129_status": "Compliant (DSCN 14/2009, DCB0129, DCB0160)",
   "dcb0160_boilerplate_available": true,
@@ -242,5 +247,5 @@
   "supplier_contact_name": "DDM Health",
   "last_reviewed_date": "2026-03-18",
   "source_summary": "NICE HTG764, DDM Health website, ORCHA rating, DTAC certification announcement.",
-  "confidence_note": "DTAC passed (refresh required). CE marked medical device. HeartBuddy-specific cardiac rehab evidence is emerging. Verify all details with DDM Health before procurement."
+  "confidence_note": "DTAC completed (refresh required). CE marked medical device. HeartBuddy-specific cardiac rehab evidence is emerging. Verify all details with DDM Health before procurement."
 }

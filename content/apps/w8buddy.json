@@ -18,10 +18,14 @@
     { "ref": "NICE CG189", "url": "https://www.nice.org.uk/guidance/cg189", "type": "CG", "date": "2014", "note": "Obesity management guideline" }
   ],
   "evidence_summary": "NICE HTG700 recommendation. Evidence supporting digital multidisciplinary weight management including behavioural change and nutritional support.",
-  "evidence_strength": "promising",
+  "evidence_strength": "moderate",
+  "evidence_strength_rationale": "Evidence rationale not yet aligned to Servita scoring document.",
   "case_studies": [],
   "maturity_level": "limited_live",
   "live_sites": "Limited NHS deployments",
+  "named_sites": [
+    { "name": "Limited NHS deployments (specific trusts not listed in catalogue)", "status": "active" }
+  ],
   "live_icbs": 2,
   "patients_covered_note": "Early-stage NHS deployment. Evidence generation in progress.",
   "dtac_status": "passed",

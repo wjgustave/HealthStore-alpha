@@ -36,7 +36,8 @@
     }
   ],
   "evidence_summary": "Two peer-reviewed observational studies (Ghosh et al. 2016, 2018) showing 67.5% reduction in unscheduled admissions and 484% ROI, a peer-reviewed economic evaluation of a COVID-19 digital ward (Swift et al. JMIR 2024) and an NHSX grey-literature case study. All key authors have declared Spirit Health affiliations. No independent RCT for Clinitouch in COPD has been identified. NICE HTE19 reviewed and recommended with conditions.",
-  "evidence_strength": "promising",
+  "evidence_strength": "low",
+  "evidence_strength_rationale": "NICE recommends self-management use during evidence generation, but the COPD evidence located by NICE is two before-after studies and a retrospective study, with no COPD RCT. Reported admission/CAT improvements are promising, but comparator details are weak; PR use is research-only.",
   "case_studies": [
     {
       "title": "Leicester COPD programme \u2014 admission reduction and ROI",
@@ -57,10 +58,17 @@
   ],
   "maturity_level": "scaled",
   "live_sites": "LLR ICS (16 pathways), Leicestershire Partnership NHS Trust (since 2013), Royal Devon University Healthcare NHS FT, Bradford District and Craven, 20+ international partners in 15 countries",
+  "named_sites": [
+    { "name": "LLR ICS (16 pathways)", "status": "active" },
+    { "name": "Leicestershire Partnership NHS Trust (since 2013)", "status": "active" },
+    { "name": "Royal Devon University Healthcare NHS FT", "status": "active" },
+    { "name": "Bradford District and Craven", "status": "active" },
+    { "name": "International partners (20+ organisations, 15 countries)", "status": "active" }
+  ],
   "live_icbs": 3,
   "patients_covered_note": "System-wide deployment across LLR ICS. 20+ international partner organisations. Patient count not publicly confirmed for individual deployments.",
   "dtac_status": "passed_refresh_required",
-  "dtac_note": "NHS Digital Playbook confirms DTAC completion. Central pass may be over 3 years old \u2014 updated DTAC form (April 2026) may require refresh. Confirm with Spirit Health before commissioning.",
+  "dtac_note": "NHS Digital Playbook confirms DTAC completion. Central completion may be over 3 years old \u2014 updated DTAC form (April 2026) may require refresh. Confirm with Spirit Health before commissioning.",
   "device_class": "Class IIa SaMD",
   "dcb0129_status": "Confirmed",
   "dcb0160_boilerplate_available": true,

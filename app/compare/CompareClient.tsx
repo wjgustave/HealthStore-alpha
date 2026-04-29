@@ -1,71 +1,60 @@
 'use client'
-import { useEffect, useMemo } from 'react'
+import { Fragment, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { X } from 'lucide-react'
 import type { App } from '@/lib/data'
 import { STORE_ACCENT } from '@/lib/storeAccent'
-import { DtacBadge, MaturityBadge, EvidenceBadge, EffortBadge, SupervisionBadge } from '@/components/Badges'
+import { DtacBadge, MaturityBadge, ConditionTag } from '@/components/Badges'
 import { useCompareBasket } from '@/components/CompareBasketProvider'
 import {
   formatConditionLabels,
   sharedConditionTags,
+  appConditionTags,
 } from '@/lib/compareConditions'
+import {
+  NOT_STATED,
+  getTherapeuticPurpose,
+  getClinicalPathways,
+  getCareSettings,
+  getClinicalEvidenceExcerpt,
+  getExpectedBenefit,
+  getNiceGuidanceStatus,
+  getOnboardingCompareLine,
+  getLiveIcbsDisplay,
+  getServiceWrapYn,
+  getIntegrationsSummary,
+  getIndicativePriceShort,
+  pickStr,
+} from '@/lib/compareFieldFormat'
 
 type Props = { allApps: App[] }
-
-const DIMENSIONS = [
-  { key: 'supervision', label: 'Supervision model' },
-  { key: 'maturity', label: 'Deployment maturity' },
-  { key: 'evidence', label: 'Evidence strength' },
-  { key: 'effort', label: 'Local effort required' },
-  { key: 'dtac', label: 'DTAC status' },
-  { key: 'device_class', label: 'Device class' },
-  { key: 'dcb0129_status', label: 'DCB0129' },
-  { key: 'gdpr', label: 'Data hosting' },
-  { key: 'iso27001', label: 'ISO 27001' },
-  { key: 'fhir', label: 'FHIR / EHR integration' },
-  { key: 'pricing', label: 'Pricing model' },
-  { key: 'nhse_125k', label: 'NHSE £125k eligible' },
-  { key: 'nice_refs', label: 'NICE guidance' },
-  { key: 'target_patients', label: 'Target patients' },
-  { key: 'prerequisites', label: 'Key prerequisites' },
-]
-
-function CellValue({ app, dim }: { app: App; dim: string }) {
-  switch (dim) {
-    case 'supervision': return <SupervisionBadge model={app.supervision_model} />
-    case 'maturity': return <MaturityBadge level={app.maturity_level} />
-    case 'evidence': return <EvidenceBadge strength={app.evidence_strength} />
-    case 'effort': return <EffortBadge level={app.local_wraparound} />
-    case 'dtac': return <DtacBadge status={app.dtac_status} />
-    case 'device_class': return <span style={{ fontSize: 'var(--text-label)' }}>{app.device_class}</span>
-    case 'dcb0129_status': return <span style={{ fontSize: 'var(--text-label)' }}>{app.dcb0129_status}</span>
-    case 'gdpr': return <span style={{ fontSize: 'var(--text-label)' }}>{app.gdpr_note.split('.')[0]}</span>
-    case 'iso27001': return <span style={{ fontSize: 'var(--text-label)' }}>{app.iso27001}</span>
-    case 'fhir': return <span style={{ fontSize: 'var(--text-label)' }}>{(app as any).technical_information?.fhir_api_status ?? 'See app page'}</span>
-    case 'pricing': return <span style={{ fontSize: 'var(--text-label)' }}>{app.indicative_price_text.slice(0, 80)}</span>
-    case 'nhse_125k':
-      return app.nhse_125k_eligible === true
-        ? <span className="badge badge-green">Eligible</span>
-        : app.nhse_125k_eligible === false
-        ? <span className="badge badge-grey">Not eligible</span>
-        : <span className="badge badge-amber">Unconfirmed</span>
-    case 'nice_refs':
-      return <div className="space-y-1">{app.nice_guidance_refs.map(r => <span key={r.ref} className="block" style={{ fontSize: 'var(--text-label)' }}>{r.ref} ({r.date})</span>)}</div>
-    case 'target_patients': return <span style={{ fontSize: 'var(--text-label)' }}>{app.target_patients.slice(0, 100)}</span>
-    case 'prerequisites':
-      return <ul className="space-y-1">{(app.implementation_prerequisites ?? []).slice(0, 3).map((p, i) => <li key={i} style={{ fontSize: 'var(--text-label)' }}>• {p}</li>)}</ul>
-    default: return <span className="text-gray-400" style={{ fontSize: 'var(--text-label)' }}>—</span>
-  }
-}
 
 const LOGO_DESKTOP = { w: 140, h: 72 }
 const LOGO_MOBILE = { w: 112, h: 60 }
 
-/** App logo + name + corner remove control (pattern from healthstore-m compare). */
-function CompareAppHeaderColumn({
+function cellText(text: string) {
+  return (
+    <span className="leading-relaxed" style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)' }}>
+      {text}
+    </span>
+  )
+}
+
+function ServiceWrapBadge({ value }: { value: ReturnType<typeof getServiceWrapYn> }) {
+  if (value === NOT_STATED) {
+    return <span className="badge badge-amber">{NOT_STATED}</span>
+  }
+  return value === 'Yes' ? (
+    <span className="badge badge-green">Yes</span>
+  ) : (
+    <span className="badge badge-grey">No</span>
+  )
+}
+
+/** Logo + name + supplier + condition tags + remove. */
+function CompareSummaryCard({
   app,
   onRemove,
   layout,
@@ -75,6 +64,7 @@ function CompareAppHeaderColumn({
   layout: 'mobile' | 'desktop'
 }) {
   const { w, h } = layout === 'desktop' ? LOGO_DESKTOP : LOGO_MOBILE
+  const tags = appConditionTags(app)
 
   const logoBox = (
     <div className="relative inline-block shrink-0">
@@ -87,22 +77,12 @@ function CompareAppHeaderColumn({
             borderColor: 'var(--border)',
           }}
         >
-          <Image
-            src={app.logo_path}
-            alt=""
-            fill
-            sizes={`${w}px`}
-            className="object-contain p-3"
-          />
+          <Image src={app.logo_path} alt="" fill sizes={`${w}px`} className="object-contain p-3" />
         </div>
       ) : (
         <div
           className="rounded-xl bg-[#F7F9FC] border flex items-center justify-center"
-          style={{
-            width: w,
-            height: h,
-            borderColor: 'var(--border)',
-          }}
+          style={{ width: w, height: h, borderColor: 'var(--border)' }}
           aria-hidden
         />
       )}
@@ -118,42 +98,140 @@ function CompareAppHeaderColumn({
     </div>
   )
 
+  const meta = (
+    <div className={layout === 'mobile' ? 'min-w-0 flex-1 text-left' : 'text-center mt-2'}>
+      <Link
+        href={`/apps/${app.slug}`}
+        className={`font-bold hover:underline ${layout === 'mobile' ? 'text-sm block' : 'text-sm block mt-0'}`}
+        style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
+      >
+        {app.app_name}
+      </Link>
+      <p className={`${layout === 'mobile' ? 'text-xs mt-0.5' : 'text-xs mt-0.5'}`} style={{ color: 'var(--text-muted)' }}>
+        {app.supplier_name}
+      </p>
+      <div className={`flex flex-wrap gap-1 mt-2 ${layout === 'desktop' ? 'justify-center' : ''}`}>
+        {tags.map((t) => (
+          <ConditionTag key={t} tag={t} />
+        ))}
+      </div>
+    </div>
+  )
+
   if (layout === 'mobile') {
     return (
-      <div className="flex items-center gap-4">
+      <div className="flex items-start gap-4">
         {logoBox}
-        <div className="min-w-0 flex-1 text-left">
-          <Link
-            href={`/apps/${app.slug}`}
-            className="text-sm font-bold hover:underline block"
-            style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
-          >
-            {app.app_name}
-          </Link>
-          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-            {app.supplier_name}
-          </p>
-        </div>
+        {meta}
       </div>
     )
   }
 
   return (
-    <div className="text-center">
+    <div className="text-center flex flex-col items-center">
       {logoBox}
-      <Link
-        href={`/apps/${app.slug}`}
-        className="block mt-2 text-sm font-bold hover:underline"
-        style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
-      >
-        {app.app_name}
-      </Link>
-      <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-        {app.supplier_name}
-      </p>
+      {meta}
     </div>
   )
 }
+
+type DimRow = { key: string; label: string; render: (app: App) => React.ReactNode }
+
+const COMPARE_SECTIONS: { id: string; title: string; rows: DimRow[] }[] = [
+  {
+    id: 'clinical',
+    title: 'Clinical context',
+    rows: [
+      {
+        key: 'conditions',
+        label: 'Conditions',
+        render: (app) => cellText(formatConditionLabels(appConditionTags(app))),
+      },
+      {
+        key: 'therapeutic',
+        label: 'Therapeutic purpose',
+        render: (app) => cellText(getTherapeuticPurpose(app)),
+      },
+      {
+        key: 'pathways',
+        label: 'Clinical pathways',
+        render: (app) => cellText(getClinicalPathways(app)),
+      },
+      {
+        key: 'care_settings',
+        label: 'Care settings',
+        render: (app) => cellText(getCareSettings(app)),
+      },
+      {
+        key: 'evidence_excerpt',
+        label: 'Clinical evidence (summary)',
+        render: (app) => cellText(getClinicalEvidenceExcerpt(app)),
+      },
+      {
+        key: 'expected_benefit',
+        label: 'Expected benefit',
+        render: (app) => cellText(getExpectedBenefit(app)),
+      },
+    ],
+  },
+  {
+    id: 'adoption',
+    title: 'Adoption & assurance',
+    rows: [
+      {
+        key: 'maturity',
+        label: 'Deployment maturity',
+        render: (app) => <MaturityBadge level={app.maturity_level} />,
+      },
+      {
+        key: 'nice',
+        label: 'NICE guidance status',
+        render: (app) => cellText(getNiceGuidanceStatus(app)),
+      },
+      {
+        key: 'dtac',
+        label: 'DTAC status',
+        render: (app) => <DtacBadge status={app.dtac_status} />,
+      },
+      {
+        key: 'onboarding',
+        label: 'Onboarding model',
+        render: (app) => cellText(getOnboardingCompareLine(app)),
+      },
+      {
+        key: 'live_icbs',
+        label: 'Live ICB sites',
+        render: (app) => cellText(getLiveIcbsDisplay(app)),
+      },
+    ],
+  },
+  {
+    id: 'commercial',
+    title: 'Commercial & delivery',
+    rows: [
+      {
+        key: 'service_wrap',
+        label: 'Service wrap',
+        render: (app) => <ServiceWrapBadge value={getServiceWrapYn(app)} />,
+      },
+      {
+        key: 'integrations',
+        label: 'Integrations',
+        render: (app) => cellText(getIntegrationsSummary(app)),
+      },
+      {
+        key: 'pricing_model',
+        label: 'Pricing model',
+        render: (app) => cellText(pickStr(app.pricing_model)),
+      },
+      {
+        key: 'indicative_price',
+        label: 'Indicative price',
+        render: (app) => cellText(getIndicativePriceShort(app)),
+      },
+    ],
+  },
+]
 
 export default function CompareClient({ allApps }: Props) {
   const searchParams = useSearchParams()
@@ -162,14 +240,16 @@ export default function CompareClient({ allApps }: Props) {
   const idsParam = searchParams?.get('ids') ?? ''
   useEffect(() => {
     if (!idsParam) return
-    const urlIds = idsParam.split(',').map(s => s.trim()).filter(Boolean)
+    const urlIds = idsParam.split(',').map((s) => s.trim()).filter(Boolean)
     if (urlIds.length > 0) setFromUrlIds(urlIds)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idsParam])
 
-  const selected = selectedIds.map(id => allApps.find(a => a.id === id)).filter(Boolean) as App[]
+  const selected = selectedIds.map((id) => allApps.find((a) => a.id === id)).filter(Boolean) as App[]
 
   const sharedTags = useMemo(() => sharedConditionTags(selected), [selected])
+
+  let rowIndex = 0
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
@@ -206,33 +286,23 @@ export default function CompareClient({ allApps }: Props) {
             </button>
           </div>
 
-          <div className="hs-surface-card bg-white rounded-xl border p-5 mb-8" style={{ borderColor: 'var(--border)' }}>
-            <div className="md:hidden flex flex-col gap-5">
-              {selected.map(app => (
-                <CompareAppHeaderColumn
-                  key={app.id}
-                  app={app}
-                  layout="mobile"
-                  onRemove={() => remove(app.id)}
-                />
+          {/* Summary strip — hybrid layout top */}
+          <div className="hs-surface-card bg-white rounded-xl border p-5 mb-6" style={{ borderColor: 'var(--border)' }}>
+            <h2 className="sr-only">Selected apps summary</h2>
+            <div className="md:hidden flex flex-col gap-6">
+              {selected.map((app) => (
+                <CompareSummaryCard key={app.id} app={app} layout="mobile" onRemove={() => remove(app.id)} />
               ))}
             </div>
-            {/* Padding so corner remove controls are not clipped by overflow-x */}
             <div className="hidden md:block overflow-x-auto py-2 px-2 -mx-2">
               <div
-                className="grid gap-4 mx-auto"
+                className="grid gap-6 mx-auto min-w-0"
                 style={{
-                  gridTemplateColumns: `180px repeat(${selected.length}, minmax(136px, 1fr))`,
+                  gridTemplateColumns: `repeat(${selected.length}, minmax(200px, 1fr))`,
                 }}
               >
-                <div aria-hidden />
-                {selected.map(app => (
-                  <CompareAppHeaderColumn
-                    key={app.id}
-                    app={app}
-                    layout="desktop"
-                    onRemove={() => remove(app.id)}
-                  />
+                {selected.map((app) => (
+                  <CompareSummaryCard key={app.id} app={app} layout="desktop" onRemove={() => remove(app.id)} />
                 ))}
               </div>
             </div>
@@ -242,7 +312,9 @@ export default function CompareClient({ allApps }: Props) {
 
       {selected.length === 0 ? (
         <div className="hs-surface-card text-center py-20 px-4 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
-          <div className="text-4xl mb-4" aria-hidden>⚖️</div>
+          <div className="text-4xl mb-4" aria-hidden>
+            ⚖️
+          </div>
           <p className="font-semibold mb-3 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
             No applications selected for comparison. Browse the catalogue and add applications to compare them side by side.
           </p>
@@ -255,63 +327,107 @@ export default function CompareClient({ allApps }: Props) {
           </Link>
         </div>
       ) : (
-        <div className="hs-surface-card overflow-x-auto rounded-xl border bg-white" style={{ borderColor: 'var(--border)' }}>
-          <table className="w-full border-collapse" style={{ fontSize: 'var(--text-body)' }}>
-            <caption className="sr-only">
-              {selected.length === 1
-                ? 'Application details by dimension.'
-                : 'Comparison of selected apps by dimension; each column is one product.'}
-            </caption>
-            <thead className="sr-only">
-              <tr>
-                <th scope="col">Dimension</th>
-                {selected.map(app => (
-                  <th key={app.id} scope="col">{app.app_name}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {DIMENSIONS.map((dim, i) => (
-                <tr key={dim.key} style={{ background: i % 2 === 0 ? '#fff' : '#FAFBFC' }}>
-                  <th scope="row" className="p-4 border-b border-r font-medium uppercase tracking-wide text-left"
-                    style={{ fontSize: 'var(--text-label)', borderColor: 'var(--border)', color: 'var(--text-muted)', background: '#F7F9FC' }}>
-                    {dim.label}
+        <>
+          <div className="hs-surface-card overflow-x-auto rounded-xl border bg-white shadow-sm" style={{ borderColor: 'var(--border)' }}>
+            <table className="w-full border-collapse min-w-[720px]" style={{ fontSize: 'var(--text-body)' }}>
+              <caption className="sr-only">
+                {selected.length === 1
+                  ? 'Application details by comparison dimension.'
+                  : 'Comparison of selected apps by dimension; each column is one product.'}
+              </caption>
+              <thead className="sticky top-0 z-[3] bg-white shadow-[0_1px_0_0_var(--border)]">
+                <tr className="border-b" style={{ borderColor: 'var(--border)' }}>
+                  <th
+                    scope="col"
+                    className="sticky left-0 z-[4] p-3 text-left align-bottom font-semibold uppercase tracking-wide border-r bg-white"
+                    style={{ fontSize: 'var(--text-label)', borderColor: 'var(--border)', color: 'var(--text-muted)', minWidth: 160 }}
+                  >
+                    Comparison
                   </th>
-                  {selected.map(app => (
-                    <td key={app.id} className="p-4 border-b border-r align-top" style={{ borderColor: 'var(--border)' }}>
-                      <CellValue app={app} dim={dim.key} />
-                    </td>
+                  {selected.map((app) => (
+                    <th
+                      key={app.id}
+                      scope="col"
+                      className="p-3 text-left align-bottom border-l bg-white"
+                      style={{ borderColor: 'var(--border)', minWidth: 180 }}
+                    >
+                      <span className="font-bold block" style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}>
+                        {app.app_name}
+                      </span>
+                      <span className="text-xs font-normal block mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                        {app.supplier_name}
+                      </span>
+                    </th>
                   ))}
                 </tr>
-              ))}
-              <tr>
-                <th scope="row" className="p-4 border-b border-r font-medium uppercase tracking-wide text-left"
-                  style={{ fontSize: 'var(--text-label)', borderColor: 'var(--border)', color: 'var(--text-muted)', background: '#F7F9FC' }}>
-                  Evidence summary
-                </th>
-                {selected.map(app => (
-                  <td key={app.id} className="p-4 border-b border-r align-top" style={{ borderColor: 'var(--border)' }}>
-                    <p className="leading-relaxed" style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)' }}>
-                      {app.evidence_summary.slice(0, 200)}…
-                    </p>
-                  </td>
+              </thead>
+              <tbody>
+                {COMPARE_SECTIONS.map((section) => (
+                  <Fragment key={section.id}>
+                    <tr>
+                      <td
+                        colSpan={1 + selected.length}
+                        className="p-3 font-semibold border-t border-b"
+                        style={{
+                          background: '#E8EDF3',
+                          borderColor: 'var(--border)',
+                          color: 'var(--text-primary)',
+                          fontSize: 'var(--text-label)',
+                          letterSpacing: '0.02em',
+                        }}
+                      >
+                        {section.title}
+                      </td>
+                    </tr>
+                    {section.rows.map((row) => {
+                      const bg = rowIndex % 2 === 0 ? '#fff' : '#FAFBFC'
+                      rowIndex += 1
+                      return (
+                        <tr key={row.key}>
+                          <th
+                            scope="row"
+                            className="sticky left-0 z-[1] p-4 border-b border-r font-medium uppercase tracking-wide text-left align-top"
+                            style={{
+                              fontSize: 'var(--text-label)',
+                              borderColor: 'var(--border)',
+                              color: 'var(--text-muted)',
+                              background: bg,
+                              boxShadow: '2px 0 0 0 var(--border)',
+                            }}
+                          >
+                            {row.label}
+                          </th>
+                          {selected.map((app) => (
+                            <td key={app.id} className="p-4 border-b align-top" style={{ borderColor: 'var(--border)', background: bg }}>
+                              {row.render(app)}
+                            </td>
+                          ))}
+                        </tr>
+                      )
+                    })}
+                  </Fragment>
                 ))}
-              </tr>
-              <tr>
-                <td className="p-4" style={{ background: '#F7F9FC' }} />
-                {selected.map(app => (
-                    <td key={app.id} className="p-4">
-                      <Link href={`/apps/${app.slug}`}
-                        className="block text-center text-sm font-semibold rounded-lg py-2"
-                        style={{ background: STORE_ACCENT, color: '#fff' }}>
+                <tr>
+                  <td
+                    className="sticky left-0 z-[1] p-4 border-t bg-[#F7F9FC]"
+                    style={{ borderColor: 'var(--border)', boxShadow: '2px 0 0 0 var(--border)' }}
+                  />
+                  {selected.map((app) => (
+                    <td key={app.id} className="p-4 border-t bg-[#F7F9FC]" style={{ borderColor: 'var(--border)' }}>
+                      <Link
+                        href={`/apps/${app.slug}`}
+                        className="block text-center text-sm font-semibold rounded-lg py-2.5 min-h-[44px] flex items-center justify-center transition-colors hover:!bg-[#004B8C]"
+                        style={{ background: STORE_ACCENT, color: '#fff' }}
+                      >
                         View details →
                       </Link>
                     </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   )

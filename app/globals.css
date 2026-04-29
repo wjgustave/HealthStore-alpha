@@ -99,6 +99,12 @@
     margin-bottom: 10px;
     background: #f7f9fc;
   }
+  /** Evidence type pills stay single-line; global `.badge` allows wrapping — override here. */
+  .card-evidence .badge.whitespace-nowrap {
+    word-break: normal;
+    overflow-wrap: normal;
+    max-width: none;
+  }
   .card-evidence--gap {
     border-color: var(--border);
     background: #fffbf0;

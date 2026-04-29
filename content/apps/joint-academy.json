@@ -18,10 +18,15 @@
     { "ref": "NICE NG226", "url": "https://www.nice.org.uk/guidance/ng226", "type": "NG", "date": "2022", "note": "Osteoarthritis management guideline" }
   ],
   "evidence_summary": "NICE HTG766 recommendation. Multiple peer-reviewed studies supporting physiotherapist-guided digital OA management including RCTs demonstrating pain reduction and functional improvement.",
-  "evidence_strength": "established",
+  "evidence_strength": "strong",
+  "evidence_strength_rationale": "Evidence rationale not yet aligned to Servita scoring document.",
   "case_studies": [],
   "maturity_level": "scaled",
   "live_sites": "Multiple NHS organisations and international deployments across Europe and North America",
+  "named_sites": [
+    { "name": "Multiple NHS organisations (specific sites not listed in catalogue)", "status": "active" },
+    { "name": "International deployments (Europe and North America)", "status": "active" }
+  ],
   "live_icbs": 12,
   "patients_covered_note": "Over 100,000 patients treated globally. Growing NHS deployment base.",
   "dtac_status": "passed",

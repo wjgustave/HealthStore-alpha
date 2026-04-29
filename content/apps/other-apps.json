@@ -18,10 +18,15 @@
       { "ref": "NICE HTG700", "url": "https://www.nice.org.uk/guidance/htg700", "type": "HTG", "date": "2024" }
     ],
     "evidence_summary": "NICE HTG700 recommendation. Multiple peer-reviewed studies supporting app-delivered dietitian-supported weight management. Evidence includes RCTs and real-world studies across NHS and international settings.",
-    "evidence_strength": "established",
+    "evidence_strength": "strong",
+    "evidence_strength_rationale": "Evidence rationale not yet aligned to Servita scoring document.",
     "case_studies": [],
     "maturity_level": "scaled",
     "live_sites": "Multiple NHS organisations across England and internationally",
+    "named_sites": [
+      { "name": "Multiple NHS organisations across England", "status": "active" },
+      { "name": "International deployments", "status": "active" }
+    ],
     "live_icbs": 15,
     "patients_covered_note": "Tens of thousands of patients in NHS weight management pathways. Growing deployment linked to NHS anti-obesity medication pathways.",
     "dtac_status": "passed",
@@ -98,10 +103,14 @@
       { "ref": "NICE HTG700", "url": "https://www.nice.org.uk/guidance/htg700", "type": "HTG", "date": "2024" }
     ],
     "evidence_summary": "NICE HTG700 recommendation. Published evidence on digital health coach-supported weight management.",
-    "evidence_strength": "promising",
+    "evidence_strength": "moderate",
+    "evidence_strength_rationale": "Evidence rationale not yet aligned to Servita scoring document.",
     "case_studies": [],
     "maturity_level": "multi_site_live",
     "live_sites": "Multiple NHS organisations",
+    "named_sites": [
+      { "name": "Multiple NHS organisations (specific trusts not listed in catalogue)", "status": "active" }
+    ],
     "live_icbs": 8,
     "patients_covered_note": "Large NHS and consumer user base.",
     "dtac_status": "passed",
@@ -178,10 +187,14 @@
       { "ref": "NICE HTG766", "url": "https://www.nice.org.uk/guidance/htg766", "type": "HTG", "date": "2024" }
     ],
     "evidence_summary": "NICE HTG766 recommendation. Real-world evidence from multiple NHS deployments showing symptom improvement and reduced GP/physio appointments.",
-    "evidence_strength": "established",
+    "evidence_strength": "strong",
+    "evidence_strength_rationale": "Evidence rationale not yet aligned to Servita scoring document.",
     "case_studies": [],
     "maturity_level": "scaled",
     "live_sites": "Multiple NHS trusts and ICBs across England",
+    "named_sites": [
+      { "name": "Multiple NHS trusts and ICBs across England (specific organisations not listed in catalogue)", "status": "active" }
+    ],
     "live_icbs": 20,
     "patients_covered_note": "Large NHS deployment base. Widely adopted across MSK first-contact physiotherapy pathways.",
     "dtac_status": "passed",
@@ -258,10 +271,14 @@
       { "ref": "NICE HTG768", "url": "https://www.nice.org.uk/guidance/htg768", "type": "EVA", "date": "2024", "note": "Recommended during evidence generation for specific presentations" }
     ],
     "evidence_summary": "NICE HTG768 recommendation during evidence generation. CBT-based self-help with established evidence base for bulimia nervosa. Pathway controls and clinical inclusion/exclusion criteria are essential — NICE guidance specifies conditions of use.",
-    "evidence_strength": "promising",
+    "evidence_strength": "moderate",
+    "evidence_strength_rationale": "Evidence rationale not yet aligned to Servita scoring document.",
     "case_studies": [],
     "maturity_level": "limited_live",
     "live_sites": "Limited NHS eating disorder services",
+    "named_sites": [
+      { "name": "Limited NHS eating disorder services (specific sites not listed in catalogue)", "status": "active" }
+    ],
     "live_icbs": 3,
     "patients_covered_note": "Limited NHS deployment at present. Evidence generation in progress.",
     "dtac_status": "passed",

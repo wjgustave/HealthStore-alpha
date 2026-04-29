@@ -28,11 +28,8 @@ export default function LoginPage() {
 
       if (res.ok) {
         const data = await res.json()
-        setHomeLayoutPreferenceAfterAuth('v1')
-        let next = typeof data.redirect === 'string' ? data.redirect : '/'
-        if (next === '/') {
-          next = '/?home=v1'
-        }
+        setHomeLayoutPreferenceAfterAuth('v2')
+        const next = typeof data.redirect === 'string' ? data.redirect : '/'
         router.push(next)
         router.refresh()
       } else {

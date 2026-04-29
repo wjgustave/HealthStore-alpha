@@ -3,14 +3,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { evidenceLabels, type App } from '@/lib/data'
+import { maturityLabels, type App } from '@/lib/data'
 import { STORE_ACCENT } from '@/lib/storeAccent'
 import {
   catalogueDemoAvailable,
   getCataloguePriceLabel,
   hasLinkedFunding,
 } from '@/lib/catalogueCardSignals'
-import { EvidenceBadge, SupervisionBadge, ConditionTag } from '@/components/Badges'
+import { MaturityBadge, SupervisionBadge, ConditionTag } from '@/components/Badges'
 import { CompareToggleButton } from '@/components/CompareToggleButton'
 import { Check, X } from 'lucide-react'
 import { buildBrowseSearchParams, filterAppsBySearchQuery, parseBrowseConditionParam } from '@/lib/catalogueSearch'
@@ -40,12 +40,12 @@ const supervisionOptions = [
   { id: 'all', label: 'All models' },
   { id: 'self_management_only', label: 'Self-management' },
   { id: 'guided_self_help', label: 'Guided self-help' },
-  { id: 'active_remote_management', label: 'Active remote management' },
+  { id: 'active_remote_management', label: 'Remote management' },
 ]
 
-const evidenceOptions = [
-  { id: 'all', label: 'Any evidence level' },
-  ...Object.entries(evidenceLabels).map(([id, label]) => ({ id, label })),
+const maturityOptions = [
+  { id: 'all', label: 'Any maturity level' },
+  ...Object.entries(maturityLabels).map(([id, label]) => ({ id, label })),
 ]
 
 const conditionOptions = [
@@ -88,7 +88,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [supervision, setSupervision] = useState('all')
-  const [evidence, setEvidence] = useState('all')
+  const [maturity, setMaturity] = useState('all')
   const [condition, setCondition] = useState('all')
   const [demoOnly, setDemoOnly] = useState(false)
   const [searchInput, setSearchInput] = useState('')
@@ -148,7 +148,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
 
   const activeFilters: { label: string; clear: () => void }[] = []
   if (supervision !== 'all') activeFilters.push({ label: supervisionOptions.find(o => o.id === supervision)!.label, clear: () => setSupervision('all') })
-  if (evidence !== 'all') activeFilters.push({ label: evidenceOptions.find(o => o.id === evidence)!.label, clear: () => setEvidence('all') })
+  if (maturity !== 'all') activeFilters.push({ label: maturityOptions.find(o => o.id === maturity)!.label, clear: () => setMaturity('all') })
   if (condition !== 'all') activeFilters.push({ label: conditionOptions.find(o => o.id === condition)!.label, clear: () => {
     setCondition('all')
     replaceBrowseUrl('all', searchInput)
@@ -165,12 +165,12 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
   const attrFiltered = useMemo(() => {
     return apps.filter((app: App) => {
       if (supervision !== 'all' && app.supervision_model !== supervision) return false
-      if (evidence !== 'all' && app.evidence_strength !== evidence) return false
+      if (maturity !== 'all' && app.maturity_level !== maturity) return false
       if (condition !== 'all' && !app.condition_tags.includes(condition)) return false
       if (demoOnly && !catalogueDemoAvailable(app)) return false
       return true
     })
-  }, [apps, supervision, evidence, condition, demoOnly])
+  }, [apps, supervision, maturity, condition, demoOnly])
 
   const filtered = useMemo(
     () => filterAppsBySearchQuery(attrFiltered, searchInput),
@@ -235,7 +235,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 flex-1 min-w-0">
                 <FilterSelect label="Condition" value={condition} onChange={onConditionChange} options={conditionOptions} />
                 <FilterSelect label="Supervision model" value={supervision} onChange={setSupervision} options={supervisionOptions} />
-                <FilterSelect label="Evidence level" value={evidence} onChange={setEvidence} options={evidenceOptions} />
+                <FilterSelect label="Deployment maturity" value={maturity} onChange={setMaturity} options={maturityOptions} />
               </div>
               <div className="flex flex-wrap items-end gap-4 shrink-0 xl:ml-auto">
                 <div className="flex min-h-[44px] items-center gap-2.5">
@@ -260,7 +260,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                   onClick={() => {
                     if (debounceTimer.current) clearTimeout(debounceTimer.current)
                     setSupervision('all')
-                    setEvidence('all')
+                    setMaturity('all')
                     setCondition('all')
                     setDemoOnly(false)
                     setSearchInput('')
@@ -365,7 +365,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                     <ConditionTag key={t} tag={t} />
                   ))}
                   <SupervisionBadge model={app.supervision_model} />
-                  <EvidenceBadge strength={app.evidence_strength} />
+                  <MaturityBadge level={app.maturity_level} />
                 </div>
 
                 <p

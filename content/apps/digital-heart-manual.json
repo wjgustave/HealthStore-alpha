@@ -17,7 +17,8 @@
     { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — evidence for non-digital Heart Manual; digital version evidence generation underway" }
   ],
   "evidence_summary": "Extensive evidence for the paper-based Heart Manual: Lewin et al. Lancet 1992 (foundational RCT), BRUM RCT (Jolly et al. 2009), CHARMS RCT (Dalal et al. 2007), cost-effectiveness analysis (Taylor et al. 2006), systematic review (Clark et al. 2011), AHA/AACVPR/ACC Scientific Statement (2019). Digital version: pilot study (Deighan et al. 2017, n=28), patient-reported outcomes (Stark et al. 2021, Ranaldi et al. 2018). NICE notes evidence of clinical benefit for the non-digital programme; digital version evidence generation underway.",
-  "evidence_strength": "established",
+  "evidence_strength": "low",
+  "evidence_strength_rationale": "Digital evidence is a small single-arm mixed-methods pilot with no comparator or digital RCT. We did not count paper Heart Manual evidence as Digital Heart Manual-specific digital evidence.",
   "case_studies": [
     {
       "title": "Digital Heart Manual pilot study",
@@ -30,6 +31,11 @@
   ],
   "maturity_level": "multi_site_live",
   "live_sites": "NHS Scotland (multiple boards), NHS Lothian (primary). Paper Heart Manual: approximately 14,000 patients/year in the UK and abroad.",
+  "named_sites": [
+    { "name": "NHS Scotland (multiple boards)", "status": "active" },
+    { "name": "NHS Lothian (primary)", "status": "active" },
+    { "name": "Paper Heart Manual (UK and international reach)", "status": "active" }
+  ],
   "live_icbs": 3,
   "patients_covered_note": "Paper Heart Manual: approximately 14,000 patients/year. Digital Heart Manual-specific adoption data not publicly available.",
   "dtac_status": "required_not_confirmed",

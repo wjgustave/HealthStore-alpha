@@ -43,7 +43,8 @@
     }
   ],
   "evidence_summary": "Real-world evidence from NWL ICS (6,000 COPD patients), Bradford District and Craven ICB (6,000 COPD patients, \u00a3400k NHSE investment), Sunderland virtual COPD clinic (50% admission reduction \u2014 attribution caveated), and MTW NHS Trust virtual ward. Imperial College HFrEF retention study (2% drop-out at 3 months). Published SAFE@HOME academic studies (preeclampsia). DTAC confirmed in G-Cloud 14 (April 2024). No standalone peer-reviewed RCT for Luscii in COPD identified.",
-  "evidence_strength": "promising",
+  "evidence_strength": "moderate",
+  "evidence_strength_rationale": "NICE-prioritised evidence was UK before-after/case-series data, but a Luscii/cVitals randomised crossover study in Sweden exists and was feasible/safe without QoL benefit. RCT presence plus mid-scale implementation supports Moderate rather than Strong.",
   "case_studies": [
     {
       "title": "NWL ICS \u2014 UK's largest COPD remote monitoring programme",
@@ -64,10 +65,19 @@
   ],
   "maturity_level": "scaled",
   "live_sites": "NWL ICS / Imperial College Healthcare NHS Trust, Bradford District and Craven ICB, South Tyneside and Sunderland NHS FT (attribution caveated), Airedale NHS Foundation Trust, Maidstone and Tunbridge Wells NHS Trust, NHS Dorset (asthma), 11+ countries internationally",
+  "named_sites": [
+    { "name": "NWL ICS / Imperial College Healthcare NHS Trust", "status": "active" },
+    { "name": "Bradford District and Craven ICB", "status": "active" },
+    { "name": "South Tyneside and Sunderland NHS FT (attribution caveated)", "status": "active" },
+    { "name": "Airedale NHS Foundation Trust", "status": "active" },
+    { "name": "Maidstone and Tunbridge Wells NHS Trust", "status": "active" },
+    { "name": "NHS Dorset (asthma)", "status": "active" },
+    { "name": "International deployments (11+ countries)", "status": "active" }
+  ],
   "live_icbs": 4,
   "patients_covered_note": "25 million+ global registrations across all conditions. 6,000+ COPD patients in NWL ICS alone. 350+ remote monitoring pathways delivered globally.",
   "dtac_status": "passed",
-  "dtac_note": "DTAC passed \u2014 confirmed in G-Cloud 14 Service Definition (April 2024). Most recently confirmed DTAC status of the four HTE19-recommended COPD apps.",
+  "dtac_note": "DTAC completed \u2014 confirmed in G-Cloud 14 Service Definition (April 2024). Most recently confirmed DTAC status of the four HTE19-recommended COPD apps.",
   "device_class": "Class IIa SaMD",
   "dcb0129_status": "Confirmed",
   "dcb0160_boilerplate_available": true,

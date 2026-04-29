@@ -1,10 +1,9 @@
 'use client'
-import { Suspense, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { LogOut } from 'lucide-react'
-import HomeHeroLayoutToggle from '@/components/home/HomeHeroLayoutToggle'
 import { useCompareBasket } from '@/components/CompareBasketProvider'
 
 function CompareNavLink({
@@ -108,7 +107,7 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
           </button>
         </nav>
       </div>
-      {commissioningContextLabel || path === '/' ? (
+      {commissioningContextLabel ? (
         <div
           className="border-t px-4 sm:px-6 py-2"
           style={{
@@ -116,22 +115,13 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
             background: 'rgba(240, 244, 245, 0.9)',
           }}
         >
-          <div
-            className={`mx-auto flex max-w-7xl items-center gap-4 ${commissioningContextLabel ? 'justify-between' : 'justify-end'}`}
-          >
-            {commissioningContextLabel ? (
-              <p
-                className="min-w-0 flex-1 text-sm leading-snug"
-                style={{ color: '#425563', fontFamily: 'Frutiger, Arial, sans-serif' }}
-              >
-                {commissioningContextLabel}
-              </p>
-            ) : null}
-            {path === '/' ? (
-              <Suspense fallback={null}>
-                <HomeHeroLayoutToggle surface="header" />
-              </Suspense>
-            ) : null}
+          <div className="mx-auto flex max-w-7xl items-center gap-4 justify-between">
+            <p
+              className="min-w-0 flex-1 text-sm leading-snug"
+              style={{ color: '#425563', fontFamily: 'Frutiger, Arial, sans-serif' }}
+            >
+              {commissioningContextLabel}
+            </p>
           </div>
         </div>
       ) : null}

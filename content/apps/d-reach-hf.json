@@ -17,7 +17,8 @@
     { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — evidence for non-digital REACH-HF; digital version evidence generation underway" }
   ],
   "evidence_summary": "Strong evidence for the paper-based REACH-HF programme: NIHR-funded multicentre RCT (HFrEF) showing clinically superior disease-specific HRQoL at 12 months vs usual care, cost-effective within NHS tariff. Pilot RCT (HFpEF) demonstrated feasibility with favourable caregiver impacts. SCOT:REACH-HF implementation study across six NHS Scotland Health Boards replicated RCT findings. Digital version (D REACH-HF) has a peer-reviewed development paper but no completed RCT yet — evidence generation during the 3-year NICE period will address this.",
-  "evidence_strength": "promising",
+  "evidence_strength": "low",
+  "evidence_strength_rationale": "Digital evidence is qualitative/feasibility only. We did not count paper REACH-HF RCTs as DTx-specific digital RCTs because NICE says paper-manual evidence may not generalise to digital delivery.",
   "case_studies": [
     {
       "title": "SCOT:REACH-HF implementation study",
@@ -30,6 +31,11 @@
   ],
   "maturity_level": "limited_live",
   "live_sites": "Paper-based REACH-HF deployed across six NHS Scotland Health Boards and four NHS CR centres. D REACH-HF (digital) specific deployment sites not publicly confirmed.",
+  "named_sites": [
+    { "name": "Paper-based REACH-HF — six NHS Scotland Health Boards", "status": "active" },
+    { "name": "Paper-based REACH-HF — four NHS cardiac rehabilitation centres", "status": "active" },
+    { "name": "D REACH-HF (digital) — deployment sites not publicly confirmed", "status": "active" }
+  ],
   "live_icbs": 0,
   "patients_covered_note": "Paper-based version deployed across multiple NHS sites. Digital version deployment scale not publicly confirmed.",
   "dtac_status": "required_not_confirmed",

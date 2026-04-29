@@ -6,7 +6,6 @@ import {
   getConceptFeaturedContent,
   getConceptGridContent,
   getDashboardContent,
-  getDashboardStats,
   getConditionAreas,
   getRemovedApps,
   getOpenFunding,
@@ -14,18 +13,12 @@ import {
   getHomeEvidenceSpotlights,
   getHomeCampaigns,
 } from '@/lib/data'
-import { parseHomeVariant } from '@/lib/homeVariant'
-import ConceptStepsBand from '@/components/home/ConceptStepsBand'
 import HomeBelowHeroInteractive from '@/components/home/HomeBelowHeroInteractive'
 import HomeHeroSearch from '@/components/home/HomeHeroSearch'
 
-export default async function HomePage({ searchParams }: { searchParams: Promise<{ home?: string }> }) {
-  const { home } = await searchParams
-  const isV2Concept = parseHomeVariant(home) === 'v2'
-
+export default async function HomePage() {
   const apps = getAllApps()
   const dash = getDashboardContent()
-  const stats = getDashboardStats()
   const conditions = getConditionAreas()
   const removedApps = getRemovedApps()
   const openFunding = getOpenFunding()
@@ -104,22 +97,6 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           </div>
         </div>
       </section>
-
-      {isV2Concept ? (
-        <ConceptStepsBand />
-      ) : (
-        <section style={{ background: '#003087' }}>
-          <div className="max-w-7xl mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-4 gap-6">
-            {stats.map((s) => (
-              <div key={s.label}>
-                <div style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '2rem', fontWeight: 700, color: '#fff' }}>{s.value}</div>
-                <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#fff' }}>{s.label}</div>
-                <div style={{ fontSize: 'var(--text-label)', color: 'rgba(255,255,255,0.55)' }}>{s.sublabel}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       <HomeBelowHeroInteractive
         apps={apps}

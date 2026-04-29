@@ -27,8 +27,8 @@ export default function SelectEntityForm() {
         body: JSON.stringify({ entityId }),
       })
       if (res.ok) {
-        setHomeLayoutPreferenceAfterAuth('v1')
-        router.push('/?home=v1')
+        setHomeLayoutPreferenceAfterAuth('v2')
+        router.push('/')
         router.refresh()
       } else {
         const data = await res.json()
