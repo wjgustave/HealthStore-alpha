@@ -39,11 +39,14 @@ export default function AppShell({
     <>
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <CompareBasketProvider allApps={allApps}>
-        <Nav commissioningContextLabel={icbSubheaderLabel} />
+        <Nav commissioningContextLabel={icbSubheaderLabel} isLoggedIn={isLoggedIn} />
         <main id="main-content">{children}</main>
       </CompareBasketProvider>
       <BackToTop />
-      <footer className="mt-20 border-t py-10 px-6" style={{ borderColor: 'var(--border)', background: '#fff' }}>
+      <footer
+        className="mt-20 border-t pt-10 px-6 pb-[calc(2.5rem+30px)]"
+        style={{ borderColor: 'var(--border)', background: '#fff' }}
+      >
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -54,9 +57,10 @@ export default function AppShell({
               Prototype based on publicly available information as of March 2026.
             </p>
           </div>
-          <div className="flex gap-6 text-xs" style={{ color: 'var(--text-muted)' }}>
+          <div className="flex flex-wrap gap-6 text-xs" style={{ color: 'var(--text-muted)' }}>
             <Link href="/apps" className="hover:underline">Find apps</Link>
             <Link href="/funding" className="hover:underline">Funding directory</Link>
+            <Link href="/cookies" className="hover:underline">Cookies</Link>
           </div>
         </div>
       </footer>

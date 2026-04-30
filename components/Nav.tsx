@@ -44,7 +44,13 @@ function CompareNavLink({
   )
 }
 
-export default function Nav({ commissioningContextLabel }: { commissioningContextLabel: string }) {
+export default function Nav({
+  commissioningContextLabel,
+  isLoggedIn,
+}: {
+  commissioningContextLabel: string
+  isLoggedIn: boolean
+}) {
   const path = usePathname()
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -89,12 +95,22 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
               style={{ color: path === links[2].href ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === links[2].href ? '#E6F0FB' : 'transparent' }}>
               {links[2].label}
             </Link>
-            <button onClick={handleLogout}
-              className="ml-2 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors hover:bg-gray-100"
-              style={{ color: 'var(--text-muted)' }}>
-              <LogOut className="w-3.5 h-3.5" />
-              Sign out
-            </button>
+            {isLoggedIn ? (
+              <button onClick={handleLogout}
+                className="ml-2 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors hover:bg-gray-100"
+                style={{ color: 'var(--text-muted)' }}>
+                <LogOut className="w-3.5 h-3.5" />
+                Sign out
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                className="ml-2 inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                style={{ color: 'var(--nhs-blue)', background: path === '/login' ? '#E6F0FB' : 'transparent' }}
+              >
+                Sign in
+              </Link>
+            )}
             <span className="ml-2 badge badge-prototype">Prototype</span>
           </div>
           <button className="md:hidden p-2 rounded transition-colors hover:bg-gray-100" onClick={() => setMobileOpen(o => !o)} aria-label="Toggle menu">
@@ -147,12 +163,23 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
             style={{ color: path === links[2].href ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === links[2].href ? '#E6F0FB' : 'transparent' }}>
             {links[2].label}
           </Link>
-          <button onClick={handleLogout}
-            className="px-3 py-2 rounded-md text-sm font-medium text-left flex items-center gap-1.5 transition-colors hover:bg-gray-100"
-            style={{ color: 'var(--text-muted)' }}>
-            <LogOut className="w-3.5 h-3.5" />
-            Sign out
-          </button>
+          {isLoggedIn ? (
+            <button onClick={handleLogout}
+              className="px-3 py-2 rounded-md text-sm font-medium text-left flex items-center gap-1.5 transition-colors hover:bg-gray-100"
+              style={{ color: 'var(--text-muted)' }}>
+              <LogOut className="w-3.5 h-3.5" />
+              Sign out
+            </button>
+          ) : (
+            <Link
+              href="/login"
+              onClick={() => setMobileOpen(false)}
+              className="px-3 py-2 rounded-md text-sm font-medium"
+              style={{ color: 'var(--nhs-blue)', background: path === '/login' ? '#E6F0FB' : 'transparent' }}
+            >
+              Sign in
+            </Link>
+          )}
         </div>
       )}
     </header>

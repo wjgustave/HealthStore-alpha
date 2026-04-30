@@ -25,6 +25,6 @@
       { "metric": "£86k", "unit": "per-ICB saving modelled", "detail": "by NICE MTG68 EAG for myCOPD in AECOPD pathway (CCG-era model)", "app_slug": "mycopd" }
     ]
   },
-  "about_note": "This prototype is a demonstration tool containing curated content based on publicly available information as of March 2026. All information should be verified with suppliers before use in formal commissioning or procurement processes.",
+  "about_note": "This prototype is a demonstration tool containing curated content based on publicly available information as of March 2026. All information is indicative.",
   "last_updated": "2026-03-17"
 }

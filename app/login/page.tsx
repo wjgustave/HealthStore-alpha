@@ -156,6 +156,15 @@ export default function LoginPage() {
         <p className="text-center text-xs mt-6" style={{ color: 'rgba(255,255,255,0.55)' }}>
           Prototype based on publicly available information as of March 2026.
         </p>
+        <p className="text-center text-xs mt-2">
+          <a
+            href="/cookies"
+            className="font-medium underline underline-offset-2 hover:opacity-90"
+            style={{ color: 'rgba(255,255,255,0.85)' }}
+          >
+            Cookies
+          </a>
+        </p>
       </div>
     </div>
   )

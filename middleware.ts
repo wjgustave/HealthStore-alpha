@@ -21,6 +21,10 @@ export async function middleware(req: NextRequest) {
     return res
   }
 
+  if (pathname === '/cookies') {
+    return res
+  }
+
   if (!session.isLoggedIn) {
     return NextResponse.redirect(new URL('/login', req.url))
   }

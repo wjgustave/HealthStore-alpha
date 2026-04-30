@@ -250,7 +250,7 @@
 }
 
 @media print {
-  header, footer, .skip-link, nav, button, [data-express-interest] { display: none !important; }
+  header, footer, .skip-link, nav, button, [data-express-interest], [data-cookie-banner] { display: none !important; }
   .pdp-share-excluded-print { display: none !important; }
   body { background: #fff !important; color: #000 !important; font-size: 12pt; }
   main { padding: 0 !important; }
