@@ -8,6 +8,9 @@ export const DEFAULT_PRIMARY_ICB_NAME = 'Shropshire, Telford and Wrekin ICB'
 export const SELECT_ICB_CONTINUE_MESSAGE = 'Select an ICB to continue'
 
 export function getCommissioningContextLabel(session: SessionData): string {
+  if (session.profileOrganisationName) {
+    return session.profileOrganisationName
+  }
   if (session.commissioningEntityId) {
     const entity = COMMISSIONING_ENTITIES.find((e) => e.id === session.commissioningEntityId)
     if (entity) return entity.name

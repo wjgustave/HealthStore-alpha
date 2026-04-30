@@ -34,7 +34,25 @@ Access is gated by middleware. You can also set variables manually in `.env.loca
 | `AUTH_USERNAME` / `AUTH_PASSWORD_HASH` | Primary user — bcrypt hash of the password (sign in → home). Prefer **base64** of the bcrypt string in `.env` (what `auth:setup` writes) so `$` is not mangled by env parsers. Plain bcrypt (`$2b$…`) also works if the value is **quoted** in `.env`. |
 | `AUTH_MULTI_USERNAME` / `AUTH_MULTI_PASSWORD_HASH` | Optional second user — after sign in they must choose a commissioning entity on `/select-entity` (same hash format as above) |
 
-Generate a hash manually (run from project root after `npm install`):
+### Named demo users (Marie / Rachel–style accounts)
+
+Additional sign-ins are defined in [`content/auth-user-accounts.json`](content/auth-user-accounts.json). Each entry has `username` (email), `passwordHashB64` (bcrypt of the password, **base64-encoded** — same format as `AUTH_PASSWORD_HASH`), `displayName`, `role`, and `organisationName`.
+
+After sign-in, that data is stored in the session and used for:
+
+- The commissioning organisation line in the nav (subheader)
+- The read-only name / role / organisation / email fields on the **Expression of interest** modal on product pages
+
+**Add another user**
+
+1. Generate a hash:  
+   `node -e "const b=require('bcryptjs');const h=b.hashSync('YOUR_PASSWORD',10);console.log(Buffer.from(h,'utf8').toString('base64'))"`
+2. Append an object to `content/auth-user-accounts.json` with the fields above (use the printed `passwordHashB64`).
+3. Redeploy (e.g. push to Git and let Vercel build).
+
+No new environment variables are required for these accounts **unless** you choose to keep them out of the repo and load them another way.
+
+**Vercel:** Use the same flow as the rest of the app — ensure `SESSION_SECRET`, `AUTH_USERNAME`, and `AUTH_PASSWORD_HASH` are set for your environment. Commit and deploy the JSON file (or your branch); named accounts work as soon as the new build is live. Rotating a named user’s password means regenerating `passwordHashB64` and redeploying.
 
 ```bash
 node -e "const b=require('bcryptjs');const h=b.hashSync('your-password',10);console.log(Buffer.from(h,'utf8').toString('base64'))"

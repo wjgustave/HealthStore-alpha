@@ -34,6 +34,7 @@ import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 import PdpSupplierContactCard from '@/components/PdpSupplierContactCard'
 import { getSession } from '@/lib/session'
 import { getCommissioningContextLabel } from '@/lib/commissioningContextDisplay'
+import { getExpressionOfInterestPrefill } from '@/lib/expressionOfInterestPrefill'
 
 export async function generateStaticParams() {
   return getAllAppsUnfiltered().map(a => ({ slug: a.slug }))
@@ -52,6 +53,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
   const session = await getSession()
   const commissioningOrganisationLabel = getCommissioningContextLabel(session)
+  const contactPrefill = getExpressionOfInterestPrefill(session, commissioningOrganisationLabel)
 
   const accent = STORE_ACCENT
 
@@ -78,7 +80,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
     app.dtac_status === 'required_not_confirmed'
 
   return (
-    <AppDetailClient app={app} commissioningOrganisationLabel={commissioningOrganisationLabel}>
+    <AppDetailClient app={app} contactPrefill={contactPrefill}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
 
         <PdpSharePrintProvider>

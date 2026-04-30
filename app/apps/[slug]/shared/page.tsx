@@ -10,6 +10,7 @@ import { SharedProductViewBanner } from '@/components/SharedProductViewBanner'
 import { STORE_ACCENT } from '@/lib/storeAccent'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 import { getCommissioningContextLabel } from '@/lib/commissioningContextDisplay'
+import { getExpressionOfInterestPrefill } from '@/lib/expressionOfInterestPrefill'
 
 export const dynamic = 'force-dynamic'
 
@@ -117,6 +118,7 @@ export default async function SharedProductPage({
   if (!app) notFound()
 
   const commissioningOrganisationLabel = getCommissioningContextLabel(session)
+  const contactPrefill = getExpressionOfInterestPrefill(session, commissioningOrganisationLabel)
 
   const allowedKeys = new Set(parsed.keys)
 
@@ -124,7 +126,7 @@ export default async function SharedProductPage({
 
   if (renderedKeys.length === 0) {
     return (
-      <AppDetailClient app={app} commissioningOrganisationLabel={commissioningOrganisationLabel}>
+      <AppDetailClient app={app} contactPrefill={contactPrefill}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
           <PageBreadcrumb
             items={[
@@ -162,7 +164,7 @@ export default async function SharedProductPage({
   }
 
   return (
-    <AppDetailClient app={app} commissioningOrganisationLabel={commissioningOrganisationLabel}>
+    <AppDetailClient app={app} contactPrefill={contactPrefill}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <PageBreadcrumb
           items={[

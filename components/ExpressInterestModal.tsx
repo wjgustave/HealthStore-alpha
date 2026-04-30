@@ -9,13 +9,13 @@ interface Props {
   appName: string
   open: boolean
   onClose: () => void
-  commissioningOrganisationLabel: string
+  contactPrefill: {
+    name: string
+    role: string
+    organisation: string
+    email: string
+  }
 }
-
-/** Prototype prefills for expression of interest (read-only contact fields). */
-const EXPRESS_INTEREST_PRESET_NAME = 'Commissioner Gordorn'
-const EXPRESS_INTEREST_PRESET_ROLE = 'Commissioiner'
-const EXPRESS_INTEREST_PRESET_EMAIL = 'henry.gordon90210@nhs.net'
 
 function Field({
   id,
@@ -77,7 +77,7 @@ export default function ExpressInterestModal({
   appName,
   open,
   onClose,
-  commissioningOrganisationLabel,
+  contactPrefill,
 }: Props) {
   const [submitted, setSubmitted] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -107,12 +107,12 @@ export default function ExpressInterestModal({
     if (!open) return
     setFormData(prev => ({
       ...prev,
-      name: EXPRESS_INTEREST_PRESET_NAME,
-      role: EXPRESS_INTEREST_PRESET_ROLE,
-      organisation: commissioningOrganisationLabel,
-      email: EXPRESS_INTEREST_PRESET_EMAIL,
+      name: contactPrefill.name,
+      role: contactPrefill.role,
+      organisation: contactPrefill.organisation,
+      email: contactPrefill.email,
     }))
-  }, [open, commissioningOrganisationLabel])
+  }, [open, contactPrefill.name, contactPrefill.role, contactPrefill.organisation, contactPrefill.email])
 
   useEffect(() => {
     if (!open) {

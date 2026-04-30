@@ -1,0 +1,16 @@
+[
+  {
+    "username": "marie.buchan@nhs.net",
+    "passwordHashB64": "JDJiJDEwJFpGWVJ4VHMzN3VlZGEyc2NOYXFydy5zMmNrYmk4RVlHV09XdGlxQ1BjQTl3aUdueFJnMGhh",
+    "displayName": "Marie Buchan",
+    "role": "Commissioner",
+    "organisationName": "Airedale NHS Foundation Trust"
+  },
+  {
+    "username": "rachel.binks@nhs.net",
+    "passwordHashB64": "JDJiJDEwJFpGWVJ4VHMzN3VlZGEyc2NOYXFydy5zMmNrYmk4RVlHV09XdGlxQ1BjQTl3aUdueFJnMGhh",
+    "displayName": "Rachel Binks",
+    "role": "Commissioner",
+    "organisationName": "Airedale NHS Foundation Trust"
+  }
+]

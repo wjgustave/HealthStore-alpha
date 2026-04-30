@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { getIronSession } from 'iron-session'
 import { resolveBcryptHashFromEnv } from '@/lib/authEnv'
-import { sessionOptions, type SessionData } from '@/lib/session'
+import { findAuthUserAccount, resolveAccountPasswordHash } from '@/lib/authUserAccounts'
+import { sessionOptions, type SessionData, clearDemoUserProfile } from '@/lib/session'
 
 function jsonWithSession(body: object, res: NextResponse, status = 200) {
   return NextResponse.json(body, { status, headers: res.headers })
@@ -42,9 +43,31 @@ export async function POST(req: NextRequest) {
           { status: 401 }
         )
       }
+      clearDemoUserProfile(session)
       session.isLoggedIn = true
       session.requiresCommissioningEntitySelection = false
       session.commissioningEntityId = undefined
+      await session.save()
+      return jsonWithSession({ ok: true, redirect: '/' }, res)
+    }
+
+    const namedAccount = findAuthUserAccount(username)
+    if (namedAccount) {
+      const accountHash = resolveAccountPasswordHash(namedAccount)
+      const passwordMatch = await bcrypt.compare(password, accountHash)
+      if (!passwordMatch) {
+        return NextResponse.json(
+          { error: 'Invalid username or password' },
+          { status: 401 }
+        )
+      }
+      session.isLoggedIn = true
+      session.requiresCommissioningEntitySelection = false
+      session.commissioningEntityId = undefined
+      session.profileDisplayName = namedAccount.displayName
+      session.profileRole = namedAccount.role
+      session.profileOrganisationName = namedAccount.organisationName
+      session.profileEmail = namedAccount.username.trim()
       await session.save()
       return jsonWithSession({ ok: true, redirect: '/' }, res)
     }
@@ -57,6 +80,7 @@ export async function POST(req: NextRequest) {
           { status: 401 }
         )
       }
+      clearDemoUserProfile(session)
       session.isLoggedIn = true
       session.requiresCommissioningEntitySelection = true
       session.commissioningEntityId = undefined
