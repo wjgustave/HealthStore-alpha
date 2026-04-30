@@ -30,6 +30,10 @@ import { SharePagePanel } from '@/components/SharePagePanel'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
 import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges, ProductHeroDemoBadge } from './pdpBlocks'
 import { ExpressInterestWhiteButton } from '@/components/ExpressInterestWhiteButton'
+import { PageBreadcrumb } from '@/components/PageBreadcrumb'
+import PdpSupplierContactCard from '@/components/PdpSupplierContactCard'
+import { getSession } from '@/lib/session'
+import { getCommissioningContextLabel } from '@/lib/commissioningContextDisplay'
 
 export async function generateStaticParams() {
   return getAllAppsUnfiltered().map(a => ({ slug: a.slug }))
@@ -45,6 +49,9 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
   const { slug } = await params
   const app = getAppBySlug(slug)
   if (!app) notFound()
+
+  const session = await getSession()
+  const commissioningOrganisationLabel = getCommissioningContextLabel(session)
 
   const accent = STORE_ACCENT
 
@@ -71,16 +78,18 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
     app.dtac_status === 'required_not_confirmed'
 
   return (
-    <AppDetailClient app={app}>
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+    <AppDetailClient app={app} commissioningOrganisationLabel={commissioningOrganisationLabel}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
 
         <PdpSharePrintProvider>
-        <PdpShareRegion shareKey="breadcrumb" label="Browse trail" excludeFromShareUi className="mb-6">
-        <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-muted)' }}>
-          <Link href="/apps" className="hover:underline">Browse apps</Link>
-          <span>›</span>
-          <span>{app.app_name}</span>
-        </div>
+        <PdpShareRegion shareKey="breadcrumb" label="Browse trail" excludeFromShareUi className="mb-4">
+          <PageBreadcrumb
+            items={[
+              { label: 'Find apps', href: '/apps' },
+              { label: 'Condition catalogue', href: '/apps/condition-catalogue' },
+              { label: app.app_name },
+            ]}
+          />
         </PdpShareRegion>
 
         <PdpShareRegion
@@ -376,7 +385,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
           <PdpShareRegion
             shareKey="sidebar-summary"
             label="Quick facts, assurance and sources"
-            description="Device class, assurance statements, product tiers, and how this profile was sourced."
+            description="Device class, assurance statements, supplier email, product tiers, and how this profile was sourced."
             className="space-y-5"
           >
 
@@ -429,6 +438,8 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 </div>
               )}
             </div>
+
+            <PdpSupplierContactCard email={app.supplier_contact_email} />
 
             {app.product_tiers?.length > 0 && (
               <div className="hs-surface-card-sm bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>

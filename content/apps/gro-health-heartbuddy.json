@@ -5,16 +5,38 @@
   "supplier_name": "DDM Health",
   "short_name": "HeartBuddy",
   "logo_path": "/logos/gro-health-heartbuddy.png",
-  "condition_tags": ["cardiac_rehab"],
-  "pathway_tags": ["cardiac-rehabilitation", "heart-failure", "post-mi", "post-surgery", "af", "self-management"],
-  "outcome_tags": ["cv-risk-reduction", "self-management", "behaviour-change", "quality-of-life"],
+  "condition_tags": [
+    "cardiac_rehab"
+  ],
+  "pathway_tags": [
+    "cardiac-rehabilitation",
+    "heart-failure",
+    "post-mi",
+    "post-surgery",
+    "af",
+    "self-management"
+  ],
+  "outcome_tags": [
+    "cv-risk-reduction",
+    "self-management",
+    "behaviour-change",
+    "quality-of-life"
+  ],
   "supervision_model": "self_management_only",
-  "referral_modes": ["clinician_referral"],
+  "referral_modes": [
+    "clinician_referral"
+  ],
   "one_line_value_proposition": "NICE HTG764-recommended app-based cardiac rehabilitation platform from DDM Health — one of four platforms with direct CV event risk reduction evidence, DTAC completed, ORCHA 97% rated, and CE marked as a medical device.",
   "why_it_matters_locally": "HeartBuddy is a mobile app offering personalised education, exercise programmes, health tracking and psychosocial support across multiple cardiac conditions. Built on the broader Gro Health platform which is already NICE-recommended for weight management and has DTAC completion, it provides a mature technical foundation with strong assurance credentials.",
   "target_problem_statement": "Low CR uptake, limited access to personalised cardiac rehabilitation across heart failure, post-MI and AF pathways, and need for a digital CR option with DTAC completion.",
   "nice_guidance_refs": [
-    { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — one of four platforms with direct clinical evidence" }
+    {
+      "ref": "NICE HTG764",
+      "url": "https://www.nice.org.uk/guidance/htg764",
+      "type": "EVA",
+      "date": "December 2025",
+      "note": "Conditionally recommended — one of four platforms with direct clinical evidence"
+    }
   ],
   "evidence_summary": "One study identified by NICE evaluating HeartBuddy for cardiac rehabilitation. NICE identifies it as one of four platforms with direct clinical evidence suggesting potential reduction in secondary CV event risk. Five additional research studies reportedly underway. The broader Gro Health platform is separately NICE-recommended for weight management.",
   "evidence_strength": "low",
@@ -172,8 +194,14 @@
   "maturity_level": "limited_live",
   "live_sites": "Gro Health platform used across multiple NHS organisations for diabetes and weight management. HeartBuddy-specific deployment sites not publicly confirmed.",
   "named_sites": [
-    { "name": "Gro Health platform (multiple NHS organisations — diabetes/weight)", "status": "active" },
-    { "name": "HeartBuddy cardiac rehab module — discrete NHS sites not publicly confirmed", "status": "active" }
+    {
+      "name": "Gro Health platform (multiple NHS organisations — diabetes/weight)",
+      "status": "active"
+    },
+    {
+      "name": "HeartBuddy cardiac rehab module — discrete NHS sites not publicly confirmed",
+      "status": "active"
+    }
   ],
   "live_icbs": 0,
   "patients_covered_note": "Gro Health platform deployed across NHS. HeartBuddy-specific cardiac rehab user numbers not publicly available.",
@@ -200,14 +228,18 @@
   "monitoring_note": "Self-management tool with in-app tracking. Not a continuously monitored clinical service. Clinician dashboard availability for cardiac rehab module not confirmed.",
   "escalation_note": "Standard NHS escalation routes. App includes self-management support but is not a monitored emergency service.",
   "operating_hours_caveat": "Not a monitored emergency service.",
-  "implementation_prerequisites": ["Smartphone with app store access", "Initial clinical assessment by trained NHS professional", "DTAC refresh confirmed"],
+  "implementation_prerequisites": [
+    "Smartphone with app store access",
+    "Initial clinical assessment by trained NHS professional",
+    "DTAC refresh confirmed"
+  ],
   "pricing_model": "local_licence",
   "national_price_available": false,
-  "indicative_price_text": "Per-patient or population licence for digital CR/wellness modules is typically negotiated with DDM Health. Illustrative range for comparable app-led CR adjuncts: \u00a335\u2013\u00a375 per patient year or bundled annual ICB licence \u2014 confirm formally with supplier.",
+  "indicative_price_text": "Per-patient or population licence for digital CR/wellness modules is typically negotiated with DDM Health. Illustrative range for comparable app-led CR adjuncts: £35–£75 per patient year or bundled annual ICB licence — confirm formally with supplier.",
   "pricing_confidence": "indicative",
   "free_offer_flag": false,
   "service_wrap_included": false,
-  "service_wrap_description": "Commercial app with optional enterprise implementation for NHS. Scope of onboarding, analytics and cardiac rehab module support must be confirmed in contract \u2014 may be limited to standard app store deployment unless enterprise terms agreed.",
+  "service_wrap_description": "Commercial app with optional enterprise implementation for NHS. Scope of onboarding, analytics and cardiac rehab module support must be confirmed in contract — may be limited to standard app store deployment unless enterprise terms agreed.",
   "service_wrap_note": "Information not available on implementation support for cardiac rehab module.",
   "contract_note": "Information not available. NICE advises considering the 3-year evidence generation period.",
   "expected_benefit_note": "NICE EAG model found cost-saving vs conventional rehabilitation. One of four platforms with direct CV event risk reduction evidence.",
@@ -223,25 +255,43 @@
   "minimum_conditions_for_success": "CR referral pathway, initial clinical assessment capacity, patients with smartphone access.",
   "procurement_notes": "Contact DDM Health for NHS procurement options.",
   "content_confidence": "Confirmed",
-  "linked_funding_ids": ["health-innovation-network"],
+  "linked_funding_ids": [
+    "health-innovation-network"
+  ],
   "technical_integrations": {
     "fhir": "Information not available",
     "emis": "Information not available",
     "nhs_app": false,
     "population_health_dashboard": false,
     "device_integration": "Connects to wearable devices (smartwatches) for activity tracking",
-    "languages": ["English"],
+    "languages": [
+      "English"
+    ],
     "data_hosting": "Confirm with DDM Health"
   },
   "context_of_use": {
     "population": "Adults post-MI, post-PCI, post-CABG, new HF or AF diagnosis",
-    "pathways": ["Post-MI cardiac rehabilitation", "Post-surgical CR", "Heart failure CR", "AF management"],
-    "care_settings": ["Home-based", "Secondary care"],
+    "pathways": [
+      "Post-MI cardiac rehabilitation",
+      "Post-surgical CR",
+      "Heart failure CR",
+      "AF management"
+    ],
+    "care_settings": [
+      "Home-based",
+      "Secondary care"
+    ],
     "therapeutic_purpose": "Personalised education, exercise programmes, health tracking, dietary support, medication adherence, psychosocial support",
     "hcp_involvement": "Minimal — self-management app with initial clinical assessment",
     "nice_scope": "NICE HTG764 — conditionally recommended during 3-year evidence generation period"
   },
-  "demo_variants": [{ "label": "DDM Health Cardiac Rehab page", "url": "https://ddm.health/cardiac-rehabilitation", "type": "website" }],
+  "demo_variants": [
+    {
+      "label": "DDM Health Cardiac Rehab page",
+      "url": "https://ddm.health/cardiac-rehabilitation",
+      "type": "website"
+    }
+  ],
   "demo_notes": "Contact DDM Health for a demonstration.",
   "supplier_contact_email": "info@ddm.health",
   "supplier_contact_name": "DDM Health",

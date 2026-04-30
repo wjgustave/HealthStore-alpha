@@ -5,17 +5,42 @@
   "supplier_name": "W8Buddy",
   "short_name": "W8Buddy",
   "logo_path": "/logos/w8buddy.svg",
-  "condition_tags": ["weight_management"],
-  "pathway_tags": ["weight-management", "multidisciplinary", "behaviour-change", "obesity"],
-  "outcome_tags": ["weight-loss", "behaviour-change", "self-management", "metabolic-health"],
+  "condition_tags": [
+    "weight_management"
+  ],
+  "pathway_tags": [
+    "weight-management",
+    "multidisciplinary",
+    "behaviour-change",
+    "obesity"
+  ],
+  "outcome_tags": [
+    "weight-loss",
+    "behaviour-change",
+    "self-management",
+    "metabolic-health"
+  ],
   "supervision_model": "guided_self_help",
-  "referral_modes": ["clinician_referral"],
+  "referral_modes": [
+    "clinician_referral"
+  ],
   "one_line_value_proposition": "Multidisciplinary digital weight management programme with NICE HTG700 recommendation — combining behavioural, nutritional and activity support for NHS tier 2/3 pathways.",
   "why_it_matters_locally": "Obesity prevalence continues to rise, and NHS weight management services face significant capacity constraints. W8Buddy offers a digital multidisciplinary approach that can scale tier 2/3 provision while maintaining clinical quality.",
   "target_problem_statement": "Limited NHS tier 2/3 weight management capacity, rising obesity prevalence, and increasing demand driven by GLP-1 agonist prescribing pathways requiring structured behavioural support.",
   "nice_guidance_refs": [
-    { "ref": "NICE HTG700", "url": "https://www.nice.org.uk/guidance/htg700", "type": "HTG", "date": "2024" },
-    { "ref": "NICE CG189", "url": "https://www.nice.org.uk/guidance/cg189", "type": "CG", "date": "2014", "note": "Obesity management guideline" }
+    {
+      "ref": "NICE HTG700",
+      "url": "https://www.nice.org.uk/guidance/htg700",
+      "type": "HTG",
+      "date": "2024"
+    },
+    {
+      "ref": "NICE CG189",
+      "url": "https://www.nice.org.uk/guidance/cg189",
+      "type": "CG",
+      "date": "2014",
+      "note": "Obesity management guideline"
+    }
   ],
   "evidence_summary": "NICE HTG700 recommendation. Evidence supporting digital multidisciplinary weight management including behavioural change and nutritional support.",
   "evidence_strength": "moderate",
@@ -24,7 +49,10 @@
   "maturity_level": "limited_live",
   "live_sites": "Limited NHS deployments",
   "named_sites": [
-    { "name": "Limited NHS deployments (specific trusts not listed in catalogue)", "status": "active" }
+    {
+      "name": "Limited NHS deployments (specific trusts not listed in catalogue)",
+      "status": "active"
+    }
   ],
   "live_icbs": 2,
   "patients_covered_note": "Early-stage NHS deployment. Evidence generation in progress.",
@@ -51,21 +79,25 @@
   "monitoring_note": "Non-continuous review. Multidisciplinary team supports patients within programme. Not a continuously monitored service.",
   "escalation_note": "Escalation to tier 3 or clinical services as clinically indicated.",
   "operating_hours_caveat": "Not a monitored emergency service. Ensure patients have appropriate escalation routes.",
-  "implementation_prerequisites": ["Referral pathway established", "Patient identification and eligibility criteria agreed", "DTAC approval confirmed locally"],
+  "implementation_prerequisites": [
+    "Referral pathway established",
+    "Patient identification and eligibility criteria agreed",
+    "DTAC approval confirmed locally"
+  ],
   "pricing_model": "Local negotiation required",
   "national_price_available": false,
-  "indicative_price_text": "Pricing is negotiated locally. Indicative cost per patient pathway is in the range of \u00a3250\u2013\u00a3400 depending on volume commitments and service configuration. Commissioners should request a detailed pricing proposal.",
+  "indicative_price_text": "Pricing is negotiated locally. Indicative cost per patient pathway is in the range of £250–£400 depending on volume commitments and service configuration. Commissioners should request a detailed pricing proposal.",
   "pricing_confidence": "supplier_reported",
   "free_offer_flag": false,
   "service_wrap_included": true,
   "service_wrap_description": "Full multidisciplinary service wrap included: dietitian, psychologist, and physical activity specialist support, digital programme content, patient support, and commissioner reporting. No additional service costs beyond the per-patient fee.",
   "service_wrap_note": "Multidisciplinary support included in programme model.",
   "contract_note": "Contact W8Buddy for NHS procurement options.",
-  "procurement_notes": "Not currently available on a national framework. Local procurement required \u2014 typically via direct award for pilot commissions or competitive quotation for larger deployments. Supplier can provide standard NHS terms and conditions.",
+  "procurement_notes": "Not currently available on a national framework. Local procurement required — typically via direct award for pilot commissions or competitive quotation for larger deployments. Supplier can provide standard NHS terms and conditions.",
   "expected_benefit_note": "Multidisciplinary approach may improve completion rates and outcomes compared with single-discipline models. Potential to reduce downstream demand on Tier 3 services and obesity-related secondary care.",
   "tariff_considerations": "No direct tariff displacement. May reduce GP consultation frequency and specialist referrals for weight-related conditions over the medium term. Compare with face-to-face tier 2/3 service costs when modelling.",
   "provider_income_note": "No direct provider income implications. Referral to W8Buddy does not generate or displace a tariff payment for primary care.",
-  "roi_note": "Supplier ROI modelling suggests potential system savings of \u00a31,500\u2013\u00a32,500 per patient over 5 years from reduced obesity-related healthcare utilisation. These estimates are modelled assumptions \u2014 validate locally.",
+  "roi_note": "Supplier ROI modelling suggests potential system savings of £1,500–£2,500 per patient over 5 years from reduced obesity-related healthcare utilisation. These estimates are modelled assumptions — validate locally.",
   "funding_ids": [],
   "nhse_125k_eligible": null,
   "nhse_125k_note": "Not applicable — weight management product.",
@@ -75,7 +107,13 @@
   "minimum_conditions_for_success": "Referral pathway with primary care or weight management service. Minimum 100 patient cohort for meaningful outcome data.",
   "content_confidence": "Illustrative",
   "linked_funding_ids": [],
-  "demo_variants": [{ "label": "W8Buddy website", "url": "https://www.w8buddy.com", "type": "website" }],
+  "demo_variants": [
+    {
+      "label": "W8Buddy website",
+      "url": "https://www.w8buddy.com",
+      "type": "website"
+    }
+  ],
   "demo_notes": "Contact W8Buddy for a demonstration.",
   "supplier_contact_email": "info@w8buddy.com",
   "supplier_contact_name": "W8Buddy team",

@@ -1,15 +1,18 @@
-import { Suspense } from 'react'
-import { getAllApps } from '@/lib/data'
-import CatalogueClient from '../CatalogueClient'
-import CatalogueSkeleton from '../CatalogueSkeleton'
+import { redirect } from 'next/navigation'
 
-export const metadata = { title: 'Browse digital therapeutics — HealthStore' }
-
-export default function AppsBrowsePage() {
-  const apps = getAllApps()
-  return (
-    <Suspense fallback={<CatalogueSkeleton />}>
-      <CatalogueClient apps={apps} />
-    </Suspense>
-  )
+/** Legacy `/apps/browse` URLs redirect to `/apps/condition-catalogue` (query preserved). */
+export default async function AppsBrowseLegacyRedirect({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
+  const sp = await searchParams
+  const p = new URLSearchParams()
+  for (const [key, val] of Object.entries(sp)) {
+    if (val === undefined) continue
+    if (Array.isArray(val)) val.forEach(v => p.append(key, v))
+    else p.set(key, val)
+  }
+  const s = p.toString()
+  redirect(s ? `/apps/condition-catalogue?${s}` : '/apps/condition-catalogue')
 }

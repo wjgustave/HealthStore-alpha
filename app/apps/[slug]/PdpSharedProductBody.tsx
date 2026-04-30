@@ -24,6 +24,7 @@ import { getCommissioningSnapshot } from '@/lib/commissioningSnapshot'
 import { getCommissionerFacingFunding, getLinkedFunding } from '@/lib/data'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
 import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges, ProductHeroDemoBadge } from './pdpBlocks'
+import PdpSupplierContactCard from '@/components/PdpSupplierContactCard'
 
 export default function PdpSharedProductBody({
   app,
@@ -448,6 +449,8 @@ export default function PdpSharedProductBody({
                 </div>
               )}
             </div>
+
+            <PdpSupplierContactCard email={app.supplier_contact_email} />
 
             {app.product_tiers?.length > 0 && (
               <div className="hs-surface-card-sm bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>

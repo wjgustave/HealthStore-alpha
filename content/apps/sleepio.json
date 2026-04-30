@@ -5,16 +5,37 @@
   "supplier_name": "Big Health",
   "short_name": "Sleepio",
   "logo_path": "/logos/sleepio.svg",
-  "condition_tags": ["insomnia"],
-  "pathway_tags": ["cbt-i", "self-management", "sleep", "mental-health-adjacent"],
-  "outcome_tags": ["sleep-improvement", "self-management", "mental-health", "wellbeing"],
+  "condition_tags": [
+    "insomnia"
+  ],
+  "pathway_tags": [
+    "cbt-i",
+    "self-management",
+    "sleep",
+    "mental-health-adjacent"
+  ],
+  "outcome_tags": [
+    "sleep-improvement",
+    "self-management",
+    "mental-health",
+    "wellbeing"
+  ],
   "supervision_model": "guided_self_help",
-  "referral_modes": ["self_referral", "clinician_referral"],
+  "referral_modes": [
+    "self_referral",
+    "clinician_referral"
+  ],
   "one_line_value_proposition": "Formally NICE-recommended digital CBT for insomnia — one of the most evidence-rich DTx in the NHS with multiple RCTs and a full NICE HTG recommendation.",
   "why_it_matters_locally": "Insomnia affects around a third of adults and is a common driver of GP appointments, prescription burden and mental health referrals. Sleepio provides a structured, fully digital CBT-I programme that can reach patients who cannot access face-to-face sleep clinics.",
   "target_problem_statement": "High demand for insomnia treatment, limited NHS sleep clinic capacity, over-reliance on hypnotic prescribing, and wide variation in access to evidence-based CBT-I.",
   "nice_guidance_refs": [
-    { "ref": "NICE HTG624", "url": "https://www.nice.org.uk/guidance/htg624", "type": "HTG", "date": "2023", "note": "Migrated from MTG70" }
+    {
+      "ref": "NICE HTG624",
+      "url": "https://www.nice.org.uk/guidance/htg624",
+      "type": "HTG",
+      "date": "2023",
+      "note": "Migrated from MTG70"
+    }
   ],
   "evidence_summary": "Multiple RCTs including the OASIS trial (n=1,711, general population, BMJ 2017). Formal NICE guidance via HTG624 (migrated from MTG70). Strong evidence base across general population, cancer, chronic pain and mental health comorbidity settings.",
   "evidence_strength": "strong",
@@ -32,8 +53,14 @@
   "maturity_level": "scaled",
   "live_sites": "Multiple NHS trusts, national deployments internationally. Formally recommended by NICE.",
   "named_sites": [
-    { "name": "Multiple NHS trusts (specific organisations not listed in catalogue)", "status": "active" },
-    { "name": "International deployments", "status": "active" }
+    {
+      "name": "Multiple NHS trusts (specific organisations not listed in catalogue)",
+      "status": "active"
+    },
+    {
+      "name": "International deployments",
+      "status": "active"
+    }
   ],
   "live_icbs": 10,
   "patients_covered_note": "Millions of users globally. Deployed across multiple NHS organisations since NICE MTG70 recommendation.",
@@ -58,10 +85,14 @@
   "monitoring_note": "Self-management tool. Not a monitored clinical service. Appropriate escalation pathways for patients with worsening symptoms or mental health concerns must be defined locally.",
   "escalation_note": "Programme includes safety features and signposting. Local escalation pathways for mental health concerns should be communicated to patients.",
   "operating_hours_caveat": "Fully digital self-management programme — not a monitored service. Ensure patients know how to access clinical support if needed.",
-  "implementation_prerequisites": ["Referral pathway or self-referral process established", "Clinician awareness of programme scope and limitations", "DTAC approval confirmed locally"],
+  "implementation_prerequisites": [
+    "Referral pathway or self-referral process established",
+    "Clinician awareness of programme scope and limitations",
+    "DTAC approval confirmed locally"
+  ],
   "pricing_model": "National negotiated rate",
   "national_price_available": true,
-  "indicative_price_text": "National pricing available for population-level deployment. Typically structured as a per-capita annual licence covering the ICB population. Indicative range: \u00a30.10\u2013\u00a30.30 per head of population per year. Contact supplier for formal pricing.",
+  "indicative_price_text": "National pricing available for population-level deployment. Typically structured as a per-capita annual licence covering the ICB population. Indicative range: £0.10–£0.30 per head of population per year. Contact supplier for formal pricing.",
   "pricing_confidence": "supplier_reported",
   "free_offer_flag": false,
   "service_wrap_included": true,
@@ -72,12 +103,16 @@
   "expected_benefit_note": "Population-level deployment may reduce hypnotic prescribing, sleep-related GP consultations, and downstream impacts of untreated insomnia on mental health and long-term conditions. Trial evidence shows significant improvement in sleep quality and insomnia severity. Benefits depend on sustained communications to drive uptake.",
   "tariff_considerations": "No direct tariff implications. Commissioner-funded as a population health intervention. May contribute to QOF-related targets around mental health and medication review. Potential prescribing cost savings from reduced hypnotic use.",
   "provider_income_note": "Minimal direct impact on provider income. May reduce some GP consultation volume for sleep complaints over time, which could be relevant to demand management discussions. Talking Therapies services may see reduced caseload pressure for insomnia-related presentations.",
-  "roi_note": "NICE health economic analysis supporting the HTG recommendation indicates Sleepio is cost-effective compared with no treatment and with sleep hygiene advice. The Oxford AHSN evaluation estimated a return of \u00a33\u2013\u00a35 per \u00a31 invested at population level over 3 years, primarily from reduced prescribing and GP consultation costs. Local results will vary with uptake rates.",
+  "roi_note": "NICE health economic analysis supporting the HTG recommendation indicates Sleepio is cost-effective compared with no treatment and with sleep hygiene advice. The Oxford AHSN evaluation estimated a return of £3–£5 per £1 invested at population level over 3 years, primarily from reduced prescribing and GP consultation costs. Local results will vary with uptake rates.",
   "funding_ids": [],
   "nhse_125k_eligible": null,
   "nhse_125k_note": "Not applicable — this is an insomnia product, not COPD.",
   "demo_variants": [
-    { "label": "Big Health website", "url": "https://www.bighealth.com/sleepio", "type": "website" }
+    {
+      "label": "Big Health website",
+      "url": "https://www.bighealth.com/sleepio",
+      "type": "website"
+    }
   ],
   "demo_notes": "Contact Big Health for a demonstration or trial access.",
   "last_reviewed_date": "2026-03-17",
@@ -87,7 +122,7 @@
   "nhs_login_integration": true,
   "nhs_notify_integration": false,
   "monitoring_model": "Population health dashboard showing uptake, completion, and outcomes at ICB/practice level. Aggregated outcome reporting (no individual patient monitoring by commissioners). Individual patient data accessible only by the patient themselves.",
-  "minimum_conditions_for_success": "Senior commissioner sponsorship. Proactive communications plan to drive awareness and self-referral. GP and pharmacy engagement for signposting. Minimum 12-month deployment to demonstrate population-level impact. Realistic expectations \u2014 population programmes typically see 2\u20135% uptake of the eligible population.",
+  "minimum_conditions_for_success": "Senior commissioner sponsorship. Proactive communications plan to drive awareness and self-referral. GP and pharmacy engagement for signposting. Minimum 12-month deployment to demonstrate population-level impact. Realistic expectations — population programmes typically see 2–5% uptake of the eligible population.",
   "content_confidence": "Confirmed",
   "cyber_notes": "US-based company — confirm data residency and DPA terms for NHS use.",
   "linked_funding_ids": [],
@@ -99,13 +134,23 @@
     "nhs_app": true,
     "population_health_dashboard": false,
     "device_integration": "No device integration required",
-    "languages": ["English"],
+    "languages": [
+      "English"
+    ],
     "data_hosting": "Confirm with Big Health — US-based company"
   },
   "context_of_use": {
     "population": "Adults with insomnia disorder or insomnia symptoms",
-    "pathways": ["Self-management", "CBT-I", "Mental health support"],
-    "care_settings": ["Primary care", "Community", "Self-referral"],
+    "pathways": [
+      "Self-management",
+      "CBT-I",
+      "Mental health support"
+    ],
+    "care_settings": [
+      "Primary care",
+      "Community",
+      "Self-referral"
+    ],
     "therapeutic_purpose": "Digital CBT for insomnia — structured 6-week programme",
     "hcp_involvement": "Minimal — self-management programme",
     "nice_scope": "NICE HTG624 (migrated from MTG70) — formal recommendation"

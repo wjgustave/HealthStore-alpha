@@ -13,6 +13,7 @@ import {
   sharedConditionTags,
   appConditionTags,
 } from '@/lib/compareConditions'
+import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 import {
   NOT_STATED,
   getTherapeuticPurpose,
@@ -253,26 +254,12 @@ export default function CompareClient({ allApps }: Props) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-      <nav aria-label="Breadcrumb" className="mb-6">
-        <ol className="m-0 flex list-none flex-wrap items-center gap-2 p-0 text-xs" style={{ color: 'var(--text-muted)' }}>
-          <li>
-            <Link href="/apps" className="hover:underline">
-              Browse apps
-            </Link>
-          </li>
-          <li aria-hidden className="select-none">
-            ›
-          </li>
-          <li style={{ color: 'var(--text-secondary)' }} aria-current="page">
-            Compare apps
-          </li>
-        </ol>
-      </nav>
+      <PageBreadcrumb items={[{ label: 'Comparison tool' }]} />
 
       <div className="mb-8">
-        <h1 className="page-title-h1">Compare apps</h1>
+        <h1 className="page-title-h1">Comparison tool</h1>
         <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
-          Add up to four apps from the catalogue in the <strong>same condition area</strong>. Remove apps here or clear the list to compare a different condition.
+          Add up to four apps from the catalogue in the <strong>same condition area</strong>. Remove apps here or clear all to use the comparison tool for a different condition.
         </p>
       </div>
 
@@ -332,14 +319,14 @@ export default function CompareClient({ allApps }: Props) {
             ⚖️
           </div>
           <p className="font-semibold mb-3 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
-            No applications selected for comparison. Browse the catalogue and add applications to compare them side by side.
+            No applications selected for the comparison tool. Browse the catalogue and add applications to compare them side by side.
           </p>
           <Link
-            href="/apps/browse"
+            href="/apps"
             className="inline-flex items-center justify-center text-sm font-semibold rounded-lg px-5 py-3 min-h-[44px]"
             style={{ background: STORE_ACCENT, color: '#fff' }}
           >
-            Browse all apps
+            Find apps
           </Link>
         </div>
       ) : (

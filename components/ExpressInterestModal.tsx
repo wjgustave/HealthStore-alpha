@@ -9,7 +9,13 @@ interface Props {
   appName: string
   open: boolean
   onClose: () => void
+  commissioningOrganisationLabel: string
 }
+
+/** Prototype prefills for expression of interest (read-only contact fields). */
+const EXPRESS_INTEREST_PRESET_NAME = 'Commissioner Gordorn'
+const EXPRESS_INTEREST_PRESET_ROLE = 'Commissioiner'
+const EXPRESS_INTEREST_PRESET_EMAIL = 'henry.gordon90210@nhs.net'
 
 function Field({
   id,
@@ -19,14 +25,16 @@ function Field({
   required,
   type = 'text',
   placeholder,
+  readOnly,
 }: {
   id: string
   label: string
   value: string
-  onChange: (v: string) => void
+  onChange?: (v: string) => void
   required?: boolean
   type?: string
   placeholder?: string
+  readOnly?: boolean
 }) {
   return (
     <div>
@@ -46,11 +54,17 @@ function Field({
         id={id}
         type={type}
         value={value}
-        onChange={e => onChange(e.target.value)}
+        onChange={readOnly ? undefined : e => onChange?.(e.target.value)}
+        readOnly={readOnly}
         required={required}
         placeholder={placeholder}
-        className="w-full px-3 py-2.5 rounded-lg border text-sm"
-        style={{ borderColor: 'var(--border)', color: 'var(--text-primary)', background: '#fff' }}
+        aria-readOnly={readOnly || undefined}
+        className={`w-full px-3 py-2.5 rounded-lg border text-sm ${readOnly ? 'cursor-default' : ''}`}
+        style={{
+          borderColor: 'var(--border)',
+          color: 'var(--text-primary)',
+          background: readOnly ? '#F7F9FC' : '#fff',
+        }}
       />
     </div>
   )
@@ -59,7 +73,12 @@ function Field({
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
-export default function ExpressInterestModal({ appName, open, onClose }: Props) {
+export default function ExpressInterestModal({
+  appName,
+  open,
+  onClose,
+  commissioningOrganisationLabel,
+}: Props) {
   const [submitted, setSubmitted] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [formData, setFormData] = useState({
@@ -83,6 +102,17 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    if (!open) return
+    setFormData(prev => ({
+      ...prev,
+      name: EXPRESS_INTEREST_PRESET_NAME,
+      role: EXPRESS_INTEREST_PRESET_ROLE,
+      organisation: commissioningOrganisationLabel,
+      email: EXPRESS_INTEREST_PRESET_EMAIL,
+    }))
+  }, [open, commissioningOrganisationLabel])
 
   useEffect(() => {
     if (!open) {
@@ -237,24 +267,23 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
                   id={`${titleId}-name`}
                   label="Your name"
                   value={formData.name}
-                  onChange={v => handleChange('name', v)}
                   required
+                  readOnly
                 />
                 <Field
                   id={`${titleId}-role`}
                   label="Role"
                   value={formData.role}
-                  onChange={v => handleChange('role', v)}
                   required
-                  placeholder="e.g. Commissioner, Clinical Lead"
+                  readOnly
                 />
               </div>
               <Field
                 id={`${titleId}-org`}
                 label="Organisation / ICB"
                 value={formData.organisation}
-                onChange={v => handleChange('organisation', v)}
                 required
+                readOnly
               />
               <div className="grid sm:grid-cols-2 gap-4">
                 <Field
@@ -262,8 +291,8 @@ export default function ExpressInterestModal({ appName, open, onClose }: Props) 
                   label="Email"
                   type="email"
                   value={formData.email}
-                  onChange={v => handleChange('email', v)}
                   required
+                  readOnly
                 />
                 <Field
                   id={`${titleId}-phone`}

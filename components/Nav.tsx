@@ -24,13 +24,13 @@ function CompareNavLink({
       href={href}
       onClick={onNavigate}
       className={`inline-flex items-center gap-1.5 ${className}`}
-      aria-label={count > 0 ? `Compare apps, ${count} selected` : 'Compare apps'}
+      aria-label={count > 0 ? `Comparison tool, ${count} selected` : 'Comparison tool'}
       style={{
         color: active ? 'var(--nhs-blue)' : 'var(--text-secondary)',
         background: active ? '#E6F0FB' : 'transparent',
       }}
     >
-      Compare
+      Comparison tool
       {count > 0 ? (
         <span
           className="min-w-[1.25rem] h-5 px-1 rounded-md text-[11px] font-bold leading-none inline-flex items-center justify-center"
@@ -52,10 +52,10 @@ export default function Nav({ commissioningContextLabel }: { commissioningContex
   const links = [
     { href: '/', label: 'Home' },
     { href: '/apps', label: 'Find apps' },
-    { href: '/funding', label: 'Funding' },
+    { href: '/funding', label: 'Funding directory' },
   ]
 
-  const browseAppsActive = path === '/apps' || path === '/apps/browse'
+  const browseAppsActive = path === '/apps' || path === '/apps/condition-catalogue' || path === '/apps/browse'
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' })

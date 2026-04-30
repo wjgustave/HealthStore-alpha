@@ -100,7 +100,7 @@ export function BrowseByConditionSection({ conditions }: Pick<HomeFragmentsProps
         {conditions.map((c) => (
           <Link
             key={c.id}
-            href={`/apps/browse?condition=${encodeURIComponent(c.id)}`}
+            href={`/apps/condition-catalogue?condition=${encodeURIComponent(c.id)}`}
             className="group flex gap-4 rounded-xl border bg-white p-4 text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
             style={{ borderColor: 'var(--border)', textDecoration: 'none', outlineColor: '#005EB8' }}
           >

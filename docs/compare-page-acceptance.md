@@ -38,7 +38,7 @@ Helpers live in [`lib/compareFieldFormat.ts`](../lib/compareFieldFormat.ts). Emp
 
 ## Functional acceptance criteria
 
-- [ ] Empty basket shows empty state with CTA to `/apps/browse`.
+- [ ] Empty basket shows empty state with CTA to `/apps/condition-catalogue`.
 - [ ] With 1–4 apps selected, summary strip shows each app’s logo, name, supplier, and condition tag pills.
 - [ ] Comparison table lists **all rows** above under the correct **section headers**: Clinical context; Adoption & assurance; Commercial & delivery.
 - [ ] Horizontal scroll appears below `min-width` breakpoint without clipping sticky first column.

@@ -6,9 +6,10 @@ import ExpressInterestModal from '@/components/ExpressInterestModal'
 interface Props {
   app: { app_name: string }
   children: React.ReactNode
+  commissioningOrganisationLabel: string
 }
 
-export default function AppDetailClient({ app, children }: Props) {
+export default function AppDetailClient({ app, children, commissioningOrganisationLabel }: Props) {
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
@@ -26,7 +27,12 @@ export default function AppDetailClient({ app, children }: Props) {
   return (
     <>
       {children}
-      <ExpressInterestModal appName={app.app_name} open={showModal} onClose={() => setShowModal(false)} />
+      <ExpressInterestModal
+        appName={app.app_name}
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        commissioningOrganisationLabel={commissioningOrganisationLabel}
+      />
     </>
   )
 }

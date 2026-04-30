@@ -5,16 +5,38 @@
   "supplier_name": "Pumping Marvellous Foundation",
   "short_name": "Pumping Marvellous",
   "logo_path": "/logos/pumping-marvellous.jpeg",
-  "condition_tags": ["cardiac_rehab"],
-  "pathway_tags": ["cardiac-rehabilitation", "heart-failure", "peer-support", "self-management", "charity"],
-  "outcome_tags": ["self-management", "peer-support", "quality-of-life", "health-equity"],
+  "condition_tags": [
+    "cardiac_rehab"
+  ],
+  "pathway_tags": [
+    "cardiac-rehabilitation",
+    "heart-failure",
+    "peer-support",
+    "self-management",
+    "charity"
+  ],
+  "outcome_tags": [
+    "self-management",
+    "peer-support",
+    "quality-of-life",
+    "health-equity"
+  ],
   "supervision_model": "self_management_only",
-  "referral_modes": ["self_referral", "clinician_referral"],
+  "referral_modes": [
+    "self_referral",
+    "clinician_referral"
+  ],
   "one_line_value_proposition": "NICE HTG764-recommended free cardiac rehabilitation platform from a UK heart failure charity — uniquely reaching underserved populations with 63% women and one-third from the most deprived English cities, with peer-to-peer community support.",
   "why_it_matters_locally": "Pumping Marvellous addresses the well-documented gender and deprivation disparities in cardiac rehabilitation uptake. With 63% women (reversing the typical gender bias in CR) and one-third of registrants from the top 20 most deprived English cities, it demonstrates an ability to reach populations that conventional CR programmes consistently fail to engage. The platform is entirely free, funded by educational grants.",
   "target_problem_statement": "Severe underrepresentation of women and deprived communities in cardiac rehabilitation, low HF-specific CR provision, and cost barriers to digital CR adoption.",
   "nice_guidance_refs": [
-    { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — moved from 'research only' (Aug 2025 draft) to recommended (Dec 2025 final)" }
+    {
+      "ref": "NICE HTG764",
+      "url": "https://www.nice.org.uk/guidance/htg764",
+      "type": "EVA",
+      "date": "December 2025",
+      "note": "Conditionally recommended — moved from 'research only' (Aug 2025 draft) to recommended (Dec 2025 final)"
+    }
   ],
   "evidence_summary": "Service evaluation: Sankaranarayanan et al. (2025, medRxiv preprint), n=673 registrants (Aug 2024 - Jul 2025). 63% women, one-third from top 20 most deprived English cities. Referral sources: ~30% from HF/CR teams, 29% via social media, ~25% from PMF groups, 4% from GPs. NICE noted clinical evidence for the platform is uncertain, but clinical and financial risk judged low. Designed using evidence-based NHS programmes for heart failure.",
   "evidence_strength": "low",
@@ -179,7 +201,10 @@
   "maturity_level": "limited_live",
   "live_sites": "UK-wide, free access. 673 registrants in first year (launched August 2024).",
   "named_sites": [
-    { "name": "UK-wide programme (free access)", "status": "active" }
+    {
+      "name": "UK-wide programme (free access)",
+      "status": "active"
+    }
   ],
   "live_icbs": 0,
   "patients_covered_note": "673 registrants in first year (Aug 2024 - Jul 2025). Platform is free and open access — not contracted to specific NHS trusts.",
@@ -206,7 +231,10 @@
   "monitoring_note": "Self-management platform. Not a monitored clinical service. Peer-to-peer community support.",
   "escalation_note": "Standard NHS escalation routes. Platform is not a clinical service. Clinical Advisory Board oversees content.",
   "operating_hours_caveat": "Not a clinical service or monitored platform. Peer support community only.",
-  "implementation_prerequisites": ["Internet access and browser-capable device", "Clinical assessment before offering the platform (NICE requirement)"],
+  "implementation_prerequisites": [
+    "Internet access and browser-capable device",
+    "Clinical assessment before offering the platform (NICE requirement)"
+  ],
   "pricing_model": "free",
   "national_price_available": true,
   "indicative_price_text": "Free to patients and NHS teams. Funded by educational grant from Pharmacosmos UK.",
@@ -229,27 +257,46 @@
   "minimum_conditions_for_success": "Clinical assessment pathway for patients before offering the platform. Awareness among HF/CR teams.",
   "procurement_notes": "No procurement required. Free platform. Order booklets via NHS team forms.",
   "content_confidence": "Confirmed",
-  "linked_funding_ids": ["health-innovation-network"],
+  "linked_funding_ids": [
+    "health-innovation-network"
+  ],
   "technical_integrations": {
     "fhir": "Information not available",
     "emis": "Information not available",
     "nhs_app": false,
     "population_health_dashboard": false,
     "device_integration": "No device integration. Web-based, accessible via any browser.",
-    "languages": ["English"],
+    "languages": [
+      "English"
+    ],
     "data_hosting": "Confirm with Pumping Marvellous Foundation"
   },
   "context_of_use": {
     "population": "Adults with heart failure, particularly women and patients from deprived areas",
-    "pathways": ["Heart failure cardiac rehabilitation", "Self-referral CR", "Community-based CR"],
-    "care_settings": ["Home-based", "Community"],
+    "pathways": [
+      "Heart failure cardiac rehabilitation",
+      "Self-referral CR",
+      "Community-based CR"
+    ],
+    "care_settings": [
+      "Home-based",
+      "Community"
+    ],
     "therapeutic_purpose": "Structured exercise (low and medium function), education, psychosocial support, peer-to-peer community",
     "hcp_involvement": "Minimal — clinical assessment required before offering, but platform is self-directed with peer support",
     "nice_scope": "NICE HTG764 — conditionally recommended during 3-year evidence generation period"
   },
   "demo_variants": [
-    { "label": "Pumping Marvellous CR programme", "url": "https://pumpingmarvellous.org/heart-failure-guide/heart-failure-rehabilitation", "type": "website" },
-    { "label": "Pumping Marvellous University", "url": "https://university.pumpingmarvellous.org", "type": "website" }
+    {
+      "label": "Pumping Marvellous CR programme",
+      "url": "https://pumpingmarvellous.org/heart-failure-guide/heart-failure-rehabilitation",
+      "type": "website"
+    },
+    {
+      "label": "Pumping Marvellous University",
+      "url": "https://university.pumpingmarvellous.org",
+      "type": "website"
+    }
   ],
   "demo_notes": "Platform is freely accessible. Visit the website to explore.",
   "supplier_contact_email": "info@pumpingmarvellous.org",

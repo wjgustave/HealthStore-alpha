@@ -25,8 +25,8 @@
     "clinician_referral",
     "self_referral"
   ],
-  "one_line_value_proposition": "Nationally deployed in 100% of Welsh GP practices \u2014 a population-scale COPD self-management app with 8 years of NHS partnership evidence and bilingual (English/Welsh) capability.",
-  "why_it_matters_locally": "COPDhub integrates with annual review workflows to give patients a personalised digital care plan they can use year-round. Its 8-year NHS Wales deployment demonstrates population-scale adoption across all deprivation levels \u2014 making it a strong exemplar for commissioners considering equitable digital access.",
+  "one_line_value_proposition": "Nationally deployed in 100% of Welsh GP practices — a population-scale COPD self-management app with 8 years of NHS partnership evidence and bilingual (English/Welsh) capability.",
+  "why_it_matters_locally": "COPDhub integrates with annual review workflows to give patients a personalised digital care plan they can use year-round. Its 8-year NHS Wales deployment demonstrates population-scale adoption across all deprivation levels — making it a strong exemplar for commissioners considering equitable digital access.",
   "target_problem_statement": "Low patient activation between appointments, poor inhaler optimisation, lack of personalised self-management plans, and high carbon impact from inappropriate inhaler prescribing.",
   "nice_guidance_refs": [
     {
@@ -41,51 +41,63 @@
   "evidence_strength_rationale": "NICE recommends self-management use during evidence generation. Evidence is early: a retrospective case series had no comparator, and an addendum before-after Welsh winter comparison reported lower ED visits and steroid courses. No COPD RCT or robust controlled study was found.",
   "case_studies": [
     {
-      "title": "NHS Wales national deployment \u2014 population-level outcomes",
+      "title": "NHS Wales national deployment — population-level outcomes",
       "setting": "100% of NHS Wales GP practices and hospitals, 2019 to present",
       "sample_size": null,
-      "outcome": "36% reduction in GP visits among regular users. 19% reduction in A&E admissions among regular users. 41% improvement in wellness scores at 4+ months. 20,303 tonnes CO\u2082 equivalent reduction from inhaler prescribing shift.",
-      "caveat": "Real-world data from national deployment \u2014 outcomes reflect users who engage regularly. Attribution to COPDhub specifically not verified by independent peer review. ICST-reported outcomes.",
+      "outcome": "36% reduction in GP visits among regular users. 19% reduction in A&E admissions among regular users. 41% improvement in wellness scores at 4+ months. 20,303 tonnes CO₂ equivalent reduction from inhaler prescribing shift.",
+      "caveat": "Real-world data from national deployment — outcomes reflect users who engage regularly. Attribution to COPDhub specifically not verified by independent peer review. ICST-reported outcomes.",
       "source": "ICST outcomes page (icst.org.uk/outcomes)"
     },
     {
-      "title": "Low-GWP inhaler prescribing shift \u2014 Wales",
-      "setting": "NHS Wales, ICST Respiratory Toolkit, 2018\u20132024",
+      "title": "Low-GWP inhaler prescribing shift — Wales",
+      "setting": "NHS Wales, ICST Respiratory Toolkit, 2018–2024",
       "sample_size": null,
-      "outcome": "Inhaler prescribing shifted from 30.8% to 41.1% DDD low-GWP \u2014 20,303 tonnes CO\u2082 equivalent reduction. Most significant shift of any UK nation.",
-      "caveat": "Shift attributable to ICST toolkit broadly \u2014 not solely to COPDhub app. Reflects combined technology, clinical engagement and behaviour change work.",
+      "outcome": "Inhaler prescribing shifted from 30.8% to 41.1% DDD low-GWP — 20,303 tonnes CO₂ equivalent reduction. Most significant shift of any UK nation.",
+      "caveat": "Shift attributable to ICST toolkit broadly — not solely to COPDhub app. Reflects combined technology, clinical engagement and behaviour change work.",
       "source": "ICST outcomes page (icst.org.uk/outcomes)"
     }
   ],
   "maturity_level": "scaled",
-  "live_sites": "NHS Wales (national \u2014 100% GP practices), West Yorkshire ICB, NHS England expansion in progress, Hong Kong (Long COVID programme)",
+  "live_sites": "NHS Wales (national — 100% GP practices), West Yorkshire ICB, NHS England expansion in progress, Hong Kong (Long COVID programme)",
   "named_sites": [
-    { "name": "NHS Wales (national — 100% GP practices)", "status": "active" },
-    { "name": "West Yorkshire ICB", "status": "active" },
-    { "name": "NHS England expansion", "status": "active" },
-    { "name": "Hong Kong (Long COVID programme)", "status": "active" }
+    {
+      "name": "NHS Wales (national — 100% GP practices)",
+      "status": "active"
+    },
+    {
+      "name": "West Yorkshire ICB",
+      "status": "active"
+    },
+    {
+      "name": "NHS England expansion",
+      "status": "active"
+    },
+    {
+      "name": "Hong Kong (Long COVID programme)",
+      "status": "active"
+    }
   ],
   "live_icbs": 2,
   "patients_covered_note": "20,000+ downloads in Wales. 99% of Welsh GP practices have patients using ICST respiratory app. NHS England expansion scope not publicly confirmed.",
   "dtac_status": "required_not_confirmed",
   "dtac_note": "DTAC required for NHS commissioning. COPDhub-specific central DTAC completion not confirmed in reviewed public sources. Commissioners must request the DTAC form from ICST and complete local assessment.",
   "device_class": "Class I SaMD",
-  "dcb0129_status": "Required \u2014 confirm with ICST",
+  "dcb0129_status": "Required — confirm with ICST",
   "dcb0160_boilerplate_available": true,
   "dspt_status": "Not confirmed in reviewed sources",
   "iso27001": "Not confirmed in reviewed sources",
   "cyber_essentials": "Not confirmed in reviewed sources",
   "gdpr_note": "GDPR compliant. Specific data hosting location not confirmed in reviewed public sources.",
   "target_patients": "Adults aged 18+ with a COPD diagnosis (all severities). Available irrespective of age, disease severity, geographical location or socioeconomic status.",
-  "exclusions": "iOS confirmed. Android \u2014 confirmation recommended before deployment. Web app not confirmed.",
+  "exclusions": "iOS confirmed. Android — confirmation recommended before deployment. Web app not confirmed.",
   "onboarding_model": "light_touch",
   "onboarding_detail": "App freely available on App Store (NHS Wales branded). NHS-branded referral pathway from GP. ICST implementation facilitators support rollout in each region.",
   "supplier_wrap": "ICST provides implementation support, HCP education and change management alongside the technology. Educational modules embedded in platform. Continuous updates aligned with NICE/BTS/GOLD guidelines.",
   "local_wraparound": "medium",
-  "local_wraparound_detail": "GP practice or community respiratory service must establish referral/invitation pathway. COPD register must be up to date. Co-production engagement with local clinical teams expected \u2014 allow time for this.",
+  "local_wraparound_detail": "GP practice or community respiratory service must establish referral/invitation pathway. COPD register must be up to date. Co-production engagement with local clinical teams expected — allow time for this.",
   "training_required": true,
   "training_note": "ICST provides HCP education and change management support.",
-  "monitoring_note": "Guided self-help model. Clinician messaging confirmed. Full clinician dashboard specification not publicly confirmed \u2014 clarify with ICST before deployment.",
+  "monitoring_note": "Guided self-help model. Clinician messaging confirmed. Full clinician dashboard specification not publicly confirmed — clarify with ICST before deployment.",
   "escalation_note": "Rescue plan feature activated by HCP. Patients must have clear routes to clinical support. Real-time deterioration guidance is built into the app but clinical escalation protocols must be defined locally.",
   "operating_hours_caveat": "COPDhub is a guided self-management tool, not a continuously monitored remote management service. Ensure local escalation pathways are clear.",
   "implementation_prerequisites": [
@@ -97,21 +109,21 @@
   ],
   "pricing_model": "Free core access (no support wrap)",
   "national_price_available": false,
-  "indicative_price_text": "Core COPDhub access is offered at no licence cost for eligible NHS organisations (as in NHS Wales national deployment). NHS England: optional implementation and analytics support is not included in the free offer and requires a separate commercial agreement \u2014 contact support@icst.org.uk.",
+  "indicative_price_text": "Core COPDhub access is offered at no licence cost for eligible NHS organisations (as in NHS Wales national deployment). NHS England: optional implementation and analytics support is not included in the free offer and requires a separate commercial agreement — contact support@icst.org.uk.",
   "pricing_confidence": "supplier_reported",
   "free_offer_flag": true,
   "service_wrap_included": false,
-  "service_wrap_description": "No service wrap is included in the free offer. Local teams should assume self-service onboarding, internal adoption support, and local performance monitoring unless additional paid support is procured. ICST provides implementation science support and platform updates in the NHS Wales model \u2014 confirm England terms with ICST.",
-  "service_wrap_note": "ICST provides implementation science support and ongoing platform updates as part of NHS Wales model. Free core in England typically excludes paid wrap \u2014 confirm with ICST.",
+  "service_wrap_description": "No service wrap is included in the free offer. Local teams should assume self-service onboarding, internal adoption support, and local performance monitoring unless additional paid support is procured. ICST provides implementation science support and platform updates in the NHS Wales model — confirm England terms with ICST.",
+  "service_wrap_note": "ICST provides implementation science support and ongoing platform updates as part of NHS Wales model. Free core in England typically excludes paid wrap — confirm with ICST.",
   "contract_note": "Direct from ICST. Free core access can be initiated with the supplier; paid support is contracted separately.",
-  "procurement_notes": "Free core access can be initiated directly with the supplier. Any requested implementation support, account management, or enhanced reporting is contracted separately.",
+  "procurement_notes": "Available via direct contract with ICST. Confirm G-Cloud availability.",
   "expected_benefit_note": "NHS Wales population-scale signals include 36% GP visit reduction and 19% A&E reduction among regular users. May improve patient knowledge and self-management; should not be expected to deliver measurable admission reductions in isolation. Most valuable as a supplement to existing COPD pathways. NICE HTE19 evidence programme may refine cost-effectiveness.",
   "tariff_considerations": "No tariff implications as a commissioner-funded patient education tool under the free core model. Does not replace tariff-funded activity directly. Commissioners should still model using local COPD prevalence and activity costs where paid wrap is added.",
   "provider_income_note": "Minimal impact on provider income. May reduce time spent on certain educational components of COPD reviews but is unlikely to change overall review activity.",
-  "roi_note": "No independently validated ROI model available. Supplier illustrative analysis suggests potential savings from reduced GP consultations, but this has not been tested in a controlled setting. 20,303 tonnes CO\u2082 equivalent reduction (Wales inhaler shift) supports Net Zero narratives. Treat cost-effectiveness claims as indicative; financial ROI pending NICE HTE19.",
+  "roi_note": "No independently validated ROI model available. Supplier illustrative analysis suggests potential savings from reduced GP consultations, but this has not been tested in a controlled setting. 20,303 tonnes CO₂ equivalent reduction (Wales inhaler shift) supports Net Zero narratives. Treat cost-effectiveness claims as indicative; financial ROI pending NICE HTE19.",
   "funding_ids": [],
   "nhse_125k_eligible": null,
-  "nhse_125k_note": "Eligibility for NHSE ICB \u00a3125k COPD funding not confirmed for COPDhub. Verify with NHSE before including in business case.",
+  "nhse_125k_note": "Eligibility for NHSE ICB £125k COPD funding not confirmed for COPDhub. Verify with NHSE before including in business case.",
   "demo_variants": [
     {
       "label": "ICST website",
@@ -123,11 +135,11 @@
   "last_reviewed_date": "2026-03-17",
   "source_summary": "NICE HTG736, ICST outcomes page (icst.org.uk/outcomes), Barry & Davies Clinical Medicine (RCP) 2025 (PMC12395526), NHS Wales App Store listing, RCP Digital Health report.",
   "confidence_note": "Content based on publicly available information. COPDhub-specific peer-reviewed RCT not identified. Verify all claims with ICST before use in procurement documentation.",
-  "sustainability_highlight": "20,303 tonnes CO\u2082 equivalent reduction from inhaler prescribing shift in Wales (2018\u20132024). Relevant for ICB Net Zero commitments.",
+  "sustainability_highlight": "20,303 tonnes CO₂ equivalent reduction from inhaler prescribing shift in Wales (2018–2024). Relevant for ICB Net Zero commitments.",
   "clinical_evidence_detailed": [
     {
       "id": "nhs-wales-deployment",
-      "ref": "NHS Wales national deployment (2019\u2013present)",
+      "ref": "NHS Wales national deployment (2019–present)",
       "type": "real_world",
       "type_label": "Real-world population evidence",
       "authors": "ICST / NHS Wales",
@@ -146,7 +158,7 @@
       "n": null,
       "setting": "100% of NHS Wales GP practices and hospitals, 2019 to present",
       "key_results": "36% reduction in GP visits among regular users. 19% reduction in A&E admissions among regular users. 41% improvement in wellness scores at 4+ months use.",
-      "study_limitation": "ICST-reported outcomes. Not independently peer-reviewed. Regular users only \u2014 outcomes do not represent the full deployed population.",
+      "study_limitation": "ICST-reported outcomes. Not independently peer-reviewed. Regular users only — outcomes do not represent the full deployed population.",
       "peer_reviewed": false,
       "coi": false,
       "data_quality_flag": false,
@@ -156,7 +168,7 @@
     },
     {
       "id": "inhaler-prescribing",
-      "ref": "Low-GWP inhaler prescribing shift \u2014 NHS Wales (2018\u20132024)",
+      "ref": "Low-GWP inhaler prescribing shift — NHS Wales (2018–2024)",
       "type": "real_world",
       "type_label": "Real-world population evidence",
       "authors": "ICST / NHS Wales",
@@ -172,9 +184,9 @@
       "url_pubmed": null,
       "url_full_text": "https://icst.org.uk/outcomes",
       "n": null,
-      "setting": "NHS Wales, ICST Respiratory Toolkit, 2018\u20132024",
-      "key_results": "Low-GWP inhaler prescribing shifted from 30.8% to 41.1% DDD (2018\u20132024). 20,303 tonnes CO\u2082 equivalent reduction. Most significant prescribing shift of any UK nation.",
-      "study_limitation": "Attributable to the ICST toolkit broadly \u2014 not to COPDhub alone. Reflects combined technology, clinical engagement and behaviour change work.",
+      "setting": "NHS Wales, ICST Respiratory Toolkit, 2018–2024",
+      "key_results": "Low-GWP inhaler prescribing shifted from 30.8% to 41.1% DDD (2018–2024). 20,303 tonnes CO₂ equivalent reduction. Most significant prescribing shift of any UK nation.",
+      "study_limitation": "Attributable to the ICST toolkit broadly — not to COPDhub alone. Reflects combined technology, clinical engagement and behaviour change work.",
       "peer_reviewed": false,
       "coi": false,
       "data_quality_flag": false,
@@ -203,7 +215,7 @@
       "n": null,
       "setting": "NHS Wales national implementation, 8-year analysis",
       "key_results": "Documents key enablers of 100% national adoption: co-production, digital infrastructure, clinical leadership, embedding into workflows, audit/QI tools. Open access.",
-      "study_limitation": "Implementation science publication \u2014 describes implementation methodology rather than clinical outcomes RCT.",
+      "study_limitation": "Implementation science publication — describes implementation methodology rather than clinical outcomes RCT.",
       "peer_reviewed": true,
       "coi": false,
       "data_quality_flag": false,
@@ -245,7 +257,6 @@
   "nhs_notify_integration": false,
   "monitoring_model": "Self-management with clinician dashboard for population-level oversight.",
   "minimum_conditions_for_success": "GP practice engagement, respiratory pathway lead, integration into prescribing review workflow.",
-  "procurement_notes": "Available via direct contract with ICST. Confirm G-Cloud availability.",
   "content_confidence": "Confirmed",
   "cyber_notes": "Confirm current security certifications with ICST.",
   "linked_funding_ids": [],
@@ -255,13 +266,22 @@
     "nhs_app": false,
     "population_health_dashboard": true,
     "device_integration": "No device integration required",
-    "languages": ["English", "Welsh"],
+    "languages": [
+      "English",
+      "Welsh"
+    ],
     "data_hosting": "UK-based servers"
   },
   "context_of_use": {
     "population": "Adults with COPD across all severity levels",
-    "pathways": ["Self-management", "Inhaler technique", "Prescribing optimisation"],
-    "care_settings": ["Primary care"],
+    "pathways": [
+      "Self-management",
+      "Inhaler technique",
+      "Prescribing optimisation"
+    ],
+    "care_settings": [
+      "Primary care"
+    ],
     "therapeutic_purpose": "Self-management education, inhaler technique training, prescribing decision support",
     "hcp_involvement": "Minimal — clinician dashboard available for population oversight",
     "nice_scope": "NICE HTE19 (HTG736) — recommended during 3-year evidence generation period"

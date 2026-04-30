@@ -64,7 +64,7 @@ export function OriginalBrowseByCondition({ conditions }: Pick<HomeFragmentsProp
         {conditions.map((c) => (
           <Link
             key={c.id}
-            href={`/apps/browse?condition=${encodeURIComponent(c.id)}`}
+            href={`/apps/condition-catalogue?condition=${encodeURIComponent(c.id)}`}
             className="flex flex-col items-center gap-2 rounded-xl border bg-white p-4 text-center shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
             style={{ borderColor: 'var(--border)', textDecoration: 'none', outlineColor: '#005EB8' }}
           >
@@ -199,7 +199,7 @@ function FeaturedAppsOriginal({ apps }: Pick<HomeFragmentsProps, 'apps'>) {
       </div>
       <div className="mt-6 text-center">
         <Link
-          href="/apps/browse"
+          href="/apps/condition-catalogue"
           className="inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-semibold text-white"
           style={{ background: STORE_ACCENT }}
         >

@@ -8,6 +8,8 @@ import AppDetailClient from '../AppDetailClient'
 import PdpSharedProductBody from '../PdpSharedProductBody'
 import { SharedProductViewBanner } from '@/components/SharedProductViewBanner'
 import { STORE_ACCENT } from '@/lib/storeAccent'
+import { PageBreadcrumb } from '@/components/PageBreadcrumb'
+import { getCommissioningContextLabel } from '@/lib/commissioningContextDisplay'
 
 export const dynamic = 'force-dynamic'
 
@@ -42,7 +44,7 @@ function ShareError({
         ) : (
           <p className="mt-4">
             <Link href="/apps" className="text-sm font-semibold underline underline-offset-2" style={{ color: STORE_ACCENT }}>
-              Browse apps
+              Find apps
             </Link>
           </p>
         )}
@@ -114,14 +116,23 @@ export default async function SharedProductPage({
   const app = getAppBySlug(slug)
   if (!app) notFound()
 
+  const commissioningOrganisationLabel = getCommissioningContextLabel(session)
+
   const allowedKeys = new Set(parsed.keys)
 
   const renderedKeys = sharedKeysWithVisibleContent(app, allowedKeys)
 
   if (renderedKeys.length === 0) {
     return (
-      <AppDetailClient app={app}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+      <AppDetailClient app={app} commissioningOrganisationLabel={commissioningOrganisationLabel}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+          <PageBreadcrumb
+            items={[
+              { label: 'Find apps', href: '/apps' },
+              { label: 'Condition catalogue', href: '/apps/condition-catalogue' },
+              { label: app.app_name },
+            ]}
+          />
           <SharedProductViewBanner appName={app.app_name} slug={slug} renderedKeys={[]} />
           <div
             className="rounded-xl border p-6 mt-4"
@@ -151,8 +162,15 @@ export default async function SharedProductPage({
   }
 
   return (
-    <AppDetailClient app={app}>
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+    <AppDetailClient app={app} commissioningOrganisationLabel={commissioningOrganisationLabel}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        <PageBreadcrumb
+          items={[
+            { label: 'Find apps', href: '/apps' },
+            { label: 'Condition catalogue', href: '/apps/condition-catalogue' },
+            { label: app.app_name },
+          ]}
+        />
         <SharedProductViewBanner appName={app.app_name} slug={slug} renderedKeys={renderedKeys} />
         <PdpSharedProductBody app={app} allowedKeys={allowedKeys} />
       </div>

@@ -5,16 +5,37 @@
   "supplier_name": "Ki Performance Lifestyle Ltd",
   "short_name": "KiActiv",
   "logo_path": "/logos/kiactiv.png",
-  "condition_tags": ["cardiac_rehab"],
-  "pathway_tags": ["cardiac-rehabilitation", "physical-activity", "heart-failure", "wearable-technology", "remote-monitoring"],
-  "outcome_tags": ["physical-activity", "cv-risk-reduction", "quality-of-life", "self-management"],
+  "condition_tags": [
+    "cardiac_rehab"
+  ],
+  "pathway_tags": [
+    "cardiac-rehabilitation",
+    "physical-activity",
+    "heart-failure",
+    "wearable-technology",
+    "remote-monitoring"
+  ],
+  "outcome_tags": [
+    "physical-activity",
+    "cv-risk-reduction",
+    "quality-of-life",
+    "self-management"
+  ],
   "supervision_model": "guided_self_help",
-  "referral_modes": ["clinician_referral"],
+  "referral_modes": [
+    "clinician_referral"
+  ],
   "one_line_value_proposition": "NICE HTG764-recommended wearable-based cardiac rehabilitation with direct RCT evidence of CV event risk reduction — using patented physical activity analytics, dedicated mentoring, and deployment across 13 NHS ICS regions.",
   "why_it_matters_locally": "KiActiv uses a proprietary wearable device to collect minute-by-minute physical activity data, combined with dedicated mentor support over a 12-week programme. With deployment across 13 NHS ICS regions and an RCT presented at the European Society of Cardiology Congress, it offers a data-rich approach to CR with broad NHS adoption.",
   "target_problem_statement": "Low CR uptake, limited objective physical activity measurement in CR programmes, and lack of personalised activity-based rehabilitation outside centre-based settings.",
   "nice_guidance_refs": [
-    { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — one of four platforms with direct CV event risk reduction evidence" }
+    {
+      "ref": "NICE HTG764",
+      "url": "https://www.nice.org.uk/guidance/htg764",
+      "type": "EVA",
+      "date": "December 2025",
+      "note": "Conditionally recommended — one of four platforms with direct CV event risk reduction evidence"
+    }
   ],
   "evidence_summary": "RCT conducted with Liverpool University Hospitals NHS Foundation Trust, presented at ESC Congress Amsterdam and published in the European Heart Journal. Liverpool NHS CR pilot (17 patients) showed 1.10-2.92 MET CRF improvements, equating to 14-38% reductions in all-cause mortality. HF virtual ward pilot: 78% of patients improved everyday physical activity. NICE identifies KiActiv as one of four platforms with direct clinical evidence suggesting potential reduction in secondary CV event risk.",
   "evidence_strength": "moderate",
@@ -249,12 +270,30 @@
   "maturity_level": "multi_site_live",
   "live_sites": "Liverpool University Hospitals NHS FT, Suffolk and North East Essex ICS, NHS Gloucestershire ICS, Wiltshire Health and Care, Bath Centre for Fatigue Services. Deployed across 13 NHS ICS regions.",
   "named_sites": [
-    { "name": "Liverpool University Hospitals NHS FT", "status": "active" },
-    { "name": "Suffolk and North East Essex ICS", "status": "active" },
-    { "name": "NHS Gloucestershire ICS", "status": "active" },
-    { "name": "Wiltshire Health and Care", "status": "active" },
-    { "name": "Bath Centre for Fatigue Services", "status": "active" },
-    { "name": "Additional ICS regions (13 NHS ICS regions reported)", "status": "active" }
+    {
+      "name": "Liverpool University Hospitals NHS FT",
+      "status": "active"
+    },
+    {
+      "name": "Suffolk and North East Essex ICS",
+      "status": "active"
+    },
+    {
+      "name": "NHS Gloucestershire ICS",
+      "status": "active"
+    },
+    {
+      "name": "Wiltshire Health and Care",
+      "status": "active"
+    },
+    {
+      "name": "Bath Centre for Fatigue Services",
+      "status": "active"
+    },
+    {
+      "name": "Additional ICS regions (13 NHS ICS regions reported)",
+      "status": "active"
+    }
   ],
   "live_icbs": 13,
   "patients_covered_note": "Deployed across 13 NHS ICS regions. Aggregate user numbers not publicly available.",
@@ -281,10 +320,15 @@
   "monitoring_note": "Remote activity monitoring via wearable device. Not a continuously monitored clinical service. Mentor calls at structured timepoints.",
   "escalation_note": "Mentor signposts to NHS services. Standard NHS escalation routes for clinical deterioration.",
   "operating_hours_caveat": "Not a monitored emergency service. Mentor support during programme hours only.",
-  "implementation_prerequisites": ["Ability to wear activity monitor", "Internet access for online dashboard", "Referral and initial assessment by NHS CR team", "DTAC approval obtained"],
+  "implementation_prerequisites": [
+    "Ability to wear activity monitor",
+    "Internet access for online dashboard",
+    "Referral and initial assessment by NHS CR team",
+    "DTAC approval obtained"
+  ],
   "pricing_model": "bundled_service",
   "national_price_available": false,
-  "indicative_price_text": "All-inclusive service: wearable device, mentor support and dashboard. Indicative NHS discussion range often \u00a380\u2013\u00a3180 per patient for a standard CR programme length depending on volume \u2014 confirm with Ki Performance Lifestyle Ltd.",
+  "indicative_price_text": "All-inclusive service: wearable device, mentor support and dashboard. Indicative NHS discussion range often £80–£180 per patient for a standard CR programme length depending on volume — confirm with Ki Performance Lifestyle Ltd.",
   "pricing_confidence": "indicative",
   "free_offer_flag": false,
   "service_wrap_included": true,
@@ -304,25 +348,43 @@
   "minimum_conditions_for_success": "NHS CR team referral pathway, patient able to wear wearable monitor, internet access.",
   "procurement_notes": "Contact Ki Performance Lifestyle Ltd. Service-based model includes device and mentoring.",
   "content_confidence": "Confirmed",
-  "linked_funding_ids": ["health-innovation-network"],
+  "linked_funding_ids": [
+    "health-innovation-network"
+  ],
   "technical_integrations": {
     "fhir": "Information not available",
     "emis": "Information not available",
     "nhs_app": false,
     "population_health_dashboard": true,
     "device_integration": "Proprietary wearable device collects minute-by-minute physical activity data. Patented analytics technology.",
-    "languages": ["English"],
+    "languages": [
+      "English"
+    ],
     "data_hosting": "Confirm with Ki Performance Lifestyle Ltd"
   },
   "context_of_use": {
     "population": "Adults with ACS, HF, cardiomyopathy, congenital heart disease, post-cardiac surgery",
-    "pathways": ["Cardiac rehabilitation", "HF virtual ward", "Long COVID", "Pulmonary rehabilitation"],
-    "care_settings": ["Home-based", "Remote"],
+    "pathways": [
+      "Cardiac rehabilitation",
+      "HF virtual ward",
+      "Long COVID",
+      "Pulmonary rehabilitation"
+    ],
+    "care_settings": [
+      "Home-based",
+      "Remote"
+    ],
     "therapeutic_purpose": "Wearable-based physical activity monitoring with personalised feedback, mentor support, and educational signposting",
     "hcp_involvement": "Minimal — clinician refers and confirms eligibility; KiActiv manages programme delivery",
     "nice_scope": "NICE HTG764 — conditionally recommended during 3-year evidence generation period"
   },
-  "demo_variants": [{ "label": "KiActiv website", "url": "https://kiactiv.com", "type": "website" }],
+  "demo_variants": [
+    {
+      "label": "KiActiv website",
+      "url": "https://kiactiv.com",
+      "type": "website"
+    }
+  ],
   "demo_notes": "Contact Ki Performance Lifestyle Ltd for a demonstration.",
   "supplier_contact_email": "nhs@kiactiv.com",
   "supplier_contact_name": "KiActiv NHS team",

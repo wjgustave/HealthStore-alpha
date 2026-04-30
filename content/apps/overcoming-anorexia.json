@@ -5,17 +5,43 @@
   "supplier_name": "Overcoming",
   "short_name": "Overcoming Anorexia",
   "logo_path": "/logos/overcoming-anorexia-online.svg",
-  "condition_tags": ["eating_disorders"],
-  "pathway_tags": ["eating-disorders", "cbt", "self-help", "anorexia"],
-  "outcome_tags": ["symptom-reduction", "self-management", "eating-disorder", "cbt"],
+  "condition_tags": [
+    "eating_disorders"
+  ],
+  "pathway_tags": [
+    "eating-disorders",
+    "cbt",
+    "self-help",
+    "anorexia"
+  ],
+  "outcome_tags": [
+    "symptom-reduction",
+    "self-management",
+    "eating-disorder",
+    "cbt"
+  ],
   "supervision_model": "guided_self_help",
-  "referral_modes": ["clinician_referral"],
+  "referral_modes": [
+    "clinician_referral"
+  ],
   "one_line_value_proposition": "NICE HTG768-recommended digital guided self-help for anorexia nervosa — a conditional recommendation with strict clinical pathway controls and safety requirements.",
   "why_it_matters_locally": "Eating disorder services face significant capacity pressures with long waiting times. Overcoming Anorexia Online offers a structured digital CBT-based self-help programme for appropriate patients within carefully defined clinical boundaries.",
   "target_problem_statement": "Long eating disorder service waiting times, limited access to evidence-based treatments for anorexia, and pressure on specialist eating disorder services.",
   "nice_guidance_refs": [
-    { "ref": "NICE HTG768", "url": "https://www.nice.org.uk/guidance/htg768", "type": "EVA", "date": "2024", "note": "Recommended during evidence generation for specific presentations" },
-    { "ref": "NICE NG69", "url": "https://www.nice.org.uk/guidance/ng69", "type": "NG", "date": "2017", "note": "Eating disorders guideline" }
+    {
+      "ref": "NICE HTG768",
+      "url": "https://www.nice.org.uk/guidance/htg768",
+      "type": "EVA",
+      "date": "2024",
+      "note": "Recommended during evidence generation for specific presentations"
+    },
+    {
+      "ref": "NICE NG69",
+      "url": "https://www.nice.org.uk/guidance/ng69",
+      "type": "NG",
+      "date": "2017",
+      "note": "Eating disorders guideline"
+    }
   ],
   "evidence_summary": "NICE HTG768 recommendation during evidence generation. CBT-based guided self-help with clinical evidence base. Strict pathway controls and clinical inclusion/exclusion criteria are essential — NICE guidance specifies conditions of use.",
   "evidence_strength": "low",
@@ -24,7 +50,10 @@
   "maturity_level": "pilot",
   "live_sites": "Limited NHS eating disorder services — pilot deployments",
   "named_sites": [
-    { "name": "Limited NHS eating disorder services — pilot deployments (sites not listed in catalogue)", "status": "active" }
+    {
+      "name": "Limited NHS eating disorder services — pilot deployments (sites not listed in catalogue)",
+      "status": "active"
+    }
   ],
   "live_icbs": 1,
   "patients_covered_note": "Very limited NHS deployment at present. Evidence generation in early stages.",
@@ -51,14 +80,20 @@
   "monitoring_note": "Guided self-help — not continuously monitored. Active clinical oversight of patient progress required within service pathway.",
   "escalation_note": "Clear escalation to specialist eating disorder services essential. Patients must have access to clinical support.",
   "operating_hours_caveat": "Not a monitored emergency service. Robust escalation pathways to eating disorder services are mandatory before deployment.",
-  "implementation_prerequisites": ["Clinical safety review completed", "Local inclusion/exclusion criteria defined", "Escalation pathway to specialist eating disorder services agreed", "DTAC approval confirmed locally", "Evidence generation agreement with NICE"],
+  "implementation_prerequisites": [
+    "Clinical safety review completed",
+    "Local inclusion/exclusion criteria defined",
+    "Escalation pathway to specialist eating disorder services agreed",
+    "DTAC approval confirmed locally",
+    "Evidence generation agreement with NICE"
+  ],
   "pricing_model": "Local negotiation required",
   "national_price_available": false,
-  "indicative_price_text": "Pricing is typically structured as part of a broader SilverCloud eating disorders programme bundle. Indicative cost per patient is in the range of \u00a380\u2013\u00a3150. Bundle pricing with Overcoming Bulimia Online is available and generally more cost-effective. Commissioners with existing SilverCloud licences should check whether this programme can be added to their current agreement.",
+  "indicative_price_text": "Pricing is typically structured as part of a broader SilverCloud eating disorders programme bundle. Indicative cost per patient is in the range of £80–£150. Bundle pricing with Overcoming Bulimia Online is available and generally more cost-effective. Commissioners with existing SilverCloud licences should check whether this programme can be added to their current agreement.",
   "pricing_confidence": "supplier_reported",
   "free_offer_flag": false,
   "service_wrap_included": false,
-  "service_wrap_description": "Digital programme content and platform access are included. Specialist clinical oversight must be provided locally \u2014 this is a mandatory requirement, not an optional enhancement. SilverCloud provides practitioner training and technical support but does not supply the specialist clinical workforce.",
+  "service_wrap_description": "Digital programme content and platform access are included. Specialist clinical oversight must be provided locally — this is a mandatory requirement, not an optional enhancement. SilverCloud provides practitioner training and technical support but does not supply the specialist clinical workforce.",
   "service_wrap_note": "Clinical pathway wraparound is commissioner/provider responsibility.",
   "contract_note": "Contact Overcoming / SilverCloud for NHS procurement options.",
   "procurement_notes": "Available via the SilverCloud / Amwell platform. Strongly recommended to procure as part of the SilverCloud eating disorders programme suite alongside Overcoming Bulimia Online. Check existing local SilverCloud arrangements before separate procurement. Clinical governance requirements for this programme are more stringent than for other SilverCloud offerings due to the patient population. Evidence generation agreement with NICE may apply for listed technologies.",
@@ -75,7 +110,13 @@
   "minimum_conditions_for_success": "Specialist eating disorder clinical lead, defined inclusion/exclusion criteria, active safety monitoring protocol, minimum 30 patient pilot cohort.",
   "content_confidence": "Illustrative",
   "linked_funding_ids": [],
-  "demo_variants": [{ "label": "Overcoming website", "url": "https://www.overcoming.co.uk", "type": "website" }],
+  "demo_variants": [
+    {
+      "label": "Overcoming website",
+      "url": "https://www.overcoming.co.uk",
+      "type": "website"
+    }
+  ],
   "demo_notes": "Contact Overcoming for a demonstration.",
   "supplier_contact_email": "nhs@overcoming.co.uk",
   "supplier_contact_name": "Overcoming NHS team",

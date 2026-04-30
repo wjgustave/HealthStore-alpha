@@ -5,16 +5,37 @@
   "supplier_name": "University Hospitals of Leicester NHS Trust",
   "short_name": "Activate Your Heart",
   "logo_path": "/logos/activate-your-heart.svg",
-  "condition_tags": ["cardiac_rehab"],
-  "pathway_tags": ["cardiac-rehabilitation", "home-based-cr", "cvd", "heart-failure", "post-surgery"],
-  "outcome_tags": ["exercise-capacity", "cv-risk-reduction", "quality-of-life", "self-management"],
+  "condition_tags": [
+    "cardiac_rehab"
+  ],
+  "pathway_tags": [
+    "cardiac-rehabilitation",
+    "home-based-cr",
+    "cvd",
+    "heart-failure",
+    "post-surgery"
+  ],
+  "outcome_tags": [
+    "exercise-capacity",
+    "cv-risk-reduction",
+    "quality-of-life",
+    "self-management"
+  ],
   "supervision_model": "guided_self_help",
-  "referral_modes": ["clinician_referral"],
+  "referral_modes": [
+    "clinician_referral"
+  ],
   "one_line_value_proposition": "NICE HTG764-recommended web-based cardiac rehabilitation platform with direct RCT evidence of secondary CV event risk reduction — developed by NHS clinicians and reaching patients who would not attend conventional CR.",
   "why_it_matters_locally": "Cardiac rehabilitation uptake remains well below NHS targets, with many patients unable or unwilling to attend face-to-face sessions. Activate Your Heart is part of the i-IMPACT platform at UHL and demonstrated that 90% of pilot patients would not have attended conventional CR, showing the platform reaches an otherwise unreachable population.",
   "target_problem_statement": "Low cardiac rehabilitation uptake, limited face-to-face CR capacity, and inability to reach patients who decline or cannot attend centre-based programmes.",
   "nice_guidance_refs": [
-    { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — digital platforms to support cardiac rehabilitation" }
+    {
+      "ref": "NICE HTG764",
+      "url": "https://www.nice.org.uk/guidance/htg764",
+      "type": "EVA",
+      "date": "December 2025",
+      "note": "Conditionally recommended — digital platforms to support cardiac rehabilitation"
+    }
   ],
   "evidence_summary": "Two RCTs evaluating exercise capacity, cardiovascular risk factors and health-related quality of life. One of four HTG764 platforms with direct clinical evidence suggesting potential reduction in secondary CV event risk. Pilot of 68 patients showed 90% would not have attended conventional CR. NICE EAG economic model found the platform cost-saving vs conventional rehabilitation.",
   "evidence_strength": "moderate",
@@ -32,8 +53,14 @@
   "maturity_level": "limited_live",
   "live_sites": "University Hospitals of Leicester NHS Trust, Leicestershire",
   "named_sites": [
-    { "name": "University Hospitals of Leicester NHS Trust", "status": "active" },
-    { "name": "Leicestershire", "status": "active" }
+    {
+      "name": "University Hospitals of Leicester NHS Trust",
+      "status": "active"
+    },
+    {
+      "name": "Leicestershire",
+      "status": "active"
+    }
   ],
   "live_icbs": 1,
   "patients_covered_note": "Approximately 2,000 patients/year referred through the Leicester CR service overall. Platform-specific user numbers not publicly available.",
@@ -60,19 +87,24 @@
   "monitoring_note": "Not a continuously monitored service. Clinicians review patient-entered data (symptoms, exertion scores, step counts) via dashboard. Traffic light alerts flag deterioration.",
   "escalation_note": "Patients can switch to in-person care if they struggle with the digital format. Worsening symptoms flagged by traffic light system require clinical follow-up.",
   "operating_hours_caveat": "Not a monitored emergency service. Patients must have access to standard NHS escalation routes.",
-  "implementation_prerequisites": ["Smartphone, tablet, or computer with internet access", "Initial face-to-face clinical assessment by trained CR professional", "Staff training on the platform and menu-of-choice model", "DTAC approval obtained"],
+  "implementation_prerequisites": [
+    "Smartphone, tablet, or computer with internet access",
+    "Initial face-to-face clinical assessment by trained CR professional",
+    "Staff training on the platform and menu-of-choice model",
+    "DTAC approval obtained"
+  ],
   "pricing_model": "local_licence",
   "national_price_available": false,
-  "indicative_price_text": "NHS Trust\u2013developed product \u2014 no public national tariff. When benchmarked against similar hybrid cardiac rehabilitation digital programmes, all-in indicative costs are often discussed in the \u00a340\u2013\u00a380 per completed patient range depending on cohort and integration; confirm with University Hospitals of Leicester NHS Trust.",
+  "indicative_price_text": "NHS Trust–developed product — no public national tariff. When benchmarked against similar hybrid cardiac rehabilitation digital programmes, all-in indicative costs are often discussed in the £40–£80 per completed patient range depending on cohort and integration; confirm with University Hospitals of Leicester NHS Trust.",
   "pricing_confidence": "indicative",
   "free_offer_flag": false,
   "service_wrap_included": false,
-  "service_wrap_description": "NHS Trust\u2013developed platform. Implementation support, hosting and clinical dashboard scope are agreed locally with UHL \u2014 not a standard commercial SaaS wrap.",
+  "service_wrap_description": "NHS Trust–developed platform. Implementation support, hosting and clinical dashboard scope are agreed locally with UHL — not a standard commercial SaaS wrap.",
   "service_wrap_note": "NHS Trust-developed platform. Implementation support model not publicly described.",
   "contract_note": "Information not available. NICE advises that contract negotiations should consider the 3-year evidence generation period.",
   "expected_benefit_note": "NICE EAG economic model found Activate Your Heart cost-saving vs conventional rehabilitation, with small quality-of-life gains. Savings arose mainly from reduced delivery costs between initial and final in-person sessions.",
   "tariff_considerations": "Cardiac rehabilitation delivery is typically commissioned rather than separately tariffed per session in many systems. Model using CR service costs. Platform may reduce the cost of delivering CR by replacing some face-to-face sessions with digital delivery.",
-  "provider_income_note": "If hybrid CR reduces centre-based contacts, trusts may see shifts in activity and income versus traditional group CR \u2014 align gainshare or pathway budgets between commissioner and provider.",
+  "provider_income_note": "If hybrid CR reduces centre-based contacts, trusts may see shifts in activity and income versus traditional group CR — align gainshare or pathway budgets between commissioner and provider.",
   "roi_note": "NICE EAG model found cost-saving vs conventional rehabilitation. Reaches patients who would not otherwise attend CR, expanding the total patient pool.",
   "funding_ids": [],
   "nhse_125k_eligible": null,
@@ -83,20 +115,30 @@
   "minimum_conditions_for_success": "Dedicated CR clinical team, face-to-face assessment capacity for initial patient evaluation, staff trained on platform use.",
   "procurement_notes": "Information not available. NHS Trust-developed product — confirm procurement route with UHL.",
   "content_confidence": "Confirmed",
-  "linked_funding_ids": ["health-innovation-network"],
+  "linked_funding_ids": [
+    "health-innovation-network"
+  ],
   "technical_integrations": {
     "fhir": "Information not available",
     "emis": "Information not available",
     "nhs_app": false,
     "population_health_dashboard": true,
     "device_integration": "No specific device integration described. Web-based platform tracks patient-entered symptoms, exertion scores and step counts.",
-    "languages": ["English"],
+    "languages": [
+      "English"
+    ],
     "data_hosting": "NHS Trust-hosted (UHL)"
   },
   "context_of_use": {
     "population": "Adults with CVD — coronary heart disease, bypass/valve surgery rehab, spontaneous coronary artery dissection, heart failure, arrhythmias",
-    "pathways": ["Home-based digital cardiac rehabilitation", "Menu-of-choice CR delivery"],
-    "care_settings": ["Home-based", "Secondary care"],
+    "pathways": [
+      "Home-based digital cardiac rehabilitation",
+      "Menu-of-choice CR delivery"
+    ],
+    "care_settings": [
+      "Home-based",
+      "Secondary care"
+    ],
     "therapeutic_purpose": "Structured home-based cardiac rehabilitation with personalised exercise plans, education and clinician-monitored symptom tracking",
     "hcp_involvement": "Active — initial face-to-face assessment required, ongoing dashboard monitoring, Ask the Expert communication",
     "nice_scope": "NICE HTG764 — conditionally recommended during 3-year evidence generation period"
@@ -250,7 +292,13 @@
       "data_quality_note": null
     }
   ],
-  "demo_variants": [{ "label": "Activate Your Heart website", "url": "https://activateyourheart.org.uk", "type": "website" }],
+  "demo_variants": [
+    {
+      "label": "Activate Your Heart website",
+      "url": "https://activateyourheart.org.uk",
+      "type": "website"
+    }
+  ],
   "demo_notes": "Contact University Hospitals of Leicester for further information.",
   "supplier_contact_email": "activateyourheart@uhl-tr.nhs.uk",
   "supplier_contact_name": "UHL Cardiac Rehabilitation Service",

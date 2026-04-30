@@ -5,16 +5,37 @@
   "supplier_name": "NHS Lothian",
   "short_name": "Digital Heart Manual",
   "logo_path": "/logos/digital-heart-manual.png",
-  "condition_tags": ["cardiac_rehab"],
-  "pathway_tags": ["cardiac-rehabilitation", "post-mi", "post-revascularisation", "home-based-cr", "self-management"],
-  "outcome_tags": ["self-management", "quality-of-life", "exercise-capacity", "psychological-wellbeing"],
+  "condition_tags": [
+    "cardiac_rehab"
+  ],
+  "pathway_tags": [
+    "cardiac-rehabilitation",
+    "post-mi",
+    "post-revascularisation",
+    "home-based-cr",
+    "self-management"
+  ],
+  "outcome_tags": [
+    "self-management",
+    "quality-of-life",
+    "exercise-capacity",
+    "psychological-wellbeing"
+  ],
   "supervision_model": "guided_self_help",
-  "referral_modes": ["clinician_referral"],
+  "referral_modes": [
+    "clinician_referral"
+  ],
   "one_line_value_proposition": "NICE HTG764-recommended digital edition of the Heart Manual — described by the AHA as 'perhaps the most extensively studied self-management book for patients recovering from acute MI,' with 500+ peer-reviewed citations since 1992.",
   "why_it_matters_locally": "The paper-based Heart Manual is the most extensively studied post-MI self-management programme globally, with foundational Lancet RCT evidence and AHA endorsement. The Digital Heart Manual brings this into a web-based format, maintaining facilitator-led delivery while expanding access. The paper version already serves approximately 14,000 patients/year in the UK.",
   "target_problem_statement": "Low CR uptake among post-MI and post-revascularisation patients, limited face-to-face CR capacity, and geographic barriers to centre-based programmes.",
   "nice_guidance_refs": [
-    { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — evidence for non-digital Heart Manual; digital version evidence generation underway" }
+    {
+      "ref": "NICE HTG764",
+      "url": "https://www.nice.org.uk/guidance/htg764",
+      "type": "EVA",
+      "date": "December 2025",
+      "note": "Conditionally recommended — evidence for non-digital Heart Manual; digital version evidence generation underway"
+    }
   ],
   "evidence_summary": "Extensive evidence for the paper-based Heart Manual: Lewin et al. Lancet 1992 (foundational RCT), BRUM RCT (Jolly et al. 2009), CHARMS RCT (Dalal et al. 2007), cost-effectiveness analysis (Taylor et al. 2006), systematic review (Clark et al. 2011), AHA/AACVPR/ACC Scientific Statement (2019). Digital version: pilot study (Deighan et al. 2017, n=28), patient-reported outcomes (Stark et al. 2021, Ranaldi et al. 2018). NICE notes evidence of clinical benefit for the non-digital programme; digital version evidence generation underway.",
   "evidence_strength": "low",
@@ -32,9 +53,18 @@
   "maturity_level": "multi_site_live",
   "live_sites": "NHS Scotland (multiple boards), NHS Lothian (primary). Paper Heart Manual: approximately 14,000 patients/year in the UK and abroad.",
   "named_sites": [
-    { "name": "NHS Scotland (multiple boards)", "status": "active" },
-    { "name": "NHS Lothian (primary)", "status": "active" },
-    { "name": "Paper Heart Manual (UK and international reach)", "status": "active" }
+    {
+      "name": "NHS Scotland (multiple boards)",
+      "status": "active"
+    },
+    {
+      "name": "NHS Lothian (primary)",
+      "status": "active"
+    },
+    {
+      "name": "Paper Heart Manual (UK and international reach)",
+      "status": "active"
+    }
   ],
   "live_icbs": 3,
   "patients_covered_note": "Paper Heart Manual: approximately 14,000 patients/year. Digital Heart Manual-specific adoption data not publicly available.",
@@ -61,10 +91,15 @@
   "monitoring_note": "Facilitated programme. HCPs review progress via standard NHS communication channels. Not a continuously monitored service.",
   "escalation_note": "Standard NHS escalation routes. Facilitator manages clinical pathway decisions.",
   "operating_hours_caveat": "Not a monitored emergency service. Standard NHS escalation routes apply.",
-  "implementation_prerequisites": ["Trained facilitators with Heart Manual Department specialist training", "Patient internet-connected device access", "Initial clinical assessment by CR professional", "DTAC approval obtained"],
+  "implementation_prerequisites": [
+    "Trained facilitators with Heart Manual Department specialist training",
+    "Patient internet-connected device access",
+    "Initial clinical assessment by CR professional",
+    "DTAC approval obtained"
+  ],
   "pricing_model": "local_licence",
   "national_price_available": false,
-  "indicative_price_text": "Self-funded within NHS Lothian \u2014 no separate patient purchase. Other NHS organisations should budget facilitator time, Heart Manual Department training and any licence or roll-out fee; illustrative external discussions often use \u00a330\u2013\u00a360 per patient pathway \u2014 confirm with NHS Lothian Heart Manual Department.",
+  "indicative_price_text": "Self-funded within NHS Lothian — no separate patient purchase. Other NHS organisations should budget facilitator time, Heart Manual Department training and any licence or roll-out fee; illustrative external discussions often use £30–£60 per patient pathway — confirm with NHS Lothian Heart Manual Department.",
   "pricing_confidence": "indicative",
   "free_offer_flag": false,
   "service_wrap_included": false,
@@ -84,20 +119,31 @@
   "minimum_conditions_for_success": "Facilitators trained by Heart Manual Department, established CR referral pathway, initial clinical assessment capacity.",
   "procurement_notes": "NHS Lothian public sector product. Contact Heart Manual Department for availability outside Scotland.",
   "content_confidence": "Confirmed",
-  "linked_funding_ids": ["health-innovation-network"],
+  "linked_funding_ids": [
+    "health-innovation-network"
+  ],
   "technical_integrations": {
     "fhir": "Information not available",
     "emis": "Information not available",
     "nhs_app": false,
     "population_health_dashboard": false,
     "device_integration": "No device integration described. Web-based platform accessible via links/QR codes.",
-    "languages": ["English"],
+    "languages": [
+      "English"
+    ],
     "data_hosting": "NHS Lothian"
   },
   "context_of_use": {
     "population": "Adults post-MI, post-angioplasty, post-revascularisation",
-    "pathways": ["Post-MI rehabilitation", "Post-revascularisation rehabilitation", "Home-based CR"],
-    "care_settings": ["Home-based", "Secondary care"],
+    "pathways": [
+      "Post-MI rehabilitation",
+      "Post-revascularisation rehabilitation",
+      "Home-based CR"
+    ],
+    "care_settings": [
+      "Home-based",
+      "Secondary care"
+    ],
     "therapeutic_purpose": "Structured home-based CR: exercise guide, education, diet, medication and psychological support",
     "hcp_involvement": "Active — specialist-trained facilitators deliver the programme",
     "nice_scope": "NICE HTG764 — conditionally recommended during 3-year evidence generation period"
@@ -454,7 +500,13 @@
       "data_quality_note": null
     }
   ],
-  "demo_variants": [{ "label": "Heart Manual website", "url": "https://www.theheartmanual.com", "type": "website" }],
+  "demo_variants": [
+    {
+      "label": "Heart Manual website",
+      "url": "https://www.theheartmanual.com",
+      "type": "website"
+    }
+  ],
   "demo_notes": "Contact NHS Lothian Heart Manual Department for further information.",
   "supplier_contact_email": "heartmanual@nhslothian.scot.nhs.uk",
   "supplier_contact_name": "NHS Lothian Heart Manual Department",

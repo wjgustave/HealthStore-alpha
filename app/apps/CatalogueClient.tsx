@@ -14,6 +14,7 @@ import { MaturityBadge, SupervisionBadge, ConditionTag } from '@/components/Badg
 import { CompareToggleButton } from '@/components/CompareToggleButton'
 import { Check, X } from 'lucide-react'
 import { buildBrowseSearchParams, filterAppsBySearchQuery, parseBrowseConditionParam } from '@/lib/catalogueSearch'
+import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 
 function CatalogueSignalDotRow({ tone, label }: { tone: 'green' | 'orange' | 'blue'; label: string }) {
   const stroke =
@@ -103,7 +104,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
   const replaceBrowseUrl = useCallback(
     (nextCondition: string, nextQ: string) => {
       const suffix = buildBrowseSearchParams(nextCondition, nextQ)
-      router.replace(`/apps/browse${suffix}`, { scroll: false })
+      router.replace(`/apps/condition-catalogue${suffix}`, { scroll: false })
     },
     [router],
   )
@@ -189,23 +190,16 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-      <nav aria-label="Breadcrumb" className="mb-4 text-sm">
-        <ol className="flex flex-wrap items-center gap-1.5" style={{ color: 'var(--text-muted)' }}>
-          <li>
-            <Link href="/apps" className="font-medium transition-colors hover:underline" style={{ color: '#005EB8' }}>
-              Browse apps
-            </Link>
-          </li>
-          <li aria-hidden>/</li>
-          <li style={{ color: 'var(--text-primary)' }} aria-current="page">
-            Digital therapeutics
-          </li>
-        </ol>
-      </nav>
+      <PageBreadcrumb
+        items={[
+          { label: 'Find apps', href: '/apps' },
+          { label: 'Condition catalogue' },
+        ]}
+      />
 
       <div className="mb-8">
         <h1 className="page-title-h1">
-          Browse digital therapeutics
+          Condition catalogue
         </h1>
         <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
           {apps.length} apps across {conditionOptions.length - 1} condition areas · Last reviewed March 2026
@@ -264,7 +258,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                     setCondition('all')
                     setDemoOnly(false)
                     setSearchInput('')
-                    router.replace('/apps/browse', { scroll: false })
+                    router.replace('/apps/condition-catalogue', { scroll: false })
                   }}
                   className="min-h-[44px] text-sm px-4 rounded-lg border transition-colors hover:bg-[#F7F9FC] hover:border-[var(--text-muted-low-con)]"
                   style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
@@ -313,7 +307,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                 Clear search
               </button>
               <Link
-                href="/apps/browse"
+                href="/apps/condition-catalogue"
                 className="inline-flex items-center rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-[#F7F9FC]"
                 style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
               >

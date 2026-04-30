@@ -55,8 +55,8 @@ export default function AppShell({
             </p>
           </div>
           <div className="flex gap-6 text-xs" style={{ color: 'var(--text-muted)' }}>
-            <Link href="/apps" className="hover:underline">Browse apps</Link>
-            <Link href="/funding" className="hover:underline">Funding</Link>
+            <Link href="/apps" className="hover:underline">Find apps</Link>
+            <Link href="/funding" className="hover:underline">Funding directory</Link>
           </div>
         </div>
       </footer>

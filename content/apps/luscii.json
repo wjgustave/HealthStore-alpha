@@ -25,7 +25,7 @@
     "clinician_referral"
   ],
   "one_line_value_proposition": "G-Cloud 14 listed remote monitoring platform with dual NICE recommendations (HTE19 + ARI), 25 million global registrations and the UK's largest COPD monitoring programme at NWL ICS.",
-  "why_it_matters_locally": "Luscii enables ICBs to build virtual COPD wards at scale without lengthy configuration delays \u2014 150+ pre-built NHS pathways are available immediately. NWL ICS enrolled 6,000 COPD patients one year ahead of schedule. G-Cloud 14 listing means no separate OJEU tender is required.",
+  "why_it_matters_locally": "Luscii enables ICBs to build virtual COPD wards at scale without lengthy configuration delays — 150+ pre-built NHS pathways are available immediately. NWL ICS enrolled 6,000 COPD patients one year ahead of schedule. G-Cloud 14 listing means no separate OJEU tender is required.",
   "target_problem_statement": "Limited virtual ward capacity, high COPD admission rates, post-exacerbation monitoring gaps and slow procurement of remote monitoring technology.",
   "nice_guidance_refs": [
     {
@@ -42,42 +42,63 @@
       "note": "Separate recommendation for Acute Respiratory Infection remote monitoring"
     }
   ],
-  "evidence_summary": "Real-world evidence from NWL ICS (6,000 COPD patients), Bradford District and Craven ICB (6,000 COPD patients, \u00a3400k NHSE investment), Sunderland virtual COPD clinic (50% admission reduction \u2014 attribution caveated), and MTW NHS Trust virtual ward. Imperial College HFrEF retention study (2% drop-out at 3 months). Published SAFE@HOME academic studies (preeclampsia). DTAC confirmed in G-Cloud 14 (April 2024). No standalone peer-reviewed RCT for Luscii in COPD identified.",
+  "evidence_summary": "Real-world evidence from NWL ICS (6,000 COPD patients), Bradford District and Craven ICB (6,000 COPD patients, £400k NHSE investment), Sunderland virtual COPD clinic (50% admission reduction — attribution caveated), and MTW NHS Trust virtual ward. Imperial College HFrEF retention study (2% drop-out at 3 months). Published SAFE@HOME academic studies (preeclampsia). DTAC confirmed in G-Cloud 14 (April 2024). No standalone peer-reviewed RCT for Luscii in COPD identified.",
   "evidence_strength": "moderate",
   "evidence_strength_rationale": "NICE-prioritised evidence was UK before-after/case-series data, but a Luscii/cVitals randomised crossover study in Sweden exists and was feasible/safe without QoL benefit. RCT presence plus mid-scale implementation supports Moderate rather than Strong.",
   "case_studies": [
     {
-      "title": "NWL ICS \u2014 UK's largest COPD remote monitoring programme",
-      "setting": "North West London ICS / Imperial College Healthcare NHS Trust, 2022\u20132023",
+      "title": "NWL ICS — UK's largest COPD remote monitoring programme",
+      "setting": "North West London ICS / Imperial College Healthcare NHS Trust, 2022–2023",
       "sample_size": 6000,
-      "outcome": "6,000 COPD patient target met within 1 year \u2014 12 months ahead of the 2-year programme target. MyCare24 24/7 monitoring hub operational.",
-      "caveat": "Programme scale and pace data from Luscii G-Cloud 14 Service Definition \u2014 not independently peer-reviewed. Outcomes reflect specific NWL ICS configuration including 24/7 hub model.",
+      "outcome": "6,000 COPD patient target met within 1 year — 12 months ahead of the 2-year programme target. MyCare24 24/7 monitoring hub operational.",
+      "caveat": "Programme scale and pace data from Luscii G-Cloud 14 Service Definition — not independently peer-reviewed. Outcomes reflect specific NWL ICS configuration including 24/7 hub model.",
       "source": "Luscii G-Cloud 14 Service Definition (NHS Digital Marketplace, 2024)"
     },
     {
-      "title": "Bradford District and Craven ICB \u2014 COPD scale-up",
-      "setting": "Bradford District and Craven ICB, 2021\u20132023",
+      "title": "Bradford District and Craven ICB — COPD scale-up",
+      "setting": "Bradford District and Craven ICB, 2021–2023",
       "sample_size": 6000,
-      "outcome": "6,000 COPD patients enrolled over 2 years. \u00a3400,000+ NHSE investment. Commenced as 50-patient COVID-19 recovery pilot.",
-      "caveat": "Source is Luscii G-Cloud 14 Service Definition \u2014 not independently peer-reviewed.",
+      "outcome": "6,000 COPD patients enrolled over 2 years. £400,000+ NHSE investment. Commenced as 50-patient COVID-19 recovery pilot.",
+      "caveat": "Source is Luscii G-Cloud 14 Service Definition — not independently peer-reviewed.",
       "source": "Luscii G-Cloud 14 Service Definition (NHS Digital Marketplace, 2024)"
     }
   ],
   "maturity_level": "scaled",
   "live_sites": "NWL ICS / Imperial College Healthcare NHS Trust, Bradford District and Craven ICB, South Tyneside and Sunderland NHS FT (attribution caveated), Airedale NHS Foundation Trust, Maidstone and Tunbridge Wells NHS Trust, NHS Dorset (asthma), 11+ countries internationally",
   "named_sites": [
-    { "name": "NWL ICS / Imperial College Healthcare NHS Trust", "status": "active" },
-    { "name": "Bradford District and Craven ICB", "status": "active" },
-    { "name": "South Tyneside and Sunderland NHS FT (attribution caveated)", "status": "active" },
-    { "name": "Airedale NHS Foundation Trust", "status": "active" },
-    { "name": "Maidstone and Tunbridge Wells NHS Trust", "status": "active" },
-    { "name": "NHS Dorset (asthma)", "status": "active" },
-    { "name": "International deployments (11+ countries)", "status": "active" }
+    {
+      "name": "NWL ICS / Imperial College Healthcare NHS Trust",
+      "status": "active"
+    },
+    {
+      "name": "Bradford District and Craven ICB",
+      "status": "active"
+    },
+    {
+      "name": "South Tyneside and Sunderland NHS FT (attribution caveated)",
+      "status": "active"
+    },
+    {
+      "name": "Airedale NHS Foundation Trust",
+      "status": "active"
+    },
+    {
+      "name": "Maidstone and Tunbridge Wells NHS Trust",
+      "status": "active"
+    },
+    {
+      "name": "NHS Dorset (asthma)",
+      "status": "active"
+    },
+    {
+      "name": "International deployments (11+ countries)",
+      "status": "active"
+    }
   ],
   "live_icbs": 4,
   "patients_covered_note": "25 million+ global registrations across all conditions. 6,000+ COPD patients in NWL ICS alone. 350+ remote monitoring pathways delivered globally.",
   "dtac_status": "passed",
-  "dtac_note": "DTAC completed \u2014 confirmed in G-Cloud 14 Service Definition (April 2024). Most recently confirmed DTAC status of the four HTE19-recommended COPD apps.",
+  "dtac_note": "DTAC completed — confirmed in G-Cloud 14 Service Definition (April 2024). Most recently confirmed DTAC status of the four HTE19-recommended COPD apps.",
   "device_class": "Class IIa SaMD",
   "dcb0129_status": "Confirmed",
   "dcb0160_boilerplate_available": true,
@@ -86,17 +107,17 @@
   "cyber_essentials": "Not confirmed in reviewed sources",
   "gdpr_note": "Patient data on Amazon AWS servers in Germany. Encrypted at rest. Daily full backups + 5-minute transaction logs. DPIA required as part of local commissioning process.",
   "target_patients": "Adults with COPD (any severity). Platform also supports 150+ other LTC pathways.",
-  "exclusions": "Pulse oximeter required for standard COPD protocol \u2014 organisations must procure and supply devices to patients.",
+  "exclusions": "Pulse oximeter required for standard COPD protocol — organisations must procure and supply devices to patients.",
   "onboarding_model": "clinician_led",
   "onboarding_detail": "Introductory patient call model (as per NWL ICS). Patient sets up app and Bluetooth oximeter with clinical support. 150+ pre-built pathways available immediately from Luscii Library. Custom pathways via Luscii Builder (Medical Developer certification required).",
   "supplier_wrap": "Co-creates remote monitoring strategy with each NHS organisation. Comprehensive implementation plans and stakeholder mapping. Luscii staff visit wards during setup. 24/7 monitoring hub support available.",
   "local_wraparound": "high",
   "local_wraparound_detail": "Clinical team or contracted 24/7 monitoring hub required. Pulse oximeters must be procured and supplied to patients. AWS Germany data residency requires DPIA review. Pathway design needed (either pre-built or custom via Builder).",
   "training_required": true,
-  "training_note": "Certified Medical Developer programme available: clinicians complete online course \u2192 certificate \u2192 Luscii Builder access. 70% revenue share for Library-listed programmes.",
+  "training_note": "Certified Medical Developer programme available: clinicians complete online course → certificate → Luscii Builder access. 70% revenue share for Library-listed programmes.",
   "monitoring_note": "Active remote management model. Clinical Engine AI generates alerts for missed measurements, out-of-range readings and patient comments. Must be reviewed by clinical team or contracted hub.",
   "escalation_note": "Alerts projected as FHIR Flags to connected EHR/EPR. Clinical team configures alert thresholds and escalation protocols.",
-  "operating_hours_caveat": "Virtual ward model requires staffed monitoring capability \u2014 either in-house or contracted (e.g. MyCare24 model). Confirm monitoring hours before deployment.",
+  "operating_hours_caveat": "Virtual ward model requires staffed monitoring capability — either in-house or contracted (e.g. MyCare24 model). Confirm monitoring hours before deployment.",
   "implementation_prerequisites": [
     "Pulse oximeters procured and supplied to patients",
     "Clinical team or 24/7 monitoring hub contracted",
@@ -107,22 +128,22 @@
   ],
   "pricing_model": "Local negotiation required",
   "national_price_available": false,
-  "indicative_price_text": "Pricing is typically per-patient-per-month for active monitoring. Indicative range: \u00a330\u2013\u00a360 per patient per month depending on volume and service level. Implementation costs quoted separately. Listed on NHS G-Cloud 14 (Digital Marketplace) as \u2018System-wide Remote Patient Monitoring Service\u2019 \u2014 contact Luscii via luscii.co.uk.",
+  "indicative_price_text": "Pricing is typically per-patient-per-month for active monitoring. Indicative range: £30–£60 per patient per month depending on volume and service level. Implementation costs quoted separately. Listed on NHS G-Cloud 14 (Digital Marketplace) as ‘System-wide Remote Patient Monitoring Service’ — contact Luscii via luscii.co.uk.",
   "pricing_confidence": "supplier_reported",
   "free_offer_flag": false,
   "service_wrap_included": true,
   "service_wrap_description": "Standard contract includes platform access, implementation support, clinical pathway design, training, technical support, and reporting. Premium tier available with dedicated clinical advisory support and custom integrations.",
   "service_wrap_note": "Comprehensive implementation support included. Confirm scope of 24/7 monitoring hub support in contract.",
-  "contract_note": "Listed on NHS G-Cloud 14 (Digital Marketplace) as 'System-wide Remote Patient Monitoring Service' \u2014 procurement without separate OJEU tender is a significant process advantage.",
-  "procurement_notes": "Not currently on a national framework specific to remote monitoring. May be procurable via Health Systems Support Framework or local tender. Several ICBs have procured collaboratively. Supplier can support competitive dialogue processes. G-Cloud 14 listing can streamline procurement.",
+  "contract_note": "Listed on NHS G-Cloud 14 (Digital Marketplace) as 'System-wide Remote Patient Monitoring Service' — procurement without separate OJEU tender is a significant process advantage.",
+  "procurement_notes": "Available via SBRI Healthcare contract. Direct procurement with Luscii/OMRON also possible.",
   "expected_benefit_note": "Primary benefit is supporting virtual ward delivery and potentially reducing readmissions for COPD when monitoring and response processes are strong. NWL ICS enrolled 6,000 COPD patients ahead of schedule; Bradford reached similar scale with NHSE investment. Technology alone does not deliver outcomes.",
   "tariff_considerations": "Virtual ward activity may be funded under the national virtual ward programme. Commissioners should confirm local funding arrangements and whether technology costs are within scope. Remote monitoring does not currently attract a separate tariff outside virtual ward frameworks. Model locally using admission and cost data.",
-  "provider_income_note": "Supports provider delivery of virtual ward targets, which may attract national funding. May reduce some inpatient and outpatient activity over time \u2014 factor into pathway economics.",
+  "provider_income_note": "Supports provider delivery of virtual ward targets, which may attract national funding. May reduce some inpatient and outpatient activity over time — factor into pathway economics.",
   "roi_note": "Supplier provides ROI modelling based on admission avoidance assumptions. Sunderland 50% respiratory admission reduction is cited in market materials but attribution is contested (see data quality note). Independent NHS evaluation data is still emerging. Commissioners should model locally.",
   "funding_ids": [],
   "nhse_125k_eligible": null,
-  "nhse_125k_note": "Eligibility for NHSE ICB \u00a3125k COPD funding not confirmed for Luscii in reviewed sources. Verify with NHSE before including in business case.",
-  "data_quality_note": "The 50% respiratory admission reduction cited for Sunderland is also claimed by Clinitouch/Spirit Health for the same geography. Attribution cannot be confirmed from public sources \u2014 do not use in comparative commissioning claims without verification from South Tyneside and Sunderland NHS Foundation Trust.",
+  "nhse_125k_note": "Eligibility for NHSE ICB £125k COPD funding not confirmed for Luscii in reviewed sources. Verify with NHSE before including in business case.",
+  "data_quality_note": "The 50% respiratory admission reduction cited for Sunderland is also claimed by Clinitouch/Spirit Health for the same geography. Attribution cannot be confirmed from public sources — do not use in comparative commissioning claims without verification from South Tyneside and Sunderland NHS Foundation Trust.",
   "demo_variants": [
     {
       "label": "Luscii UK website",
@@ -138,7 +159,7 @@
   "demo_notes": "Contact Luscii via luscii.co.uk for a configured demonstration environment.",
   "last_reviewed_date": "2026-03-17",
   "source_summary": "NICE HTG736, Luscii G-Cloud 14 Service Definition (NHS Digital Marketplace 2024), HTN interview February 2024 (MTW case study), All Together Better Alliance press release March 2020, luscii.co.uk/evidence.",
-  "confidence_note": "Content based on publicly available information including G-Cloud 14 Service Definition. Device classification caveated \u2014 confirm COPD-specific CE certificate with Luscii. Sunderland attribution unresolved.",
+  "confidence_note": "Content based on publicly available information including G-Cloud 14 Service Definition. Device classification caveated — confirm COPD-specific CE certificate with Luscii. Sunderland attribution unresolved.",
   "clinical_evidence_detailed": [
     {
       "id": "nwl-ics",
@@ -158,9 +179,9 @@
       "url_pubmed": null,
       "url_full_text": "https://www.digitalmarketplace.service.gov.uk/g-cloud/services/716511",
       "n": 6000,
-      "setting": "North West London ICS, 2022\u20132023. MyCare24 24/7 monitoring hub.",
-      "key_results": "6,000 COPD patient target met within 1 year \u2014 12 months ahead of the 2-year programme target. Weekly SpO2/HR monitoring, CAT/CCQ questionnaires, Know Your Normal, and educational lessons deployed.",
-      "study_limitation": "Data from Luscii G-Cloud 14 Service Definition \u2014 not independently peer-reviewed.",
+      "setting": "North West London ICS, 2022–2023. MyCare24 24/7 monitoring hub.",
+      "key_results": "6,000 COPD patient target met within 1 year — 12 months ahead of the 2-year programme target. Weekly SpO2/HR monitoring, CAT/CCQ questionnaires, Know Your Normal, and educational lessons deployed.",
+      "study_limitation": "Data from Luscii G-Cloud 14 Service Definition — not independently peer-reviewed.",
       "peer_reviewed": false,
       "coi": false,
       "data_quality_flag": false,
@@ -186,9 +207,9 @@
       "url_pubmed": null,
       "url_full_text": "https://www.digitalmarketplace.service.gov.uk/g-cloud/services/716511",
       "n": 6000,
-      "setting": "Bradford District and Craven ICB, 2021\u20132023. \u00a3400,000+ NHSE investment.",
+      "setting": "Bradford District and Craven ICB, 2021–2023. £400,000+ NHSE investment.",
       "key_results": "6,000 COPD patients enrolled over 2 years. Commenced as 50-patient COVID-19 recovery pilot (2021) and expanded into full COPD programme. Air quality alerts and Know Your Normal in use.",
-      "study_limitation": "Source is Luscii G-Cloud 14 Service Definition \u2014 not independently peer-reviewed.",
+      "study_limitation": "Source is Luscii G-Cloud 14 Service Definition — not independently peer-reviewed.",
       "peer_reviewed": false,
       "coi": false,
       "data_quality_flag": false,
@@ -198,7 +219,7 @@
     },
     {
       "id": "sunderland-atb",
-      "ref": "Sunderland \u2014 All Together Better Alliance virtual COPD clinic",
+      "ref": "Sunderland — All Together Better Alliance virtual COPD clinic",
       "type": "real_world",
       "type_label": "Real-world NHS programme data",
       "authors": "Recovery at Home team, South Tyneside and Sunderland NHS FT",
@@ -243,9 +264,9 @@
       "url_pubmed": null,
       "url_full_text": "https://htn.co.uk/2024/02/29/featured-interview-luscii-and-maidstone-and-tunbridge-wells-nhs-trust-on-virtual-wards-for-acute-settings/",
       "n": null,
-      "setting": "Maidstone and Tunbridge Wells NHS Trust, 2023\u20132024",
+      "setting": "Maidstone and Tunbridge Wells NHS Trust, 2023–2024",
       "key_results": "Virtual COPD ward expanded from monitoring-only to include acute and A&E escalation pathways. Luscii Builder used to create bespoke escalation pathway.",
-      "study_limitation": "Published interview \u2014 not peer-reviewed.",
+      "study_limitation": "Published interview — not peer-reviewed.",
       "peer_reviewed": false,
       "coi": false,
       "data_quality_flag": false,
@@ -255,7 +276,7 @@
     },
     {
       "id": "imperial-hf",
-      "ref": "Imperial College \u2014 Heart Failure retention study",
+      "ref": "Imperial College — Heart Failure retention study",
       "type": "observational",
       "type_label": "Observational study",
       "authors": "Imperial College Healthcare NHS Trust",
@@ -283,7 +304,7 @@
     },
     {
       "id": "safe-home",
-      "ref": "SAFE@HOME \u2014 preeclampsia remote monitoring",
+      "ref": "SAFE@HOME — preeclampsia remote monitoring",
       "type": "observational",
       "type_label": "Published academic studies (multiple)",
       "authors": "Multiple authors",
@@ -299,7 +320,7 @@
       "url_pubmed": null,
       "url_full_text": "https://luscii.co.uk/evidence",
       "n": null,
-      "setting": "Netherlands \u2014 pregnancy hypertension monitoring",
+      "setting": "Netherlands — pregnancy hypertension monitoring",
       "key_results": "Published peer-reviewed studies on Luscii in preeclampsia remote monitoring. Demonstrates platform evidence generation capability across conditions beyond COPD.",
       "study_limitation": "Not directly applicable to COPD commissioning decisions. Cross-condition platform evidence only.",
       "peer_reviewed": true,
@@ -329,7 +350,7 @@
       "n": null,
       "setting": "England",
       "key_results": "Recommended for NHS use during 3-year evidence generation period. DTAC confirmed (G-Cloud 14 April 2024).",
-      "study_limitation": "Evidence generation period \u2014 full NICE recommendation pending ~December 2027.",
+      "study_limitation": "Evidence generation period — full NICE recommendation pending ~December 2027.",
       "peer_reviewed": false,
       "coi": false,
       "data_quality_flag": false,
@@ -346,7 +367,6 @@
   "nhs_notify_integration": true,
   "monitoring_model": "Active remote monitoring with automated triage and clinical escalation pathways.",
   "minimum_conditions_for_success": "Dedicated monitoring hub or virtual ward team, OMRON devices distributed to patients, IT infrastructure for device connectivity.",
-  "procurement_notes": "Available via SBRI Healthcare contract. Direct procurement with Luscii/OMRON also possible.",
   "content_confidence": "Confirmed",
   "cyber_notes": "Netherlands-based company — confirm data residency and DPA terms for NHS use. ISO 27001 certified.",
   "linked_funding_ids": [],
@@ -356,13 +376,25 @@
     "nhs_app": false,
     "population_health_dashboard": true,
     "device_integration": "OMRON pulse oximeters, blood pressure monitors, spirometers via Bluetooth",
-    "languages": ["English", "Dutch"],
+    "languages": [
+      "English",
+      "Dutch"
+    ],
     "data_hosting": "EU-based servers (Netherlands) — confirm DPA terms"
   },
   "context_of_use": {
     "population": "Adults with moderate-severe COPD or post-hospitalisation COPD patients",
-    "pathways": ["Remote monitoring", "Virtual ward", "Post-discharge support", "Population health management"],
-    "care_settings": ["Secondary care", "Virtual ward", "Community"],
+    "pathways": [
+      "Remote monitoring",
+      "Virtual ward",
+      "Post-discharge support",
+      "Population health management"
+    ],
+    "care_settings": [
+      "Secondary care",
+      "Virtual ward",
+      "Community"
+    ],
     "therapeutic_purpose": "Active remote monitoring, automated triage, early exacerbation detection, population health management",
     "hcp_involvement": "Active — monitoring hub team required for triage and escalation",
     "nice_scope": "NICE HTE19 (HTG736) — recommended during 3-year evidence generation period"

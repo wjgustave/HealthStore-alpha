@@ -1,5 +1,6 @@
 import { getAllFunding, getAllApps } from '@/lib/data'
 import { FundingDirectoryCard } from '@/components/FundingDirectoryCard'
+import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 
 export const metadata = { title: 'Funding directory — HealthStore' }
 
@@ -52,7 +53,8 @@ export default function FundingPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <PageBreadcrumb items={[{ label: 'Funding directory' }]} />
       <div className="mb-10">
         <h1 className="page-title-h1">Funding directory</h1>
         <p

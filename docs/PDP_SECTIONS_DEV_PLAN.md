@@ -67,7 +67,7 @@ The main column renders sections in this order:
 | **Commercial model and cost** | `pricing_model` (see `content/common/enums.json` `pricing_labels`), `national_price_available`, `indicative_price_text`, `pricing_confidence` (muted subline under indicative price), `service_wrap_included`, `service_wrap_description` or `service_wrap_note`, `procurement_notes` or `contract_note`, optional `nhse_125k_note`, optional `monitoring_model`, `free_offer_flag` (warning callout when true) |
 | **Indicative financial context** | `expected_benefit_note`, `tariff_considerations`, `provider_income_note`, `roi_note`, optional `minimum_conditions_for_success`; fixed disclaimer copy in component |
 | **Related funding** | `linked_funding_ids` or `funding_ids` |
-| **Express interest** | `supplier_contact_name`, `supplier_name` (CTA copy only; no contact email on page) |
+| **Express interest** | `supplier_contact_name`, `supplier_name` (main-column CTA copy). **`supplier_contact_email`** appears in the sidebar **Supplier contact information** card as a `mailto:` link when present. |
 
 ---
 
@@ -78,7 +78,7 @@ The main column renders sections in this order:
 - **NHS integrations table:** Omit NHS App row (hero badges cover it). Table shows FHIR, EMIS, population health dashboard, device integration, languages, data hosting.
 - **Related funding:** Always show an expander row. If no linked IDs, body renders empty-state copy with link to `/funding`.
 - **Commercial / financial:** Indicative price and procurement sit in **Commercial model and cost** (expander row, **open by default**). Tariff, ROI and related rows sit in **Indicative financial context** (separate expander row, **collapsed** by default).
-- **Express interest:** Main column only, **below** the section stack. No sidebar contact block.
+- **Express interest:** Main column only, **below** the section stack. **Supplier contact** email sits in the **sidebar** (“Supplier contact information” card under Assurance), not in the main column.
 
 ---
 
@@ -86,6 +86,7 @@ The main column renders sections in this order:
 
 - Quick facts (device class, supervision model, target patients)
 - Assurance (DTAC, DCB0129, GDPR, ISO 27001, Cyber Essentials, DSP Toolkit)
+- Supplier contact information (`supplier_contact_email`)
 - Product tiers (if present)
 - Source note
 

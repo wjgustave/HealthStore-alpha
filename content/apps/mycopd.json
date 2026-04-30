@@ -36,8 +36,8 @@
       "title": "myCOPD in use"
     }
   ],
-  "one_line_value_proposition": "Structured COPD self-management, home pulmonary rehabilitation and remote monitoring \u2014 the only app in NICE HTE19 with a prior NICE MTG recommendation.",
-  "why_it_matters_locally": "COPD drives high unplanned admissions and significant GP workload. myCOPD gives patients a structured self-management toolkit \u2014 including a 6-week home PR programme \u2014 without requiring face-to-face PR capacity. The Pro tier adds a clinician dashboard for remote monitoring at population scale.",
+  "one_line_value_proposition": "Structured COPD self-management, home pulmonary rehabilitation and remote monitoring — the only app in NICE HTE19 with a prior NICE MTG recommendation.",
+  "why_it_matters_locally": "COPD drives high unplanned admissions and significant GP workload. myCOPD gives patients a structured self-management toolkit — including a 6-week home PR programme — without requiring face-to-face PR capacity. The Pro tier adds a clinician dashboard for remote monitoring at population scale.",
   "target_problem_statement": "Unplanned COPD admissions, low PR uptake, poor inhaler technique and inadequate post-exacerbation support between appointments.",
   "nice_guidance_refs": [
     {
@@ -53,12 +53,12 @@
       "date": "March 2022"
     }
   ],
-  "evidence_summary": "Two RCTs (RESCUE n=41, EARLY n=60), five real-world studies including NHS Grampian (n=64) and NHS Highland (n=113), and a NICE MTG68 health economics review. NICE MTG68 modelled \u00a386,297 cost saving per CCG for AECOPD (74% probability) and \u00a322,779 per CCG for PR (86% probability). Note: CCG-era model \u2014 recalculate using current ICB population sizes.",
+  "evidence_summary": "Two RCTs (RESCUE n=41, EARLY n=60), five real-world studies including NHS Grampian (n=64) and NHS Highland (n=113), and a NICE MTG68 health economics review. NICE MTG68 modelled £86,297 cost saving per CCG for AECOPD (74% probability) and £22,779 per CCG for PR (86% probability). Note: CCG-era model — recalculate using current ICB population sizes.",
   "evidence_strength": "strong",
   "evidence_strength_rationale": "NICE/EAG found multiple myCOPD RCTs, and the PR guidance says myCOPD had well-designed RCT evidence supporting digital-vs-face-to-face non-inferiority. Real-world NHS use is mixed but materially broad.",
   "case_studies": [
     {
-      "title": "NHS Grampian \u2014 inhaler technique and admission reduction",
+      "title": "NHS Grampian — inhaler technique and admission reduction",
       "setting": "Stonehaven Medical Group & Aberdeenshire HSCP, primary care, 5 months",
       "sample_size": 64,
       "outcome": "Inhaler technique improved from 48% to 91% correct. Rescue inhaler use fell from 3.17 to 2.13 per week. Reduction in unscheduled GP visits and hospital admissions.",
@@ -66,15 +66,15 @@
       "source": "my mhealth evidence catalogue (mymhealth.com/studies)"
     },
     {
-      "title": "Jersey \u2014 engagement and daily use",
+      "title": "Jersey — engagement and daily use",
       "setting": "Jersey Health and Community Services",
       "sample_size": null,
       "outcome": "60% daily login rate. 800+ educational video views per week.",
-      "caveat": "Source is a Respiratory Nurse Specialist report \u2014 not peer-reviewed.",
+      "caveat": "Source is a Respiratory Nurse Specialist report — not peer-reviewed.",
       "source": "my mhealth / Jersey evaluation"
     },
     {
-      "title": "NHS Highland \u2014 remote and rural feasibility",
+      "title": "NHS Highland — remote and rural feasibility",
       "setting": "NHS Highland, up to 1 year",
       "sample_size": 113,
       "outcome": "78.8% activation rate. No correlation with age, wealth, rurality or COPD severity. Very high-use subgroup (17%) showed moderate reduction in admissions and bed days.",
@@ -85,13 +85,34 @@
   "maturity_level": "scaled",
   "live_sites": "NHS Grampian, NHS Dorset ICS, NHS Highland, Kent Community Health NHS FT, Southend University Hospital, Portsmouth Hospitals NHS Trust, Jersey",
   "named_sites": [
-    { "name": "NHS Grampian", "status": "active" },
-    { "name": "NHS Dorset ICS", "status": "active" },
-    { "name": "NHS Highland", "status": "active" },
-    { "name": "Kent Community Health NHS FT", "status": "active" },
-    { "name": "Southend University Hospital", "status": "active" },
-    { "name": "Portsmouth Hospitals NHS Trust", "status": "active" },
-    { "name": "Jersey", "status": "active" }
+    {
+      "name": "NHS Grampian",
+      "status": "active"
+    },
+    {
+      "name": "NHS Dorset ICS",
+      "status": "active"
+    },
+    {
+      "name": "NHS Highland",
+      "status": "active"
+    },
+    {
+      "name": "Kent Community Health NHS FT",
+      "status": "active"
+    },
+    {
+      "name": "Southend University Hospital",
+      "status": "active"
+    },
+    {
+      "name": "Portsmouth Hospitals NHS Trust",
+      "status": "active"
+    },
+    {
+      "name": "Jersey",
+      "status": "active"
+    }
   ],
   "live_icbs": 5,
   "patients_covered_note": "100,000+ patients across all my mhealth conditions globally. Multiple named NHS sites active.",
@@ -104,16 +125,16 @@
   "iso27001": "Not confirmed in reviewed sources",
   "cyber_essentials": "Held (annual renewal required)",
   "gdpr_note": "UK/EU-based servers. Data Processing Agreement available for NHS organisations.",
-  "target_patients": "Adults aged 18+ with COPD (all GOLD grades A\u2013E), including mild, moderate, severe and newly diagnosed.",
+  "target_patients": "Adults aged 18+ with COPD (all GOLD grades A–E), including mild, moderate, severe and newly diagnosed.",
   "exclusions": "Not confirmed for patients requiring active clinical monitoring who cannot access internet-connected devices without support.",
   "onboarding_model": "clinician_led",
-  "onboarding_detail": "Commissioner engagement \u2192 infrastructure assessment \u2192 pathway embedding with clinical teams \u2192 staff training \u2192 patient invitation or self-referral. Digital Health Advisors support patients.",
+  "onboarding_detail": "Commissioner engagement → infrastructure assessment → pathway embedding with clinical teams → staff training → patient invitation or self-referral. Digital Health Advisors support patients.",
   "supplier_wrap": "Digital Transformation Team supports infrastructure assessment, pathway embedding, staff training and patient onboarding. Dashboard support included in contract.",
   "local_wraparound": "medium",
-  "local_wraparound_detail": "Essentials tier: respiratory clinical lead and practice manager required. Pro tier: clinician capacity needed to actively monitor dashboard \u2014 without this, the Pro tier's value is unrealised.",
+  "local_wraparound_detail": "Essentials tier: respiratory clinical lead and practice manager required. Pro tier: clinician capacity needed to actively monitor dashboard — without this, the Pro tier's value is unrealised.",
   "training_required": true,
   "training_note": "HCP dashboard training and pathway integration materials provided by my mhealth clinical engagement specialists.",
-  "monitoring_note": "Essentials: patient self-managed. Pro: clinician dashboard with remote monitoring \u2014 not a 24/7 monitored service. Patients must have clear escalation routes for deterioration.",
+  "monitoring_note": "Essentials: patient self-managed. Pro: clinician dashboard with remote monitoring — not a 24/7 monitored service. Patients must have clear escalation routes for deterioration.",
   "escalation_note": "Patients must have clear routes to clinical support for deterioration. The app itself is not a monitored emergency service.",
   "operating_hours_caveat": "This is not a continuously monitored service. Ensure patients have access to appropriate clinical escalation routes.",
   "implementation_prerequisites": [
@@ -125,20 +146,20 @@
   ],
   "pricing_model": "National negotiated rate",
   "national_price_available": true,
-  "indicative_price_text": "National framework pricing available. Indicative cost per patient per year is in the range of \u00a350\u2013\u00a3100 depending on volume and modules selected. Contact supplier for current pricing schedule.",
+  "indicative_price_text": "National framework pricing available. Indicative cost per patient per year is in the range of £50–£100 depending on volume and modules selected. Contact supplier for current pricing schedule.",
   "pricing_confidence": "supplier_reported",
   "free_offer_flag": false,
   "service_wrap_included": true,
   "service_wrap_description": "Standard contract includes implementation support, clinical dashboard access, patient technical support, and quarterly reporting. Enhanced wrap with EPR integration and bespoke reporting available at additional cost.",
   "service_wrap_note": "Standard contract includes implementation support, clinical dashboard access, patient technical support, and quarterly reporting. Enhanced wrap with EPR integration and bespoke reporting available at additional cost.",
   "contract_note": "Contract/licence agreement with my mhealth required before deployment. G-Cloud and direct ICB routes available.",
-  "procurement_notes": "Available via NHS Shared Business Services framework. Also procurable via direct award or local tender. Some ICBs have established collaborative procurement arrangements.",
+  "procurement_notes": "G-Cloud and direct ICB procurement routes available. 3-year contract typical.",
   "expected_benefit_note": "Potential to reduce face-to-face PR appointments and extend PR capacity. May contribute to lower emergency admission rates for COPD, though attribution is difficult to isolate. Benefits are most clearly realised where the app is embedded in existing clinical pathways rather than offered as a standalone tool.",
-  "tariff_considerations": "NICE MTG68 modelled \u00a386,297 cost saving per CCG (AECOPD, 74% probability) and \u00a322,779 per CCG (PR, 86% probability). These are CCG-era models \u2014 CCGs dissolved July 2022. Commissioners should recalculate using current ICB/PCN population size and local COPD prevalence. Digital PR is not currently separately reimbursed under national tariff; consider whether savings from reduced face-to-face PR offset the per-patient licence cost.",
+  "tariff_considerations": "NICE MTG68 modelled £86,297 cost saving per CCG (AECOPD, 74% probability) and £22,779 per CCG (PR, 86% probability). These are CCG-era models — CCGs dissolved July 2022. Commissioners should recalculate using current ICB/PCN population size and local COPD prevalence. Digital PR is not currently separately reimbursed under national tariff; consider whether savings from reduced face-to-face PR offset the per-patient licence cost.",
   "provider_income_note": "Providers delivering face-to-face PR may see reduced activity if digital PR diverts referrals. Consider gainshare or pathway redesign arrangements to align incentives.",
-  "roi_note": "Supplier-reported ROI models suggest cost savings of \u00a3200\u2013\u00a3400 per patient compared with face-to-face PR, primarily from reduced venue and staffing costs. Independent validation of these figures in the NHS context is limited. NHS Grampian service evaluation also signalled fewer unscheduled contacts. Commissioners should request site-specific modelling.",
+  "roi_note": "Supplier-reported ROI models suggest cost savings of £200–£400 per patient compared with face-to-face PR, primarily from reduced venue and staffing costs. Independent validation of these figures in the NHS context is limited. NHS Grampian service evaluation also signalled fewer unscheduled contacts. Commissioners should request site-specific modelling.",
   "nhse_125k_eligible": false,
-  "nhse_125k_note": "Clinitouch is explicitly named in NHSE winter 2024 COPD funding. myCOPD eligibility not confirmed \u2014 verify with NHSE before including in business case.",
+  "nhse_125k_note": "Clinitouch is explicitly named in NHSE winter 2024 COPD funding. myCOPD eligibility not confirmed — verify with NHSE before including in business case.",
   "demo_variants": [
     {
       "label": "Product website",
@@ -150,7 +171,7 @@
   "last_reviewed_date": "2026-03-17",
   "source_summary": "NICE HTG736, NICE MTG68, JMIR mHealth Cooper et al. 2022, my mhealth evidence catalogue, NHS Grampian service evaluation, Jersey evaluation report.",
   "confidence_note": "Content based on publicly available information. All claims should be verified with my mhealth before use in procurement documentation.",
-  "decommissioning_alert": "BNSSG ICB decommissioned myCOPD in January 2025 (no new enrolments). Reasons not publicly documented \u2014 investigate before commissioning in similar environments.",
+  "decommissioning_alert": "BNSSG ICB decommissioned myCOPD in January 2025 (no new enrolments). Reasons not publicly documented — investigate before commissioning in similar environments.",
   "clinical_evidence_detailed": [
     {
       "id": "rescue-rct",
@@ -171,8 +192,8 @@
       "url_full_text": "https://www.nature.com/articles/s41746-020-00347-7",
       "n": 41,
       "setting": "Portsmouth Hospitals NHS Trust",
-      "key_results": "CAT score 4.49 points lower in myCOPD arm (95% CI \u22128.41 to \u22120.58). Critical inhaler errors: 101\u219220 (myCOPD) vs 100\u219272 (usual care). Exacerbations: 18 vs 34. OR for readmission 0.383 (0.074\u20131.987).",
-      "study_limitation": "Feasibility study \u2014 signals clinical benefit but powered for feasibility not efficacy.",
+      "key_results": "CAT score 4.49 points lower in myCOPD arm (95% CI −8.41 to −0.58). Critical inhaler errors: 101→20 (myCOPD) vs 100→72 (usual care). Exacerbations: 18 vs 34. OR for readmission 0.383 (0.074–1.987).",
+      "study_limitation": "Feasibility study — signals clinical benefit but powered for feasibility not efficacy.",
       "peer_reviewed": true,
       "coi": false,
       "data_quality_flag": false,
@@ -198,7 +219,7 @@
       "url_trial_reg": "https://clinicaltrials.gov/study/NCT03620630",
       "n": 60,
       "setting": "Multi-site England",
-      "key_results": "No significant difference in CAT score (\u22121.27, 95% CI \u22124.47\u20131.92, p=0.44). Inhaler error OR 0.30 (p=0.061) favouring myCOPD. PAM OR 1.65 favouring myCOPD.",
+      "key_results": "No significant difference in CAT score (−1.27, 95% CI −4.47–1.92, p=0.44). Inhaler error OR 0.30 (p=0.061) favouring myCOPD. PAM OR 1.65 favouring myCOPD.",
       "study_limitation": "Primary outcome (CAT) not met. p=0.061 for inhaler errors does not reach p<0.05 threshold.",
       "peer_reviewed": true,
       "coi": false,
@@ -223,9 +244,9 @@
       "url_pubmed": null,
       "url_full_text": "https://mymhealth.com/studies",
       "n": 64,
-      "setting": "Primary care, Aberdeenshire, 5 months (2019\u20132020)",
-      "key_results": "Rescue inhaler use: 3.17\u21922.13/week. Inhaler technique: 48%\u219291% correct. Reduction in unscheduled GP visits and hospital admissions. Led to ICB-level commissioning decision.",
-      "study_limitation": "Service evaluation \u2014 not peer-reviewed. Reflects specific local deployment conditions.",
+      "setting": "Primary care, Aberdeenshire, 5 months (2019–2020)",
+      "key_results": "Rescue inhaler use: 3.17→2.13/week. Inhaler technique: 48%→91% correct. Reduction in unscheduled GP visits and hospital admissions. Led to ICB-level commissioning decision.",
+      "study_limitation": "Service evaluation — not peer-reviewed. Reflects specific local deployment conditions.",
       "peer_reviewed": false,
       "coi": false,
       "data_quality_flag": false,
@@ -279,7 +300,7 @@
       "n": null,
       "setting": "NHS Dorset ICS",
       "key_results": "Integration with Dorset Intelligence and Insight Service (DiiS). Socioeconomic factors did not negatively influence activation. Clinician remote monitoring of CAT scores at population level demonstrated.",
-      "study_limitation": "Service evaluation \u2014 not peer-reviewed.",
+      "study_limitation": "Service evaluation — not peer-reviewed.",
       "peer_reviewed": false,
       "coi": false,
       "data_quality_flag": false,
@@ -289,7 +310,7 @@
     },
     {
       "id": "ml-exacerbation",
-      "ref": "ML exacerbation prediction \u2014 BigMedilytics Pilot 4",
+      "ref": "ML exacerbation prediction — BigMedilytics Pilot 4",
       "type": "observational",
       "type_label": "Observational / ML study",
       "authors": "Chmiel FP et al.",
@@ -306,8 +327,8 @@
       "url_full_text": "https://medinform.jmir.org/2022/3/e26499",
       "n": 2374,
       "setting": "University of Southampton & my mhealth (EU-funded, BigMedilytics)",
-      "key_results": "AUROC 0.727 (95% CI 0.720\u20130.735) for predicting exacerbation within 3 days. 68,139 patient self-reports analysed.",
-      "study_limitation": "Research stage only \u2014 not a deployed product feature in current versions.",
+      "key_results": "AUROC 0.727 (95% CI 0.720–0.735) for predicting exacerbation within 3 days. 68,139 patient self-reports analysed.",
+      "study_limitation": "Research stage only — not a deployed product feature in current versions.",
       "peer_reviewed": true,
       "coi": false,
       "data_quality_flag": false,
@@ -322,7 +343,7 @@
       "journal": "Applied Health Economics and Health Policy (review)",
       "year": 2022,
       "month": "March",
-      "volume_issue": "21:689\u2013700 (review article, 2023)",
+      "volume_issue": "21:689–700 (review article, 2023)",
       "doi": null,
       "pmid": "37246188",
       "pmc": null,
@@ -332,8 +353,8 @@
       "url_full_text": "https://www.nice.org.uk/guidance/mtg68",
       "n": null,
       "setting": "England, health economics model",
-      "key_results": "EAG-adjusted models: \u00a386,297 cost saving per CCG (AECOPD, 74% probability); \u00a322,779 per CCG (PR, 86% probability). Reviewed 3 RCTs, 1 observational study, 22 real-world evidence documents.",
-      "study_limitation": "CCG-era model \u2014 CCGs dissolved July 2022. Recalculate using current ICB population size and local COPD prevalence for any new business case.",
+      "key_results": "EAG-adjusted models: £86,297 cost saving per CCG (AECOPD, 74% probability); £22,779 per CCG (PR, 86% probability). Reviewed 3 RCTs, 1 observational study, 22 real-world evidence documents.",
+      "study_limitation": "CCG-era model — CCGs dissolved July 2022. Recalculate using current ICB population size and local COPD prevalence for any new business case.",
       "peer_reviewed": true,
       "coi": false,
       "data_quality_flag": true,
@@ -349,23 +370,35 @@
   "nhs_notify_integration": false,
   "monitoring_model": "Essentials: patient self-managed. Pro: clinician dashboard with remote monitoring — not 24/7.",
   "minimum_conditions_for_success": "Respiratory clinical lead, pathway agreement with clinical teams, minimum 500 patient cohort for meaningful outcome data.",
-  "procurement_notes": "G-Cloud and direct ICB procurement routes available. 3-year contract typical.",
   "content_confidence": "Confirmed",
   "cyber_notes": "Cyber Essentials held (annual renewal). ISO 27001 not confirmed in reviewed sources.",
-  "linked_funding_ids": ["nhse-copd-wave2"],
+  "linked_funding_ids": [
+    "nhse-copd-wave2"
+  ],
   "technical_integrations": {
     "fhir": "Not confirmed",
     "emis": "Not confirmed",
     "nhs_app": false,
     "population_health_dashboard": true,
     "device_integration": "No device integration required for Essentials tier. Pro tier supports clinician dashboard.",
-    "languages": ["English"],
+    "languages": [
+      "English"
+    ],
     "data_hosting": "UK/EU-based servers"
   },
   "context_of_use": {
     "population": "Adults aged 18+ with COPD (all GOLD grades A–E)",
-    "pathways": ["Self-management", "Pulmonary rehabilitation", "Post-exacerbation support", "Remote monitoring (Pro)"],
-    "care_settings": ["Primary care", "Community", "Secondary care outpatients"],
+    "pathways": [
+      "Self-management",
+      "Pulmonary rehabilitation",
+      "Post-exacerbation support",
+      "Remote monitoring (Pro)"
+    ],
+    "care_settings": [
+      "Primary care",
+      "Community",
+      "Secondary care outpatients"
+    ],
     "therapeutic_purpose": "Self-management education, inhaler technique training, home PR programme, remote symptom monitoring",
     "hcp_involvement": "Essentials: minimal. Pro: clinician dashboard review required",
     "nice_scope": "NICE HTE19 (HTG736) — recommended during 3-year evidence generation period"

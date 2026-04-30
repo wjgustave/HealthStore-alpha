@@ -5,17 +5,43 @@
   "supplier_name": "Joint Academy",
   "short_name": "Joint Academy",
   "logo_path": "/logos/joint-academy.svg",
-  "condition_tags": ["msk"],
-  "pathway_tags": ["msk", "osteoarthritis", "physiotherapy", "self-management"],
-  "outcome_tags": ["pain-reduction", "function-improvement", "self-management", "quality-of-life"],
+  "condition_tags": [
+    "msk"
+  ],
+  "pathway_tags": [
+    "msk",
+    "osteoarthritis",
+    "physiotherapy",
+    "self-management"
+  ],
+  "outcome_tags": [
+    "pain-reduction",
+    "function-improvement",
+    "self-management",
+    "quality-of-life"
+  ],
   "supervision_model": "guided_self_help",
-  "referral_modes": ["clinician_referral", "self_referral"],
+  "referral_modes": [
+    "clinician_referral",
+    "self_referral"
+  ],
   "one_line_value_proposition": "Physiotherapist-guided digital osteoarthritis programme with NICE HTG766 and NG226 recommendations — structured exercise and education for hip and knee OA at scale.",
   "why_it_matters_locally": "MSK conditions are the largest single cause of disability and a major driver of GP and orthopaedic demand. Joint Academy provides a physiotherapist-guided digital programme for hip and knee OA patients, reducing pressure on face-to-face physiotherapy services and orthopaedic waiting lists.",
   "target_problem_statement": "Long orthopaedic waiting lists, limited physiotherapy capacity, and inadequate structured support for osteoarthritis self-management between appointments.",
   "nice_guidance_refs": [
-    { "ref": "NICE HTG766", "url": "https://www.nice.org.uk/guidance/htg766", "type": "HTG", "date": "2024" },
-    { "ref": "NICE NG226", "url": "https://www.nice.org.uk/guidance/ng226", "type": "NG", "date": "2022", "note": "Osteoarthritis management guideline" }
+    {
+      "ref": "NICE HTG766",
+      "url": "https://www.nice.org.uk/guidance/htg766",
+      "type": "HTG",
+      "date": "2024"
+    },
+    {
+      "ref": "NICE NG226",
+      "url": "https://www.nice.org.uk/guidance/ng226",
+      "type": "NG",
+      "date": "2022",
+      "note": "Osteoarthritis management guideline"
+    }
   ],
   "evidence_summary": "NICE HTG766 recommendation. Multiple peer-reviewed studies supporting physiotherapist-guided digital OA management including RCTs demonstrating pain reduction and functional improvement.",
   "evidence_strength": "strong",
@@ -24,8 +50,14 @@
   "maturity_level": "scaled",
   "live_sites": "Multiple NHS organisations and international deployments across Europe and North America",
   "named_sites": [
-    { "name": "Multiple NHS organisations (specific sites not listed in catalogue)", "status": "active" },
-    { "name": "International deployments (Europe and North America)", "status": "active" }
+    {
+      "name": "Multiple NHS organisations (specific sites not listed in catalogue)",
+      "status": "active"
+    },
+    {
+      "name": "International deployments (Europe and North America)",
+      "status": "active"
+    }
   ],
   "live_icbs": 12,
   "patients_covered_note": "Over 100,000 patients treated globally. Growing NHS deployment base.",
@@ -52,10 +84,13 @@
   "monitoring_note": "Guided self-help with physiotherapist check-ins. Not a continuously monitored clinical service.",
   "escalation_note": "Escalation to clinical services as clinically indicated. Programme includes safety screening.",
   "operating_hours_caveat": "Not a monitored clinical service.",
-  "implementation_prerequisites": ["Referral pathway established", "DTAC approval confirmed locally"],
+  "implementation_prerequisites": [
+    "Referral pathway established",
+    "DTAC approval confirmed locally"
+  ],
   "pricing_model": "Local negotiation required",
   "national_price_available": false,
-  "indicative_price_text": "Pricing is per patient pathway (typically 12 weeks of active treatment with maintenance access). Indicative cost per patient is in the range of \u00a3200\u2013\u00a3350 depending on volume commitments. Commissioners should request a formal pricing proposal.",
+  "indicative_price_text": "Pricing is per patient pathway (typically 12 weeks of active treatment with maintenance access). Indicative cost per patient is in the range of £200–£350 depending on volume commitments. Commissioners should request a formal pricing proposal.",
   "pricing_confidence": "supplier_reported",
   "free_offer_flag": false,
   "service_wrap_included": true,
@@ -63,10 +98,10 @@
   "service_wrap_note": "Physiotherapist support and analytics included in per-patient fee.",
   "contract_note": "Contact Joint Academy for NHS procurement options.",
   "procurement_notes": "Not currently available on a national NHS framework. Local procurement required via direct award or competitive process. Several AHSN regions have facilitated introductions and supported procurement. Supplier has experience with NHS standard contract terms.",
-  "expected_benefit_note": "International evidence suggests 30\u201340% of OA patients completing the programme may achieve sufficient symptom improvement to defer or avoid joint replacement surgery. Each deferred hip or knee replacement represents approximately \u00a36,000\u2013\u00a38,000 in direct surgical costs plus rehabilitation.",
+  "expected_benefit_note": "International evidence suggests 30–40% of OA patients completing the programme may achieve sufficient symptom improvement to defer or avoid joint replacement surgery. Each deferred hip or knee replacement represents approximately £6,000–£8,000 in direct surgical costs plus rehabilitation.",
   "tariff_considerations": "Joint replacement is a high-value tariff activity. Reductions in surgical volumes may have significant financial implications for orthopaedic provider trusts. Model using orthopaedic outpatient and physiotherapy costs and align incentives in pathway redesign.",
   "provider_income_note": "Orthopaedic providers should be engaged early. A reduction in surgical referrals may impact provider income from elective orthopaedic tariffs. Consider joint commissioning approaches that share benefits between commissioner and provider.",
-  "roi_note": "If 30% of referred patients defer surgery, net savings can be substantial at indicative programme cost of ~\u00a3250 per patient versus \u00a36,000\u2013\u00a38,000 surgical cost avoidance per deferred procedure. UK-specific ROI data is still developing.",
+  "roi_note": "If 30% of referred patients defer surgery, net savings can be substantial at indicative programme cost of ~£250 per patient versus £6,000–£8,000 surgical cost avoidance per deferred procedure. UK-specific ROI data is still developing.",
   "funding_ids": [],
   "nhse_125k_eligible": null,
   "nhse_125k_note": "Not applicable — MSK product.",
@@ -76,7 +111,13 @@
   "minimum_conditions_for_success": "Referral pathway with MSK first-contact practitioners or GPs. Minimum 200 patient cohort for meaningful outcome data.",
   "content_confidence": "Supplier-reported",
   "linked_funding_ids": [],
-  "demo_variants": [{ "label": "Joint Academy website", "url": "https://www.jointacademy.com", "type": "website" }],
+  "demo_variants": [
+    {
+      "label": "Joint Academy website",
+      "url": "https://www.jointacademy.com",
+      "type": "website"
+    }
+  ],
   "demo_notes": "Contact Joint Academy for a demonstration.",
   "supplier_contact_email": "nhs@jointacademy.com",
   "supplier_contact_name": "Joint Academy NHS team",

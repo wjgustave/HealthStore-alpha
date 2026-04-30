@@ -24,7 +24,7 @@
   "referral_modes": [
     "clinician_referral"
   ],
-  "one_line_value_proposition": "Clinician-reviewed remote monitoring and virtual ward platform with 15 years of NHS COPD deployment and an explicit NHSE ICB \u00a3125k funding endorsement.",
+  "one_line_value_proposition": "Clinician-reviewed remote monitoring and virtual ward platform with 15 years of NHS COPD deployment and an explicit NHSE ICB £125k funding endorsement.",
   "why_it_matters_locally": "Clinitouch enables NHS organisations to stand up virtual COPD wards that reduce unplanned admissions and free up bed capacity. It supports 24/7 monitoring hub models and integrates with HL7 FHIR. Spirit Health is explicitly named in NHSE winter 2024 COPD technology funding.",
   "target_problem_statement": "High unplanned COPD admissions, long hospital stays, inadequate post-discharge monitoring and limited virtual ward capacity.",
   "nice_guidance_refs": [
@@ -40,35 +40,50 @@
   "evidence_strength_rationale": "NICE recommends self-management use during evidence generation, but the COPD evidence located by NICE is two before-after studies and a retrospective study, with no COPD RCT. Reported admission/CAT improvements are promising, but comparator details are weak; PR use is research-only.",
   "case_studies": [
     {
-      "title": "Leicester COPD programme \u2014 admission reduction and ROI",
+      "title": "Leicester COPD programme — admission reduction and ROI",
       "setting": "Leicestershire Partnership NHS Trust, urban COPD population, 12 months",
       "sample_size": null,
-      "outcome": "Admissions fell from 3.13 to 1.02 per patient (p<0.001). 67.5% reduction in unscheduled admissions. Net saving \u00a3622k from \u00a352k service cost. \u00a32,278 saving per patient.",
-      "caveat": "Observational study. Authors have declared Spirit Health affiliations. Combined Clinitouch + clinical health coaching + specialist nurse intervention \u2014 outcomes reflect the full model, not technology alone.",
+      "outcome": "Admissions fell from 3.13 to 1.02 per patient (p<0.001). 67.5% reduction in unscheduled admissions. Net saving £622k from £52k service cost. £2,278 saving per patient.",
+      "caveat": "Observational study. Authors have declared Spirit Health affiliations. Combined Clinitouch + clinical health coaching + specialist nurse intervention — outcomes reflect the full model, not technology alone.",
       "source": "Ghosh et al., Br J Healthcare Management 2016, DOI: 10.12968/bjhc.2016.22.3.123"
     },
     {
-      "title": "LLR ICS virtual ward \u2014 bed days saved",
-      "setting": "NHS Leicester, Leicestershire and Rutland ICS, COVID-19 digital ward, 2020\u20132021",
+      "title": "LLR ICS virtual ward — bed days saved",
+      "setting": "NHS Leicester, Leicestershire and Rutland ICS, COVID-19 digital ward, 2020–2021",
       "sample_size": null,
-      "outcome": "1,103 bed days saved. \u00a3529,719 net financial savings. Sensitivity analysis: 78.4% simultaneous reduction in effects and cost increase required to reach break-even.",
-      "caveat": "Peer-reviewed but authors include Spirit Health staff (declared COI). COVID-19 context \u2014 not directly transferable to standard COPD.",
+      "outcome": "1,103 bed days saved. £529,719 net financial savings. Sensitivity analysis: 78.4% simultaneous reduction in effects and cost increase required to reach break-even.",
+      "caveat": "Peer-reviewed but authors include Spirit Health staff (declared COI). COVID-19 context — not directly transferable to standard COPD.",
       "source": "Swift et al., JMIR Formative Research 2024, DOI: 10.2196/47441, PMID: 38349716"
     }
   ],
   "maturity_level": "scaled",
   "live_sites": "LLR ICS (16 pathways), Leicestershire Partnership NHS Trust (since 2013), Royal Devon University Healthcare NHS FT, Bradford District and Craven, 20+ international partners in 15 countries",
   "named_sites": [
-    { "name": "LLR ICS (16 pathways)", "status": "active" },
-    { "name": "Leicestershire Partnership NHS Trust (since 2013)", "status": "active" },
-    { "name": "Royal Devon University Healthcare NHS FT", "status": "active" },
-    { "name": "Bradford District and Craven", "status": "active" },
-    { "name": "International partners (20+ organisations, 15 countries)", "status": "active" }
+    {
+      "name": "LLR ICS (16 pathways)",
+      "status": "active"
+    },
+    {
+      "name": "Leicestershire Partnership NHS Trust (since 2013)",
+      "status": "active"
+    },
+    {
+      "name": "Royal Devon University Healthcare NHS FT",
+      "status": "active"
+    },
+    {
+      "name": "Bradford District and Craven",
+      "status": "active"
+    },
+    {
+      "name": "International partners (20+ organisations, 15 countries)",
+      "status": "active"
+    }
   ],
   "live_icbs": 3,
   "patients_covered_note": "System-wide deployment across LLR ICS. 20+ international partner organisations. Patient count not publicly confirmed for individual deployments.",
   "dtac_status": "passed_refresh_required",
-  "dtac_note": "NHS Digital Playbook confirms DTAC completion. Central completion may be over 3 years old \u2014 updated DTAC form (April 2026) may require refresh. Confirm with Spirit Health before commissioning.",
+  "dtac_note": "NHS Digital Playbook confirms DTAC completion. Central completion may be over 3 years old — updated DTAC form (April 2026) may require refresh. Confirm with Spirit Health before commissioning.",
   "device_class": "Class IIa SaMD",
   "dcb0129_status": "Confirmed",
   "dcb0160_boilerplate_available": true,
@@ -77,15 +92,15 @@
   "cyber_essentials": "Cyber Essentials Plus held (supplier-reported)",
   "gdpr_note": "GDPR compliant. Specific data hosting location not confirmed in public sources.",
   "target_patients": "Adults with COPD (any severity). Platform supports 15+ other long-term conditions including heart failure, frailty, diabetes and asthma.",
-  "exclusions": "Requires active clinician monitoring \u2014 not suitable for organisations that cannot staff dashboard review.",
+  "exclusions": "Requires active clinician monitoring — not suitable for organisations that cannot staff dashboard review.",
   "onboarding_model": "clinician_led",
   "onboarding_detail": "Co-design with clinical teams to configure pathway parameters, questionnaire sets and alert thresholds before deployment. Community/ward staff support patient initial setup.",
   "supplier_wrap": "Spirit Health works directly with NHS organisations to design, configure and deploy clinical pathways. Training for all clinical staff. Supports 24/7 monitoring hub setup.",
   "local_wraparound": "high",
-  "local_wraparound_detail": "Clinical team required to review dashboard and respond to alerts. 24/7 staffing needed for virtual ward model. Pathway design must be completed before deployment \u2014 Spirit Health supports this process but local clinical commitment is essential.",
+  "local_wraparound_detail": "Clinical team required to review dashboard and respond to alerts. 24/7 staffing needed for virtual ward model. Pathway design must be completed before deployment — Spirit Health supports this process but local clinical commitment is essential.",
   "training_required": true,
   "training_note": "Training provided to all clinical staff. Platform designed to be kept simple.",
-  "monitoring_note": "Active remote management model \u2014 clinical team or contracted 24/7 hub must review dashboard. This is not a self-management-only tool.",
+  "monitoring_note": "Active remote management model — clinical team or contracted 24/7 hub must review dashboard. This is not a self-management-only tool.",
   "escalation_note": "Clinical teams configure alert thresholds and escalation protocols. Spirit Health supports hub setup.",
   "operating_hours_caveat": "Virtual ward model requires staffed monitoring capability. Confirm monitoring hours and escalation protocols with Spirit Health before deployment.",
   "implementation_prerequisites": [
@@ -97,23 +112,23 @@
   ],
   "pricing_model": "National negotiated rate",
   "national_price_available": true,
-  "indicative_price_text": "National framework pricing available. Per-patient-per-month model with indicative range of \u00a325\u2013\u00a350 depending on volume and contract term. Implementation and training costs typically quoted separately. Contact supplier for current schedule.",
+  "indicative_price_text": "National framework pricing available. Per-patient-per-month model with indicative range of £25–£50 depending on volume and contract term. Implementation and training costs typically quoted separately. Contact supplier for current schedule.",
   "pricing_confidence": "supplier_reported",
   "free_offer_flag": false,
   "service_wrap_included": true,
   "service_wrap_description": "Standard contract includes platform access, implementation support, clinical pathway design consultancy, training programme, 24/7 technical support, and monthly reporting. Enhanced tier with dedicated clinical informatics support and custom EPR integration available.",
   "service_wrap_note": "Spirit Health provides co-design, configuration and implementation support. Standard contract includes platform access, implementation support, clinical pathway design consultancy, training programme, 24/7 technical support, and monthly reporting. Spirit Health Foundation offers unlimited free licences for LMICs.",
   "contract_note": "NHS Digital Marketplace and direct contract routes available.",
-  "procurement_notes": "Available via NHS frameworks including Health Systems Support Framework. Also procurable via direct award or local competitive process. Several ICBs have established multi-year contracts. Supplier experienced in NHS procurement processes.",
+  "procurement_notes": "Available via NHSE ICB COPD Digital Technology Fund. G-Cloud and direct procurement routes.",
   "expected_benefit_note": "67.5% reduction in unscheduled COPD admissions in Leicester programme; 1,103 bed days saved in LLR ICS virtual ward (ROI evidence carries conflict-of-interest caveat). More generally, benefit is most likely when combined with effective clinical monitoring and response; real-world data are more encouraging than RCT evidence alone for admission avoidance.",
-  "tariff_considerations": "Telemonitoring may be funded under virtual ward programme allocations. Commissioners should check local virtual ward funding scope. Potential to support Best Practice Tariff compliance for COPD where applicable. Long-term condition management costs sit with commissioner. Leicester programme generated \u00a3622k net saving from \u00a352k service cost but reflects a combined clinical and digital intervention \u2014 model full service wrap locally.",
+  "tariff_considerations": "Telemonitoring may be funded under virtual ward programme allocations. Commissioners should check local virtual ward funding scope. Potential to support Best Practice Tariff compliance for COPD where applicable. Long-term condition management costs sit with commissioner. Leicester programme generated £622k net saving from £52k service cost but reflects a combined clinical and digital intervention — model full service wrap locally.",
   "provider_income_note": "Supports providers in delivering virtual ward targets and managing COPD cohorts at scale. May reduce some emergency and inpatient activity over time. Consider pathway-level financial modelling to align commissioner and provider incentives.",
   "roi_note": "Supplier provides detailed ROI modelling based on NHS deployment data. Liverpool evaluation suggests potential net savings when admission avoidance is factored against monitoring costs, but this is observational. Earlier literature cited 484% system ROI (Ghosh 2018) with declared COI; treat as directional. Commissioners should model using local cost and activity data.",
   "funding_ids": [
     "nhse-copd-wave2"
   ],
   "nhse_125k_eligible": true,
-  "nhse_125k_note": "Clinitouch is explicitly named as eligible for NHSE ICB \u00a3125k COPD technology funding (August 2024 deadline). Spirit Health can support ICB applications \u2014 contact clinitouch@spirit-health.com.",
+  "nhse_125k_note": "Clinitouch is explicitly named as eligible for NHSE ICB £125k COPD technology funding (August 2024 deadline). Spirit Health can support ICB applications — contact clinitouch@spirit-health.com.",
   "demo_variants": [
     {
       "label": "Product website",
@@ -135,7 +150,7 @@
       "journal": "British Journal of Healthcare Management",
       "year": 2016,
       "month": null,
-      "volume_issue": "22(3):123\u2013131",
+      "volume_issue": "22(3):123–131",
       "doi": "10.12968/bjhc.2016.22.3.123",
       "pmid": null,
       "pmc": null,
@@ -144,12 +159,12 @@
       "url_pubmed": null,
       "url_full_text": "https://doi.org/10.12968/bjhc.2016.22.3.123",
       "n": null,
-      "setting": "Leicestershire Partnership NHS Trust \u2014 COPD in urban setting, 12 months",
-      "key_results": "Admissions fell from 3.13 to 1.02 per patient (p<0.001). 67.5% reduction in unscheduled admissions. Net saving \u00a3622k from \u00a352k service cost. \u00a32,278 saving per patient.",
-      "study_limitation": "Observational. Combined intervention (Clinitouch + clinical health coaching + specialist nurse) \u2014 outcomes reflect the full model, not technology alone.",
+      "setting": "Leicestershire Partnership NHS Trust — COPD in urban setting, 12 months",
+      "key_results": "Admissions fell from 3.13 to 1.02 per patient (p<0.001). 67.5% reduction in unscheduled admissions. Net saving £622k from £52k service cost. £2,278 saving per patient.",
+      "study_limitation": "Observational. Combined intervention (Clinitouch + clinical health coaching + specialist nurse) — outcomes reflect the full model, not technology alone.",
       "peer_reviewed": true,
       "coi": true,
-      "coi_note": "Authors have Spirit Health affiliations \u2014 declared conflict of interest.",
+      "coi_note": "Authors have Spirit Health affiliations — declared conflict of interest.",
       "data_quality_flag": true,
       "data_quality_note": "Authors have Spirit Health affiliations with declared conflicts of interest. No independent RCT identified."
     },
@@ -162,7 +177,7 @@
       "journal": "British Journal of Healthcare Management",
       "year": 2018,
       "month": null,
-      "volume_issue": "24(11):526\u2013528",
+      "volume_issue": "24(11):526–528",
       "doi": "10.12968/bjhc.2018.24.11.526",
       "pmid": null,
       "pmc": null,
@@ -171,12 +186,12 @@
       "url_pubmed": null,
       "url_full_text": "https://doi.org/10.12968/bjhc.2018.24.11.526",
       "n": null,
-      "setting": "Leicestershire Partnership NHS Trust \u2014 COPD programme",
+      "setting": "Leicestershire Partnership NHS Trust — COPD programme",
       "key_results": "484% return on investment to the health system from Clinitouch remote monitoring in COPD.",
-      "study_limitation": "Authors have Spirit Health affiliations \u2014 declared conflict of interest.",
+      "study_limitation": "Authors have Spirit Health affiliations — declared conflict of interest.",
       "peer_reviewed": true,
       "coi": true,
-      "coi_note": "Authors have Spirit Health affiliations \u2014 declared conflict of interest.",
+      "coi_note": "Authors have Spirit Health affiliations — declared conflict of interest.",
       "data_quality_flag": true,
       "data_quality_note": "Treat ROI claims with appropriate caution given declared COI. No independent RCT identified for Clinitouch in COPD."
     },
@@ -199,12 +214,12 @@
       "url_full_text": "https://formative.jmir.org/2024/1/e47441",
       "url_pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10866202/",
       "n": null,
-      "setting": "LLR ICS COVID-19 digital ward, 2020\u20132021",
-      "key_results": "1,103 bed days saved; \u00a3529,719 net financial savings. Sensitivity analysis: 78.4% simultaneous reduction in effects and cost increase required to reach break-even.",
-      "study_limitation": "COVID-19 context \u2014 not directly transferable to standard COPD. Authors include Spirit Health staff (declared COI).",
+      "setting": "LLR ICS COVID-19 digital ward, 2020–2021",
+      "key_results": "1,103 bed days saved; £529,719 net financial savings. Sensitivity analysis: 78.4% simultaneous reduction in effects and cost increase required to reach break-even.",
+      "study_limitation": "COVID-19 context — not directly transferable to standard COPD. Authors include Spirit Health staff (declared COI).",
       "peer_reviewed": true,
       "coi": true,
-      "coi_note": "Authors include Spirit Health staff \u2014 declared conflict of interest.",
+      "coi_note": "Authors include Spirit Health staff — declared conflict of interest.",
       "data_quality_flag": true,
       "data_quality_note": "Spirit Health staff authorship with declared COI. COVID-19 virtual ward context."
     },
@@ -228,7 +243,7 @@
       "n": null,
       "setting": "LLR ICS, COVID-19 digital ward",
       "key_results": "50% reduction in COVID-19 re-admissions for patients discharged with Clinitouch monitoring.",
-      "study_limitation": "Grey literature \u2014 not peer-reviewed.",
+      "study_limitation": "Grey literature — not peer-reviewed.",
       "peer_reviewed": false,
       "coi": false,
       "data_quality_flag": false,
@@ -244,23 +259,34 @@
   "nhs_notify_integration": true,
   "monitoring_model": "Active remote monitoring with clinician dashboard and automated alerts.",
   "minimum_conditions_for_success": "Dedicated clinical monitoring team, respiratory clinical lead, minimum 200 patient cohort.",
-  "procurement_notes": "Available via NHSE ICB COPD Digital Technology Fund. G-Cloud and direct procurement routes.",
   "content_confidence": "Confirmed",
   "cyber_notes": "ISO 27001 certified. Cyber Essentials Plus held.",
-  "linked_funding_ids": ["nhse-copd-wave2"],
+  "linked_funding_ids": [
+    "nhse-copd-wave2"
+  ],
   "technical_integrations": {
     "fhir": "Not confirmed",
     "emis": "Integration available via Spirit Health",
     "nhs_app": false,
     "population_health_dashboard": true,
     "device_integration": "Pulse oximetry, spirometry, blood pressure via connected devices",
-    "languages": ["English"],
+    "languages": [
+      "English"
+    ],
     "data_hosting": "UK-based servers"
   },
   "context_of_use": {
     "population": "Adults with moderate-severe COPD requiring remote monitoring",
-    "pathways": ["Remote monitoring", "Post-exacerbation support", "High-risk patient management"],
-    "care_settings": ["Secondary care", "Community", "Primary care"],
+    "pathways": [
+      "Remote monitoring",
+      "Post-exacerbation support",
+      "High-risk patient management"
+    ],
+    "care_settings": [
+      "Secondary care",
+      "Community",
+      "Primary care"
+    ],
     "therapeutic_purpose": "Active remote monitoring, symptom tracking, clinical alerts, exacerbation prevention",
     "hcp_involvement": "Active — clinician monitoring dashboard required",
     "nice_scope": "NICE HTE19 (HTG736) — recommended during 3-year evidence generation period"

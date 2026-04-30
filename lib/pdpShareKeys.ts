@@ -76,5 +76,5 @@ export const PDP_SHARE_SECTION_LABELS: Record<PdpShareKey, string> = {
   'commercial-model': 'Commercial model and cost',
   'indicative-financial': 'Indicative financial context',
   'related-funding': 'Related funding opportunities',
-  'sidebar-summary': 'Quick facts, assurance and sources',
+  'sidebar-summary': 'Quick facts, assurance, supplier email and sources',
 }

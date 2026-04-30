@@ -5,7 +5,7 @@ A commissioner decision-support tool for NHS digital health technology procureme
 ## What's included
 
 - **Homepage** — hero, condition browser, NICE HTE19 COPD app grid, real-world impact metrics
-- **App catalogue** (`/apps`) — filterable by condition, supervision model, local effort, DTAC status
+- **App catalogue** (`/apps`, `/apps/condition-catalogue`) — search hub and filterable listing by condition, supervision model, local effort, DTAC status
 - **App detail pages** (`/apps/[slug]`) — commissioner assessment: why it matters, scale and maturity, what it takes locally, expected impact and case studies, clinical evidence, NICE guidance, demo access, NHS/system integrations, indicative cost and commercial detail, related funding (see `ADDING_APPS.md` for field mapping; `docs/PDP_SECTIONS_DEV_PLAN.md` for implementation spec)
 - **Funding directory** (`/funding`) — 5 funding opportunities with condition/app links
 

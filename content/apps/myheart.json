@@ -5,16 +5,37 @@
   "supplier_name": "my mhealth Limited",
   "short_name": "myHeart",
   "logo_path": "/logos/myheart.png",
-  "condition_tags": ["cardiac_rehab"],
-  "pathway_tags": ["cardiac-rehabilitation", "heart-failure", "post-cardiac-event", "remote-monitoring", "self-management"],
-  "outcome_tags": ["self-management", "quality-of-life", "exercise-capacity", "cr-uptake"],
+  "condition_tags": [
+    "cardiac_rehab"
+  ],
+  "pathway_tags": [
+    "cardiac-rehabilitation",
+    "heart-failure",
+    "post-cardiac-event",
+    "remote-monitoring",
+    "self-management"
+  ],
+  "outcome_tags": [
+    "self-management",
+    "quality-of-life",
+    "exercise-capacity",
+    "cr-uptake"
+  ],
   "supervision_model": "self_management_only",
-  "referral_modes": ["clinician_referral"],
+  "referral_modes": [
+    "clinician_referral"
+  ],
   "one_line_value_proposition": "NICE HTG764-recommended cardiac rehabilitation app from the makers of myCOPD — over 20,800 UK users, DTAC completed, with the Dorset County Hospital case study showing 70% CR uptake (surpassing the 2028 NHS target).",
   "why_it_matters_locally": "myHeart has the largest documented NHS deployment among HTG764-recommended platforms, with over 20,800 UK users since 2018. The Dorset County Hospital case study demonstrated 70% CR uptake — surpassing the 2028 NHS Long-Term Plan target. Built on the my mhealth platform (which also powers myCOPD), it benefits from an established NHS relationship and DTAC completion.",
   "target_problem_statement": "Low national CR uptake rates, limited capacity for home-based CR delivery, and the 2028 NHS Long-Term Plan target to increase CR uptake to 85%.",
   "nice_guidance_refs": [
-    { "ref": "NICE HTG764", "url": "https://www.nice.org.uk/guidance/htg764", "type": "EVA", "date": "December 2025", "note": "Conditionally recommended — one of four platforms with direct clinical evidence" }
+    {
+      "ref": "NICE HTG764",
+      "url": "https://www.nice.org.uk/guidance/htg764",
+      "type": "EVA",
+      "date": "December 2025",
+      "note": "Conditionally recommended — one of four platforms with direct clinical evidence"
+    }
   ],
   "evidence_summary": "Large real-world evidence base: UH Derby & Burton evaluation (721 patients) showed significantly lower drop-out rates with myHeart vs without. COVID-19 multi-site evaluation (5 NHS services): 89.7% of users accessed CR videos, 99.7% within first 6 weeks. Dorset County Hospital: 70% CR uptake achieved, surpassing 2028 NHS target. CUOREMA Eurostars Grant (€2.5M) for international research collaboration. NICE identifies myHeart as one of four platforms with direct clinical evidence.",
   "evidence_strength": "moderate",
@@ -284,10 +305,22 @@
   "maturity_level": "scaled",
   "live_sites": "Dorset County Hospital NHSFT, Leeds Community Healthcare NHS Trust, University Hospitals of Derby and Burton NHSFT, multiple NHS secondary care CR services.",
   "named_sites": [
-    { "name": "Dorset County Hospital NHSFT", "status": "active" },
-    { "name": "Leeds Community Healthcare NHS Trust", "status": "active" },
-    { "name": "University Hospitals of Derby and Burton NHSFT", "status": "active" },
-    { "name": "Additional NHS secondary care cardiac rehabilitation services", "status": "active" }
+    {
+      "name": "Dorset County Hospital NHSFT",
+      "status": "active"
+    },
+    {
+      "name": "Leeds Community Healthcare NHS Trust",
+      "status": "active"
+    },
+    {
+      "name": "University Hospitals of Derby and Burton NHSFT",
+      "status": "active"
+    },
+    {
+      "name": "Additional NHS secondary care cardiac rehabilitation services",
+      "status": "active"
+    }
   ],
   "live_icbs": 5,
   "patients_covered_note": "Over 20,800 myHeart users in the UK. In use since 2018/2019. 275,000+ rehabilitation/education sessions delivered in 2020 across the mymhealth platform.",
@@ -314,10 +347,15 @@
   "monitoring_note": "Non-continuous clinician review via clinician app. Remote monitoring of patient-entered vitals and activity. Not a 24/7 monitored service.",
   "escalation_note": "Standard NHS escalation routes. Clinician app enables messaging to patients.",
   "operating_hours_caveat": "Not a monitored emergency service. Clinician monitoring during standard working hours.",
-  "implementation_prerequisites": ["Smartphone, tablet, or smart TV with internet access", "CR team integration and training", "Bluetooth devices for vital monitoring (optional)", "DTAC refresh confirmed"],
+  "implementation_prerequisites": [
+    "Smartphone, tablet, or smart TV with internet access",
+    "CR team integration and training",
+    "Bluetooth devices for vital monitoring (optional)",
+    "DTAC refresh confirmed"
+  ],
   "pricing_model": "local_licence",
   "national_price_available": false,
-  "indicative_price_text": "From the same supplier family as myCOPD; cardiac rehab modules are typically quoted as population or per-patient licences. Illustrative range when benchmarked with similar my mhealth deployments: \u00a345\u2013\u00a395 per patient per year depending on modules and volume \u2014 confirm with my mhealth Limited.",
+  "indicative_price_text": "From the same supplier family as myCOPD; cardiac rehab modules are typically quoted as population or per-patient licences. Illustrative range when benchmarked with similar my mhealth deployments: £45–£95 per patient per year depending on modules and volume — confirm with my mhealth Limited.",
   "pricing_confidence": "indicative",
   "free_offer_flag": false,
   "service_wrap_included": true,
@@ -337,27 +375,46 @@
   "minimum_conditions_for_success": "Established CR service pathway, CR team trained on platform, minimum 200 patient cohort for meaningful outcome data.",
   "procurement_notes": "Contact my mhealth Limited. Same company as myCOPD — existing NHS relationships may facilitate procurement.",
   "content_confidence": "Confirmed",
-  "linked_funding_ids": ["health-innovation-network"],
+  "linked_funding_ids": [
+    "health-innovation-network"
+  ],
   "technical_integrations": {
     "fhir": "Information not available",
     "emis": "Information not available",
     "nhs_app": false,
     "population_health_dashboard": true,
     "device_integration": "Connects to Bluetooth devices (blood pressure monitors). Patient app and clinician app.",
-    "languages": ["English"],
+    "languages": [
+      "English"
+    ],
     "data_hosting": "Confirm with my mhealth Limited"
   },
   "context_of_use": {
     "population": "Adults with heart failure, post-cardiac event, post-cardiac surgery",
-    "pathways": ["Cardiac rehabilitation", "Home-based CR", "Class-based CR adjunct"],
-    "care_settings": ["Home-based", "Secondary care"],
+    "pathways": [
+      "Cardiac rehabilitation",
+      "Home-based CR",
+      "Class-based CR adjunct"
+    ],
+    "care_settings": [
+      "Home-based",
+      "Secondary care"
+    ],
     "therapeutic_purpose": "Personalised exercise, 50+ educational videos, symptom tracking, activity diary, medication diary, ECG/ECHO tracking, psychosocial support, clinician remote monitoring",
     "hcp_involvement": "Active — clinician app for remote monitoring, messaging, and patient management",
     "nice_scope": "NICE HTG764 — conditionally recommended during 3-year evidence generation period"
   },
   "demo_variants": [
-    { "label": "myHeart product page", "url": "https://mymhealth.com/myheart", "type": "website" },
-    { "label": "Knowledge hub", "url": "https://knowledgehub.mymhealth.com", "type": "website" }
+    {
+      "label": "myHeart product page",
+      "url": "https://mymhealth.com/myheart",
+      "type": "website"
+    },
+    {
+      "label": "Knowledge hub",
+      "url": "https://knowledgehub.mymhealth.com",
+      "type": "website"
+    }
   ],
   "demo_notes": "Contact my mhealth Limited for a demonstration. Free ebook for CR teams available.",
   "supplier_contact_email": "nhs@mymhealth.com",

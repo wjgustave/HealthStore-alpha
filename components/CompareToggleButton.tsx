@@ -25,6 +25,7 @@ export function CompareToggleButton({
   return (
     <button
       type="button"
+      aria-label={added ? 'Remove from comparison tool' : 'Add to comparison tool'}
       aria-disabled={blocked}
       onClick={() => {
         if (blocked) return
@@ -33,7 +34,7 @@ export function CompareToggleButton({
       title={
         blocked
           ? atCapacity
-            ? 'A maximum of 4 apps can be in the compare list.'
+            ? 'A maximum of 4 apps can be in the comparison tool.'
             : incompatibleCompareTooltip || undefined
           : undefined
       }
