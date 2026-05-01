@@ -33,6 +33,14 @@ Access is gated by middleware. You can also set variables manually in `.env.loca
 | `SESSION_SECRET` | Secret for encrypted session cookies (iron-session) |
 | `AUTH_USERNAME` / `AUTH_PASSWORD_HASH` | Primary user — bcrypt hash of the password (sign in → home). Prefer **base64** of the bcrypt string in `.env` (what `auth:setup` writes) so `$` is not mangled by env parsers. Plain bcrypt (`$2b$…`) also works if the value is **quoted** in `.env`. |
 | `AUTH_MULTI_USERNAME` / `AUTH_MULTI_PASSWORD_HASH` | Optional second user — after sign in they must choose a commissioning entity on `/select-entity` (same hash format as above) |
+| `NEXT_PUBLIC_ALPHA_LINE` | When `true` / `1`: **no cookie banner** and **no Hotjar**. Use on the **main** deployment (e.g. healthstore-alpha) only; **omit** on the v1 / prototype deployment so consent + analytics stay enabled. |
+
+### Alpha vs v1 on Vercel (same repo, two projects)
+
+If you deploy **`main`** to one Vercel project and **`v1`** to another, use the **same codebase** and differ only by env:
+
+- **Main (alpha) project:** set `NEXT_PUBLIC_ALPHA_LINE=true` (Production). Cookie banner hidden; Hotjar disabled.
+- **v1 project:** do **not** set `NEXT_PUBLIC_ALPHA_LINE` (or set it to `false`). Cookie banner + Hotjar (gated by consent) behave as implemented on `v1`.
 
 ### Named demo users (Marie / Rachel–style accounts)
 

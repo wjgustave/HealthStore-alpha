@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import AppShell from '@/components/AppShell'
 import CookieConsentRoot from '@/components/CookieConsentRoot'
+import { isAlphaLineFromEnv } from '@/lib/alphaLine'
 import { getSession } from '@/lib/session'
 import { getCommissioningContextLabel } from '@/lib/commissioningContextDisplay'
 import { getAllApps } from '@/lib/data'
@@ -16,13 +17,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const isLoggedIn = session.isLoggedIn
   const commissioningContextLabel = isLoggedIn ? getCommissioningContextLabel(session) : ''
   const allApps = getAllApps()
+  const alphaLine = isAlphaLineFromEnv()
 
   return (
     <html lang="en">
       <head>
       </head>
       <body className="min-h-screen" style={{ background: 'var(--surface)' }}>
-        <CookieConsentRoot>
+        {alphaLine ? (
           <AppShell
             isLoggedIn={isLoggedIn}
             commissioningContextLabel={commissioningContextLabel}
@@ -30,7 +32,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           >
             {children}
           </AppShell>
-        </CookieConsentRoot>
+        ) : (
+          <CookieConsentRoot>
+            <AppShell
+              isLoggedIn={isLoggedIn}
+              commissioningContextLabel={commissioningContextLabel}
+              allApps={allApps}
+            >
+              {children}
+            </AppShell>
+          </CookieConsentRoot>
+        )}
       </body>
     </html>
   )
