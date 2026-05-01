@@ -12,5 +12,12 @@
     "displayName": "Rachel Binks",
     "role": "Commissioner",
     "organisationName": "Airedale NHS Foundation Trust"
+  },
+  {
+    "username": "bca@nhs.net",
+    "passwordHashB64": "JDJiJDEwJFZLcHRLNWJudHNBSG1UY1g0RDFNTi5GM1NLV3VZQTQ2M0IxV0o0VmxqODROZS9vVldhckd5",
+    "displayName": "Commissioner Bradford CA",
+    "role": "Commissioner",
+    "organisationName": "Bradford Care Alliance CIC"
   }
 ]
