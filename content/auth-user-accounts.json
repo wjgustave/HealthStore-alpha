@@ -19,5 +19,26 @@
     "displayName": "Commissioner Bradford CA",
     "role": "Commissioner",
     "organisationName": "Bradford Care Alliance CIC"
+  },
+  {
+    "username": "lorrainelong@nhs.net",
+    "passwordHashB64": "JDJiJDEwJGxOVWNPczd5R1NKS0RGMVp6TXlKZy5LcC5QN0pSWVRteUhvYVFmQlovNTVVcENJdkpDWnhP",
+    "displayName": "Lorraine Long",
+    "role": "Programme Manager",
+    "organisationName": "Cornwall and Isle of Scilly ICB"
+  },
+  {
+    "username": "sam.wilson6@nhs.net",
+    "passwordHashB64": "JDJiJDEwJGxOVWNPczd5R1NKS0RGMVp6TXlKZy5LcC5QN0pSWVRteUhvYVFmQlovNTVVcENJdkpDWnhP",
+    "displayName": "Sam Wilson",
+    "role": "Deputy programme of care lead for planned care and cancer",
+    "organisationName": "Cornwall and Isle of Scilly ICB"
+  },
+  {
+    "username": "rachel.williams48@nhs.net",
+    "passwordHashB64": "JDJiJDEwJGxOVWNPczd5R1NKS0RGMVp6TXlKZy5LcC5QN0pSWVRteUhvYVFmQlovNTVVcENJdkpDWnhP",
+    "displayName": "Rachel Williams",
+    "role": "Consultant Respiratory Practitioner (Physiotherapist)",
+    "organisationName": "Cornwall and Isle of Scilly ICB"
   }
 ]
