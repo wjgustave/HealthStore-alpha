@@ -463,7 +463,10 @@ function IndicativeFinancialContextBody({ app }: { app: any }) {
   return (
     <div>
       <dl>
-        <FinancialContextDlRow label="Expected benefit" value={app.expected_benefit_note} />
+        <FinancialContextDlRow
+          label="Expected benefit"
+          value={app.financial_expected_benefit_note ?? app.expected_benefit_note}
+        />
         <FinancialContextDlRow label="Tariff considerations" value={app.tariff_considerations} />
         <FinancialContextDlRow label="Provider income impact" value={app.provider_income_note} />
         <FinancialContextDlRow label="ROI note" value={app.roi_note} />
