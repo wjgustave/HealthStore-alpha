@@ -186,19 +186,6 @@ export default function PdpSharedProductBody({
               title="Clinical evidence"
               description="Full evidence record. Links to source publications provided where available."
             >
-              {app.evidence_summary?.trim() ? (
-                <p
-                  style={{
-                    fontSize: 'var(--text-body)',
-                    lineHeight: 1.7,
-                    color: 'var(--text-secondary)',
-                    marginBottom: 20,
-                  }}
-                >
-                  {app.evidence_summary}
-                </p>
-              ) : null}
-
               {rcts.length > 0 && (
                 <div style={{ marginBottom: 16 }}>
                   <div

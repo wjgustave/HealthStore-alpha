@@ -42,7 +42,7 @@
       "note": "Separate recommendation for Acute Respiratory Infection remote monitoring"
     }
   ],
-  "evidence_summary": "",
+  "evidence_summary": "Real-world evidence from NWL ICS (6,000 COPD patients), Bradford District and Craven ICB (6,000 COPD patients, £400k NHSE investment), Sunderland virtual COPD clinic (50% admission reduction — attribution caveated), and MTW NHS Trust virtual ward. Imperial College HFrEF retention study (2% drop-out at 3 months). Published SAFE@HOME academic studies (preeclampsia). DTAC confirmed in G-Cloud 14 (April 2024). No standalone peer-reviewed RCT for Luscii in COPD identified.",
   "evidence_strength": "moderate",
   "evidence_strength_rationale": "NICE-prioritised evidence was UK before-after/case-series data, but a Luscii/cVitals randomised crossover study in Sweden exists and was feasible/safe without QoL benefit. RCT presence plus mid-scale implementation supports Moderate rather than Strong.",
   "case_studies": [
