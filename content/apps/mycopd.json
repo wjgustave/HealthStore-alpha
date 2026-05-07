@@ -36,8 +36,8 @@
       "title": "myCOPD in use"
     }
   ],
-  "one_line_value_proposition": "Structured COPD self-management, home pulmonary rehabilitation and remote monitoring — the only app in NICE HTE19 with a prior NICE MTG recommendation.",
-  "why_it_matters_locally": "COPD drives high unplanned admissions and significant GP workload. myCOPD gives patients a structured self-management toolkit — including a 6-week home PR programme — without requiring face-to-face PR capacity. The Pro tier adds a clinician dashboard for remote monitoring at population scale.",
+  "one_line_value_proposition": "Structured COPD self-management, home pulmonary rehabilitation and remote monitoring",
+  "why_it_matters_locally": "myCOPD gives patients a structured self-management toolkit, including a 6-week home PR programme, without requiring face-to-face PR capacity. The Pro tier adds a clinician dashboard for remote monitoring at population scale.",
   "target_problem_statement": "Unplanned COPD admissions, low PR uptake, poor inhaler technique and inadequate post-exacerbation support between appointments.",
   "nice_guidance_refs": [
     {
@@ -58,7 +58,7 @@
   "evidence_strength_rationale": "NICE/EAG found multiple myCOPD RCTs, and the PR guidance says myCOPD had well-designed RCT evidence supporting digital-vs-face-to-face non-inferiority. Real-world NHS use is mixed but materially broad.",
   "case_studies": [
     {
-      "title": "NHS Grampian — inhaler technique and admission reduction",
+      "title": "NHS Grampian, inhaler technique and admission reduction",
       "setting": "Stonehaven Medical Group & Aberdeenshire HSCP, primary care, 5 months",
       "sample_size": 64,
       "outcome": "Inhaler technique improved from 48% to 91% correct. Rescue inhaler use fell from 3.17 to 2.13 per week. Reduction in unscheduled GP visits and hospital admissions.",
@@ -66,15 +66,15 @@
       "source": "my mhealth evidence catalogue (mymhealth.com/studies)"
     },
     {
-      "title": "Jersey — engagement and daily use",
+      "title": "Jersey, engagement and daily use",
       "setting": "Jersey Health and Community Services",
       "sample_size": null,
       "outcome": "60% daily login rate. 800+ educational video views per week.",
-      "caveat": "Source is a Respiratory Nurse Specialist report — not peer-reviewed.",
+      "caveat": "Source is a Respiratory Nurse Specialist report, not peer-reviewed.",
       "source": "my mhealth / Jersey evaluation"
     },
     {
-      "title": "NHS Highland — remote and rural feasibility",
+      "title": "NHS Highland, remote and rural feasibility",
       "setting": "NHS Highland, up to 1 year",
       "sample_size": 113,
       "outcome": "78.8% activation rate. No correlation with age, wealth, rurality or COPD severity. Very high-use subgroup (17%) showed moderate reduction in admissions and bed days.",
@@ -131,7 +131,7 @@
   "onboarding_detail": "Commissioner engagement → infrastructure assessment → pathway embedding with clinical teams → staff training → patient invitation or self-referral. Digital Health Advisors support patients.",
   "supplier_wrap": "Digital Transformation Team supports infrastructure assessment, pathway embedding, staff training and patient onboarding. Dashboard support included in contract.",
   "local_wraparound": "medium",
-  "local_wraparound_detail": "Essentials tier: respiratory clinical lead and practice manager required. Pro tier: clinician capacity needed to actively monitor dashboard — without this, the Pro tier's value is unrealised.",
+  "local_wraparound_detail": "Essentials tier: respiratory clinical lead and practice manager required. Pro tier: clinician capacity needed to actively monitor dashboard, without this, the Pro tier's value is unrealised.",
   "training_required": true,
   "training_note": "HCP dashboard training and pathway integration materials provided by my mhealth clinical engagement specialists.",
   "monitoring_note": "Essentials: patient self-managed. Pro: clinician dashboard with remote monitoring — not a 24/7 monitored service. Patients must have clear escalation routes for deterioration.",
@@ -159,7 +159,7 @@
   "provider_income_note": "Providers delivering face-to-face PR may see reduced activity if digital PR diverts referrals. Consider gainshare or pathway redesign arrangements to align incentives.",
   "roi_note": "Supplier-reported ROI models suggest cost savings of £200–£400 per patient compared with face-to-face PR, primarily from reduced venue and staffing costs. Independent validation of these figures in the NHS context is limited. NHS Grampian service evaluation also signalled fewer unscheduled contacts. Commissioners should request site-specific modelling.",
   "nhse_125k_eligible": false,
-  "nhse_125k_note": "Clinitouch is explicitly named in NHSE winter 2024 COPD funding. myCOPD eligibility not confirmed — verify with NHSE before including in business case.",
+  "nhse_125k_note": "Clinitouch is explicitly named in NHSE winter 2024 COPD funding. myCOPD eligibility not confirmed, verify with NHSE before including in business case.",
   "demo_variants": [
     {
       "label": "Product website",
@@ -193,7 +193,7 @@
       "n": 41,
       "setting": "Portsmouth Hospitals NHS Trust",
       "key_results": "CAT score 4.49 points lower in myCOPD arm (95% CI −8.41 to −0.58). Critical inhaler errors: 101→20 (myCOPD) vs 100→72 (usual care). Exacerbations: 18 vs 34. OR for readmission 0.383 (0.074–1.987).",
-      "study_limitation": "Feasibility study — signals clinical benefit but powered for feasibility not efficacy.",
+      "study_limitation": "Feasibility study, signals clinical benefit but powered for feasibility not efficacy.",
       "peer_reviewed": true,
       "coi": false,
       "data_quality_flag": false,
@@ -246,7 +246,7 @@
       "n": 64,
       "setting": "Primary care, Aberdeenshire, 5 months (2019–2020)",
       "key_results": "Rescue inhaler use: 3.17→2.13/week. Inhaler technique: 48%→91% correct. Reduction in unscheduled GP visits and hospital admissions. Led to ICB-level commissioning decision.",
-      "study_limitation": "Service evaluation — not peer-reviewed. Reflects specific local deployment conditions.",
+      "study_limitation": "Service evaluation, not peer-reviewed. Reflects specific local deployment conditions.",
       "peer_reviewed": false,
       "coi": false,
       "data_quality_flag": false,
@@ -387,7 +387,7 @@
     "data_hosting": "UK/EU-based servers"
   },
   "context_of_use": {
-    "population": "Adults aged 18+ with COPD (all GOLD grades A–E)",
+    "population": "Adults aged 18+ with COPD (all GOLD grades A - E)",
     "pathways": [
       "Self-management",
       "Pulmonary rehabilitation",
