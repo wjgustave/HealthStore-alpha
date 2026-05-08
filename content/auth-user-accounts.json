@@ -40,5 +40,12 @@
     "displayName": "Rachel Williams",
     "role": "Consultant Respiratory Practitioner (Physiotherapist)",
     "organisationName": "Cornwall and Isle of Scilly ICB"
+  },
+  {
+    "username": "healthstore.test@nhs.net",
+    "passwordHashB64": "JDJiJDEwJEpnUEZxREVLU1BrZ3dvalVUekk5RE90cS5QaTlvczBYcmRLN2J0aDE5VGxZMExaZjdzSzFL",
+    "displayName": "Test user",
+    "role": "Consultant",
+    "organisationName": "Generic Trust"
   }
 ]
