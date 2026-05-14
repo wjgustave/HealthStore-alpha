@@ -47,5 +47,33 @@
     "displayName": "Test user",
     "role": "Consultant",
     "organisationName": "Generic Trust"
+  },
+  {
+    "username": "user.airedale@nhs.net",
+    "passwordHashB64": "JDJiJDEwJExydnNpLnlkRDBFTUFDUlBUcGw3SS5aOTBXSEdOMk5hVmxyL2Q2SGYyZFNYOGkybnZETGdp",
+    "displayName": "Commissioner",
+    "role": "Commissioner",
+    "organisationName": "Airedale NHS Foundation Trust"
+  },
+  {
+    "username": "admin.hoiw01@nhs.net",
+    "passwordHashB64": "JDJiJDEwJExydnNpLnlkRDBFTUFDUlBUcGw3SS5aOTBXSEdOMk5hVmxyL2Q2SGYyZFNYOGkybnZETGdp",
+    "displayName": "Commissioner",
+    "role": "Commissioner",
+    "organisationName": "Hampshire & Isle of Wight Healthcare NHS Foundation Trust"
+  },
+  {
+    "username": "admin.hoiw02@nhs.net",
+    "passwordHashB64": "JDJiJDEwJExydnNpLnlkRDBFTUFDUlBUcGw3SS5aOTBXSEdOMk5hVmxyL2Q2SGYyZFNYOGkybnZETGdp",
+    "displayName": "Commissioner",
+    "role": "Commissioner",
+    "organisationName": "Hampshire & Isle of Wight Healthcare NHS Foundation Trust"
+  },
+  {
+    "username": "admin.hoiw03@nhs.net",
+    "passwordHashB64": "JDJiJDEwJExydnNpLnlkRDBFTUFDUlBUcGw3SS5aOTBXSEdOMk5hVmxyL2Q2SGYyZFNYOGkybnZETGdp",
+    "displayName": "Commissioner",
+    "role": "Commissioner",
+    "organisationName": "Hampshire & Isle of Wight Healthcare NHS Foundation Trust"
   }
 ]
