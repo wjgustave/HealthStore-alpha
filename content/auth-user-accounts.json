@@ -75,5 +75,12 @@
     "displayName": "Commissioner",
     "role": "Commissioner",
     "organisationName": "Hampshire & Isle of Wight Healthcare NHS Foundation Trust"
+  },
+  {
+    "username": "admin.00@nhs.net",
+    "passwordHashB64": "JDJiJDEwJFI4Tk96c3FDbHBhekowZ0ZzLm4zdy41RnhRS1R3NTZxNDFYdXZBSXpRamwvODhVZE91Zjll",
+    "displayName": "Commissioner",
+    "role": "Commissioner",
+    "organisationName": "NHS Foundation Trust"
   }
 ]
