@@ -10,21 +10,25 @@ import { CompareBasketProvider } from './CompareBasketProvider'
 import { BookmarkProvider } from './BookmarkProvider'
 import { EoiProvider } from './EoiProvider'
 import ClearDataModal from './ClearDataModal'
+import AiAdvisorPanel, { type AiAdvisorClientProfile } from './ai/AiAdvisorPanel'
 
 export default function AppShell({
   children,
   isLoggedIn = false,
   commissioningContextLabel = '',
   allApps,
+  aiProfile,
 }: {
   children: React.ReactNode
   isLoggedIn?: boolean
   commissioningContextLabel?: string
   allApps: App[]
+  aiProfile?: AiAdvisorClientProfile | null
 }) {
   const pathname = usePathname()
   const isLoginPage = pathname === '/login'
   const [showClearData, setShowClearData] = useState(false)
+  const [aiPanelOpen, setAiPanelOpen] = useState(false)
   /** Subheader only when logged in (login route renders no Nav here) */
   const icbSubheaderLabel = isLoggedIn && commissioningContextLabel ? commissioningContextLabel : ''
 
@@ -46,8 +50,19 @@ export default function AppShell({
       <CompareBasketProvider allApps={allApps}>
         <BookmarkProvider>
           <EoiProvider>
-            <Nav commissioningContextLabel={icbSubheaderLabel} isLoggedIn={isLoggedIn} />
+            <Nav
+              commissioningContextLabel={icbSubheaderLabel}
+              isLoggedIn={isLoggedIn}
+              onOpenAiPanel={isLoggedIn && aiProfile ? () => setAiPanelOpen(true) : undefined}
+            />
             <main id="main-content">{children}</main>
+            {isLoggedIn && aiProfile && (
+              <AiAdvisorPanel
+                open={aiPanelOpen}
+                onClose={() => setAiPanelOpen(false)}
+                profile={aiProfile}
+              />
+            )}
             {isLoggedIn && (
               <ClearDataModal open={showClearData} onClose={() => setShowClearData(false)} />
             )}

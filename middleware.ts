@@ -42,7 +42,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    // Exclude api/apps, api/bookmarks and api/express-interest so APIs return JSON (401/403) instead of redirecting to /login for fetch clients.
-    '/((?!api/auth|api/apps|api/bookmarks|api/express-interest|_next/static|_next/image|logos|favicon\\.ico|.*\\.svg|.*\\.png|.*\\.jpg).*)',
+    // Exclude api/apps, api/ai, api/ai-advisor, api/bookmarks and api/express-interest so APIs return JSON (401/403) instead of redirecting to /login for fetch clients.
+    '/((?!api/auth|api/apps|api/ai|api/ai-advisor|api/bookmarks|api/express-interest|_next/static|_next/image|logos|favicon\\.ico|.*\\.svg|.*\\.png|.*\\.jpg).*)',
   ],
 }
