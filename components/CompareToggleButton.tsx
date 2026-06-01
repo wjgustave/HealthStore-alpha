@@ -52,7 +52,7 @@ export function CompareToggleButton({
         {added ? (
           <>
             <Check className="w-4 h-4 shrink-0" strokeWidth={2.5} aria-hidden />
-            Added
+            Compare
           </>
         ) : (
           <>

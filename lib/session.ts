@@ -6,6 +6,12 @@ export interface SessionData {
   /** True after multi-user login until they choose an ICB */
   requiresCommissioningEntitySelection?: boolean
   commissioningEntityId?: string
+  /** Stable key for per-account server data (e.g. saved apps). Set on login. */
+  accountKey?: string
+  /** UUID of the user's active organization (from DB). */
+  organizationId?: string
+  /** UUID of the authenticated user row (from DB). */
+  userId?: string
   /** Named demo accounts from `content/auth-user-accounts.json` — nav + expression-of-interest prefill. */
   profileDisplayName?: string
   profileRole?: string

@@ -25,28 +25,28 @@
     "passwordHashB64": "JDJiJDEwJGxOVWNPczd5R1NKS0RGMVp6TXlKZy5LcC5QN0pSWVRteUhvYVFmQlovNTVVcENJdkpDWnhP",
     "displayName": "Lorraine Long",
     "role": "Programme Manager",
-    "organisationName": "Cornwall and Isle of Scilly ICB"
+    "organisationName": "Cornwall and Isles of Scilly ICB"
   },
   {
     "username": "sam.wilson6@nhs.net",
     "passwordHashB64": "JDJiJDEwJGxOVWNPczd5R1NKS0RGMVp6TXlKZy5LcC5QN0pSWVRteUhvYVFmQlovNTVVcENJdkpDWnhP",
     "displayName": "Sam Wilson",
     "role": "Deputy programme of care lead for planned care and cancer",
-    "organisationName": "Cornwall and Isle of Scilly ICB"
+    "organisationName": "Cornwall and Isles of Scilly ICB"
   },
   {
     "username": "rachel.williams48@nhs.net",
     "passwordHashB64": "JDJiJDEwJGxOVWNPczd5R1NKS0RGMVp6TXlKZy5LcC5QN0pSWVRteUhvYVFmQlovNTVVcENJdkpDWnhP",
     "displayName": "Rachel Williams",
     "role": "Consultant Respiratory Practitioner (Physiotherapist)",
-    "organisationName": "Cornwall and Isle of Scilly ICB"
+    "organisationName": "Cornwall and Isles of Scilly ICB"
   },
   {
     "username": "healthstore.test@nhs.net",
     "passwordHashB64": "JDJiJDEwJEpnUEZxREVLU1BrZ3dvalVUekk5RE90cS5QaTlvczBYcmRLN2J0aDE5VGxZMExaZjdzSzFL",
     "displayName": "Test user",
     "role": "Consultant",
-    "organisationName": "Generic Trust"
+    "organisationName": "NHS Foundation Trust"
   },
   {
     "username": "user.airedale@nhs.net",
@@ -89,5 +89,12 @@
     "displayName": "Commissioner",
     "role": "Commissioner",
     "organisationName": "NHS Foundation Trust"
+  },
+  {
+    "username": "user.roxton@nhs.net",
+    "passwordHashB64": "JDJiJDEwJFI4Tk96c3FDbHBhekowZ0ZzLm4zdy41RnhRS1R3NTZxNDFYdXZBSXpRamwvODhVZE91Zjll",
+    "displayName": "Commissioner",
+    "role": "Commissioner",
+    "organisationName": "The Roxton Practice"
   }
 ]

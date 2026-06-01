@@ -186,7 +186,7 @@ function CommissionedWidget({ commissioned }: { commissioned: ConceptGridContent
   )
 }
 
-function NewsListConcept({ news }: { news: HomeNewsItem[] }) {
+export function NewsListConcept({ news }: { news: HomeNewsItem[] }) {
   return (
     <div className="rounded-xl border bg-white p-5 shadow-md" style={{ borderColor: 'var(--border)' }}>
       <h3 className="mb-4 text-lg font-bold" style={{ ...fr, color: 'var(--text-primary)' }}>
@@ -212,7 +212,7 @@ function NewsListConcept({ news }: { news: HomeNewsItem[] }) {
   )
 }
 
-function CampaignsColumnConcept({ campaigns }: { campaigns: HomeCampaignItem[] }) {
+export function CampaignsColumnConcept({ campaigns }: { campaigns: HomeCampaignItem[] }) {
   const featured = campaigns.find((c) => c.featured) ?? campaigns[0]
   const rest = campaigns.filter((c) => c !== featured)
 
@@ -261,12 +261,14 @@ function CampaignsColumnConcept({ campaigns }: { campaigns: HomeCampaignItem[] }
   )
 }
 
-function FeaturedTherapeuticBand({
+export function FeaturedTherapeuticBand({
   concept,
   app,
+  disableLink = false,
 }: {
   concept: ConceptFeaturedContent
   app: App | undefined
+  disableLink?: boolean
 }) {
   return (
     <section
@@ -328,13 +330,23 @@ function FeaturedTherapeuticBand({
                       <DtacBadge status={app.dtac_status} />
                     </div>
                   </div>
-                  <Link
-                    href={`/apps/${app.slug}`}
-                    className="block w-full rounded-lg py-3 text-center text-sm font-semibold text-white"
-                    style={{ background: STORE_ACCENT }}
-                  >
-                    View details →
-                  </Link>
+                  {disableLink ? (
+                    <span
+                      className="block w-full rounded-lg py-3 text-center text-sm font-semibold text-white opacity-60 cursor-default"
+                      style={{ background: STORE_ACCENT }}
+                      aria-hidden
+                    >
+                      Sign in to view details
+                    </span>
+                  ) : (
+                    <Link
+                      href={`/apps/${app.slug}`}
+                      className="block w-full rounded-lg py-3 text-center text-sm font-semibold text-white"
+                      style={{ background: STORE_ACCENT }}
+                    >
+                      View details →
+                    </Link>
+                  )}
                 </>
               ) : (
                 <p className="text-sm" style={{ color: 'var(--text-muted)' }}>

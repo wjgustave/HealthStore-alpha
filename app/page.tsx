@@ -13,10 +13,15 @@ import {
   getHomeEvidenceSpotlights,
   getHomeCampaigns,
 } from '@/lib/data'
+import { getSession } from '@/lib/session'
 import HomeBelowHeroInteractive from '@/components/home/HomeBelowHeroInteractive'
 import HomeHeroSearch from '@/components/home/HomeHeroSearch'
+import HomePublicContent from '@/components/home/HomePublicContent'
 
 export default async function HomePage() {
+  const session = await getSession()
+  const isLoggedIn = session.isLoggedIn
+
   const apps = getAllApps()
   const dash = getDashboardContent()
   const conditions = getConditionAreas()
@@ -31,25 +36,37 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-x-clip" style={{ background: 'linear-gradient(135deg, #003087 0%, #005EB8 60%, #0072CE 100%)' }}>
+      <section
+        className="relative overflow-x-clip"
+        style={{
+          background: 'linear-gradient(135deg, #003087 0%, #005EB8 60%, #0072CE 100%)',
+          ...(isLoggedIn ? { maxHeight: '275px', overflow: 'hidden' } : {}),
+        }}
+      >
+        {!isLoggedIn && (
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 z-0 hidden w-[calc(30vw+200px)] overflow-hidden md:block [clip-path:polygon(18%_0,100%_0,100%_100%,0_100%)]"
+          >
+            <Image
+              src="/images/home-hero.jpg"
+              alt="Healthcare professionals collaborating with digital health tools"
+              fill
+              className="object-cover"
+              sizes="calc(30vw + 200px)"
+              priority
+            />
+          </div>
+        )}
         <div
-          className="pointer-events-none absolute inset-y-0 right-0 z-0 hidden w-[calc(30vw+200px)] overflow-hidden md:block [clip-path:polygon(18%_0,100%_0,100%_100%,0_100%)]"
-        >
-          <Image
-            src="/images/home-hero.jpg"
-            alt="Healthcare professionals collaborating with digital health tools"
-            fill
-            className="object-cover"
-            sizes="calc(30vw + 200px)"
-            priority
-          />
-        </div>
-        <div
-          className="relative z-10 mx-auto max-w-7xl px-6 md:min-h-[min(28rem,58vh)]"
-          style={{ paddingTop: '5rem', paddingBottom: '5rem' }}
+          className="relative z-10 mx-auto max-w-7xl px-6"
+          style={{
+            paddingTop: isLoggedIn ? '2.5rem' : '5rem',
+            paddingBottom: isLoggedIn ? '2.5rem' : '5rem',
+            ...(isLoggedIn ? {} : { minHeight: 'min(28rem, 58vh)' }),
+          }}
         >
           <div className="grid grid-cols-1 gap-10">
-            <div className="min-w-0 md:max-w-[min(56rem,calc(70vw-200px-(100vw-min(100vw,80rem))/2-3rem))]">
+            <div className={`min-w-0 ${isLoggedIn ? 'w-full' : 'md:max-w-[min(56rem,calc(70vw-200px-(100vw-min(100vw,80rem))/2-3rem))]'}`}>
               <h1
                 style={{
                   fontFamily: 'Frutiger, Arial, sans-serif',
@@ -68,49 +85,72 @@ export default async function HomePage() {
               >
                 {dash.hero.subheadline}
               </p>
-              <div className="mb-6">
-                <Link
-                  href="/apps"
-                  className="inline-flex min-h-[52px] items-center justify-center rounded-xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-95"
-                  style={{ background: '#fff', color: '#003087' }}
-                >
-                  Find apps
-                </Link>
+              {isLoggedIn ? (
+                <div className="flex items-center gap-4">
+                  <Link
+                    href="/apps"
+                    className="text-base font-semibold underline-offset-2 hover:underline"
+                    style={{ color: '#fff' }}
+                  >
+                    Find apps
+                  </Link>
+                  <span style={{ color: 'rgba(255,255,255,0.4)' }}>·</span>
+                  <HomeHeroSearch />
+                </div>
+              ) : (
+                <div className="mb-6">
+                  <Link
+                    href="/login"
+                    className="inline-flex min-h-[52px] items-center justify-center rounded-xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-95"
+                    style={{ background: '#fff', color: '#003087' }}
+                  >
+                    Sign in to explore apps
+                  </Link>
+                </div>
+              )}
+            </div>
+            {!isLoggedIn && (
+              <div className="relative mx-auto min-h-[14rem] w-full overflow-hidden rounded-xl md:hidden [clip-path:polygon(0_0,100%_0,100%_100%,0_100%)]">
+                <Image
+                  src="/images/home-hero.jpg"
+                  alt="Healthcare professionals collaborating with digital health tools"
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                />
               </div>
-              <p
-                className="mb-2 text-base font-semibold"
-                style={{ color: 'rgba(255,255,255,0.92)' }}
-              >
-                Or search
-              </p>
-              <HomeHeroSearch />
-            </div>
-            <div className="relative mx-auto min-h-[14rem] w-full overflow-hidden rounded-xl md:hidden [clip-path:polygon(0_0,100%_0,100%_100%,0_100%)]">
-              <Image
-                src="/images/home-hero.jpg"
-                alt="Healthcare professionals collaborating with digital health tools"
-                fill
-                className="object-cover"
-                sizes="100vw"
-              />
-            </div>
+            )}
           </div>
         </div>
       </section>
 
-      <HomeBelowHeroInteractive
-        apps={apps}
-        dash={dash}
-        conditions={conditions}
-        removedApps={removedApps}
-        openFunding={openFunding}
-        news={news}
-        evidence={evidence}
-        campaigns={campaigns}
-        conceptGrid={getConceptGridContent()}
-        conceptFeatured={conceptFeatured}
-        featuredApp={featuredApp}
-      />
+      {isLoggedIn ? (
+        <HomeBelowHeroInteractive
+          apps={apps}
+          dash={dash}
+          conditions={conditions}
+          removedApps={removedApps}
+          openFunding={openFunding}
+          news={news}
+          evidence={evidence}
+          campaigns={campaigns}
+          conceptGrid={getConceptGridContent()}
+          conceptFeatured={conceptFeatured}
+          featuredApp={featuredApp}
+          displayName={session.profileDisplayName}
+          organisationName={session.profileOrganisationName}
+        />
+      ) : (
+        <HomePublicContent
+          apps={apps}
+          dash={dash}
+          conditions={conditions}
+          news={news}
+          campaigns={campaigns}
+          conceptFeatured={conceptFeatured}
+          featuredApp={featuredApp}
+        />
+      )}
     </div>
   )
 }

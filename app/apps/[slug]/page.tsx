@@ -10,6 +10,7 @@ import {
 } from '@/components/Badges'
 import AppDetailClient from './AppDetailClient'
 import { CompareToggleButton } from '@/components/CompareToggleButton'
+import { SaveToggleButton } from '@/components/SaveToggleButton'
 import { STORE_ACCENT } from '@/lib/storeAccent'
 import {
   ScaleAndMaturitySection,
@@ -158,6 +159,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               </div>
               <div className="flex flex-wrap gap-2 items-center shrink-0">
                 <SharePagePanel borderlessTrigger />
+                <SaveToggleButton appId={app.id} borderless className="px-4 py-4 shrink-0" />
                 <CompareToggleButton appId={app.id} borderless className="px-4 py-4 shrink-0" />
               </div>
             </div>

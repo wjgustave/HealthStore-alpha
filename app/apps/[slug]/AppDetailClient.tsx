@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import ExpressInterestModal from '@/components/ExpressInterestModal'
 
 interface Props {
-  app: { app_name: string }
+  app: { id: string; app_name: string }
   children: React.ReactNode
   contactPrefill: {
     name: string
@@ -33,6 +33,7 @@ export default function AppDetailClient({ app, children, contactPrefill }: Props
     <>
       {children}
       <ExpressInterestModal
+        appId={app.id}
         appName={app.app_name}
         open={showModal}
         onClose={() => setShowModal(false)}

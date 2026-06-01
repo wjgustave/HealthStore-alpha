@@ -3,9 +3,10 @@
 import { Suspense, useEffect } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { HOME_LAYOUT_STORAGE_KEY } from '@/lib/homeLayoutStorage'
-import { HomeLayoutV4, type HomeLayoutV4Props } from './HomeLayoutV4'
+import { DashboardSwitcher } from './dashboard/DashboardSwitcher'
+import type { DashboardVariantProps } from './dashboard/types'
 
-function HomeBelowInner(props: HomeLayoutV4Props) {
+function HomeBelowInner(props: DashboardVariantProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -27,7 +28,7 @@ function HomeBelowInner(props: HomeLayoutV4Props) {
 
   return (
     <div className="max-w-7xl mx-auto px-6 pb-16 pt-10">
-      <HomeLayoutV4 {...props} />
+      <DashboardSwitcher {...props} />
     </div>
   )
 }
@@ -40,7 +41,7 @@ function HomeBelowFallback() {
   )
 }
 
-export default function HomeBelowHeroInteractive(props: HomeLayoutV4Props) {
+export default function HomeBelowHeroInteractive(props: DashboardVariantProps) {
   return (
     <Suspense fallback={<HomeBelowFallback />}>
       <HomeBelowInner {...props} />

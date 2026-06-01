@@ -1,12 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { getIronSession } from 'iron-session'
+import { eq } from 'drizzle-orm'
 import { resolveBcryptHashFromEnv } from '@/lib/authEnv'
 import { findAuthUserAccount, resolveAccountPasswordHash } from '@/lib/authUserAccounts'
 import { sessionOptions, type SessionData, clearDemoUserProfile } from '@/lib/session'
+import { db } from '@/lib/db'
+import { users } from '@/lib/db/schema'
 
 function jsonWithSession(body: object, res: NextResponse, status = 200) {
   return NextResponse.json(body, { status, headers: res.headers })
+}
+
+async function lookupUserOrgIds(email: string): Promise<{ userId?: string; organizationId?: string }> {
+  try {
+    const rows = await db().select({
+      id: users.id,
+      organizationId: users.organizationId,
+    }).from(users).where(eq(users.email, email)).limit(1)
+
+    if (rows.length > 0) {
+      return { userId: rows[0].id, organizationId: rows[0].organizationId }
+    }
+  } catch {
+    // DB not available — graceful fallback
+  }
+  return {}
 }
 
 export async function POST(req: NextRequest) {
@@ -47,6 +66,12 @@ export async function POST(req: NextRequest) {
       session.isLoggedIn = true
       session.requiresCommissioningEntitySelection = false
       session.commissioningEntityId = undefined
+      session.accountKey = validUsername
+
+      const dbIds = await lookupUserOrgIds(validUsername)
+      session.userId = dbIds.userId
+      session.organizationId = dbIds.organizationId
+
       await session.save()
       return jsonWithSession({ ok: true, redirect: '/' }, res)
     }
@@ -64,10 +89,16 @@ export async function POST(req: NextRequest) {
       session.isLoggedIn = true
       session.requiresCommissioningEntitySelection = false
       session.commissioningEntityId = undefined
+      session.accountKey = namedAccount.username.trim()
       session.profileDisplayName = namedAccount.displayName
       session.profileRole = namedAccount.role
       session.profileOrganisationName = namedAccount.organisationName
       session.profileEmail = namedAccount.username.trim()
+
+      const dbIds = await lookupUserOrgIds(namedAccount.username.trim())
+      session.userId = dbIds.userId
+      session.organizationId = dbIds.organizationId
+
       await session.save()
       return jsonWithSession({ ok: true, redirect: '/' }, res)
     }
@@ -84,6 +115,12 @@ export async function POST(req: NextRequest) {
       session.isLoggedIn = true
       session.requiresCommissioningEntitySelection = true
       session.commissioningEntityId = undefined
+      session.accountKey = multiUsername
+
+      const dbIds = await lookupUserOrgIds(multiUsername)
+      session.userId = dbIds.userId
+      session.organizationId = dbIds.organizationId
+
       await session.save()
       return jsonWithSession({ ok: true, redirect: '/select-entity' }, res)
     }

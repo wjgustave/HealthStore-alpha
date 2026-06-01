@@ -80,20 +80,42 @@ npm install
 npm run dev
 # → http://localhost:3000
 
-# Production build + static export
+# Production build
 npm run build
-# → generates /out directory
-
-# Serve the static export
-cd out && npx serve -s .
+npm run start
 # → http://localhost:3000
 ```
 
+## Database (Postgres via Neon)
+
+Bookmarks and organisation data are stored in Postgres. Create a free project at [neon.tech](https://neon.tech) and add the connection string to `.env.local`:
+
+```bash
+DATABASE_URL="postgresql://user:pass@ep-xxx.region.neon.tech/dbname?sslmode=require"
+```
+
+Then run migrations and seed the database:
+
+```bash
+# Create tables
+npm run db:migrate
+
+# Seed organizations + users from content/auth-user-accounts.json
+npm run db:seed
+
+# Or both in one step
+npm run db:setup
+```
+
+**On Vercel:** Add `DATABASE_URL` under Project → Settings → Environment Variables. The migration must be run once manually (`npm run db:migrate`) against your Neon project before deploying.
+
 ## Tech stack
 
-- **Next.js 16** (App Router, static export)
+- **Next.js 16** (App Router, server-rendered)
 - **Tailwind CSS v4** 
 - **TypeScript**
+- **Drizzle ORM** + **Neon Postgres** (org-scoped data)
+- **iron-session** (encrypted cookie auth)
 - **Frutiger** (Light, Regular, Bold — local font files)
 
 ## Content

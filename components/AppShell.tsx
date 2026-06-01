@@ -2,10 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
 import type { App } from '@/lib/data'
 import Nav from './Nav'
 import BackToTop from './BackToTop'
 import { CompareBasketProvider } from './CompareBasketProvider'
+import { BookmarkProvider } from './BookmarkProvider'
+import { EoiProvider } from './EoiProvider'
+import ClearDataModal from './ClearDataModal'
 
 export default function AppShell({
   children,
@@ -20,6 +24,7 @@ export default function AppShell({
 }) {
   const pathname = usePathname()
   const isLoginPage = pathname === '/login'
+  const [showClearData, setShowClearData] = useState(false)
   /** Subheader only when logged in (login route renders no Nav here) */
   const icbSubheaderLabel = isLoggedIn && commissioningContextLabel ? commissioningContextLabel : ''
 
@@ -39,8 +44,15 @@ export default function AppShell({
     <>
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <CompareBasketProvider allApps={allApps}>
-        <Nav commissioningContextLabel={icbSubheaderLabel} isLoggedIn={isLoggedIn} />
-        <main id="main-content">{children}</main>
+        <BookmarkProvider>
+          <EoiProvider>
+            <Nav commissioningContextLabel={icbSubheaderLabel} isLoggedIn={isLoggedIn} />
+            <main id="main-content">{children}</main>
+            {isLoggedIn && (
+              <ClearDataModal open={showClearData} onClose={() => setShowClearData(false)} />
+            )}
+          </EoiProvider>
+        </BookmarkProvider>
       </CompareBasketProvider>
       <BackToTop />
       <footer
@@ -61,6 +73,16 @@ export default function AppShell({
             <Link href="/apps" className="hover:underline">Find apps</Link>
             <Link href="/funding" className="hover:underline">Funding directory</Link>
             <Link href="/cookies" className="hover:underline">Cookies</Link>
+            {isLoggedIn && (
+              <button
+                type="button"
+                onClick={() => setShowClearData(true)}
+                className="hover:underline"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                Manage data
+              </button>
+            )}
           </div>
         </div>
       </footer>

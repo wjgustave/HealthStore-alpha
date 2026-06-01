@@ -12,6 +12,7 @@ import {
 } from '@/lib/catalogueCardSignals'
 import { MaturityBadge, SupervisionBadge, ConditionTag } from '@/components/Badges'
 import { CompareToggleButton } from '@/components/CompareToggleButton'
+import { SaveToggleButton } from '@/components/SaveToggleButton'
 import { Check, X } from 'lucide-react'
 import { buildBrowseSearchParams, filterAppsBySearchQuery, parseBrowseConditionParam } from '@/lib/catalogueSearch'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
@@ -387,15 +388,18 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                     </>
                   ) : null}
 
-                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                  <div className="grid grid-cols-1 gap-2">
                     <Link
                       href={`/apps/${app.slug}`}
-                      className="block rounded-lg py-4 text-center text-sm font-semibold transition-colors hover:!bg-[#004B8C] sm:col-span-2"
+                      className="block rounded-lg py-4 text-center text-sm font-semibold transition-colors hover:!bg-[#004B8C]"
                       style={{ background: STORE_ACCENT, color: '#fff' }}
                     >
                       View details →
                     </Link>
-                    <CompareToggleButton appId={app.id} className="w-full sm:col-span-1" />
+                    <div className="grid grid-cols-2 gap-2">
+                      <SaveToggleButton appId={app.id} borderless className="w-full px-4 py-4" />
+                      <CompareToggleButton appId={app.id} borderless className="w-full px-4 py-4" />
+                    </div>
                   </div>
                 </div>
               </div>

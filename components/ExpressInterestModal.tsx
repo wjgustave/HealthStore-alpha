@@ -4,8 +4,10 @@ import { useState, useEffect, useRef, useId, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { X, Send, CheckCircle } from 'lucide-react'
 import { STORE_ACCENT } from '@/lib/storeAccent'
+import { useEoi } from '@/components/EoiProvider'
 
 interface Props {
+  appId: string
   appName: string
   open: boolean
   onClose: () => void
@@ -74,12 +76,16 @@ const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 export default function ExpressInterestModal({
+  appId,
   appName,
   open,
   onClose,
   contactPrefill,
 }: Props) {
+  const { submit } = useEoi()
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -117,6 +123,8 @@ export default function ExpressInterestModal({
   useEffect(() => {
     if (!open) {
       setSubmitted(false)
+      setSubmitError(null)
+      setSubmitting(false)
       return
     }
     previouslyFocused.current = document.activeElement as HTMLElement
@@ -169,9 +177,26 @@ export default function ExpressInterestModal({
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [open, submitted])
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    setSubmitted(true)
+    if (submitting) return
+    setSubmitting(true)
+    setSubmitError(null)
+    try {
+      await submit({
+        appId,
+        appName,
+        phone: formData.phone,
+        population_estimate: formData.population_estimate,
+        timeline: formData.timeline,
+        notes: formData.notes,
+      })
+      setSubmitted(true)
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Could not register your expression of interest.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   function handleChange(field: string, value: string) {
@@ -351,14 +376,25 @@ export default function ExpressInterestModal({
                   placeholder="Any specific requirements, questions or constraints…"
                 />
               </div>
+              {submitError ? (
+                <p
+                  role="alert"
+                  className="text-sm rounded-md px-3 py-2"
+                  style={{ background: '#FEF3F2', color: '#912018', border: '1px solid #FECDCA' }}
+                >
+                  {submitError}
+                </p>
+              ) : null}
               <div className="pt-2 flex items-center gap-3">
                 <button
                   type="submit"
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold text-white transition-colors hover:!bg-[#004B8C] disabled:hover:!bg-[var(--nhs-blue)]"
+                  disabled={submitting}
+                  aria-busy={submitting}
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold text-white transition-colors hover:!bg-[#004B8C] disabled:hover:!bg-[var(--nhs-blue)] disabled:opacity-60 disabled:cursor-wait"
                   style={{ background: 'var(--nhs-blue)' }}
                 >
                   <Send className="w-4 h-4" aria-hidden />
-                  Submit expression of interest
+                  {submitting ? 'Submitting…' : 'Submit expression of interest'}
                 </button>
                 <button
                   type="button"

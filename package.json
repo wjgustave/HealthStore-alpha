@@ -4,6 +4,10 @@
   "private": true,
   "scripts": {
     "auth:setup": "node scripts/create-local-env.cjs",
+    "db:migrate": "npx tsx scripts/run-migration.ts",
+    "db:seed": "npx tsx scripts/seed-db.ts",
+    "db:setup": "npm run db:migrate && npm run db:seed",
+    "db:migrate-bookmarks": "npx tsx scripts/migrate-bookmarks.ts",
     "dev": "next dev --webpack",
     "dev:turbo": "next dev --turbopack",
     "build": "next build",
@@ -12,9 +16,11 @@
   },
   "dependencies": {
     "@awesome.me/webawesome": "^3.4.0",
+    "@neondatabase/serverless": "^1.1.0",
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
+    "drizzle-orm": "^0.45.2",
     "fuse.js": "^7.1.0",
     "iron-session": "^8.0.4",
     "jose": "^6.2.2",
@@ -28,9 +34,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.4.2",
+    "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.1.7",
     "tailwindcss": "^4",
+    "tsx": "^4.22.3",
     "typescript": "^5"
   }
 }
