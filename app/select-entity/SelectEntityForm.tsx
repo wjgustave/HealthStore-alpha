@@ -28,7 +28,7 @@ export default function SelectEntityForm() {
       })
       if (res.ok) {
         setHomeLayoutPreferenceAfterAuth('v2')
-        router.push('/')
+        router.push('/dashboard')
         router.refresh()
       } else {
         const data = await res.json()

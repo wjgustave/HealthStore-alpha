@@ -1,9 +1,9 @@
 'use client'
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { LogOut, PanelRightOpen, Settings } from 'lucide-react'
+import { Home, LogOut, PanelRightOpen, Settings } from 'lucide-react'
 import { useCompareBasket } from '@/components/CompareBasketProvider'
 import { SELECT_ICB_CONTINUE_MESSAGE } from '@/lib/commissioningContextDisplay'
 import {
@@ -65,6 +65,8 @@ export default function Nav({
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const browseAppsActive = path === '/apps' || path === '/apps/condition-catalogue' || path === '/apps/browse'
+  const dashboardActive = path === '/dashboard'
+  const homePageActive = path === '/'
   const canOpenOrgSettings =
     isLoggedIn &&
     !!commissioningContextLabel &&
@@ -72,8 +74,15 @@ export default function Nav({
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' })
-    router.push('/login')
+    router.push('/')
     router.refresh()
+  }
+
+  function navItemStyle(active: boolean): CSSProperties {
+    return {
+      color: active ? 'var(--nhs-blue)' : 'var(--text-secondary)',
+      background: active ? '#E6F0FB' : 'transparent',
+    }
   }
 
   return (
@@ -82,27 +91,42 @@ export default function Nav({
         <div style={aiAdvisorBlueStripStyle} />
         <nav className={aiAdvisorNavBarClass}>
           <div className="mx-auto flex min-w-0 flex-1 max-w-7xl items-center justify-between px-4 sm:px-6">
-            <Link href="/" className="flex items-center gap-2 font-bold text-base" style={{ color: 'var(--nhs-dark)', fontFamily: 'Frutiger, Arial, sans-serif' }}>
+            <Link
+              href={isLoggedIn ? '/dashboard' : '/'}
+              className="flex items-center gap-2 font-bold text-base"
+              style={{ color: 'var(--nhs-dark)', fontFamily: 'Frutiger, Arial, sans-serif' }}
+            >
               <Image src="/logos/nhs-blue-alt.svg" alt="" width={56} height={22} className="flex-shrink-0" />
               <span>HealthStore</span>
             </Link>
             <div className="hidden md:flex items-center gap-1">
-              <Link href="/"
-                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-                style={{ color: path === '/' ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === '/' ? '#E6F0FB' : 'transparent' }}>
-                Home
-              </Link>
               {isLoggedIn && (
                 <>
+                  <Link
+                    href="/"
+                    className="inline-flex items-center justify-center rounded-md p-1.5 transition-colors"
+                    style={navItemStyle(homePageActive)}
+                    aria-label="Home page"
+                    title="Home page"
+                  >
+                    <Home className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    href="/dashboard"
+                    className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                    style={navItemStyle(dashboardActive)}
+                  >
+                    Dashboard
+                  </Link>
                   <Link href="/apps"
                     className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-                    style={{ color: browseAppsActive ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: browseAppsActive ? '#E6F0FB' : 'transparent' }}>
+                    style={navItemStyle(browseAppsActive)}>
                     Find apps
                   </Link>
                   <CompareNavLink path={path} className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors" />
                   <Link href="/funding"
                     className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-                    style={{ color: path === '/funding' ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === '/funding' ? '#E6F0FB' : 'transparent' }}>
+                    style={navItemStyle(path === '/funding')}>
                     Funding directory
                   </Link>
                 </>
@@ -184,16 +208,22 @@ export default function Nav({
       ) : null}
       {mobileOpen && (
         <div className="md:hidden border-t px-4 py-3 flex flex-col gap-1" style={{ borderColor: 'var(--border)', background: '#fff' }}>
-          <Link href="/" onClick={() => setMobileOpen(false)}
-            className="px-3 py-2 rounded-md text-sm font-medium"
-            style={{ color: path === '/' ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === '/' ? '#E6F0FB' : 'transparent' }}>
-            Home
-          </Link>
           {isLoggedIn && (
             <>
+              <Link href="/" onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium"
+                style={navItemStyle(homePageActive)}>
+                <Home className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--nhs-blue)' }} />
+                Home page
+              </Link>
+              <Link href="/dashboard" onClick={() => setMobileOpen(false)}
+                className="px-3 py-2 rounded-md text-sm font-medium"
+                style={navItemStyle(dashboardActive)}>
+                Dashboard
+              </Link>
               <Link href="/apps" onClick={() => setMobileOpen(false)}
                 className="px-3 py-2 rounded-md text-sm font-medium"
-                style={{ color: browseAppsActive ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: browseAppsActive ? '#E6F0FB' : 'transparent' }}>
+                style={navItemStyle(browseAppsActive)}>
                 Find apps
               </Link>
               <CompareNavLink
@@ -203,7 +233,7 @@ export default function Nav({
               />
               <Link href="/funding" onClick={() => setMobileOpen(false)}
                 className="px-3 py-2 rounded-md text-sm font-medium"
-                style={{ color: path === '/funding' ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === '/funding' ? '#E6F0FB' : 'transparent' }}>
+                style={navItemStyle(path === '/funding')}>
                 Funding directory
               </Link>
               {canOpenOrgSettings && (

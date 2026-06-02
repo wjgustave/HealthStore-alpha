@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
       if (session.requiresCommissioningEntitySelection) {
         return NextResponse.redirect(new URL('/select-entity', req.url))
       }
-      return NextResponse.redirect(new URL('/', req.url))
+      return NextResponse.redirect(new URL('/dashboard', req.url))
     }
     return res
   }
@@ -30,7 +30,7 @@ export async function middleware(req: NextRequest) {
   }
 
   if (pathname === '/select-entity' && !session.requiresCommissioningEntitySelection) {
-    return NextResponse.redirect(new URL('/', req.url))
+    return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 
   if (session.requiresCommissioningEntitySelection && pathname !== '/select-entity') {

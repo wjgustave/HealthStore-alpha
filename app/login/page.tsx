@@ -29,7 +29,7 @@ export default function LoginPage() {
       if (res.ok) {
         const data = await res.json()
         setHomeLayoutPreferenceAfterAuth('v2')
-        const next = typeof data.redirect === 'string' ? data.redirect : '/'
+        const next = typeof data.redirect === 'string' ? data.redirect : '/dashboard'
         router.push(next)
         router.refresh()
       } else {

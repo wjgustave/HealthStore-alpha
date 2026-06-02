@@ -1,5 +1,4 @@
 import { DatasetOverviewBand } from '@/components/home/HomeFragments'
-import { FeaturedTherapeuticBand } from '@/components/home/HomeLayoutV4'
 import { DashboardWelcome } from './DashboardWelcome'
 import { SavedAppsWidget } from './widgets/SavedAppsWidget'
 import { CommissionedAppsWidget } from './widgets/CommissionedAppsWidget'
@@ -9,7 +8,7 @@ import type { DashboardVariantProps } from './types'
 
 /** Version 4 - "Bento grid": quick-stat tiles + widgets in a varied tile grid, then discovery. */
 export function DashboardV4(props: DashboardVariantProps) {
-  const { apps, conditions, conceptGrid, conceptFeatured, featuredApp, displayName, organisationName } = props
+  const { apps, conditions, conceptGrid, displayName, organisationName } = props
 
   return (
     <div className="flex flex-col gap-12 md:gap-14">
@@ -28,8 +27,6 @@ export function DashboardV4(props: DashboardVariantProps) {
           <CommissionedAppsWidget commissioned={conceptGrid.commissioned} />
         </div>
       </div>
-
-      <FeaturedTherapeuticBand concept={conceptFeatured} app={featuredApp} />
 
       <DatasetOverviewBand apps={apps} conditions={conditions} hideNiceGuidance />
     </div>
