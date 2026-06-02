@@ -5,7 +5,7 @@ import CookieConsentRoot from '@/components/CookieConsentRoot'
 import { isAlphaLineFromEnv } from '@/lib/alphaLine'
 import { getSession } from '@/lib/session'
 import { getCommissioningContextLabel } from '@/lib/commissioningContextDisplay'
-import { getCommissionerProfileFromSession } from '@/lib/ai/commissionerProfiles'
+import { getResolvedOrganisationProfile } from '@/lib/ai/organisationProfileResolver'
 import { getAllApps } from '@/lib/data'
 
 export const metadata: Metadata = {
@@ -21,8 +21,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const alphaLine = isAlphaLineFromEnv()
 
   const aiProfile = isLoggedIn
-    ? (() => {
-        const profile = getCommissionerProfileFromSession(session)
+    ? await (async () => {
+        const profile = await getResolvedOrganisationProfile(session)
         return {
           commissionerName: profile.commissionerName,
           roleTitle: profile.roleTitle,

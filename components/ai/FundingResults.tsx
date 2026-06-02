@@ -1,14 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, ChevronUp, MapPin, Search, AlertTriangle, UserCheck } from 'lucide-react'
+import { ChevronDown, ChevronUp, MapPin, AlertTriangle, UserCheck } from 'lucide-react'
 import type { ApplicantFit, FundingResult, MatchType } from '@/lib/ai/funding'
 
 type Props = {
   results: FundingResult[]
   region: string
   selectionLabel: string
-  onNewSearch: () => void
+  onFollowUp: (question: string) => void
   disabled?: boolean
 }
 
@@ -151,7 +151,7 @@ export default function FundingResults({
   results,
   region,
   selectionLabel,
-  onNewSearch,
+  onFollowUp,
   disabled,
 }: Props) {
   const empty = results.length === 0
@@ -201,21 +201,46 @@ export default function FundingResults({
         </span>
       </div>
 
-      <button
-        type="button"
-        onClick={onNewSearch}
-        disabled={disabled}
-        className="mt-3 inline-flex items-center gap-1.5 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all hover:shadow-sm disabled:opacity-40"
-        style={{
-          borderColor: 'var(--border)',
-          background: 'var(--card)',
-          color: 'var(--nhs-blue)',
-          fontFamily: 'Frutiger, Arial, sans-serif',
-        }}
-      >
-        <Search className="h-4 w-4" />
-        New funding search
-      </button>
+      {!empty && (
+        <div className="mt-3">
+          <p
+            className="mb-2 text-xs font-semibold uppercase tracking-wide"
+            style={{ color: 'var(--text-muted)', fontFamily: 'Frutiger, Arial, sans-serif' }}
+          >
+            Follow-up questions
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => onFollowUp('Compare the top two funds')}
+              disabled={disabled}
+              className="rounded-full border px-3 py-1.5 text-xs font-medium transition-all hover:shadow-sm disabled:opacity-40"
+              style={{
+                borderColor: 'var(--border)',
+                background: 'var(--card)',
+                color: 'var(--nhs-blue)',
+                fontFamily: 'Frutiger, Arial, sans-serif',
+              }}
+            >
+              Compare the top two funds
+            </button>
+            <button
+              type="button"
+              onClick={() => onFollowUp('How do I apply for the strongest match?')}
+              disabled={disabled}
+              className="rounded-full border px-3 py-1.5 text-xs font-medium transition-all hover:shadow-sm disabled:opacity-40"
+              style={{
+                borderColor: 'var(--border)',
+                background: 'var(--card)',
+                color: 'var(--nhs-blue)',
+                fontFamily: 'Frutiger, Arial, sans-serif',
+              }}
+            >
+              How do I apply for the strongest match?
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

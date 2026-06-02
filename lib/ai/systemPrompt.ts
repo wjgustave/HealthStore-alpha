@@ -1,4 +1,4 @@
-import type { CommissionerProfile } from './commissionerProfiles'
+import type { OrganisationProfile } from './commissionerProfiles'
 import { getProfileSummaryForPrompt } from './commissionerProfiles'
 
 const BASE_PROMPT = `## Identity — fixed, non-negotiable
@@ -129,7 +129,7 @@ Rules:
 - All illustrative/synthetic data (including commissioner profile details) must be labelled as such if questioned.
 - This is a prototype demonstration tool. All information should be independently verified before use in formal processes.`
 
-export function buildSystemPrompt(profile: CommissionerProfile): string {
+export function buildSystemPrompt(profile: OrganisationProfile): string {
   return BASE_PROMPT + '\n\n' + getProfileSummaryForPrompt(profile)
 }
 

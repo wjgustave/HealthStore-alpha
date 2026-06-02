@@ -4,7 +4,8 @@ import type {
 } from 'openai/resources/responses/responses'
 import { openai, AI_MODEL, REASONING_EFFORT, MAX_TOOL_ROUNDS } from '@/lib/ai/config'
 import { buildSystemPrompt } from '@/lib/ai/systemPrompt'
-import { getCommissionerProfileFromSession } from '@/lib/ai/commissionerProfiles'
+import { resolveFundingRegion } from '@/lib/ai/commissionerProfiles'
+import { getResolvedOrganisationProfile } from '@/lib/ai/organisationProfileResolver'
 import { aiTools } from '@/lib/ai/tools'
 import { executeTool } from '@/lib/ai/toolExecutor'
 import { createSSEStream } from '@/lib/ai/stream'
@@ -12,7 +13,7 @@ import { getSession } from '@/lib/session'
 import { REGIONS, type Region } from '@/lib/ai/funding'
 
 export const runtime = 'nodejs'
-export const maxDuration = 60
+export const maxDuration = 300
 
 type ChatMessage = {
   role: 'user' | 'assistant'
@@ -36,6 +37,33 @@ const WEB_SEARCH_TOOL = {
   user_location: { type: 'approximate' as const, country: 'GB' },
 }
 
+const FUNDING_STARTER_MESSAGE =
+  'I want to find NHS funding for deploying a digital therapeutic.'
+
+function inferDefaultFundingCondition(focus: string[]): 'copd' | 'pr' | 'cr' | null {
+  for (const item of focus) {
+    const v = item.trim().toLowerCase()
+    if (v === 'copd') return 'copd'
+    if (v === 'pr' || v === 'pulmonary_rehabilitation') return 'pr'
+    if (v === 'cr' || v === 'cardiac_rehab' || v === 'cardiac_rehabilitation') return 'cr'
+  }
+  return null
+}
+
+async function streamAssistantText(
+  writer: ReturnType<typeof createSSEStream>['writer'],
+  text: string,
+) {
+  writer.writeCommentary('')
+  const chunkSize = 12
+  for (let i = 0; i < text.length; i += chunkSize) {
+    writer.writeTextDelta(text.slice(i, i + chunkSize))
+    await new Promise(resolve => setTimeout(resolve, 15))
+  }
+  writer.writeDone()
+  writer.close()
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
@@ -55,7 +83,8 @@ export async function POST(request: Request) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const profile = getCommissionerProfileFromSession(session)
+    const profile = await getResolvedOrganisationProfile(session)
+    const fundingRegion = resolveFundingRegion(profile)
     const systemPrompt = buildSystemPrompt(profile)
 
     const { readable, writer } = createSSEStream()
@@ -71,6 +100,41 @@ export async function POST(request: Request) {
           role: m.role as 'user' | 'assistant',
           content: m.content,
         }))
+
+        const latestUserMessage = messages
+          .filter(m => m.role === 'user')
+          .at(-1)
+          ?.content.trim()
+
+        // Deterministic funding starter path: clicking "Find NHS funding & deployment routes"
+        // should immediately return funding cards in the chat.
+        if (
+          latestUserMessage === FUNDING_STARTER_MESSAGE &&
+          fundingRegion
+        ) {
+          const defaultCondition = inferDefaultFundingCondition(profile.conditionFocus) ?? 'copd'
+          const args: Record<string, unknown> = {
+            region: fundingRegion,
+            condition: defaultCondition,
+          }
+          const result = await executeTool('find_dtx_funding', args)
+          if (result.funding) {
+            writer.writeFundingResults(result.funding)
+            await streamAssistantText(
+              writer,
+              `I searched funding routes for ${result.funding.selectionLabel} in ${result.funding.region}. The ranked opportunities are shown above. [[Compare the top two funds]] [[How do I apply for the strongest match?]]`,
+            )
+            return
+          }
+          writer.writeFundingFallback(
+            'Funding search could not return result cards from the starter button. Please try asking for COPD, Pulmonary Rehab, or Cardiac Rehab funding.',
+          )
+          await streamAssistantText(
+            writer,
+            'I could not load funding cards from the starter action this time. Please ask for a specific funding search, for example: "Find COPD funding in my region."',
+          )
+          return
+        }
 
         let rounds = 0
 
@@ -96,18 +160,7 @@ export async function POST(request: Request) {
           )
 
           if (functionCalls.length === 0 && !hasWebSearch) {
-            const text = response.output_text ?? ''
-
-            writer.writeCommentary('')
-
-            const chunkSize = 12
-            for (let i = 0; i < text.length; i += chunkSize) {
-              writer.writeTextDelta(text.slice(i, i + chunkSize))
-              await new Promise(resolve => setTimeout(resolve, 15))
-            }
-
-            writer.writeDone()
-            writer.close()
+            await streamAssistantText(writer, response.output_text ?? '')
             return
           }
 
@@ -119,6 +172,9 @@ export async function POST(request: Request) {
           if (hasWebSearch) {
             writer.writeCommentary('Searching NHS sources for the latest information...')
           }
+
+          let fundingDelivered = false
+          let fundingToolCalled = false
 
           for (const call of functionCalls) {
             const commentary = TOOL_COMMENTARY[call.name] ?? `Using ${call.name}`
@@ -135,13 +191,13 @@ export async function POST(request: Request) {
             // profile. Only inject it when the model omitted or gave an invalid region;
             // an explicit, valid region (a deliberate override) is left untouched.
             if (call.name === 'find_dtx_funding') {
+              fundingToolCalled = true
               const r = args.region
               if (
                 (typeof r !== 'string' || !REGIONS.includes(r as Region)) &&
-                profile.region &&
-                REGIONS.includes(profile.region as Region)
+                fundingRegion
               ) {
-                args.region = profile.region
+                args.region = fundingRegion
               }
             }
 
@@ -149,6 +205,7 @@ export async function POST(request: Request) {
 
             if (result.funding) {
               writer.writeFundingResults(result.funding)
+              fundingDelivered = true
             }
 
             const output: ResponseInputItem.FunctionCallOutput = {
@@ -157,6 +214,30 @@ export async function POST(request: Request) {
               output: result.result,
             }
             input.push(output)
+          }
+
+          if (fundingToolCalled && !fundingDelivered) {
+            writer.writeFundingFallback(
+              'Funding search ran, but no result cards were returned. Please try again in a moment.',
+            )
+          }
+
+          // Funding search nests a slow web-search model call; skip another full
+          // tool-enabled round so we stay within Vercel's function timeout.
+          if (
+            fundingDelivered &&
+            functionCalls.length > 0 &&
+            functionCalls.every(c => c.name === 'find_dtx_funding')
+          ) {
+            writer.writeCommentary('Finalising my response...')
+            const finalResponse = await openai.responses.create({
+              model: AI_MODEL,
+              instructions: systemPrompt,
+              input,
+              reasoning: { effort: 'low' },
+            })
+            await streamAssistantText(writer, finalResponse.output_text ?? '')
+            return
           }
         }
 
@@ -170,17 +251,7 @@ export async function POST(request: Request) {
           reasoning: { effort: REASONING_EFFORT },
         })
 
-        const text = finalResponse.output_text ?? ''
-        writer.writeCommentary('')
-
-        const chunkSize = 12
-        for (let i = 0; i < text.length; i += chunkSize) {
-          writer.writeTextDelta(text.slice(i, i + chunkSize))
-          await new Promise(resolve => setTimeout(resolve, 15))
-        }
-
-        writer.writeDone()
-        writer.close()
+        await streamAssistantText(writer, finalResponse.output_text ?? '')
       } catch (err) {
         console.error('[AI Chat] Error:', err)
         const message = err instanceof Error ? err.message : 'An unexpected error occurred'

@@ -155,6 +155,8 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
                         : m,
                     ),
                   )
+                } else if (eventType === 'funding_fallback' && typeof data.message === 'string') {
+                  setError(data.message)
                 } else if (eventType === 'error') {
                   throw new Error(data.message ?? 'Unknown error')
                 }
@@ -278,7 +280,7 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
                       results={m.funding}
                       region={m.fundingMeta?.region ?? ''}
                       selectionLabel={m.fundingMeta?.selectionLabel ?? ''}
-                      onNewSearch={startFundingConversation}
+                      onFollowUp={sendMessage}
                       disabled={isLoading}
                     />
                   )}

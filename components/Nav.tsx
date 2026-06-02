@@ -3,8 +3,9 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { LogOut, PanelRightOpen } from 'lucide-react'
+import { LogOut, PanelRightOpen, Settings } from 'lucide-react'
 import { useCompareBasket } from '@/components/CompareBasketProvider'
+import { SELECT_ICB_CONTINUE_MESSAGE } from '@/lib/commissioningContextDisplay'
 import {
   aiAdvisorBlueStripStyle,
   aiAdvisorNavBarClass,
@@ -64,6 +65,10 @@ export default function Nav({
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const browseAppsActive = path === '/apps' || path === '/apps/condition-catalogue' || path === '/apps/browse'
+  const canOpenOrgSettings =
+    isLoggedIn &&
+    !!commissioningContextLabel &&
+    commissioningContextLabel !== SELECT_ICB_CONTINUE_MESSAGE
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' })
@@ -152,12 +157,28 @@ export default function Nav({
           }}
         >
           <div className="mx-auto flex max-w-7xl items-center gap-4 justify-between">
-            <p
-              className="min-w-0 flex-1 text-sm leading-snug"
-              style={{ color: '#425563', fontFamily: 'Frutiger, Arial, sans-serif' }}
-            >
-              {commissioningContextLabel}
-            </p>
+            {canOpenOrgSettings ? (
+              <Link
+                href="/org-settings"
+                className="group inline-flex min-w-0 flex-1 items-center gap-1.5 text-sm leading-snug hover:underline"
+                style={{ color: '#425563', fontFamily: 'Frutiger, Arial, sans-serif' }}
+                aria-label={`Organisation settings for ${commissioningContextLabel}`}
+                title="Edit organisation settings"
+              >
+                <span className="truncate">{commissioningContextLabel}</span>
+                <Settings
+                  className="h-3.5 w-3.5 flex-shrink-0 opacity-60 group-hover:opacity-100"
+                  style={{ color: 'var(--nhs-blue)' }}
+                />
+              </Link>
+            ) : (
+              <p
+                className="min-w-0 flex-1 text-sm leading-snug"
+                style={{ color: '#425563', fontFamily: 'Frutiger, Arial, sans-serif' }}
+              >
+                {commissioningContextLabel}
+              </p>
+            )}
           </div>
         </div>
       ) : null}
@@ -185,6 +206,14 @@ export default function Nav({
                 style={{ color: path === '/funding' ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === '/funding' ? '#E6F0FB' : 'transparent' }}>
                 Funding directory
               </Link>
+              {canOpenOrgSettings && (
+                <Link href="/org-settings" onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium"
+                  style={{ color: path === '/org-settings' ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === '/org-settings' ? '#E6F0FB' : 'transparent' }}>
+                  <Settings className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--nhs-blue)' }} />
+                  Org settings
+                </Link>
+              )}
               {onOpenAiPanel && (
                 <button
                   type="button"

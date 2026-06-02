@@ -10,7 +10,7 @@ import {
 } from '@/lib/ai/funding'
 
 export const runtime = 'nodejs'
-export const maxDuration = 60
+export const maxDuration = 300
 
 /**
  * Auth-gated DTx Funding Finder endpoint. Accepts { region, mode, selection },

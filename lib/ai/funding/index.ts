@@ -75,7 +75,7 @@ export async function runFundingFinder(
   const system = buildSystemPrompt(params.region, params.mode, params.selection)
   const user = buildUserMessage(params.region, params.mode, params.selection)
 
-  const raw = await provider.generate({ system, user, webSearch: true, maxTokens: 6000 })
+  const raw = await provider.generate({ system, user, webSearch: true, maxTokens: 4500 })
 
   if (!raw.trim()) {
     throw new Error('No text returned from the model.')

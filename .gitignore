@@ -8,3 +8,4 @@ out
 .data
 tsconfig.tsbuildinfo
 .cursor/
+.vercel

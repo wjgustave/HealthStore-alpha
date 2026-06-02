@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, timestamp, unique } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, timestamp, unique, jsonb } from 'drizzle-orm/pg-core'
 
 export const organizations = pgTable('organizations', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -32,6 +32,18 @@ export const orgBookmarks = pgTable(
   },
   (t) => [unique().on(t.organizationId, t.appId)],
 )
+
+export const orgProfiles = pgTable('org_profiles', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  organizationId: uuid('organization_id')
+    .notNull()
+    .unique()
+    .references(() => organizations.id),
+  /** Editable OrgProfileSettings subset, stored as JSON. */
+  profile: jsonb('profile').notNull(),
+  updatedByUserId: uuid('updated_by_user_id').references(() => users.id),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})
 
 export const orgExpressionsOfInterest = pgTable('org_expressions_of_interest', {
   id: uuid('id').primaryKey().defaultRandom(),

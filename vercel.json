@@ -1,4 +1,12 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "functions": {
+    "app/api/ai/chat/route.ts": {
+      "maxDuration": 300
+    },
+    "app/api/ai-advisor/funding-search/route.ts": {
+      "maxDuration": 300
+    }
+  }
 }

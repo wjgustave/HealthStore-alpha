@@ -21,6 +21,7 @@ export type StreamWriter = {
   writeTextDelta: (text: string) => void
   writeCommentary: (text: string) => void
   writeFundingResults: (payload: FundingResultsPayload) => void
+  writeFundingFallback: (message: string) => void
   writeError: (message: string) => void
   writeDone: () => void
   close: () => void
@@ -44,6 +45,9 @@ export function createSSEStream(): { readable: ReadableStream; writer: StreamWri
     },
     writeFundingResults(payload: FundingResultsPayload) {
       controller?.enqueue(encodeSSE('funding_results', JSON.stringify(payload)))
+    },
+    writeFundingFallback(message: string) {
+      controller?.enqueue(encodeSSE('funding_fallback', JSON.stringify({ message })))
     },
     writeError(message: string) {
       controller?.enqueue(encodeSSE('error', JSON.stringify({ message })))

@@ -1,6 +1,25 @@
-export type CommissionerProfile = {
+import { COMMISSIONING_ENTITIES } from '@/lib/commissioningEntities'
+import { REGIONS, type Region } from '@/lib/ai/funding/data'
+import { inferRegionFromOrganisationName } from '@/lib/regionInference'
+
+/** Org entity types. Extend as more are supported. */
+export const ENTITY_TYPES = ['ICB', 'Trust', 'CIC', 'PCN', 'Other'] as const
+export type EntityType = (typeof ENTITY_TYPES)[number]
+
+/** Condition-specific context captured on the Org Settings page. */
+export type OrganisationConditionEntry = {
+  conditionId: string
+  cohortSize?: number
+  priorities: string[]
+}
+
+export type OrganisationProfile = {
   entityId: string
   icbName: string
+  /** Type of organisation (ICB, Trust, CIC, PCN, ...). */
+  entityType: EntityType
+  /** Parent ICB name when the org is not itself an ICB. */
+  parentIcbName?: string
   region: string
   odsCode: string
   commissionerName: string
@@ -8,6 +27,8 @@ export type CommissionerProfile = {
   population: number
   strategicPriorities: string[]
   conditionFocus: string[]
+  /** Structured per-condition cohort + priorities (Org Settings). */
+  conditions: OrganisationConditionEntry[]
   localHealthChallenges: string[]
   currentDigitalPosition: string
   budgetContext: string
@@ -16,10 +37,14 @@ export type CommissionerProfile = {
   starterPrompts: { label: string; prompt: string }[]
 }
 
-const profiles: Record<string, CommissionerProfile> = {
+/** @deprecated Use OrganisationProfile. Kept as an alias to avoid churn. */
+export type CommissionerProfile = OrganisationProfile
+
+const profiles: Record<string, OrganisationProfile> = {
   'shropshire-telford-wrekin-icb': {
     entityId: 'shropshire-telford-wrekin-icb',
     icbName: 'Shropshire, Telford and Wrekin ICB',
+    entityType: 'ICB',
     region: 'Midlands',
     odsCode: 'QOC',
     commissionerName: 'Sarah Thornton',
@@ -32,6 +57,7 @@ const profiles: Record<string, CommissionerProfile> = {
       'Addressing health inequalities in former mining communities around Telford',
     ],
     conditionFocus: ['copd', 'cardiac_rehab', 'weight_management'],
+    conditions: [],
     localHealthChallenges: [
       'COPD prevalence 20% above national average in Telford & Wrekin',
       'Face-to-face PR waiting lists at 14 weeks — well above 6-week standard',
@@ -56,6 +82,7 @@ const profiles: Record<string, CommissionerProfile> = {
   'cornwall-and-isles-of-scilly-icb': {
     entityId: 'cornwall-and-isles-of-scilly-icb',
     icbName: 'Cornwall and Isles of Scilly ICB',
+    entityType: 'ICB',
     region: 'South West',
     odsCode: 'QT6',
     commissionerName: 'James Penrose',
@@ -68,6 +95,7 @@ const profiles: Record<string, CommissionerProfile> = {
       'Building digital confidence in an aging population',
     ],
     conditionFocus: ['copd', 'cardiac_rehab', 'msk'],
+    conditions: [],
     localHealthChallenges: [
       'Oldest population profile of any English ICB — 25% aged 65+',
       'Extreme rurality: single acute trust (RCHT) serving entire county',
@@ -92,6 +120,7 @@ const profiles: Record<string, CommissionerProfile> = {
   'north-east-london-icb': {
     entityId: 'north-east-london-icb',
     icbName: 'North East London ICB',
+    entityType: 'ICB',
     region: 'London',
     odsCode: 'QMF',
     commissionerName: 'Priya Chakraborty',
@@ -104,6 +133,7 @@ const profiles: Record<string, CommissionerProfile> = {
       'Provider collaborative model for digital adoption across Barts Health and BHRUT',
     ],
     conditionFocus: ['copd', 'cardiac_rehab', 'weight_management', 'eating_disorders'],
+    conditions: [],
     localHealthChallenges: [
       'Extreme ethnic and linguistic diversity — 100+ languages spoken',
       'Highest deprivation borough in London (Tower Hamlets) alongside rapid gentrification',
@@ -128,6 +158,7 @@ const profiles: Record<string, CommissionerProfile> = {
   'west-yorkshire-icb': {
     entityId: 'west-yorkshire-icb',
     icbName: 'West Yorkshire ICB',
+    entityType: 'ICB',
     region: 'North East and Yorkshire',
     odsCode: 'QWO',
     commissionerName: 'David Hartley',
@@ -140,6 +171,7 @@ const profiles: Record<string, CommissionerProfile> = {
       'Leveraging West Yorkshire Health and Care Partnership for at-scale adoption',
     ],
     conditionFocus: ['copd', 'cardiac_rehab', 'msk', 'insomnia'],
+    conditions: [],
     localHealthChallenges: [
       'Significant variation in COPD outcomes between Bradford and Harrogate',
       'Former industrial communities with high respiratory disease burden',
@@ -164,10 +196,46 @@ const profiles: Record<string, CommissionerProfile> = {
 
 const DEFAULT_ENTITY_ID = 'shropshire-telford-wrekin-icb'
 
-export function getCommissionerProfile(entityId: string | undefined): CommissionerProfile {
+/** Maps NHS org names from named login accounts to a known demo ICB profile. */
+function inferEntityIdFromOrganisationName(orgName: string): string | undefined {
+  const normalised = orgName.trim().toLowerCase()
+  if (!normalised) return undefined
+
+  const exact = COMMISSIONING_ENTITIES.find(
+    e => e.name.toLowerCase() === normalised,
+  )
+  if (exact) return exact.id
+
+  if (normalised.includes('cornwall') || normalised.includes('isles of scilly')) {
+    return 'cornwall-and-isles-of-scilly-icb'
+  }
+  if (normalised.includes('north east london')) return 'north-east-london-icb'
+  if (
+    normalised.includes('west yorkshire') ||
+    normalised.includes('airedale') ||
+    normalised.includes('bradford')
+  ) {
+    return 'west-yorkshire-icb'
+  }
+
+  return undefined
+}
+
+/** Region used for funding searches (profile field or inferred from organisation). */
+export function resolveFundingRegion(profile: OrganisationProfile): Region | undefined {
+  if (profile.region && REGIONS.includes(profile.region as Region)) {
+    return profile.region as Region
+  }
+  return inferRegionFromOrganisationName(profile.parentIcbName ?? profile.icbName)
+}
+
+export function getOrganisationProfile(entityId: string | undefined): OrganisationProfile {
   if (entityId && profiles[entityId]) return profiles[entityId]
   return profiles[DEFAULT_ENTITY_ID]
 }
+
+/** @deprecated Use getOrganisationProfile. */
+export const getCommissionerProfile = getOrganisationProfile
 
 type SessionLike = {
   commissioningEntityId?: string
@@ -178,25 +246,43 @@ type SessionLike = {
 }
 
 /**
- * Resolves a commissioner profile from v2 session data.
+ * Resolves an organisation profile from v2 session data.
  * Priority: known entity match > ad-hoc profile from session fields > default.
  */
-export function getCommissionerProfileFromSession(session: SessionLike): CommissionerProfile {
+export function getOrganisationProfileFromSession(session: SessionLike): OrganisationProfile {
   if (session.commissioningEntityId && profiles[session.commissioningEntityId]) {
     return profiles[session.commissioningEntityId]
   }
 
   if (session.profileDisplayName || session.profileOrganisationName) {
+    const orgName = session.profileOrganisationName ?? 'Your Organisation'
+    const entityId = inferEntityIdFromOrganisationName(orgName)
+
+    if (entityId && profiles[entityId]) {
+      const base = profiles[entityId]
+      return {
+        ...base,
+        entityId: 'session-derived',
+        commissionerName: session.profileDisplayName ?? base.commissionerName,
+        roleTitle: session.profileRole ?? base.roleTitle,
+        icbName: orgName,
+      }
+    }
+
+    const region = inferRegionFromOrganisationName(orgName) ?? ''
+
     return {
       entityId: 'session-derived',
-      icbName: session.profileOrganisationName ?? 'Your Organisation',
-      region: '',
+      icbName: orgName,
+      entityType: 'ICB',
+      region,
       odsCode: '',
       commissionerName: session.profileDisplayName ?? 'Commissioner',
       roleTitle: session.profileRole ?? 'Digital Health Commissioner',
       population: 0,
       strategicPriorities: [],
       conditionFocus: [],
+      conditions: [],
       localHealthChallenges: [],
       currentDigitalPosition: '',
       budgetContext: '',
@@ -214,7 +300,10 @@ export function getCommissionerProfileFromSession(session: SessionLike): Commiss
   return profiles[DEFAULT_ENTITY_ID]
 }
 
-export function getProfileSummaryForPrompt(profile: CommissionerProfile): string {
+/** @deprecated Use getOrganisationProfileFromSession. */
+export const getCommissionerProfileFromSession = getOrganisationProfileFromSession
+
+export function getProfileSummaryForPrompt(profile: OrganisationProfile): string {
   return [
     `## Commissioner context`,
     ``,
