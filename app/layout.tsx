@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import AppShell from '@/components/AppShell'
 import CookieConsentRoot from '@/components/CookieConsentRoot'
+import { isAiAdvisorEnabledFromEnv } from '@/lib/aiAdvisor'
 import { isAlphaLineFromEnv } from '@/lib/alphaLine'
 import { getSession } from '@/lib/session'
 import { getCommissioningContextLabel } from '@/lib/commissioningContextDisplay'
@@ -19,19 +20,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const commissioningContextLabel = isLoggedIn ? getCommissioningContextLabel(session) : ''
   const allApps = getAllApps()
   const alphaLine = isAlphaLineFromEnv()
+  const aiAdvisorEnabled = isAiAdvisorEnabledFromEnv()
 
-  const aiProfile = isLoggedIn
-    ? await (async () => {
-        const profile = await getResolvedOrganisationProfile(session)
-        return {
-          commissionerName: profile.commissionerName,
-          roleTitle: profile.roleTitle,
-          icbName: profile.icbName,
-          region: profile.region,
-          starterPrompts: profile.starterPrompts,
-        }
-      })()
-    : null
+  const aiProfile =
+    isLoggedIn && aiAdvisorEnabled
+      ? await (async () => {
+          const profile = await getResolvedOrganisationProfile(session)
+          return {
+            commissionerName: profile.commissionerName,
+            roleTitle: profile.roleTitle,
+            icbName: profile.icbName,
+            region: profile.region,
+            starterPrompts: profile.starterPrompts,
+          }
+        })()
+      : null
 
   return (
     <html lang="en">

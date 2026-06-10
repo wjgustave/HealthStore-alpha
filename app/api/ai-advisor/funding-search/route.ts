@@ -1,3 +1,4 @@
+import { isAiAdvisorEnabledFromEnv } from '@/lib/aiAdvisor'
 import { getSession } from '@/lib/session'
 import {
   runFundingFinder,
@@ -17,6 +18,10 @@ export const maxDuration = 300
  * runs the provider-agnostic finder, and returns ranked, scored results.
  */
 export async function POST(request: Request) {
+  if (!isAiAdvisorEnabledFromEnv()) {
+    return Response.json({ error: 'Not found' }, { status: 404 })
+  }
+
   const session = await getSession()
   if (!session.isLoggedIn) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })

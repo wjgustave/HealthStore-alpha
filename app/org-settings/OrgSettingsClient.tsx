@@ -202,7 +202,7 @@ export default function OrgSettingsClient({
             Organisation settings
           </h1>
           <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
-            Shared across everyone in your organisation. Used to personalise the AI Advisor.
+            Shared across everyone in your organisation.
           </p>
         </div>
         <div className="flex items-center gap-2">

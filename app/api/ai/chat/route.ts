@@ -9,6 +9,7 @@ import { getResolvedOrganisationProfile } from '@/lib/ai/organisationProfileReso
 import { aiTools } from '@/lib/ai/tools'
 import { executeTool } from '@/lib/ai/toolExecutor'
 import { createSSEStream } from '@/lib/ai/stream'
+import { isAiAdvisorEnabledFromEnv } from '@/lib/aiAdvisor'
 import { getSession } from '@/lib/session'
 import { REGIONS, type Region } from '@/lib/ai/funding'
 
@@ -65,6 +66,10 @@ async function streamAssistantText(
 }
 
 export async function POST(request: Request) {
+  if (!isAiAdvisorEnabledFromEnv()) {
+    return Response.json({ error: 'Not found' }, { status: 404 })
+  }
+
   try {
     const body = await request.json()
     const messages: ChatMessage[] = body.messages ?? []
