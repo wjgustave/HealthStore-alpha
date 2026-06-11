@@ -155,7 +155,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
     setCondition('all')
     replaceBrowseUrl('all', searchInput)
   } })
-  if (demoOnly) activeFilters.push({ label: 'Demo available', clear: () => setDemoOnly(false) })
+  if (demoOnly) activeFilters.push({ label: 'Demo', clear: () => setDemoOnly(false) })
   if (searchInput.trim()) {
     const st = searchInput.trim()
     activeFilters.push({
@@ -247,7 +247,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                     className="cursor-pointer select-none text-sm font-medium"
                     style={{ color: 'var(--text-primary)' }}
                   >
-                    Demo available
+                    Demo
                   </label>
                 </div>
                 <button
@@ -360,7 +360,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                     <ConditionTag key={t} tag={t} />
                   ))}
                   <SupervisionBadge model={app.supervision_model} />
-                  <MaturityBadge level={app.maturity_level} />
+                  <MaturityBadge level={app.maturity_level} hideEstablished />
                 </div>
 
                 <p
@@ -375,8 +375,8 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                     <>
                       <div className="mb-[10px] flex flex-row flex-wrap items-center gap-x-2 gap-y-1 sm:mb-3 lg:mb-[15px] xl:flex-nowrap xl:gap-x-1.5 2xl:gap-x-2">
                         {priceLabel ? <CatalogueSignalDotRow tone="green" label={priceLabel} /> : null}
-                        {showDemo ? <CatalogueSignalDotRow tone="orange" label="Demo available" /> : null}
-                        {showFunding ? <CatalogueSignalDotRow tone="blue" label="Funding opportunities" /> : null}
+                        {showDemo ? <CatalogueSignalDotRow tone="orange" label="Demo" /> : null}
+                        {showFunding ? <CatalogueSignalDotRow tone="blue" label="Related funding" /> : null}
                       </div>
                       <div
                         className="mb-[12px] border-t border-solid sm:mb-4 lg:mb-5"

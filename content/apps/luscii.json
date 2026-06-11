@@ -97,6 +97,74 @@
   ],
   "live_icbs": 4,
   "patients_covered_note": "25 million+ global registrations across all conditions. 6,000+ COPD patients in North West London ICS alone. 350+ remote monitoring pathways delivered globally.",
+  "deployment_register": [
+    {
+      "site": "Airedale NHS FT — MyCare24 COPD service (Digital Care Hub)",
+      "condition": "COPD remote monitoring",
+      "icb": "NHS West Yorkshire ICB",
+      "location": "Bradford District & Craven place",
+      "delivery": "Digital care hub + patient's home",
+      "care_setting": "Community (secondary-led)",
+      "status": "live",
+      "confidence": "high",
+      "notes": "Described as the largest COPD remote-monitoring rollout in England. Patients submit SpO2 + heart rate via oximeter through the Luscii app; algorithm flags deterioration. ~£400k NHSX grant; 1,000+ registered by 2025, target ~6,000."
+    },
+    {
+      "site": "All Together Better, Sunderland — virtual COPD clinic (Recovery at Home)",
+      "condition": "COPD remote monitoring",
+      "icb": "NHS North East & North Cumbria ICB",
+      "location": "Sunderland place",
+      "delivery": "Patient's home (hospital-at-home model)",
+      "care_setting": "Community (multi-provider)",
+      "status": "live",
+      "confidence": "high",
+      "notes": "First Luscii use in England (2020). COPD protocol (symptom questionnaire + SpO2) with BP and temperature added locally, plus video calling. Reported to have cut respiratory emergency admissions in half. Deliberately targeted lower socio-economic patients."
+    },
+    {
+      "site": "NHS Dorset — respiratory services",
+      "condition": "COPD remote monitoring",
+      "icb": "NHS Dorset ICB",
+      "location": "ICB-wide (system partnership)",
+      "delivery": "Outpatient clinic + patient's home (hybrid remote)",
+      "care_setting": "Primary & secondary care",
+      "status": "live",
+      "confidence": "high",
+      "notes": "Hybrid cardiology + respiratory models powered by Luscii; phased rollout began 1 April 2025. Respiratory scope includes COPD. Shaped by public engagement."
+    },
+    {
+      "site": "Leeds PCN pilot",
+      "condition": "COPD remote monitoring",
+      "icb": "NHS West Yorkshire ICB",
+      "location": "Leeds place (Leeds PCNs + Leeds City Council)",
+      "delivery": "GP practice + patient's home",
+      "care_setting": "Primary care",
+      "status": "pilot",
+      "confidence": "medium",
+      "notes": "Remote monitoring for diabetes, COPD and heart failure in primary care; aimed at reducing GP-practice burden and empowering self-management."
+    },
+    {
+      "site": "Frimley ICS — Graphnet Remote Monitoring powered by Luscii",
+      "condition": "COPD remote monitoring",
+      "icb": "NHS Frimley ICB",
+      "location": "ICB-wide (early adopter)",
+      "delivery": "Patient's home (population-health RM)",
+      "care_setting": "Primary & secondary care",
+      "status": "live",
+      "confidence": "medium",
+      "notes": "First go-live of the merged Graphnet RM + Luscii platform. Early adopter reported up to 50% reductions in hospital admissions and A&E attendances for monitored patients. COPD is a supported pathway."
+    },
+    {
+      "site": "Stockport — Graphnet Remote Monitoring powered by Luscii",
+      "condition": "Respiratory / COPD (via Graphnet RM)",
+      "icb": "NHS Greater Manchester ICB",
+      "location": "Stockport locality",
+      "delivery": "Patient's home (acute support at home)",
+      "care_setting": "Primary & secondary care",
+      "status": "live",
+      "confidence": "medium",
+      "notes": "Remote monitoring across heart failure, frailty and respiratory care, helping patients receive acute support safely at home. Respiratory includes COPD. Over 2.2m measurements submitted platform-wide since expansion."
+    }
+  ],
   "dtac_status": "passed",
   "dtac_note": "DTAC completed — confirmed in G-Cloud 14 Service Definition (April 2024). Most recently confirmed DTAC status of the four HTE19-recommended COPD apps.",
   "device_class": "Class IIa SaMD",

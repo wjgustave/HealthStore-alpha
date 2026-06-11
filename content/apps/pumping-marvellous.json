@@ -206,16 +206,22 @@
       "status": "active"
     }
   ],
+  "deployment_register": [
+    {
+      "site": "UK-wide programme (free access)",
+      "status": "live"
+    }
+  ],
   "live_icbs": 0,
   "patients_covered_note": "673 registrants in first year (Aug 2024 - Jul 2025). Platform is free and open access — not contracted to specific NHS trusts.",
   "dtac_status": "required_not_confirmed",
-  "dtac_note": "Information not available. DTAC approval is a condition of the NICE EVA recommendation.",
+  "dtac_note": "Check with supplier. DTAC approval is a condition of the NICE EVA recommendation.",
   "device_class": "Class I SaMD",
-  "dcb0129_status": "Information not available",
+  "dcb0129_status": "Check with supplier",
   "dcb0160_boilerplate_available": false,
-  "dspt_status": "Information not available",
-  "iso27001": "Information not available",
-  "cyber_essentials": "Information not available",
+  "dspt_status": "Check with supplier",
+  "iso27001": "Check with supplier",
+  "cyber_essentials": "Check with supplier",
   "cyber_notes": "Registered UK charity. Clinical Advisory Board oversees the platform. Confirm security certifications.",
   "gdpr_note": "Confirm data handling and privacy terms with Pumping Marvellous Foundation.",
   "target_patients": "Adults with heart failure, particularly those underserved by conventional CR: women, patients from deprived areas, those unwilling or unable to attend centre-based CR.",
@@ -261,8 +267,8 @@
     "health-innovation-network"
   ],
   "technical_integrations": {
-    "fhir": "Information not available",
-    "emis": "Information not available",
+    "fhir": "Check with supplier",
+    "emis": "Check with supplier",
     "nhs_app": false,
     "population_health_dashboard": false,
     "device_integration": "No device integration. Web-based, accessible via any browser.",

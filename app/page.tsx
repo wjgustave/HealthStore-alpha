@@ -1,13 +1,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import {
-  getAllApps,
-  getAppBySlug,
-  getConceptFeaturedContent,
   getDashboardContent,
-  getConditionAreas,
   getHomeNews,
   getHomeCampaigns,
+  getHomeCaseStudies,
 } from '@/lib/data'
 import { getSession } from '@/lib/session'
 import HomePublicContent from '@/components/home/HomePublicContent'
@@ -17,13 +14,10 @@ export default async function HomePage() {
   const session = await getSession()
   const isLoggedIn = session.isLoggedIn
 
-  const apps = getAllApps()
   const dash = getDashboardContent()
-  const conditions = getConditionAreas()
   const news = getHomeNews()
   const campaigns = getHomeCampaigns()
-  const conceptFeatured = getConceptFeaturedContent()
-  const featuredApp = getAppBySlug(conceptFeatured.featured_app_slug)
+  const caseStudies = getHomeCaseStudies()
 
   return (
     <div>
@@ -97,7 +91,7 @@ export default async function HomePage() {
                     className="inline-flex min-h-[52px] items-center justify-center rounded-xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-95"
                     style={{ background: '#fff', color: '#003087' }}
                   >
-                    Sign in to explore apps
+                    Find out more
                   </Link>
                 </div>
               )}
@@ -116,13 +110,10 @@ export default async function HomePage() {
       </section>
 
       <HomePublicContent
-        apps={apps}
         dash={dash}
-        conditions={conditions}
         news={news}
         campaigns={campaigns}
-        conceptFeatured={conceptFeatured}
-        featuredApp={featuredApp}
+        caseStudies={caseStudies}
       />
     </div>
   )

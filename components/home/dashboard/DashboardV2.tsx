@@ -12,7 +12,7 @@ export function DashboardV2(props: DashboardVariantProps) {
 
   return (
     <div className="flex flex-col gap-12 md:gap-14">
-      <DashboardWelcome displayName={displayName} organisationName={organisationName} />
+      <DashboardWelcome organisationName={organisationName} />
 
       <div className="grid items-stretch gap-6 lg:grid-cols-3">
         <SavedAppsWidget apps={apps} />

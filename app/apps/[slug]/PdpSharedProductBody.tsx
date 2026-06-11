@@ -20,7 +20,7 @@ import {
 import { PdpCommissioningSnapshot } from '@/components/PdpCommissioningSnapshot'
 import { PdpReadOnlySection } from '@/components/PdpReadOnlySection'
 import { catalogueDemoAvailable } from '@/lib/catalogueCardSignals'
-import { getCommissioningSnapshot } from '@/lib/commissioningSnapshot'
+import { getCommissioningSnapshot, getFundingSnapshotCard } from '@/lib/commissioningSnapshot'
 import { getCommissionerFacingFunding, getLinkedFunding } from '@/lib/data'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
 import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges, ProductHeroDemoBadge } from './pdpBlocks'
@@ -47,19 +47,18 @@ export default function PdpSharedProductBody({
   const linkedFundingIds = app.linked_funding_ids ?? app.funding_ids ?? []
   const commissionerFunding = getCommissionerFacingFunding(linkedFundingIds)
   const allLinkedFunding = getLinkedFunding(linkedFundingIds)
-  const commissioningCards = getCommissioningSnapshot(
-    app,
-    allLinkedFunding.map((f: { id: string; title: string; status: string }) => ({
-      id: f.id,
-      title: f.title,
-      status: f.status,
-    })),
-  )
+  const fundingRows = allLinkedFunding.map((f: { id: string; title: string; status: string }) => ({
+    id: f.id,
+    title: f.title,
+    status: f.status,
+  }))
+  const commissioningCards = getCommissioningSnapshot(app)
+  const fundingSnapshotCard = getFundingSnapshotCard(app, fundingRows)
 
   return (
     <>
       {a.has('hero') ? (
-        <div className="mb-3 hs-surface-card-sm rounded-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
+        <div className="mb-3 hs-surface-card-sm rounded-t-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
           <div className="px-8 pt-8 pb-3">
             <div className="flex flex-col gap-6 items-start">
               <div className="flex-1 w-full min-w-0">
@@ -68,7 +67,7 @@ export default function PdpSharedProductBody({
                     <ConditionTag key={t} tag={t} />
                   ))}
                   <SupervisionBadge model={app.supervision_model} />
-                  <MaturityBadge level={app.maturity_level} />
+                  <MaturityBadge level={app.maturity_level} hideEstablished />
                   {app.nice_guidance_refs
                     .filter((r: any) => r.type !== 'EVA' && r.type !== 'MTG')
                     .map((r: any) => (
@@ -122,8 +121,12 @@ export default function PdpSharedProductBody({
       ) : null}
 
       {a.has('commissioning-snapshot') ? (
-        <div className="mb-8">
-          <PdpCommissioningSnapshot cards={commissioningCards} />
+        <div className="hs-decision-snapshot mb-8">
+          <PdpCommissioningSnapshot
+            cards={commissioningCards}
+            fundingCard={a.has('related-funding') ? fundingSnapshotCard : null}
+            whereLiveApp={app}
+          />
         </div>
       ) : null}
 

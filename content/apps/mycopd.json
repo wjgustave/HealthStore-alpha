@@ -116,6 +116,63 @@
   ],
   "live_icbs": 5,
   "patients_covered_note": "100,000+ patients across all my mhealth conditions globally. Multiple named NHS sites active.",
+  "deployment_register": [
+    {
+      "site": "University Hospital Southampton NHS FT",
+      "condition": "COPD + pulmonary rehab",
+      "icb": "NHS Hampshire & Isle of Wight ICB",
+      "location": "UHS acute respiratory (NIHR Southampton)",
+      "delivery": "Hospital outpatient + patient's home",
+      "care_setting": "Secondary care",
+      "status": "live",
+      "confidence": "high",
+      "notes": "One of four trusts named in the NHSX Digital Health Partnership Award for adoption of myOp and myCOPD. Also the app's clinical birthplace."
+    },
+    {
+      "site": "Norfolk & Norwich University Hospital NHS FT",
+      "condition": "COPD + pulmonary rehab",
+      "icb": "NHS Norfolk & Waveney ICB",
+      "location": "Acute respiratory service",
+      "delivery": "Hospital outpatient + patient's home",
+      "care_setting": "Secondary care",
+      "status": "live",
+      "confidence": "medium",
+      "notes": "Named NHSX Digital Health Partnership Award site (myOp + myCOPD)."
+    },
+    {
+      "site": "University Hospital of North Midlands NHS Trust",
+      "condition": "COPD + pulmonary rehab",
+      "icb": "NHS Staffordshire & Stoke-on-Trent ICB",
+      "location": "Acute respiratory service",
+      "delivery": "Hospital outpatient + patient's home",
+      "care_setting": "Secondary care",
+      "status": "live",
+      "confidence": "medium",
+      "notes": "Named NHSX Digital Health Partnership Award site (myOp + myCOPD)."
+    },
+    {
+      "site": "Cornwall Partnership NHS FT",
+      "condition": "Pulmonary rehab",
+      "icb": "NHS Cornwall & Isles of Scilly ICB",
+      "location": "Community pulmonary rehab service",
+      "delivery": "Community clinic + patient's home (blended PR)",
+      "care_setting": "Community",
+      "status": "research",
+      "confidence": "high",
+      "notes": "PROPEL study 'Setting 2': digital PR to isolated communities to increase PR capacity, access and completion. Research/evaluation rather than full commissioning."
+    },
+    {
+      "site": "Southend University Hospital — 'DEPR' model",
+      "condition": "Pulmonary rehab",
+      "icb": "NHS Mid & South Essex ICB",
+      "location": "Southend acute PR service (multi-location)",
+      "delivery": "PR centre + patient's home",
+      "care_setting": "Secondary care",
+      "status": "live",
+      "confidence": "high",
+      "notes": "Exemplar PR site. Menu-based 'Digitally Enhanced PR' launched 2018; year-one review showed improved completion rates and a doubling of service capacity while maintaining outcomes."
+    }
+  ],
   "dtac_status": "passed_refresh_required",
   "dtac_note": "Central DTAC completion is over 3 years old. Updated DTAC form (February 2026) applies from April 2026. Commissioning organisations must request the current form from my mhealth and complete local due diligence.",
   "device_class": "Class I SaMD",

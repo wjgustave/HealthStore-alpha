@@ -21,7 +21,8 @@ export async function middleware(req: NextRequest) {
     return res
   }
 
-  if (pathname === '/' || pathname === '/cookies') {
+  const publicPaths = ['/', '/cookies', '/news', '/campaigns', '/case-studies']
+  if (publicPaths.includes(pathname)) {
     return res
   }
 

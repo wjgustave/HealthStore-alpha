@@ -295,16 +295,42 @@
       "status": "active"
     }
   ],
+  "deployment_register": [
+    {
+      "site": "Liverpool University Hospitals NHS FT",
+      "status": "live"
+    },
+    {
+      "site": "Suffolk and North East Essex ICS",
+      "status": "live"
+    },
+    {
+      "site": "NHS Gloucestershire ICS",
+      "status": "live"
+    },
+    {
+      "site": "Wiltshire Health and Care",
+      "status": "live"
+    },
+    {
+      "site": "Bath Centre for Fatigue Services",
+      "status": "live"
+    },
+    {
+      "site": "Additional ICS regions (13 NHS ICS regions reported)",
+      "status": "live"
+    }
+  ],
   "live_icbs": 13,
   "patients_covered_note": "Deployed across 13 NHS ICS regions. Aggregate user numbers not publicly available.",
   "dtac_status": "required_not_confirmed",
   "dtac_note": "Not within central DTAC records. DTAC approval is a condition of the NICE EVA recommendation.",
   "device_class": "Class I SaMD",
-  "dcb0129_status": "Information not available",
+  "dcb0129_status": "Check with supplier",
   "dcb0160_boilerplate_available": false,
-  "dspt_status": "Information not available",
-  "iso27001": "Information not available",
-  "cyber_essentials": "Information not available",
+  "dspt_status": "Check with supplier",
+  "iso27001": "Check with supplier",
+  "cyber_essentials": "Check with supplier",
   "cyber_notes": "Confirm current security certifications and data handling for wearable device data.",
   "gdpr_note": "Confirm data hosting and DPA terms with Ki Performance Lifestyle Ltd. Wearable device collects continuous physical activity data.",
   "target_patients": "Adults referred for cardiac rehabilitation — ACS, HF, cardiomyopathy, congenital heart disease, post-surgery. Also applicable to Long COVID, pulmonary rehabilitation, chronic fatigue.",
@@ -352,8 +378,8 @@
     "health-innovation-network"
   ],
   "technical_integrations": {
-    "fhir": "Information not available",
-    "emis": "Information not available",
+    "fhir": "Check with supplier",
+    "emis": "Check with supplier",
     "nhs_app": false,
     "population_health_dashboard": true,
     "device_integration": "Proprietary wearable device collects minute-by-minute physical activity data. Patented analytics technology.",

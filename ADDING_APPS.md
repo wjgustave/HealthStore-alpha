@@ -41,7 +41,7 @@ The product detail template (`app/apps/[slug]/page.tsx` and `components/AppDetai
 |---------|----------------------|
 | **Why it matters locally** | `why_it_matters_locally`, `sustainability_highlight` |
 | **Context of use** | `context_of_use` |
-| **Scale and maturity** | `maturity_level`, `evidence_strength`, optional `evidence_strength_rationale`, **`named_sites`** (preferred PDP label **Live sites**), legacy `live_sites`, `patients_covered_note`, optional `deployments` (only shown when `named_sites` is absent). (`live_icbs` remains in JSON for compare / snippets — not shown on PDP Scale.) |
+| **Scale and maturity** | `maturity_level`, `evidence_strength`, optional `evidence_strength_rationale`, `patients_covered_note`, and **`deployment_register`** — the structured **Where it's live** table (status-filterable; ICB / place / care setting / status / confidence per row). Legacy `named_sites` / `live_sites` / `deployments` are retained for back-compat and used as a fallback when `deployment_register` is absent. (`live_icbs` remains in JSON for compare / snippets.) |
 | **What it takes locally** | `local_wraparound`, `local_wraparound_detail`, `onboarding_model`, `onboarding_detail`, `training_required`, `training_note`, `supplier_wrap`, `service_wrap_included`, `service_wrap_note`, `monitoring_note`, `escalation_note`, `operating_hours_caveat`, `implementation_prerequisites` |
 | **Expected impact and case studies** | `expected_benefit_note`, `case_studies` (shown whenever `case_studies` has entries — not gated on `clinical_evidence_detailed`) |
 | **Clinical evidence** | `evidence_summary`, `clinical_evidence_detailed` |
@@ -143,6 +143,19 @@ Below is the full JSON template with every field annotated. Fields marked **(req
   ],
   "live_icbs": 5,
   "patients_covered_note": "Number of patients or deployments.",
+  "deployment_register": [
+    {
+      "site": "Example NHS FT — named service",
+      "condition": "Condition / use case",
+      "icb": "NHS Example ICB",
+      "location": "Place / locality within ICB",
+      "delivery": "How it's delivered (home / hub / clinic)",
+      "care_setting": "Secondary care",
+      "status": "live",
+      "confidence": "high",
+      "notes": "Context: scale, dates, corroboration, caveats."
+    }
+  ],
 
   "dtac_status": "passed",
   "dtac_note": "Any notes about DTAC status.",
@@ -243,6 +256,10 @@ Below is the full JSON template with every field annotated. Fields marked **(req
 | `condition_tags` | Must match an `id` in `content/conditions/conditions.json` |
 | `clinical_evidence_detailed[].type` | `RCT`, `observational`, `service_eval`, `grey_lit`, `nice_assessment`, `real_world`, `implementation_science`, `evidence_gap` |
 | `named_sites[].status` | `active`, `decommissioned`, `unknown` — use `unknown` when deployment status is not evidenced in catalogue sources |
+| `deployment_register[].status` | `live`, `pilot`, `research`, `historic`, `undocumented`, `unknown` |
+| `deployment_register[].confidence` | `high`, `medium`, `low` (optional — omit when provenance is unclear) |
+
+**Where it's live (`deployment_register`):** Canonical, structured deployment data rendered as the PDP **Where it's live** table (in the Deployment & adoption tab) and summarised in the persistent header strip. Each row: required `site`; optional `condition`, `icb`, `location` (within ICB), `delivery` (how/where delivered), `care_setting` (setting/tier), `status` (see enum), `confidence`, and `notes` (context, dates, corroboration, caveats). The table is filterable by status (live / pilot & research / historic) and distinguishes "currently live" from "ever procured". Full rationale, taxonomy and migration rules in [docs/PDP_WHERE_ITS_LIVE_REDESIGN.md](docs/PDP_WHERE_ITS_LIVE_REDESIGN.md). When `deployment_register` is absent, the PDP falls back to `named_sites` / `live_sites`.
 
 **Live sites (`named_sites`):** Prefer an array of `{ "name": string, "status": ... }` rows for the PDP **Live sites** list (with Active / Decommissioned / Unknown indicators). **`live_sites`** remains supported as legacy free-text; if **`named_sites`** is non-empty, the PDP renders the structured list only (not both). Aggregate copy without discrete organisations may be modelled as a single row — commonly **`active`** when treated as current catalogue deployment scope; use **`unknown`** only when status genuinely cannot be classified. **`deployments`** (extended footprint metadata) renders only when **`named_sites`** is absent, to avoid duplicate lists. **Editorial note:** Use **`decommissioned`** when a site is evidenced as no longer live; prefer **`active`** for current deployments listed in the catalogue unless you need **`unknown`** for ambiguous cases. **PDP contact:** Each structured row has an info control with a **placeholder** email derived from the site `name` as `{slug}.pulmonary.sleep@nhs.net` (`lib/liveSiteContact.ts`); adjust slug logic there if editorial needs a different pattern.
 

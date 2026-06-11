@@ -55,6 +55,12 @@
       "status": "active"
     }
   ],
+  "deployment_register": [
+    {
+      "site": "Limited NHS eating disorder services — pilot deployments (sites not listed in catalogue)",
+      "status": "live"
+    }
+  ],
   "live_icbs": 1,
   "patients_covered_note": "Very limited NHS deployment at present. Evidence generation in early stages.",
   "dtac_status": "passed",

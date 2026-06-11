@@ -182,9 +182,13 @@ export function ContextOfUseGrid({ app }: { app: any }) {
 export function ProductHeroDemoBadge({ app }: { app: any }) {
   if (!catalogueDemoAvailable(app)) return null
   return (
-    <span className="badge" style={{ background: '#fff', color: 'var(--text-primary)' }}>
+    <a
+      href="#demo-access"
+      className="badge"
+      style={{ background: '#fff', color: 'var(--nhs-blue)' }}
+    >
       Demo available
-    </span>
+    </a>
   )
 }
 

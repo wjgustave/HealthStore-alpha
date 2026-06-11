@@ -62,6 +62,16 @@
       "status": "active"
     }
   ],
+  "deployment_register": [
+    {
+      "site": "Multiple NHS trusts (specific organisations not listed in catalogue)",
+      "status": "live"
+    },
+    {
+      "site": "International deployments",
+      "status": "live"
+    }
+  ],
   "live_icbs": 10,
   "patients_covered_note": "Millions of users globally. Deployed across multiple NHS organisations since NICE MTG70 recommendation.",
   "dtac_status": "passed",

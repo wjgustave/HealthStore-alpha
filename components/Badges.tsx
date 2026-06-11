@@ -9,7 +9,17 @@ export function DtacBadge({ status }: { status: string }) {
   return <span className={`badge ${cls}`}>{label}</span>
 }
 
-export function MaturityBadge({ level }: { level: string }) {
+const ESTABLISHED_MATURITY_LEVELS = new Set(['scaled', 'multi_site_live'])
+
+export function MaturityBadge({
+  level,
+  hideEstablished = false,
+}: {
+  level: string
+  /** Omit the badge when maturity maps to "Established" (hero / catalogue cards). */
+  hideEstablished?: boolean
+}) {
+  if (hideEstablished && ESTABLISHED_MATURITY_LEVELS.has(level)) return null
   const label = maturityLabels[level] ?? level
   const cls = level === 'scaled' ? 'badge-green'
     : level === 'multi_site_live' ? 'badge-blue'

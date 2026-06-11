@@ -1,7 +1,11 @@
 import type { App } from '@/lib/data'
+import { CHECK_WITH_SUPPLIER } from '@/lib/data'
+import { formatPricingModelDisplay } from '@/components/AppDetailSections'
+import { evidenceLabels } from '@/lib/data'
+import { getWhereLiveSummary } from '@/lib/whereLiveSummary'
 
-/** Single empty-state token for compare cells (PO-approved consistency). */
-export const NOT_STATED = 'Not stated'
+/** Single empty-state token for compare cells (aligned with PDP). */
+export const NOT_STATED = CHECK_WITH_SUPPLIER
 
 const MAX_INTEGRATIONS_CHARS = 200
 const MAX_INDICATIVE_PRICE_CHARS = 120
@@ -170,4 +174,121 @@ export function getIndicativePriceShort(app: App): string {
   const sentenceMatch = oneLine.match(/^[^.!?]+[.!?]?/)
   const first = sentenceMatch ? sentenceMatch[0].trim() : oneLine
   return truncateEnd(first, MAX_INDICATIVE_PRICE_CHARS)
+}
+
+/** Where it's live — uses deployment_register via getWhereLiveSummary. */
+export function getWhereLiveCompare(app: App): string {
+  const { headline, detail, icbText } = getWhereLiveSummary(app)
+  if (headline === 'Deployment footprint not yet recorded') return NOT_STATED
+  const parts = [headline]
+  if (detail) parts.push(detail)
+  if (icbText && !headline.toLowerCase().includes('across')) parts.push(icbText)
+  return parts.join(' · ')
+}
+
+/** Pricing model for compare cells. */
+export function getPricingModelDisplay(app: App): string {
+  const model = formatPricingModelDisplay(app.pricing_model)
+  const parts: string[] = []
+  if (model?.trim()) parts.push(model.trim())
+  if (app.free_offer_flag === true) parts.push('Free offer')
+  return parts.length > 0 ? parts.join(' · ') : NOT_STATED
+}
+
+/** Evidence strength label for text comparison. */
+export function getEvidenceStrengthText(app: App): string {
+  const raw = app.evidence_strength
+  if (!raw?.trim()) return NOT_STATED
+  return evidenceLabels[raw] ?? raw
+}
+
+/** Cyber Essentials / ISO 27001 / DSPT combined line. */
+export function getAssuranceSummary(app: App): string {
+  const parts: string[] = []
+  if (app.cyber_essentials?.trim()) parts.push(`Cyber Essentials: ${app.cyber_essentials.trim()}`)
+  if (app.iso27001?.trim()) parts.push(`ISO 27001: ${app.iso27001.trim()}`)
+  if (app.dspt_status?.trim()) parts.push(`DSPT: ${app.dspt_status.trim()}`)
+  return parts.length > 0 ? truncateEnd(parts.join(' · '), 200) : NOT_STATED
+}
+
+/** NHS App / Login / Notify summary. */
+export function getNhsIntegrationsSummary(app: App): string {
+  const parts: string[] = []
+  if (app.nhs_app_integration === true) parts.push('NHS App')
+  if (app.nhs_notify_integration === true) parts.push('NHS Notify')
+  if (app.nhs_login_integration === true) parts.push('NHS Login')
+  return parts.length > 0 ? parts.join(', ') : NOT_STATED
+}
+
+/** Data hosting from technical_integrations. */
+export function getDataHosting(app: App): string {
+  const ti = app.technical_integrations as { data_hosting?: string } | undefined
+  return pickStr(ti?.data_hosting)
+}
+
+/** NHSE £125k and related funding eligibility line. */
+export function getFundingEligibility(app: App): string {
+  const parts: string[] = []
+  if (app.nhse_125k_eligible === true && app.slug !== 'clinitouch') {
+    parts.push('NHSE £125k — eligible')
+  }
+  if (app.nhse_125k_note?.trim()) parts.push(truncateEnd(app.nhse_125k_note.trim(), 120))
+  return parts.length > 0 ? parts.join(' · ') : NOT_STATED
+}
+
+/**
+ * Normalised plain-text value for a compare row — used for "differences only" filtering.
+ * Keys match COMPARE_ROWS in lib/compareConfig.ts.
+ */
+export function getCompareRowTextValue(app: App, rowKey: string): string {
+  switch (rowKey) {
+    case 'conditions': {
+      const tags = Array.isArray(app.condition_tags) ? app.condition_tags : []
+      return tags.length > 0 ? tags.join(',') : NOT_STATED
+    }
+    case 'therapeutic':
+      return getTherapeuticPurpose(app)
+    case 'pathways':
+      return getClinicalPathways(app)
+    case 'care_settings':
+      return getCareSettings(app)
+    case 'evidence_excerpt':
+      return getClinicalEvidenceExcerpt(app)
+    case 'expected_benefit':
+      return getExpectedBenefit(app)
+    case 'nice':
+      return getNiceGuidanceStatus(app)
+    case 'evidence_strength':
+      return getEvidenceStrengthText(app)
+    case 'where_live':
+      return getWhereLiveCompare(app)
+    case 'maturity':
+      return pickStr(app.maturity_level)
+    case 'onboarding':
+      return getOnboardingCompareLine(app)
+    case 'service_wrap':
+      return getServiceWrapYn(app)
+    case 'dtac':
+      return pickStr(app.dtac_status)
+    case 'dcb0129':
+      return pickStr(app.dcb0129_status)
+    case 'device_class':
+      return pickStr(app.device_class)
+    case 'assurance':
+      return getAssuranceSummary(app)
+    case 'pricing_model':
+      return getPricingModelDisplay(app)
+    case 'indicative_price':
+      return getIndicativePriceShort(app)
+    case 'funding':
+      return getFundingEligibility(app)
+    case 'nhs_integrations':
+      return getNhsIntegrationsSummary(app)
+    case 'integrations':
+      return getIntegrationsSummary(app)
+    case 'data_hosting':
+      return getDataHosting(app)
+    default:
+      return NOT_STATED
+  }
 }

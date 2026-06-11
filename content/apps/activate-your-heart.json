@@ -62,16 +62,26 @@
       "status": "active"
     }
   ],
+  "deployment_register": [
+    {
+      "site": "University Hospitals of Leicester NHS Trust",
+      "status": "live"
+    },
+    {
+      "site": "Leicestershire",
+      "status": "live"
+    }
+  ],
   "live_icbs": 1,
   "patients_covered_note": "Approximately 2,000 patients/year referred through the Leicester CR service overall. Platform-specific user numbers not publicly available.",
   "dtac_status": "required_not_confirmed",
   "dtac_note": "Did not submit for central DTAC assessment (pre-submission stage). DTAC approval is a condition of the NICE EVA recommendation and must be obtained before commissioning.",
   "device_class": "Class I SaMD",
-  "dcb0129_status": "Information not available",
+  "dcb0129_status": "Check with supplier",
   "dcb0160_boilerplate_available": false,
   "dspt_status": "Operates within UHL NHS Trust IG framework",
-  "iso27001": "Information not available",
-  "cyber_essentials": "Information not available",
+  "iso27001": "Check with supplier",
+  "cyber_essentials": "Check with supplier",
   "cyber_notes": "NHS Trust-developed product — operates within UHL information governance framework.",
   "gdpr_note": "NHS Trust-hosted product. Operates within UHL NHS Trust IG and data governance framework.",
   "target_patients": "Adults with CVD unable or unwilling to attend face-to-face cardiac rehabilitation sessions.",
@@ -101,7 +111,7 @@
   "service_wrap_included": false,
   "service_wrap_description": "NHS Trust–developed platform. Implementation support, hosting and clinical dashboard scope are agreed locally with UHL — not a standard commercial SaaS wrap.",
   "service_wrap_note": "NHS Trust-developed platform. Implementation support model not publicly described.",
-  "contract_note": "Information not available. NICE advises that contract negotiations should consider the 3-year evidence generation period.",
+  "contract_note": "Check with supplier. NICE advises that contract negotiations should consider the 3-year evidence generation period.",
   "expected_benefit_note": "NICE EAG economic model found Activate Your Heart cost-saving vs conventional rehabilitation, with small quality-of-life gains. Savings arose mainly from reduced delivery costs between initial and final in-person sessions.",
   "tariff_considerations": "Cardiac rehabilitation delivery is typically commissioned rather than separately tariffed per session in many systems. Model using CR service costs. Platform may reduce the cost of delivering CR by replacing some face-to-face sessions with digital delivery.",
   "provider_income_note": "If hybrid CR reduces centre-based contacts, trusts may see shifts in activity and income versus traditional group CR — align gainshare or pathway budgets between commissioner and provider.",
@@ -113,14 +123,14 @@
   "nhs_login_integration": true,
   "nhs_notify_integration": false,
   "minimum_conditions_for_success": "Dedicated CR clinical team, face-to-face assessment capacity for initial patient evaluation, staff trained on platform use.",
-  "procurement_notes": "Information not available. NHS Trust-developed product — confirm procurement route with UHL.",
+  "procurement_notes": "Check with supplier. NHS Trust-developed product — confirm procurement route with UHL.",
   "content_confidence": "Confirmed",
   "linked_funding_ids": [
     "health-innovation-network"
   ],
   "technical_integrations": {
-    "fhir": "Information not available",
-    "emis": "Information not available",
+    "fhir": "Check with supplier",
+    "emis": "Check with supplier",
     "nhs_app": false,
     "population_health_dashboard": true,
     "device_integration": "No specific device integration described. Web-based platform tracks patient-entered symptoms, exertion scores and step counts.",

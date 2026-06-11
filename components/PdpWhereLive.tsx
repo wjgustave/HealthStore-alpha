@@ -1,0 +1,82 @@
+import { MapPin } from 'lucide-react'
+import { getWhereLiveSummary, type WhereLiveApp } from '@/lib/whereLiveSummary'
+
+export type { WhereLiveApp }
+
+/**
+ * Persistent "Where it's live" strip for the PDP decision snapshot.
+ * Summarises the deployment register (live site + ICB counts, pilots/historic flagged)
+ * and links into the Deployment & adoption tab via the `#scale-and-maturity` anchor.
+ * Full detail lives in the DeploymentRegisterTable. See docs/PDP_WHERE_ITS_LIVE_REDESIGN.md.
+ */
+export function PdpWhereLive({
+  app,
+  embedded = false,
+}: {
+  app: WhereLiveApp
+  /** Renders full-width inside the decision snapshot white panel. */
+  embedded?: boolean
+}) {
+  const { sitesText, statusText } = getWhereLiveSummary(app)
+
+  return (
+    <a
+      href="#scale-and-maturity"
+      className={
+        embedded
+          ? 'group flex w-full items-center gap-3 rounded-lg border px-4 py-3 transition-colors hover:opacity-95'
+          : 'hs-surface-card-sm group flex items-center gap-3 rounded-lg border bg-white px-4 py-3 transition-shadow hover:shadow-md'
+      }
+      style={{
+        borderColor: 'var(--border)',
+        borderLeftWidth: 4,
+        borderLeftColor: '#007F3B',
+        ...(embedded ? { background: 'rgb(247, 249, 252)' } : {}),
+      }}
+    >
+      <MapPin className="h-5 w-5 flex-shrink-0" style={{ color: '#007F3B' }} aria-hidden />
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0">
+          {sitesText ? (
+            <span className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>{sitesText}</span>
+          ) : null}
+          {statusText ? (
+            <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>{statusText}</span>
+          ) : null}
+        </div>
+      </div>
+      <span className="hidden shrink-0 text-xs font-medium group-hover:underline sm:inline" style={{ color: '#005EB8' }}>
+        Where it&apos;s live →
+      </span>
+    </a>
+  )
+}
+
+/** Fourth callout card in the commissioning snapshot grid. */
+export function PdpWhereLiveSegment({ app }: { app: WhereLiveApp }) {
+  const { sitesText, statusText } = getWhereLiveSummary(app)
+
+  return (
+    <article className="hs-snapshot-strip__segment">
+      <h2 className="hs-snapshot-strip__heading">
+        <a href="#scale-and-maturity" className="hs-snapshot-strip__heading-link">
+          Where it&apos;s live
+        </a>
+      </h2>
+      <div className="hs-snapshot-strip__body">
+        <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0">
+          {sitesText ? (
+            <span className="text-lg font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
+              {sitesText}
+            </span>
+          ) : null}
+          {statusText ? (
+            <span className="text-xs leading-snug" style={{ color: 'var(--text-secondary)' }}>
+              {statusText}
+            </span>
+          ) : null}
+        </div>
+      </div>
+    </article>
+  )
+}

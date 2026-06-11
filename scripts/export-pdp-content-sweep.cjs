@@ -105,7 +105,7 @@ function yn(bool) {
 }
 
 function formatPricingModel(raw, pricingLabels) {
-  if (!raw || !String(raw).trim()) return 'Information not available'
+  if (!raw || !String(raw).trim()) return 'Check with supplier'
   const key = String(raw).trim()
   if (pricingLabels[key]) return pricingLabels[key]
   return key

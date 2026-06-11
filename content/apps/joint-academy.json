@@ -59,6 +59,16 @@
       "status": "active"
     }
   ],
+  "deployment_register": [
+    {
+      "site": "Multiple NHS organisations (specific sites not listed in catalogue)",
+      "status": "live"
+    },
+    {
+      "site": "International deployments (Europe and North America)",
+      "status": "live"
+    }
+  ],
   "live_icbs": 12,
   "patients_covered_note": "Over 100,000 patients treated globally. Growing NHS deployment base.",
   "dtac_status": "passed",

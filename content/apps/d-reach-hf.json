@@ -67,16 +67,30 @@
       "status": "active"
     }
   ],
+  "deployment_register": [
+    {
+      "site": "Paper-based REACH-HF — six NHS Scotland Health Boards",
+      "status": "live"
+    },
+    {
+      "site": "Paper-based REACH-HF — four NHS cardiac rehabilitation centres",
+      "status": "live"
+    },
+    {
+      "site": "D REACH-HF (digital) — deployment sites not publicly confirmed",
+      "status": "live"
+    }
+  ],
   "live_icbs": 0,
   "patients_covered_note": "Paper-based version deployed across multiple NHS sites. Digital version deployment scale not publicly confirmed.",
   "dtac_status": "required_not_confirmed",
   "dtac_note": "Not within central DTAC records. DTAC approval is a condition of the NICE EVA recommendation.",
   "device_class": "Class I SaMD",
-  "dcb0129_status": "Information not available",
+  "dcb0129_status": "Check with supplier",
   "dcb0160_boilerplate_available": false,
-  "dspt_status": "Information not available",
-  "iso27001": "Information not available",
-  "cyber_essentials": "Information not available",
+  "dspt_status": "Check with supplier",
+  "iso27001": "Check with supplier",
+  "cyber_essentials": "Check with supplier",
   "cyber_notes": "Developed as part of NIHR-funded research programme with full ethical approvals and governance. Confirm current assurance status.",
   "gdpr_note": "Confirm data hosting and DPA terms with Health & Care Innovations Ltd.",
   "target_patients": "Adults with heart failure (HFrEF and HFpEF) suitable for home-based cardiac rehabilitation.",
@@ -106,7 +120,7 @@
   "service_wrap_included": false,
   "service_wrap_description": "Supplier provides facilitator training, intervention manual and digital platform access. Twelve-week facilitated delivery, HCP dashboard and clinical time are commissioner/provider responsibilities.",
   "service_wrap_note": "Facilitator training and intervention manual provided. Clinical delivery is commissioner/provider responsibility.",
-  "contract_note": "Information not available. NICE advises considering the 3-year evidence generation period.",
+  "contract_note": "Check with supplier. NICE advises considering the 3-year evidence generation period.",
   "expected_benefit_note": "Original REACH-HF RCT showed clinically superior disease-specific quality of life at 12 months vs usual care. Cost-effective within NHS tariff. NICE EAG model found cost-saving vs conventional rehabilitation.",
   "tariff_considerations": "Original REACH-HF programme cost-effective within NHS CR tariff. Model using HF-specific CR service costs and any virtual delivery allowances.",
   "provider_income_note": "Successful HF CR programmes may reduce unplanned admissions over time; model commissioner and community HF service activity jointly to avoid misaligned incentives.",
@@ -124,8 +138,8 @@
     "health-innovation-network"
   ],
   "technical_integrations": {
-    "fhir": "Information not available",
-    "emis": "Information not available",
+    "fhir": "Check with supplier",
+    "emis": "Check with supplier",
     "nhs_app": false,
     "population_health_dashboard": true,
     "device_integration": "No specific device integration described. Web-based platform.",

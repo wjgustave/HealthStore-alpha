@@ -1,15 +1,19 @@
 import Link from 'next/link'
 import {
   AlertBox,
+  DtacBadge,
   EffortBadge,
   EvidenceBadge,
   FundingStatusBadge,
   MaturityBadge,
+  SupervisionBadge,
 } from '@/components/Badges'
 import enumsData from '@/content/common/enums.json'
 import ProductVideosSection from '@/components/ProductVideosSection'
-import { NamedSitesStructuredList, type NamedSiteRow } from '@/components/LiveSitesStructuredList'
-import { getCommissionerFacingFunding } from '@/lib/data'
+import { DeviceClassDetails } from '@/components/DeviceClassDetails'
+import { DeploymentRegisterTable } from '@/components/DeploymentRegisterTable'
+import { getDeploymentRegister } from '@/lib/deploymentRegister'
+import { CHECK_WITH_SUPPLIER, getCommissionerFacingFunding } from '@/lib/data'
 
 export function TechnicalIntegrationTable({ app }: { app: any }) {
   const ti = app.technical_integrations
@@ -63,11 +67,7 @@ export function TechnicalIntegrationTable({ app }: { app: any }) {
 }
 
 export function ScaleAndMaturitySection({ app }: { app: any }) {
-  const namedSitesRaw: NamedSiteRow[] = Array.isArray(app.named_sites) ? app.named_sites : []
-  const namedSites = namedSitesRaw.filter((s) => typeof s?.name === 'string' && s.name.trim().length > 0)
-  const hasStructuredNamedSites = namedSites.length > 0
-  const legacyLiveSites = typeof app.live_sites === 'string' ? app.live_sites.trim() : ''
-  const showLiveSitesRow = hasStructuredNamedSites || !!legacyLiveSites
+  const deploymentRows = getDeploymentRegister(app)
 
   return (
     <div>
@@ -88,18 +88,6 @@ export function ScaleAndMaturitySection({ app }: { app: any }) {
         </div>
       </div>
       <dl className="space-y-3 text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
-        {showLiveSitesRow && (
-          <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Live sites</dt>
-            <dd className="overflow-visible" style={{ lineHeight: 1.6 }}>
-              {hasStructuredNamedSites ? (
-                <NamedSitesStructuredList rows={namedSites} />
-              ) : (
-                legacyLiveSites
-              )}
-            </dd>
-          </div>
-        )}
         {app.evidence_strength_rationale && (
           <div>
             <dt className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Evidence overview</dt>
@@ -113,30 +101,10 @@ export function ScaleAndMaturitySection({ app }: { app: any }) {
           </div>
         )}
       </dl>
-      {app.deployments?.length > 0 && !hasStructuredNamedSites && (
-        <>
-          <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>Deployment footprint</div>
-          <div className="space-y-0 divide-y" style={{ borderColor: 'var(--border)' }}>
-            {app.deployments.map((d: any, i: number) => (
-              <div key={i} className="py-3 flex items-start gap-3 text-sm">
-                <div className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${d.currently_active === false ? 'bg-red-400' : d.currently_active === null ? 'bg-gray-300' : 'bg-green-500'}`} />
-                <div>
-                  <div className="font-medium" style={{ color: 'var(--text-primary)' }}>{d.organisation_name}</div>
-                  <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                    {d.region}{d.country !== 'United Kingdom' ? ` · ${d.country}` : ''}
-                    {d.patient_count ? ` · ${d.patient_count.toLocaleString()} patients` : ''}
-                    {d.currently_active === false ? ' · DECOMMISSIONED' : ''}
-                  </div>
-                  {d.deployment_scope && <div className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>{d.deployment_scope}</div>}
-                  {d.attribution_flag && d.attribution_note && (
-                    <div className="text-xs mt-1" style={{ color: '#D5840D' }}>⚠ {d.attribution_note}</div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
+      <div>
+        <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>Where it&apos;s live</div>
+        <DeploymentRegisterTable rows={deploymentRows} />
+      </div>
     </div>
   )
 }
@@ -328,7 +296,7 @@ export function formatPricingConfidence(raw: string | undefined): string | null 
 }
 
 export function formatPricingModelDisplay(raw: string | undefined): string {
-  if (!raw || String(raw).trim() === '') return 'Information not available'
+  if (!raw || String(raw).trim() === '') return CHECK_WITH_SUPPLIER
   const key = String(raw).trim()
   if (PRICING_MODEL_LABELS[key]) return PRICING_MODEL_LABELS[key]
   return key
@@ -337,7 +305,7 @@ export function formatPricingModelDisplay(raw: string | undefined): string {
 function yesNo(value: boolean | undefined | null): string {
   if (value === true) return 'Yes'
   if (value === false) return 'No'
-  return 'Information not available'
+  return CHECK_WITH_SUPPLIER
 }
 
 function CommercialDlRow({
@@ -367,7 +335,7 @@ function CommercialDlRow({
           color: has || !mutedWhenEmpty ? 'var(--text-primary)' : 'var(--text-muted)',
         }}
       >
-        {has ? content : 'Information not available'}
+        {has ? content : CHECK_WITH_SUPPLIER}
       </dd>
     </div>
   )
@@ -402,7 +370,7 @@ export function CommercialModelAndCostSection({ app }: { app: any }) {
             Indicative price
           </dt>
           <dd className="min-w-0 flex-1 leading-relaxed" style={{ color: 'var(--text-primary)' }}>
-            {app.indicative_price_text ?? 'Information not available'}
+            {app.indicative_price_text ?? CHECK_WITH_SUPPLIER}
             {conf ? (
               <div className="text-xs mt-1.5" style={{ color: 'var(--text-muted)' }}>
                 Pricing confidence: {conf}
@@ -453,7 +421,7 @@ function FinancialContextDlRow({
         className="min-w-0 flex-1 leading-relaxed"
         style={{ color: has ? 'var(--text-primary)' : 'var(--text-muted)' }}
       >
-        {has ? value : 'Information not available'}
+        {has ? value : CHECK_WITH_SUPPLIER}
       </dd>
     </div>
   )
@@ -487,6 +455,77 @@ function IndicativeFinancialContextBody({ app }: { app: any }) {
 /** Tariff, ROI, benefit context — title lives on PDP expander row. */
 export function IndicativeFinancialContextSection({ app }: { app: any }) {
   return <IndicativeFinancialContextBody app={app} />
+}
+
+function GovernanceRow({ label, value, children }: { label: string; value?: string | null; mutedWhenEmpty?: boolean; children?: React.ReactNode }) {
+  const has = children != null ? true : !!(value && String(value).trim())
+  return (
+    <div className="flex flex-col gap-1 py-3 border-b last:border-0 text-sm sm:flex-row sm:gap-4" style={{ borderColor: 'var(--border)' }}>
+      <dt className="w-full flex-shrink-0 font-medium sm:w-52" style={{ color: 'var(--text-muted)' }}>{label}</dt>
+      <dd className="min-w-0 flex-1 leading-relaxed" style={{ color: has ? 'var(--text-primary)' : 'var(--text-muted)' }}>
+        {children ?? (has ? value : CHECK_WITH_SUPPLIER)}
+      </dd>
+    </div>
+  )
+}
+
+/**
+ * Safety & governance group: clinical safety (Maisie) + information governance (Deb).
+ * Surfaces assurance detail that previously only appeared compressed in the sidebar.
+ */
+export function SafetyAndGovernanceSection({ app }: { app: any }) {
+  return (
+    <div className="space-y-6">
+      {app.clinical_safety_alert ? (
+        <div className="space-y-3">
+          <AlertBox type="danger"><strong>Clinical safety: </strong>{app.clinical_safety_alert}</AlertBox>
+        </div>
+      ) : null}
+
+      <div>
+        <div className="mb-1 text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Clinical safety</div>
+        <dl>
+          <GovernanceRow label="DTAC">
+            <span className="inline-flex flex-wrap items-center gap-2">
+              <DtacBadge status={app.dtac_status} />
+              {app.dtac_note ? <span style={{ color: 'var(--text-secondary)' }}>{app.dtac_note}</span> : null}
+            </span>
+          </GovernanceRow>
+          <GovernanceRow label="DCB0129 (manufacturer)" value={app.dcb0129_status} mutedWhenEmpty />
+          <GovernanceRow label="DCB0160 (deploying org)">
+            {app.dcb0160_boilerplate_available
+              ? 'Boilerplate clinical safety case available to support local DCB0160.'
+              : 'No supplier boilerplate recorded — complete local DCB0160 safety case.'}
+          </GovernanceRow>
+          <GovernanceRow label="Device class">
+            <div>
+              <div style={{ fontWeight: 600 }}>{app.device_class ?? CHECK_WITH_SUPPLIER}</div>
+              {app.device_class_note && <div className="mt-0.5 text-xs" style={{ color: '#D5840D' }}>⚠ {app.device_class_note}</div>}
+              <DeviceClassDetails deviceClass={app.device_class} />
+            </div>
+          </GovernanceRow>
+          <GovernanceRow label="Supervision model">
+            <SupervisionBadge model={app.supervision_model} />
+          </GovernanceRow>
+        </dl>
+      </div>
+
+      <div id="data-information-governance">
+        <div className="mb-1 text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Data & information governance</div>
+        <dl>
+          <GovernanceRow label="GDPR / data protection" value={app.gdpr_note} mutedWhenEmpty />
+          <GovernanceRow label="ISO 27001" value={app.iso27001} mutedWhenEmpty />
+          <GovernanceRow label="Cyber Essentials" value={app.cyber_essentials} mutedWhenEmpty />
+          <GovernanceRow label="DSP Toolkit" value={app.dspt_status} mutedWhenEmpty />
+        </dl>
+        {app.cyber_notes && (
+          <div className="mt-3 rounded p-3 text-xs" style={{ background: '#FEF5E6', color: '#7A4800' }}>
+            {app.cyber_notes}
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
 
 export function RelatedFundingSection({ fundingIds }: { fundingIds: string[] }) {

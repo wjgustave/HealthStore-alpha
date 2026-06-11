@@ -77,6 +77,24 @@
       "status": "active"
     }
   ],
+  "deployment_register": [
+    {
+      "site": "NHS Wales (national — 100% GP practices)",
+      "status": "live"
+    },
+    {
+      "site": "West Yorkshire ICB",
+      "status": "live"
+    },
+    {
+      "site": "NHS England expansion",
+      "status": "live"
+    },
+    {
+      "site": "Hong Kong (Long COVID programme)",
+      "status": "live"
+    }
+  ],
   "live_icbs": 2,
   "patients_covered_note": "20,000+ downloads in Wales. 99% of Welsh GP practices have patients using ICST respiratory app. NHS England expansion scope not publicly confirmed.",
   "dtac_status": "required_not_confirmed",

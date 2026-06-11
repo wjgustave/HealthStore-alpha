@@ -1,9 +1,20 @@
-import { Fragment, type ReactNode } from 'react'
-import type { CommissioningSnapshotCard, InteropSnapshotItem } from '@/lib/commissioningSnapshot'
-import { STORE_ACCENT } from '@/lib/storeAccent'
+import type { ReactNode } from 'react'
+import type {
+  CommissioningSnapshotCard,
+  FundingSnapshotCard,
+  InteropSnapshotItem,
+  RegulationSnapshotPill,
+} from '@/lib/commissioningSnapshot'
+import { PdpWhereLiveSegment } from '@/components/PdpWhereLive'
+import type { WhereLiveApp } from '@/lib/whereLiveSummary'
 
 const INTEROP_LOGO_KEYS = ['nhs_app', 'nhs_notify', 'nhs_login'] as const
 const INTEROP_BOTTOM_KEYS = ['fhir', 'emis'] as const
+const NHS_SERVICE_PILL_LABELS: Record<(typeof INTEROP_LOGO_KEYS)[number], string> = {
+  nhs_app: 'App',
+  nhs_notify: 'Notify',
+  nhs_login: 'Login',
+}
 
 function interopItemsInOrder(items: InteropSnapshotItem[], keys: readonly string[]): InteropSnapshotItem[] {
   return keys.flatMap(k => {
@@ -12,213 +23,225 @@ function interopItemsInOrder(items: InteropSnapshotItem[], keys: readonly string
   })
 }
 
-function SnapshotPill({
-  muted,
-  children,
-}: {
-  muted?: boolean
-  children: ReactNode
-}) {
+function SnapshotPill({ muted, children }: { muted?: boolean; children: ReactNode }) {
+  return (
+    <span className={`badge badge-grey max-w-full ${muted ? 'opacity-50' : ''}`}>{children}</span>
+  )
+}
+
+function NhsServicePill({ children }: { children: ReactNode }) {
   return (
     <span
-      className={`inline-flex max-w-full items-center justify-center rounded-md border px-2 py-0.5 text-[13px] font-semibold leading-tight ${
-        muted ? 'opacity-50' : ''
-      }`}
-      style={{
-        borderColor: 'var(--border)',
-        color: 'var(--text-primary)',
-        backgroundColor: '#F7F9FC',
-      }}
+      className="badge max-w-full border-0"
+      style={{ background: 'var(--nhs-blue)', color: '#fff' }}
     >
       {children}
     </span>
   )
 }
 
-export function PdpCommissioningSnapshot({ cards }: { cards: CommissioningSnapshotCard[] }) {
-  const accent = STORE_ACCENT
+function SegmentLink({
+  href,
+  children,
+  className = '',
+}: {
+  href: string
+  children: ReactNode
+  className?: string
+}) {
+  return (
+    <a
+      href={href}
+      className={`inline-block text-sm font-medium underline-offset-2 hover:underline ${className}`.trim()}
+      style={{ color: 'var(--nhs-blue)' }}
+    >
+      {children}
+    </a>
+  )
+}
+
+function SegmentShell({
+  label,
+  labelHref,
+  footer,
+  children,
+}: {
+  label: string
+  labelHref?: string
+  footer?: ReactNode
+  children: ReactNode
+}) {
+  return (
+    <article className="hs-snapshot-strip__segment">
+      <h2 className="hs-snapshot-strip__heading">
+        {labelHref ? (
+          <a href={labelHref} className="hs-snapshot-strip__heading-link">
+            {label}
+          </a>
+        ) : (
+          label
+        )}
+      </h2>
+      <div className="hs-snapshot-strip__body">{children}</div>
+      {footer ? <div className="hs-snapshot-strip__footer">{footer}</div> : null}
+    </article>
+  )
+}
+
+function GovernanceSegment({
+  label,
+  href,
+  pills,
+}: {
+  label: string
+  href: string
+  pills: RegulationSnapshotPill[]
+}) {
+  return (
+    <SegmentShell label={label} labelHref={href}>
+      <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0">
+        {pills.map(p => (
+          <li key={p.label}>
+            <span className={`badge badge-blue max-w-full ${p.muted ? 'opacity-50' : ''}`}>{p.label}</span>
+          </li>
+        ))}
+      </ul>
+    </SegmentShell>
+  )
+}
+
+function CostSegment({
+  card,
+}: {
+  card: Extract<CommissioningSnapshotCard, { kind: 'cost' }>
+}) {
+  return (
+    <SegmentShell label={card.label} labelHref={card.href}>
+      {card.modelPills.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-1.5">
+          {card.modelPills.map(text => (
+            <SnapshotPill key={text}>{text}</SnapshotPill>
+          ))}
+          {card.indicativeNote ? (
+            <span className="text-xs font-normal" style={{ color: 'var(--text-muted)' }}>
+              {card.indicativeNote}
+            </span>
+          ) : null}
+        </div>
+      ) : (
+        <p className="m-0 text-xs leading-snug" style={{ color: 'var(--text-muted)' }}>
+          Not listed in profile
+        </p>
+      )}
+      {card.subline ? (
+        <p className="mt-2 mb-0 text-xs leading-snug" style={{ color: 'var(--text-muted)' }}>
+          {card.subline}
+        </p>
+      ) : null}
+    </SegmentShell>
+  )
+}
+
+function FundingFullWidthSegment({ card }: { card: FundingSnapshotCard }) {
+  return (
+    <article className="hs-snapshot-strip__segment hs-snapshot-strip__segment--row">
+      <div className="hs-snapshot-strip__row hs-snapshot-strip__row--funding">
+        <h2 className="sr-only">{card.label}</h2>
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+          {card.pills.map((text, i) => (
+            <span key={`${i}-${text}`} className="shrink-0 whitespace-nowrap">
+              <SnapshotPill>{text}</SnapshotPill>
+            </span>
+          ))}
+        </div>
+        {card.opportunitiesLink ? (
+          <SegmentLink href={card.opportunitiesLink.href} className="shrink-0 whitespace-nowrap">
+            {card.opportunitiesLink.label}
+          </SegmentLink>
+        ) : null}
+      </div>
+    </article>
+  )
+}
+
+function IntegrationSegment({
+  card,
+}: {
+  card: Extract<CommissioningSnapshotCard, { kind: 'interop' }>
+}) {
+  const logoRow = interopItemsInOrder(card.items, INTEROP_LOGO_KEYS)
+  const bottomRow = interopItemsInOrder(card.items, INTEROP_BOTTOM_KEYS)
 
   return (
+    <SegmentShell label={card.label} labelHref={card.href}>
+      {logoRow.length === 0 && bottomRow.length === 0 ? (
+        <p className="m-0 text-xs leading-snug" style={{ color: 'var(--text-muted)' }}>
+          None listed in profile
+        </p>
+      ) : (
+        <div className="flex flex-col gap-2" role="group" aria-label="Confirmed integrations">
+          {logoRow.length > 0 ? (
+            <div className="flex flex-wrap items-center gap-1.5" aria-label="NHS service integrations">
+              <span className="text-sm font-semibold leading-none" style={{ color: 'var(--nhs-dark)' }}>
+                NHS:
+              </span>
+              {logoRow.map(item => (
+                <NhsServicePill key={item.key}>
+                  {NHS_SERVICE_PILL_LABELS[item.key as (typeof INTEROP_LOGO_KEYS)[number]] ?? item.name}
+                </NhsServicePill>
+              ))}
+            </div>
+          ) : null}
+          {bottomRow.length > 0 ? (
+            <div className="flex flex-wrap gap-1.5" aria-label="FHIR and EMIS">
+              {bottomRow.map(item => (
+                <SnapshotPill key={item.key}>{item.textLabel ?? item.name}</SnapshotPill>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      )}
+    </SegmentShell>
+  )
+}
+
+function renderGridCard(card: CommissioningSnapshotCard) {
+  switch (card.kind) {
+    case 'regulation':
+      return <GovernanceSegment key={card.kind} label={card.label} href={card.href} pills={card.pills} />
+    case 'cost':
+      return <CostSegment key={card.kind} card={card} />
+    case 'interop':
+      return <IntegrationSegment key={card.kind} card={card} />
+    default:
+      return null
+  }
+}
+
+/**
+ * Persistent commissioning decision snapshot — governance, pricing model, integration,
+ * where it's live (grid); funding opportunities full-width below when present.
+ */
+export function PdpCommissioningSnapshot({
+  cards,
+  fundingCard,
+  whereLiveApp,
+}: {
+  cards: CommissioningSnapshotCard[]
+  fundingCard?: FundingSnapshotCard | null
+  whereLiveApp: WhereLiveApp
+}) {
+  return (
     <section className="m-0" aria-label="Commissioning snapshot">
-      <div
-        className={`grid grid-cols-2 gap-3 sm:gap-4 items-stretch ${cards.length >= 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}
-      >
-        {cards.map(card => (
-          <div
-            key={card.kind}
-            className="hs-surface-card-sm flex h-full min-h-0 flex-col rounded-lg bg-white border px-3 py-3 sm:px-4 sm:py-3 shadow-sm transition-[box-shadow,transform] duration-200 hover:shadow-md hover:-translate-y-px text-center"
-            style={{
-              borderColor: 'var(--border)',
-              borderTopWidth: 4,
-              borderTopColor: accent,
-            }}
-          >
-            <div
-              className="shrink-0 text-[10px] sm:text-xs font-semibold uppercase tracking-wide"
-              style={{ color: 'var(--text-muted)' }}
-            >
-              {card.label}
-            </div>
-
-            <div className="flex min-h-0 flex-1 flex-col justify-end items-center gap-1.5 pt-2">
-              {card.kind === 'regulation' ? (
-                <>
-                  <div className="flex flex-wrap justify-center gap-1.5">
-                    {card.pills.map(p => (
-                      <span
-                        key={p.label}
-                        className={`badge badge-blue max-w-full ${p.muted ? 'opacity-50' : ''}`}
-                      >
-                        {p.label}
-                      </span>
-                    ))}
-                  </div>
-                  <span
-                    className="invisible pointer-events-none select-none block w-full min-h-[14px] text-[10px] font-normal leading-normal shrink-0"
-                    aria-hidden="true"
-                  />
-                </>
-              ) : null}
-
-              {card.kind === 'cost' ? (
-                <>
-                  <div className="flex flex-wrap items-baseline justify-center gap-x-1.5 gap-y-0.5">
-                    <span
-                      className="text-xl sm:text-lg font-bold leading-tight tracking-tight"
-                      style={{ color: 'var(--text-primary)' }}
-                    >
-                      {card.xlText}
-                    </span>
-                    {card.indicativeNote ? (
-                      <span className="text-[10px] font-normal m-0" style={{ color: 'var(--text-muted)' }}>
-                        {card.indicativeNote}
-                      </span>
-                    ) : null}
-                  </div>
-                  {card.modelPills.length > 0 ? (
-                    <div className="flex flex-wrap justify-center gap-1.5">
-                      {card.modelPills.map(text => (
-                        <SnapshotPill key={text}>{text}</SnapshotPill>
-                      ))}
-                    </div>
-                  ) : null}
-                  {card.subline ? (
-                    <p className="text-[10px] leading-snug m-0 max-w-full" style={{ color: 'var(--text-muted)' }}>
-                      {card.subline}
-                    </p>
-                  ) : null}
-                  <a
-                    href={card.href}
-                    className="text-[10px] font-normal hover:underline"
-                    style={{ color: accent }}
-                  >
-                    {card.linkText} →
-                  </a>
-                </>
-              ) : null}
-
-              {card.kind === 'funding' ? (
-                <>
-                  <div className="flex flex-wrap justify-center gap-1.5">
-                    {card.pills.map((text, i) => (
-                      <SnapshotPill key={`${i}-${text}`}>{text}</SnapshotPill>
-                    ))}
-                  </div>
-                  {card.opportunitiesLink ? (
-                    <a
-                      href={card.opportunitiesLink.href}
-                      className="text-[10px] font-normal hover:underline"
-                      style={{ color: accent }}
-                    >
-                      {card.opportunitiesLink.label} →
-                    </a>
-                  ) : card.subline ? (
-                    <p className="text-[10px] leading-snug m-0" style={{ color: 'var(--text-muted)' }}>
-                      {card.subline}
-                    </p>
-                  ) : null}
-                </>
-              ) : null}
-
-              {card.kind === 'interop' ? (
-                <>
-                  {(() => {
-                    const logoRow = interopItemsInOrder(card.items, INTEROP_LOGO_KEYS)
-                    const bottomRow = interopItemsInOrder(card.items, INTEROP_BOTTOM_KEYS)
-                    if (logoRow.length === 0 && bottomRow.length === 0) {
-                      return (
-                        <p className="text-[10px] leading-snug m-0 max-w-full" style={{ color: 'var(--text-muted)' }}>
-                          None listed in profile
-                        </p>
-                      )
-                    }
-                    return (
-                      <div className="flex w-full flex-col items-center gap-1.5" role="group" aria-label="Confirmed integrations">
-                        {logoRow.length > 0 ? (
-                          <div
-                            className="flex w-full min-w-0 max-w-full flex-wrap items-center justify-center gap-y-0.5 px-1"
-                            aria-label="NHS service integrations"
-                          >
-                            {logoRow.map((item, i) => (
-                              <Fragment key={item.key}>
-                                {i > 0 ? (
-                                  <span
-                                    className="text-[12px] font-semibold leading-none px-1.5 shrink-0"
-                                    style={{ color: '#003087' }}
-                                    aria-hidden
-                                  >
-                                    •
-                                  </span>
-                                ) : null}
-                                <span
-                                  className="text-[12px] font-semibold leading-tight text-center shrink-0"
-                                  style={{ color: '#003087' }}
-                                >
-                                  {item.name}
-                                </span>
-                              </Fragment>
-                            ))}
-                          </div>
-                        ) : null}
-                        {bottomRow.length > 0 ? (
-                          <div
-                            className="flex w-full flex-wrap justify-center gap-1"
-                            aria-label="FHIR and EMIS"
-                          >
-                            {bottomRow.map(item => (
-                              <div key={item.key} className="flex flex-col items-center">
-                                {item.textLabel ? (
-                                  <SnapshotPill>{item.textLabel}</SnapshotPill>
-                                ) : (
-                                  <span
-                                    className="text-[9px] font-semibold leading-tight text-center"
-                                    style={{ color: 'var(--text-primary)' }}
-                                  >
-                                    {item.name}
-                                  </span>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        ) : null}
-                      </div>
-                    )
-                  })()}
-                  {card.detailsLink ? (
-                    <a
-                      href={card.detailsLink.href}
-                      className="text-[10px] font-normal hover:underline"
-                      style={{ color: accent }}
-                    >
-                      {card.detailsLink.label} →
-                    </a>
-                  ) : null}
-                </>
-              ) : null}
-            </div>
-          </div>
-        ))}
+      <div className="hs-snapshot-strip__grid">
+        {cards.map(card => renderGridCard(card))}
+        <PdpWhereLiveSegment app={whereLiveApp} />
       </div>
+      {fundingCard ? (
+        <div className="hs-decision-snapshot__full-width">
+          <FundingFullWidthSegment card={fundingCard} />
+        </div>
+      ) : null}
     </section>
   )
 }

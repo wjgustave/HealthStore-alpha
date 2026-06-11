@@ -80,6 +80,28 @@
       "status": "active"
     }
   ],
+  "deployment_register": [
+    {
+      "site": "LLR ICS (16 pathways)",
+      "status": "live"
+    },
+    {
+      "site": "Leicestershire Partnership NHS Trust (since 2013)",
+      "status": "live"
+    },
+    {
+      "site": "Royal Devon University Healthcare NHS FT",
+      "status": "live"
+    },
+    {
+      "site": "Bradford District and Craven",
+      "status": "live"
+    },
+    {
+      "site": "International partners (20+ organisations, 15 countries)",
+      "status": "live"
+    }
+  ],
   "live_icbs": 3,
   "patients_covered_note": "System-wide deployment across LLR ICS. 20+ international partner organisations. Patient count not publicly confirmed for individual deployments.",
   "dtac_status": "passed_refresh_required",

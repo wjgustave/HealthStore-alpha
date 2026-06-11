@@ -12,6 +12,7 @@ import {
   getHomeCampaigns,
 } from '@/lib/data'
 import type { SessionData } from '@/lib/session'
+import { getCommissioningContextLabel } from '@/lib/commissioningContextDisplay'
 
 /** Shared data bundle for the signed-in Dashboard (V4). */
 export function getDashboardPageProps(session: SessionData) {
@@ -28,6 +29,6 @@ export function getDashboardPageProps(session: SessionData) {
     conceptFeatured: getConceptFeaturedContent(),
     featuredApp: getAppBySlug(getConceptFeaturedContent().featured_app_slug),
     displayName: session.profileDisplayName,
-    organisationName: session.profileOrganisationName,
+    organisationName: getCommissioningContextLabel(session),
   }
 }

@@ -38,6 +38,15 @@ export type ConceptGridContent = {
   commissioned: ConceptCommissionedWidget
 }
 
+export type CaseStudy = {
+  id: string
+  title: string
+  description?: string
+  image: string
+  image_alt?: string
+  href: string
+}
+
 export type ConceptFeaturedContent = {
   featured_app_slug: string
   badge_label: string

@@ -22,12 +22,15 @@ import homeEvidenceData from '@/content/home/evidence-spotlights.json'
 import homeCampaignsData from '@/content/home/campaigns.json'
 import conceptGridData from '@/content/home/concept-grid.json'
 import conceptFeaturedData from '@/content/home/concept-featured.json'
-import type { ConceptFeaturedContent, ConceptGridContent } from '@/lib/conceptHomeTypes'
+import type { CaseStudy, ConceptFeaturedContent, ConceptGridContent } from '@/lib/conceptHomeTypes'
 import type { HomeCampaignItem, HomeEvidenceSpotlight, HomeNewsItem } from '@/lib/homeContentTypes'
 import { isVisibleCondition } from '@/lib/visibleConditions'
 
 /** App JSON: `service_wrap_description` is preferred; `service_wrap_note` is legacy — PDP merges both for “Service wrap details”. Optional `named_sites`: `{ name, status: active|decommissioned|unknown }[]` for **Live sites** on PDP (info tooltip derives placeholder email via `lib/liveSiteContact.ts`); legacy `live_sites` string when structured rows absent. */
 export type App = any
+
+/** Standard fallback when profile fields are empty or unknown. */
+export const CHECK_WITH_SUPPLIER = 'Check with supplier'
 export type Funding = any
 export type Condition = any
 
@@ -52,6 +55,39 @@ export function getConceptGridContent(): ConceptGridContent {
 
 export function getConceptFeaturedContent(): ConceptFeaturedContent {
   return conceptFeaturedData as ConceptFeaturedContent
+}
+
+/** Case studies surfaced on the home band and the /case-studies page, derived from the concept-grid story + promos. */
+export function getHomeCaseStudies(): CaseStudy[] {
+  const grid = getConceptGridContent()
+  const story: CaseStudy = {
+    id: 'story',
+    title: grid.story.title,
+    image: grid.story.image,
+    image_alt: grid.story.alt,
+    href: grid.story.href,
+  }
+  const promos: CaseStudy[] = grid.promos.map((p) => ({
+    id: p.id,
+    title: p.title,
+    description: p.description,
+    image: p.image,
+    image_alt: p.image_alt,
+    href: p.href,
+  }))
+
+  const featured = getConceptFeaturedContent()
+  const featuredApp = getAppBySlug(featured.featured_app_slug)
+  const featuredStudy: CaseStudy = {
+    id: 'featured-app',
+    title: featuredApp?.app_name ? `${featuredApp.app_name}: ${featured.headline}` : featured.headline,
+    description: featured.body,
+    image: featured.right_image,
+    image_alt: featured.right_image_alt,
+    href: `/apps/${featured.featured_app_slug}`,
+  }
+
+  return [story, ...promos, featuredStudy]
 }
 
 const otherApps = otherAppsData as App[]

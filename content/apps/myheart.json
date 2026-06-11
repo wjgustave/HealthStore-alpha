@@ -324,14 +324,38 @@
   ],
   "live_icbs": 5,
   "patients_covered_note": "Over 20,800 myHeart users in the UK. In use since 2018/2019. 275,000+ rehabilitation/education sessions delivered in 2020 across the mymhealth platform.",
+  "deployment_register": [
+    {
+      "site": "Dorset County Hospital NHS FT (flagship)",
+      "condition": "Cardiac rehab",
+      "icb": "NHS Dorset ICB",
+      "location": "Acute cardiac rehab service",
+      "delivery": "CR clinic + patient's home (menu-based)",
+      "care_setting": "Secondary care",
+      "status": "live",
+      "confidence": "high",
+      "notes": "Anchor English deployment. Menu-based CR from 2004; myHeart CR module co-developed with my mhealth in 2017. Team has hit the 2028 NHS cardiac-rehab uptake targets for the past two years using myHeart."
+    },
+    {
+      "site": "Mid & South Essex (Basildon)",
+      "condition": "Cardiac rehab",
+      "icb": "NHS Mid & South Essex ICB",
+      "location": "MSE FT cardiac rehab service (Basildon)",
+      "delivery": "CR service + patient's home",
+      "care_setting": "Secondary care",
+      "status": "live",
+      "confidence": "medium",
+      "notes": "myHeart listed as a cardiac rehabilitation resource by the MSE NHS cardiac rehab service: signals active local use/recommendation."
+    }
+  ],
   "dtac_status": "passed_refresh_required",
   "dtac_note": "my mhealth platform centrally DTAC assessed and completed. Refresh required. QISMET accredited.",
   "device_class": "Class I SaMD",
   "dcb0129_status": "Covered by mymhealth platform",
   "dcb0160_boilerplate_available": true,
   "dspt_status": "Covered by mymhealth platform",
-  "iso27001": "Information not available",
-  "cyber_essentials": "Information not available",
+  "iso27001": "Check with supplier",
+  "cyber_essentials": "Check with supplier",
   "cyber_notes": "DTAC completed, QISMET accredited. Confirm current security certifications with my mhealth.",
   "gdpr_note": "Confirm data hosting and DPA terms with my mhealth Limited.",
   "target_patients": "Adults with heart failure, post-cardiac event, or post-cardiac surgery requiring cardiac rehabilitation.",
@@ -379,8 +403,8 @@
     "health-innovation-network"
   ],
   "technical_integrations": {
-    "fhir": "Information not available",
-    "emis": "Information not available",
+    "fhir": "Check with supplier",
+    "emis": "Check with supplier",
     "nhs_app": false,
     "population_health_dashboard": true,
     "device_integration": "Connects to Bluetooth devices (blood pressure monitors). Patient app and clinician app.",

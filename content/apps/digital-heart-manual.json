@@ -66,16 +66,30 @@
       "status": "active"
     }
   ],
+  "deployment_register": [
+    {
+      "site": "NHS Scotland (multiple boards)",
+      "status": "live"
+    },
+    {
+      "site": "NHS Lothian (primary)",
+      "status": "live"
+    },
+    {
+      "site": "Paper Heart Manual (UK and international reach)",
+      "status": "live"
+    }
+  ],
   "live_icbs": 3,
   "patients_covered_note": "Paper Heart Manual: approximately 14,000 patients/year. Digital Heart Manual-specific adoption data not publicly available.",
   "dtac_status": "required_not_confirmed",
   "dtac_note": "Not within central DTAC records. DTAC approval is a condition of the NICE EVA recommendation.",
   "device_class": "Class I SaMD",
-  "dcb0129_status": "Information not available",
+  "dcb0129_status": "Check with supplier",
   "dcb0160_boilerplate_available": false,
-  "dspt_status": "Information not available",
-  "iso27001": "Information not available",
-  "cyber_essentials": "Information not available",
+  "dspt_status": "Check with supplier",
+  "iso27001": "Check with supplier",
+  "cyber_essentials": "Check with supplier",
   "cyber_notes": "NHS Lothian public sector product. Operates within NHS Lothian clinical governance framework.",
   "gdpr_note": "NHS Lothian-operated product. Data governance within NHS Scotland framework.",
   "target_patients": "Adults recovering from acute MI, post-angioplasty, or post-revascularisation (angioplasty and coronary bypass without MI).",
@@ -105,7 +119,7 @@
   "service_wrap_included": false,
   "service_wrap_description": "NHS public sector product. Specialist facilitator training and programme materials are provided by the Heart Manual Department; ongoing clinical delivery remains commissioner/provider responsibility.",
   "service_wrap_note": "NHS public sector product. Specialist facilitator training provided by Heart Manual Department.",
-  "contract_note": "Information not available. Contact NHS Lothian Heart Manual Department.",
+  "contract_note": "Check with supplier. Contact NHS Lothian Heart Manual Department.",
   "expected_benefit_note": "Taylor et al. (2006) demonstrated home-based CR via Heart Manual was cost-effective vs hospital-based CR. NICE EAG model found cost-saving vs conventional rehabilitation.",
   "tariff_considerations": "Model using CR service delivery costs. Home-based delivery reduces facility and staffing costs compared to centre-based CR.",
   "provider_income_note": "Shifting patients to home-based facilitated CR may change trust-level CR activity profiles; agree locally how capacity and income align with centre-based programmes.",
@@ -123,8 +137,8 @@
     "health-innovation-network"
   ],
   "technical_integrations": {
-    "fhir": "Information not available",
-    "emis": "Information not available",
+    "fhir": "Check with supplier",
+    "emis": "Check with supplier",
     "nhs_app": false,
     "population_health_dashboard": false,
     "device_integration": "No device integration described. Web-based platform accessible via links/QR codes.",

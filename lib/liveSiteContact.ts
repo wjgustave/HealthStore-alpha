@@ -25,3 +25,10 @@ export function liveSiteContactEmail(siteName: string, index: number): string {
   if (!slug) slug = `site-${index}`
   return `${slug}.${SUFFIX}@${DOMAIN}`
 }
+
+/** Shorter placeholder for deployment register rows (first slug segment only). */
+export function liveSiteContactEmailShort(siteName: string, index: number): string {
+  const slug = slugifyLiveSiteLocalPart(siteName)
+  const local = slug.split('-').filter(Boolean)[0] || `site-${index}`
+  return `${local}@${DOMAIN}`
+}

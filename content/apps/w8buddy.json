@@ -54,6 +54,12 @@
       "status": "active"
     }
   ],
+  "deployment_register": [
+    {
+      "site": "Limited NHS deployments (specific trusts not listed in catalogue)",
+      "status": "live"
+    }
+  ],
   "live_icbs": 2,
   "patients_covered_note": "Early-stage NHS deployment. Evidence generation in progress.",
   "dtac_status": "passed",
