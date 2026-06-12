@@ -27,7 +27,7 @@
   ],
   "commissioned": {
     "title": "Commissioned apps",
-    "illustrative_note": "Illustrative metrics for prototype demonstration — not live data.",
+    "illustrative_note": "Illustrative metrics for prototype demonstration.",
     "app_display_name": "OmniCOPD",
     "status_label": "Live",
     "status_variant": "live",

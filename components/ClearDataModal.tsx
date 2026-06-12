@@ -10,7 +10,7 @@ type Dataset = 'bookmarks' | 'eoi' | 'all'
 
 const DATASET_LABELS: Record<Dataset, string> = {
   bookmarks: 'Saved apps',
-  eoi: 'Expressions of interest',
+  eoi: 'EOI record',
   all: 'All data',
 }
 

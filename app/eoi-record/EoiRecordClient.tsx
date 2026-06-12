@@ -26,7 +26,7 @@ function formatDateTime(iso: string) {
   }
 }
 
-export default function ExpressInterestHistoryClient({
+export default function EoiRecordClient({
   appSlugById,
 }: {
   appSlugById: Record<string, string>
@@ -62,23 +62,12 @@ export default function ExpressInterestHistoryClient({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-      <PageBreadcrumb items={[{ label: 'Expressions of interest' }]} />
+      <PageBreadcrumb items={[{ label: 'EOI record' }]} />
 
       <div className="mb-8">
-        <h1
-          className="mb-2"
-          style={{
-            fontFamily: 'Frutiger, Arial, sans-serif',
-            fontWeight: 700,
-            fontSize: 'var(--text-page-title)',
-            color: 'var(--text-primary)',
-          }}
-        >
-          Expressions of interest
-        </h1>
+        <h1 className="page-title-h1 mb-2">EOI record</h1>
         <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', maxWidth: '42rem' }}>
-          A shared record of every expression of interest submitted by your organisation — which app, who submitted it,
-          and when. Visible to everyone in your organisation.
+          A shared record of submitted expression of interest.
         </p>
       </div>
 

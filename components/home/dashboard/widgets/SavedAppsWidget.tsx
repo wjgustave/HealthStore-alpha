@@ -32,7 +32,7 @@ export function SavedAppsWidget({ apps, limit = 4 }: { apps: App[]; limit?: numb
         <p className="flex-1 text-sm" style={{ color: 'var(--text-muted)' }}>Loading…</p>
       ) : count === 0 ? (
         <p className="flex-1 text-sm" style={{ color: 'var(--text-muted)' }}>
-          You have not saved any apps yet. Browse the catalogue and save products to revisit later.
+          You have not saved any apps yet.
         </p>
       ) : (
         <ul className="m-0 min-h-0 flex-1 list-none space-y-3 p-0">

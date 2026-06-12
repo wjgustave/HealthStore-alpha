@@ -30,7 +30,7 @@ export function EoiActivityWidget({ limit = 5 }: { limit?: number }) {
         <p className="flex-1 text-sm" style={{ color: 'var(--text-muted)' }}>Loading…</p>
       ) : count === 0 ? (
         <p className="flex-1 text-sm" style={{ color: 'var(--text-muted)' }}>
-          No expressions of interest yet. When you or a colleague expresses interest in an app, it appears here.
+          No expressions of interest yet.
         </p>
       ) : (
         <ul className="m-0 min-h-0 flex-1 list-none space-y-3 p-0">
@@ -48,11 +48,11 @@ export function EoiActivityWidget({ limit = 5 }: { limit?: number }) {
       )}
 
       <Link
-        href="/express-interest"
+        href="/eoi-record"
         className="mt-5 flex shrink-0 items-center justify-between rounded-lg border px-4 py-3 text-sm font-semibold transition-colors hover:bg-slate-50"
         style={{ borderColor: 'var(--border)', color: '#005EB8' }}
       >
-        View all expressions of interest
+        View EOI record
         <ChevronRight className="h-4 w-4" aria-hidden />
       </Link>
     </div>

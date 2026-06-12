@@ -1,12 +1,6 @@
-import { getAllAppsUnfiltered } from '@/lib/data'
-import ExpressInterestHistoryClient from './ExpressInterestHistoryClient'
+import { redirect } from 'next/navigation'
 
-export const metadata = { title: 'Expressions of interest — HealthStore' }
-
-export default function ExpressInterestPage() {
-  const appSlugById: Record<string, string> = {}
-  for (const app of getAllAppsUnfiltered()) {
-    appSlugById[app.id] = app.slug
-  }
-  return <ExpressInterestHistoryClient appSlugById={appSlugById} />
+/** Legacy URL — redirects to /eoi-record. */
+export default function ExpressInterestRedirectPage() {
+  redirect('/eoi-record')
 }

@@ -1,3 +1,6 @@
+import Link from 'next/link'
+import { LayoutGrid } from 'lucide-react'
+import HomeHeroSearch from '@/components/home/HomeHeroSearch'
 import { DashboardWelcome } from './DashboardWelcome'
 import { SavedAppsWidget } from './widgets/SavedAppsWidget'
 import { CommissionedAppsWidget } from './widgets/CommissionedAppsWidget'
@@ -12,6 +15,21 @@ export function DashboardV4(props: DashboardVariantProps) {
   return (
     <div className="flex flex-col gap-12 md:gap-14">
       <DashboardWelcome organisationName={organisationName} />
+
+      <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+        <HomeHeroSearch />
+        <span className="text-lg font-bold sm:px-1" style={{ color: 'var(--text-secondary)' }}>
+          Or
+        </span>
+        <Link
+          href="/apps"
+          className="inline-flex min-h-[52px] shrink-0 items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-colors hover:bg-slate-50"
+          style={{ border: '1px solid var(--border)', color: '#005EB8', background: '#fff' }}
+        >
+          <LayoutGrid className="h-4 w-4" aria-hidden />
+          Find apps
+        </Link>
+      </div>
 
       <DashboardStatTiles commissionedStatus={conceptGrid.commissioned.status_label} />
 
