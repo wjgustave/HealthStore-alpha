@@ -92,71 +92,15 @@ export default function Nav({
     <header className="sticky top-0 z-50 border-b" style={{ borderColor: 'var(--border)', background: 'transparent' }}>
       <div className="bg-white">
         <div style={aiAdvisorBlueStripStyle} />
-        <nav className={aiAdvisorNavBarClass}>
-          <div className="hidden md:flex flex-shrink-0 items-center px-4 sm:px-5">
+        <nav className={`relative ${aiAdvisorNavBarClass}`}>
+          <div className="absolute inset-y-0 left-0 z-10 hidden items-center px-4 sm:px-5 md:flex">
             <span className="badge badge-prototype">Prototype</span>
-          </div>
-          <div className="mx-auto flex min-w-0 flex-1 max-w-7xl items-center justify-between px-4 sm:px-6">
-            <Link
-              href={isLoggedIn ? '/dashboard' : '/'}
-              className="flex items-center gap-2 font-bold text-base"
-              style={{ color: 'var(--nhs-dark)', fontFamily: 'Frutiger, Arial, sans-serif' }}
-            >
-              <Image src="/logos/nhs-blue-alt.svg" alt="" width={56} height={22} className="flex-shrink-0" />
-              <span>HealthStore</span>
-            </Link>
-            <div className="hidden md:flex items-center gap-1">
-              <Link href="/"
-                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-                style={navItemStyle(homePageActive)}>
-                Home
-              </Link>
-              <Link href="/news"
-                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-                style={navItemStyle(newsActive)}>
-                News
-              </Link>
-              <Link href="/campaigns"
-                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-                style={navItemStyle(campaignsActive)}>
-                Campaigns
-              </Link>
-              <Link href="/case-studies"
-                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-                style={navItemStyle(caseStudiesActive)}>
-                Case studies
-              </Link>
-              {isLoggedIn ? (
-                <button onClick={handleLogout}
-                  className="ml-2 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors hover:bg-gray-100"
-                  style={{ color: 'var(--text-muted)' }}>
-                  <LogOut className="w-3.5 h-3.5" />
-                  Sign out
-                </button>
-              ) : (
-                <Link
-                  href="/login"
-                  className="ml-2 inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-                  style={{ color: 'var(--nhs-blue)', background: path === '/login' ? '#E6F0FB' : 'transparent' }}
-                >
-                  Sign in
-                </Link>
-              )}
-            </div>
-            <button className="md:hidden p-2 rounded transition-colors hover:bg-gray-100" onClick={() => setMobileOpen(o => !o)} aria-label="Toggle menu">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                {mobileOpen
-                  ? <><path d="M4 4l12 12M16 4L4 16" stroke="#1A2332" strokeWidth="1.5" strokeLinecap="round"/></>
-                  : <><rect x="2" y="5" width="16" height="1.5" rx="0.75" fill="#1A2332"/><rect x="2" y="9.25" width="16" height="1.5" rx="0.75" fill="#1A2332"/><rect x="2" y="13.5" width="16" height="1.5" rx="0.75" fill="#1A2332"/></>
-                }
-              </svg>
-            </button>
           </div>
           {isLoggedIn && onOpenAiPanel && (
             <button
               type="button"
               onClick={onOpenAiPanel}
-              className={`hidden md:flex ${aiAdvisorStripButtonClass} border-l`}
+              className={`absolute inset-y-0 right-0 z-10 hidden md:flex ${aiAdvisorStripButtonClass} border-l`}
               style={{ borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
               aria-label="Open AI Advisor panel"
             >
@@ -164,6 +108,64 @@ export default function Nav({
               AI Advisor
             </button>
           )}
+          <div className="w-full px-4 sm:px-6">
+            <div className="mx-auto flex h-14 max-w-7xl items-center justify-between">
+              <Link
+                href={isLoggedIn ? '/dashboard' : '/'}
+                className="flex min-w-0 items-center gap-2 font-bold text-base"
+                style={{ color: 'var(--nhs-dark)', fontFamily: 'Frutiger, Arial, sans-serif' }}
+              >
+                <Image src="/logos/nhs-blue-alt.svg" alt="" width={56} height={22} className="flex-shrink-0" />
+                <span>HealthStore</span>
+              </Link>
+              <div className="hidden md:flex items-center gap-1">
+                <Link href="/"
+                  className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                  style={navItemStyle(homePageActive)}>
+                  Home
+                </Link>
+                <Link href="/news"
+                  className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                  style={navItemStyle(newsActive)}>
+                  News
+                </Link>
+                <Link href="/campaigns"
+                  className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                  style={navItemStyle(campaignsActive)}>
+                  Campaigns
+                </Link>
+                <Link href="/case-studies"
+                  className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                  style={navItemStyle(caseStudiesActive)}>
+                  Case studies
+                </Link>
+                {isLoggedIn ? (
+                  <button onClick={handleLogout}
+                    className="ml-2 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors hover:bg-gray-100"
+                    style={{ color: 'var(--text-muted)' }}>
+                    <LogOut className="w-3.5 h-3.5" />
+                    Sign out
+                  </button>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="ml-2 inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                    style={{ color: 'var(--nhs-blue)', background: path === '/login' ? '#E6F0FB' : 'transparent' }}
+                  >
+                    Sign in
+                  </Link>
+                )}
+              </div>
+              <button className="md:hidden p-2 rounded transition-colors hover:bg-gray-100" onClick={() => setMobileOpen(o => !o)} aria-label="Toggle menu">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  {mobileOpen
+                    ? <><path d="M4 4l12 12M16 4L4 16" stroke="#1A2332" strokeWidth="1.5" strokeLinecap="round"/></>
+                    : <><rect x="2" y="5" width="16" height="1.5" rx="0.75" fill="#1A2332"/><rect x="2" y="9.25" width="16" height="1.5" rx="0.75" fill="#1A2332"/><rect x="2" y="13.5" width="16" height="1.5" rx="0.75" fill="#1A2332"/></>
+                  }
+                </svg>
+              </button>
+            </div>
+          </div>
         </nav>
       </div>
       {isLoggedIn ? (

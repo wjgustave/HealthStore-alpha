@@ -71,7 +71,7 @@ export default function AppShell({
       </CompareBasketProvider>
       <BackToTop />
       <footer
-        className="mt-20 border-t pt-10 px-6 pb-[calc(2.5rem+30px)]"
+        className="mt-20 border-t px-4 pt-10 pb-[calc(2.5rem+30px)] sm:px-6"
         style={{ borderColor: 'var(--border)', background: '#fff' }}
       >
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
