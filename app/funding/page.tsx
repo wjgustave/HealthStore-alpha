@@ -54,7 +54,7 @@ export default function FundingPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-      <PageBreadcrumb items={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Funding directory' }]} />
+      <PageBreadcrumb items={[{ label: 'Funding directory' }]} />
       <div className="mb-10">
         <h1 className="page-title-h1">Funding directory</h1>
         <p

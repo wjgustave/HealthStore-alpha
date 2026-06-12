@@ -83,7 +83,7 @@ export default function CompareClient({ allApps }: Props) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-      <PageBreadcrumb items={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Comparison tool' }]} />
+      <PageBreadcrumb items={[{ label: 'Comparison tool' }]} />
 
       <div className="mb-8">
         <h1 className="page-title-h1">Comparison tool</h1>

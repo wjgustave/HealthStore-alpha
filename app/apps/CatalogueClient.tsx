@@ -193,7 +193,6 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <PageBreadcrumb
         items={[
-          { label: 'Dashboard', href: '/dashboard' },
           { label: 'Find apps', href: '/apps' },
           { label: 'Condition catalogue' },
         ]}

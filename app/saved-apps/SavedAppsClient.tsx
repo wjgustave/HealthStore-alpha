@@ -90,7 +90,7 @@ export default function SavedAppsClient({ allApps }: Props) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-      <PageBreadcrumb items={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Find apps', href: '/apps' }, { label: 'Saved apps' }]} />
+      <PageBreadcrumb items={[{ label: 'Find apps', href: '/apps' }, { label: 'Saved apps' }]} />
 
       <div className="mb-8">
         <h1

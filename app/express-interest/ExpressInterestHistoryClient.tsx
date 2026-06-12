@@ -62,7 +62,7 @@ export default function ExpressInterestHistoryClient({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-      <PageBreadcrumb items={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Expressions of interest' }]} />
+      <PageBreadcrumb items={[{ label: 'Expressions of interest' }]} />
 
       <div className="mb-8">
         <h1
