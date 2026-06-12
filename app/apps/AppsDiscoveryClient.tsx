@@ -59,7 +59,7 @@ export default function AppsDiscoveryClient({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-      <PageBreadcrumb items={[{ label: 'Find apps' }]} />
+      <PageBreadcrumb items={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Find apps' }]} />
       <div className="mb-10 max-w-3xl">
         <h1 className="page-title-h1 mb-3">Find apps</h1>
         <div className="space-y-2 text-balance" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', lineHeight: 1.6 }}>

@@ -67,6 +67,9 @@ export default function Nav({
   const browseAppsActive = path === '/apps' || path === '/apps/condition-catalogue' || path === '/apps/browse'
   const dashboardActive = path === '/dashboard'
   const homePageActive = path === '/'
+  const newsActive = path === '/news'
+  const campaignsActive = path === '/campaigns'
+  const caseStudiesActive = path === '/case-studies'
   const canOpenOrgSettings =
     isLoggedIn &&
     !!commissioningContextLabel &&
@@ -90,6 +93,9 @@ export default function Nav({
       <div className="bg-white">
         <div style={aiAdvisorBlueStripStyle} />
         <nav className={aiAdvisorNavBarClass}>
+          <div className="hidden md:flex flex-shrink-0 items-center px-4 sm:px-5">
+            <span className="badge badge-prototype">Prototype</span>
+          </div>
           <div className="mx-auto flex min-w-0 flex-1 max-w-7xl items-center justify-between px-4 sm:px-6">
             <Link
               href={isLoggedIn ? '/dashboard' : '/'}
@@ -100,37 +106,26 @@ export default function Nav({
               <span>HealthStore</span>
             </Link>
             <div className="hidden md:flex items-center gap-1">
-              {isLoggedIn && (
-                <>
-                  <Link
-                    href="/"
-                    className="inline-flex items-center justify-center rounded-md p-1.5 transition-colors"
-                    style={navItemStyle(homePageActive)}
-                    aria-label="Home page"
-                    title="Home page"
-                  >
-                    <Home className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    href="/dashboard"
-                    className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-                    style={navItemStyle(dashboardActive)}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link href="/apps"
-                    className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-                    style={navItemStyle(browseAppsActive)}>
-                    Find apps
-                  </Link>
-                  <CompareNavLink path={path} className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors" />
-                  <Link href="/funding"
-                    className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-                    style={navItemStyle(path === '/funding')}>
-                    Funding directory
-                  </Link>
-                </>
-              )}
+              <Link href="/"
+                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                style={navItemStyle(homePageActive)}>
+                Home
+              </Link>
+              <Link href="/news"
+                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                style={navItemStyle(newsActive)}>
+                News
+              </Link>
+              <Link href="/campaigns"
+                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                style={navItemStyle(campaignsActive)}>
+                Campaigns
+              </Link>
+              <Link href="/case-studies"
+                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                style={navItemStyle(caseStudiesActive)}>
+                Case studies
+              </Link>
               {isLoggedIn ? (
                 <button onClick={handleLogout}
                   className="ml-2 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors hover:bg-gray-100"
@@ -147,7 +142,6 @@ export default function Nav({
                   Sign in
                 </Link>
               )}
-              <span className="ml-2 badge badge-prototype">Prototype</span>
             </div>
             <button className="md:hidden p-2 rounded transition-colors hover:bg-gray-100" onClick={() => setMobileOpen(o => !o)} aria-label="Toggle menu">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -172,7 +166,7 @@ export default function Nav({
           )}
         </nav>
       </div>
-      {commissioningContextLabel ? (
+      {isLoggedIn ? (
         <div
           className="border-t px-4 sm:px-6 py-2"
           style={{
@@ -184,7 +178,7 @@ export default function Nav({
             {canOpenOrgSettings ? (
               <Link
                 href="/org-settings"
-                className="group inline-flex min-w-0 flex-1 items-center gap-1.5 text-sm leading-snug hover:underline"
+                className="group inline-flex min-w-0 items-center gap-1.5 text-sm leading-snug hover:underline"
                 style={{ color: '#425563', fontFamily: 'Frutiger, Arial, sans-serif' }}
                 aria-label={`Organisation settings for ${commissioningContextLabel}`}
                 title="Edit organisation settings"
@@ -195,27 +189,63 @@ export default function Nav({
                   style={{ color: 'var(--nhs-blue)' }}
                 />
               </Link>
-            ) : (
+            ) : commissioningContextLabel ? (
               <p
-                className="min-w-0 flex-1 text-sm leading-snug"
+                className="min-w-0 text-sm leading-snug"
                 style={{ color: '#425563', fontFamily: 'Frutiger, Arial, sans-serif' }}
               >
                 {commissioningContextLabel}
               </p>
+            ) : (
+              <span aria-hidden />
             )}
+            <div className="hidden md:flex items-center gap-1">
+              <Link href="/dashboard"
+                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                style={navItemStyle(dashboardActive)}>
+                Dashboard
+              </Link>
+              <Link href="/apps"
+                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                style={navItemStyle(browseAppsActive)}>
+                Find apps
+              </Link>
+              <CompareNavLink path={path} className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors" />
+              <Link href="/funding"
+                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                style={navItemStyle(path === '/funding')}>
+                Funding directory
+              </Link>
+            </div>
           </div>
         </div>
       ) : null}
       {mobileOpen && (
         <div className="md:hidden border-t px-4 py-3 flex flex-col gap-1" style={{ borderColor: 'var(--border)', background: '#fff' }}>
+          <Link href="/" onClick={() => setMobileOpen(false)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium"
+            style={navItemStyle(homePageActive)}>
+            <Home className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--nhs-blue)' }} />
+            Home
+          </Link>
+          <Link href="/news" onClick={() => setMobileOpen(false)}
+            className="px-3 py-2 rounded-md text-sm font-medium"
+            style={navItemStyle(newsActive)}>
+            News
+          </Link>
+          <Link href="/campaigns" onClick={() => setMobileOpen(false)}
+            className="px-3 py-2 rounded-md text-sm font-medium"
+            style={navItemStyle(campaignsActive)}>
+            Campaigns
+          </Link>
+          <Link href="/case-studies" onClick={() => setMobileOpen(false)}
+            className="px-3 py-2 rounded-md text-sm font-medium"
+            style={navItemStyle(caseStudiesActive)}>
+            Case studies
+          </Link>
           {isLoggedIn && (
             <>
-              <Link href="/" onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium"
-                style={navItemStyle(homePageActive)}>
-                <Home className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--nhs-blue)' }} />
-                Home page
-              </Link>
+              <div className="my-1 border-t" style={{ borderColor: 'var(--border)' }} />
               <Link href="/dashboard" onClick={() => setMobileOpen(false)}
                 className="px-3 py-2 rounded-md text-sm font-medium"
                 style={navItemStyle(dashboardActive)}>

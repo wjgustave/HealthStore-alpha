@@ -324,6 +324,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
         <PdpShareRegion shareKey="breadcrumb" label="Browse trail" excludeFromShareUi className="mb-4">
           <PageBreadcrumb
             items={[
+              { label: 'Dashboard', href: '/dashboard' },
               { label: 'Find apps', href: '/apps' },
               { label: 'Condition catalogue', href: '/apps/condition-catalogue' },
               { label: app.app_name },

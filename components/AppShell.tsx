@@ -85,8 +85,12 @@ export default function AppShell({
             </p>
           </div>
           <div className="flex flex-wrap gap-6 text-xs" style={{ color: 'var(--text-muted)' }}>
-            <Link href="/apps" className="hover:underline">Find apps</Link>
-            <Link href="/funding" className="hover:underline">Funding directory</Link>
+            {isLoggedIn && (
+              <>
+                <Link href="/apps" className="hover:underline">Find apps</Link>
+                <Link href="/funding" className="hover:underline">Funding directory</Link>
+              </>
+            )}
             <Link href="/cookies" className="hover:underline">Cookies</Link>
             {isLoggedIn && (
               <button
