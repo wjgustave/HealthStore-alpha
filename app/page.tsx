@@ -8,6 +8,7 @@ import {
 } from '@/lib/data'
 import { getSession } from '@/lib/session'
 import HomePublicContent from '@/components/home/HomePublicContent'
+import HomeHeroSearch from '@/components/home/HomeHeroSearch'
 
 /** Public marketing homepage — same experience for signed-out and signed-in visitors. */
 export default async function HomePage() {
@@ -69,17 +70,12 @@ export default async function HomePage() {
               </p>
               {isLoggedIn ? (
                 <div className="flex flex-wrap items-center gap-4">
-                  <Link
-                    href="/dashboard"
-                    className="inline-flex min-h-[52px] items-center justify-center rounded-xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-95"
-                    style={{ background: '#fff', color: '#003087' }}
-                  >
-                    Go to Dashboard
-                  </Link>
+                  <HomeHeroSearch />
+                  <span className="text-lg font-bold text-white">Or</span>
                   <Link
                     href="/apps"
-                    className="text-base font-semibold underline-offset-2 hover:underline"
-                    style={{ color: '#fff' }}
+                    className="inline-flex min-h-[52px] items-center justify-center rounded-xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-95"
+                    style={{ background: '#fff', color: '#003087' }}
                   >
                     Find apps
                   </Link>
