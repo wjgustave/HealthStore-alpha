@@ -20,6 +20,8 @@ type Props = {
   selected: App[]
   lens: CompareLensId
   differencesOnly: boolean
+  /** R7 UX-04: turn the "Differences only" filter back off from the empty state. */
+  onShowAllRows?: () => void
 }
 
 function rowHasDifference(row: CompareRowDef, apps: App[]): boolean {
@@ -28,7 +30,7 @@ function rowHasDifference(row: CompareRowDef, apps: App[]): boolean {
   return new Set(values).size > 1
 }
 
-export default function CompareWorkspaceView({ selected, lens, differencesOnly }: Props) {
+export default function CompareWorkspaceView({ selected, lens, differencesOnly, onShowAllRows }: Props) {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {}
     for (const g of COMPARE_GROUPS) {
@@ -48,6 +50,18 @@ export default function CompareWorkspaceView({ selected, lens, differencesOnly }
     return count
   }, [differencesOnly, selected, openGroups])
 
+  // R7 UX-04: total differing rows across all groups (ignoring open/closed) so we can show a
+  // real empty state instead of a blank workspace when "Differences only" hides everything.
+  const differingRowsTotal = useMemo(() => {
+    let count = 0
+    for (const group of COMPARE_GROUPS) {
+      count += getRowsForGroup(group.id).filter(row => rowHasDifference(row, selected)).length
+    }
+    return count
+  }, [selected])
+
+  const noDifferences = differencesOnly && selected.length >= 2 && differingRowsTotal === 0
+
   function toggleGroup(groupId: string) {
     setOpenGroups(prev => ({ ...prev, [groupId]: !prev[groupId] }))
   }
@@ -55,24 +69,48 @@ export default function CompareWorkspaceView({ selected, lens, differencesOnly }
   return (
     <div className="hs-compare-workspace">
       <p className="sr-only" aria-live="polite" aria-atomic="true">
-        {differencesOnly
-          ? `Showing rows with differences. ${visibleRowCount} comparison dimensions visible.`
-          : `Showing all comparison dimensions. ${visibleRowCount} rows across ${COMPARE_GROUPS.length} groups.`}
+        {noDifferences
+          ? 'The selected DTx apps are identical on every comparison dimension. Showing the differences-only filter empty state.'
+          : differencesOnly
+            ? `Showing rows with differences. ${visibleRowCount} comparison dimensions visible.`
+            : `Showing all comparison dimensions. ${visibleRowCount} rows across ${COMPARE_GROUPS.length} groups.`}
       </p>
 
-      <div className="hs-compare-workspace__groups">
-        {COMPARE_GROUPS.map(group => (
-          <CompareWorkspaceGroup
-            key={group.id}
-            group={group}
-            selected={selected}
-            isOpen={openGroups[group.id] ?? isDecisionCriticalGroup(group.id)}
-            onToggle={() => toggleGroup(group.id)}
-            differencesOnly={differencesOnly}
-            emphasized={groupMatchesLens(group.id, lens)}
-          />
-        ))}
-      </div>
+      {noDifferences ? (
+        <div
+          className="hs-compare-workspace__empty rounded-xl border bg-white px-6 py-12 text-center"
+          style={{ borderColor: 'var(--border)' }}
+        >
+          <p className="mx-auto mb-1 max-w-md font-semibold" style={{ color: 'var(--text-primary)' }}>
+            No differences to show
+          </p>
+          <p className="mx-auto mb-5 max-w-md text-sm" style={{ color: 'var(--text-muted)' }}>
+            The selected DTx apps match on every comparison dimension. Turn off the filter to see the full comparison.
+          </p>
+          <button
+            type="button"
+            onClick={onShowAllRows}
+            className="inline-flex min-h-[44px] items-center justify-center rounded-lg border px-5 text-sm font-semibold transition-colors hover:bg-[#E6F0FB]"
+            style={{ borderColor: 'var(--nhs-blue)', color: 'var(--nhs-blue)' }}
+          >
+            Show all rows
+          </button>
+        </div>
+      ) : (
+        <div className="hs-compare-workspace__groups">
+          {COMPARE_GROUPS.map(group => (
+            <CompareWorkspaceGroup
+              key={group.id}
+              group={group}
+              selected={selected}
+              isOpen={openGroups[group.id] ?? isDecisionCriticalGroup(group.id)}
+              onToggle={() => toggleGroup(group.id)}
+              differencesOnly={differencesOnly}
+              emphasized={groupMatchesLens(group.id, lens)}
+            />
+          ))}
+        </div>
+      )}
 
       <div className="hs-compare-summary-row hs-compare-workspace__footer mt-6">
         <div className="hs-compare-summary-row__spacer" aria-hidden="true" />

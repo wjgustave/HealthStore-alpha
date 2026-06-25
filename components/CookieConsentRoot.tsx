@@ -27,7 +27,11 @@ export default function CookieConsentRoot({ children }: { children: React.ReactN
 
   return (
     <>
-      {/* Opt-in default: Hotjar runs while the banner is shown (undecided) unless the user has rejected. */}
+      {/*
+        Opt-out policy (Round 4, CONSENT-1 B): analytics run while the banner is still
+        showing (state 'undecided') and after the user accepts. They are only switched
+        off once the user explicitly rejects. See /cookies for the user-facing wording.
+      */}
       {state === 'analytics' || state === 'undecided' ? <HotjarWhenConsented /> : null}
       {state === 'undecided' ? <CookieBanner onAccept={accept} onReject={reject} /> : null}
       {children}

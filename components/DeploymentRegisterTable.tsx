@@ -35,7 +35,7 @@ function DetailContent({ row, index }: { row: DeploymentRow; index: number }) {
       ) : null}
       <p className="m-0">
         <strong className="font-semibold text-[var(--text-primary)]">Contact: </strong>
-        <a href={`mailto:${email}`} className="font-medium underline" style={{ color: '#005EB8' }}>
+        <a href={`mailto:${email}`} className="font-medium underline" style={{ color: 'var(--nhs-blue)' }}>
           {email}
         </a>
       </p>
@@ -168,7 +168,7 @@ export function DeploymentRegisterTable({ rows }: { rows: DeploymentRow[] }) {
                   aria-expanded={open}
                   onClick={() => toggle(i)}
                   className="mt-3 flex items-center gap-1 text-xs font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFD800]"
-                  style={{ color: '#005EB8' }}
+                  style={{ color: 'var(--nhs-blue)' }}
                 >
                   {open ? 'Less' : 'More'}
                   <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden />
@@ -230,7 +230,7 @@ function RowGroup({
               aria-controls={detailId}
               onClick={() => onToggle(index)}
               className="flex items-center gap-1 rounded p-1 text-xs font-medium hover:bg-[#F7F9FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFD800]"
-              style={{ color: '#005EB8' }}
+              style={{ color: 'var(--nhs-blue)' }}
             >
               {open ? 'Less' : 'More'}
               <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden />

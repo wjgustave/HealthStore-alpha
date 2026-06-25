@@ -6,7 +6,10 @@ import HotjarRouteTracker from '@/components/HotjarRouteTracker'
 import { HOTJAR_SITE_ID, HOTJAR_SV } from '@/lib/hotjarSite'
 
 /**
- * Loads Hotjar only after the user accepts analytics. Include inline bootstrap + SPA route tracker.
+ * Loads Hotjar (inline bootstrap + SPA route tracker). Mounting is gated by
+ * `CookieConsentRoot`, which follows an opt-out policy: analytics run while the
+ * consent banner is still showing and after acceptance, and are only withheld
+ * once the user explicitly rejects.
  */
 export default function HotjarWhenConsented() {
   return (

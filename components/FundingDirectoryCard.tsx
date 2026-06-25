@@ -85,7 +85,7 @@ export function FundingDirectoryCard({ f, apps }: { f: FundingDirectoryRecord; a
         </div>
 
         {f.total_value ? (
-          <p className="mb-3 m-0 text-[16px] font-bold leading-tight" style={{ color: 'var(--nhs-blue, #005EB8)' }}>
+          <p className="mb-3 m-0 text-[16px] font-bold leading-tight" style={{ color: 'var(--nhs-blue)' }}>
             {f.total_value}
           </p>
         ) : (
@@ -122,7 +122,7 @@ export function FundingDirectoryCard({ f, apps }: { f: FundingDirectoryRecord; a
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 py-1 text-sm font-semibold transition-colors hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-            style={{ color: 'var(--nhs-blue, #005EB8)', outlineColor: 'var(--nhs-blue, #005EB8)' }}
+            style={{ color: 'var(--nhs-blue)', outlineColor: 'var(--nhs-blue)' }}
           >
             <span>{f.external_url_label ?? 'More information'}</span>
             <span aria-hidden className="translate-y-px">

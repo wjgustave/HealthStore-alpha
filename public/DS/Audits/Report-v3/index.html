@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Round 3 plan (v3) — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="report-v3">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Report &middot; v3</p>
+      <h1 class="ds-page-title">Round 3 &mdash; component consolidation plan</h1>
+      <p class="ds-lede">
+        Round 3 consolidates the repeated <strong>containers, fields, pills and collapsibles</strong> catalogued in the
+        <a href="/DS/Report-v1/index.html">v1 audit</a>, now that the         Round 2 primitives (<code>Button</code>,
+        <code>Modal</code>, radius + colour tokens) shipped. Like <a href="/DS/Report-v2/index.html">v2</a>, this was a
+        <strong>decision document</strong>: each section presented <strong>live Option A / B choices</strong> with a
+        recommended default and a migration map. The choices below have now been <strong>applied and shipped</strong> &mdash;
+        see the <a href="#decision-log">decision log</a> and <a href="#shipped">what shipped</a>.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Round</div><div class="ds-meta__v">3 &middot; component consolidation</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Status</div><div class="ds-meta__v"><span class="ds-status ds-status--canonical">Shipped</span></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Scope</div><div class="ds-meta__v">SurfaceCard/Widget &middot; FormField/Auth &middot; Badges/pills &middot; Collapsible</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Implementation</div><div class="ds-meta__v">React <code>components/ui/</code> + <code>globals.css</code></div></div>
+    </div>
+
+    <h2>1. Round 3 at a glance</h2>
+    <table class="ds-table">
+      <thead><tr><th>Item</th><th>Priority</th><th>Consolidates</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><strong>SurfaceCard</strong> + <strong>Widget</strong> shell</td><td><span class="ds-prio ds-prio--p2">P2</span></td><td>dashboard widgets, news, campaigns, case-study cards</td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td><strong>FormField</strong> + <strong>AuthCard</strong> shell</td><td><span class="ds-prio ds-prio--p2">P2</span></td><td>login, select-entity, EOI, org-settings, filters</td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td><strong>Badge / pill</strong> consolidation</td><td><span class="ds-prio ds-prio--p2">P2</span></td><td>EditorialPills, ConditionTag/TopicPill, AI &amp; filter chips</td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td>Unify <strong>Collapsible</strong> variants</td><td><span class="ds-prio ds-prio--p3">P3</span></td><td>CollapsibleSection, CollapsibleInline, ProductPageExpander</td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+      </tbody>
+    </table>
+    <p>
+      How to read this report: each section presents the <strong>Option A / B</strong> that was on the table (rendered
+      live using the DS preview classes) and the migration map that was applied. Every section is now
+      <span class="ds-status ds-status--canonical">Shipped</span>; the chosen option is recorded in the
+      <a href="#decision-log">decision log</a>.
+    </p>
+
+    <h2>2. What already exists to build on</h2>
+    <p>Round 3 mostly promotes existing building blocks rather than inventing new ones.</p>
+    <table class="ds-table">
+      <thead><tr><th>Already shipped</th><th>Where</th><th>Round 3 use</th></tr></thead>
+      <tbody>
+        <tr><td><code>.hs-surface-card</code> / <code>-sm</code> (shadow), <code>.app-card</code></td><td><code>app/globals.css</code></td><td>Base for the SurfaceCard decision (&sect;3)</td></tr>
+        <tr><td><code>.ds-field/.ds-input/.ds-select/.ds-textarea</code> (DS preview only)</td><td><code>/DS/assets/ds.css</code></td><td>Template for the FormField decision (&sect;4)</td></tr>
+        <tr><td><code>.badge</code> + colour modifiers + domain wrappers</td><td><code>components/Badges.tsx</code></td><td>Canonical target for pills (&sect;5)</td></tr>
+        <tr><td>Radius <code>@theme</code> scale, <code>nhs-blue</code> utilities, <code>Button</code></td><td>Round 2</td><td>Reused by every component below</td></tr>
+      </tbody>
+    </table>
+    <h2 id="card">3. SurfaceCard + Widget shell <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      The product has good surface classes (<code>.hs-surface-card</code>, <code>.app-card</code>) but they are
+      <strong>shadow-only</strong> &mdash; every consumer still hand-rolls <code>rounded-xl border bg-white p-5</code>
+      alongside them. Worse, the dashboard widgets repeat an identical <em>header + body + footer-link</em> shell.
+    </p>
+
+    <h3>3.1 Current duplication</h3>
+    <div class="ds-example">
+      <div class="ds-example__stack" style="gap:8px;max-width:560px">
+        <div class="ds-space-row"><span class="ds-space-meta">hand-rolled <code>rounded-xl border bg-white shadow-*</code></span><span class="ds-space-bar" style="width:100%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta">duplicated widget shells (Saved, EOI, Commissioned, QuickLinks, NewsList)</span><span class="ds-space-bar" style="width:55%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta">editorial / marketing cards (case-study, concept steps, funding)</span><span class="ds-space-bar" style="width:60%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta"><code>.glass-card</code>/<code>.glass-panel</code> &mdash; defined, never imported</span><span class="ds-space-bar" style="width:12%"></span></div>
+      </div>
+    </div>
+
+    <h3>3.2 Choice CARD-1 &mdash; how SurfaceCard is delivered</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; extend the CSS class (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0 0 8px">Make <code>.hs-surface-card</code> own border + radius + padding (with <code>--sm</code> elevation + a padding modifier). Existing markup like <code>&lt;div class="hs-surface-card rounded-xl border p-5"&gt;</code> just drops the redundant utilities. Works in server components, smallest churn.</p>
+<pre class="ds-code" style="margin:0"><code>.hs-surface-card { border:1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 20px;
+  box-shadow: var(--shadow-md); background: var(--card); }</code></pre>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; React <code>&lt;SurfaceCard&gt;</code></p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">A component with <code>elevation</code> / <code>padding</code> / <code>interactive</code> props. More explicit and type-safe, but must be a client/island import at each site and is a bigger diff.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.3 Choice CARD-2 &mdash; canonical card radius</h3>
+    <p>Round 2 remapped Tailwind&rsquo;s named radii, so today&rsquo;s card <code>rounded-xl</code> now renders at 16px. The DS card role is 12px (<code>lg</code>).</p>
+    <div class="ds-example">
+      <div class="ds-example__row" style="gap:20px;align-items:flex-start">
+        <div style="text-align:center"><div style="width:150px;height:90px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-md);border-radius:var(--radius-lg)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px">A &mdash; <code>lg</code> 12px (recommended)</div></div>
+        <div style="text-align:center"><div style="width:150px;height:90px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-md);border-radius:var(--radius-xl)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px">B &mdash; <code>xl</code> 16px (keep current)</div></div>
+      </div>
+    </div>
+    <p class="ds-u-muted" style="font-size:.82rem">Option A restores the pre-Round-2 card look and matches the radius doc; Option B keeps the rounder post-remap surfaces and updates the mapping to suit.</p>
+
+    <h3>3.4 Choice CARD-3 &mdash; dashboard Widget shell</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; <code>&lt;WidgetShell&gt;</code> (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">One component for the <em>icon + title + count, body, footer link</em> chrome shared by Saved / EOI / Commissioned / QuickLinks / NewsList. Removes ~5 copies.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; SurfaceCard only</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Promote the surface class but leave each widget to compose its own header/footer. Less abstraction, keeps the duplication.</p>
+        </div>
+      </div>
+    </div>
+    <h4>WidgetShell preview</h4>
+    <div class="ds-example ds-example--surface">
+      <div style="max-width:340px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);overflow:hidden">
+        <div style="display:flex;align-items:center;gap:10px;padding:16px 20px">
+          <span style="width:32px;height:32px;border-radius:var(--radius-md);background:#E6F0FB;color:var(--nhs-blue);display:flex;align-items:center;justify-content:center;font-weight:700">&#9733;</span>
+          <strong style="flex:1;font-size:var(--text-card-title)">Saved apps</strong>
+          <span class="badge badge-blue">3</span>
+        </div>
+        <div style="padding:0 20px 12px;color:var(--text-secondary);font-size:.9rem">Clinitouch &middot; myCOPD &middot; Luscii</div>
+        <a href="#card" style="display:block;border-top:1px solid var(--border);padding:12px 20px;color:var(--nhs-blue);font-weight:600;font-size:.875rem">View all saved apps &rarr;</a>
+      </div>
+    </div>
+
+    <h3>3.5 Migration map (CARD-4)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Surface</th><th>File(s)</th><th>&rarr; Target</th></tr></thead>
+      <tbody>
+        <tr><td>Saved / EOI / Commissioned widgets</td><td><code>components/home/dashboard/widgets/*</code></td><td><code>WidgetShell</code> (CARD-3 A)</td></tr>
+        <tr><td>QuickLinks, NewsList, V4 Commissioned</td><td><code>DashboardV3.tsx</code>, <code>HomeLayoutV4.tsx</code></td><td><code>WidgetShell</code> / SurfaceCard</td></tr>
+        <tr><td>News &amp; campaigns list items</td><td><code>app/news/page.tsx</code>, <code>app/campaigns/page.tsx</code></td><td>SurfaceCard (<code>sm</code> elevation)</td></tr>
+        <tr><td>Case-study cards</td><td><code>components/home/CaseStudies.tsx</code></td><td>SurfaceCard (+ navy band kept)</td></tr>
+        <tr><td>Concept steps, funding preview, org-settings sections</td><td><code>ConceptStepsBand</code>, <code>HomeFragments</code>, <code>OrgSettingsClient</code></td><td>SurfaceCard</td></tr>
+        <tr><td><code>.glass-card</code> / <code>.glass-panel</code></td><td><code>app/globals.css</code></td><td><span class="ds-status ds-status--orphan">Delete (unused)</span></td></tr>
+      </tbody>
+    </table>
+    <div class="ds-note ds-note--source">Source: <a href="/DS/components/cards.html">Cards &amp; surfaces</a>; <code>app/globals.css</code>, dashboard widgets, news/campaigns/case-study pages.</div>
+    <h2 id="form">4. FormField + AuthCard shell <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      There is <strong>no shared field primitive</strong>. Five surfaces each define their own label + input dialect with
+      different radii, border tokens and focus treatments. The login and select-entity screens also duplicate an
+      identical &ldquo;blue-bar&rdquo; auth card.
+    </p>
+
+    <h3>4.1 Current field dialects</h3>
+    <table class="ds-table">
+      <thead><tr><th>Surface</th><th>Radius</th><th>Border</th><th>Focus ring</th></tr></thead>
+      <tbody>
+        <tr><td>Login (<code>app/login/page.tsx</code>)</td><td><code>rounded-lg</code></td><td><code>#DEE4EA</code> (hardcoded)</td><td><span class="ds-status ds-status--duplicate">None</span></td></tr>
+        <tr><td>Select-entity radios</td><td><code>rounded-lg</code></td><td><code>var(--border)</code> / blue</td><td>&mdash; (radio)</td></tr>
+        <tr><td>EOI <code>Field</code> (<code>ExpressInterestModal</code>)</td><td><code>rounded-lg</code></td><td><code>var(--border)</code></td><td><span class="ds-status ds-status--duplicate">None</span></td></tr>
+        <tr><td>Org-settings <code>TextInput/Select</code></td><td><code>rounded-md</code></td><td><code>var(--border)</code></td><td><span class="ds-status ds-status--canonical">Blue 2px</span></td></tr>
+        <tr><td>Catalogue <code>FilterSelect</code></td><td><code>rounded-lg</code></td><td><code>var(--border)</code></td><td><span class="ds-status ds-status--duplicate">None</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.2 Choice FORM-1 &mdash; how FormField is delivered</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; React <code>&lt;FormField&gt;</code> + inputs (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0"><code>FormField</code> owns label / hint / error wiring (auto <code>id</code> + <code>aria-describedby</code> + <code>aria-invalid</code>); <code>TextInput</code>/<code>Select</code>/<code>Textarea</code> share one styled base. Best for a11y correctness; org-settings already works this way.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; CSS classes only</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Ship <code>.ds-field/.ds-input/.ds-select/.ds-textarea</code> (already prototyped in the DS) into <code>globals.css</code> and apply by hand. Lower churn, but label/error/aria wiring stays manual at each site.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.3 Choice FORM-2 &mdash; input focus treatment</h3>
+    <div class="ds-example">
+      <div class="ds-example__row" style="gap:24px;align-items:flex-end;flex-wrap:wrap">
+        <div>
+          <label class="ds-field__label">A &mdash; blue 2px ring (recommended)</label>
+          <input class="ds-input" style="border-color:var(--nhs-blue);box-shadow:0 0 0 3px rgba(0,94,184,.15)" aria-label="focus ring A">
+        </div>
+        <div>
+          <label class="ds-field__label">B &mdash; global yellow focus-visible only</label>
+          <input class="ds-input" style="outline:3px solid #FFB81C;outline-offset:1px" aria-label="focus ring B">
+        </div>
+      </div>
+    </div>
+    <p class="ds-u-muted" style="font-size:.82rem">Option A standardises the org-settings blue ring across all inputs; Option B leans on the existing global yellow <code>:focus-visible</code> outline and adds no per-input ring.</p>
+
+    <h3>4.4 Choice FORM-3 &mdash; extract the AuthCard shell</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; <code>&lt;AuthCard&gt;</code> (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">One shell (6px blue top bar + <code>rounded-2xl</code> + <code>shadow-lg</code>) shared by login &amp; select-entity. Slot in logo, heading, form.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; keep inline</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Two screens only &mdash; leave the duplicated markup as is.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.5 Canonical field + AuthCard preview</h3>
+    <div class="ds-example ds-example--surface">
+      <div style="max-width:380px;margin:0 auto;background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);overflow:hidden">
+        <div style="height:6px;background:var(--nhs-blue)"></div>
+        <div style="padding:28px">
+          <h3 class="ds-u-mt0" style="margin-top:0">Sign in</h3>
+          <div class="ds-field">
+            <label class="ds-field__label" for="rv3-email">Work email</label>
+            <p class="ds-field__hint" id="rv3-email-hint">Use your NHS.net address.</p>
+            <input class="ds-input" id="rv3-email" type="email" aria-describedby="rv3-email-hint" placeholder="name@nhs.net">
+          </div>
+          <div class="ds-field">
+            <label class="ds-field__label" for="rv3-role">Role</label>
+            <select class="ds-select" id="rv3-role"><option>Commissioner</option><option>Clinician</option></select>
+          </div>
+          <button class="ds-btn ds-btn--primary ds-btn--block" type="button">Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.6 Migration map (FORM-4)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Surface</th><th>File</th><th>&rarr; Target</th></tr></thead>
+      <tbody>
+        <tr><td>Login form + card</td><td><code>app/login/page.tsx</code></td><td><code>AuthCard</code> + <code>FormField</code> + <code>Button</code></td></tr>
+        <tr><td>Select-entity</td><td><code>app/select-entity/SelectEntityForm.tsx</code></td><td><code>AuthCard</code> + radio cards + <code>Button</code></td></tr>
+        <tr><td>EOI internal <code>Field</code></td><td><code>components/ExpressInterestModal.tsx</code></td><td><code>FormField</code> (keep read-only rows)</td></tr>
+        <tr><td>Org-settings field stack</td><td><code>app/org-settings/OrgSettingsClient.tsx</code></td><td><code>FormField</code> (already closest)</td></tr>
+        <tr><td>Catalogue <code>FilterSelect</code></td><td><code>app/apps/CatalogueClient.tsx</code></td><td><code>FormField</code> select (keep uppercase label)</td></tr>
+      </tbody>
+    </table>
+    <div class="ds-note ds-note--source">Source: <a href="/DS/components/forms.html">Forms &amp; inputs</a>; login, select-entity, EOI modal, org-settings, catalogue filters.</div>
+    <h2 id="badge">5. Badge / pill consolidation <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      <code>.badge</code> + colour modifiers is already the canonical, most-reused primitive. The problem is a
+      <strong>parallel pill system</strong>: <code>ConditionTag</code>/<code>TopicPill</code> render <code>.badge</code> but
+      override colour with inline styles, <code>EditorialPills</code> reimplements the look from scratch, and AI / filter
+      chips invent their own <code>rounded-md</code>/<code>rounded-full</code> shapes.
+    </p>
+
+    <h3>5.1 The two systems today</h3>
+    <div class="ds-example">
+      <p class="ds-example__label">Canonical <code>.badge</code> + modifiers</p>
+      <div class="ds-example__row" style="margin-bottom:16px">
+        <span class="badge badge-green">Strong</span>
+        <span class="badge badge-blue">Multi-site live</span>
+        <span class="badge badge-amber">Upcoming</span>
+        <span class="badge badge-grey">Pilot</span>
+      </div>
+      <p class="ds-example__label">Inline-styled pills (ConditionTag / TopicPill / EditorialPills / AI chips)</p>
+      <div class="ds-example__row">
+        <span class="badge" style="background:rgba(0,94,182,.1);color:rgb(0,94,184);border:1px solid rgb(0,94,184)">COPD</span>
+        <span class="badge" style="background:#F0F4F8;color:#1E293B;border:1px solid #CBD5E1;font-weight:600">Remote monitoring</span>
+        <span style="display:inline-flex;font-size:12px;padding:3px 8px;border-radius:6px;border:none;background:#E6F0FB;color:#003087">Editorial topic</span>
+        <span style="display:inline-flex;padding:4px 10px;border-radius:9999px;background:#E6F5EC;color:#004B22;font-size:.8rem">AI chip &middot; full-round</span>
+      </div>
+    </div>
+
+    <h3>5.2 Choice BADGE-1 &mdash; how pill colours are delivered</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; tint modifier classes (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Add <code>.badge-condition</code> / <code>.badge-topic</code> (and reuse the existing palette) so <code>ConditionTag</code>, <code>TopicPill</code> and <code>EditorialPills</code> all render via classes &mdash; no inline colour.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; centralised inline constants</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep inline styles but move the colour objects into one shared module. Less CSS, but styling stays in JS and can&rsquo;t be themed by token.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>5.3 Choice BADGE-2 &mdash; one shape or two</h3>
+    <div class="ds-example">
+      <div class="ds-example__row" style="gap:28px;align-items:flex-start;flex-wrap:wrap">
+        <div style="text-align:center">
+          <div class="ds-example__row" style="justify-content:center"><span class="badge badge-blue">Static</span><span class="badge badge-grey">Status</span></div>
+          <div class="ds-u-muted" style="font-size:.78rem;margin-top:8px">A &mdash; everything is a 6px <code>.badge</code></div>
+        </div>
+        <div style="text-align:center">
+          <div class="ds-example__row" style="justify-content:center">
+            <span class="badge badge-blue">Static badge</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:9999px;background:#E6F0FB;color:#003087;font-size:.8rem;font-weight:600">Removable chip &times;</span>
+          </div>
+          <div class="ds-u-muted" style="font-size:.78rem;margin-top:8px">B &mdash; <code>.badge</code> (6px) vs interactive <code>.pill</code> (round) <strong>(recommended)</strong></div>
+        </div>
+      </div>
+    </div>
+    <p class="ds-u-muted" style="font-size:.82rem">Option B keeps a meaningful split: static metadata uses the square <code>.badge</code>; <em>removable / clickable</em> chips (filter pills, tag editor, AI follow-ups) use a rounded <code>.pill</code>.</p>
+
+    <h3>5.4 Choice BADGE-3 &mdash; EditorialPills fate</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; fold in &amp; delete (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Map <code>EditorialTopicPill</code>/<code>ConditionPill</code>/<code>CategoryPill</code> onto <code>Badges</code> wrappers and remove <code>EditorialPills.tsx</code>.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; thin wrapper</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep the editorial names as a thin re-export over <code>Badges</code> for the home page&rsquo;s sake.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>5.5 Migration map (BADGE-4)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Pill source</th><th>File</th><th>&rarr; Target</th></tr></thead>
+      <tbody>
+        <tr><td><code>ConditionTag</code>, <code>TopicPill</code></td><td><code>components/Badges.tsx</code></td><td>Tint modifier classes (BADGE-1 A)</td></tr>
+        <tr><td><code>SupervisionBadge</code> guided-self-help inline case</td><td><code>components/Badges.tsx</code></td><td>Modifier class</td></tr>
+        <tr><td>Editorial pills</td><td><code>components/home/EditorialPills.tsx</code></td><td>Fold into <code>Badges</code> (BADGE-3)</td></tr>
+        <tr><td>Filter pills, tag-editor chips</td><td><code>CatalogueClient</code>, <code>OrgSettingsClient</code></td><td>Interactive <code>.pill</code> (if BADGE-2 B)</td></tr>
+        <tr><td>AI chips / match-fit / follow-ups</td><td><code>components/ai/*</code></td><td><code>.badge</code> or <code>.pill</code> per BADGE-2</td></tr>
+        <tr><td>Compare snapshot blue filled pill</td><td><code>components/compare/CompareDecisionSnapshot.tsx</code></td><td>Modifier class</td></tr>
+      </tbody>
+    </table>
+    <div class="ds-note ds-note--source">Source: <a href="/DS/components/badges-tags.html">Badges &amp; tags</a>; <code>components/Badges.tsx</code>, <code>EditorialPills.tsx</code>, AI &amp; compare surfaces.</div>
+    <h2 id="collapsible">6. Unify Collapsible variants <span class="ds-prio ds-prio--p3">P3</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      Three components solve the same show/hide problem with ~90% shared logic:
+      <code>CollapsibleSection</code> (card + Show/Hide text), <code>CollapsibleInline</code> (top-border + Show/Hide), and
+      <code>ProductPageExpander</code> (chevron header + hash deep-link + print hooks). The expander is currently
+      <strong>orphaned</strong> &mdash; the PDP migrated to the flat <code>PdpSection</code>.
+    </p>
+
+    <h3>6.1 The three variants</h3>
+    <div class="ds-example ds-example--surface">
+      <section style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:20px;margin-bottom:16px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+          <div><strong>Card variant</strong><p class="ds-u-muted ds-u-mt0" style="font-size:.82rem">CollapsibleSection &mdash; Show/Hide text toggle</p></div>
+          <button type="button" class="ds-btn ds-btn--ghost ds-btn--sm" style="border:1px solid var(--border);color:var(--text-muted)" data-ds-toggle="rv3-c1" data-show-label="Show" data-hide-label="Hide" aria-controls="rv3-c1" aria-expanded="true">Hide</button>
+        </div>
+        <div id="rv3-c1" style="padding-top:12px"><p class="ds-u-mt0" style="font-size:.9rem;color:var(--text-secondary)">Card chrome with shadow + 12px radius.</p></div>
+      </section>
+      <div style="border-top:1px solid var(--border);padding-top:18px;margin-bottom:16px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+          <div><strong>Inline variant</strong><p class="ds-u-muted ds-u-mt0" style="font-size:.82rem">CollapsibleInline &mdash; lighter, no card</p></div>
+          <button type="button" class="ds-btn ds-btn--ghost ds-btn--sm" style="border:1px solid var(--border);color:var(--text-muted)" data-ds-toggle="rv3-c2" data-show-label="Show" data-hide-label="Hide" aria-controls="rv3-c2" aria-expanded="false">Show</button>
+        </div>
+        <div id="rv3-c2" hidden style="margin-top:12px"><p class="ds-u-mt0" style="font-size:.9rem;color:var(--text-secondary)">Top-border separator, nests inside an existing card.</p></div>
+      </div>
+      <section style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
+        <button type="button" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;background:none;border:0;cursor:pointer;text-align:left;font:inherit" data-ds-toggle="rv3-c3" aria-controls="rv3-c3" aria-expanded="false">
+          <span><strong>Expander variant</strong><span class="ds-u-muted" style="display:block;font-size:.82rem">ProductPageExpander &mdash; chevron header + hash/print</span></span>
+          <span aria-hidden="true">&#9662;</span>
+        </button>
+        <div id="rv3-c3" hidden style="padding:0 20px 16px"><p class="ds-u-mt0" style="font-size:.9rem;color:var(--text-secondary)">Full-width header button, elevation changes on open, deep-link + print registration.</p></div>
+      </section>
+    </div>
+
+    <h3>6.2 Choice COLL-1 &mdash; how to unify</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; one <code>&lt;Collapsible variant&gt;</code> (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">A single component with <code>variant="card" | "inline" | "expander"</code>. Shared core: <code>useId</code>, open state, <code>aria-expanded</code>/<code>aria-controls</code>/<code>hidden</code>.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; shared <code>useCollapsible</code> hook</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep three components but extract the state + aria wiring into one hook. Less churn, but chrome stays duplicated.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>6.3 Choice COLL-2 &mdash; ProductPageExpander (orphaned) fate</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; keep as <code>expander</code> variant (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Fold the chevron + hash deep-link + print registration into the unified component so the capability survives for future PDP detail.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; delete it</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">It is unused at runtime &mdash; remove the dead code and keep only <code>card</code> + <code>inline</code> variants.</p>
+        </div>
+      </div>
+    </div>
+    <p class="ds-u-muted" style="font-size:.82rem">Default toggle affordance (COLL-3, proposed): Show/Hide text for <code>card</code>/<code>inline</code>, chevron header for <code>expander</code>.</p>
+    <div class="ds-note ds-note--source">Source: <a href="/DS/components/collapsible.html">Collapsible sections</a>; <code>CollapsibleSection.tsx</code>, <code>CollapsibleInline.tsx</code>, <code>ProductPageExpander.tsx</code>.</div>
+    <h2 id="decision-log">7. Decision log</h2>
+    <p>Choices applied this round. Where the pick differed from the recommendation it is flagged.</p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th><th>Chosen &amp; applied</th></tr></thead>
+      <tbody>
+        <tr><td>CARD-1</td><td>SurfaceCard delivery</td><td>A &mdash; extend CSS class</td><td>A &mdash; extended <code>.hs-surface-card(-sm)</code></td></tr>
+        <tr><td>CARD-2</td><td>Canonical card radius</td><td>A &mdash; <code>lg</code> 12px</td><td>A &mdash; <code>lg</code> 12px (bands keep 2xl)</td></tr>
+        <tr><td>CARD-3</td><td>Dashboard WidgetShell</td><td>A &mdash; build it</td><td>A &mdash; <code>WidgetShell</code> + <code>WidgetHeading</code></td></tr>
+        <tr><td>CARD-4</td><td>Surface migration + delete <code>.glass-*</code></td><td>As tabled (3.5)</td><td>As tabled &mdash; surfaces swept, <code>.glass-*</code> removed</td></tr>
+        <tr><td>FORM-1</td><td>FormField delivery</td><td>A &mdash; React component</td><td>A &mdash; <code>FormField</code> + controls</td></tr>
+        <tr><td>FORM-2</td><td>Input focus treatment</td><td>A &mdash; blue 2px ring</td><td><strong>B &mdash; global focus-visible only</strong></td></tr>
+        <tr><td>FORM-3</td><td>Extract AuthCard shell</td><td>A &mdash; build it</td><td>A &mdash; <code>AuthCard</code></td></tr>
+        <tr><td>FORM-4</td><td>Approve form migration map</td><td>As tabled (4.6)</td><td>As tabled &mdash; 5 surfaces migrated</td></tr>
+        <tr><td>BADGE-1</td><td>Pill colour delivery</td><td>A &mdash; tint modifier classes</td><td>A &mdash; <code>.badge-condition</code>/<code>.badge-topic</code></td></tr>
+        <tr><td>BADGE-2</td><td>One shape or two</td><td>B &mdash; <code>.badge</code> + <code>.pill</code></td><td>B &mdash; added <code>.pill</code></td></tr>
+        <tr><td>BADGE-3</td><td>EditorialPills fate</td><td>A &mdash; fold in &amp; delete</td><td>A &mdash; folded into <code>Badges</code>, file deleted</td></tr>
+        <tr><td>BADGE-4</td><td>Approve pill migration scope</td><td>As tabled (5.5)</td><td>As tabled (AI result/thinking chips deferred)</td></tr>
+        <tr><td>COLL-1</td><td>How to unify collapsibles</td><td>A &mdash; one variant component</td><td>A &mdash; <code>&lt;Collapsible variant&gt;</code></td></tr>
+        <tr><td>COLL-2</td><td>ProductPageExpander fate</td><td>A &mdash; keep as <code>expander</code></td><td>A &mdash; folded in as <code>expander</code> variant</td></tr>
+        <tr><td>COLL-3</td><td>Default toggle affordance</td><td>Show/Hide + chevron (proposed)</td><td>As proposed</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="shipped">8. Shipped this round</h2>
+    <ul>
+      <li><strong>SurfaceCard / WidgetShell</strong> &mdash; <code>.hs-surface-card(-sm)</code> now own bg + border + radius (lg 12px) + elevation (CARD-1/2 A); <code>.app-card</code> too. <code>components/ui/WidgetShell.tsx</code> built (CARD-3 A); dashboard widgets, news, campaigns, case-study cards, concept/funding bands and org-settings sections swept onto the classes; <code>.glass-*</code> removed (CARD-4).</li>
+      <li><strong>FormField / AuthCard</strong> &mdash; <code>components/ui/FormField.tsx</code> (<code>FormField</code> + <code>TextInput</code>/<code>Select</code>/<code>Textarea</code>) and <code>AuthCard.tsx</code> built; login, select-entity, EOI, org-settings and catalogue filters migrated. Inputs use the global focus outline, not a blue ring (FORM-2 B).</li>
+      <li><strong>Badges / pills</strong> &mdash; <code>.badge-condition</code>/<code>.badge-topic</code>/<code>.badge-blue-solid</code> + <code>.pill</code> added; <code>ConditionTag</code>/<code>TopicPill</code>, the <code>SupervisionBadge</code> self-help case, the compare snapshot and the funding-wizard chip routed through classes; <code>EditorialPills.tsx</code> folded into <code>Badges</code> and deleted. Filter pills and tag-editor chips use <code>.pill</code>.</li>
+      <li><strong>Collapsible</strong> &mdash; <code>components/Collapsible.tsx</code> unifies <code>card</code>/<code>inline</code>/<code>expander</code> (COLL-1 A); the expander&rsquo;s chevron + hash + print hooks were preserved (COLL-2 A). The old files remain as thin deprecated re-exports.</li>
+      <li>DS pages updated to canonical/shipped: <a href="/DS/components/cards.html">Cards</a>, <a href="/DS/components/forms.html">Forms</a>, <a href="/DS/components/badges-tags.html">Badges</a>, <a href="/DS/components/collapsible.html">Collapsible</a>; <a href="/DS/Report-v1/index.html">v1 audit</a> scorecard refreshed.</li>
+      <li>Deferred: the AI funding-result / tool-thinking chips (functional, component-local) keep their current shapes for a later pass.</li>
+    </ul>
+
+    <hr class="ds-rule">
+    <p class="ds-u-muted" style="font-size:.85rem">
+      Companion to the <a href="/DS/Report-v1/index.html">v1 audit</a> and <a href="/DS/Report-v2/index.html">v2 foundations</a>.
+      v3 is the Round 3 decision record &mdash; component consolidation, decisions applied &amp; shipped. Structure follows the
+      <a href="https://design-system.service.gov.uk/">GOV.UK Design System</a>.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

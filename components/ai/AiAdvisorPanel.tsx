@@ -11,6 +11,7 @@ import {
   aiAdvisorStripButtonClass,
 } from '@/components/ai/aiAdvisorChrome'
 import { BotMessageSquare, PanelRightClose, PoundSterling } from 'lucide-react'
+import { Modal } from '@/components/ui/Modal'
 
 export type AiAdvisorClientProfile = {
   commissionerName: string
@@ -325,7 +326,6 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
 
 export default function AiAdvisorPanel({ open, onClose, profile }: Props) {
   const [isFullScreen, setIsFullScreen] = useState(false)
-  const panelRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
 
   const handleClose = useCallback(() => {
@@ -333,99 +333,59 @@ export default function AiAdvisorPanel({ open, onClose, profile }: Props) {
     onClose()
   }, [onClose])
 
-  useEffect(() => {
-    if (!open) return
-
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    closeButtonRef.current?.focus()
-
-    return () => {
-      document.body.style.overflow = previousOverflow
-    }
-  }, [open])
-
-  useEffect(() => {
-    if (!open) return
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault()
-        handleClose()
-      }
-    }
-
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [open, handleClose])
-
   const panelClasses = isFullScreen
-    ? 'fixed inset-0 z-[60] flex w-full flex-col bg-white'
-    : 'fixed right-0 top-0 z-[60] flex h-full w-[560px] max-w-full flex-col border-l bg-white'
+    ? 'flex w-full flex-col bg-white'
+    : 'flex w-[560px] max-w-full flex-col border-l border-[var(--border)] bg-white'
 
   return (
-    <>
-      <button
-        type="button"
-        className={`fixed inset-0 z-[55] bg-black/30 transition-opacity duration-300 ${
-          open ? 'opacity-100' : 'pointer-events-none opacity-0'
-        }`}
-        aria-hidden="true"
-        tabIndex={-1}
-        onClick={handleClose}
-      />
-      <div
-        ref={panelRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label="AI Advisor"
-        aria-hidden={!open}
-        className={`${panelClasses} transition-transform duration-300 ease-out ${
-          open ? 'translate-x-0' : 'pointer-events-none translate-x-full'
-        }`}
-        style={{
-          borderColor: 'var(--border)',
-          background: '#fff',
-        }}
-      >
-        <div className="flex-shrink-0 bg-white">
-          <div style={aiAdvisorBlueStripStyle} />
-          <div
-            className={`${aiAdvisorNavBarClass} border-b`}
-            style={{ borderColor: 'var(--border)' }}
+    <Modal
+      open={open}
+      onClose={handleClose}
+      variant="drawer"
+      ariaLabel="AI Advisor"
+      initialFocusRef={closeButtonRef}
+      restoreFocus="previous"
+      keepMounted
+      zIndexClass="z-[60]"
+      panelClassName={panelClasses}
+    >
+      <div className="flex-shrink-0 bg-white">
+        <div style={aiAdvisorBlueStripStyle} />
+        <div
+          className={`${aiAdvisorNavBarClass} border-b`}
+          style={{ borderColor: 'var(--border)' }}
+        >
+          <button
+            ref={closeButtonRef}
+            type="button"
+            onClick={handleClose}
+            className={`${aiAdvisorStripButtonClass} justify-center border-r md:justify-start`}
+            style={{ borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
+            aria-label="Close AI Advisor"
           >
-            <button
-              ref={closeButtonRef}
-              type="button"
-              onClick={handleClose}
-              className={`${aiAdvisorStripButtonClass} justify-center border-r md:justify-start`}
-              style={{ borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
-              aria-label="Close AI Advisor"
+            <PanelRightClose className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--nhs-blue)' }} />
+            <span className="hidden md:inline">AI Advisor</span>
+          </button>
+          <div className="flex min-w-0 flex-1 items-center justify-between gap-3 px-4">
+            <span
+              className="truncate text-sm font-semibold"
+              style={{ color: 'var(--nhs-blue)', fontFamily: 'Frutiger, Arial, sans-serif' }}
             >
-              <PanelRightClose className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--nhs-blue)' }} />
-              <span className="hidden md:inline">AI Advisor</span>
+              HealthStore AI Advisor
+            </span>
+            <button
+              type="button"
+              onClick={() => setIsFullScreen(prev => !prev)}
+              className="hidden flex-shrink-0 text-sm font-medium transition-colors hover:underline md:block"
+              style={{ color: 'var(--text-secondary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
+            >
+              {isFullScreen ? 'Exit full screen view' : 'Full screen view'}
             </button>
-            <div className="flex min-w-0 flex-1 items-center justify-between gap-3 px-4">
-              <span
-                className="truncate text-sm font-semibold"
-                style={{ color: 'var(--nhs-blue)', fontFamily: 'Frutiger, Arial, sans-serif' }}
-              >
-                HealthStore AI Advisor
-              </span>
-              <button
-                type="button"
-                onClick={() => setIsFullScreen(prev => !prev)}
-                className="hidden flex-shrink-0 text-sm font-medium transition-colors hover:underline md:block"
-                style={{ color: 'var(--text-secondary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
-              >
-                {isFullScreen ? 'Exit full screen view' : 'Full screen view'}
-              </button>
-            </div>
           </div>
         </div>
-
-        <AiAdvisorChat profile={profile} />
       </div>
-    </>
+
+      <AiAdvisorChat profile={profile} />
+    </Modal>
   )
 }

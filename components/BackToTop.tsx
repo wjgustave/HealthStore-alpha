@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/Button'
 
 const SCROLL_THRESHOLD = 400
 
@@ -23,19 +24,15 @@ export default function BackToTop() {
   if (!visible) return null
 
   return (
-    <button
-      type="button"
+    <Button
       onClick={scrollToTop}
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-md transition-colors hover:!bg-[#004B8C] focus:outline-none focus:ring-2 focus:ring-offset-2"
-      style={{
-        background: 'var(--nhs-blue)',
-        color: '#fff',
-        boxShadow: 'var(--shadow-md)',
-      }}
+      pill
+      size="none"
       aria-label="Back to top"
+      className="fixed bottom-6 right-6 z-50 gap-2 px-4 py-2.5 text-sm shadow-md"
     >
       <span aria-hidden>↑</span>
       Back to top
-    </button>
+    </Button>
   )
 }

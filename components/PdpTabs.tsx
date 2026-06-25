@@ -127,7 +127,7 @@ export function PdpTabs({ tabs }: { tabs: PdpTab[] }) {
             tabIndex={0}
           >
             {printing ? (
-              <h2 className="mb-4 mt-2 text-lg font-bold" style={{ color: '#005EB8' }}>
+              <h2 className="mb-4 mt-2 text-lg font-bold" style={{ color: 'var(--nhs-blue)' }}>
                 {t.label}
               </h2>
             ) : null}

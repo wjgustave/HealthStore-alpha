@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Accessibility — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="accessibility">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Styles</p>
+      <h1 class="ds-page-title">Accessibility</h1>
+      <p class="ds-lede">
+        This page documents the shared primitives every component should respect.
+      </p>
+    </div>
+
+    <h2>Focus state</h2>
+    <p>A single global focus style is applied via <code>:focus-visible</code>: a 3px yellow outline with offset. Tab through the controls below to see it.</p>
+    <div class="ds-example">
+      <div class="ds-example__row">
+        <button class="ds-btn ds-btn--primary" type="button">Primary action</button>
+        <a href="#ds-main">A focusable link</a>
+        <input class="ds-input" style="max-width:240px" placeholder="A text input" aria-label="Demo input">
+      </div>
+    </div>
+<pre class="ds-code"><code>:focus-visible {
+  outline: 3px solid #FFD800;
+  outline-offset: 2px;
+  border-radius: 3px;
+}</code></pre>
+
+    <h2>Skip link</h2>
+    <p>A visually hidden skip link reveals on focus and jumps to <code>#main-content</code> (here, <code>#ds-main</code>). Press <kbd>Tab</kbd> from the top of the page.</p>
+<pre class="ds-code"><code>&lt;a class="skip-link" href="#main-content"&gt;Skip to main content&lt;/a&gt;</code></pre>
+
+    <h2>Visually hidden content (<code>.sr-only</code>)</h2>
+    <p>Use <code>.sr-only</code> for labels that should be announced but not shown (e.g. count context on icon buttons).</p>
+    <div class="ds-example">
+      <button class="ds-btn ds-btn--secondary" type="button">
+        Saved apps <span class="sr-only">(3 items)</span>
+      </button>
+      <p class="ds-u-muted" style="font-size:.85rem;margin-top:8px">The "(3 items)" text is present for screen readers only.</p>
+    </div>
+
+    <h2>Reduced motion</h2>
+    <p>All transitions/animations collapse to near-zero under <code>prefers-reduced-motion: reduce</code> (card hover lifts, fade-ups, skeleton shimmer).</p>
+
+    <h2>Print</h2>
+    <p>The app ships a print stylesheet: header/footer/nav/buttons hidden, shadows removed, link URLs expanded. Relevant for the PDP "print / share" flow.</p>
+
+    <h2>Component expectations</h2>
+    <table class="ds-table">
+      <thead><tr><th>Pattern</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td>Icon-only button</td><td><code>aria-label</code>; decorative icon <code>aria-hidden</code></td></tr>
+        <tr><td>Toggle button</td><td><code>aria-pressed</code> reflecting state; <code>aria-busy</code> while pending</td></tr>
+        <tr><td>Tabs</td><td><code>role="tablist"</code>, <code>aria-selected</code>, arrow-key roving focus</td></tr>
+        <tr><td>Modal/dialog</td><td><code>role="dialog"</code>, <code>aria-labelledby</code>, focus trap, Escape, restore focus on close</td></tr>
+        <tr><td>Alert</td><td><code>role="alert"</code> (danger) or <code>role="status"</code> (info/warning)</td></tr>
+        <tr><td>Radio group</td><td><code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code> (may be sr-only)</td></tr>
+        <tr><td>Live updates</td><td>Transient action feedback goes through the global toast service (<code>useToast()</code>) &mdash; polite <code>role="status"</code> for success/info, assertive <code>role="alert"</code> for errors. Contextual counts (compare rows, catalogue results) keep their own <code>aria-live</code> regions.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ds-note ds-note--source">Source: <code>app/globals.css</code> (focus, <code>.skip-link</code>, <code>.sr-only</code>, reduced-motion, print); <code>components/AppShell.tsx</code>.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

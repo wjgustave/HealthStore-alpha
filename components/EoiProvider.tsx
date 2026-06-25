@@ -8,6 +8,9 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { useToast } from './ui/Toast'
+
+export type LoadStatus = 'loading' | 'ready' | 'error'
 
 export type ExpressionOfInterestEntry = {
   id: string
@@ -28,6 +31,10 @@ export type ExpressionOfInterestEntry = {
 export type ExpressionOfInterestSubmission = {
   appId: string
   appName: string
+  name?: string
+  role?: string
+  organisation?: string
+  email?: string
   phone?: string
   population_estimate?: string
   timeline?: string
@@ -38,6 +45,9 @@ type EoiContextValue = {
   expressionsOfInterest: ExpressionOfInterestEntry[]
   count: number
   isLoading: boolean
+  status: LoadStatus
+  /** True when the last load returned 401 (session likely expired). */
+  sessionExpired: boolean
   error: string | null
   refresh: () => Promise<void>
   submit: (payload: ExpressionOfInterestSubmission) => Promise<void>
@@ -46,17 +56,22 @@ type EoiContextValue = {
 const EoiContext = createContext<EoiContextValue | null>(null)
 
 export function EoiProvider({ children }: { children: React.ReactNode }) {
+  const toast = useToast()
   const [expressionsOfInterest, setExpressionsOfInterest] = useState<ExpressionOfInterestEntry[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [status, setStatus] = useState<LoadStatus>('loading')
+  const [sessionExpired, setSessionExpired] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
     setError(null)
+    setStatus('loading')
     try {
       const res = await fetch('/api/express-interest')
       if (!res.ok) {
         if (res.status === 401) {
           setExpressionsOfInterest([])
+          setSessionExpired(true)
+          setStatus('ready')
           return
         }
         const data = (await res.json().catch(() => ({}))) as { error?: string }
@@ -64,12 +79,14 @@ export function EoiProvider({ children }: { children: React.ReactNode }) {
       }
       const data = (await res.json()) as { expressionsOfInterest?: ExpressionOfInterestEntry[] }
       setExpressionsOfInterest(Array.isArray(data.expressionsOfInterest) ? data.expressionsOfInterest : [])
+      setSessionExpired(false)
+      setStatus('ready')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not load expressions of interest.')
-    } finally {
-      setIsLoading(false)
+      setStatus('error')
+      toast.error('Couldn’t load expressions of interest.')
     }
-  }, [])
+  }, [toast])
 
   useEffect(() => {
     void refresh()
@@ -95,12 +112,14 @@ export function EoiProvider({ children }: { children: React.ReactNode }) {
     () => ({
       expressionsOfInterest,
       count: expressionsOfInterest.length,
-      isLoading,
+      isLoading: status === 'loading',
+      status,
+      sessionExpired,
       error,
       refresh,
       submit,
     }),
-    [expressionsOfInterest, isLoading, error, refresh, submit],
+    [expressionsOfInterest, status, sessionExpired, error, refresh, submit],
   )
 
   return <EoiContext.Provider value={value}>{children}</EoiContext.Provider>

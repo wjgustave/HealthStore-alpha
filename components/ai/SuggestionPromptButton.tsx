@@ -1,6 +1,7 @@
 'use client'
 
 import { Sparkles } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
 
 type Props = {
   label: string
@@ -10,23 +11,21 @@ type Props = {
 
 export default function SuggestionPromptButton({ label, onClick, disabled }: Props) {
   return (
-    <button
-      type="button"
+    <Button
+      variant="ghost"
+      align="start"
+      radius="xl"
+      size="none"
+      block
       onClick={onClick}
       disabled={disabled}
-      className="group flex w-full items-start gap-2.5 rounded-xl border px-4 py-3 text-left text-sm transition-all hover:shadow-sm disabled:opacity-40"
-      style={{
-        borderColor: 'var(--border)',
-        background: 'var(--card)',
-        color: 'var(--text-primary)',
-        fontFamily: 'Frutiger, Arial, sans-serif',
-      }}
+      className="gap-2.5 border border-[var(--border)] px-4 py-3 text-sm"
     >
       <Sparkles
         className="mt-0.5 h-4 w-4 flex-shrink-0"
         style={{ color: 'var(--nhs-blue)' }}
       />
       <span>{label}</span>
-    </button>
+    </Button>
   )
 }

@@ -31,8 +31,9 @@ import { PdpTabs, type PdpTab } from '@/components/PdpTabs'
 import { PdpSharePrintProvider, PdpShareRegion } from '@/components/PdpSharePrintContext'
 import { SharePagePanel } from '@/components/SharePagePanel'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
-import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges, ProductHeroDemoBadge } from './pdpBlocks'
+import { EvidenceCard, ContextOfUseGrid, ProductHeroDemoBadge } from './pdpBlocks'
 import { ExpressInterestWhiteButton } from '@/components/ExpressInterestWhiteButton'
+import { Button } from '@/components/ui/Button'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 import PdpSupplierContactCard from '@/components/PdpSupplierContactCard'
 import { getSession } from '@/lib/session'
@@ -333,25 +334,19 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
         <PdpShareRegion
           shareKey="hero"
-          label="Product summary"
-          description="Supplier, proposition, NHS integration badges, and actions."
+          label="DTx app summary"
+          description="Supplier, proposition, and actions."
           className="mb-3"
         >
         <div className="hs-surface-card-sm rounded-t-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
           <div className="px-8 pt-8 pb-3">
             <div className="flex flex-col gap-6 items-start">
               <div className="flex-1 w-full min-w-0">
+                {/* R7 PDP triage (RSP-01): hero keeps condition + decision-signal pills only;
+                    supervision model, NICE refs and NHS App now live in the commissioning snapshot below. */}
                 <div className="flex flex-wrap gap-2 mb-3">
                   {app.condition_tags.map((t: string) => <ConditionTag key={t} tag={t} />)}
-                  <SupervisionBadge model={app.supervision_model} />
                   <MaturityBadge level={app.maturity_level} hideEstablished />
-                  {app.nice_guidance_refs
-                    .filter((r: any) => r.type !== 'EVA' && r.type !== 'MTG')
-                    .map((r: any) => (
-                      <a key={r.ref} href={r.url} target="_blank" rel="noopener noreferrer">
-                        <NiceTypeBadge type={r.type} />
-                      </a>
-                    ))}
                   {app.content_confidence && app.content_confidence !== 'Confirmed' && (
                     <span className={`badge ${app.content_confidence === 'Supplier-reported' ? 'badge-blue' : 'badge-amber'}`}>
                       {app.content_confidence}
@@ -375,17 +370,18 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                   >
                     {app.one_line_value_proposition}
                   </p>
-                  <button
+                  <Button
                     data-express-interest
-                    className="shrink-0 self-end sm:self-auto px-4 py-4 rounded-lg text-sm font-semibold text-white transition-colors hover:!bg-[#004B8C]"
-                    style={{ background: accent }}
+                    size="none"
+                    className="shrink-0 self-end sm:self-auto px-5 py-4 text-sm font-semibold"
                   >
                     Express interest
-                  </button>
+                  </Button>
                 </div>
-                <NhsIntegrationBadges app={app} />
               </div>
             </div>
+            {/* R7 PDP triage (RSP-01): Express interest is the sole primary; Save / Compare / Share
+                are demoted into one quiet, compact utility cluster on the right. */}
             <div
               className="flex flex-wrap gap-3 items-center justify-between mt-3 pt-3 border-t"
               style={{ borderColor: 'var(--border)' }}
@@ -393,10 +389,10 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               <div className="flex flex-wrap items-center gap-2 min-w-0">
                 <ProductHeroDemoBadge app={app} />
               </div>
-              <div className="flex flex-wrap gap-2 items-center shrink-0">
+              <div className="flex flex-wrap items-center gap-1 shrink-0 rounded-lg px-1 py-0.5" style={{ background: '#F7F9FC' }}>
                 <SharePagePanel borderlessTrigger />
-                <SaveToggleButton appId={app.id} borderless className="px-4 py-4 shrink-0" />
-                <CompareToggleButton appId={app.id} borderless className="px-4 py-4 shrink-0" />
+                <SaveToggleButton appId={app.id} borderless className="px-3 min-h-[44px] shrink-0" />
+                <CompareToggleButton appId={app.id} borderless className="px-3 min-h-[44px] shrink-0" />
               </div>
             </div>
           </div>

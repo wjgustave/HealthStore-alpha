@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Forms &amp; inputs — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="forms">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Components</p>
+      <h1 class="ds-page-title">Forms &amp; inputs</h1>
+      <p class="ds-lede">
+        Text inputs, selects, textareas, radios and checkboxes. <code>FormField</code> owns label + hint + error and
+        wires <code>id</code> / <code>aria-describedby</code> / <code>aria-invalid</code>. Shared
+        <code>TextInput</code> / <code>Select</code> / <code>Textarea</code> controls sit inside an
+        <code>AuthCard</code> shell where needed. Focus uses the global yellow <code>:focus-visible</code> outline.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Components</div><div class="ds-meta__v"><code>components/ui/FormField.tsx</code>, <code>AuthCard.tsx</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Focus</div><div class="ds-meta__v">Global <code>:focus-visible</code> (no per-input ring)</div></div>
+    </div>
+
+    <h2>Text input</h2>
+    <div class="ds-example">
+      <div class="ds-field">
+        <label class="ds-field__label" for="f-email">Work email</label>
+        <p class="ds-field__hint" id="f-email-hint">We'll only use this to contact you about your interest.</p>
+        <input class="ds-input" id="f-email" type="email" aria-describedby="f-email-hint" placeholder="name@nhs.net">
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;div class="ds-field"&gt;
+  &lt;label class="ds-field__label" for="email"&gt;Work email&lt;/label&gt;
+  &lt;p class="ds-field__hint" id="email-hint"&gt;We'll only use this &hellip;&lt;/p&gt;
+  &lt;input class="ds-input" id="email" type="email" aria-describedby="email-hint"&gt;
+&lt;/div&gt;</code></pre>
+
+    <h2>Select &amp; textarea</h2>
+    <div class="ds-example">
+      <div class="ds-field">
+        <label class="ds-field__label" for="f-timeline">Procurement timeline</label>
+        <select class="ds-select" id="f-timeline">
+          <option>Not sure yet</option>
+          <option>0&ndash;3 months</option>
+          <option>3&ndash;6 months</option>
+          <option>6&ndash;12 months</option>
+        </select>
+      </div>
+      <div class="ds-field">
+        <label class="ds-field__label" for="f-notes">Notes</label>
+        <textarea class="ds-textarea" id="f-notes" placeholder="Anything the supplier should know"></textarea>
+      </div>
+    </div>
+
+    <h2>Error state</h2>
+    <div class="ds-example">
+      <div class="ds-field">
+        <label class="ds-field__label" for="f-err">Password</label>
+        <input class="ds-input" id="f-err" type="password" aria-invalid="true" aria-describedby="f-err-msg" style="border-color:var(--nhs-red);box-shadow:0 0 0 3px rgba(218,41,28,0.15)">
+        <p id="f-err-msg" role="alert" style="color:#7A1210;font-size:.85rem;margin:6px 0 0">Enter your password to continue.</p>
+      </div>
+    </div>
+
+    <h2>Radio cards (entity selection)</h2>
+    <p>The select-entity pattern: radios styled as selectable cards inside a fieldset.</p>
+    <div class="ds-example">
+      <fieldset style="border:0;margin:0;padding:0">
+        <legend class="sr-only">Choose your commissioning entity</legend>
+        <div class="ds-u-stack">
+          <label style="display:flex;gap:12px;align-items:center;border:1px solid var(--nhs-blue);background:#E6F0FB;border-radius:8px;padding:14px 16px;cursor:pointer">
+            <input type="radio" name="icb" checked style="accent-color:var(--nhs-blue)">
+            <span><strong>NHS Example ICB</strong><br><span class="ds-u-muted" style="font-size:.85rem">Integrated Care Board</span></span>
+          </label>
+          <label style="display:flex;gap:12px;align-items:center;border:1px solid var(--border);background:#fff;border-radius:8px;padding:14px 16px;cursor:pointer">
+            <input type="radio" name="icb" style="accent-color:var(--nhs-blue)">
+            <span><strong>NHS Sample ICB</strong><br><span class="ds-u-muted" style="font-size:.85rem">Integrated Care Board</span></span>
+          </label>
+        </div>
+      </fieldset>
+    </div>
+
+    <h2>Checkbox</h2>
+    <div class="ds-example">
+      <label style="display:flex;gap:10px;align-items:flex-start;font-size:.92rem">
+        <input type="checkbox" checked style="accent-color:var(--nhs-blue);width:18px;height:18px;margin-top:2px">
+        <span>Only show differences when comparing products</span>
+      </label>
+    </div>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Every field has a programmatically associated <code>&lt;label&gt;</code>; hints use <code>aria-describedby</code>.</li>
+      <li>Errors set <code>aria-invalid</code> and reference an <code>role="alert"</code> message.</li>
+      <li>Radio/checkbox groups use <code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code> (may be sr-only).</li>
+      <li>Focus shows the global yellow <code>:focus-visible</code> outline; never remove focus styles.</li>
+    </ul>
+
+    <div class="ds-note ds-note--source">Source: <code>components/ui/FormField.tsx</code>, <code>components/ui/AuthCard.tsx</code>; login, select-entity, EOI modal, org-settings, catalogue filters.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

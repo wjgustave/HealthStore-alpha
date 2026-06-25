@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Round 2 plan (v2) — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="report-v2">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Report &middot; v2</p>
+      <h1 class="ds-page-title">Round 2 &mdash; foundation hardening plan</h1>
+      <p class="ds-lede">
+        Round 2 hardens the foundations identified in the <a href="/DS/Report-v1/index.html">v1 audit</a>. This was a
+        decision document; <strong>all decisions are now applied and shipped</strong>. The <code>&lt;Button&gt;</code>
+        and <code>&lt;Modal&gt;</code> primitives live in <code>components/ui/</code>, the bespoke buttons and the four
+        task overlays have been migrated onto them, the radius scale is wired via <code>@theme</code>, and the
+        <code>nhs-blue</code> colour alias is in. The chosen options are recorded in the
+        <a href="#decision-log">decision log</a>.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Round</div><div class="ds-meta__v">2 &middot; foundation hardening</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Status</div><div class="ds-meta__v"><span class="ds-status ds-status--canonical">All applied &amp; shipped</span></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Shipped</div><div class="ds-meta__v">Button &middot; Modal &middot; radius <code>@theme</code> &middot; token sweep</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Implementation</div><div class="ds-meta__v">React <code>components/ui/</code></div></div>
+    </div>
+
+    <h2>1. Round 2 at a glance</h2>
+    <table class="ds-table">
+      <thead><tr><th>Item</th><th>Priority</th><th>This round</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Radius tokens in <code>app/globals.css</code></td><td><span class="ds-prio ds-prio--p1">P1</span></td><td>Landed (additive, no visual change)</td><td><span class="ds-status ds-status--canonical">Done</span></td></tr>
+        <tr><td><code>#005EB8</code> &rarr; <code>var(--nhs-blue)</code> sweep</td><td><span class="ds-prio ds-prio--p2">P2</span></td><td>Landed (CSS-context, visual no-op)</td><td><span class="ds-status ds-status--canonical">Done</span></td></tr>
+        <tr><td><strong>Button</strong> component + migrate instances</td><td><span class="ds-prio ds-prio--p1">P1</span></td><td><code>components/ui/Button.tsx</code> + 12 migrated</td><td><span class="ds-status ds-status--canonical">Done</span></td></tr>
+        <tr><td><strong>Modal</strong> primitive + AI-drawer trap</td><td><span class="ds-prio ds-prio--p1">P1</span></td><td><code>components/ui/Modal.tsx</code>; 4 overlays</td><td><span class="ds-status ds-status--canonical">Done</span></td></tr>
+        <tr><td><code>rounded-*</code> sweep to the scale</td><td><span class="ds-prio ds-prio--p1">P1</span></td><td><code>@theme</code> remap (RAD-2 A)</td><td><span class="ds-status ds-status--canonical">Done</span></td></tr>
+      </tbody>
+    </table>
+    <p>
+      Every section below is now <span class="ds-status ds-status--canonical">Done</span>. The Option A / B blocks are
+      kept as a record of what was chosen; the option that shipped is marked in each section and in the
+      <a href="#decision-log">decision log</a>.
+    </p>
+
+    <h2>2. Foundations landed this round</h2>
+    <p>Both are guaranteed visual no-ops, so they shipped without needing a choice.</p>
+
+    <h3>2.1 Radius tokens</h3>
+    <p>
+      The fixed radius scale (previously only a proposal in the DS) is now real in <code>app/globals.css</code>. It
+      shipped in an <code>@theme</code> block (RAD-2 Option A), so Tailwind&rsquo;s named radii resolve to the scale
+      app-wide &mdash; see <a href="#radius">section 5</a>.
+    </p>
+    <div class="ds-example">
+      <div class="ds-example__row" style="gap:24px;align-items:flex-end">
+        <div style="text-align:center"><div style="width:88px;height:60px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-sm)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px"><code>--radius-sm</code> &middot; 6px</div></div>
+        <div style="text-align:center"><div style="width:88px;height:60px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-md)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px"><code>--radius-md</code> &middot; 8px</div></div>
+        <div style="text-align:center"><div style="width:88px;height:60px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-lg)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px"><code>--radius-lg</code> &middot; 12px</div></div>
+        <div style="text-align:center"><div style="width:88px;height:60px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-xl)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px"><code>--radius-xl</code> &middot; 16px</div></div>
+        <div style="text-align:center"><div style="width:88px;height:60px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-pill)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px"><code>--radius-pill</code></div></div>
+      </div>
+    </div>
+<pre class="ds-code"><code>/* app/globals.css @theme */
+--radius-sm: 6px;   /* badges, chips */
+--radius-md: 8px;   /* buttons, inputs, callouts */
+--radius-lg: 12px;  /* cards, panels */
+--radius-xl: 16px;  /* large/feature cards, auth, modals */
+--radius-pill: 9999px; /* toggles, FABs */</code></pre>
+
+    <h3>2.2 <code>#005EB8</code> &rarr; <code>var(--nhs-blue)</code> sweep</h3>
+    <p>
+      <code>--nhs-blue</code> is exactly <code>#005EB8</code>, so each swap is invisible. The sweep covered
+      <strong>CSS-context</strong> uses only: Tailwind arbitrary values (<code>text-[#005EB8]</code> &rarr;
+      <code>text-[var(--nhs-blue)]</code>) and inline DOM <code>style</code> literals
+      (<code>color</code>/<code>background</code>/<code>borderColor</code>/<code>outlineColor</code>, plus the
+      <code>#005EB8</code> stop inside gradients).
+    </p>
+    <div class="ds-dosdonts">
+      <div class="ds-panel ds-panel--do">
+        <p class="ds-panel__head">Swept</p>
+        <ul>
+          <li>Tailwind arbitrary classes: <code>text-/border-/ring-/from-[#005EB8]</code>.</li>
+          <li>Inline <code>style</code> colour literals on DOM elements.</li>
+          <li>Gradient colour stops in inline styles.</li>
+          <li><code>.app-card:hover</code> border in <code>globals.css</code>.</li>
+        </ul>
+      </div>
+      <div class="ds-panel ds-panel--dont">
+        <p class="ds-panel__head">Deliberately left (tracked, not silent)</p>
+        <ul>
+          <li>The <code>--nhs-blue</code> token definition itself.</li>
+          <li>SVG <code>fill</code> in <code>public/**</code>; <code>conditions.json</code>; <code>ADDING_APPS.md</code>.</li>
+          <li>Chart colour map (<code>DashboardCharts.tsx</code>) &mdash; CSS vars may not resolve in chart contexts.</li>
+          <li>Multi-colour JS constants (<code>storeAccent.ts</code>, <code>Badges.tsx</code>, <code>ConceptStepsBand.tsx</code>) &mdash; folded into the Button / badge rounds.</li>
+        </ul>
+      </div>
+    </div>
+    <h2 id="button">3. Button decision <span class="ds-status ds-status--canonical">Done</span></h2>
+    <p>
+      Shipped: one React <code>&lt;Button&gt;</code> at <code>components/ui/Button.tsx</code> drives every action. The
+      variant set below was approved (3.1), the four style choices applied (3.2&ndash;3.5: <strong>BTN-3 took Option B,
+      the blue-tinted toggle</strong>), and all 12 instances migrated (3.6).
+    </p>
+
+    <h3>3.1 Proposed variant set</h3>
+    <div class="ds-example">
+      <div class="ds-example__row">
+        <button class="ds-btn ds-btn--primary" type="button">Primary</button>
+        <button class="ds-btn ds-btn--secondary" type="button">Secondary</button>
+        <button class="ds-btn ds-btn--ghost" type="button">Ghost</button>
+        <button class="ds-btn ds-btn--destructive" type="button">Destructive</button>
+        <button class="ds-btn ds-btn--icon ds-btn--primary" type="button" aria-label="Send">&uarr;</button>
+        <button class="ds-btn ds-btn--primary" type="button" disabled>Disabled</button>
+      </div>
+      <div class="ds-example__row" style="margin-top:16px;background:var(--nhs-blue);padding:16px;border-radius:var(--radius-md)">
+        <button class="ds-btn ds-btn--on-accent" type="button">On-accent (white)</button>
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;Button variant="primary | secondary | ghost | destructive | on-accent"
+        size="sm | md | lg" iconOnly pill block
+        pressed={/* toggle */} loading /&gt;</code></pre>
+
+    <h3>3.2 Choice BTN-1 &mdash; primary corner radius</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; <code>--radius-md</code> 8px (recommended)</p>
+          <button class="ds-btn ds-btn--primary" type="button" style="border-radius:var(--radius-md)">Sign in</button>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:12px 0 0">Matches today&rsquo;s dominant <code>rounded-lg</code> (8px) on login/EOI/PDP CTAs. Lowest-churn.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; <code>--radius-lg</code> 12px</p>
+          <button class="ds-btn ds-btn--primary" type="button" style="border-radius:var(--radius-lg)">Sign in</button>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:12px 0 0">Softer, more contemporary; aligns buttons with card radius. Slightly more visible change.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.3 Choice BTN-2 &mdash; primary hover shade</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; <code>#004B8C</code> (recommended)</p>
+          <button class="ds-btn" type="button" style="background:#004B8C;color:#fff">Hover shade</button>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:12px 0 0">The shade already hardcoded on login, PDP hero and EOI submit hovers. Zero change.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; <code>--nhs-dark</code> #003087</p>
+          <button class="ds-btn" type="button" style="background:var(--nhs-dark);color:#fff">Hover shade</button>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:12px 0 0">Uses an existing token (no new hex), but a darker, higher-contrast hover.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.4 Choice BTN-3 &mdash; toggle &ldquo;on&rdquo; state (Save / Compare)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; teal (was recommended)</p>
+          <div class="ds-u-row">
+            <button class="ds-btn ds-btn--secondary" type="button" aria-pressed="false">&#9734; Save</button>
+            <button class="ds-btn" type="button" aria-pressed="true" style="background:#E1F4F5;color:#004B50;border:1px solid #B8E0E4">&#9733; Saved</button>
+          </div>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:12px 0 0">Today&rsquo;s exact treatment (<code>#E1F4F5</code>/<code>#004B50</code>). Distinct from the blue primary, reads clearly as &ldquo;active&rdquo;.</p>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option B &mdash; blue-tinted <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <div class="ds-u-row">
+            <button class="ds-btn ds-btn--secondary" type="button" aria-pressed="false">&#9734; Save</button>
+            <button class="ds-btn" type="button" aria-pressed="true" style="background:#E6F0FB;color:var(--nhs-dark);border:1px solid var(--nhs-blue)">&#9733; Saved</button>
+          </div>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:12px 0 0">Single-hue system (all blue), fewer colours overall; less differentiation from primary.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.5 Choice BTN-4 &mdash; icon-button radius (AI send)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; <code>--radius-md</code> 8px (recommended)</p>
+          <button class="ds-btn ds-btn--icon ds-btn--primary" type="button" aria-label="Send" style="border-radius:var(--radius-md)">&uarr;</button>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:12px 0 0">Consistent with primary buttons and inputs.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; keep <code>rounded-xl</code> 12px</p>
+          <button class="ds-btn ds-btn--icon ds-btn--primary" type="button" aria-label="Send" style="border-radius:12px">&uarr;</button>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:12px 0 0">Preserves the current AI send button look exactly.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.6 Migration map &mdash; the 12 instances</h3>
+    <p>Each current button mapped to a proposed variant. Confirm the mapping or flag any you want treated differently.</p>
+    <table class="ds-table">
+      <thead><tr><th>Current</th><th>File</th><th>Today</th><th>&rarr; Variant</th></tr></thead>
+      <tbody>
+        <tr><td>Login submit</td><td><code>app/login/page.tsx</code></td><td>inline <code>#005EB8</code>, <code>rounded-lg</code></td><td><code>primary</code></td></tr>
+        <tr><td>PDP hero CTA</td><td><code>app/apps/[slug]/page.tsx</code></td><td><code>accent</code> fill, <code>rounded-lg</code></td><td><code>primary</code></td></tr>
+        <tr><td>EOI submit</td><td><code>ExpressInterestModal.tsx</code></td><td><code>var(--nhs-blue)</code>, <code>rounded-lg</code></td><td><code>primary</code> (loading)</td></tr>
+        <tr><td>Cookie accept</td><td><code>CookieBanner.tsx</code></td><td><code>var(--nhs-blue)</code>, <code>rounded-lg</code></td><td><code>primary</code></td></tr>
+        <tr><td>Reset consent</td><td><code>ResetCookieConsentButton.tsx</code></td><td><code>var(--nhs-blue)</code>, <code>rounded-lg</code></td><td><code>primary</code></td></tr>
+        <tr><td>Express interest (white)</td><td><code>ExpressInterestWhiteButton.tsx</code></td><td>white on accent, inline 8px</td><td><code>on-accent</code></td></tr>
+        <tr><td>Save toggle</td><td><code>SaveToggleButton.tsx</code></td><td>white/blue &rarr; teal active</td><td><code>toggle</code></td></tr>
+        <tr><td>Compare toggle</td><td><code>CompareToggleButton.tsx</code></td><td>white/blue &rarr; teal active</td><td><code>toggle</code> (+ blocked)</td></tr>
+        <tr><td>Back to top</td><td><code>BackToTop.tsx</code></td><td>blue <code>rounded-full</code> FAB</td><td><code>primary pill</code></td></tr>
+        <tr><td>AI send</td><td><code>ai/ChatInput.tsx</code></td><td>40&times;40 <code>rounded-xl</code></td><td><code>primary iconOnly</code></td></tr>
+        <tr><td>Suggestion prompt</td><td><code>ai/SuggestionPromptButton.tsx</code></td><td>bordered card, <code>rounded-xl</code></td><td><code>ghost</code> (card-ish)</td></tr>
+        <tr><td>Clear data confirm</td><td><code>ClearDataModal.tsx</code></td><td><code>var(--nhs-red)</code>, <code>rounded-xl</code></td><td><code>destructive</code></td></tr>
+      </tbody>
+    </table>
+
+    <h4>Current &rarr; proposed (the non-obvious ones)</h4>
+    <div class="ds-example">
+      <div class="ds-example__stack" style="gap:20px">
+        <div>
+          <p class="ds-example__label">ExpressInterestWhiteButton (on a blue callout)</p>
+          <div class="ds-u-row" style="background:var(--nhs-blue);padding:14px;border-radius:var(--radius-md)">
+            <span style="background:#fff;color:#005EB8;border-radius:8px;padding:12px 24px;font-size:var(--text-label);font-weight:700;display:inline-flex">Express interest <span class="ds-u-muted" style="font-weight:400;margin-left:6px">(current)</span></span>
+            <button class="ds-btn ds-btn--on-accent" type="button">Express interest</button>
+          </div>
+        </div>
+        <div>
+          <p class="ds-example__label">BackToTop FAB</p>
+          <div class="ds-u-row">
+            <span style="background:var(--nhs-blue);color:#fff;border-radius:9999px;padding:10px 16px;font-size:.875rem;font-weight:600;box-shadow:var(--shadow-md);display:inline-flex">&uarr; Back to top <span style="opacity:.7;font-weight:400;margin-left:6px">(current)</span></span>
+            <button class="ds-btn ds-btn--primary ds-btn--pill" type="button">&uarr; Back to top</button>
+          </div>
+        </div>
+        <div>
+          <p class="ds-example__label">AI send button</p>
+          <div class="ds-u-row">
+            <span style="background:var(--nhs-blue);color:#fff;border-radius:12px;width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center">&uarr;</span>
+            <span class="ds-u-muted" style="font-size:.82rem">current (xl)</span>
+            <button class="ds-btn ds-btn--icon ds-btn--primary" type="button" aria-label="Send">&uarr;</button>
+            <span class="ds-u-muted" style="font-size:.82rem">proposed (md)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-note ds-note--source">Source (current): the 8 bespoke components + inline CTAs catalogued in the <a href="/DS/Report-v1/index.html">v1 audit</a>. Proposed: <code>components/ui/Button.tsx</code> + <code>.ds-btn</code> tokens.</div>
+    <h2 id="modal">4. Modal decision <span class="ds-status ds-status--canonical">Done</span></h2>
+    <p>
+      Shipped: <code>components/ui/Modal.tsx</code> (with <code>useFocusTrap</code>, <code>useEscape</code>,
+      <code>useLockBodyScroll</code>) replaces the duplicated focus-trap / Escape / restore-focus / scroll-lock code.
+      All three portal modals and the AI advisor drawer now run on it &mdash; the drawer gained a portal, a focus trap
+      and focus restore (MOD-1 Option A, MOD-2 Option A).
+    </p>
+
+    <h3>4.1 Proposed primitive + hooks</h3>
+<pre class="ds-code"><code>// components/ui/useFocusTrap.ts, useEscape.ts, useLockBodyScroll.ts
+// components/ui/Modal.tsx
+&lt;Modal open={open} onClose={close}
+       labelledBy={titleId} describedBy={descId}
+       initialFocus="close | first-focusable"
+       restoreFocus="previous | trigger"
+       dismissOnBackdrop={true}
+       lockDismiss={stage === 'loading'}&gt; ... &lt;/Modal&gt;</code></pre>
+    <table class="ds-table">
+      <thead><tr><th>Shell</th><th>Portal</th><th>Escape</th><th>Focus trap</th><th>Restore</th></tr></thead>
+      <tbody>
+        <tr><td><code>ExpressInterestModal</code></td><td>Yes</td><td>Yes</td><td>Yes</td><td>previous</td></tr>
+        <tr><td><code>ClearDataModal</code></td><td>Yes</td><td>Yes (locked while loading)</td><td>Yes</td><td>previous</td></tr>
+        <tr><td><code>SharePagePanel</code></td><td>Yes</td><td>Yes</td><td>Yes</td><td>trigger</td></tr>
+        <tr><td><code>AiAdvisorPanel</code></td><td><span class="ds-status ds-status--canonical">Yes</span></td><td>Yes</td><td><span class="ds-status ds-status--canonical">Yes</span></td><td>previous</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.2 Choice MOD-1 &mdash; how the drawer relates to Modal</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; <code>&lt;Modal variant="drawer"&gt;</code> (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">One component, one trap implementation; <code>variant</code> switches centred dialog vs right slide-over. Fewer moving parts.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; separate <code>&lt;Drawer&gt;</code></p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Distinct component that shares the <code>useFocusTrap</code> hook. More files, but keeps drawer-specific animation/markup cleanly apart.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.3 Choice MOD-2 &mdash; AI drawer portal</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; move into a portal + trap (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Consistent stacking/z-index with the modals; gains a real focus trap and focus restore. Behaviour parity across all overlays.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; keep inline, add trap only</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Smaller diff (preserves the current mounted-and-translated animation), but keeps the drawer&rsquo;s separate stacking model.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.4 Behaviour defaults (confirm)</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th></tr></thead>
+      <tbody>
+        <tr><td>MOD-3</td><td>Default <code>restoreFocus</code></td><td><code>previous</code> (active element on open); <code>SharePagePanel</code> overrides to <code>trigger</code></td></tr>
+        <tr><td>MOD-4</td><td>Default <code>initialFocus</code></td><td><code>close</code> button for forms; <code>first-focusable</code> for share</td></tr>
+        <tr><td>MOD-5</td><td>Backdrop / Escape lock</td><td>Locked while <code>ClearDataModal</code> is in its <code>loading</code> stage</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.5 Previews</h3>
+    <div class="ds-example ds-example--surface">
+      <div style="position:relative;border-radius:var(--radius-lg);overflow:hidden;background:rgba(0,48,135,0.35);padding:28px;min-height:240px;display:flex;align-items:center;justify-content:center">
+        <div role="dialog" aria-label="Preview dialog" style="width:100%;max-width:420px;background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border)">
+            <h3 class="ds-u-mt0" style="margin:0;font-size:1.1rem">Express interest</h3>
+            <button class="ds-btn ds-btn--ghost ds-btn--icon" type="button" aria-label="Close">&times;</button>
+          </div>
+          <div style="padding:20px">
+            <div class="ds-field" style="margin-bottom:0"><label class="ds-field__label">Message to supplier</label><textarea class="ds-textarea" aria-label="Message demo"></textarea></div>
+          </div>
+          <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px">
+            <button class="ds-btn ds-btn--ghost" type="button">Cancel</button>
+            <button class="ds-btn ds-btn--primary" type="button">Send interest</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example ds-example--surface">
+      <p class="ds-example__label">Drawer variant (right slide-over)</p>
+      <div style="position:relative;border-radius:var(--radius-lg);overflow:hidden;background:rgba(0,0,0,0.25);min-height:200px;display:flex;justify-content:flex-end">
+        <div role="dialog" aria-label="AI advisor preview" style="width:280px;background:#fff;border-left:1px solid var(--border);box-shadow:var(--shadow-lg);padding:18px;display:flex;flex-direction:column;gap:10px">
+          <div class="ds-u-row" style="justify-content:space-between"><strong>AI advisor</strong><button class="ds-btn ds-btn--ghost ds-btn--icon" type="button" aria-label="Close">&times;</button></div>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Slide-over sharing the same trap + Escape + restore-focus behaviour.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-note ds-note--source">Source: <code>components/ExpressInterestModal.tsx</code>, <code>ClearDataModal.tsx</code>, <code>SharePagePanel.tsx</code>, <code>ai/AiAdvisorPanel.tsx</code>. See also <a href="/DS/components/modals.html">Modals &amp; dialogs</a>.</div>
+    <h2 id="radius">5. Radius mapping decision <span class="ds-status ds-status--canonical">Done</span></h2>
+    <p>
+      Shipped via the <code>@theme</code> remap (RAD-2 Option A): Tailwind&rsquo;s named radii now point at the tokens, so
+      <code>rounded-sm/md/lg/xl</code> resolve to the DS scale (6/8/12/16px) and <code>rounded-pill</code> is available.
+      The semantic mapping (RAD-1) is reflected in the <code>Button</code> primitive (md/8px) and documented on the
+      <a href="/DS/styles/elevation.html">Elevation &amp; radius</a> page.
+    </p>
+
+    <h3>5.1 Current usage</h3>
+    <div class="ds-example">
+      <div class="ds-example__stack" style="gap:8px;max-width:520px">
+        <div class="ds-space-row"><span class="ds-space-meta"><code>rounded-xl</code> &middot; 98</span><span class="ds-space-bar" style="width:98%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta"><code>rounded-lg</code> &middot; 81</span><span class="ds-space-bar" style="width:81%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta"><code>rounded-md</code> &middot; 61</span><span class="ds-space-bar" style="width:61%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta"><code>rounded-full</code> &middot; 26</span><span class="ds-space-bar" style="width:26%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta"><code>rounded-2xl</code> &middot; 19</span><span class="ds-space-bar" style="width:19%"></span></div>
+      </div>
+    </div>
+
+    <h3>5.2 Proposed semantic mapping (RAD-1)</h3>
+    <p>By role, not by current class. Rendered at the real token so you can sanity-check the look.</p>
+    <div class="ds-example">
+      <div class="ds-example__row" style="gap:20px;align-items:flex-start">
+        <div style="text-align:center"><div style="width:120px;height:72px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-sm);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:.78rem">button / input</div><div class="ds-u-muted" style="font-size:.76rem;margin-top:6px"><code>md</code> 8px</div></div>
+        <div style="text-align:center"><div style="width:120px;height:72px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-sm);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;font-size:.78rem">card / panel</div><div class="ds-u-muted" style="font-size:.76rem;margin-top:6px"><code>lg</code> 12px</div></div>
+        <div style="text-align:center"><div style="width:120px;height:72px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-sm);border-radius:var(--radius-xl);display:flex;align-items:center;justify-content:center;font-size:.78rem">feature / modal</div><div class="ds-u-muted" style="font-size:.76rem;margin-top:6px"><code>xl</code> 16px</div></div>
+        <div style="text-align:center"><div style="width:120px;height:48px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-sm);border-radius:var(--radius-pill);display:flex;align-items:center;justify-content:center;font-size:.78rem">pill / FAB</div><div class="ds-u-muted" style="font-size:.76rem;margin-top:6px"><code>pill</code></div></div>
+      </div>
+    </div>
+    <table class="ds-table">
+      <thead><tr><th>Role</th><th>Token</th><th>Current classes folded in</th></tr></thead>
+      <tbody>
+        <tr><td>Buttons, inputs, small callouts</td><td><code>--radius-md</code> 8px</td><td><code>rounded-md</code>, most <code>rounded-lg</code> buttons</td></tr>
+        <tr><td>Cards, panels, list items</td><td><code>--radius-lg</code> 12px</td><td>most <code>rounded-xl</code>, surface <code>rounded-lg</code></td></tr>
+        <tr><td>Large/feature cards, auth card, modals</td><td><code>--radius-xl</code> 16px</td><td><code>rounded-2xl</code>, modal <code>rounded-2xl</code></td></tr>
+        <tr><td>Toggles, FABs, count chips</td><td><code>--radius-pill</code></td><td><code>rounded-full</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3>5.3 Choice RAD-2 &mdash; how to wire it</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; Tailwind <code>@theme</code> remap (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0 0 8px">Point Tailwind&rsquo;s radius scale at the tokens, so existing <code>rounded-lg</code> etc. automatically resolve to the scale. Smallest churn in JSX.</p>
+<pre class="ds-code" style="margin:0"><code>@theme {
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+}</code></pre>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; explicit utilities</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Rewrite to <code>rounded-[var(--radius-lg)]</code> at each site. Most explicit/greppable, but touches every <code>rounded-*</code> usage by hand.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="token-alias">6. Token-alias option (TOK-1) <span class="ds-status ds-status--canonical">Done</span></h2>
+    <p>
+      Shipped (Option A): <code>@theme { --color-nhs-blue: #005EB8; }</code> is in <code>app/globals.css</code>, so
+      <code>bg-nhs-blue</code> / <code>text-nhs-blue</code> / <code>border-nhs-blue</code> utilities are now available for
+      future code.
+    </p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; add <code>@theme</code> colour alias (recommended)</p>
+<pre class="ds-code" style="margin:0"><code>@theme { --color-nhs-blue: #005EB8; }
+/* enables bg-nhs-blue, text-nhs-blue, border-nhs-blue */</code></pre>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; keep <code>[var(--nhs-blue)]</code> arbitrary values</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">No config change; slightly more verbose at call sites.</p>
+        </div>
+      </div>
+    </div>
+    <h2 id="decision-log">7. Decision log</h2>
+    <p>Choices applied this round. Where the pick differed from the recommendation it is flagged.</p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th><th>Chosen &amp; applied</th></tr></thead>
+      <tbody>
+        <tr><td>BTN-1</td><td>Primary corner radius</td><td>A &mdash; <code>md</code> 8px</td><td>A &mdash; <code>md</code> 8px</td></tr>
+        <tr><td>BTN-2</td><td>Primary hover shade</td><td>A &mdash; <code>#004B8C</code></td><td>A &mdash; <code>#004B8C</code></td></tr>
+        <tr><td>BTN-3</td><td>Toggle &ldquo;on&rdquo; state</td><td>A &mdash; teal</td><td><strong>B &mdash; blue-tinted</strong></td></tr>
+        <tr><td>BTN-4</td><td>Icon-button radius</td><td>A &mdash; <code>md</code> 8px</td><td>A &mdash; <code>md</code> 8px</td></tr>
+        <tr><td>BTN-5</td><td>Approve the 12-instance migration map</td><td>As tabled (3.6)</td><td>As tabled &mdash; all 12 migrated</td></tr>
+        <tr><td>MOD-1</td><td>Drawer relationship to Modal</td><td>A &mdash; <code>variant="drawer"</code></td><td>A &mdash; <code>variant="drawer"</code></td></tr>
+        <tr><td>MOD-2</td><td>AI drawer into a portal</td><td>A &mdash; portal + trap</td><td>A &mdash; portal + trap (+ <code>keepMounted</code>)</td></tr>
+        <tr><td>MOD-3</td><td>Default <code>restoreFocus</code></td><td><code>previous</code></td><td><code>previous</code> (Share &rarr; <code>trigger</code>)</td></tr>
+        <tr><td>MOD-4</td><td>Default <code>initialFocus</code></td><td><code>close</code> (forms)</td><td>close ref (forms) / first-focusable (share)</td></tr>
+        <tr><td>MOD-5</td><td>Lock dismiss while loading</td><td>Yes (ClearData)</td><td>Yes &mdash; <code>lockDismiss</code></td></tr>
+        <tr><td>RAD-1</td><td>Approve semantic radius mapping</td><td>As tabled (5.2)</td><td>As tabled</td></tr>
+        <tr><td>RAD-2</td><td>Radius wiring</td><td>A &mdash; <code>@theme</code> remap</td><td>A &mdash; <code>@theme</code> remap</td></tr>
+        <tr><td>TOK-1</td><td>Add <code>--color-nhs-blue</code> alias</td><td>A &mdash; add it</td><td>A &mdash; added</td></tr>
+      </tbody>
+    </table>
+
+    <h2>8. Shipped this round</h2>
+    <ul>
+      <li><code>components/ui/Button.tsx</code> built; all 12 instances migrated per BTN-1&hellip;BTN-5 (BTN-3 = blue-tinted).</li>
+      <li><code>components/ui/Modal.tsx</code> + <code>useFocusTrap</code>/<code>useEscape</code>/<code>useLockBodyScroll</code> built; the 3 portal modals refactored and the AI drawer moved onto the drawer variant with a real trap (MOD-1&hellip;MOD-5).</li>
+      <li>Radius wired via <code>@theme</code> (RAD-1/RAD-2); <code>--color-nhs-blue</code> alias added (TOK-1).</li>
+      <li>Remaining: the <code>ProductVideosSection</code> lightbox is the one overlay still to migrate onto <code>Modal</code>.</li>
+    </ul>
+
+    <hr class="ds-rule">
+    <p class="ds-u-muted" style="font-size:.85rem">
+      Companion to the <a href="/DS/Report-v1/index.html">v1 audit</a>. v2 is the Round 2 decision record: foundations
+      landed and all primitive decisions applied &amp; shipped. Structure follows the
+      <a href="https://design-system.service.gov.uk/">GOV.UK Design System</a>.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

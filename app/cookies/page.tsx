@@ -53,15 +53,18 @@ export default function CookiesPage() {
               color: 'var(--text-primary)',
             }}
           >
-            Analytics (Hotjar) only if you accept
+            Analytics (Hotjar)
           </h2>
           <div className="space-y-3" style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
             <p className="m-0">
-              If you choose <strong>Accept analytics cookies</strong>, we load Hotjar to help us understand how this
-              prototype is used and improve it.
+              We use Hotjar to help us understand how this prototype is used and improve it. While the cookie banner is
+              still showing &mdash; before you have made a choice &mdash; analytics may run.
             </p>
             <p className="m-0">
-              If you choose <strong>Reject analytics cookies</strong>, we do not load Hotjar on your device.
+              If you choose <strong>Accept analytics cookies</strong>, Hotjar continues to load.
+            </p>
+            <p className="m-0">
+              If you choose <strong>Reject analytics cookies</strong>, we stop loading Hotjar on your device.
             </p>
           </div>
         </section>

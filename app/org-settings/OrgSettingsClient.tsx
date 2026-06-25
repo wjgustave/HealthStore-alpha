@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import {
   Plus,
   Trash2,
@@ -15,10 +15,13 @@ import {
 import { REGIONS, inferRegionFromOrganisationName } from '@/lib/regionInference'
 import {
   ENTITY_TYPES,
-  emptyOrgProfileSettings,
   type EntityType,
   type OrgProfileSettings,
 } from '@/lib/orgProfile'
+import { Button } from '@/components/ui/Button'
+import { FormField, TextInput, Select, Textarea } from '@/components/ui/FormField'
+import { useToast } from '@/components/ui/Toast'
+import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 
 type ConditionOption = { id: string; label: string }
 
@@ -29,6 +32,8 @@ type Props = {
   dbAvailable: boolean
   conditionOptions: ConditionOption[]
 }
+
+const labelStyle = { fontSize: 'var(--text-label)', color: 'var(--text-secondary)' } as const
 
 function clone(s: OrgProfileSettings): OrgProfileSettings {
   return {
@@ -46,12 +51,11 @@ export default function OrgSettingsClient({
   dbAvailable,
   conditionOptions,
 }: Props) {
+  const toast = useToast()
   const [settings, setSettings] = useState<OrgProfileSettings>(() => clone(initial))
   const [baseline, setBaseline] = useState<OrgProfileSettings>(() => clone(initial))
   const [editing, setEditing] = useState(!savedExists && dbAvailable)
   const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [savedOk, setSavedOk] = useState(false)
 
   const dirty = useMemo(
     () => JSON.stringify(settings) !== JSON.stringify(baseline),
@@ -103,13 +107,11 @@ export default function OrgSettingsClient({
   }, [])
 
   function update(patch: Partial<OrgProfileSettings>) {
-    setSavedOk(false)
     setSettings(prev => ({ ...prev, ...patch }))
   }
 
   /** Org name change for an ICB-type org also re-infers region. */
   function updateOrganisationName(value: string) {
-    setSavedOk(false)
     setSettings(prev => {
       const next = { ...prev, organisationName: value }
       if (prev.entityType === 'ICB') {
@@ -121,7 +123,6 @@ export default function OrgSettingsClient({
   }
 
   function updateParentIcb(value: string) {
-    setSavedOk(false)
     setSettings(prev => {
       const next = { ...prev, parentIcbName: value }
       if (prev.entityType !== 'ICB') {
@@ -133,7 +134,6 @@ export default function OrgSettingsClient({
   }
 
   function updateEntityType(value: EntityType) {
-    setSavedOk(false)
     setSettings(prev => {
       const next = { ...prev, entityType: value }
       const icbName = value === 'ICB' ? prev.organisationName : prev.parentIcbName
@@ -145,8 +145,6 @@ export default function OrgSettingsClient({
 
   async function handleSave() {
     setSaving(true)
-    setError(null)
-    setSavedOk(false)
     try {
       const res = await fetch('/api/org-profile', {
         method: 'PUT',
@@ -161,9 +159,9 @@ export default function OrgSettingsClient({
       setSettings(clone(saved))
       setBaseline(clone(saved))
       setEditing(false)
-      setSavedOk(true)
+      toast.success('Organisation settings saved for your whole organisation.')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not save settings.')
+      toast.error(err instanceof Error ? err.message : 'Could not save settings.')
     } finally {
       setSaving(false)
     }
@@ -172,8 +170,6 @@ export default function OrgSettingsClient({
   function handleCancel() {
     setSettings(clone(baseline))
     setEditing(false)
-    setError(null)
-    setSavedOk(false)
   }
 
   function addCondition(conditionId: string) {
@@ -196,6 +192,8 @@ export default function OrgSettingsClient({
 
   return (
     <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
+      {/* R7 NAV-03: org-settings now has a breadcrumb like every other signed-in page. */}
+      <PageBreadcrumb items={[{ label: 'Organisation settings' }]} className="mb-4" />
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold" style={{ color: 'var(--nhs-dark)' }}>
@@ -206,49 +204,41 @@ export default function OrgSettingsClient({
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
+          <Button
+            variant="secondary"
+            size="sm"
             disabled
             title="Coming soon — auto-fill from an AI search"
-            className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium opacity-60"
-            style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
+            className="gap-1.5"
           >
-            <Sparkles className="h-4 w-4" />
+            <Sparkles className="h-4 w-4" aria-hidden />
             Find this information
-          </button>
+          </Button>
           {editing ? (
             <>
-              <button
-                type="button"
-                onClick={handleCancel}
-                disabled={saving}
-                className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-gray-50"
-                style={{ borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
-              >
+              <Button variant="secondary" size="sm" onClick={handleCancel} disabled={saving}>
                 Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleSave}
-                disabled={saving}
-                className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-semibold text-white transition-opacity disabled:opacity-60"
-                style={{ background: 'var(--nhs-blue)' }}
-              >
-                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              </Button>
+              <Button variant="primary" size="sm" onClick={handleSave} loading={saving} className="gap-1.5">
+                {saving ? (
+                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                ) : (
+                  <Save className="h-4 w-4" aria-hidden />
+                )}
                 {saving ? 'Saving…' : 'Save'}
-              </button>
+              </Button>
             </>
           ) : (
-            <button
-              type="button"
+            <Button
+              variant="primary"
+              size="sm"
               onClick={() => setEditing(true)}
               disabled={!dbAvailable}
-              className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-semibold text-white transition-opacity disabled:opacity-60"
-              style={{ background: 'var(--nhs-blue)' }}
+              className="gap-1.5"
             >
-              <Pencil className="h-4 w-4" />
+              <Pencil className="h-4 w-4" aria-hidden />
               Edit
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -259,134 +249,161 @@ export default function OrgSettingsClient({
           review the current values below.
         </Banner>
       )}
-      {error && <Banner tone="error">{error}</Banner>}
-      {savedOk && (
-        <Banner tone="success">Organisation settings saved for your whole organisation.</Banner>
-      )}
-      {dirty && editing && (
-        <Banner tone="info">You have unsaved changes.</Banner>
-      )}
+      {dirty && editing && <Banner tone="info">You have unsaved changes.</Banner>}
 
       {/* Organisation details */}
       <Section title="Organisation details">
-        <Field label="Organisation name" hint="The name of your ICB, Trust, CIC or PCN.">
-          {editing ? (
+        <OrgField
+          label="Organisation name"
+          hint="The name of your ICB, Trust, CIC or PCN."
+          editing={editing}
+          readValue={<ReadValue value={settings.organisationName} />}
+        >
+          {field => (
             <TextInput
+              {...field}
+              type="text"
               value={settings.organisationName}
-              onChange={updateOrganisationName}
+              onChange={e => updateOrganisationName(e.target.value)}
               placeholder="e.g. Shropshire, Telford and Wrekin ICB"
             />
-          ) : (
-            <ReadValue value={settings.organisationName} />
           )}
-        </Field>
+        </OrgField>
 
-        <Field label="Entity type">
-          {editing ? (
+        <OrgField label="Entity type" editing={editing} readValue={<ReadValue value={settings.entityType} />}>
+          {field => (
             <Select
+              {...field}
               value={settings.entityType}
-              onChange={v => updateEntityType(v as EntityType)}
-              options={ENTITY_TYPES.map(t => ({ value: t, label: t }))}
-            />
-          ) : (
-            <ReadValue value={settings.entityType} />
+              onChange={e => updateEntityType(e.target.value as EntityType)}
+            >
+              {ENTITY_TYPES.map(t => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </Select>
           )}
-        </Field>
+        </OrgField>
 
         {settings.entityType !== 'ICB' && (
-          <Field label="ICB" hint="The ICB this organisation sits under.">
-            {editing ? (
+          <OrgField
+            label="ICB"
+            hint="The ICB this organisation sits under."
+            editing={editing}
+            readValue={<ReadValue value={settings.parentIcbName} />}
+          >
+            {field => (
               <TextInput
+                {...field}
+                type="text"
                 value={settings.parentIcbName}
-                onChange={updateParentIcb}
+                onChange={e => updateParentIcb(e.target.value)}
                 placeholder="e.g. West Yorkshire ICB"
               />
-            ) : (
-              <ReadValue value={settings.parentIcbName} />
             )}
-          </Field>
+          </OrgField>
         )}
 
-        <Field label="Region" hint="Auto-filled from the ICB. You can override it.">
-          {editing ? (
-            <Select
-              value={settings.region}
-              onChange={v => update({ region: v })}
-              options={[{ value: '', label: '— Select region —' }, ...REGIONS.map(r => ({ value: r, label: r }))]}
-            />
-          ) : (
-            <ReadValue value={settings.region} />
+        <OrgField
+          label="Region"
+          hint="Auto-filled from the ICB. You can override it."
+          editing={editing}
+          readValue={<ReadValue value={settings.region} />}
+        >
+          {field => (
+            <Select {...field} value={settings.region} onChange={e => update({ region: e.target.value })}>
+              <option value="">— Select region —</option>
+              {REGIONS.map(r => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </Select>
           )}
-        </Field>
+        </OrgField>
 
-        <Field label="Population" hint="Size of the population your organisation serves.">
-          {editing ? (
-            <NumberInput
-              value={settings.population}
-              onChange={v => update({ population: v })}
+        <OrgField
+          label="Population"
+          hint="Size of the population your organisation serves."
+          editing={editing}
+          readValue={<ReadValue value={settings.population ? settings.population.toLocaleString() : ''} />}
+        >
+          {field => (
+            <TextInput
+              {...field}
+              type="number"
+              min={0}
+              inputMode="numeric"
+              value={settings.population ?? ''}
+              onChange={e => {
+                const n = e.target.value === '' ? undefined : Number(e.target.value)
+                update({ population: n !== undefined && Number.isFinite(n) && n >= 0 ? n : undefined })
+              }}
               placeholder="e.g. 510000"
             />
-          ) : (
-            <ReadValue value={settings.population ? settings.population.toLocaleString() : ''} />
           )}
-        </Field>
+        </OrgField>
 
-        <Field label="Local health challenges">
-          <TagEditor
-            tags={settings.localHealthChallenges}
-            editing={editing}
-            placeholder="Add a challenge and press Enter"
-            onChange={tags => update({ localHealthChallenges: tags })}
-          />
-        </Field>
+        <TagField
+          label="Local health challenges"
+          tags={settings.localHealthChallenges}
+          editing={editing}
+          placeholder="Add a challenge and press Enter"
+          onChange={tags => update({ localHealthChallenges: tags })}
+        />
 
-        <Field label="Current digital position">
-          <TagEditor
-            tags={settings.currentDigitalPosition}
-            editing={editing}
-            placeholder="Add a tag and press Enter"
-            onChange={tags => update({ currentDigitalPosition: tags })}
-          />
-        </Field>
+        <TagField
+          label="Current digital position"
+          tags={settings.currentDigitalPosition}
+          editing={editing}
+          placeholder="Add a tag and press Enter"
+          onChange={tags => update({ currentDigitalPosition: tags })}
+        />
 
-        <Field label="Deprivation profile">
-          {editing ? (
-            <TextArea
+        <OrgField
+          label="Deprivation profile"
+          editing={editing}
+          readValue={<ReadValue value={settings.deprivationProfile} multiline />}
+        >
+          {field => (
+            <Textarea
+              {...field}
+              rows={3}
               value={settings.deprivationProfile}
-              onChange={v => update({ deprivationProfile: v })}
+              onChange={e => update({ deprivationProfile: e.target.value })}
               placeholder="Describe the deprivation profile"
             />
-          ) : (
-            <ReadValue value={settings.deprivationProfile} multiline />
           )}
-        </Field>
+        </OrgField>
 
-        <Field label="Rural / urban mix">
-          {editing ? (
-            <TextArea
+        <OrgField
+          label="Rural / urban mix"
+          editing={editing}
+          readValue={<ReadValue value={settings.ruralUrbanMix} multiline />}
+        >
+          {field => (
+            <Textarea
+              {...field}
+              rows={3}
               value={settings.ruralUrbanMix}
-              onChange={v => update({ ruralUrbanMix: v })}
+              onChange={e => update({ ruralUrbanMix: e.target.value })}
               placeholder="Describe the rural / urban mix"
             />
-          ) : (
-            <ReadValue value={settings.ruralUrbanMix} multiline />
           )}
-        </Field>
+        </OrgField>
       </Section>
 
       {/* Priorities */}
       <Section title="Priorities">
-        <Field
+        <TagField
           label="General priorities"
           hint="Cross-cutting priorities that are not specific to a single condition."
-        >
-          <TagEditor
-            tags={settings.strategicPriorities}
-            editing={editing}
-            placeholder="Add a priority and press Enter"
-            onChange={tags => update({ strategicPriorities: tags })}
-          />
-        </Field>
+          tags={settings.strategicPriorities}
+          editing={editing}
+          placeholder="Add a priority and press Enter"
+          onChange={tags => update({ strategicPriorities: tags })}
+        />
 
         <div className="mt-2 space-y-4">
           {settings.conditions.map(condition => (
@@ -400,40 +417,51 @@ export default function OrgSettingsClient({
                   {conditionLabel(condition.conditionId)}
                 </h3>
                 {editing && (
-                  <button
-                    type="button"
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => removeCondition(condition.conditionId)}
-                    className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-colors hover:bg-red-50"
+                    className="gap-1 hover:bg-red-50"
                     style={{ color: '#b91c1c' }}
                     aria-label={`Remove ${conditionLabel(condition.conditionId)}`}
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
+                    <Trash2 className="h-3.5 w-3.5" aria-hidden />
                     Remove
-                  </button>
+                  </Button>
                 )}
               </div>
 
               <div className="mt-3">
-                <FieldLabel
+                <OrgField
                   label="Cohort"
                   hint={`How many people in your population have ${conditionLabel(condition.conditionId)}?`}
-                />
-                {editing ? (
-                  <NumberInput
-                    value={condition.cohortSize}
-                    onChange={v => updateCondition(condition.conditionId, { cohortSize: v })}
-                    placeholder="e.g. 18000"
-                  />
-                ) : (
-                  <ReadValue
-                    value={condition.cohortSize ? condition.cohortSize.toLocaleString() : ''}
-                  />
-                )}
+                  editing={editing}
+                  readValue={
+                    <ReadValue value={condition.cohortSize ? condition.cohortSize.toLocaleString() : ''} />
+                  }
+                >
+                  {field => (
+                    <TextInput
+                      {...field}
+                      type="number"
+                      min={0}
+                      inputMode="numeric"
+                      value={condition.cohortSize ?? ''}
+                      onChange={e => {
+                        const n = e.target.value === '' ? undefined : Number(e.target.value)
+                        updateCondition(condition.conditionId, {
+                          cohortSize: n !== undefined && Number.isFinite(n) && n >= 0 ? n : undefined,
+                        })
+                      }}
+                      placeholder="e.g. 18000"
+                    />
+                  )}
+                </OrgField>
               </div>
 
               <div className="mt-3">
-                <FieldLabel label="Condition priorities" />
-                <TagEditor
+                <TagField
+                  label="Condition priorities"
                   tags={condition.priorities}
                   editing={editing}
                   placeholder="Add a priority and press Enter"
@@ -444,12 +472,8 @@ export default function OrgSettingsClient({
           ))}
         </div>
 
-        {editing && (
-          <AddCondition options={availableConditions} onAdd={addCondition} />
-        )}
-        {!editing && settings.conditions.length === 0 && (
-          <ReadValue value="" />
-        )}
+        {editing && <AddCondition options={availableConditions} onAdd={addCondition} />}
+        {!editing && settings.conditions.length === 0 && <ReadValue value="" />}
       </Section>
     </div>
   )
@@ -457,12 +481,9 @@ export default function OrgSettingsClient({
 
 /* ---------- Presentational helpers ---------- */
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section
-      className="mt-6 rounded-xl border bg-white p-5 sm:p-6"
-      style={{ borderColor: 'var(--border)' }}
-    >
+    <section className="hs-surface-card mt-6 p-5 sm:p-6">
       <h2 className="text-lg font-semibold" style={{ color: 'var(--nhs-dark)' }}>
         {title}
       </h2>
@@ -471,34 +492,44 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   )
 }
 
-function FieldLabel({ label, hint }: { label: string; hint?: string }) {
-  return (
-    <div className="mb-1.5">
-      <span className="text-sm font-medium" style={{ color: 'var(--nhs-dark)' }}>
-        {label}
-      </span>
-      {hint && (
-        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-          {hint}
-        </p>
-      )}
-    </div>
-  )
-}
-
-function Field({
+/**
+ * Labelled field that uses the canonical `FormField` (real `<label htmlFor>` +
+ * wired `aria-*`) while editing, and a plain label + read value when not.
+ */
+function OrgField({
   label,
   hint,
+  editing,
   children,
+  readValue,
 }: {
   label: string
   hint?: string
-  children: React.ReactNode
+  editing: boolean
+  children: Parameters<typeof FormField>[0]['children']
+  readValue: ReactNode
 }) {
+  const id = useId()
+  if (editing) {
+    return (
+      <FormField id={id} label={label} hint={hint}>
+        {children}
+      </FormField>
+    )
+  }
   return (
     <div>
-      <FieldLabel label={label} hint={hint} />
-      {children}
+      <div className="mb-1.5">
+        <span className="block font-semibold" style={labelStyle}>
+          {label}
+        </span>
+        {hint ? (
+          <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+            {hint}
+          </p>
+        ) : null}
+      </div>
+      {readValue}
     </div>
   )
 }
@@ -521,99 +552,42 @@ function ReadValue({ value, multiline }: { value: string; multiline?: boolean })
   )
 }
 
-const inputClass =
-  'w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--nhs-blue)]'
-const inputStyle = { borderColor: 'var(--border)', color: 'var(--nhs-dark)' } as const
-
-function TextInput({
-  value,
-  onChange,
+/** Field group wrapping the tag editor with a proper label. */
+function TagField({
+  label,
+  hint,
+  tags,
+  editing,
   placeholder,
-}: {
-  value: string
-  onChange: (v: string) => void
-  placeholder?: string
-}) {
-  return (
-    <input
-      type="text"
-      value={value}
-      placeholder={placeholder}
-      onChange={e => onChange(e.target.value)}
-      className={inputClass}
-      style={inputStyle}
-    />
-  )
-}
-
-function TextArea({
-  value,
   onChange,
-  placeholder,
 }: {
-  value: string
-  onChange: (v: string) => void
+  label: string
+  hint?: string
+  tags: string[]
+  editing: boolean
   placeholder?: string
+  onChange: (tags: string[]) => void
 }) {
   return (
-    <textarea
-      value={value}
-      placeholder={placeholder}
-      rows={3}
-      onChange={e => onChange(e.target.value)}
-      className={inputClass}
-      style={inputStyle}
-    />
-  )
-}
-
-function NumberInput({
-  value,
-  onChange,
-  placeholder,
-}: {
-  value: number | undefined
-  onChange: (v: number | undefined) => void
-  placeholder?: string
-}) {
-  return (
-    <input
-      type="number"
-      min={0}
-      value={value ?? ''}
-      placeholder={placeholder}
-      onChange={e => {
-        const n = e.target.value === '' ? undefined : Number(e.target.value)
-        onChange(n !== undefined && Number.isFinite(n) && n >= 0 ? n : undefined)
-      }}
-      className={inputClass}
-      style={inputStyle}
-    />
-  )
-}
-
-function Select({
-  value,
-  onChange,
-  options,
-}: {
-  value: string
-  onChange: (v: string) => void
-  options: { value: string; label: string }[]
-}) {
-  return (
-    <select
-      value={value}
-      onChange={e => onChange(e.target.value)}
-      className={inputClass}
-      style={inputStyle}
-    >
-      {options.map(o => (
-        <option key={o.value} value={o.value}>
-          {o.label}
-        </option>
-      ))}
-    </select>
+    <div>
+      <div className="mb-1.5">
+        <span className="block font-semibold" style={labelStyle}>
+          {label}
+        </span>
+        {hint ? (
+          <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+            {hint}
+          </p>
+        ) : null}
+      </div>
+      <TagEditor
+        tags={tags}
+        editing={editing}
+        placeholder={placeholder}
+        addLabel={`Add to ${label.toLowerCase()}`}
+        onChange={onChange}
+      />
+    </div>
   )
 }
 
@@ -621,11 +595,13 @@ function TagEditor({
   tags,
   editing,
   placeholder,
+  addLabel,
   onChange,
 }: {
   tags: string[]
   editing: boolean
   placeholder?: string
+  addLabel: string
   onChange: (tags: string[]) => void
 }) {
   const [draft, setDraft] = useState('')
@@ -654,8 +630,8 @@ function TagEditor({
         {tags.map((tag, i) => (
           <span
             key={`${tag}-${i}`}
-            className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium"
-            style={{ background: '#E6F0FB', color: 'var(--nhs-blue)' }}
+            className="pill text-xs"
+            style={{ background: '#E6F0FB', color: 'var(--nhs-blue)', borderColor: '#E6F0FB' }}
           >
             {tag}
           </span>
@@ -671,8 +647,8 @@ function TagEditor({
           {tags.map((tag, i) => (
             <span
               key={`${tag}-${i}`}
-              className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium"
-              style={{ background: '#E6F0FB', color: 'var(--nhs-blue)' }}
+              className="pill text-xs"
+              style={{ background: '#E6F0FB', color: 'var(--nhs-blue)', borderColor: '#E6F0FB' }}
             >
               {tag}
               <button
@@ -681,17 +657,18 @@ function TagEditor({
                 className="rounded-full p-0.5 transition-colors hover:bg-white/60"
                 aria-label={`Remove ${tag}`}
               >
-                <X className="h-3 w-3" />
+                <X className="h-3 w-3" aria-hidden />
               </button>
             </span>
           ))}
         </div>
       )}
       <div className="flex items-center gap-2">
-        <input
+        <TextInput
           type="text"
           value={draft}
           placeholder={placeholder}
+          aria-label={addLabel}
           onChange={e => setDraft(e.target.value)}
           onKeyDown={e => {
             if (e.key === 'Enter') {
@@ -699,18 +676,16 @@ function TagEditor({
               addDraft()
             }
           }}
-          className={inputClass}
-          style={inputStyle}
         />
-        <button
-          type="button"
+        <Button
+          variant="secondary"
+          size="none"
           onClick={addDraft}
-          className="inline-flex flex-shrink-0 items-center justify-center rounded-md border p-2 transition-colors hover:bg-gray-50"
-          style={{ borderColor: 'var(--border)', color: 'var(--nhs-blue)' }}
-          aria-label="Add"
+          aria-label={addLabel}
+          className="flex-shrink-0 p-2.5"
         >
-          <Plus className="h-4 w-4" />
-        </button>
+          <Plus className="h-4 w-4" aria-hidden />
+        </Button>
       </div>
     </div>
   )
@@ -735,11 +710,10 @@ function AddCondition({
 
   return (
     <div className="mt-3 flex items-center gap-2">
-      <select
+      <Select
         value={selected}
+        aria-label="Add a condition"
         onChange={e => setSelected(e.target.value)}
-        className={inputClass}
-        style={inputStyle}
       >
         <option value="">— Add a condition —</option>
         {options.map(o => (
@@ -747,22 +721,22 @@ function AddCondition({
             {o.label}
           </option>
         ))}
-      </select>
-      <button
-        type="button"
+      </Select>
+      <Button
+        variant="primary"
+        size="sm"
+        disabled={!selected}
         onClick={() => {
           if (selected) {
             onAdd(selected)
             setSelected('')
           }
         }}
-        disabled={!selected}
-        className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-white transition-opacity disabled:opacity-50"
-        style={{ background: 'var(--nhs-blue)' }}
+        className="flex-shrink-0 gap-1.5"
       >
-        <Plus className="h-4 w-4" />
+        <Plus className="h-4 w-4" aria-hidden />
         Add condition
-      </button>
+      </Button>
     </div>
   )
 }
@@ -772,7 +746,7 @@ function Banner({
   children,
 }: {
   tone: 'warn' | 'error' | 'success' | 'info'
-  children: React.ReactNode
+  children: ReactNode
 }) {
   const palette = {
     warn: { bg: '#FFF8E1', border: '#F2C94C', color: '#8a6d00', Icon: AlertTriangle },
@@ -783,10 +757,12 @@ function Banner({
   const Icon = palette.Icon
   return (
     <div
+      role={tone === 'error' ? 'alert' : 'status'}
+      aria-live={tone === 'error' ? 'assertive' : 'polite'}
       className="mt-4 flex items-start gap-2 rounded-md border px-3 py-2 text-sm"
       style={{ background: palette.bg, borderColor: palette.border, color: palette.color }}
     >
-      <Icon className="mt-0.5 h-4 w-4 flex-shrink-0" />
+      <Icon className="mt-0.5 h-4 w-4 flex-shrink-0" aria-hidden />
       <span>{children}</span>
     </div>
   )

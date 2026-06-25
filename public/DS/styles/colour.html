@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Colour — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="colour">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Styles</p>
+      <h1 class="ds-page-title">Colour</h1>
+      <p class="ds-lede">
+        The palette is NHS-derived.
+      </p>
+    </div>
+
+    <h2>Brand &amp; accent</h2>
+    <div class="ds-swatches">
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#005EB8"></div><div class="ds-swatch__body"><div class="ds-swatch__name">NHS blue</div><div class="ds-swatch__meta">--nhs-blue &middot; #005EB8</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#003087"></div><div class="ds-swatch__body"><div class="ds-swatch__name">NHS dark blue</div><div class="ds-swatch__meta">--nhs-dark &middot; #003087</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#004B8C"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Primary hover</div><div class="ds-swatch__meta">(literal) &middot; #004B8C</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#FFD800"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Focus yellow</div><div class="ds-swatch__meta">(literal) &middot; #FFD800</div></div></div>
+    </div>
+
+    <h2>Semantic colours</h2>
+    <p>Used for badges, alerts and status. Each pairs a tint background with an accessible text colour (see the badge tokens on the <a href="/DS/components/badges-tags.html">Badges &amp; tags</a> page).</p>
+    <div class="ds-swatches">
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#007F3B"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Green (success)</div><div class="ds-swatch__meta">--nhs-green &middot; #007F3B</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#D5840D"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Amber (warning)</div><div class="ds-swatch__meta">--nhs-amber &middot; #D5840D</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#DA291C"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Red (danger)</div><div class="ds-swatch__meta">--nhs-red &middot; #DA291C</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#330072"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Purple</div><div class="ds-swatch__meta">--nhs-purple &middot; #330072</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#425563"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Grey (neutral)</div><div class="ds-swatch__meta">--nhs-grey &middot; #425563</div></div></div>
+    </div>
+
+    <h2>Surfaces &amp; borders</h2>
+    <div class="ds-swatches">
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#F7F9FC"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Surface (page)</div><div class="ds-swatch__meta">--surface &middot; #F7F9FC</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#FFFFFF;border-bottom:1px solid var(--border)"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Card</div><div class="ds-swatch__meta">--card &middot; #FFFFFF</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#DEE4EA"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Border</div><div class="ds-swatch__meta">--border &middot; #DEE4EA</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#E6F0FB"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Blue tint (active)</div><div class="ds-swatch__meta">(literal) &middot; #E6F0FB</div></div></div>
+    </div>
+
+    <h2>Text colours</h2>
+    <div class="ds-swatches">
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#1A2332"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Primary</div><div class="ds-swatch__meta">--text-primary &middot; #1A2332</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#485768"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Secondary</div><div class="ds-swatch__meta">--text-secondary &middot; #485768</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#68757c"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Muted</div><div class="ds-swatch__meta">--text-muted &middot; #68757c</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#768692"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Muted low-contrast</div><div class="ds-swatch__meta">--text-muted-low-con &middot; #768692</div></div></div>
+    </div>
+    <div class="ds-note">
+      <strong>Contrast rule.</strong> <code>--text-muted-low-con</code> (#768692) is for non-body-line contexts only
+      (e.g. meta on tinted panels). It does not meet AA against white for body copy — use <code>--text-muted</code> or darker for paragraphs.
+    </div>
+
+    <h2>Usage</h2>
+    <div class="ds-dosdonts">
+      <div class="ds-panel ds-panel--do">
+        <p class="ds-panel__head">Do</p>
+        <ul>
+          <li>Reference colours via tokens (<code>var(--nhs-blue)</code> or the <code>nhs-blue</code> Tailwind utilities), not hex literals.</li>
+          <li>Keep blue as the only interactive accent.</li>
+          <li>Pair semantic colour with an icon or text label, never colour alone.</li>
+        </ul>
+      </div>
+      <div class="ds-panel ds-panel--dont">
+        <p class="ds-panel__head">Don't</p>
+        <ul>
+          <li>Inline <code>#005EB8</code> directly — use the token or <code>nhs-blue</code> utility.</li>
+          <li>Introduce new accent hues for one-off surfaces.</li>
+          <li>Use low-contrast muted text for body copy.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ds-note ds-note--source">Source: <code>app/globals.css</code> (<code>:root</code> custom properties).</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

@@ -1,7 +1,8 @@
 'use client'
 
-import '@awesome.me/webawesome/dist/components/icon/icon.js'
+import { Bookmark } from 'lucide-react'
 import { useBookmarks } from '@/components/BookmarkProvider'
+import { Button } from '@/components/ui/Button'
 
 export function SaveToggleButton({
   appId,
@@ -18,8 +19,11 @@ export function SaveToggleButton({
   const busy = isLoading || togglingId === appId
 
   return (
-    <button
-      type="button"
+    <Button
+      variant="toggle"
+      pressed={saved}
+      borderless={borderless}
+      size="none"
       aria-label={saved ? 'Remove from saved apps' : 'Save app'}
       aria-pressed={saved}
       aria-busy={busy}
@@ -27,39 +31,21 @@ export function SaveToggleButton({
       onClick={() => {
         void toggle(appId)
       }}
-      className={`rounded-lg py-4 text-sm font-semibold text-center transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--nhs-blue)] disabled:opacity-60 disabled:cursor-wait ${className} ${
-        borderless ? 'border-0' : 'border'
-      } ${
-        saved
-          ? `bg-[#E1F4F5] text-[#004B50] hover:bg-[#cde8eb] ${borderless ? '' : 'border-[#B8E0E4] hover:border-[#9fd4d9]'}`
-          : `bg-white text-[#005EB8] hover:bg-[#E6F0FB] ${borderless ? '' : 'border-[#005EB8]'}`
-      }`}
+      className={`py-4 text-sm disabled:cursor-wait ${className}`}
     >
       <span className="inline-flex items-center justify-center gap-1.5">
         {saved ? (
           <>
-            <wa-icon
-              name="bookmark"
-              family="classic"
-              variant="solid"
-              className="shrink-0 text-base leading-none inline-block align-middle text-current"
-              aria-hidden
-            />
+            <Bookmark className="h-4 w-4 shrink-0" fill="currentColor" aria-hidden />
             Saved
           </>
         ) : (
           <>
-            <wa-icon
-              name="bookmark"
-              family="classic"
-              variant="regular"
-              className="shrink-0 text-base leading-none inline-block align-middle text-current"
-              aria-hidden
-            />
+            <Bookmark className="h-4 w-4 shrink-0" aria-hidden />
             Save
           </>
         )}
       </span>
-    </button>
+    </Button>
   )
 }

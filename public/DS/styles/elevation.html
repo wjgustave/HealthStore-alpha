@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Elevation &amp; radius — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="elevation">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Styles</p>
+      <h1 class="ds-page-title">Elevation &amp; radius</h1>
+    </div>
+
+    <h2>Shadow tokens</h2>
+    <div class="ds-example ds-example--surface">
+      <div class="ds-example__row" style="gap:32px">
+        <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:var(--shadow-sm)">
+          <strong>shadow-sm</strong><div class="ds-u-muted" style="font-size:.82rem">0 1px 3px rgba(0,0,0,.06)</div>
+        </div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:var(--shadow-md)">
+          <strong>shadow-md</strong><div class="ds-u-muted" style="font-size:.82rem">0 4px 12px rgba(0,0,0,.08)</div>
+        </div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:var(--shadow-lg)">
+          <strong>shadow-lg</strong><div class="ds-u-muted" style="font-size:.82rem">0 10px 30px rgba(0,0,0,.10)</div>
+        </div>
+      </div>
+    </div>
+    <table class="ds-table">
+      <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td><code>--shadow-sm</code></td><td>0 1px 3px rgba(0,0,0,.06)</td><td><code>.hs-surface-card-sm</code> &mdash; PDP cards, sidebars</td></tr>
+        <tr><td><code>--shadow-md</code></td><td>0 4px 12px rgba(0,0,0,.08)</td><td><code>.hs-surface-card</code>, <code>.app-card</code> (rest)</td></tr>
+        <tr><td><code>--shadow-lg</code></td><td>0 10px 30px rgba(0,0,0,.10)</td><td><code>.app-card</code> hover, auth card</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Surface classes</h2>
+    <p>Two canonical elevation surface classes wrap bordered, rounded white panels. See <a href="/DS/components/cards.html">Cards &amp; surfaces</a> for the full set.</p>
+    <div class="ds-example ds-example--surface">
+      <div class="ds-example__row" style="gap:24px">
+        <div class="hs-surface-card-sm" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;min-width:200px"><code>.hs-surface-card-sm</code></div>
+        <div class="hs-surface-card" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;min-width:200px"><code>.hs-surface-card</code></div>
+      </div>
+    </div>
+
+    <h2>Radius scale</h2>
+    <div class="ds-note">
+      The scale below is defined in <code>app/globals.css</code> inside an
+      <code>@theme</code> block, so Tailwind's named radii (<code>rounded-sm/md/lg/xl</code>) now resolve to these
+      values app-wide and <code>rounded-pill</code> is available. The <code>Button</code> primitive uses
+      <code>--radius-md</code> (8px).
+    </div>
+    <div class="ds-example">
+      <div class="ds-example__row" style="gap:24px;align-items:flex-end">
+        <div style="text-align:center"><div style="width:88px;height:64px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-sm)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px">--radius-sm &middot; 6px</div></div>
+        <div style="text-align:center"><div style="width:88px;height:64px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-md)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px">--radius-md &middot; 8px</div></div>
+        <div style="text-align:center"><div style="width:88px;height:64px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-lg)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px">--radius-lg &middot; 12px</div></div>
+        <div style="text-align:center"><div style="width:88px;height:64px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-xl)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px">--radius-xl &middot; 16px</div></div>
+        <div style="text-align:center"><div style="width:88px;height:64px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-pill)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px">--radius-pill</div></div>
+      </div>
+    </div>
+    <table class="ds-table">
+      <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td><code>--radius-sm</code></td><td>6px</td><td>Badges, small chips, code blocks</td></tr>
+        <tr><td><code>--radius-md</code></td><td>8px</td><td>Buttons, inputs, callouts</td></tr>
+        <tr><td><code>--radius-lg</code></td><td>12px</td><td>Cards, panels, examples</td></tr>
+        <tr><td><code>--radius-xl</code></td><td>16px</td><td>Large feature cards, auth card</td></tr>
+        <tr><td><code>--radius-pill</code></td><td>9999px</td><td>Toggles, FABs, count badges</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ds-note ds-note--source">Source: <code>app/globals.css</code> — shadow tokens, surface classes and the <code>@theme</code> radius scale.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

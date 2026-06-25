@@ -1,12 +1,12 @@
-import Link from 'next/link'
-import { Boxes, ChevronRight } from 'lucide-react'
+import { Boxes } from 'lucide-react'
 import type { ConceptCommissionedWidget } from '@/lib/conceptHomeTypes'
+import { WidgetShell } from '@/components/ui/WidgetShell'
 
 const fr = { fontFamily: 'Frutiger, Arial, sans-serif' } as const
 
 export function CommissionedAppsWidget({ commissioned }: { commissioned: ConceptCommissionedWidget }) {
   return (
-    <div className="flex h-full min-h-0 w-full min-w-0 flex-col rounded-xl border bg-white p-5 shadow-md" style={{ borderColor: 'var(--border)' }}>
+    <WidgetShell footerHref={commissioned.dashboard_href} footerLabel={commissioned.dashboard_label}>
       <h3 className="mb-1 flex items-center gap-2 text-lg font-bold" style={{ ...fr, color: 'var(--text-primary)' }}>
         <Boxes className="h-4 w-4" style={{ color: 'var(--nhs-blue)' }} aria-hidden />
         {commissioned.title}
@@ -20,7 +20,7 @@ export function CommissionedAppsWidget({ commissioned }: { commissioned: Concept
         </span>
         <span
           className="rounded-md px-2.5 py-0.5 text-xs font-bold text-white"
-          style={{ background: commissioned.status_variant === 'live' ? '#007F3B' : '#005EB8' }}
+          style={{ background: commissioned.status_variant === 'live' ? '#007F3B' : 'var(--nhs-blue)' }}
         >
           {commissioned.status_label}
         </span>
@@ -40,14 +40,6 @@ export function CommissionedAppsWidget({ commissioned }: { commissioned: Concept
           </li>
         ))}
       </ul>
-      <Link
-        href={commissioned.dashboard_href}
-        className="mt-5 flex shrink-0 items-center justify-between rounded-lg border px-4 py-3 text-sm font-semibold transition-colors hover:bg-slate-50"
-        style={{ borderColor: 'var(--border)', color: '#005EB8' }}
-      >
-        {commissioned.dashboard_label}
-        <ChevronRight className="h-4 w-4" aria-hidden />
-      </Link>
-    </div>
+    </WidgetShell>
   )
 }

@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Component audit report (v1) — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="report">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Report &middot; v1</p>
+      <h1 class="ds-page-title">Component audit &amp; reuse report</h1>
+      <p class="ds-lede">
+        A retrospective UX and component audit of the HealthStore product. It catalogues every component, identifies
+        where the same problem is solved in multiple ways, and proposes a tightened, reusable component set with a
+        prioritised plan to get there.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Scope</div><div class="ds-meta__v">~70 components, ~32 pages</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Tech</div><div class="ds-meta__v">Next.js 16, React 19, Tailwind v4</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Token layer</div><div class="ds-meta__v"><code>app/globals.css</code> (solid)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Version</div><div class="ds-meta__v">v1 (first pass)</div></div>
+    </div>
+
+    <h2>1. Executive summary</h2>
+    <p>
+      HealthStore has a <strong>strong foundation but a fragmented component layer</strong>. The token system in
+      <code>app/globals.css</code> (colour, type scale, shadows) is well-considered, and several components are
+      genuinely well-built and accessible &mdash; notably <code>PdpTabs</code>, the three portal modals, the badge
+      system, and the compare controls.
+    </p>
+    <p>
+      The main weakness is <strong>duplication of common primitives</strong>. There is no shared button, card surface,
+      modal, or form field component, so the same patterns are re-implemented inline across dozens of files, often with
+      hardcoded hex values and inconsistent radii. There is also a meaningful amount of <strong>prototype / orphaned
+      code</strong> (alternate home and dashboard layouts, an unused design-switcher) that inflates the surface area.
+    </p>
+
+    <h3>Consistency scorecard</h3>
+    <table class="ds-table">
+      <thead><tr><th>Area</th><th>Rating</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Colour tokens</td><td><span class="ds-status ds-status--canonical">Good</span></td><td><span class="ds-status ds-status--canonical">R2</span> Inline <code>#005EB8</code> swept to the token; <code>nhs-blue</code> Tailwind alias added.</td></tr>
+        <tr><td>Typography</td><td><span class="ds-status ds-status--canonical">Good</span></td><td>Scale tokens exist; some inline font sizes remain.</td></tr>
+        <tr><td>Spacing</td><td><span class="ds-status ds-status--page">Fair</span></td><td>Tailwind steps used consistently; no named token scale.</td></tr>
+        <tr><td>Radius / elevation</td><td><span class="ds-status ds-status--canonical">Good</span></td><td><span class="ds-status ds-status--canonical">R2/R3</span> Radius scale via <code>@theme</code>; surface classes now own bg/border/radius/elevation.</td></tr>
+        <tr><td>Buttons</td><td><span class="ds-status ds-status--canonical">Good</span></td><td><span class="ds-status ds-status--canonical">R2</span> Canonical <code>components/ui/Button.tsx</code> shipped; 12 bespoke/inline buttons migrated.</td></tr>
+        <tr><td>Forms</td><td><span class="ds-status ds-status--canonical">Good</span></td><td><span class="ds-status ds-status--canonical">R3</span> <code>FormField</code> + <code>AuthCard</code> shipped; 5 field stacks migrated.</td></tr>
+        <tr><td>Modals</td><td><span class="ds-status ds-status--canonical">Good</span></td><td><span class="ds-status ds-status--canonical">R2</span> Shared <code>components/ui/Modal.tsx</code> (center + drawer); 4 overlays on it. Video lightbox still to migrate.</td></tr>
+        <tr><td>Accessibility</td><td><span class="ds-status ds-status--page">Fair&ndash;Good</span></td><td><span class="ds-status ds-status--canonical">R2</span> AI drawer now has a focus trap + restore; lightbox trap + consent timing remain.</td></tr>
+        <tr><td>Dead / prototype code</td><td><span class="ds-status ds-status--orphan">Needs cleanup</span></td><td>Alternate layouts, switchers, unused CSS.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>2. Top reuse opportunities (highest impact first)</h2>
+    <table class="ds-table">
+      <thead><tr><th>#</th><th>Opportunity</th><th>Consolidates</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Single <strong>Button</strong> component / <code>.ds-btn</code> variant system</td><td><code>ExpressInterestWhiteButton</code>, <code>SaveToggleButton</code>, <code>CompareToggleButton</code>, <code>BackToTop</code>, <code>ResetCookieConsentButton</code>, <code>ChatInput</code> send, + dozens of inline buttons</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>2</td><td>Single <strong>SurfaceCard</strong> + elevation/radius tokens</td><td><code>app-card</code>, <code>hs-surface-card(-sm)</code>, manual <code>rounded-xl shadow-md</code> widgets, case-study/news/campaign cards, org-settings sections</td><td><span class="ds-status ds-status--canonical">Done (R3)</span></td></tr>
+        <tr><td>3</td><td>Single <strong>Modal</strong> primitive (portal, scrim, trap, escape, restore focus)</td><td><code>ExpressInterestModal</code>, <code>ClearDataModal</code>, <code>SharePagePanel</code>; fixes <code>AiAdvisorPanel</code> + video lightbox traps</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>4</td><td>Single <strong>FormField</strong> + auth-card shell</td><td>login, select-entity, express-interest <code>Field</code>, org-settings inputs, catalogue filters</td><td><span class="ds-status ds-status--canonical">Done (R3)</span></td></tr>
+        <tr><td>5</td><td>Replace inline <code>#005EB8</code> / hex with tokens &amp; utilities</td><td>~30 files using literal NHS-blue</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>6</td><td>Badge / pill consolidation</td><td><code>Badges</code> + <code>EditorialPills</code> + inline compare/AI pills + <code>ConditionTag</code>/<code>TopicPill</code> inline styles</td><td><span class="ds-status ds-status--canonical">Done (R3)</span></td></tr>
+        <tr><td>7</td><td>Single <strong>Widget</strong> shell for dashboard</td><td>Saved / EOI / Commissioned / QuickLinks widgets (identical chrome)</td><td><span class="ds-status ds-status--canonical">Done (R3)</span></td></tr>
+        <tr><td>8</td><td>Unify <strong>Collapsible</strong> variants</td><td><code>CollapsibleSection</code>, <code>CollapsibleInline</code>, <code>ProductPageExpander</code></td><td><span class="ds-status ds-status--canonical">Done (R3)</span></td></tr>
+        <tr><td>9</td><td>Remove orphans / dead code</td><td><s><code>DesignProvider</code>/<code>DesignSwitcher</code>, <code>DashboardSwitcher</code>, <code>HomeBelowHeroInteractive</code>, <code>HomeLayoutV1&ndash;V4</code></s> <span class="ds-status ds-status--canonical">removed R4</span>; <s>unused <code>.glass-*</code> CSS</s> <span class="ds-status ds-status--canonical">removed R3</span></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>3. Inconsistencies log</h2>
+    <table class="ds-table">
+      <thead><tr><th>Theme</th><th>Observed</th><th>Recommendation</th></tr></thead>
+      <tbody>
+        <tr><td>Corner radius</td><td><code>rounded-md</code>, <code>-lg</code>, <code>-xl</code>, <code>-2xl</code>, <code>-full</code> used interchangeably</td><td>Adopt the fixed <a href="/DS/styles/elevation.html">radius scale</a> (sm/md/lg/xl/pill).</td></tr>
+        <tr><td>Accent colour</td><td>Mix of <code>var(--nhs-blue)</code> and literal <code>#005EB8</code></td><td>Always reference the token.</td></tr>
+        <tr><td>Card elevation</td><td><s>Two classes + many manual <code>shadow-md</code> divs</s> <span class="ds-status ds-status--canonical">Resolved (R3)</span></td><td>Surface classes own bg/border/radius/elevation; widgets share <code>WidgetShell</code>.</td></tr>
+        <tr><td>Buttons</td><td>8+ bespoke shells, differing radii/hover hex</td><td>One <code>.ds-btn</code> system.</td></tr>
+        <tr><td>Badges/pills</td><td><s>Some bypass <code>.badge-*</code> with inline styles</s> <span class="ds-status ds-status--canonical">Resolved (R3)</span></td><td>Routed through modifier classes; interactive chips use <code>.pill</code>.</td></tr>
+        <tr><td>Section headings</td><td><code>SectionHeader</code> (gradient rule) vs plain blue <code>PdpSection</code> h2</td><td>Pick one section-heading primitive.</td></tr>
+        <tr><td>Disabled state</td><td><code>disabled</code> vs <code>aria-disabled</code> used inconsistently (Save vs Compare)</td><td>Standardise; document the focusable-disabled case.</td></tr>
+        <tr><td>Icons</td><td>Three icon sources (lucide, web-awesome, custom SVG)</td><td>Standardise on one primary set.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>4. Accessibility findings</h2>
+    <h3>Strengths</h3>
+    <ul>
+      <li>Skip link + <code>#main-content</code> landmark in <code>AppShell</code>.</li>
+      <li><code>PdpTabs</code>: full <code>role="tablist"</code> semantics with arrow-key roving focus.</li>
+      <li>Portal modals (EOI, Clear data, Share): escape, focus trap, focus restore, labelled titles.</li>
+      <li><code>CompareLensControl</code> fieldset/legend; <code>CompareViewToggle</code> <code>aria-pressed</code>; compare row-count <code>aria-live</code>.</li>
+      <li>Global <code>:focus-visible</code> yellow outline; reduced-motion and print stylesheets.</li>
+    </ul>
+    <h3>Gaps to fix</h3>
+    <table class="ds-table">
+      <thead><tr><th>Component</th><th>Issue</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td><code>AiAdvisorPanel</code></td><td><s>Drawer has no focus trap; focus can escape behind the scrim.</s> <span class="ds-status ds-status--canonical">Fixed (R2)</span> &mdash; moved onto <code>&lt;Modal variant="drawer"&gt;</code> with portal, trap and focus restore.</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td><code>ProductVideosSection</code> lightbox</td><td>No initial focus, no trap, no <code>aria-labelledby</code>.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>Consent / Hotjar</td><td>Analytics may load while consent is undecided.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td><code>CompareToggleButton</code></td><td><code>aria-disabled</code> without a described reason.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td><s><code>DashboardSwitcher</code></s></td><td>Button group without <code>aria-pressed</code> / roving tabindex. <span class="ds-status ds-status--canonical">Removed R4</span></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>5. Recommended canonical component set</h2>
+    <p>The target library &mdash; the small, documented set everything else should be expressed in terms of:</p>
+    <table class="ds-table">
+      <thead><tr><th>Primitive</th><th>Replaces</th><th>DS page</th></tr></thead>
+      <tbody>
+        <tr><td>Button (variants: primary, secondary, ghost, destructive, on-accent; toggle)</td><td>8+ bespoke buttons</td><td><a href="/DS/components/buttons.html">Buttons</a></td></tr>
+        <tr><td>SurfaceCard (elevation sm/md, interactive)</td><td>app-card, hs-surface-card(-sm), manual cards</td><td><a href="/DS/components/cards.html">Cards</a></td></tr>
+        <tr><td>Badge / Tag</td><td>Badges + EditorialPills + inline pills</td><td><a href="/DS/components/badges-tags.html">Badges &amp; tags</a></td></tr>
+        <tr><td>AlertBox</td><td>(already canonical)</td><td><a href="/DS/components/alerts.html">Alerts</a></td></tr>
+        <tr><td>SectionHeader</td><td>PdpSection h2</td><td><a href="/DS/components/section-headers.html">Section headers</a></td></tr>
+        <tr><td>Collapsible (variant prop)</td><td>CollapsibleSection/Inline, ProductPageExpander</td><td><a href="/DS/components/collapsible.html">Collapsible</a></td></tr>
+        <tr><td>Tabs</td><td>(already canonical)</td><td><a href="/DS/components/tabs.html">Tabs</a></td></tr>
+        <tr><td>FormField (input/select/textarea/radio/checkbox)</td><td>4+ field stacks</td><td><a href="/DS/components/forms.html">Forms</a></td></tr>
+        <tr><td>Modal (+ Drawer using same trap)</td><td>3 modal copies, drawer, lightbox</td><td><a href="/DS/components/modals.html">Modals</a></td></tr>
+        <tr><td>SegmentedControl / Toggle</td><td>compare toggles, lens, view switch</td><td><a href="/DS/components/toggles.html">Toggles</a></td></tr>
+        <tr><td>DataTable</td><td>deployment register, compare matrix</td><td><a href="/DS/components/tables.html">Tables</a></td></tr>
+        <tr><td>Skeleton</td><td>catalogue/compare skeletons</td><td><a href="/DS/components/loading.html">Loading</a></td></tr>
+        <tr><td>Widget (dashboard shell)</td><td>4 widget chromes</td><td><a href="/DS/patterns/dashboard.html">Dashboard</a></td></tr>
+      </tbody>
+    </table>
+
+    <h2>6. Prioritised backlog</h2>
+    <h3>Round 2 (foundation hardening) <span class="ds-status ds-status--canonical">Shipped</span></h3>
+    <p class="ds-u-muted" style="font-size:.85rem;margin:0 0 10px">Delivered &mdash; see the <a href="/DS/Report-v2/index.html">Round 2 record</a> for the decisions applied.</p>
+    <ul>
+      <li><span class="ds-status ds-status--canonical">Done</span> Built the <strong>Button</strong> component (<code>components/ui/Button.tsx</code>); migrated 12 buttons + CTAs (login, PDP hero, EOI submit, cookie, toggles, AI send, &hellip;).</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Added the <strong>Modal</strong> primitive (+ <code>useFocusTrap</code>/<code>useEscape</code>/<code>useLockBodyScroll</code>); refactored the 3 portal modals and moved the AI drawer onto the drawer variant with a real focus trap.</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Formalised <strong>radius</strong> tokens and wired them via a Tailwind <code>@theme</code> remap.</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Token sweep: replaced inline <code>#005EB8</code> with <code>var(--nhs-blue)</code> and added the <code>nhs-blue</code> utility alias.</li>
+    </ul>
+    <h3>Round 3 (component consolidation) <span class="ds-status ds-status--canonical">Shipped</span></h3>
+    <p class="ds-u-muted" style="font-size:.85rem;margin:0 0 10px">Delivered &mdash; see the <a href="/DS/Report-v3/index.html">Round 3 record</a> for the decisions applied.</p>
+    <ul>
+      <li><span class="ds-status ds-status--canonical">Done</span> <strong>SurfaceCard</strong> classes own bg/border/radius/elevation + <strong>WidgetShell</strong>; migrated dashboard, news, campaigns, case-study cards.</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> <strong>FormField</strong> + <strong>AuthCard</strong> shell; migrated login/select-entity/EOI/org-settings/catalogue filters.</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Badge/pill consolidation; folded <code>EditorialPills</code> + inline pills into <code>Badges</code> (+ <code>.pill</code> shape).</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Unified <strong>Collapsible</strong> variants into one <code>variant</code>-prop component.</li>
+    </ul>
+    <h3>Round 4 (cleanup &amp; a11y polish) <span class="ds-status ds-status--canonical">Shipped</span></h3>
+    <p class="ds-u-muted" style="font-size:.85rem;margin:0 0 10px">Delivered &mdash; see the <a href="/DS/Report-v4/index.html">Round 4 record</a> for the decisions applied.</p>
+    <ul>
+      <li><span class="ds-status ds-status--canonical">Done</span> Removed the orphaned prototype chain (design A/B switcher, home/dashboard switcher, <code>DashboardV2/V3</code>, <code>HomeLayoutV4</code>/<code>Original</code>, <code>ConceptStepsBand</code>, <code>homeLayoutStorage</code>, <code>DashboardCharts</code>); live concept widgets extracted to <code>home/concept/</code>. Compare matrix kept (CMP-001).</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Lightbox a11y: focus trap + restore + portal + visible <code>aria-labelledby</code> heading on the product-video dialog. Analytics consent kept opt-out, but docs/copy aligned to say so honestly.</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Icon set standardised on lucide (<code>@awesome.me/webawesome</code> dropped); disabled convention is native <code>disabled</code> + a <code>Button</code> <code>ariaDisabled</code> escape hatch, on <code>opacity-40</code>.</li>
+    </ul>
+    <h3>Round 6 (experience &amp; reliability) <span class="ds-status ds-status--page">Awaiting choices</span></h3>
+    <p class="ds-u-muted" style="font-size:.85rem;margin:0 0 10px">Surfaced by the <a href="/DS/Report-v5/index.html">second audit (v2)</a>; decision document drafted &mdash; see the <a href="/DS/Report-v6/index.html">Round 6 plan (v6)</a> to pick options.</p>
+    <ul>
+      <li><span class="ds-status ds-status--page">Planned</span> P1 Shared toast / live-region feedback service; wire save/remove/copy + provider errors (UX-01, UX-02, UX-06).</li>
+      <li><span class="ds-status ds-status--page">Planned</span> P1 Distinguish error from empty on dashboard widgets and stat tiles (UX-03, UX-05).</li>
+      <li><span class="ds-status ds-status--page">Planned</span> P1 Migrate org-settings (+ select-entity) to <code>FormField</code> + <code>Button</code>; fix programmatic labels (FRM-01, FRM-03, A11Y-01).</li>
+      <li><span class="ds-status ds-status--page">Planned</span> P1 Make EOI contact fields editable when prefill is empty (FRM-02).</li>
+    </ul>
+
+    <h2>7. Full component inventory</h2>
+    <p>All ~70 components and ~32 pages, grouped. Status: <span class="ds-status ds-status--canonical">Canonical</span> keep as-is; <span class="ds-status ds-status--duplicate">Duplicate</span> consolidate; <span class="ds-status ds-status--page">Page-bound</span> section/page-scoped; <span class="ds-status ds-status--provider">Provider</span> context/behaviour; <span class="ds-status ds-status--orphan">Orphan</span> unused/prototype.</p>
+
+    <h3>Primitives &amp; shared UI (<code>components/</code>)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Component</th><th>Role</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>Badges.tsx</code> (DtacBadge, MaturityBadge, EvidenceBadge, EffortBadge, SupervisionBadge, NiceTypeBadge, TopicPill, ConditionTag, FundingStatusBadge, AlertBox, SectionHeader)</td><td>Status badges, pills, alerts, section headings</td><td><span class="ds-status ds-status--canonical">Canonical</span></td></tr>
+        <tr><td><code>HealthIcons.tsx</code></td><td>Condition/nav SVG icons</td><td><span class="ds-status ds-status--canonical">Canonical</span></td></tr>
+        <tr><td><code>SaveToggleButton.tsx</code></td><td>Bookmark toggle</td><td><span class="ds-status ds-status--duplicate">Duplicate</span></td></tr>
+        <tr><td><code>CompareToggleButton.tsx</code></td><td>Compare-basket toggle</td><td><span class="ds-status ds-status--duplicate">Duplicate</span></td></tr>
+        <tr><td><code>ExpressInterestWhiteButton.tsx</code></td><td>White CTA on accent</td><td><span class="ds-status ds-status--duplicate">Duplicate</span></td></tr>
+        <tr><td><code>BackToTop.tsx</code></td><td>Scroll-to-top FAB</td><td><span class="ds-status ds-status--duplicate">Duplicate</span></td></tr>
+        <tr><td><code>ResetCookieConsentButton.tsx</code></td><td>Clears consent</td><td><span class="ds-status ds-status--duplicate">Duplicate</span></td></tr>
+        <tr><td><code>CollapsibleSection.tsx</code> (+ Inline)</td><td>Show/hide sections</td><td><span class="ds-status ds-status--duplicate">Duplicate</span></td></tr>
+        <tr><td><code>ProductPageExpander.tsx</code></td><td>PDP collapsible cards</td><td><span class="ds-status ds-status--duplicate">Duplicate</span></td></tr>
+        <tr><td><code>PageBreadcrumb.tsx</code></td><td>Breadcrumb trail</td><td><span class="ds-status ds-status--canonical">Canonical</span></td></tr>
+        <tr><td><code>DeviceClassDetails.tsx</code></td><td><code>&lt;details&gt;</code> explainer</td><td><span class="ds-status ds-status--canonical">Canonical</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Composite &amp; PDP sections (<code>components/</code>)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Component</th><th>Role</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>AppShell.tsx</code></td><td>Global shell (skip link, nav, footer, providers)</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>Nav.tsx</code></td><td>Sticky header + mobile menu</td><td><span class="ds-status ds-status--canonical">Canonical</span></td></tr>
+        <tr><td><code>PdpTabs.tsx</code></td><td>NHS-style tablist</td><td><span class="ds-status ds-status--canonical">Canonical</span></td></tr>
+        <tr><td><code>PdpSection.tsx</code> / <code>PdpReadOnlySection.tsx</code></td><td>PDP section wrappers</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>PdpCommissioningSnapshot.tsx</code></td><td>Decision snapshot grid</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>PdpWhereLive.tsx</code></td><td>"Where it's live" strip</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>PdpSupplierContactCard.tsx</code></td><td>Sidebar contact card</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>AppDetailSections.tsx</code></td><td>14 PDP content sections</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>DeploymentRegisterTable.tsx</code></td><td>Expandable deployment rows</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>LiveSitesStructuredList.tsx</code></td><td>Live sites grid + tooltips</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>FundingDirectoryCard.tsx</code></td><td>Funding list card</td><td><span class="ds-status ds-status--canonical">Canonical</span></td></tr>
+        <tr><td><code>ExpressInterestModal.tsx</code></td><td>EOI form modal</td><td><span class="ds-status ds-status--duplicate">Duplicate (modal recipe)</span></td></tr>
+        <tr><td><code>ClearDataModal.tsx</code></td><td>Destructive multi-step modal</td><td><span class="ds-status ds-status--duplicate">Duplicate (modal recipe)</span></td></tr>
+        <tr><td><code>SharePagePanel.tsx</code></td><td>Share link/PDF modal</td><td><span class="ds-status ds-status--duplicate">Duplicate (modal recipe)</span></td></tr>
+        <tr><td><code>ProductVideosSection.tsx</code></td><td>Video grid + lightbox</td><td><span class="ds-status ds-status--page">Page-bound (a11y gap)</span></td></tr>
+        <tr><td><code>SharedProductViewBanner.tsx</code></td><td>Shared-view banner</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Providers &amp; behaviour</h3>
+    <table class="ds-table">
+      <thead><tr><th>Component</th><th>Role</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>BookmarkProvider</code>, <code>CompareBasketProvider</code>, <code>EoiProvider</code></td><td>App state contexts</td><td><span class="ds-status ds-status--provider">Provider</span></td></tr>
+        <tr><td><code>CookieConsentRoot</code>, <code>HotjarWhenConsented</code>, <code>HotjarRouteTracker</code></td><td>Consent + analytics</td><td><span class="ds-status ds-status--provider">Provider</span></td></tr>
+        <tr><td><code>PdpSharePrintContext</code>, <code>AppDetailClient</code></td><td>Share/print registry; modal delegation</td><td><span class="ds-status ds-status--provider">Provider</span></td></tr>
+        <tr><td><s><code>design/DesignProvider</code>, <code>design/DesignSwitcher</code></s></td><td>Design A/B variant (not wired in)</td><td><span class="ds-status ds-status--canonical">Removed (R4)</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>AI (<code>components/ai/</code>)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Component</th><th>Role</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>AiAdvisorPanel</code></td><td>Slide-over chat drawer</td><td><span class="ds-status ds-status--page">Page-bound (a11y gap)</span></td></tr>
+        <tr><td><code>ChatInput</code>, <code>ChatMessage</code></td><td>Input + message render</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>SuggestionPromptButton</code></td><td>Prompt chip</td><td><span class="ds-status ds-status--duplicate">Duplicate (button)</span></td></tr>
+        <tr><td><code>FundingWizard</code>, <code>FundingResults</code></td><td>Funding search flow</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>ToolCallIndicator</code></td><td>Tool-call pill strip</td><td><span class="ds-status ds-status--duplicate">Duplicate (pill)</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Compare (<code>components/compare/</code>)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Component</th><th>Role</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>CompareViewToggle</code>, <code>CompareLensControl</code></td><td>View + lens controls</td><td><span class="ds-status ds-status--canonical">Canonical</span></td></tr>
+        <tr><td><code>CompareMatrixView</code>, <code>CompareWorkspaceView</code></td><td>Matrix / workspace layouts</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>CompareDecisionSnapshot</code>, <code>compareRowRenderers</code></td><td>Snapshot + cell renderers</td><td><span class="ds-status ds-status--duplicate">Duplicate (pill logic)</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Home &amp; dashboard (<code>components/home/</code>)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Component</th><th>Role</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>HomePublicContent</code>, <code>HomeHeroSearch</code></td><td>Production home bands + hero search</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>HomeFragments</code> (now 2 live sections + types), <code>home/concept/ConceptColumns</code></td><td>Live home sections; <s><code>HomeLayoutOriginal</code>/<code>V1&ndash;V4</code></s> removed, concept columns extracted</td><td><span class="ds-status ds-status--canonical">Trimmed (R4)</span></td></tr>
+        <tr><td><s><code>HomeBelowHeroInteractive</code></s></td><td>Layout switcher wrapper (unused)</td><td><span class="ds-status ds-status--canonical">Removed (R4)</span></td></tr>
+        <tr><td><code>CaseStudies</code></td><td>Case-study tiles (<s><code>ConceptStepsBand</code></s> removed R4)</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>EditorialPills</code>, <code>EditorialImage</code></td><td>Editorial pills + placeholder images</td><td><span class="ds-status ds-status--duplicate">Duplicate (pills)</span></td></tr>
+        <tr><td><code>dashboard/DashboardV4</code></td><td>Production dashboard</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><s><code>dashboard/DashboardV2</code>, <code>V3</code>, <code>DashboardSwitcher</code></s></td><td>Dashboard concepts (<code>DashboardV4</code> is the live one)</td><td><span class="ds-status ds-status--canonical">Removed (R4)</span></td></tr>
+        <tr><td><code>dashboard/DashboardWelcome</code></td><td>Dashboard header</td><td><span class="ds-status ds-status--page">Page-bound</span></td></tr>
+        <tr><td><code>dashboard/widgets/*</code> (SavedApps, EoiActivity, CommissionedApps, DashboardStatTiles)</td><td>Activity widgets + stat tiles</td><td><span class="ds-status ds-status--duplicate">Duplicate (widget shell)</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Pages (<code>app/</code>)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Route / file</th><th>Role</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>layout.tsx</code>, <code>page.tsx</code></td><td>Root layout; public home</td><td><span class="ds-status ds-status--page">Page</span></td></tr>
+        <tr><td><code>login</code>, <code>select-entity</code> (+ form)</td><td>Auth + entity selection</td><td><span class="ds-status ds-status--duplicate">Duplicate (auth card/fields)</span></td></tr>
+        <tr><td><code>dashboard</code> <span class="ds-u-muted">(<s><code>DashboardCharts</code></s> removed R4)</span></td><td>Dashboard route</td><td><span class="ds-status ds-status--page">Page</span></td></tr>
+        <tr><td><code>apps</code>, <code>apps/AppsDiscoveryClient</code>, <code>apps/CatalogueClient</code>, <code>apps/condition-catalogue</code>, <code>apps/CatalogueSkeleton</code></td><td>Discovery + catalogue + skeleton</td><td><span class="ds-status ds-status--page">Page</span></td></tr>
+        <tr><td><code>apps/[slug]/page</code>, <code>AppDetailClient</code>, <code>pdpBlocks</code>, <code>PdpSharedProductBody</code>, <code>apps/[slug]/shared/page</code></td><td>Product detail + shared view</td><td><span class="ds-status ds-status--page">Page</span></td></tr>
+        <tr><td><code>compare</code> (+ CompareClient)</td><td>Comparison tool</td><td><span class="ds-status ds-status--page">Page</span></td></tr>
+        <tr><td><code>funding</code>, <code>saved-apps</code> (+ client), <code>eoi-record</code> (+ client), <code>express-interest</code></td><td>Funding, saved, EOI record</td><td><span class="ds-status ds-status--page">Page</span></td></tr>
+        <tr><td><code>org-settings</code> (+ client)</td><td>Org profile editor (self-contained form system)</td><td><span class="ds-status ds-status--duplicate">Duplicate (fields)</span></td></tr>
+        <tr><td><code>news</code>, <code>campaigns</code>, <code>case-studies</code>, <code>cookies</code></td><td>Content + policy pages</td><td><span class="ds-status ds-status--duplicate">Duplicate (list cards)</span></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="ds-rule">
+    <p class="ds-u-muted" style="font-size:.85rem">
+      Inventory derived from a full read of <code>components/**</code> and <code>app/**</code>. This is v1 &mdash; refine
+      groupings and statuses in later rounds as components are consolidated. Structure and conventions follow the
+      <a href="https://design-system.service.gov.uk/">GOV.UK Design System</a>.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

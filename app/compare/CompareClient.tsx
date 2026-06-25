@@ -88,7 +88,7 @@ export default function CompareClient({ allApps }: Props) {
       <div className="mb-8">
         <h1 className="page-title-h1">Comparison tool</h1>
         <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
-          Add up to four apps from the catalogue in the <strong>same condition area</strong>.
+          Add up to four DTx apps from the catalogue in the <strong>same condition area</strong>.
           Compare decision snapshot signals — where it&apos;s live, governance, pricing model, and integrations — then drill into the detail groups below.
         </p>
       </div>
@@ -98,7 +98,7 @@ export default function CompareClient({ allApps }: Props) {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-4">
             <div>
               <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                {selected.length} application{selected.length !== 1 ? 's' : ''} selected
+                {selected.length} DTx app{selected.length !== 1 ? 's' : ''} selected
               </p>
               {sharedTags.length > 0 && (
                 <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
@@ -133,7 +133,7 @@ export default function CompareClient({ allApps }: Props) {
           </div>
 
           <div className="hs-compare-panel hs-compare-panel--summary mb-3">
-            <h2 className="sr-only">Selected apps summary</h2>
+            <h2 className="sr-only">Selected DTx apps summary</h2>
             <div className="hs-compare-summary-row">
               <div className="hs-compare-summary-row__spacer" aria-hidden="true" />
               <div
@@ -159,7 +159,7 @@ export default function CompareClient({ allApps }: Props) {
             ⚖️
           </div>
           <p className="font-semibold mb-3 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
-            No applications selected for the comparison tool. Browse the catalogue and add applications to compare them side by side.
+            No DTx apps selected for the comparison tool. Browse the catalogue and add DTx apps to compare them side by side.
           </p>
           <Link
             href="/apps"
@@ -170,7 +170,12 @@ export default function CompareClient({ allApps }: Props) {
           </Link>
         </div>
       ) : (
-        <CompareWorkspaceView selected={selected} lens={lens} differencesOnly={differencesOnly} />
+        <CompareWorkspaceView
+          selected={selected}
+          lens={lens}
+          differencesOnly={differencesOnly}
+          onShowAllRows={() => setDifferencesOnly(false)}
+        />
       )}
     </div>
   )

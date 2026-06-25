@@ -8,7 +8,7 @@ import {
 import {
   NewsListConcept,
   CampaignsColumnConcept,
-} from './HomeLayoutV4'
+} from './concept/ConceptColumns'
 import { HomeCaseStudiesBand } from './CaseStudies'
 
 type HomePublicContentProps = {

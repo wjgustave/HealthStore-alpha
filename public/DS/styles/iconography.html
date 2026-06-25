@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Iconography — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="iconography">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Styles</p>
+      <h1 class="ds-page-title">Iconography</h1>
+      <p class="ds-lede">
+        UI icons come from a single set, <code>lucide-react</code>.
+      </p>
+    </div>
+
+    <h2>1. Lucide React</h2>
+    <p>The primary &mdash; and only &mdash; UI icon set (<code>lucide-react</code>): navigation, chrome and in-button icons such as <code>Home</code>, <code>LogOut</code>, <code>Settings</code>, <code>PanelRightOpen</code>, <code>Menu</code>, <code>X</code>, <code>Bookmark</code>, <code>GitCompare</code>, <code>Mail</code>, <code>Share2</code>. Outline style, sized via <code>className="h-4 w-4"</code>.</p>
+<pre class="ds-code"><code>import { Settings } from 'lucide-react'
+
+&lt;Settings className="h-3.5 w-3.5" style={{ color: 'var(--nhs-blue)' }} /&gt;</code></pre>
+
+    <h2>2. Custom HealthIcons SVGs</h2>
+    <p>Bespoke condition glyphs in <code>components/HealthIcons.tsx</code> (6 icons + a <code>ConditionIcon</code> resolver) for condition tiles and charts (lungs, heart, etc.).</p>
+
+    <h2>Sizing &amp; accessibility</h2>
+    <table class="ds-table">
+      <thead><tr><th>Context</th><th>Size</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Inline with text</td><td>1em / 14&ndash;16px</td><td>Align to baseline; use <code>text-current</code></td></tr>
+        <tr><td>Nav / chrome</td><td>16&ndash;20px (h-4 / h-5)</td><td>Pair with a visible or sr-only label</td></tr>
+        <tr><td>Condition tiles</td><td>24&ndash;40px</td><td>Decorative alongside a heading</td></tr>
+      </tbody>
+    </table>
+    <div class="ds-dosdonts">
+      <div class="ds-panel ds-panel--do">
+        <p class="ds-panel__head">Do</p>
+        <ul>
+          <li>Mark decorative icons <code>aria-hidden</code>.</li>
+          <li>Give icon-only buttons an <code>aria-label</code>.</li>
+          <li>Colour icons with the accent token, not literal hex.</li>
+        </ul>
+      </div>
+      <div class="ds-panel ds-panel--dont">
+        <p class="ds-panel__head">Don't</p>
+        <ul>
+          <li>Mix outline and solid styles within one control group.</li>
+          <li>Convey meaning by icon alone without a text equivalent.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ds-note ds-note--source">Source: <code>lucide-react</code>, <code>components/HealthIcons.tsx</code>.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

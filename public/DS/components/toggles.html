@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Toggles &amp; segmented controls — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="toggles">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Components</p>
+      <h1 class="ds-page-title">Toggles &amp; segmented controls</h1>
+      <p class="ds-lede">
+        Controls that switch between mutually exclusive views or filter options. Most live on the comparison tool and
+        are styled via dedicated <code>.hs-compare-*</code> classes.
+      </p>
+    </div>
+
+    <h2>Add-to-compare toggle</h2>
+    <p>The catalogue / PDP control that adds a DTx app to the comparison basket. It is a pressed <code>aria-pressed</code> toggle whose <strong>label changes with state</strong> so it&rsquo;s never ambiguous (CNT-02): <strong>&ldquo;Add to compare&rdquo;</strong> &rarr; <strong>&ldquo;Added&rdquo;</strong> (with a check). When the basket is full or the condition differs it becomes <code>aria-disabled</code> with a reason, staying in the tab order.</p>
+    <div class="ds-example ds-example--surface">
+      <div class="ds-u-row" style="gap:12px">
+        <button class="ds-btn ds-btn--secondary" type="button" aria-pressed="false">&#8646; Add to compare</button>
+        <button class="ds-btn ds-btn--secondary" type="button" aria-pressed="true" style="border-color:var(--nhs-blue);background:#E6F0FB">&#10003; Added</button>
+      </div>
+    </div>
+
+    <h2>Lens control (segmented options)</h2>
+    <p>A task-focused filter set rendered as a fieldset of selectable options.</p>
+    <div class="ds-example ds-example--surface">
+      <fieldset class="hs-compare-lens">
+        <legend class="hs-compare-lens__legend">Compare by</legend>
+        <div class="hs-compare-lens__options">
+          <span class="hs-compare-lens__option" data-active="true">Evidence</span>
+          <span class="hs-compare-lens__option" data-active="false">Cost</span>
+          <span class="hs-compare-lens__option" data-active="false">Implementation</span>
+          <span class="hs-compare-lens__option" data-active="false">Integration</span>
+        </div>
+      </fieldset>
+    </div>
+
+    <h2>Diff toggle (checkbox)</h2>
+    <div class="ds-example ds-example--surface">
+      <label style="display:inline-flex;align-items:center;gap:8px;min-height:2.75rem;font-size:.875rem;font-weight:600;color:var(--text-secondary)">
+        <input type="checkbox" checked style="width:1.125rem;height:1.125rem;accent-color:var(--nhs-blue)">
+        Only show differences
+      </label>
+    </div>
+
+    <h2>Variants &amp; states</h2>
+    <table class="ds-table">
+      <thead><tr><th>Control</th><th>Active state</th><th>A11y</th></tr></thead>
+      <tbody>
+        <tr><td>Add-to-compare toggle</td><td><code>aria-pressed="true"</code> &rarr; tinted, &ldquo;Added&rdquo; + check</td><td><code>aria-pressed</code>, <code>aria-disabled</code> + reason</td></tr>
+        <tr><td>Lens option</td><td><code>data-active="true"</code> &rarr; blue border, tint bg</td><td>fieldset + legend</td></tr>
+        <tr><td>Diff toggle</td><td>Native checked</td><td>Associated label</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Segmented toggles use <code>role="group"</code> with <code>aria-pressed</code> per button (not link styling).</li>
+      <li>Lens options are wrapped in a <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code>.</li>
+      <li>All controls meet the 44px minimum target height.</li>
+    </ul>
+
+    <div class="ds-note ds-note--source">Source: <code>components/CompareToggleButton.tsx</code>, <code>components/compare/CompareLensControl.tsx</code>; classes in <code>app/globals.css</code>.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

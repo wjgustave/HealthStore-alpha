@@ -1,5 +1,5 @@
 import type { App } from '@/lib/data'
-import type { HomeLayoutV4Props } from '@/components/home/HomeLayoutV4'
+import type { HomeLayoutV4Props } from '@/components/home/concept/ConceptColumns'
 
 export type DashboardVariantProps = Omit<HomeLayoutV4Props, 'apps'> & {
   apps: App[]

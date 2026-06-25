@@ -75,7 +75,7 @@ export default function AppsDiscoveryClient({
         <div className="relative">
           <div
             className="flex items-stretch rounded-xl border bg-white overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-offset-2"
-            style={{ borderColor: 'var(--border)', outlineColor: '#005EB8' }}
+            style={{ borderColor: 'var(--border)', outlineColor: 'var(--nhs-blue)' }}
           >
             <span className="flex items-center pl-4" style={{ color: 'var(--text-muted)' }} aria-hidden>
               <Search className="w-5 h-5 shrink-0" strokeWidth={2} />
@@ -174,7 +174,7 @@ export default function AppsDiscoveryClient({
               key={c.id}
               href={`/apps/condition-catalogue?condition=${encodeURIComponent(c.id)}`}
               className="group flex gap-4 rounded-xl border bg-white p-5 text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-              style={{ borderColor: 'var(--border)', textDecoration: 'none', outlineColor: '#005EB8' }}
+              style={{ borderColor: 'var(--border)', textDecoration: 'none', outlineColor: 'var(--nhs-blue)' }}
             >
               <div
                 className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
@@ -189,7 +189,7 @@ export default function AppsDiscoveryClient({
                 <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', marginTop: 4 }}>
                   {c.count} {c.count === 1 ? 'app' : 'apps'}
                 </div>
-                <span className="mt-2 inline-block text-sm font-semibold text-[#005EB8] group-hover:underline">View apps</span>
+                <span className="mt-2 inline-block text-sm font-semibold text-[var(--nhs-blue)] group-hover:underline">View apps</span>
               </div>
             </Link>
           ))}
@@ -197,11 +197,11 @@ export default function AppsDiscoveryClient({
           <Link
             href="/apps/condition-catalogue"
             className="group flex gap-4 rounded-xl border bg-white p-5 text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:col-span-2 lg:col-span-1"
-            style={{ borderColor: 'var(--border)', textDecoration: 'none', outlineColor: '#005EB8' }}
+            style={{ borderColor: 'var(--border)', textDecoration: 'none', outlineColor: 'var(--nhs-blue)' }}
           >
             <div
               className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
-              style={{ background: 'rgba(0, 94, 184, 0.1)', color: '#005EB8' }}
+              style={{ background: 'rgba(0, 94, 184, 0.1)', color: 'var(--nhs-blue)' }}
               aria-hidden
             >
               <LayoutGrid className="h-7 w-7" strokeWidth={2} />
@@ -213,7 +213,7 @@ export default function AppsDiscoveryClient({
               <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', marginTop: 4 }}>
                 {totalAppCount} digital therapeutics in the catalogue
               </div>
-              <span className="mt-2 inline-block text-sm font-semibold text-[#005EB8] group-hover:underline">Browse entire catalogue</span>
+              <span className="mt-2 inline-block text-sm font-semibold text-[var(--nhs-blue)] group-hover:underline">Browse entire catalogue</span>
             </div>
           </Link>
         </div>

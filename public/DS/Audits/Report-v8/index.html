@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Audit report (v3) — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="report-v8">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Report &middot; v3 (audit) &middot; Round 8</p>
+      <h1 class="ds-page-title">Third UX audit</h1>
+      <p class="ds-lede">
+        A fresh, full UX audit of the HealthStore product, taken with new eyes after Rounds 6&ndash;7 shipped the
+        experience backlog from the <a href="/DS/Report-v5/index.html">v2 audit</a>. Where v1 focused on component
+        <em>reuse</em> and v2 on <em>experience</em>, this pass focuses on <strong>follow-through and coherence</strong>:
+        whether the shipped patterns (toasts, error-vs-empty, the canonical primitives) have reached the
+        <strong>destination pages and newer surfaces</strong> &mdash; the editorial home, the dual home / search, the AI
+        advisor &mdash; or stopped at the first screen. Cookie consent is intentionally out of scope.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Lineage</div><div class="ds-meta__v">3rd audit &middot; Round 8 in the series</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Since v2</div><div class="ds-meta__v">R6&ndash;R7 shipped (toasts, error-vs-empty, FormField, PDP triage, nav, vocabulary)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Lens</div><div class="ds-meta__v">Follow-through, coherence, newer surfaces</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Out of scope</div><div class="ds-meta__v">Cookie consent</div></div>
+    </div>
+
+    <div class="ds-note">
+      <strong>Naming.</strong> This is the third <em>audit</em> (hence &ldquo;v3&rdquo;), but the eighth report in the
+      series. <a href="/DS/Report-v1/index.html">v1</a> and <a href="/DS/Report-v5/index.html">v5</a> are the audits;
+      <a href="/DS/Report-v2/index.html">v2</a>/<a href="/DS/Report-v3/index.html">v3</a>/<a href="/DS/Report-v4/index.html">v4</a>
+      and <a href="/DS/Report-v6/index.html">v6</a>/<a href="/DS/Report-v7/index.html">v7</a> are the Round
+      <em>implementation records</em>. This audit lives at <code>/DS/Audits/Report-v8</code> under the Audits section.
+    </div>
+
+    <h2>1. Executive summary</h2>
+    <p>
+      The product is in genuinely good shape. The primitives from v1 are real and well-built, and the experience backlog
+      from v2 has largely shipped: a <strong>top-centre toast / live-region service</strong>
+      (<code>components/ui/Toast.tsx</code>) is wired into six providers, dashboard widgets <strong>tell errors apart from
+      empty</strong>, the core forms run on <code>FormField</code> + <code>Button</code>, the PDP hero has a single primary
+      action, the nav highlights correctly across the <code>/apps</code> branch, and destructive one-clicks are guarded.
+      Those claims hold up against the code.
+    </p>
+    <p>
+      The problems have shifted again &mdash; from &ldquo;experience&rdquo; to <strong>follow-through and coherence</strong>.
+      Good patterns shipped on the first screen but <strong>didn't propagate</strong>: the dashboard widgets distinguish
+      error from empty, yet the full <code>saved-apps</code> and <code>eoi-record</code> pages they link to still render an
+      empty state on a failed fetch. A second cluster is the <strong>newer surfaces</strong> added since v2 &mdash; the
+      editorial public home, a signed-in hero search, the AI advisor &mdash; which roll their own buttons and inputs
+      instead of the canonical primitives, and introduce a <strong>dual &ldquo;home&rdquo;</strong> with duplicated search.
+      The remaining accessibility gaps are small but real (AI error role, a disabled-reason exposed only as a tooltip,
+      heading-level skips on two main pages), and a <strong>password reveal that can't be reached by keyboard</strong>.
+      As in v2, there is mild <strong>documentation drift</strong>: &ldquo;standardised&rdquo; and &ldquo;shipped&rdquo;
+      claims are true for the surfaces they were applied to, but narrower than they sound.
+    </p>
+
+    <h3>Consistency scorecard</h3>
+    <table class="ds-table">
+      <thead><tr><th>Area</th><th>Rating</th><th>Notes</th><th>vs v2</th></tr></thead>
+      <tbody>
+        <tr><td>Buttons / Modal / radius / colour</td><td><span class="ds-status ds-status--canonical">Good</span></td><td>Primitives stable and well-adopted in the core flows; newer surfaces drift (see DS adoption).</td><td>=</td></tr>
+        <tr><td>Feedback &amp; confirmation</td><td><span class="ds-status ds-status--canonical">Good</span></td><td>Toast service shipped &amp; wired (bookmarks, compare, share, org-save) with polite/assertive split. Residual: logout silent (FB-01); EOI submit has no toast.</td><td><span class="ds-status ds-status--canonical">&uarr;</span></td></tr>
+        <tr><td>States (loading / empty / error)</td><td><span class="ds-status ds-status--page">Fair</span></td><td>Dashboard widgets &amp; tiles are exemplary, but the destination <code>saved-apps</code> / <code>eoi-record</code> pages still conflate error with empty (STA-01) and don't surface session expiry (STA-02).</td><td><span class="ds-status ds-status--page">&darr;</span></td></tr>
+        <tr><td>Forms consistency</td><td><span class="ds-status ds-status--canonical">Good</span></td><td>Login / EOI / org-settings / select-entity migrated. Residual: catalogue search + AI input still raw (FRM-05/03); password reveal not keyboard-reachable (FRM-01); no focus-to-first-error (FRM-02).</td><td>=</td></tr>
+        <tr><td>Content &amp; microcopy</td><td><span class="ds-status ds-status--page">Fair</span></td><td>&ldquo;DTx app&rdquo; landed on compare / saved / PDP, but discovery (catalogue, hero) still says &ldquo;apps&rdquo; / &ldquo;digital therapeutics&rdquo; (CNT-01). Residual: &ldquo;EOI&rdquo; acronym, typos, &ldquo;Placeholder page&rdquo; copy.</td><td>=</td></tr>
+        <tr><td>Navigation &amp; IA</td><td><span class="ds-status ds-status--page">Fair</span></td><td>Active states &amp; breadcrumbs solid. New friction: a dual signed-in &ldquo;home&rdquo; with duplicated search (NAV-02); select-entity still escapable (NAV-03); orphaned routes still deferred (NAV-01).</td><td>=</td></tr>
+        <tr><td>Responsive &amp; density</td><td><span class="ds-status ds-status--page">Fair</span></td><td>PDP / snapshot / compare fixes from R7 hold. Residual: container-width drift (RSP-01); stat-tile density + hard-coded &ldquo;1&rdquo; (RSP-02); funding pills <code>nowrap</code> despite a wrapping row (RSP-03).</td><td>=</td></tr>
+        <tr><td>Accessibility</td><td><span class="ds-status ds-status--canonical">Good</span></td><td>Strong foundation (skip link, focus-visible, modal trap, widget alerts). Residual: AI error box has no <code>role="alert"</code> (A11Y-01, open since v2); disabled-reason tooltip-only (A11Y-02); heading skips on home / dashboard (A11Y-03).</td><td>=</td></tr>
+        <tr><td>DS adoption (newer surfaces)</td><td><span class="ds-status ds-status--page">Fair</span></td><td><em>New lens.</em> Home / dashboard hero search, AI starter prompts and editorial cards bypass <code>Button</code> / <code>FormField</code> / <code>Badges</code> (DSX-01/02/03).</td><td><span class="ds-status ds-status--page">new</span></td></tr>
+        <tr><td>Docs vs code accuracy</td><td><span class="ds-status ds-status--page">Fair</span></td><td>R6/R7 claims are true but scoped: &ldquo;vocabulary standardised&rdquo; and &ldquo;error-vs-empty shipped&rdquo; don't cover discovery or the destination list pages.</td><td>=</td></tr>
+      </tbody>
+    </table>
+
+    <h2>2. What changed since the v2 audit</h2>
+    <p>For full detail see the round records (<a href="/DS/Report-v6/index.html">R6</a>, <a href="/DS/Report-v7/index.html">R7</a>). Verified against the current code, the v2 backlog shipped as follows:</p>
+    <ul>
+      <li><span class="ds-status ds-status--canonical">Shipped</span> <strong>Toast / live-region service</strong> (top-centre, polite + assertive, optional Undo) wired into bookmarks, compare basket, share, and org-settings save (UX-01/02/06/08).</li>
+      <li><span class="ds-status ds-status--canonical">Shipped</span> <strong>Error vs empty</strong> on dashboard widgets and stat tiles, with a tri-state <code>status</code> on the providers and a loading skeleton (UX-03/05).</li>
+      <li><span class="ds-status ds-status--canonical">Shipped</span> <strong>Form migration</strong>: org-settings and select-entity onto <code>FormField</code> / <code>Button</code> / labelled <code>role="radiogroup"</code>; EOI contact fields editable when prefill is empty (FRM-01/02/03, A11Y-01/02/04).</li>
+      <li><span class="ds-status ds-status--canonical">Shipped</span> <strong>PDP triage</strong>: one filled primary, demoted utility cluster, trimmed hero badges; snapshot strip wraps; compare grids scroll (RSP-01/02/03).</li>
+      <li><span class="ds-status ds-status--canonical">Shipped</span> <strong>Nav &amp; vocabulary</strong>: prefix active-state across <code>/apps</code>, org-settings breadcrumb, &ldquo;DTx app&rdquo; on PDP / compare / saved, Compare toggle &ldquo;Add to compare&rdquo; / &ldquo;Added&rdquo; (NAV-02/03, CNT-01/02).</li>
+      <li><span class="ds-status ds-status--canonical">Shipped</span> <strong>Safe destructive actions</strong>: in-flight guards on saved-app remove and clear-data; compare &ldquo;Clear all&rdquo; with an Undo toast (UX-04/07/08).</li>
+      <li><span class="ds-status ds-status--page">Deferred</span> Surfacing orphaned routes in nav (NAV-01) and removing the repeated PDP CTA (PDP-4) &mdash; both intentional decisions, still open.</li>
+    </ul>
+    <p class="ds-u-muted" style="font-size:.9rem">This audit takes that as the baseline and looks for what's left, what didn't propagate, and what's newly visible on surfaces added since v2.</p>
+
+    <h2>3. Top opportunities this round (highest impact first)</h2>
+    <table class="ds-table">
+      <thead><tr><th>#</th><th>Opportunity</th><th>Why it matters</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Propagate error-vs-empty</strong> to the <code>saved-apps</code> &amp; <code>eoi-record</code> pages</td><td>The dashboard does this right; the full pages it links to still read a failed fetch as &ldquo;nothing here yet&rdquo; &mdash; a reliability bug at the destination.</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>2</td><td>Make the <strong>password reveal keyboard-reachable</strong></td><td><code>tabIndex={-1}</code> hides a functional control from keyboard and switch users.</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>3</td><td>Resolve the <strong>dual signed-in &ldquo;home&rdquo;</strong> + duplicated search</td><td>Logo goes to <code>/dashboard</code> but &ldquo;Home&rdquo; goes to the marketing <code>/</code>; both carry a catalogue search. Two entry points, no clear distinction.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>4</td><td>Finish the <strong>vocabulary pass on discovery</strong> (&ldquo;DTx app&rdquo;)</td><td>The term standardised everywhere except the highest-traffic discovery surfaces (catalogue, hero), so the product still reads inconsistently.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>5</td><td>Close the <strong>remaining a11y gaps</strong> (AI error role, disabled-reason text, heading order)</td><td>Small fixes that complete the accessibility story; the AI error role has been open since v2.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>6</td><td>Adopt <strong>DS primitives on newer surfaces</strong></td><td>Home / AI search &amp; CTAs and editorial cards roll their own, so hover / focus / disabled behaviour diverges from the system.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>7</td><td>Consolidate the <strong>page shell</strong> (width &amp; padding) and fix stat-tile density</td><td>Container drift (<code>px-6</code> vs <code>px-4 sm:px-6</code>, <code>max-w-4xl</code>/<code>3xl</code>) and a hard-coded &ldquo;Commissioned: 1&rdquo; undercut polish and trust.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>8</td><td><strong>Content hygiene</strong>: spell out &ldquo;EOI&rdquo;, fix typos, remove &ldquo;Placeholder page&rdquo; copy</td><td>Quick wins before any external demo; small credibility issues for a commissioner audience.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>4. UX findings by theme</h2>
+
+    <h3>4.1 Feedback &amp; states</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Finding</th><th>Where</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>STA-01</td><td>The full <code>saved-apps</code> and <code>eoi-record</code> pages still render the empty-state illustration on a failed fetch &mdash; the error-vs-empty work (R6) reached the dashboard widgets but not the destination pages they link to.</td><td><code>SavedAppsClient</code>, <code>EoiRecordClient</code></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>STA-02</td><td>Session expiry (401) isn't surfaced on the list pages the way it is on the dashboard, so an expired session reads as &ldquo;you have nothing saved/submitted&rdquo;.</td><td><code>SavedAppsClient</code>, <code>EoiRecordClient</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>STA-03</td><td>Saved-apps load errors toast <em>and</em> show a banner but offer <strong>no &ldquo;Try again&rdquo;</strong>, unlike the dashboard widgets, so there's no recovery path on the page itself.</td><td><code>SavedAppsClient</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>FB-01</td><td>Nav logout is a silent <code>fetch</code> + redirect &mdash; a failed POST gives no feedback. (Carried from v2 UX-09; still open.)</td><td><code>Nav.tsx</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>FB-02</td><td>EOI submit has no toast; success lives only on the in-modal screen. Acceptable, but inconsistent with the &ldquo;actions say what happened&rdquo; pattern &mdash; decide and document.</td><td><code>EoiProvider</code>, <code>ExpressInterestModal</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>STA-04</td><td>The funding directory omits empty sections; if all are empty the page is nearly blank with no global empty message.</td><td><code>app/funding/page.tsx</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+    <div class="ds-note">
+      <strong>What's already good:</strong> the toast service (polite <code>role="status"</code> + assertive <code>role="alert"</code>,
+      auto-dismiss, Undo), the dashboard widgets / stat tiles (loading / empty / error tri-state with retry), and the
+      catalogue's empty-search vs filter-empty messaging are the templates the destination pages should now match.
+    </div>
+
+    <h3>4.2 Forms</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Finding</th><th>Where</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>FRM-01</td><td>The login password-reveal toggle is <code>tabIndex={-1}</code>, so it can't be reached or operated by keyboard. Keep it in tab order with <code>aria-pressed</code>. (Was a Low in v2; reclassified &mdash; it removes a control from keyboard users.)</td><td><code>app/login/page.tsx</code></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>FRM-02</td><td>No form moves focus to the first invalid field / error region on a failed submit (login, EOI, select-entity), so the error can be off-screen.</td><td>login, EOI, select-entity</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>FRM-03</td><td>The AI chat textarea has a placeholder only &mdash; no <code>&lt;label&gt;</code> or <code>aria-label</code>.</td><td><code>components/ai/ChatInput.tsx</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>FRM-04</td><td>EOI email / phone fields lack <code>autoComplete</code> (<code>email</code>, <code>tel</code>, <code>organization</code>), so browsers can't help fill them.</td><td><code>ExpressInterestModal</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>FRM-05</td><td>Catalogue search input and checkboxes are raw HTML (only the <code>Select</code> is shared) and filter labels are uppercase against <code>FormField</code>'s sentence case. (Carried from v2 FRM-06.)</td><td><code>CatalogueClient</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>FRM-06</td><td>The home / dashboard hero search submit and the AI starter-prompt / full-screen toggle use raw <code>&lt;button&gt;</code> rather than the <code>Button</code> primitive (see DSX-01).</td><td><code>HomeHeroSearch</code>, <code>AiAdvisorPanel</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.3 Content &amp; microcopy</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Finding</th><th>Where</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>CNT-01</td><td>&ldquo;DTx app&rdquo; standardised on compare / saved / PDP body copy, but the <strong>discovery surfaces</strong> &mdash; catalogue intro &amp; counts, apps hub, hero subhead &mdash; still say &ldquo;apps&rdquo; / &ldquo;digital therapeutics&rdquo;. Extend the term (or document &ldquo;digital therapeutics&rdquo; as the deliberate public-facing gloss).</td><td><code>CatalogueClient</code>, <code>AppsDiscoveryClient</code>, <code>content/dashboard/dashboard.json</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>CNT-02</td><td>The &ldquo;EOI&rdquo; acronym appears in the page title, breadcrumb, stat tile and widget footer. Spell out &ldquo;Expression of interest&rdquo; at least on first use. (Carried from v2 CNT-03.)</td><td><code>EoiRecordClient</code>, <code>DashboardStatTiles</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>CNT-03</td><td>CTA labels vary: trigger &ldquo;Express interest&rdquo; vs modal &ldquo;Submit expression of interest&rdquo;; catalogue &ldquo;View details&rdquo; vs compare &ldquo;View {app}&rdquo;. (Carried from v2 CNT-04.)</td><td>PDP, catalogue, compare</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-04</td><td>Typos in the EOI prefill (&ldquo;Commissioiner&rdquo;, name &ldquo;Gordorn&rdquo;) and singular &ldquo;a shared record of submitted expression of interest&rdquo; in the EOI intro.</td><td><code>lib/expressionOfInterestPrefill.ts</code>, <code>EoiRecordClient</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-05</td><td>&ldquo;Placeholder page&rdquo; copy is still visible in the body of <code>/news</code> and <code>/campaigns</code> &mdash; remove before any external demo.</td><td><code>app/news/page.tsx</code>, <code>app/campaigns/page.tsx</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-06</td><td>Unexplained jargon on dense surfaces: catalogue &ldquo;&#9733; NHSE &pound;125k&rdquo; badge, snapshot &ldquo;NICE-EVA&rdquo; pill, scattered DTAC. Add a tooltip or expand on first mention. (Carried from v2 CNT-05.)</td><td>catalogue, snapshot</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-07</td><td>Dead CMS fields: <code>cta_label</code> / <code>cta_path</code> in <code>dashboard.json</code> are unused &mdash; wire or remove.</td><td><code>content/dashboard/dashboard.json</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.4 Navigation &amp; IA</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Finding</th><th>Where</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>NAV-01 <span class="ds-status ds-status--page">Deferred</span></td><td>Saved apps and EOI record are still orphaned from primary nav &amp; footer &mdash; reachable only via dashboard tiles / widgets. A &ldquo;Your workspace&rdquo; grouping remains the proposed fix. (Deferred in R7 by decision.)</td><td><code>Nav.tsx</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-02</td><td>Two &ldquo;homes&rdquo; for signed-in users: the logo links to <code>/dashboard</code> but the &ldquo;Home&rdquo; nav item links to the marketing <code>/</code>, which also carries its own catalogue hero search. The roles of <code>/</code> vs <code>/dashboard</code> aren't distinct &mdash; redirect signed-in <code>/</code> to <code>/dashboard</code>, or differentiate them.</td><td><code>Nav.tsx</code>, <code>app/page.tsx</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-03</td><td>Select-entity renders the full nav + footer (unlike login, which is correctly sandboxed), so a user can navigate away mid-selection while the flow still says &ldquo;select an entity to continue&rdquo;. (Carried from v2 NAV-04.)</td><td><code>AppShell</code>, <code>SelectEntityForm</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-04</td><td>The dashboard &ldquo;Commissioned&rdquo; stat tile hard-codes <strong>&ldquo;1&rdquo;</strong> and links to <code>/apps</code> (the catalogue), not a commissioned-apps view &mdash; false precision plus a misleading target.</td><td><code>DashboardStatTiles</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-05</td><td>On <code>/org-settings</code> the desktop workspace bar shows no active state (mobile highlights it), so there's no &ldquo;you are here&rdquo; on desktop.</td><td><code>Nav.tsx</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>NAV-06</td><td>Redundant &ldquo;&larr; Back to home&rdquo; links sit below the breadcrumb on news / campaigns / case-studies; the breadcrumb Home already does this.</td><td>news, campaigns, case-studies</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>NAV-07</td><td>The EOI-record breadcrumb is flat (<code>Home / EOI record</code>) with no workflow parent; nav label &ldquo;Campaigns&rdquo; vs page title &ldquo;Campaigns and initiatives&rdquo; also drift. (NAV-03 residual from v2.)</td><td><code>EoiRecordClient</code>, <code>Nav.tsx</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>NAV-08</td><td>Editorial home previews (news / campaign / case-study cards) are non-clickable &mdash; only the &ldquo;See all&rdquo; link works &mdash; so the cards read as dead ends.</td><td><code>HomePublicContent</code>, <code>ConceptColumns</code>, <code>CaseStudies</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.5 Responsive &amp; density</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Finding</th><th>Where</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>RSP-01</td><td>Container width / padding drift: dashboard &amp; home use <code>px-6</code>; catalogue / funding / compare use <code>px-4 sm:px-6</code>; org-settings <code>max-w-4xl</code>; news / campaigns <code>max-w-3xl</code> &mdash; all against the shared <code>max-w-7xl</code> grid. Standardise one page shell with narrow editorial variants. (Broadens v2 RSP-05.)</td><td>multiple</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>RSP-02</td><td>Dashboard stat tiles use <code>sm:grid-cols-3 md:max-w-[50%]</code>, squeezing three tiles into half the width from 768px and wrapping awkwardly; the &ldquo;Commissioned&rdquo; label can also wrap. (v2 RSP-06.)</td><td><code>DashboardStatTiles</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>RSP-03</td><td>Funding snapshot pills keep <code>shrink-0 whitespace-nowrap</code> even though the row is <code>flex-wrap</code>, so on a narrow PDP they overflow rather than wrap.</td><td><code>PdpCommissioningSnapshot</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>RSP-04</td><td>From 768px the PDP tab list is single-row equal-width, so long labels (&ldquo;Clinical evidence &amp; outcomes&rdquo;) compress rather than reflow to a second row. (Carried from v2 RSP-04.)</td><td><code>PdpTabs</code>, <code>globals.css</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.6 Design-system adoption on newer surfaces</h3>
+    <p class="ds-u-muted" style="font-size:.9rem">A new theme for this audit: the surfaces added since v2 mostly bypass the primitives, so behaviour and styling drift from the system.</p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Finding</th><th>Where</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>DSX-01</td><td>High-traffic newer CTAs roll their own: the home / dashboard hero search submit and the AI starter-prompt + full-screen toggle use raw buttons, so hover / focus / disabled / loading parity is lost vs <code>Button</code>.</td><td><code>HomeHeroSearch</code>, <code>AiAdvisorPanel</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>DSX-02</td><td>Editorial list pages (news / campaigns / case-studies) use bespoke cards instead of <code>EditorialPillRow</code> / <code>Badges</code> and the shared page shell; the home case-study band isn't reused on its own page.</td><td>news, campaigns, case-studies</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>DSX-03</td><td>Deployment status pills are styled with inline styles, bypassing the contrast-tested <code>.badge</code> palette in <code>components/Badges.tsx</code>.</td><td><code>DeploymentRegisterTable</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>5. Accessibility findings</h2>
+    <h3>Strengths (carried forward / improved)</h3>
+    <ul>
+      <li>Skip link on every routed page (including login); global <code>:focus-visible</code> outline.</li>
+      <li><code>Modal</code> centralises focus trap, scroll lock, escape and restore; the AI drawer, EOI, Clear-data and Share modals all use it.</li>
+      <li>Toast errors live in an assertive <code>role="alert"</code> region; success / info in a polite <code>role="status"</code> region.</li>
+      <li>Dashboard widget failures use <code>role="alert"</code> + retry; compare exposes a live count region and per-cell sr-only app names.</li>
+      <li><code>Button</code> handles <code>aria-busy</code>, native <code>disabled</code> and an <code>aria-disabled</code> escape hatch; <code>PdpTabs</code> roving focus.</li>
+    </ul>
+    <h3>Residual gaps</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Issue</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>A11Y-01</td><td>The AI advisor error box is a plain <code>&lt;div&gt;</code> with no <code>role="alert"</code> / <code>aria-live</code>, so failures aren't announced. <strong>Open since v2 (A11Y-03).</strong></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>A11Y-02</td><td><code>CompareToggleButton</code>'s disabled reason is exposed only via the <code>title</code> tooltip on the <code>aria-disabled</code> button &mdash; not reliably announced and invisible to sighted keyboard users. Add <code>aria-describedby</code> / visible helper text. (Confirms v2 A11Y-05.)</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>A11Y-03</td><td>Heading-level skips: the public home goes <code>h1</code> &rarr; <code>h3</code> (no <code>h2</code>); the dashboard goes <code>h1</code> &rarr; widget <code>h3</code> with no intervening <code>h2</code>.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>A11Y-04</td><td>The Clear-data modal error stage and some inline error copy lack <code>role="alert"</code>.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>A11Y-05</td><td>Icon / label edge cases: product-video play buttons are weak when a title is missing; deployment &ldquo;More&rdquo; buttons don't say which row in their accessible name.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>A11Y-06</td><td>Contrast spot-check: the low-contrast muted token and the custom deployment status pills should be verified against 4.5:1 at small sizes.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>6. Documentation vs code drift</h2>
+    <p>The recurring meta-finding of this series: claims that are <em>true but narrower than they read</em>.</p>
+    <table class="ds-table">
+      <thead><tr><th>Claim (in DS / round records)</th><th>Code reality</th></tr></thead>
+      <tbody>
+        <tr><td>R6: &ldquo;Error vs empty&rdquo; shipped.</td><td>True for the <strong>dashboard widgets &amp; stat tiles</strong>; the destination <code>saved-apps</code> / <code>eoi-record</code> pages still render empty on a failed fetch (STA-01).</td></tr>
+        <tr><td>R7: Vocabulary &ldquo;standardised on DTx app&rdquo;.</td><td>True for <strong>compare / saved / PDP body copy</strong>; the discovery surfaces (catalogue, apps hub, hero subhead) still say &ldquo;apps&rdquo; / &ldquo;digital therapeutics&rdquo; (CNT-01).</td></tr>
+        <tr><td>R3/R6: forms migrated to <code>FormField</code>.</td><td>Core forms done; catalogue search + checkboxes and the AI input remain raw HTML (FRM-03/05).</td></tr>
+      </tbody>
+    </table>
+    <div class="ds-dosdonts">
+      <div class="ds-panel ds-panel--do">
+        <p class="ds-panel__head">Do</p>
+        <ul><li>Scope completion claims to the surfaces actually touched (&ldquo;dashboard widgets&rdquo;, not &ldquo;the app&rdquo;).</li><li>Carry a shipped pattern through to the destination pages it implies.</li></ul>
+      </div>
+      <div class="ds-panel ds-panel--dont">
+        <p class="ds-panel__head">Don't</p>
+        <ul><li>Let &ldquo;standardised&rdquo; / &ldquo;shipped&rdquo; imply coverage the code doesn't have yet.</li><li>Ship new surfaces (home, AI, editorial) on bespoke buttons / inputs instead of the primitives.</li></ul>
+      </div>
+    </div>
+
+    <h2>7. Prioritised backlog (Round 8+)</h2>
+    <h3>Round 8 (follow-through &amp; reliability)</h3>
+    <ul>
+      <li><span class="ds-prio ds-prio--p1">P1</span> Propagate <strong>error-vs-empty + retry + session-expiry</strong> to the <code>saved-apps</code> &amp; <code>eoi-record</code> pages (STA-01, STA-02, STA-03).</li>
+      <li><span class="ds-prio ds-prio--p1">P1</span> Make the <strong>password reveal keyboard-reachable</strong> (FRM-01).</li>
+      <li><span class="ds-prio ds-prio--p2">P2</span> Close the a11y gaps: AI error <code>role="alert"</code>, disabled-reason as text, heading order (A11Y-01, A11Y-02, A11Y-03).</li>
+      <li><span class="ds-prio ds-prio--p2">P2</span> Move focus to the first error on failed submit; label the AI input (FRM-02, FRM-03).</li>
+    </ul>
+    <h3>Round 9 (coherence)</h3>
+    <ul>
+      <li><span class="ds-prio ds-prio--p2">P2</span> Resolve the <strong>dual signed-in home</strong> + duplicated search; sandbox select-entity; fix the &ldquo;Commissioned&rdquo; tile (NAV-02, NAV-03, NAV-04).</li>
+      <li><span class="ds-prio ds-prio--p2">P2</span> Extend the <strong>&ldquo;DTx app&rdquo; vocabulary</strong> to discovery, or document the public gloss (CNT-01).</li>
+      <li><span class="ds-prio ds-prio--p2">P2</span> Adopt <strong>DS primitives</strong> on the home / AI search &amp; CTAs (DSX-01).</li>
+      <li><span class="ds-prio ds-prio--p2">P2</span> Surface the <strong>orphaned routes</strong> via a &ldquo;Your workspace&rdquo; grouping (NAV-01, if product approves).</li>
+    </ul>
+    <h3>Round 10 (polish &amp; hygiene)</h3>
+    <ul>
+      <li><span class="ds-prio ds-prio--p3">P3</span> Consolidate the page shell (width / padding); stat-tile density; funding pill wrap; PDP tab reflow (RSP-01&ndash;RSP-04).</li>
+      <li><span class="ds-prio ds-prio--p3">P3</span> Content hygiene: spell out &ldquo;EOI&rdquo;, fix typos, remove &ldquo;Placeholder page&rdquo;, prune dead CMS fields, harmonise CTA labels (CNT-02&ndash;CNT-07).</li>
+      <li><span class="ds-prio ds-prio--p3">P3</span> Nav / editorial polish: org-settings active state, redundant back-links, breadcrumb parents, clickable previews (NAV-05&ndash;NAV-08, DSX-02/03).</li>
+      <li><span class="ds-prio ds-prio--p3">P3</span> Logout / EOI-submit feedback; funding empty state; a11y edge cases (FB-01, FB-02, STA-04, A11Y-04&ndash;A11Y-06).</li>
+    </ul>
+
+    <h2>8. Findings register</h2>
+    <p class="ds-u-muted" style="font-size:.9rem">All findings, sortable by area and severity. <span class="ds-prio ds-prio--p1">High</span> = reliability/a11y or blocks a task; <span class="ds-prio ds-prio--p2">Medium</span> = friction/clarity; <span class="ds-prio ds-prio--p3">Low</span> = polish.</p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Area</th><th>Summary</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>STA-01</td><td>States</td><td>saved-apps / eoi-record pages conflate error with empty</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>STA-02</td><td>States</td><td>Session expiry not surfaced on list pages</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>STA-03</td><td>States</td><td>Saved-apps load error has no retry</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>STA-04</td><td>States</td><td>Funding all-empty has no global message</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>FB-01</td><td>Feedback</td><td>Logout failures silent</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>FB-02</td><td>Feedback</td><td>EOI submit has no toast (modal-only)</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>FRM-01</td><td>Forms</td><td>Password reveal not keyboard reachable</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>FRM-02</td><td>Forms</td><td>No focus-to-first-error on submit</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>FRM-03</td><td>Forms</td><td>AI chat input has no label</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>FRM-04</td><td>Forms</td><td>EOI missing autoComplete</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>FRM-05</td><td>Forms</td><td>Catalogue search/checkbox raw; label casing</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>FRM-06</td><td>Forms</td><td>Hero / AI buttons not the Button primitive</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-01</td><td>Content</td><td>&ldquo;DTx app&rdquo; not extended to discovery</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>CNT-02</td><td>Content</td><td>&ldquo;EOI&rdquo; acronym in titles / tiles</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>CNT-03</td><td>Content</td><td>Inconsistent CTA labels</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-04</td><td>Content</td><td>Typos (&ldquo;Commissioiner&rdquo;, &ldquo;Gordorn&rdquo;, singular EOI)</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-05</td><td>Content</td><td>&ldquo;Placeholder page&rdquo; copy on news / campaigns</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-06</td><td>Content</td><td>Unexplained jargon (NHSE / NICE-EVA / DTAC)</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-07</td><td>Content</td><td>Dead CMS fields in dashboard.json</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>NAV-01</td><td>IA</td><td>Saved apps / EOI record orphaned <span class="ds-status ds-status--page">Deferred</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-02</td><td>IA</td><td>Dual signed-in &ldquo;home&rdquo; + duplicate search</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-03</td><td>IA</td><td>Select-entity escapable mid-flow</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-04</td><td>IA</td><td>&ldquo;Commissioned&rdquo; tile hard-coded &amp; mis-linked</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-05</td><td>IA</td><td>No org-settings active state on desktop</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>NAV-06</td><td>IA</td><td>Redundant &ldquo;Back to home&rdquo; links</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>NAV-07</td><td>IA</td><td>EOI breadcrumb parent / nav-label drift</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>NAV-08</td><td>IA</td><td>Home editorial previews non-clickable</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>RSP-01</td><td>Responsive</td><td>Container width / padding drift</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>RSP-02</td><td>Density</td><td>Stat tiles squeezed; awkward wrap</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>RSP-03</td><td>Responsive</td><td>Funding pills nowrap despite wrapping row</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>RSP-04</td><td>Responsive</td><td>PDP tab labels compress at tablet</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>DSX-01</td><td>DS adoption</td><td>Home / AI CTAs bypass Button</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>DSX-02</td><td>DS adoption</td><td>Editorial cards bypass Badges / shell</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>DSX-03</td><td>DS adoption</td><td>Deployment pills bypass badge palette</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>A11Y-01</td><td>A11y</td><td>AI error box lacks <code>role="alert"</code> <span class="ds-u-muted">(open since v2)</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>A11Y-02</td><td>A11y</td><td>Compare disabled-reason tooltip-only</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>A11Y-03</td><td>A11y</td><td>Heading skips on home / dashboard</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>A11Y-04</td><td>A11y</td><td>Clear-data error stage lacks <code>role="alert"</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>A11Y-05</td><td>A11y</td><td>Weak labels: video play / deployment &ldquo;More&rdquo;</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>A11Y-06</td><td>A11y</td><td>Contrast spot-check muted text / status pills</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="ds-rule">
+    <p class="ds-u-muted" style="font-size:.85rem">
+      Third UX audit (Round 8). Findings derived from a fresh read of <code>app/**</code>, <code>components/**</code> and
+      <code>components/ui/**</code> against the shipped R6&ndash;R7 baseline, verified in code. Consistent in method and
+      format with the <a href="/DS/Report-v1/index.html">v1</a> and <a href="/DS/Report-v5/index.html">v2</a> audits;
+      structure follows the <a href="https://design-system.service.gov.uk/">GOV.UK Design System</a>.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

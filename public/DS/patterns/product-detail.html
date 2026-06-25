@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Product detail (PDP) — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="product-detail">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Patterns</p>
+      <h1 class="ds-page-title">Product detail (PDP)</h1>
+      <p class="ds-lede">
+        The most complex surface in the product: a hero, a persistent decision-snapshot strip, tabbed content, and a
+        sidebar. It composes badges, tabs, cards, collapsibles, tables and CTAs into a single commissioning view.
+      </p>
+    </div>
+
+    <h2>Anatomy</h2>
+    <ol>
+      <li><strong>Breadcrumb</strong> &mdash; Home / Find apps / [product].</li>
+      <li><strong>Hero</strong> &mdash; logo, name, supplier, value proposition, trimmed signal badges, one primary <strong>Express interest</strong> CTA + a quiet Save / Compare / Share utility cluster.</li>
+      <li><strong>Decision snapshot strip</strong> &mdash; persistent 4-up summary (cost, evidence, deployment, funding).</li>
+      <li><strong>Tabs</strong> &mdash; Overview, Evidence, Deployment &amp; adoption, Commercial.</li>
+      <li><strong>Sidebar</strong> &mdash; supplier contact, demo access, share/print.</li>
+    </ol>
+
+    <h2>Hero</h2>
+    <p>
+      <strong>One primary action.</strong> Express interest is the sole
+      filled CTA; Save / Compare / Share sit in a quiet, tinted utility cluster (44px targets, consistent icon + label). Hero
+      badges are trimmed to <strong>condition + decision signals</strong> (maturity if not &ldquo;Established&rdquo;, content
+      confidence) &mdash; supervision model, NICE references and the NHS App badge sit in the commissioning snapshot
+      and detail sections.
+    </p>
+    <div class="ds-example ds-example--surface">
+      <div class="hs-surface-card-sm" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px">
+        <nav aria-label="Breadcrumb" style="margin-bottom:12px"><ol style="display:flex;gap:6px;list-style:none;margin:0;padding:0;font-size:.82rem;color:var(--text-muted)"><li><a href="#ds-main" style="color:#005EB8;text-decoration:none">Home</a></li><li aria-hidden>/</li><li><a href="#ds-main" style="color:#005EB8;text-decoration:none">Find apps</a></li><li aria-hidden>/</li><li aria-current="page" style="color:var(--text-primary)">Clinitouch</li></ol></nav>
+        <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+          <div style="width:56px;height:56px;border-radius:12px;background:var(--nhs-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.4rem">C</div>
+          <div style="flex:1;min-width:220px">
+            <div class="ds-u-row" style="margin-bottom:10px"><span class="badge badge-teal">COPD</span><span class="badge badge-green">Scaled</span><span class="badge badge-blue">Supplier-reported</span></div>
+            <h2 class="ds-u-mt0" style="margin:0;font-size:1.6rem">Clinitouch</h2>
+            <p class="ds-u-muted ds-u-mt0" style="margin:2px 0 10px">Clinitouch Ltd</p>
+            <p class="ds-u-mt0" style="margin:0 0 12px;color:var(--text-secondary)">Remote monitoring that keeps COPD patients supported at home with clinician oversight.</p>
+            <button class="ds-btn ds-btn--primary" type="button">Express interest</button>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
+          <div style="display:inline-flex;gap:4px;background:#F7F9FC;border-radius:8px;padding:2px 4px">
+            <button class="ds-btn ds-btn--ghost" type="button">&#8599; Share</button>
+            <button class="ds-btn ds-btn--ghost" type="button" aria-pressed="false">&#9734; Save</button>
+            <button class="ds-btn ds-btn--ghost" type="button" aria-pressed="false">&#8646; Add to compare</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Decision snapshot strip</h2>
+    <p>The persistent commissioning summary (<code>PdpCommissioningSnapshot</code>). Four equal segments so width stays stable even when funding is absent.</p>
+    <div class="ds-example ds-example--surface">
+      <div class="hs-decision-snapshot" style="border-radius:12px">
+        <div class="hs-snapshot-strip__grid">
+          <div class="hs-snapshot-strip__segment"><p class="hs-snapshot-strip__heading">Indicative cost</p><div class="hs-snapshot-strip__body"><span class="badge badge-grey">Contact supplier</span></div></div>
+          <div class="hs-snapshot-strip__segment"><p class="hs-snapshot-strip__heading">Evidence</p><div class="hs-snapshot-strip__body"><span class="badge badge-green">Strong</span></div></div>
+          <div class="hs-snapshot-strip__segment"><p class="hs-snapshot-strip__heading">Where it's live</p><div class="hs-snapshot-strip__body"><span class="badge badge-blue">5 ICBs</span></div></div>
+          <div class="hs-snapshot-strip__segment"><p class="hs-snapshot-strip__heading">Funding</p><div class="hs-snapshot-strip__body"><span class="badge badge-green">2 opportunities</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Tabbed content</h2>
+    <div class="ds-example">
+      <div class="nhsuk-tabs" data-ds-tabs>
+        <ul class="nhsuk-tabs__list" role="tablist">
+          <li class="nhsuk-tabs__list-item nhsuk-tabs__list-item--selected"><a class="nhsuk-tabs__tab" role="tab" aria-selected="true" href="#pdp-ov">Overview</a></li>
+          <li class="nhsuk-tabs__list-item"><a class="nhsuk-tabs__tab" role="tab" aria-selected="false" href="#pdp-ev">Evidence</a></li>
+          <li class="nhsuk-tabs__list-item"><a class="nhsuk-tabs__tab" role="tab" aria-selected="false" href="#pdp-dep">Deployment</a></li>
+        </ul>
+        <div class="nhsuk-tabs__panel" id="pdp-ov" role="tabpanel"><p class="ds-u-mt0">Why it matters locally, context of use, what it takes locally.</p></div>
+        <div class="nhsuk-tabs__panel nhsuk-tabs__panel--hidden" id="pdp-ev" role="tabpanel">
+          <div class="card-evidence" style="margin-bottom:0"><div class="ds-u-row" style="margin-bottom:6px"><span class="badge badge-blue">RCT</span><span class="badge badge-grey">n=240</span></div><strong>Reduced admissions in a 12-month trial.</strong><p class="ds-u-mt0 ds-u-muted" style="font-size:.85rem;margin:4px 0 0">Author et al., Journal 2024</p></div>
+        </div>
+        <div class="nhsuk-tabs__panel nhsuk-tabs__panel--hidden" id="pdp-dep" role="tabpanel"><p class="ds-u-mt0">"Where it's live" deployment register and scale &amp; maturity. See <a href="/DS/components/tables.html">Tables</a>.</p></div>
+      </div>
+    </div>
+
+    <h2>Components used</h2>
+    <p>
+      <a href="/DS/components/navigation.html">Breadcrumb</a> &middot;
+      <a href="/DS/components/badges-tags.html">Badges</a> &middot;
+      <a href="/DS/components/buttons.html">Buttons</a> &middot;
+      <a href="/DS/components/tabs.html">Tabs</a> &middot;
+      <a href="/DS/components/cards.html">Evidence cards</a> &middot;
+      <a href="/DS/components/collapsible.html">Collapsible sections</a> &middot;
+      <a href="/DS/components/tables.html">Deployment table</a>
+    </p>
+
+    <div class="ds-note ds-note--source">Source: <code>app/apps/[slug]/page.tsx</code>, <code>components/PdpTabs.tsx</code>, <code>components/PdpCommissioningSnapshot.tsx</code>, <code>components/AppDetailSections.tsx</code>, <code>app/apps/[slug]/pdpBlocks.tsx</code>.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

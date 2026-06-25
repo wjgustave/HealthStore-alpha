@@ -3,7 +3,7 @@ import { useState, type CSSProperties } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { Home, LogOut, PanelRightOpen, Settings } from 'lucide-react'
+import { Home, LogOut, Menu, PanelRightOpen, Settings, X } from 'lucide-react'
 import { useCompareBasket } from '@/components/CompareBasketProvider'
 import { SELECT_ICB_CONTINUE_MESSAGE } from '@/lib/commissioningContextDisplay'
 import {
@@ -64,7 +64,9 @@ export default function Nav({
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  const browseAppsActive = path === '/apps' || path === '/apps/condition-catalogue' || path === '/apps/browse'
+  // R7 NAV-02: "Find apps" owns the whole /apps branch — landing, catalogue, and PDPs (/apps/[slug]) —
+  // via prefix matching, so a product page no longer leaves the nav with nothing active.
+  const browseAppsActive = path === '/apps' || (path?.startsWith('/apps/') ?? false)
   const dashboardActive = path === '/dashboard'
   const homePageActive = path === '/'
   const newsActive = path === '/news'
@@ -156,13 +158,16 @@ export default function Nav({
                   </Link>
                 )}
               </div>
-              <button className="md:hidden p-2 rounded transition-colors hover:bg-gray-100" onClick={() => setMobileOpen(o => !o)} aria-label="Toggle menu">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  {mobileOpen
-                    ? <><path d="M4 4l12 12M16 4L4 16" stroke="#1A2332" strokeWidth="1.5" strokeLinecap="round"/></>
-                    : <><rect x="2" y="5" width="16" height="1.5" rx="0.75" fill="#1A2332"/><rect x="2" y="9.25" width="16" height="1.5" rx="0.75" fill="#1A2332"/><rect x="2" y="13.5" width="16" height="1.5" rx="0.75" fill="#1A2332"/></>
-                  }
-                </svg>
+              <button
+                className="md:hidden p-2 rounded transition-colors hover:bg-gray-100"
+                onClick={() => setMobileOpen(o => !o)}
+                aria-label="Toggle menu"
+                aria-expanded={mobileOpen}
+              >
+                {mobileOpen
+                  ? <X className="h-5 w-5" style={{ color: '#1A2332' }} aria-hidden />
+                  : <Menu className="h-5 w-5" style={{ color: '#1A2332' }} aria-hidden />
+                }
               </button>
             </div>
           </div>

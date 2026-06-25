@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Button } from '@/components/ui/Button'
 
 export default function CookieBanner({
   onAccept,
@@ -45,14 +46,7 @@ export default function CookieBanner({
           </p>
         </div>
         <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3">
-          <button
-            type="button"
-            className="inline-flex justify-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white border-0 cursor-pointer"
-            style={{ background: 'var(--nhs-blue)' }}
-            onClick={onAccept}
-          >
-            Accept analytics cookies
-          </button>
+          <Button onClick={onAccept}>Accept analytics cookies</Button>
           <button
             type="button"
             className="inline-flex justify-center px-4 py-2.5 rounded-lg text-sm font-semibold cursor-pointer bg-white"

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Buttons — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="buttons">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Components</p>
+      <h1 class="ds-page-title">Buttons</h1>
+      <p class="ds-lede">
+        Buttons trigger actions. Use <code>components/ui/Button.tsx</code> and the matching <code>.ds-btn</code>
+        variants below for static previews.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Component</div><div class="ds-meta__v"><code>components/ui/Button.tsx</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Radius</div><div class="ds-meta__v"><code>--radius-md</code> (8px)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Min target</div><div class="ds-meta__v">44px height</div></div>
+    </div>
+
+    <div class="ds-note">
+      <code>&lt;Button&gt;</code> lives at <code>components/ui/Button.tsx</code> with
+      props <code>variant</code> (primary / secondary / ghost / destructive / on-accent / toggle),
+      <code>size</code>, <code>radius</code>, <code>iconOnly</code>, <code>pill</code>, <code>block</code>,
+      <code>pressed</code>, <code>borderless</code> and <code>loading</code>. The <code>.ds-btn</code> classes in
+      <code>/DS/assets/ds.css</code> exist only so this static page renders faithful previews.
+    </div>
+
+    <h2>Variants</h2>
+    <div class="ds-example">
+      <div class="ds-example__row">
+        <button class="ds-btn ds-btn--primary" type="button">Primary</button>
+        <button class="ds-btn ds-btn--secondary" type="button">Secondary</button>
+        <button class="ds-btn ds-btn--ghost" type="button">Ghost</button>
+        <button class="ds-btn ds-btn--destructive" type="button">Destructive</button>
+        <button class="ds-btn ds-btn--primary" type="button" disabled>Disabled</button>
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;button class="ds-btn ds-btn--primary"&gt;Primary&lt;/button&gt;
+&lt;button class="ds-btn ds-btn--secondary"&gt;Secondary&lt;/button&gt;
+&lt;button class="ds-btn ds-btn--ghost"&gt;Ghost&lt;/button&gt;
+&lt;button class="ds-btn ds-btn--destructive"&gt;Destructive&lt;/button&gt;</code></pre>
+
+    <h3>On a coloured (accent) surface</h3>
+    <p>For CTAs that sit inside a coloured callout (the express-interest pattern), use <code>--on-accent</code>: white fill, accent text.</p>
+    <div class="ds-example" style="background:var(--nhs-blue)">
+      <button class="ds-btn ds-btn--on-accent" type="button">Express interest</button>
+    </div>
+<pre class="ds-code"><code>&lt;div style="background: var(--nhs-blue)"&gt;
+  &lt;button class="ds-btn ds-btn--on-accent"&gt;Express interest&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+
+    <h2>Sizes &amp; modifiers</h2>
+    <div class="ds-example">
+      <div class="ds-example__row" style="margin-bottom:16px">
+        <button class="ds-btn ds-btn--primary ds-btn--sm" type="button">Small</button>
+        <button class="ds-btn ds-btn--primary" type="button">Default</button>
+        <button class="ds-btn ds-btn--primary ds-btn--lg" type="button">Large</button>
+        <button class="ds-btn ds-btn--secondary ds-btn--pill" type="button">Pill</button>
+        <button class="ds-btn ds-btn--icon ds-btn--primary" type="button" aria-label="Send">&uarr;</button>
+      </div>
+      <div style="max-width:320px">
+        <button class="ds-btn ds-btn--primary ds-btn--block" type="button">Block (full width)</button>
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;button class="ds-btn ds-btn--primary ds-btn--sm"&gt;Small&lt;/button&gt;
+&lt;button class="ds-btn ds-btn--secondary ds-btn--pill"&gt;Pill&lt;/button&gt;
+&lt;button class="ds-btn ds-btn--icon ds-btn--primary" aria-label="Send"&gt;&hellip;&lt;/button&gt;
+&lt;button class="ds-btn ds-btn--primary ds-btn--block"&gt;Block&lt;/button&gt;</code></pre>
+
+    <h2>Toggle button (stateful)</h2>
+    <p>Save / Compare are toggle buttons: <code>variant="toggle"</code>, <code>--secondary</code> at rest and a
+      <strong>blue-tinted</strong> &ldquo;on&rdquo; state, with <code>aria-pressed</code>. Use <code>borderless</code>
+      on the PDP hero utility cluster.</p>
+    <div class="ds-example">
+      <div class="ds-example__row">
+        <button class="ds-btn ds-btn--secondary" type="button" aria-pressed="false">&#9734; Save</button>
+        <button class="ds-btn ds-btn--on" type="button" aria-pressed="true">&#9733; Saved</button>
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;Button variant="toggle" pressed={saved} borderless aria-pressed={saved}&gt;Save&lt;/Button&gt;</code></pre>
+
+    <h2>Disabled state</h2>
+    <p>Disabled buttons use <code>opacity-40</code> + <code>cursor-not-allowed</code>. <code>&lt;Button&gt;</code>
+      applies it via <code>disabled:opacity-40 disabled:cursor-not-allowed</code>.</p>
+    <div class="ds-example">
+      <div class="ds-example__row">
+        <button class="ds-btn ds-btn--primary" type="button" disabled>Native disabled</button>
+        <button class="ds-btn ds-btn--secondary" type="button" aria-disabled="true" title="A maximum of 4 apps can be in the comparison tool." style="opacity:.4;cursor:not-allowed">aria-disabled (focusable)</button>
+      </div>
+    </div>
+    <p>Default to native <code>disabled</code>. When a control must <strong>stay focusable and explain itself</strong>
+      (e.g. &ldquo;compare basket full&rdquo;), use <code>ariaDisabled</code> and <code>disabledReason</code> on
+      <code>Button</code> so the control stays in the tab order and shows a tooltip.</p>
+<pre class="ds-code"><code>&lt;Button
+  variant="toggle"
+  ariaDisabled={blocked}
+  disabledReason="A maximum of 4 apps can be in the comparison tool."
+  onClick={() =&gt; toggle(appId)}
+&gt;Compare&lt;/Button&gt;</code></pre>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Use a real <code>&lt;button&gt;</code> for actions and <code>&lt;a&gt;</code> for navigation.</li>
+      <li>Icon-only buttons need <code>aria-label</code>; decorative icons get <code>aria-hidden</code>.</li>
+      <li>Toggles set <code>aria-pressed</code>; pending states set <code>aria-busy</code> and <code>disabled</code>.</li>
+      <li>Disabled buttons use real <code>disabled</code> at <code>opacity-40</code> + <code>cursor-not-allowed</code>; only use the <code>ariaDisabled</code> + <code>disabledReason</code> escape hatch when the control must stay focusable, and always pair it with an explanation.</li>
+      <li>Focus ring is the global 3px yellow outline.</li>
+    </ul>
+
+    <div class="ds-dosdonts">
+      <div class="ds-panel ds-panel--do">
+        <p class="ds-panel__head">Do</p>
+        <ul>
+          <li>Use one primary action per view.</li>
+          <li>Reuse <code>.ds-btn</code> variants instead of new inline styles.</li>
+          <li>Keep the 44px minimum target.</li>
+        </ul>
+      </div>
+      <div class="ds-panel ds-panel--dont">
+        <p class="ds-panel__head">Don't</p>
+        <ul>
+          <li>Re-hardcode <code>#005EB8</code> / hover hex per button.</li>
+          <li>Style links to look like primary buttons unless they navigate.</li>
+          <li>Mix radius conventions across adjacent buttons.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ds-note ds-note--source">Source: <code>components/ui/Button.tsx</code>. Preview styles: <code>.ds-btn</code> in <code>/DS/assets/ds.css</code>.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

@@ -9,6 +9,7 @@ import BackToTop from './BackToTop'
 import { CompareBasketProvider } from './CompareBasketProvider'
 import { BookmarkProvider } from './BookmarkProvider'
 import { EoiProvider } from './EoiProvider'
+import { ToastProvider } from './ui/Toast'
 import ClearDataModal from './ClearDataModal'
 import AiAdvisorPanel, { type AiAdvisorClientProfile } from './ai/AiAdvisorPanel'
 
@@ -47,28 +48,30 @@ export default function AppShell({
   return (
     <>
       <a href="#main-content" className="skip-link">Skip to main content</a>
-      <CompareBasketProvider allApps={allApps}>
-        <BookmarkProvider>
-          <EoiProvider>
-            <Nav
-              commissioningContextLabel={icbSubheaderLabel}
-              isLoggedIn={isLoggedIn}
-              onOpenAiPanel={isLoggedIn && aiProfile ? () => setAiPanelOpen(true) : undefined}
-            />
-            <main id="main-content">{children}</main>
-            {isLoggedIn && aiProfile && (
-              <AiAdvisorPanel
-                open={aiPanelOpen}
-                onClose={() => setAiPanelOpen(false)}
-                profile={aiProfile}
+      <ToastProvider>
+        <CompareBasketProvider allApps={allApps}>
+          <BookmarkProvider>
+            <EoiProvider>
+              <Nav
+                commissioningContextLabel={icbSubheaderLabel}
+                isLoggedIn={isLoggedIn}
+                onOpenAiPanel={isLoggedIn && aiProfile ? () => setAiPanelOpen(true) : undefined}
               />
-            )}
-            {isLoggedIn && (
-              <ClearDataModal open={showClearData} onClose={() => setShowClearData(false)} />
-            )}
-          </EoiProvider>
-        </BookmarkProvider>
-      </CompareBasketProvider>
+              <main id="main-content">{children}</main>
+              {isLoggedIn && aiProfile && (
+                <AiAdvisorPanel
+                  open={aiPanelOpen}
+                  onClose={() => setAiPanelOpen(false)}
+                  profile={aiProfile}
+                />
+              )}
+              {isLoggedIn && (
+                <ClearDataModal open={showClearData} onClose={() => setShowClearData(false)} />
+              )}
+            </EoiProvider>
+          </BookmarkProvider>
+        </CompareBasketProvider>
+      </ToastProvider>
       <BackToTop />
       <footer
         className="mt-20 border-t px-4 pt-10 pb-[calc(2.5rem+30px)] sm:px-6"

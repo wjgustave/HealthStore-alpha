@@ -52,7 +52,7 @@ export default function EoiRecordClient({
       <button
         type="button"
         disabled
-        className="inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold cursor-not-allowed opacity-50"
+        className="inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold cursor-not-allowed opacity-40"
         style={{ background: 'var(--nhs-blue)', color: '#fff' }}
       >
         Procurement confirmation

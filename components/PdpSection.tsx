@@ -28,7 +28,7 @@ export function PdpSection({
       <section id={id}>
         <h2
           className={`font-bold leading-snug ${description ? 'mb-1' : 'mb-4'}`}
-          style={{ fontSize: 'var(--text-section-alt)', color: '#005EB8' }}
+          style={{ fontSize: 'var(--text-section-alt)', color: 'var(--nhs-blue)' }}
         >
           {title}
         </h2>

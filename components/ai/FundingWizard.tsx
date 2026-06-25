@@ -35,18 +35,7 @@ const optionButtonStyle = {
 } as const
 
 function Chip({ children, tone = 'blue' }: { children: React.ReactNode; tone?: 'blue' | 'green' }) {
-  return (
-    <span
-      className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold"
-      style={{
-        background: tone === 'blue' ? '#E6F0FB' : '#E8F5EC',
-        color: tone === 'blue' ? 'var(--nhs-blue)' : 'var(--nhs-green, #007f3b)',
-        fontFamily: 'Frutiger, Arial, sans-serif',
-      }}
-    >
-      {children}
-    </span>
-  )
+  return <span className={`badge ${tone === 'blue' ? 'badge-blue' : 'badge-green'} gap-1.5 text-xs`}>{children}</span>
 }
 
 export default function FundingWizard({ onComplete, onCancel, disabled }: Props) {

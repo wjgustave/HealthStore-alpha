@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Audit report (v2) — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="report-v5">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Report &middot; v2 (audit) &middot; Round 5</p>
+      <h1 class="ds-page-title">Second UX audit</h1>
+      <p class="ds-lede">
+        A fresh, full UX audit of the HealthStore product, taken with new eyes after Rounds 2&ndash;4 shipped the
+        primitives from the <a href="/DS/Report-v1/index.html">v1 audit</a>. Where v1 focused on component
+        <em>reuse</em>, this pass focuses on <strong>experience</strong>: feedback, states, forms, content, navigation,
+        responsiveness and density &mdash; plus where documentation has drifted from the code. Cookie consent is
+        intentionally out of scope.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Lineage</div><div class="ds-meta__v">2nd audit &middot; Round 5 in the series</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Since v1</div><div class="ds-meta__v">R2&ndash;R4 shipped (Button, Modal, FormField, radius, cleanup)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Lens</div><div class="ds-meta__v">UX: feedback, states, forms, IA, responsive</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Out of scope</div><div class="ds-meta__v">Cookie consent</div></div>
+    </div>
+
+    <div class="ds-note">
+      <strong>Naming.</strong> This is the second <em>audit</em> (hence &ldquo;v2&rdquo;), but the fifth report in the
+      series &mdash; <a href="/DS/Report-v2/index.html">v2</a>/<a href="/DS/Report-v3/index.html">v3</a>/<a href="/DS/Report-v4/index.html">v4</a>
+      are the Round 2&ndash;4 <em>implementation records</em>, not audits. It lives at <code>/DS/Report-v5</code> so it
+      doesn't overwrite them.
+    </div>
+
+    <h2>1. Executive summary</h2>
+    <p>
+      The component layer is in noticeably better shape than at v1. The shared primitives are real and well-built:
+      <code>components/ui/Button.tsx</code> (six variants, proper toggle/loading/aria-disabled handling) and
+      <code>components/ui/Modal.tsx</code> (portal, focus trap, scroll lock, escape, focus restore, center/drawer) are
+      genuinely good, and the AI drawer now runs on the shared modal with a real focus trap.
+    </p>
+    <p>
+      The remaining problems have shifted from &ldquo;duplication&rdquo; to <strong>experience and follow-through</strong>:
+      there is <strong>no global feedback layer</strong>, so transient actions can fail silently; several surfaces
+      <strong>conflate &ldquo;empty&rdquo; with &ldquo;error&rdquo;</strong>; the new <code>FormField</code> is only
+      <strong>partially adopted</strong>; the <strong>PDP is dense</strong> with competing actions; and a few
+      <strong>routes are orphaned</strong> from the navigation. A cross-cutting concern is <strong>documentation drift</strong>
+      &mdash; some round records claim migrations the code hasn't actually had yet.
+    </p>
+
+    <h3>Consistency scorecard</h3>
+    <table class="ds-table">
+      <thead><tr><th>Area</th><th>Rating</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Buttons / Modal / radius / colour</td><td><span class="ds-status ds-status--canonical">Good</span></td><td>R2 primitives shipped and largely adopted; strong implementations.</td></tr>
+        <tr><td>Feedback &amp; confirmation</td><td><span class="ds-status ds-status--canonical">Good</span></td><td><span class="ds-status ds-status--canonical">R6</span> Toast / live-region service shipped; save/remove/copy/compare + provider errors now announce (UX-01/02/06).</td></tr>
+        <tr><td>States (loading / empty / error)</td><td><span class="ds-status ds-status--canonical">Good</span></td><td><span class="ds-status ds-status--canonical">R6</span> Dashboard widgets &amp; stat tiles separate loading / empty / error (UX-03/05). <span class="ds-status ds-status--canonical">R7</span> compare &ldquo;differences only&rdquo; now has a visible empty state (UX-04).</td></tr>
+        <tr><td>Forms consistency</td><td><span class="ds-status ds-status--canonical">Good</span></td><td><span class="ds-status ds-status--canonical">R6</span> Org-settings + select-entity migrated to <code>FormField</code>/<code>Button</code> (FRM-01/03); catalogue filters still partial.</td></tr>
+        <tr><td>Content &amp; microcopy</td><td><span class="ds-status ds-status--canonical">Good</span></td><td><span class="ds-status ds-status--canonical">R7</span> Standardised on &ldquo;DTx app&rdquo; across PDP / compare / saved-apps; Compare toggle now &ldquo;Add to compare&rdquo; / &ldquo;Added&rdquo; (CNT-01/02). Residual: &ldquo;EOI&rdquo; acronym + minor CTA labels.</td></tr>
+        <tr><td>Navigation &amp; IA</td><td><span class="ds-status ds-status--page">Fair</span></td><td><span class="ds-status ds-status--canonical">R7</span> Active states fixed across the <code>/apps</code> branch + org-settings breadcrumb (NAV-02/03). Residual: saved apps &amp; EOI record still orphaned from nav (NAV-01 deferred).</td></tr>
+        <tr><td>Responsive &amp; density</td><td><span class="ds-status ds-status--page">Fair</span></td><td><span class="ds-status ds-status--canonical">R7</span> PDP hero triaged to one primary; snapshot strip wraps; compare grids scroll (RSP-01/02/03). Residual: tab-label wrap + container drift (RSP-04/05).</td></tr>
+        <tr><td>Accessibility</td><td><span class="ds-status ds-status--canonical">Good</span></td><td><span class="ds-status ds-status--canonical">R6</span> Org-settings labels associated + save announced; EOI success announced (A11Y-01/02/04). Residual: AI error box role (A11Y-03).</td></tr>
+        <tr><td>Docs vs code accuracy</td><td><span class="ds-status ds-status--canonical">Good</span></td><td><span class="ds-status ds-status--canonical">R6</span> org-settings/select-entity FormField claim now true. <span class="ds-status ds-status--canonical">R7</span> the dead compare matrix / view-toggle path was removed, so the docs and code agree.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>2. What changed since v1</h2>
+    <p>For full detail see the round records (<a href="/DS/Report-v2/index.html">R2</a>, <a href="/DS/Report-v3/index.html">R3</a>, <a href="/DS/Report-v4/index.html">R4</a>). In short:</p>
+    <ul>
+      <li><span class="ds-status ds-status--canonical">Shipped</span> <code>Button</code> + <code>Modal</code> primitives; 12 buttons and 4 overlays migrated; AI drawer gained a focus trap.</li>
+      <li><span class="ds-status ds-status--canonical">Shipped</span> Radius scale via Tailwind <code>@theme</code>; <code>#005EB8</code> &rarr; <code>var(--nhs-blue)</code> token sweep.</li>
+      <li><span class="ds-status ds-status--canonical">Shipped</span> <code>FormField</code>, <code>AuthCard</code>, <code>WidgetShell</code>; badge/pill + collapsible consolidation; orphan prototype layouts removed.</li>
+      <li><span class="ds-status ds-status--canonical">Shipped</span> Product-video lightbox a11y (trap + label) and icon set standardised on lucide.</li>
+    </ul>
+    <p class="ds-u-muted" style="font-size:.9rem">This audit takes that as the baseline and looks for what's left and what's newly visible.</p>
+
+    <h2>3. Top opportunities this round (highest impact first)</h2>
+    <table class="ds-table">
+      <thead><tr><th>#</th><th>Opportunity</th><th>Why it matters</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Add a <strong>global feedback layer</strong> (toast / live-region service)</td><td>Transient actions (save, remove, copy) and provider errors currently have no consistent home.</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>2</td><td>Fix <strong>empty-vs-error conflation</strong> on dashboard widgets &amp; surface provider errors</td><td>Failed fetches read as &ldquo;nothing here yet&rdquo; &mdash; a reliability bug, not just copy.</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>3</td><td>Finish <strong>FormField adoption</strong> (org-settings, select-entity)</td><td>Largest remaining a11y/consistency gap; labels not programmatically associated in org-settings.</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>4</td><td>Reduce <strong>PDP density</strong>: one primary action, fewer hero badges</td><td>Four competing CTAs + Express interest repeated 3&times; dilutes the decision.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>5</td><td>Surface <strong>orphaned routes</strong> (saved apps, EOI record) in nav / a &ldquo;Your workspace&rdquo; group</td><td>Reachable only via dashboard tiles; no nav path back.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>6</td><td>Standardise <strong>vocabulary</strong> (app vs product vs DTx)</td><td>Mixed terms across nav, PDP, compare, AI confuse a non-technical commissioner audience.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>7</td><td>Resolve <strong>compare matrix / view-toggle</strong> dead path</td><td><code>CompareMatrixView</code> + <code>CompareViewToggle</code> exist but aren't wired; workspace summary overflows with 3&ndash;4 apps.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>8</td><td>Reconcile <strong>docs with code</strong></td><td>Round records claim migrations the code hasn't had; erodes trust in the DS.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>4. UX findings by theme</h2>
+
+    <h3>4.1 Feedback &amp; states</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Finding</th><th>Where</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>UX-01 <span class="ds-status ds-status--canonical">Fixed R6</span></td><td>No global toast/snackbar. Each feature hand-rolls inline banners; works in modals/forms, fails for transient actions. <strong>R6:</strong> shipped <code>ToastProvider</code> + <code>useToast()</code> (top-centre, polite + assertive).</td><td>app-wide</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>UX-02 <span class="ds-status ds-status--canonical">Fixed R6</span></td><td>Bookmark toggle errors are silent on catalogue/PDP &mdash; <code>BookmarkProvider</code> sets <code>error</code> but only the saved-apps page reads it. <strong>R6:</strong> save/remove success + failure now toast from the provider.</td><td><code>BookmarkProvider</code>, <code>SaveToggleButton</code></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>UX-03 <span class="ds-status ds-status--canonical">Fixed R6</span></td><td>Dashboard widgets treat a failed fetch as &ldquo;nothing saved/submitted yet&rdquo;. <strong>R6:</strong> providers expose <code>status</code>; widgets show a distinct error + &ldquo;Try again&rdquo;.</td><td><code>SavedAppsWidget</code>, <code>EoiActivityWidget</code></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>UX-04 <span class="ds-status ds-status--canonical">Fixed R7</span></td><td>Compare &ldquo;Differences only&rdquo; with no differing rows hid groups silently &mdash; an apparently blank workspace with only an sr-only count. <strong>R7:</strong> a visible empty state (&ldquo;No differences to show&rdquo;) with a <strong>&ldquo;Show all rows&rdquo;</strong> button that turns the filter off.</td><td><code>CompareWorkspaceView</code></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>UX-05 <span class="ds-status ds-status--canonical">Fixed R6</span></td><td>Stat tiles render <code>0</code> while providers load (flash of wrong counts); no loading state. <strong>R6:</strong> skeleton while loading, muted &ldquo;&mdash;&rdquo; on error, so <code>0</code> only means zero.</td><td><code>DashboardStatTiles</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>UX-06 <span class="ds-status ds-status--canonical">Fixed R6</span></td><td><code>aria-live</code> usage is sparse/inconsistent. <strong>R6:</strong> save/remove/copy/compare + org-save now announce via the toast service; EOI success via <code>role="status"</code>.</td><td>multiple</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>UX-07 <span class="ds-status ds-status--canonical">Fixed R7</span></td><td>Double-submit risk: saved-app remove (X) and clear-data confirm weren't guarded on first click. <strong>R7:</strong> the saved-apps X is disabled (wait cursor) while its DELETE is in flight via <code>togglingId</code>; the clear-data confirm ignores re-entry while pending.</td><td><code>SavedAppsClient</code>, <code>ClearDataModal</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>UX-08 <span class="ds-status ds-status--canonical">Fixed R7</span></td><td>Compare &ldquo;Clear all&rdquo; had no confirmation &mdash; one click wiped the basket. <strong>R7:</strong> it now clears immediately and offers an <strong>Undo</strong> toast (the toast service gained an optional inline action).</td><td><code>CompareClient</code>, <code>CompareBasketProvider</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>UX-09</td><td>Nav logout failures are silent (no handling if the POST fails).</td><td><code>Nav.tsx</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+    <div class="ds-note">
+      <strong>What's already good:</strong> the EOI modal (loading/error/success + double-submit guard), the share-link
+      flow (pending/error/success with <code>aria-live</code>), and <code>ClearDataModal</code> (staged destructive flow)
+      are the templates the rest of the app should follow.
+    </div>
+
+    <h3>4.2 Forms</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Finding</th><th>Where</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>FRM-01 <span class="ds-status ds-status--canonical">Fixed R6</span></td><td>Org settings doesn't use <code>FormField</code>: labels are <code>&lt;span&gt;</code>; inputs lack <code>id</code>/<code>aria-*</code>; raw buttons. <strong>R6:</strong> fully migrated to <code>FormField</code> + <code>Button</code> with real <code>&lt;label for&gt;</code> on every input.</td><td><code>OrgSettingsClient</code></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>FRM-02 <span class="ds-status ds-status--canonical">Fixed R6</span></td><td>Express-interest contact fields are <code>required</code> + <code>readOnly</code>; if prefill is empty the form can't be submitted. <strong>R6:</strong> fields are editable when prefill is empty, the API prefers submitted values, and required/validated only when editable.</td><td><code>ExpressInterestModal</code></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>FRM-03 <span class="ds-status ds-status--canonical">Fixed R6</span></td><td>Select-entity uses a bespoke radio-card stack: only an sr-only legend, no <code>aria-invalid</code> wiring. <strong>R6:</strong> radios wrapped in a labelled <code>role="radiogroup"</code> with <code>aria-required</code> / <code>aria-invalid</code> / <code>aria-describedby</code>.</td><td><code>SelectEntityForm</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>FRM-04</td><td>Login errors are form-level only &mdash; no field-level <code>error</code>, no focus move to the first invalid field.</td><td><code>app/login/page.tsx</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>FRM-05</td><td>Missing <code>autoComplete</code> on EOI email/phone; password reveal is <code>tabIndex=-1</code> (not keyboard reachable).</td><td>EOI modal, login</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>FRM-06</td><td>Catalogue filter labels are uppercase while <code>FormField</code> labels are sentence case &mdash; visual inconsistency; search/checkbox are raw HTML, not <code>FormField</code>.</td><td><code>CatalogueClient</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.3 Content &amp; microcopy</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Finding</th><th>Where</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>CNT-01 <span class="ds-status ds-status--canonical">Fixed R7</span></td><td>Mixed product vocabulary: &ldquo;app&rdquo;, &ldquo;product&rdquo;, &ldquo;application&rdquo;, &ldquo;digital therapeutics&rdquo;, &ldquo;DTx app&rdquo;. <strong>R7:</strong> standardised on <strong>&ldquo;DTx app&rdquo;</strong> across the PDP / compare / saved-apps body copy &amp; counts and dropped &ldquo;application&rdquo;; AI / funding flows already matched. Concise nav / breadcrumb / page-title labels were left as-is by design.</td><td>app-wide</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>CNT-02 <span class="ds-status ds-status--canonical">Fixed R7</span></td><td>Compare toggle read &ldquo;Compare&rdquo; in both states (only the icon changed). <strong>R7:</strong> now <strong>&ldquo;Add to compare&rdquo;</strong> / <strong>&ldquo;Added&rdquo;</strong>.</td><td><code>CompareToggleButton</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>CNT-03</td><td>&ldquo;EOI&rdquo; acronym used in tile and page title; may not land with all commissioners. Spell out &ldquo;Expressions of interest&rdquo;.</td><td><code>DashboardStatTiles</code>, <code>EoiRecordClient</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-04</td><td>Primary CTA label varies: hero &ldquo;Express interest&rdquo; vs modal &ldquo;Submit expression of interest&rdquo;; catalogue &ldquo;View details&rdquo; vs compare &ldquo;View {app}&rdquo;.</td><td>PDP, catalogue, compare</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-05</td><td>Unexplained jargon on dense surfaces: snapshot NHS pills (&ldquo;App&rdquo;, &ldquo;Notify&rdquo;, &ldquo;Login&rdquo;), &ldquo;NHSE &pound;125k&rdquo; catalogue badge, compare &ldquo;Task lens&rdquo;.</td><td>snapshot, catalogue, compare</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-06</td><td>Legacy typo &ldquo;Commissioiner&rdquo; in EOI prefill.</td><td><code>lib/expressionOfInterestPrefill.ts</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.4 Navigation &amp; IA</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Finding</th><th>Where</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>NAV-01 <span class="ds-status ds-status--page">Deferred</span></td><td>Saved apps and EOI record are orphaned from primary nav &mdash; reachable only via dashboard tiles/widgets/footer. <strong>R7:</strong> deferred to a future iteration (decision PDP/NAV-1 = do not change); they remain reachable from the dashboard. A &ldquo;Your workspace&rdquo; grouping is still the proposed fix.</td><td><code>Nav.tsx</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-02 <span class="ds-status ds-status--canonical">Fixed R7</span></td><td>&ldquo;Find apps&rdquo; active state didn't match the PDP (<code>/apps/[slug]</code>). <strong>R7:</strong> prefix matching (<code>startsWith('/apps/')</code>) lights &ldquo;Find apps&rdquo; across the whole branch incl. PDPs. (Saved-apps ownership rides with the deferred NAV-01.)</td><td><code>Nav.tsx</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-03 <span class="ds-status ds-status--canonical">Fixed R7</span> <span class="ds-u-muted">(partial)</span></td><td>Breadcrumbs missing on org-settings; EOI record breadcrumb omits its workflow parent. <strong>R7:</strong> org-settings now has a breadcrumb. The EOI-record parent + redundant &ldquo;Back to home&rdquo; links remain for a later pass.</td><td>org-settings, news/campaigns</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>NAV-04</td><td>Select-entity renders the full nav + footer (unlike login), so a user can navigate away mid-selection while the subheader still says &ldquo;Select an ICB to continue&rdquo;.</td><td><code>AppShell</code>, <code>SelectEntityForm</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-05</td><td>Two search entry points for signed-in users (nav/catalogue and a hero search on the dashboard) without a clear distinction.</td><td><code>DashboardV4</code>, <code>HomeHeroSearch</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.5 Responsive &amp; density</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Finding</th><th>Where</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>RSP-01 <span class="ds-status ds-status--canonical">Fixed R7</span></td><td>PDP hero was overloaded: ~6+ badge types above the H1 and four competing actions. <strong>R7:</strong> Express interest is the sole primary; Save / Compare / Share demoted into one quiet utility cluster; hero badges trimmed to condition + maturity + content-confidence (supervision / NICE / NHS App moved to the snapshot &amp; sections below). <em>The repeated bottom-callout CTA was intentionally kept (PDP-4 = do not change).</em></td><td><code>app/apps/[slug]/page.tsx</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>RSP-02 <span class="ds-status ds-status--canonical">Fixed R7</span></td><td>Snapshot strip base row used <code>flex-wrap: nowrap</code> &mdash; overflow risk on narrow viewports. <strong>R7:</strong> the row now wraps.</td><td><code>globals.css</code> <code>.hs-snapshot-strip__row</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>RSP-03 <span class="ds-status ds-status--canonical">Fixed R7</span></td><td>Compare workspace summary used <code>repeat(n, minmax(140px,1fr))</code> with no overflow wrapper. <strong>R7:</strong> the summary + workspace grids now scroll horizontally (columns stay readable) instead of overflowing the page.</td><td><code>CompareWorkspaceView</code>, <code>globals.css</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>RSP-04</td><td>PDP tab labels (&ldquo;Clinical evidence &amp; outcomes&rdquo;, &ldquo;Commercial, cost &amp; funding&rdquo;) wrap awkwardly at tablet widths where tabs are forced equal-width.</td><td><code>PdpTabs</code>, <code>globals.css</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>RSP-05</td><td>Container width drift: org-settings <code>max-w-4xl</code>, dashboard <code>px-6</code> vs catalogue <code>px-4 sm:px-6</code> &mdash; minor inconsistency against the shared <code>max-w-7xl</code> grid.</td><td>org-settings, dashboard</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>RSP-06</td><td>Dashboard stat tiles (<code>md:max-w-[50%]</code>) wrap awkwardly at medium widths; &ldquo;Commissioned&rdquo; tile value hard-coded to <code>1</code>.</td><td><code>DashboardStatTiles</code></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>5. Accessibility findings</h2>
+    <h3>Strengths (carried forward / improved)</h3>
+    <ul>
+      <li><code>Modal</code> primitive centralises focus trap, scroll lock, escape and focus restore; AI drawer now uses it.</li>
+      <li><code>Button</code> handles <code>aria-busy</code>, native <code>disabled</code>, and a documented <code>aria-disabled</code> escape hatch with a reason tooltip.</li>
+      <li><code>PdpTabs</code> roving focus; <code>CompareLensControl</code> fieldset/legend; catalogue filter <code>aria-live</code>; global focus-visible outline.</li>
+      <li>Product-video lightbox a11y (trap + label) reported fixed in R4.</li>
+    </ul>
+    <h3>Residual gaps</h3>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Issue</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>A11Y-01 <span class="ds-status ds-status--canonical">Fixed R6</span></td><td>Org-settings inputs aren't programmatically labelled (see FRM-01). <strong>R6:</strong> every input now has a real <code>&lt;label for&gt;</code> via <code>FormField</code>.</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>A11Y-02 <span class="ds-status ds-status--canonical">Fixed R6</span></td><td>Org-settings save-success banner has no <code>role="status"</code>/<code>aria-live</code>. <strong>R6:</strong> save result routes through the toast service (assertive on error); the persistent banner now carries <code>role</code>/<code>aria-live</code>.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>A11Y-03</td><td>AI advisor error box is a plain red <code>&lt;div&gt;</code> with no <code>role="alert"</code>.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>A11Y-04 <span class="ds-status ds-status--canonical">Fixed R6</span></td><td>EOI / compare success and add/remove actions aren't announced to assistive tech. <strong>R6:</strong> compare add/remove announce via toasts; EOI success screen is a <code>role="status"</code> region.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>A11Y-05</td><td><code>CompareToggleButton</code> uses <code>aria-disabled</code> &mdash; good &mdash; but verify the reason is exposed as text, not only a <code>title</code> tooltip.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>A11Y-06</td><td>Recommend a regression check that the R4 lightbox trap/label and R2 drawer trap still hold after subsequent changes.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>6. Documentation vs code drift</h2>
+    <p>A meta-finding worth fixing because it undermines trust in the design system:</p>
+    <table class="ds-table">
+      <thead><tr><th>Claim (in DS / round records)</th><th>Code reality</th></tr></thead>
+      <tbody>
+        <tr><td>R3: login / select-entity / EOI / org-settings / catalogue filters migrated to <code>FormField</code>.</td><td><span class="ds-status ds-status--canonical">R6</span> Org-settings now on <code>FormField</code> + <code>Button</code>; select-entity radios given a labelled <code>role="radiogroup"</code>. Catalogue filters still only use the shared <code>Select</code> (the rest is raw HTML). Login &amp; EOI already did.</td></tr>
+        <tr><td>Compare matrix &ldquo;kept&rdquo; (CMP-001); <code>CompareViewToggle</code> built.</td><td><code>CompareMatrixView</code> + <code>CompareViewToggle</code> exist but aren't wired &mdash; shipped UI is workspace-only; the matrix is a dead path.</td></tr>
+        <tr><td>Cookie consent &ldquo;docs aligned to say so honestly&rdquo;.</td><td>Out of scope for this audit &mdash; not re-verified.</td></tr>
+      </tbody>
+    </table>
+    <div class="ds-dosdonts">
+      <div class="ds-panel ds-panel--do">
+        <p class="ds-panel__head">Do</p>
+        <ul><li>Mark a migration &ldquo;done&rdquo; only when every listed surface is on the primitive.</li><li>Remove or wire dead components (matrix, view toggle).</li></ul>
+      </div>
+      <div class="ds-panel ds-panel--dont">
+        <p class="ds-panel__head">Don't</p>
+        <ul><li>Let round records assert completion ahead of the code.</li><li>Keep built-but-unused UI without a flag/route.</li></ul>
+      </div>
+    </div>
+
+    <h2>7. Prioritised backlog (Round 5+)</h2>
+    <h3>Round 5 (experience &amp; reliability) &mdash; <span class="ds-status ds-status--canonical">Shipped</span> as the <a href="/DS/Report-v6/index.html">Round 6 record</a></h3>
+    <ul>
+      <li><span class="ds-status ds-status--canonical">Done</span> Add a <strong>toast/live-region feedback service</strong>; wire save/remove/copy + provider errors (UX-01, UX-02, UX-06).</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Distinguish <strong>error from empty</strong> on dashboard widgets and stat tiles (UX-03, UX-05).</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Migrate <strong>org-settings</strong> (and select-entity) to <code>FormField</code> + <code>Button</code>; fix programmatic labels (FRM-01, FRM-03, A11Y-01).</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Make EOI contact fields <strong>editable when prefill is empty</strong> (FRM-02).</li>
+    </ul>
+    <h3>Round 6 (clarity &amp; density) &mdash; <span class="ds-status ds-status--canonical">Shipped</span> as the <a href="/DS/Report-v7/index.html">Round 7 record</a></h3>
+    <ul>
+      <li><span class="ds-status ds-status--canonical">Done</span> <strong>PDP triage</strong>: one primary action, demote Save/Compare/Share, trim hero badges (RSP-01).</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Fix nav <strong>active states</strong> + org-settings breadcrumb (NAV-02, NAV-03). <span class="ds-status ds-status--page">Deferred</span> surfacing orphaned routes (NAV-01).</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> <strong>Vocabulary</strong> pass (&ldquo;DTx app&rdquo;) + Compare toggle label (CNT-01, CNT-02).</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Compare: <strong>remove the dead matrix</strong>; fix the differences-only empty state &amp; summary overflow (UX-04, RSP-03).</li>
+      <li><span class="ds-status ds-status--canonical">Done</span> Snapshot strip overflow; safe destructive one-clicks &mdash; in-flight guards + Undo toast (RSP-02, UX-07, UX-08).</li>
+    </ul>
+    <h3>Round 7 (polish &amp; hygiene)</h3>
+    <ul>
+      <li><span class="ds-prio ds-prio--p3">P3</span> Microcopy + acronym + typo cleanup (CNT-03&ndash;CNT-06).</li>
+      <li><span class="ds-prio ds-prio--p3">P3</span> Container-width consistency; tab-label wrapping (RSP-04, RSP-05).</li>
+      <li><span class="ds-prio ds-prio--p3">P3</span> Reconcile docs with code; a11y regression checks (Section 6, A11Y-06).</li>
+    </ul>
+
+    <h2>8. Findings register</h2>
+    <p class="ds-u-muted" style="font-size:.9rem">All findings, sortable by area and severity. <span class="ds-prio ds-prio--p1">High</span> = reliability/a11y or blocks a task; <span class="ds-prio ds-prio--p2">Medium</span> = friction/clarity; <span class="ds-prio ds-prio--p3">Low</span> = polish.</p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Area</th><th>Summary</th><th>Sev</th></tr></thead>
+      <tbody>
+        <tr><td>UX-01</td><td>Feedback</td><td>No global toast layer <span class="ds-status ds-status--canonical">Fixed R6</span></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>UX-02</td><td>Feedback</td><td>Bookmark errors silent off list pages <span class="ds-status ds-status--canonical">Fixed R6</span></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>UX-03</td><td>States</td><td>Widgets mask fetch errors as empty <span class="ds-status ds-status--canonical">Fixed R6</span></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>UX-04</td><td>States</td><td>Compare &ldquo;differences only&rdquo; invisible empty <span class="ds-status ds-status--canonical">Fixed R7</span></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>UX-05</td><td>States</td><td>Stat tiles flash 0 while loading <span class="ds-status ds-status--canonical">Fixed R6</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>UX-06</td><td>A11y</td><td>Sparse/inconsistent <code>aria-live</code> <span class="ds-status ds-status--canonical">Fixed R6</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>UX-07</td><td>Feedback</td><td>Double-submit on remove / clear-data <span class="ds-status ds-status--canonical">Fixed R7</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>UX-08</td><td>Feedback</td><td>Compare &ldquo;Clear all&rdquo; no confirm <span class="ds-status ds-status--canonical">Fixed R7</span></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>UX-09</td><td>Feedback</td><td>Logout failures silent</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>FRM-01</td><td>Forms</td><td>Org-settings bespoke fields, no labels <span class="ds-status ds-status--canonical">Fixed R6</span></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>FRM-02</td><td>Forms</td><td>EOI readonly-required can trap submit <span class="ds-status ds-status--canonical">Fixed R6</span></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>FRM-03</td><td>Forms</td><td>Select-entity bespoke radio stack <span class="ds-status ds-status--canonical">Fixed R6</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>FRM-04</td><td>Forms</td><td>Login: no field error / focus move</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>FRM-05</td><td>Forms</td><td>Missing autocomplete; password reveal not keyboard reachable</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>FRM-06</td><td>Forms</td><td>Filter label casing; raw search/checkbox</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-01</td><td>Content</td><td>Mixed app/product/DTx vocabulary <span class="ds-status ds-status--canonical">Fixed R7</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>CNT-02</td><td>Content</td><td>Ambiguous Compare toggle label <span class="ds-status ds-status--canonical">Fixed R7</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>CNT-03</td><td>Content</td><td>&ldquo;EOI&rdquo; acronym</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-04</td><td>Content</td><td>Inconsistent CTA labels</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-05</td><td>Content</td><td>Unexplained jargon on dense surfaces</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>CNT-06</td><td>Content</td><td>&ldquo;Commissioiner&rdquo; typo</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>NAV-01</td><td>IA</td><td>Saved apps / EOI record orphaned <span class="ds-status ds-status--page">Deferred R7</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-02</td><td>IA</td><td>Active state misses PDP / saved <span class="ds-status ds-status--canonical">Fixed R7</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-03</td><td>IA</td><td>Breadcrumb gaps / redundant back links <span class="ds-status ds-status--canonical">Fixed R7</span> <span class="ds-u-muted">(partial)</span></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>NAV-04</td><td>IA</td><td>Select-entity escapable mid-flow</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>NAV-05</td><td>IA</td><td>Two signed-in search entry points</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>RSP-01</td><td>Density</td><td>PDP hero overloaded; competing CTAs <span class="ds-status ds-status--canonical">Fixed R7</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>RSP-02</td><td>Responsive</td><td>Snapshot funding row nowrap overflow <span class="ds-status ds-status--canonical">Fixed R7</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>RSP-03</td><td>Responsive</td><td>Compare summary overflow (3&ndash;4 apps) <span class="ds-status ds-status--canonical">Fixed R7</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>RSP-04</td><td>Responsive</td><td>PDP tab labels wrap at tablet</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>RSP-05</td><td>Responsive</td><td>Container-width drift</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>RSP-06</td><td>Density</td><td>Stat tiles wrap; hard-coded value</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>A11Y-01</td><td>A11y</td><td>Org-settings labels not associated <span class="ds-status ds-status--canonical">Fixed R6</span></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>A11Y-02</td><td>A11y</td><td>Org-save success not announced <span class="ds-status ds-status--canonical">Fixed R6</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>A11Y-03</td><td>A11y</td><td>AI error box lacks <code>role="alert"</code></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>A11Y-04</td><td>A11y</td><td>Success/add-remove not announced <span class="ds-status ds-status--canonical">Fixed R6</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>A11Y-05</td><td>A11y</td><td>Verify compare disabled-reason is text</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>A11Y-06</td><td>A11y</td><td>Regression-check drawer/lightbox traps</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="ds-rule">
+    <p class="ds-u-muted" style="font-size:.85rem">
+      Second UX audit (Round 5). Findings derived from a fresh read of <code>components/**</code>, <code>app/**</code> and
+      <code>components/ui/**</code> against the shipped R2&ndash;R4 baseline. Consistent in method and format with the
+      <a href="/DS/Report-v1/index.html">v1 audit</a>; structure follows the
+      <a href="https://design-system.service.gov.uk/">GOV.UK Design System</a>.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

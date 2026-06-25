@@ -25,7 +25,7 @@ export default async function HomePage() {
       <section
         className="relative overflow-x-clip"
         style={{
-          background: 'linear-gradient(135deg, #003087 0%, #005EB8 60%, #0072CE 100%)',
+          background: 'linear-gradient(135deg, #003087 0%, var(--nhs-blue) 60%, #0072CE 100%)',
         }}
       >
         <div

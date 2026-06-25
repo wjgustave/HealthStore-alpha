@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>AI advisor — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="ai-advisor">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Patterns</p>
+      <h1 class="ds-page-title">AI advisor</h1>
+      <p class="ds-lede">
+        A slide-over assistant panel for signed-in users: a chat conversation, suggestion prompts, a structured funding
+        wizard, and tool-call indicators. Opened from the header.
+      </p>
+    </div>
+
+    <h2>Panel anatomy</h2>
+    <div class="ds-example ds-example--surface">
+      <div style="max-width:420px;margin-left:auto;background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-lg)">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)">
+          <strong>AI Advisor</strong>
+          <button class="ds-btn ds-btn--ghost ds-btn--icon" type="button" aria-label="Close panel">&times;</button>
+        </div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px;background:var(--surface)">
+          <div style="align-self:flex-start;max-width:85%;background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px 12px;font-size:.9rem">How can I help with your COPD commissioning today?</div>
+          <div style="align-self:flex-end;max-width:85%;background:#E6F0FB;border-radius:12px;padding:10px 12px;font-size:.9rem;color:var(--nhs-dark)">Which products have the strongest evidence?</div>
+          <div style="display:inline-flex;align-items:center;gap:8px;font-size:.8rem;color:var(--text-muted)"><span class="badge badge-grey">Searching catalogue&hellip;</span></div>
+        </div>
+        <div style="padding:12px 16px;border-top:1px solid var(--border)">
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <textarea class="ds-textarea" style="min-height:44px" placeholder="Ask the advisor&hellip;" aria-label="Message"></textarea>
+            <button class="ds-btn ds-btn--icon ds-btn--primary" type="button" aria-label="Send">&uarr;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Suggestion prompts</h2>
+    <p>Full-width tappable prompt chips (<code>SuggestionPromptButton</code>) that seed the conversation.</p>
+    <div class="ds-example ds-example--surface">
+      <div class="ds-u-stack" style="max-width:420px">
+        <button type="button" style="text-align:left;width:100%;border:1px solid var(--border);background:#fff;border-radius:12px;padding:12px 14px;font-size:.9rem;cursor:pointer">&#10024; Compare evidence for my shortlisted apps</button>
+        <button type="button" style="text-align:left;width:100%;border:1px solid var(--border);background:#fff;border-radius:12px;padding:12px 14px;font-size:.9rem;cursor:pointer">&#10024; Find funding for a COPD remote-monitoring rollout</button>
+      </div>
+    </div>
+
+    <h2>Funding wizard</h2>
+    <p>A multi-step flow of large option cards (<code>FundingWizard</code>) that narrows to matched funding results (<code>FundingResults</code>).</p>
+    <div class="ds-example ds-example--surface">
+      <div class="ds-u-stack" style="max-width:420px">
+        <button type="button" style="text-align:left;border:1px solid var(--nhs-blue);background:#E6F0FB;border-radius:12px;padding:14px;font-weight:600;color:var(--nhs-dark);cursor:pointer">COPD / respiratory</button>
+        <button type="button" style="text-align:left;border:1px solid var(--border);background:#fff;border-radius:12px;padding:14px;cursor:pointer">Cardiac rehabilitation</button>
+      </div>
+    </div>
+
+    <div class="ds-note">
+      <strong>Open issue.</strong> The advisor drawer lacks a focus trap and the background scrim is excluded from the tab
+      order, so focus can escape behind it. Adopt the shared <a href="/DS/components/modals.html">Modal</a> primitive's trap.
+    </div>
+
+    <h2>Components used</h2>
+    <p><a href="/DS/components/buttons.html">Icon / option buttons</a> &middot; <a href="/DS/components/forms.html">Chat input</a> &middot; <a href="/DS/components/cards.html">Message &amp; result cards</a> &middot; <a href="/DS/components/badges-tags.html">Tool-call pills</a></p>
+
+    <div class="ds-note ds-note--source">Source: <code>components/ai/*</code> (<code>AiAdvisorPanel</code>, <code>ChatInput</code>, <code>ChatMessage</code>, <code>SuggestionPromptButton</code>, <code>FundingWizard</code>, <code>FundingResults</code>, <code>ToolCallIndicator</code>).</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Section headers — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="section-headers">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Components</p>
+      <h1 class="ds-page-title">Section headers</h1>
+      <p class="ds-lede">
+        A consistent heading block for content sections: a bold title, an optional description, and a blue-to-transparent
+        underline rule. Used throughout the PDP and content pages.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Component</div><div class="ds-meta__v"><code>SectionHeader</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Source</div><div class="ds-meta__v"><code>components/Badges.tsx</code></div></div>
+    </div>
+
+    <h2>Default</h2>
+    <div class="ds-example">
+      <div style="margin-bottom:0">
+        <h2 style="font-family:var(--font-display);font-size:var(--text-section-alt);font-weight:700;color:var(--text-primary);margin:0 0 4px">Clinical evidence</h2>
+        <p style="font-size:.875rem;color:var(--text-muted);margin:0">RCTs, service evaluations and NICE assessments behind this product.</p>
+        <div style="margin-top:12px;height:2px;border-radius:2px;background:linear-gradient(90deg, var(--nhs-blue), transparent)"></div>
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;SectionHeader
+  title="Clinical evidence"
+  description="RCTs, service evaluations and NICE assessments behind this product."
+/&gt;</code></pre>
+
+    <h2>Without description</h2>
+    <div class="ds-example">
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:var(--text-section-alt);font-weight:700;color:var(--text-primary);margin:0">Where it's live</h2>
+        <div style="margin-top:12px;height:2px;border-radius:2px;background:linear-gradient(90deg, var(--nhs-blue), transparent)"></div>
+      </div>
+    </div>
+
+    <h2>Anatomy</h2>
+    <table class="ds-table">
+      <thead><tr><th>Part</th><th>Token / value</th></tr></thead>
+      <tbody>
+        <tr><td>Title</td><td><code>--text-section-alt</code> (1.4rem), weight 700, <code>--text-primary</code></td></tr>
+        <tr><td>Description</td><td><code>--text-xs</code> (0.875rem), <code>--text-muted</code></td></tr>
+        <tr><td>Rule</td><td>2px, <code>linear-gradient(90deg, var(--nhs-blue), transparent)</code></td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Renders a real <code>&lt;h2&gt;</code>; pass an <code>id</code> to make it a heading target.</li>
+      <li>Keep heading order logical — don't skip levels for styling.</li>
+      <li>The gradient rule is decorative.</li>
+    </ul>
+
+    <div class="ds-note">
+      <strong>Related.</strong> The PDP also uses a plainer blue <code>#005EB8</code> <code>&lt;h2&gt;</code> in <code>PdpSection</code>.
+      Consider whether <code>SectionHeader</code> should be the single section-heading primitive.
+    </div>
+
+    <div class="ds-note ds-note--source">Source: <code>SectionHeader</code> in <code>components/Badges.tsx</code>.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

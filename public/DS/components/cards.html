@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Cards &amp; surfaces — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="cards">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Components</p>
+      <h1 class="ds-page-title">Cards &amp; surfaces</h1>
+      <p class="ds-lede">
+        Bordered, rounded white panels are the dominant container in the product.
+        <code>.hs-surface-card</code> / <code>.hs-surface-card-sm</code> and the interactive <code>.app-card</code>
+        own background, border, radius (lg = 12px) and elevation. Dashboard widgets use <code>WidgetShell</code>.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Canonical classes</div><div class="ds-meta__v"><code>.app-card</code>, <code>.hs-surface-card(-sm)</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Widget shell</div><div class="ds-meta__v"><code>components/ui/WidgetShell.tsx</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Radius</div><div class="ds-meta__v">12px (lg); bands keep <code>rounded-2xl</code></div></div>
+    </div>
+
+    <h2>App card (interactive)</h2>
+    <p>The clickable product card used in the catalogue and saved apps. Hover lifts and shows a blue border.</p>
+    <div class="ds-example ds-example--surface">
+      <div class="app-card" style="max-width:340px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;cursor:pointer">
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+          <div style="width:40px;height:40px;border-radius:8px;background:var(--nhs-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700">C</div>
+          <div>
+            <div style="font-weight:700;font-size:var(--text-card-title)">Clinitouch</div>
+            <div class="ds-u-muted" style="font-size:.82rem">Clinitouch Ltd</div>
+          </div>
+        </div>
+        <p class="ds-u-mt0" style="font-size:.9rem;color:var(--text-secondary)">Remote monitoring for COPD patients with clinician oversight.</p>
+        <div class="ds-example__row">
+          <span class="badge badge-green">Scaled</span>
+          <span class="badge badge-green">Strong evidence</span>
+        </div>
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;article class="app-card bg-white rounded-xl border p-5"&gt; &hellip; &lt;/article&gt;</code></pre>
+
+    <h2>Surface cards (static)</h2>
+    <div class="ds-example ds-example--surface">
+      <div class="ds-example__row" style="gap:24px;align-items:stretch">
+        <div class="hs-surface-card-sm" style="flex:1;min-width:220px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px">
+          <strong>.hs-surface-card-sm</strong>
+          <p class="ds-u-muted ds-u-mt0" style="font-size:.85rem">shadow-sm. PDP cards, sidebar cards, collapsed expanders.</p>
+        </div>
+        <div class="hs-surface-card" style="flex:1;min-width:220px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px">
+          <strong>.hs-surface-card</strong>
+          <p class="ds-u-muted ds-u-mt0" style="font-size:.85rem">shadow-md. Catalogue shell, funding cards, collapsible sections, charts.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>Evidence cards (PDP)</h2>
+    <p>Tinted variants of a base evidence row used on the product detail page.</p>
+    <div class="ds-example">
+      <div class="card-evidence" style="background:#f7f9fc">Base evidence row (<code>.card-evidence</code>)</div>
+      <div class="card-evidence card-evidence--gap">Evidence gap (<code>--gap</code>)</div>
+      <div class="card-evidence card-evidence--coi">Conflict of interest (<code>--coi</code>)</div>
+      <div class="card-evidence card-evidence--dq" style="margin-bottom:0">Data-quality flag (<code>--dq</code>)</div>
+    </div>
+
+    <h2>Auth card</h2>
+    <p>Login and entity selection use a larger card with a 6px blue top bar and <code>rounded-2xl</code>/<code>shadow-lg</code>.</p>
+    <div class="ds-example ds-example--surface">
+      <div style="max-width:360px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:var(--shadow-lg);overflow:hidden">
+        <div style="height:6px;background:var(--nhs-blue)"></div>
+        <div style="padding:28px">
+          <h3 class="ds-u-mt0" style="margin-top:0">Sign in</h3>
+          <p class="ds-u-muted" style="font-size:.88rem">Access the commissioner store.</p>
+          <div class="ds-field"><label class="ds-field__label">Email</label><input class="ds-input" aria-label="Email demo"></div>
+          <button class="ds-btn ds-btn--primary ds-btn--block" type="button">Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <h2>Surface inventory</h2>
+    <table class="ds-table">
+      <thead><tr><th>Surface</th><th>Definition</th></tr></thead>
+      <tbody>
+        <tr><td><code>.app-card</code></td><td>border + radius + shadow-md + hover lift</td></tr>
+        <tr><td><code>.hs-surface-card</code> / <code>-sm</code></td><td>bg + border + radius (lg) + shadow-md / -sm</td></tr>
+        <tr><td><code>.card-evidence(*)</code></td><td>Tinted PDP evidence rows</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ds-note ds-note--source">Source: <code>app/globals.css</code>; <code>components/ui/WidgetShell.tsx</code>; dashboard widgets, news/campaigns, case-study cards.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

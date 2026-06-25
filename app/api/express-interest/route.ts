@@ -53,15 +53,17 @@ export async function POST(req: Request) {
   const organisationLabel = getCommissioningContextLabel(session)
   const prefill = getExpressionOfInterestPrefill(session, organisationLabel)
 
+  // Prefer values the user actually submitted (only editable when the session had
+  // no prefill), otherwise fall back to the session-derived identity (FRM-02 / EOI-2).
   const expressionsOfInterest = await addExpressionOfInterest({
     organizationId: auth.organizationId,
     appId: validApp.id,
     appName: validApp.app_name,
     submittedByUserId: auth.userId,
-    submittedByName: prefill.name,
-    submittedByEmail: prefill.email,
-    organisationName: prefill.organisation,
-    role: prefill.role,
+    submittedByName: optionalString(record.name) ?? prefill.name,
+    submittedByEmail: optionalString(record.email) ?? prefill.email,
+    organisationName: optionalString(record.organisation) ?? prefill.organisation,
+    role: optionalString(record.role) ?? prefill.role,
     phone: optionalString(record.phone),
     populationEstimate: optionalString(record.population_estimate),
     timeline,

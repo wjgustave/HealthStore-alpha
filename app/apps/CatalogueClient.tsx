@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -11,6 +11,7 @@ import {
   hasLinkedFunding,
 } from '@/lib/catalogueCardSignals'
 import { MaturityBadge, SupervisionBadge, ConditionTag } from '@/components/Badges'
+import { Select } from '@/components/ui/FormField'
 import { CompareToggleButton } from '@/components/CompareToggleButton'
 import { SaveToggleButton } from '@/components/SaveToggleButton'
 import { Check, X } from 'lucide-react'
@@ -60,24 +61,22 @@ function FilterSelect({ label, value, onChange, options }: {
   label: string; value: string; onChange: (v: string) => void
   options: { id: string; label: string }[]
 }) {
+  const id = useId()
   return (
     <div>
-      <label className="block font-semibold mb-1.5 uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
+      <label htmlFor={id} className="mb-1.5 block font-semibold uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
         {label}
       </label>
-      <select value={value} onChange={e => onChange(e.target.value)}
-        className="w-full min-h-[44px] text-sm rounded-lg border px-3 py-2.5 bg-white"
-        style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}>
+      <Select id={id} value={value} onChange={e => onChange(e.target.value)} className="min-h-[44px]">
         {options.map(o => <option key={o.id} value={o.id}>{o.label}</option>)}
-      </select>
+      </Select>
     </div>
   )
 }
 
 function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium"
-      style={{ background: '#E6F0FB', color: '#003087' }}>
+    <span className="pill text-xs" style={{ background: '#E6F0FB', color: '#003087', borderColor: '#E6F0FB' }}>
       {label}
       <button type="button" onClick={onRemove} className="rounded-sm p-0.5 transition-colors hover:bg-white/60 hover:opacity-90" aria-label={`Remove ${label} filter`}>
         <X className="w-3 h-3" />
@@ -326,7 +325,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
             const showDemo = catalogueDemoAvailable(app)
             const showFunding = hasLinkedFunding(app)
             return (
-            <div key={app.id} className="app-card flex h-full min-h-0 flex-col rounded-xl border bg-white" style={{ borderColor: 'var(--border)' }}>
+            <div key={app.id} className="app-card flex h-full min-h-0 flex-col">
               <div className="flex min-h-0 flex-1 flex-col" style={{ padding: '1.25rem' }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: '0.75rem' }}>
                   <div className="flex items-center gap-2.5">

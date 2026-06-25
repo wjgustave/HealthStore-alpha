@@ -14,7 +14,7 @@ export default function PdpSupplierContactCard({ email }: { email?: string | nul
           Email
         </div>
         {showEmailLink ? (
-          <a href={`mailto:${trimmed}`} className="font-medium break-all hover:underline" style={{ color: '#005EB8' }}>
+          <a href={`mailto:${trimmed}`} className="font-medium break-all hover:underline" style={{ color: 'var(--nhs-blue)' }}>
             {trimmed}
           </a>
         ) : (

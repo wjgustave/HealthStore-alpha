@@ -1,4 +1,5 @@
 import { dtacLabels, maturityLabels, effortLabels, evidenceLabels, supervisionLabels } from '@/lib/data'
+import { isVisibleCondition } from '@/lib/visibleConditions'
 
 export function DtacBadge({ status }: { status: string }) {
   const label = dtacLabels[status] ?? status
@@ -46,18 +47,7 @@ export function EffortBadge({ level }: { level: string }) {
 export function SupervisionBadge({ model }: { model: string }) {
   const label = supervisionLabels[model] ?? model
   if (model === 'guided_self_help') {
-    return (
-      <span
-        className="badge"
-        style={{
-          background: '#fff',
-          color: '#2E3F4A',
-          border: '1px solid var(--border)',
-        }}
-      >
-        {label}
-      </span>
-    )
+    return <span className="badge badge-grey">{label}</span>
   }
   const cls = model === 'active_remote_management' ? 'badge-purple'
     : model === 'non_continuous_review' ? 'badge-blue'
@@ -72,38 +62,59 @@ export function NiceTypeBadge({ type }: { type: string }) {
 }
 
 export function TopicPill({ label }: { label: string }) {
-  return (
-    <span
-      className="badge"
-      style={{
-        background: '#F0F4F8',
-        color: '#1E293B',
-        border: '1px solid #CBD5E1',
-        fontWeight: 600,
-      }}
-    >
-      {label}
-    </span>
-  )
+  return <span className="badge badge-topic">{label}</span>
+}
+
+const CONDITION_LABELS: Record<string, string> = {
+  copd: 'COPD', insomnia: 'Insomnia', weight_management: 'Weight management',
+  msk: 'MSK', eating_disorders: 'Eating disorders', cardiac_rehab: 'Cardiac rehab',
 }
 
 export function ConditionTag({ tag }: { tag: string }) {
-  const labels: Record<string, string> = {
-    copd: 'COPD', insomnia: 'Insomnia', weight_management: 'Weight management',
-    msk: 'MSK', eating_disorders: 'Eating disorders', cardiac_rehab: 'Cardiac rehab',
-  }
-  const label = labels[tag] ?? tag
+  return <span className="badge badge-condition">{CONDITION_LABELS[tag] ?? tag}</span>
+}
+
+/**
+ * Editorial pill rows (home news / campaigns / evidence). Folded in from the former
+ * `EditorialPills` module so all pills render through the canonical `.badge` modifiers.
+ */
+export function EditorialPillRow({
+  topics,
+  conditions,
+  className = 'mb-2',
+}: {
+  topics: string[]
+  conditions: string[]
+  className?: string
+}) {
   return (
-    <span
-      className="badge"
-      style={{
-        background: 'rgba(0, 94, 182, 0.1)',
-        color: 'rgb(0, 94, 184)',
-        border: '1px solid rgb(0, 94, 184)',
-      }}
-    >
-      {label}
-    </span>
+    <div className={`flex flex-wrap gap-1.5 ${className}`}>
+      {topics.map((t) => (
+        <TopicPill key={t} label={t} />
+      ))}
+      {conditions.filter(isVisibleCondition).map((t) => (
+        <ConditionTag key={t} tag={t} />
+      ))}
+    </div>
+  )
+}
+
+export function EditorialEvidenceMetaRow({
+  evidenceType,
+  conditions,
+  className = '',
+}: {
+  evidenceType: string
+  conditions: string[]
+  className?: string
+}) {
+  return (
+    <div className={`flex flex-wrap items-center gap-1.5 ${className}`}>
+      <TopicPill label={evidenceType} />
+      {conditions.filter(isVisibleCondition).map((t) => (
+        <ConditionTag key={t} tag={t} />
+      ))}
+    </div>
   )
 }
 

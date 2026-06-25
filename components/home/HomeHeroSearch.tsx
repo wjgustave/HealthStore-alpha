@@ -31,7 +31,7 @@ export default function HomeHeroSearch() {
       </label>
       <div
         className="flex items-stretch overflow-hidden rounded-xl border bg-white/95 shadow-sm backdrop-blur-sm focus-within:ring-2 focus-within:ring-offset-2"
-        style={{ borderColor: 'var(--border)', outlineColor: '#005EB8' }}
+        style={{ borderColor: 'var(--border)', outlineColor: 'var(--nhs-blue)' }}
       >
         <span className="flex items-center pl-4 text-[#425563]" aria-hidden>
           <Search className="h-5 w-5 shrink-0" strokeWidth={2} />

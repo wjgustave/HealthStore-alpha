@@ -15,6 +15,7 @@ import {
   sanitizeIdsForCompare,
   sharedConditionTags,
 } from '@/lib/compareConditions'
+import { useToast } from './ui/Toast'
 
 const LS_KEY = 'healthstore-compare-basket'
 
@@ -56,6 +57,7 @@ export function CompareBasketProvider({
   allApps: App[]
   children: React.ReactNode
 }) {
+  const toast = useToast()
   const [ids, setIds] = useState<string[]>([])
 
   useEffect(() => {
@@ -91,26 +93,48 @@ export function CompareBasketProvider({
 
   const toggle = useCallback(
     (id: string) => {
-      setIds(prev => {
-        if (prev.includes(id)) return prev.filter(x => x !== id)
-        if (prev.length >= 4) return prev
-        const app = allApps.find(a => a.id === id)
-        if (!app) return prev
-        const selectedApps = resolveApps(prev, allApps)
-        if (selectedApps.length > 0 && !canAddToSelection(selectedApps, app)) return prev
-        return [...prev, id]
-      })
+      if (ids.includes(id)) {
+        setIds(prev => prev.filter(x => x !== id))
+        toast.info('Removed from the comparison tool.')
+        return
+      }
+      if (ids.length >= 4) {
+        toast.info('The comparison tool is full (maximum 4 apps).')
+        return
+      }
+      const app = allApps.find(a => a.id === id)
+      if (!app) return
+      const selectedApps = resolveApps(ids, allApps)
+      if (selectedApps.length > 0 && !canAddToSelection(selectedApps, app)) {
+        toast.info('You can only compare apps for the same condition.')
+        return
+      }
+      setIds(prev => (prev.includes(id) || prev.length >= 4 ? prev : [...prev, id]))
+      toast.success(`Added to the comparison tool (${ids.length + 1}/4).`)
     },
-    [allApps],
+    [ids, allApps, toast],
   )
 
-  const remove = useCallback((id: string) => {
-    setIds(prev => prev.filter(x => x !== id))
-  }, [])
+  const remove = useCallback(
+    (id: string) => {
+      setIds(prev => prev.filter(x => x !== id))
+      toast.info('Removed from the comparison tool.')
+    },
+    [toast],
+  )
 
   const clear = useCallback(() => {
+    const previous = ids
     setIds([])
-  }, [])
+    // R7 UX-08: destructive one-click clear is recoverable via an Undo toast rather than a confirm dialog.
+    if (previous.length > 0) {
+      toast.info('Comparison tool cleared.', {
+        action: { label: 'Undo', onClick: () => setIds(previous) },
+      })
+    } else {
+      toast.info('Comparison tool cleared.')
+    }
+  }, [ids, toast])
 
   const setFromUrlIds = useCallback(
     (next: string[]) => {

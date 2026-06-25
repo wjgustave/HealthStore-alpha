@@ -42,7 +42,7 @@ export function CaseStudyCard({ study, href }: { study: CaseStudy; href?: string
   )
 
   return (
-    <div className="group flex h-full min-h-[15rem] w-full min-w-0 flex-col overflow-hidden rounded-xl bg-white shadow-md">
+    <div className="hs-surface-card group flex h-full min-h-[15rem] w-full min-w-0 flex-col overflow-hidden">
       <div className="relative min-h-[10rem] flex-1 overflow-hidden">
         <Image
           src={study.image}
@@ -75,7 +75,7 @@ export function CaseStudyCard({ study, href }: { study: CaseStudy; href?: string
 /** Large, prominent case study card used for the featured app on the home band. */
 function FeaturedCaseStudyCard({ study }: { study: CaseStudy }) {
   return (
-    <div className="flex h-full min-h-[22rem] w-full min-w-0 flex-col overflow-hidden rounded-xl bg-white shadow-lg">
+    <div className="hs-surface-card flex h-full min-h-[22rem] w-full min-w-0 flex-col overflow-hidden shadow-lg">
       <div className="relative min-h-[14rem] flex-1 overflow-hidden">
         <Image
           src={study.image}
@@ -104,7 +104,7 @@ function FeaturedCaseStudyCard({ study }: { study: CaseStudy }) {
 /** Compact, lower-prominence horizontal case study card for the home band sidebar. */
 function CompactCaseStudyCard({ study }: { study: CaseStudy }) {
   return (
-    <div className="flex min-h-[5.5rem] w-full min-w-0 overflow-hidden rounded-xl bg-white shadow-md">
+    <div className="hs-surface-card flex min-h-[5.5rem] w-full min-w-0 overflow-hidden">
       <div className="relative w-24 shrink-0 overflow-hidden sm:w-28">
         <Image
           src={study.image}
@@ -130,7 +130,7 @@ export function HomeCaseStudiesBand({ caseStudies }: { caseStudies: CaseStudy[] 
   return (
     <section
       className="relative overflow-x-clip py-12 md:py-16"
-      style={{ background: 'linear-gradient(135deg, #003087 0%, #00449E 55%, #005EB8 100%)' }}
+      style={{ background: 'linear-gradient(135deg, #003087 0%, #00449E 55%, var(--nhs-blue) 100%)' }}
       aria-labelledby="case-studies-heading"
     >
       <div className="mx-auto max-w-7xl px-6">

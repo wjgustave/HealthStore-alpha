@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Badges &amp; tags — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="badges-tags">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Components</p>
+      <h1 class="ds-page-title">Badges &amp; tags</h1>
+      <p class="ds-lede">
+        Small, non-interactive labels that communicate status, category or metadata. Built on a single
+        <code>.badge</code> base with semantic colour modifiers.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Base class</div><div class="ds-meta__v"><code>.badge</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Source</div><div class="ds-meta__v"><code>components/Badges.tsx</code></div></div>
+    </div>
+
+    <h2>When to use</h2>
+    <ul>
+      <li>To label an item's status (DTAC passed, evidence strength, maturity).</li>
+      <li>To tag a category (condition, NICE type, topic).</li>
+      <li>For short, scannable metadata inside cards and tables.</li>
+    </ul>
+    <h2>When not to use</h2>
+    <ul>
+      <li>For actions — use a <a href="/DS/components/buttons.html">button</a>.</li>
+      <li>For long text — badges are for one to three words.</li>
+    </ul>
+
+    <h2>Colour modifiers</h2>
+    <div class="ds-example">
+      <div class="ds-example__row">
+        <span class="badge badge-blue">Blue</span>
+        <span class="badge badge-green">Green</span>
+        <span class="badge badge-amber">Amber</span>
+        <span class="badge badge-red">Red</span>
+        <span class="badge badge-purple">Purple</span>
+        <span class="badge badge-grey">Grey</span>
+        <span class="badge badge-teal">Teal</span>
+        <span class="badge badge-prototype">Prototype</span>
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;span class="badge badge-green"&gt;Passed&lt;/span&gt;
+&lt;span class="badge badge-amber"&gt;Refresh required&lt;/span&gt;
+&lt;span class="badge badge-grey"&gt;Not confirmed&lt;/span&gt;</code></pre>
+
+    <h2>Domain badges</h2>
+    <p>Typed React wrappers map a data value to label + colour. They all render the same <code>.badge</code> base.</p>
+    <div class="ds-example">
+      <p class="ds-example__label">DTAC status (<code>DtacBadge</code>)</p>
+      <div class="ds-example__row" style="margin-bottom:16px">
+        <span class="badge badge-green">DTAC passed</span>
+        <span class="badge badge-amber">Passed &middot; refresh required</span>
+        <span class="badge badge-grey">Not confirmed</span>
+      </div>
+      <p class="ds-example__label">Maturity (<code>MaturityBadge</code>)</p>
+      <div class="ds-example__row" style="margin-bottom:16px">
+        <span class="badge badge-green">Scaled</span>
+        <span class="badge badge-blue">Multi-site live</span>
+        <span class="badge badge-amber">Limited live</span>
+        <span class="badge badge-grey">Pilot</span>
+      </div>
+      <p class="ds-example__label">Evidence strength (<code>EvidenceBadge</code>)</p>
+      <div class="ds-example__row" style="margin-bottom:16px">
+        <span class="badge badge-green">Strong</span>
+        <span class="badge badge-blue">Moderate</span>
+        <span class="badge badge-grey">Low</span>
+      </div>
+      <p class="ds-example__label">Local effort (<code>EffortBadge</code>)</p>
+      <div class="ds-example__row" style="margin-bottom:16px">
+        <span class="badge effort-low">Low</span>
+        <span class="badge effort-medium">Medium</span>
+        <span class="badge effort-high">High</span>
+      </div>
+      <p class="ds-example__label">NICE type (<code>NiceTypeBadge</code>)</p>
+      <div class="ds-example__row" style="margin-bottom:16px">
+        <span class="badge badge-blue">EVA</span>
+        <span class="badge badge-teal">HTG</span>
+        <span class="badge badge-purple">MTG</span>
+      </div>
+      <p class="ds-example__label">Funding status (<code>FundingStatusBadge</code>)</p>
+      <div class="ds-example__row">
+        <span class="badge badge-green">Open</span>
+        <span class="badge badge-amber">Upcoming</span>
+        <span class="badge badge-grey">Closed</span>
+      </div>
+    </div>
+
+    <h2>Category / condition tags</h2>
+    <p><code>ConditionTag</code> and <code>TopicPill</code> render through <code>.badge-condition</code> and <code>.badge-topic</code>.</p>
+    <div class="ds-example">
+      <div class="ds-example__row">
+        <span class="badge badge-condition">COPD</span>
+        <span class="badge badge-condition">Cardiac rehab</span>
+        <span class="badge badge-topic">Remote monitoring</span>
+        <span class="badge badge-topic">Self-management</span>
+      </div>
+    </div>
+
+    <h2>Interactive chips (<code>.pill</code>)</h2>
+    <p>Static metadata stays a square <code>.badge</code>; <strong>removable or clickable</strong> chips (filter pills, tag
+      editors, AI follow-ups) use the rounded <code>.pill</code>.</p>
+    <div class="ds-example">
+      <div class="ds-example__row">
+        <span class="pill" style="background:#E6F0FB;color:#003087;border-color:#E6F0FB">COPD &times;</span>
+        <span class="pill" style="background:#E6F0FB;color:#003087;border-color:#E6F0FB">Remote monitoring &times;</span>
+        <span class="badge badge-blue-solid">Funded service</span>
+      </div>
+    </div>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Badges are decorative labels — keep the meaning in adjacent text where colour carries status.</li>
+      <li>Do not rely on colour alone; the text label is the source of truth.</li>
+      <li>Badge colour pairs meet AA contrast for their text on tint.</li>
+    </ul>
+
+    <div class="ds-note ds-note--source">Source: <code>components/Badges.tsx</code>; classes in <code>app/globals.css</code>.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

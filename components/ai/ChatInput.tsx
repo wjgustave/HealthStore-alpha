@@ -1,6 +1,7 @@
 'use client'
 import { useState, useRef, useCallback } from 'react'
 import { Send } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
 
 type Props = {
   onSend: (message: string) => void
@@ -63,18 +64,15 @@ export default function ChatInput({ onSend, disabled }: Props) {
             '--tw-ring-color': 'var(--nhs-blue)',
           }}
         />
-        <button
+        <Button
+          iconOnly
           onClick={handleSubmit}
           disabled={disabled || !value.trim()}
-          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl transition-all disabled:opacity-40"
-          style={{
-            background: value.trim() && !disabled ? 'var(--nhs-blue)' : 'var(--border)',
-            color: '#fff',
-          }}
+          className="flex-shrink-0"
           aria-label="Send message"
         >
           <Send className="h-4 w-4" />
-        </button>
+        </Button>
       </div>
     </div>
   )

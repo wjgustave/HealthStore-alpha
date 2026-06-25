@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Tables — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="tables">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Components</p>
+      <h1 class="ds-page-title">Tables</h1>
+      <p class="ds-lede">
+        Tabular data appears in two main forms: the PDP "Where it's live" deployment register, and the comparison
+        workspace. Both use bordered, scannable rows with status badges and scroll horizontally where the columns exceed the viewport.
+      </p>
+    </div>
+
+    <h2>Deployment register (PDP)</h2>
+    <p>Status-filterable rows: each row carries ICB, place, care setting, status and confidence. Rows expand for detail.</p>
+    <div class="ds-example ds-example--surface">
+      <div class="hs-surface-card-sm" style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <table class="ds-table" style="margin:0">
+          <thead>
+            <tr><th>Site</th><th>ICB</th><th>Care setting</th><th>Status</th><th>Confidence</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Example NHS FT &mdash; respiratory service</td><td>NHS Example ICB</td><td>Secondary care</td><td><span class="badge badge-green">Live</span></td><td><span class="badge badge-blue">High</span></td></tr>
+            <tr><td>Sample Community Trust</td><td>NHS Sample ICB</td><td>Community</td><td><span class="badge badge-amber">Pilot</span></td><td><span class="badge badge-grey">Medium</span></td></tr>
+            <tr><td>Historic deployment</td><td>NHS Legacy ICB</td><td>Primary care</td><td><span class="badge badge-grey">Historic</span></td><td><span class="badge badge-grey">Low</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="ds-note">The product distinguishes "currently live" from "ever procured" and lets users filter by status group (live / pilot &amp; research / historic).</div>
+
+    <h2>Comparison workspace</h2>
+    <p>DTx apps as columns, attributes as rows, grouped into collapsible sections. Critical rows get a blue left marker. The summary + group grids scroll horizontally (keeping columns readable) instead of overflowing the page with 3&ndash;4 apps.</p>
+    <div class="ds-example ds-example--surface">
+      <div class="hs-surface-card" style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:auto">
+        <table class="ds-table" style="margin:0;min-width:520px">
+          <thead>
+            <tr><th style="width:160px">Attribute</th><th>Clinitouch</th><th>COPD Hub</th></tr>
+          </thead>
+          <tbody>
+            <tr style="border-left:3px solid var(--nhs-blue)"><th scope="row" style="background:#fff;font-weight:600"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--nhs-blue)"></span>Evidence strength</span></th><td><span class="badge badge-green">Strong</span></td><td><span class="badge badge-blue">Moderate</span></td></tr>
+            <tr><th scope="row" style="background:#fff;font-weight:600">DTAC</th><td><span class="badge badge-green">Passed</span></td><td><span class="badge badge-amber">Refresh required</span></td></tr>
+            <tr><th scope="row" style="background:#fff;font-weight:600">Local effort</th><td><span class="badge effort-medium">Medium</span></td><td><span class="badge effort-low">Low</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h2>Conventions</h2>
+    <table class="ds-table">
+      <thead><tr><th>Aspect</th><th>Convention</th></tr></thead>
+      <tbody>
+        <tr><td>Row separation</td><td>1px <code>var(--border)</code> bottom border</td></tr>
+        <tr><td>Header</td><td>Tinted <code>#f4f7fa</code>, weight 600, left-aligned</td></tr>
+        <tr><td>Row headers</td><td><code>&lt;th scope="row"&gt;</code> for the first column</td></tr>
+        <tr><td>Critical rows</td><td>3px blue left border + marker dot</td></tr>
+        <tr><td>Overflow</td><td>Horizontal scroll container with sticky header</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>Use real <code>&lt;table&gt;</code> markup with <code>&lt;th&gt;</code> and <code>scope</code> attributes.</li>
+      <li>Status is always carried by a text badge, not colour alone.</li>
+      <li>Expandable rows use buttons with <code>aria-expanded</code>.</li>
+      <li>Comparison view announces row counts via an <code>aria-live</code> region.</li>
+    </ul>
+
+    <div class="ds-note ds-note--source">Source: <code>components/DeploymentRegisterTable.tsx</code>, <code>components/compare/CompareWorkspaceView.tsx</code>.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

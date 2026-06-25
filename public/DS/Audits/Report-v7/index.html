@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Round 7 plan (v7) — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="report-v7">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Report &middot; v7 &middot; Shipped</p>
+      <h1 class="ds-page-title">Round 7 &mdash; clarity &amp; density</h1>
+      <p class="ds-lede">
+        Round 6 made the product <em>say what happened</em> and tell errors from empty. Round 7 turned to
+        <strong>clarity &amp; density</strong> and <strong>shipped</strong>: a calmer PDP with one clear primary action,
+        navigation that highlights the right item on every <code>/apps</code> route, one consistent
+        <strong>&ldquo;DTx app&rdquo;</strong> vocabulary, a compare experience without dead paths or invisible empty
+        states, and the last destructive one-clicks made safe. Two items were deliberately held back per the decision
+        log: the repeated Express-interest CTA was left as-is (PDP-4), and surfacing the orphaned workspace routes in the
+        nav (NAV-1) was deferred to a future iteration. Vocabulary standardised on <strong>&ldquo;DTx app&rdquo;</strong>
+        (an override of the recommended plain &ldquo;app&rdquo;).
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Round</div><div class="ds-meta__v">7 &middot; clarity &amp; density</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Status</div><div class="ds-meta__v"><span class="ds-status ds-status--canonical">Shipped</span></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Scope</div><div class="ds-meta__v">PDP triage &middot; Nav &amp; IA &middot; Vocabulary &middot; Compare &middot; Density &amp; safety</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Source</div><div class="ds-meta__v">Second audit (v2) backlog &mdash; RSP-01, NAV-01/02, CNT-01/02, UX-04/07/08, RSP-02/03</div></div>
+    </div>
+
+    <h2>1. Round 7 at a glance</h2>
+    <table class="ds-table">
+      <thead><tr><th>Item</th><th>IDs</th><th>Priority</th><th>Touches</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><strong>PDP triage</strong>: one primary action, demote Save/Compare/Share, trim hero badges</td><td>RSP-01</td><td><span class="ds-prio ds-prio--p2">P2</span></td><td><code>app/apps/[slug]/page.tsx</code>, hero badge + action components</td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td><strong>Fix nav active states</strong> (surfacing orphaned routes deferred)</td><td>NAV-02 <span class="ds-u-muted">(NAV-01 deferred)</span></td><td><span class="ds-prio ds-prio--p2">P2</span></td><td><code>Nav.tsx</code>, <code>PageBreadcrumb</code></td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td><strong>Vocabulary pass</strong> + Compare toggle label</td><td>CNT-01, CNT-02</td><td><span class="ds-prio ds-prio--p2">P2</span></td><td>PDP, compare, saved-apps copy; <code>CompareToggleButton</code></td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td><strong>Compare</strong>: remove the dead matrix; fix the differences-only empty &amp; summary overflow</td><td>UX-04, RSP-03</td><td><span class="ds-prio ds-prio--p2">P2</span></td><td><code>CompareClient</code>, <code>CompareWorkspaceView</code>, dead matrix files</td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td><strong>Density &amp; safety</strong>: snapshot strip overflow; safe destructive one-clicks</td><td>RSP-02, UX-07, UX-08</td><td><span class="ds-prio ds-prio--p2">P2</span></td><td><code>globals.css</code>, <code>SavedAppsClient</code>, <code>CompareClient</code>, <code>ClearDataModal</code></td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+      </tbody>
+    </table>
+    <p>
+      How to read this report: each section explains the change, shows the <strong>Option A / B</strong> that was on the
+      table (rendered live with the DS preview classes), and records what shipped. The chosen option per decision is in the
+      <a href="#decision-log">decision log</a>; the <a href="#what-ships">what shipped</a> table summarises the result.
+    </p>
+
+    <h2>2. What this round builds on</h2>
+    <p>Round 7 ships no new primitive &mdash; it reuses what Rounds 2&ndash;6 already shipped and mostly subtracts.</p>
+    <table class="ds-table">
+      <thead><tr><th>Already shipped</th><th>Round 7 use</th></tr></thead>
+      <tbody>
+        <tr><td>Canonical <code>Button</code> (variants, sizes, <code>iconOnly</code>, <code>ariaDisabled</code>)</td><td>Re-rank the PDP actions; demoted utility cluster (&sect;3)</td></tr>
+        <tr><td>Badge / pill set (<code>components/Badges.tsx</code>)</td><td>Trim which badges appear in the hero vs the snapshot (&sect;3)</td></tr>
+        <tr><td>Toast service + <code>WidgetShell</code> states (R6)</td><td>Undo / confirmation feedback for destructive actions (&sect;7)</td></tr>
+        <tr><td><code>PageBreadcrumb</code> IA helper</td><td>Add missing crumbs; align with new nav grouping (&sect;4)</td></tr>
+        <tr><td><code>Modal</code> primitive (R2)</td><td>Available if a destructive action wants a confirm dialog (&sect;7)</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="pdp">3. PDP triage <span class="ds-prio ds-prio--p2">P2</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      The PDP hero (<code>app/apps/[slug]/page.tsx</code>) currently carries <strong>five controls</strong> &mdash; an
+      <em>Express interest</em> primary, a <em>Demo available</em> link, then a <em>Share</em> / <em>Save</em> / <em>Compare</em>
+      toolbar &mdash; and repeats <strong>Express interest</strong> again in a bottom callout. Above the H1, up to
+      <strong>seven badge / pill types</strong> can wrap (condition tags, supervision model, maturity, NICE refs, content
+      confidence, plus NHS App + Demo below). The result reads as competing CTAs and badge noise (RSP-01).
+    </p>
+
+    <h3>3.1 The hero today (live mock)</h3>
+    <div class="ds-example">
+      <div style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:20px;box-shadow:0 1px 2px rgba(15,23,42,.05)">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+          <span class="badge badge-condition">COPD</span>
+          <span class="badge badge-teal">Self-management</span>
+          <span class="badge badge-amber">Pilot</span>
+          <span class="badge badge-blue">NICE EVA</span>
+          <span class="badge badge-blue">Supplier-reported</span>
+          <span class="badge badge-blue">&#10003; NHS App</span>
+        </div>
+        <div style="font-size:1.3rem;font-weight:700;color:#1A2332;margin-bottom:6px">myCOPD</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
+          <span class="ds-u-muted" style="font-size:.85rem;max-width:60%">A guided self-management app for people living with COPD.</span>
+          <button class="ds-btn ds-btn--primary ds-btn--sm" type="button">Express interest</button>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+          <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">Share</button>
+          <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">Save</button>
+          <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">Compare</button>
+        </div>
+      </div>
+      <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Six pills above the title; four actions of similar weight; &ldquo;Express interest&rdquo; also repeats lower down the page.</p>
+    </div>
+
+    <h3>3.2 Choice PDP-1 &mdash; action hierarchy</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; one primary, the rest a quiet utility cluster (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep <strong>Express interest</strong> as the only filled primary. Group Save / Compare / Share into a single right-aligned secondary cluster (smaller, consistent icon + label) so the decision is unambiguous.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; keep four actions, re-rank by weight only</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Leave all four in the hero but make only EOI a filled primary and the rest ghost/borderless. Smaller change; still three competing utilities beside the CTA.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.3 Choice PDP-2 &mdash; demoted-action treatment</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div>
+          <p class="ds-example__label">Option A &mdash; compact icon + label cluster (recommended)</p>
+          <div style="display:flex;gap:8px;justify-content:flex-end;border:1px dashed var(--border);border-radius:10px;padding:12px;background:#f8fafc">
+            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">&#8682; Share</button>
+            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">&#9734; Save</button>
+            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">&#8646; Compare</button>
+          </div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Keeps labels (clearer for commissioners), just smaller and visually subordinate.</p>
+        </div>
+        <div>
+          <p class="ds-example__label">Option B &mdash; icon-only buttons (with <code>aria-label</code>)</p>
+          <div style="display:flex;gap:8px;justify-content:flex-end;border:1px dashed var(--border);border-radius:10px;padding:12px;background:#f8fafc">
+            <button class="ds-btn ds-btn--secondary" type="button" aria-label="Share" style="width:40px;padding:0">&#8682;</button>
+            <button class="ds-btn ds-btn--secondary" type="button" aria-label="Save" style="width:40px;padding:0">&#9734;</button>
+            <button class="ds-btn ds-btn--secondary" type="button" aria-label="Compare" style="width:40px;padding:0">&#8646;</button>
+          </div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Densest, but relies on icon recognition; less obvious to a non-technical audience.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.4 Choice PDP-3 &mdash; hero badge trim</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; keep signal badges, move the rest below (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Hero keeps <strong>condition tags</strong> + at most one or two decision signals (maturity if not &ldquo;Established&rdquo;; content confidence). Supervision, NICE refs and the NHS App badge move into the commissioning snapshot just below, where governance already lives.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; cap visible pills with &ldquo;+N more&rdquo;</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep all badge types but show the first ~3 and collapse the remainder behind a &ldquo;+N more&rdquo; disclosure. Less re-architecture, but adds an interaction and still mixes signal types.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.5 Choice PDP-4 &mdash; the repeated Express-interest CTA</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; keep both, differentiate them (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Hero CTA stays the primary; the bottom callout stays as the <em>&ldquo;contact the supplier&rdquo;</em> reinforcement at the end of a long page, with copy that makes its role distinct (not a duplicate button).</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; one CTA only</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Drop the hero EOI button (or the bottom callout) so the page has a single Express-interest entry point. Cleaner, but loses the end-of-page prompt after a long read.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-note"><strong>Shipped (3.5 = do not change):</strong> both Express-interest entry points were kept as-is. The hero remains the filled primary; the accent callout below the tabs still reinforces &ldquo;contact the supplier&rdquo; at the end of a long page.</div>
+
+    <h2 id="nav">4. Fix nav active states <span class="ds-prio ds-prio--p2">P2</span> <span class="ds-status ds-status--canonical">Shipped</span> <span class="ds-status ds-status--page">NAV-1 deferred</span></h2>
+    <p>
+      The logged-in nav has two bars; the workspace bar holds <strong>Dashboard, Find apps, Comparison tool, Funding
+      directory</strong>. <strong>Saved apps</strong> and <strong>EOI record</strong> are reachable only from dashboard tiles /
+      widgets &mdash; there is no nav path back (NAV-01). Active state uses strict <code>===</code> equality, so
+      <strong>Find apps</strong> does <em>not</em> highlight on a PDP (<code>/apps/[slug]</code>) or on
+      <code>/saved-apps</code> (NAV-02). Org-settings has no breadcrumb.
+    </p>
+
+    <h3>4.1 Choice NAV-1 &mdash; surfacing the workspace routes</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+        <div>
+          <p class="ds-example__label">Option A &mdash; a &ldquo;Your workspace&rdquo; group (recommended)</p>
+          <div style="border:1px dashed var(--border);border-radius:10px;padding:12px;background:#f8fafc;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+            <span class="ds-u-muted" style="font-size:.8rem;font-weight:700">Workspace &#9662;</span>
+            <span class="badge badge-blue">Dashboard</span>
+            <span class="badge badge-blue">Saved apps</span>
+            <span class="badge badge-blue">EOI record</span>
+          </div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Group the personal/org routes (Dashboard, Saved apps, EOI record) under one labelled cluster or dropdown in the workspace bar.</p>
+        </div>
+        <div>
+          <p class="ds-example__label">Option B &mdash; flat items in the workspace bar</p>
+          <div style="border:1px dashed var(--border);border-radius:10px;padding:12px;background:#f8fafc;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+            <span class="badge badge-grey">Dashboard</span>
+            <span class="badge badge-grey">Find apps</span>
+            <span class="badge badge-grey">Saved apps</span>
+            <span class="badge badge-grey">EOI record</span>
+            <span class="badge badge-grey">Comparison tool</span>
+            <span class="badge badge-grey">Funding</span>
+          </div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Add them as two more top-level items. Simplest, but the workspace bar gets crowded (6 items).</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-note"><strong>Deferred (4.1 = do not change):</strong> surfacing <code>/saved-apps</code> and <code>/eoi-record</code> in the primary nav is held for a future iteration. They remain reachable from the dashboard tiles and widgets. The active-state (4.2) and breadcrumb (4.3) fixes below <strong>did</strong> ship.</div>
+
+    <h3>4.2 Choice NAV-2 &mdash; active-state matching</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; prefix matching with per-route ownership (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">&ldquo;Find apps&rdquo; goes active for <code>/apps</code> <em>and</em> <code>/apps/[slug]</code> (PDP) via a <code>startsWith('/apps')</code> check, but <strong>not</strong> for <code>/saved-apps</code> &mdash; which becomes active for its own &ldquo;Saved apps&rdquo; item. Each route highlights exactly one nav item.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; add only a saved-apps mapping</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Leave Find apps on exact paths; just map <code>/saved-apps</code> to its item. PDP still shows no active nav item.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.3 Choice NAV-3 &mdash; breadcrumb fixes</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; add the missing crumbs (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Add a breadcrumb to <strong>org-settings</strong> and align the <strong>EOI record</strong> crumb with the new workspace grouping, so every signed-in page has a consistent trail.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; defer breadcrumb work</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Only do the nav grouping + active state now; leave breadcrumbs for a later polish round.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="vocab">5. Vocabulary pass + Compare toggle label <span class="ds-prio ds-prio--p2">P2</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      The same entity is called different things across surfaces (CNT-01): nav and catalogue say <strong>app(s)</strong>; the
+      PDP section copy and share labels say <strong>product</strong>; compare mixes <strong>application(s)</strong> and
+      <strong>app(s)</strong>; saved-apps mixes <strong>Products</strong> and <strong>apps</strong>; the AI / funding flows use
+      <strong>digital therapeutic</strong> / <strong>DTx app</strong>. And the Compare toggle reads <strong>&ldquo;Compare&rdquo;
+      in both states</strong> (only the icon changes) so it&rsquo;s unclear whether it adds or removes (CNT-02).
+    </p>
+
+    <h3>5.1 Where each term is used today</h3>
+    <table class="ds-table">
+      <thead><tr><th>Surface</th><th>Term in use</th></tr></thead>
+      <tbody>
+        <tr><td>Nav, catalogue, discovery, dashboard widgets</td><td><strong>app(s)</strong></td></tr>
+        <tr><td>PDP section copy + share labels (&ldquo;Product summary&rdquo;, &ldquo;Product tiers&rdquo;, &ldquo;view the product&rdquo;)</td><td><strong>product</strong></td></tr>
+        <tr><td>Compare intro / count / empty state</td><td><strong>application(s)</strong> + <strong>app(s)</strong> (mixed)</td></tr>
+        <tr><td>Saved apps page body</td><td><strong>Products</strong> + <strong>apps</strong> (mixed)</td></tr>
+        <tr><td>AI advisor / funding wizard</td><td><strong>digital therapeutic</strong> / <strong>DTx app</strong> / <strong>digital health</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h3>5.2 Choice VOC-1 &mdash; the canonical UI term</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; standardise on &ldquo;app&rdquo; (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Use <strong>app(s)</strong> as the single UI noun (it already dominates nav, catalogue, dashboard). Reserve <strong>&ldquo;product&rdquo;</strong> for supplier-facing / share-metadata contexts only. Friendliest for a non-technical commissioner audience.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; standardise on &ldquo;product&rdquo;</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Use <strong>product</strong> everywhere (matches procurement language). More formal, but means re-labelling nav / catalogue / save / compare affordances that currently say &ldquo;app&rdquo;.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-note"><strong>Shipped (override):</strong> the canonical noun is <strong>&ldquo;DTx app&rdquo;</strong> (not plain &ldquo;app&rdquo;). Per VOC-2 (A), the pass updated the high-traffic <strong>body copy &amp; counts</strong> on the PDP, comparison tool, and saved-apps surfaces, and removed &ldquo;application&rdquo;. Short navigation / breadcrumb / page-title labels (&ldquo;Find apps&rdquo;, &ldquo;Saved apps&rdquo;, &ldquo;Comparison tool&rdquo;) were intentionally left as concise affordances and can be extended later. The AI / funding flows already say &ldquo;DTx app&rdquo;, so they now match.</div>
+
+    <h3>5.3 Choice VOC-2 &mdash; scope of the pass</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; high-traffic surfaces now; keep DTx as a programme term (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Normalise PDP / compare / saved-apps copy to the canonical term and drop &ldquo;application&rdquo;. Leave <strong>digital therapeutic / DTx</strong> in the AI &amp; funding flows as a deliberate, narrower programme term (not a synonym for &ldquo;app&rdquo;).</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; full sweep incl. AI / funding</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Also replace DTx / digital therapeutic in the AI advisor and funding wizard. Most uniform, but loses a useful distinction and touches more copy.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>5.4 Choice VOC-3 &mdash; Compare toggle label (CNT-02)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div>
+          <p class="ds-example__label">Today &mdash; same label both states</p>
+          <div style="display:flex;gap:8px">
+            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">&#8646; Compare</button>
+            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button" style="background:#E6F0FB">&#10003; Compare</button>
+          </div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Only the icon distinguishes add vs added.</p>
+        </div>
+        <div>
+          <p class="ds-example__label">Option A &mdash; &ldquo;Add to compare&rdquo; / &ldquo;Added&rdquo; (recommended)</p>
+          <div style="display:flex;gap:8px">
+            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">&#8646; Add to compare</button>
+            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button" style="background:#E6F0FB">&#10003; Added</button>
+          </div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Verb tells you what the click does; pressed state reads as &ldquo;Added&rdquo;.</p>
+        </div>
+        <div>
+          <p class="ds-example__label">Option B &mdash; &ldquo;Compare&rdquo; / &ldquo;In comparison&rdquo;</p>
+          <div style="display:flex;gap:8px">
+            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">&#8646; Compare</button>
+            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button" style="background:#E6F0FB">&#10003; In comparison</button>
+          </div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Keeps &ldquo;Compare&rdquo; for the add action; state label changes only.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="compare">6. Compare: kill the dead path, fix empty &amp; overflow <span class="ds-prio ds-prio--p2">P2</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      The shipped compare UI is <strong>workspace-only</strong>. <code>CompareMatrixView</code>, <code>CompareViewToggle</code>
+      and <code>CompareDecisionSnapshot</code> exist but are <strong>never imported</strong> &mdash; a dead path the v2 audit
+      flagged (and a docs-vs-code drift). Separately, the <strong>&ldquo;Differences only&rdquo;</strong> filter hides every
+      group when nothing differs, leaving an apparently blank workspace with only an sr-only count (UX-04); and the summary /
+      row grids use <code>repeat(n, minmax(140px, 1fr))</code> with <strong>no overflow wrapper</strong>, so 3&ndash;4 apps can
+      overflow before the 639px stack breakpoint (RSP-03).
+    </p>
+
+    <h3>6.1 Choice CMP-1 &mdash; the dead matrix / view toggle</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; remove the dead code (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Delete <code>CompareMatrixView</code>, <code>CompareViewToggle</code>, <code>CompareDecisionSnapshot</code> and the unused view IDs in <code>compareConfig.ts</code>. The decision workspace is the shipped experience; removing the dead path reconciles docs with code.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; wire the view toggle</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Surface the Matrix / Workspace toggle (it already supports <code>?view=</code> + localStorage) so users can switch layouts. More UI to support and test; reintroduces a second layout to maintain.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>6.2 Choice CMP-2 &mdash; the &ldquo;Differences only&rdquo; empty state (UX-04)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+        <div>
+          <p class="ds-example__label">Today &mdash; blank body</p>
+          <div style="border:1px solid var(--border);border-radius:10px;padding:16px;background:#fff;min-height:90px;display:flex;align-items:center;justify-content:center">
+            <span class="ds-u-muted" style="font-size:.8rem;font-style:italic">(nothing visible &mdash; only an sr-only &ldquo;0 dimensions&rdquo;)</span>
+          </div>
+        </div>
+        <div>
+          <p class="ds-example__label">Option A &mdash; visible empty state + &ldquo;Show all rows&rdquo; (recommended)</p>
+          <div style="border:1px solid var(--border);border-radius:10px;padding:16px;background:#fff">
+            <p style="margin:0 0 10px;font-size:.85rem;color:#1A2332">These apps are identical on every comparison dimension.</p>
+            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">Show all rows</button>
+          </div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Explains the blank and unchecks the filter in one click.</p>
+        </div>
+        <div>
+          <p class="ds-example__label">Option B &mdash; auto-disable the filter + note</p>
+          <div style="border:1px solid var(--border);border-radius:10px;padding:16px;background:#fff">
+            <p style="margin:0;font-size:.85rem;color:#1A2332">No differences found &mdash; showing all rows.</p>
+          </div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Filter turns itself off; less user control, but never blank.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>6.3 Choice CMP-3 &mdash; summary / row overflow (RSP-03)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; horizontal scroll wrapper (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Wrap the summary + workspace row grids in an <code>overflow-x: auto</code> scroller with a sensible min column width &mdash; the same pattern the (dead) matrix already used. Columns stay readable; the panel scrolls instead of overflowing the page.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; responsive column count</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Reduce the min column width and/or stack earlier so 3&ndash;4 apps fit without scrolling. No scroll affordance, but tighter columns at desktop widths.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="safety">7. Density &amp; safety: overflow + destructive confirmations <span class="ds-prio ds-prio--p2">P2</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      Three last issues from the audit. The PDP <strong>snapshot strip</strong> base row is <code>flex-wrap: nowrap</code>, so
+      pills can overflow on narrow viewports (RSP-02). The saved-apps <strong>remove (X)</strong> is unguarded &mdash; rapid
+      clicks can fire duplicate DELETEs (UX-07) &mdash; while the compare <strong>&ldquo;Clear all&rdquo;</strong> wipes the
+      basket on a single click with no confirmation (UX-08). (The Clear-data modal is already a safe two-step; it just needs
+      its confirm button disabled while the request is in flight.)
+    </p>
+
+    <h3>7.1 Choice SNP-1 &mdash; snapshot strip overflow (RSP-02)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; let the row wrap (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Change <code>.hs-snapshot-strip__row</code> to <code>flex-wrap: wrap</code> (matching the funding variant) with min-widths so pills reflow onto a second line. Simplest, no scroll affordance.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; horizontal scroll</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep one line but wrap in <code>overflow-x: auto</code>. Preserves a single-row scan; adds a scrollbar on narrow screens.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>7.2 Choice DES-1 &mdash; saved-apps remove guard (UX-07)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; disable while in flight (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Read <code>togglingId</code> from <code>BookmarkProvider</code> and disable that row&rsquo;s X (with a wait cursor) while its DELETE runs &mdash; the same guard <code>SaveToggleButton</code> already uses. Also disable the Clear-data confirm button while pending. No duplicate requests.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; optimistic remove</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Remove the row from the list immediately on click so a second click can&rsquo;t hit the same item. Snappier, but rollback-on-error is more complex.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>7.3 Choice DES-2 &mdash; compare &ldquo;Clear all&rdquo; confirmation (UX-08)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div>
+          <p class="ds-example__label">Option A &mdash; inline two-step (recommended)</p>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">Clear all</button>
+            <span class="ds-u-muted">&rarr;</span>
+            <button class="ds-btn ds-btn--destructive ds-btn--sm" type="button">Confirm clear</button>
+          </div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">First click arms; second confirms. No modal, reverts after a few seconds.</p>
+        </div>
+        <div>
+          <p class="ds-example__label">Option B &mdash; confirm modal</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Open the shared <code>Modal</code> to confirm before wiping. Heavier, but consistent with Clear-data.</p>
+        </div>
+        <div>
+          <p class="ds-example__label">Option C &mdash; clear + undo toast</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Clear immediately but show an <strong>Undo</strong> toast for a few seconds (reuses the R6 toast service). Fastest path; relies on the user catching the toast.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="decision-log">8. Decision log</h2>
+    <p>
+      The choices that were made and shipped. Most went with the recommended option; the exceptions are
+      <strong>VOC-1</strong> (standardise on &ldquo;DTx app&rdquo; rather than plain &ldquo;app&rdquo;),
+      <strong>DES-2</strong> (Undo toast rather than inline two-step), <strong>PDP-4</strong> (left unchanged), and
+      <strong>NAV-1</strong> (deferred).
+    </p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th><th>Shipped choice</th></tr></thead>
+      <tbody>
+        <tr><td>PDP-1</td><td>Hero action hierarchy</td><td>A &mdash; one primary, quiet utility cluster</td><td><strong>A</strong></td></tr>
+        <tr><td>PDP-2</td><td>Demoted-action treatment</td><td>A &mdash; compact icon + label</td><td><strong>A</strong></td></tr>
+        <tr><td>PDP-3</td><td>Hero badge trim</td><td>A &mdash; signal badges only, rest below</td><td><strong>A</strong></td></tr>
+        <tr><td>PDP-4</td><td>Repeated Express-interest CTA</td><td>A &mdash; keep both, differentiate</td><td><strong>Do not change</strong> &mdash; both CTAs kept as-is</td></tr>
+        <tr><td>NAV-1</td><td>Surface orphaned routes</td><td>A &mdash; &ldquo;Your workspace&rdquo; group</td><td><strong>Deferred</strong> &mdash; future iteration</td></tr>
+        <tr><td>NAV-2</td><td>Active-state matching</td><td>A &mdash; prefix match + per-route ownership</td><td><strong>A</strong></td></tr>
+        <tr><td>NAV-3</td><td>Breadcrumb fixes</td><td>A &mdash; add missing crumbs</td><td><strong>A</strong></td></tr>
+        <tr><td>VOC-1</td><td>Canonical UI term</td><td>A &mdash; &ldquo;app&rdquo;</td><td><strong>Override</strong> &mdash; &ldquo;DTx app&rdquo;</td></tr>
+        <tr><td>VOC-2</td><td>Scope of vocab pass</td><td>A &mdash; high-traffic now, keep DTx as programme term</td><td><strong>A</strong></td></tr>
+        <tr><td>VOC-3</td><td>Compare toggle label</td><td>A &mdash; &ldquo;Add to compare&rdquo; / &ldquo;Added&rdquo;</td><td><strong>A</strong></td></tr>
+        <tr><td>CMP-1</td><td>Dead matrix / view toggle</td><td>A &mdash; remove the dead code</td><td><strong>A</strong></td></tr>
+        <tr><td>CMP-2</td><td>Differences-only empty state</td><td>A &mdash; visible empty + &ldquo;Show all rows&rdquo;</td><td><strong>A</strong></td></tr>
+        <tr><td>CMP-3</td><td>Summary / row overflow</td><td>A &mdash; horizontal scroll wrapper</td><td><strong>A</strong></td></tr>
+        <tr><td>SNP-1</td><td>Snapshot strip overflow</td><td>A &mdash; let the row wrap</td><td><strong>A</strong></td></tr>
+        <tr><td>DES-1</td><td>Destructive in-flight guards</td><td>A &mdash; disable while in flight</td><td><strong>A</strong></td></tr>
+        <tr><td>DES-2</td><td>Compare &ldquo;Clear all&rdquo; confirmation</td><td>A &mdash; inline two-step</td><td><strong>C</strong> &mdash; clear + Undo toast</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="what-ships">9. What shipped</h2>
+    <p>Round 7 landed the following. Typecheck passes and the changed files are lint-clean.</p>
+    <table class="ds-table">
+      <thead><tr><th>Area</th><th>Change</th><th>Files</th></tr></thead>
+      <tbody>
+        <tr><td>PDP triage <span class="ds-status ds-status--canonical">Shipped</span></td><td>Express interest is the sole filled primary; Save / Compare / Share regrouped into one quiet, tinted utility cluster on the right. Hero badges trimmed to <strong>condition + maturity + content-confidence</strong> only &mdash; supervision model, NICE refs and the NHS App badge were removed from the hero (they already live in the commissioning snapshot / detail sections below).</td><td><code>app/apps/[slug]/page.tsx</code></td></tr>
+        <tr><td>Navigation <span class="ds-status ds-status--canonical">Shipped</span></td><td>&ldquo;Find apps&rdquo; now goes active across the whole <code>/apps</code> branch (landing, catalogue, and PDPs) via prefix matching, so a product page no longer leaves the nav blank. Org-settings gained a breadcrumb. <em>Surfacing the orphaned workspace routes (NAV-1) was deferred.</em></td><td><code>components/Nav.tsx</code>, <code>app/org-settings/OrgSettingsClient.tsx</code></td></tr>
+        <tr><td>Vocabulary <span class="ds-status ds-status--canonical">Shipped</span></td><td>&ldquo;DTx app&rdquo; standardised across PDP / compare / saved-apps body copy &amp; counts; &ldquo;application&rdquo; removed. Compare toggle label &rarr; <strong>&ldquo;Add to compare&rdquo; / &ldquo;Added&rdquo;</strong> (was &ldquo;Compare&rdquo; in both states).</td><td><code>CompareClient.tsx</code>, <code>SavedAppsClient.tsx</code>, <code>CompareToggleButton.tsx</code>, PDP hero label</td></tr>
+        <tr><td>Compare <span class="ds-status ds-status--canonical">Shipped</span></td><td>Deleted the dead matrix / view-toggle / decision-snapshot and the unused view config. Differences-only now shows a visible empty state with a <strong>&ldquo;Show all rows&rdquo;</strong> button when nothing differs. Summary + workspace grids scroll horizontally instead of overflowing the page.</td><td>removed <code>CompareMatrixView/ViewToggle/DecisionSnapshot</code>; <code>lib/compareConfig.ts</code>, <code>CompareWorkspaceView.tsx</code>, <code>CompareClient.tsx</code>, <code>globals.css</code></td></tr>
+        <tr><td>Density &amp; safety <span class="ds-status ds-status--canonical">Shipped</span></td><td>Snapshot strip pills now wrap. The saved-apps remove (X) is disabled while its delete is in flight, and the Clear-data confirm ignores re-entry while pending. Compare <strong>&ldquo;Clear all&rdquo;</strong> clears immediately and offers an <strong>Undo</strong> toast (the toast service gained an optional inline action).</td><td><code>globals.css</code>, <code>SavedAppsClient.tsx</code>, <code>ClearDataModal.tsx</code>, <code>CompareBasketProvider.tsx</code>, <code>components/ui/Toast.tsx</code></td></tr>
+        <tr><td>Docs <span class="ds-status ds-status--canonical">Shipped</span></td><td>Updated the audit report (v2) findings to <em>Fixed R7</em>, and the DS pattern / component pages (PDP, navigation, compare, toasts) to match. This report flipped to <em>Shipped</em>.</td><td><code>public/DS/*</code></td></tr>
+      </tbody>
+    </table>
+    <div class="ds-note">
+      <strong>Out of scope for Round 7</strong> (later P3 polish): the legacy &ldquo;Commissioiner&rdquo; typo (CNT-06), the
+      &ldquo;EOI&rdquo; acronym expansion (CNT-03), and any remaining content-tone work. These are noted so they aren&rsquo;t
+      lost, not actioned here.
+    </div>
+
+    <hr class="ds-rule">
+    <p class="ds-u-muted" style="font-size:.85rem">
+      v7 is the Round 7 decision record &mdash; clarity &amp; density, awaiting your choices. Structure follows the
+      <a href="/DS/Report-v4/index.html">v4</a> / <a href="/DS/Report-v6/index.html">v6</a> reports; findings come from the
+      <a href="/DS/Report-v5/index.html">second audit (v2)</a> backlog.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

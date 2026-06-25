@@ -40,7 +40,7 @@ export function PageBreadcrumb({
                   <Link
                     href={item.href}
                     className="font-medium transition-colors hover:underline"
-                    style={{ color: '#005EB8' }}
+                    style={{ color: 'var(--nhs-blue)' }}
                   >
                     {item.label}
                   </Link>

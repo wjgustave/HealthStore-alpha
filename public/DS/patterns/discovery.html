@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Discovery &amp; catalogue — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="discovery">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Patterns</p>
+      <h1 class="ds-page-title">Discovery &amp; catalogue</h1>
+      <p class="ds-lede">
+        How users find products: a search entry, condition shortcuts, a filter bar, and a responsive grid of app cards
+        with empty and loading states.
+      </p>
+    </div>
+
+    <h2>Filter bar</h2>
+    <p>Native selects styled as filter controls (<code>FilterSelect</code>), uppercase labels, 44px min height, with active filter pills.</p>
+    <div class="ds-example ds-example--surface">
+      <div class="ds-u-row" style="gap:16px;align-items:flex-end">
+        <div><div class="ds-meta__k" style="margin-bottom:4px">Condition</div><select class="ds-select" style="min-width:180px"><option>All conditions</option><option>COPD</option><option>Cardiac rehab</option></select></div>
+        <div><div class="ds-meta__k" style="margin-bottom:4px">Evidence</div><select class="ds-select" style="min-width:160px"><option>Any</option><option>Strong</option><option>Moderate</option></select></div>
+        <div><div class="ds-meta__k" style="margin-bottom:4px">Maturity</div><select class="ds-select" style="min-width:160px"><option>Any</option><option>Scaled</option><option>Pilot</option></select></div>
+      </div>
+      <div class="ds-u-row" style="margin-top:14px">
+        <span class="badge badge-blue">COPD &times;</span>
+        <span class="badge badge-blue">Strong evidence &times;</span>
+        <button class="ds-btn ds-btn--ghost ds-btn--sm" type="button">Clear all</button>
+      </div>
+    </div>
+
+    <h2>Results grid</h2>
+    <p>Responsive grid of <a href="/DS/components/cards.html">app cards</a> (1 / 2 / 3 columns).</p>
+    <div class="ds-example ds-example--surface">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
+        <article class="app-card" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><div style="width:36px;height:36px;border-radius:8px;background:var(--nhs-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700">C</div><div><div style="font-weight:700">Clinitouch</div><div class="ds-u-muted" style="font-size:.78rem">Clinitouch Ltd</div></div></div>
+          <p class="ds-u-mt0" style="font-size:.86rem;color:var(--text-secondary)">Remote monitoring for COPD.</p>
+          <div class="ds-u-row"><span class="badge badge-green">Scaled</span><span class="badge badge-green">Strong</span></div>
+        </article>
+        <article class="app-card" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><div style="width:36px;height:36px;border-radius:8px;background:#007F3B;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700">H</div><div><div style="font-weight:700">COPD Hub</div><div class="ds-u-muted" style="font-size:.78rem">Example Health</div></div></div>
+          <p class="ds-u-mt0" style="font-size:.86rem;color:var(--text-secondary)">Self-management for respiratory patients.</p>
+          <div class="ds-u-row"><span class="badge badge-blue">Multi-site live</span><span class="badge badge-blue">Moderate</span></div>
+        </article>
+        <article class="app-card" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><div style="width:36px;height:36px;border-radius:8px;background:#330072;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700">A</div><div><div style="font-weight:700">Activate Your Heart</div><div class="ds-u-muted" style="font-size:.78rem">Sample Trust</div></div></div>
+          <p class="ds-u-mt0" style="font-size:.86rem;color:var(--text-secondary)">Cardiac rehabilitation programme.</p>
+          <div class="ds-u-row"><span class="badge badge-amber">Limited live</span><span class="badge badge-green">Strong</span></div>
+        </article>
+      </div>
+    </div>
+
+    <h2>Empty state</h2>
+    <div class="ds-example ds-example--surface">
+      <div class="hs-surface-card" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px;text-align:center">
+        <h3 class="ds-u-mt0" style="margin-top:0">No products match those filters</h3>
+        <p class="ds-u-muted ds-u-mt0">Try removing a filter, or browse all products.</p>
+        <button class="ds-btn ds-btn--secondary" type="button">Clear all filters</button>
+      </div>
+    </div>
+
+    <h2>Loading state</h2>
+    <p>While the route streams, a <a href="/DS/components/loading.html">card skeleton</a> grid holds the layout.</p>
+
+    <h2>Components used</h2>
+    <p>
+      <a href="/DS/components/forms.html">Filter selects</a> &middot;
+      <a href="/DS/components/badges-tags.html">Filter pills &amp; badges</a> &middot;
+      <a href="/DS/components/cards.html">App cards</a> &middot;
+      <a href="/DS/components/loading.html">Skeletons</a>
+    </p>
+
+    <div class="ds-note ds-note--source">Source: <code>app/apps/CatalogueClient.tsx</code>, <code>app/apps/AppsDiscoveryClient.tsx</code>, <code>app/apps/CatalogueSkeleton.tsx</code>.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

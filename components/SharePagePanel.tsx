@@ -1,11 +1,13 @@
 'use client'
 
-import '@awesome.me/webawesome/dist/components/icon/icon.js'
+import { Share2 } from 'lucide-react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { useParams } from 'next/navigation'
 import { usePdpSharePrint } from '@/components/PdpSharePrintContext'
 import { STORE_ACCENT } from '@/lib/storeAccent'
+import { Button } from '@/components/ui/Button'
+import { Modal } from '@/components/ui/Modal'
+import { useToast } from '@/components/ui/Toast'
 
 type ShareFlow = 'method' | 'pdf' | 'link'
 
@@ -43,21 +45,15 @@ export function SharePagePanel({
     typeof params?.slug === 'string' ? params.slug : Array.isArray(params?.slug) ? params.slug[0] ?? '' : ''
 
   const { registeredBlocks, beginModalPrint } = usePdpSharePrint()
+  const toast = useToast()
   const [modalOpen, setModalOpen] = useState(false)
   const [shareFlow, setShareFlow] = useState<ShareFlow>('method')
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(() => new Set())
-  const [announce, setAnnounce] = useState('')
   const [linkBusy, setLinkBusy] = useState(false)
   const [linkError, setLinkError] = useState('')
-  const [mounted, setMounted] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
-  const dialogRef = useRef<HTMLDivElement>(null)
   const titleId = useId()
   const descId = useId()
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   useEffect(() => {
     if (!modalOpen || (shareFlow !== 'pdf' && shareFlow !== 'link')) return
@@ -67,7 +63,6 @@ export function SharePagePanel({
 
   const openModal = useCallback(() => {
     setShareFlow('method')
-    setAnnounce('')
     setLinkError('')
     setModalOpen(true)
   }, [])
@@ -75,9 +70,7 @@ export function SharePagePanel({
   const closeModal = useCallback(() => {
     setModalOpen(false)
     setShareFlow('method')
-    setAnnounce('')
     setLinkError('')
-    triggerRef.current?.focus()
   }, [])
 
   const toggleKey = useCallback((key: string) => {
@@ -120,13 +113,11 @@ export function SharePagePanel({
       ok = legacyCopyToClipboard(url)
     }
     if (ok) {
-      setAnnounce('Full page address copied to clipboard.')
-      setTimeout(() => setAnnounce(''), 4000)
+      toast.success('Page address copied to clipboard.')
     } else {
-      setAnnounce('Could not copy link. Copy the address from your browser bar.')
-      setTimeout(() => setAnnounce(''), 6000)
+      toast.error('Couldn’t copy — copy the address from your browser bar.')
     }
-  }, [])
+  }, [toast])
 
   const createAndCopyShareLink = useCallback(async () => {
     if (selectedKeys.size === 0 || !slug) return
@@ -171,64 +162,16 @@ export function SharePagePanel({
         ok = legacyCopyToClipboard(fullUrl)
       }
       if (ok) {
-        setAnnounce('Shareable link copied to clipboard.')
-        setTimeout(() => setAnnounce(''), 5000)
+        toast.success('Shareable link copied to clipboard.')
       } else {
-        setAnnounce('Link was created but could not be copied. Copy it from the network response or try again.')
-        setTimeout(() => setAnnounce(''), 6000)
+        toast.info('Link created, but it couldn’t be copied automatically. Try again.')
       }
     } catch {
       setLinkError('Network error. Check your connection and try again.')
     } finally {
       setLinkBusy(false)
     }
-  }, [selectedKeys, slug])
-
-  useEffect(() => {
-    if (!modalOpen) return
-    const dialog = dialogRef.current
-
-    function focusables(): HTMLElement[] {
-      if (!dialog) return []
-      return [...dialog.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      )].filter(el => {
-        if (el.getAttribute('aria-hidden') === 'true') return false
-        if (el instanceof HTMLButtonElement || el instanceof HTMLInputElement || el instanceof HTMLSelectElement || el instanceof HTMLTextAreaElement) {
-          return !el.disabled
-        }
-        return true
-      })
-    }
-
-    function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        closeModal()
-        return
-      }
-      if (e.key !== 'Tab' || !dialog) return
-      const nodes = focusables()
-      if (nodes.length === 0) return
-      const first = nodes[0]
-      const last = nodes[nodes.length - 1]
-      if (e.shiftKey) {
-        if (document.activeElement === first) {
-          e.preventDefault()
-          last.focus()
-        }
-      } else if (document.activeElement === last) {
-        e.preventDefault()
-        first.focus()
-      }
-    }
-
-    document.addEventListener('keydown', onKey)
-    requestAnimationFrame(() => {
-      focusables()[0]?.focus()
-    })
-
-    return () => document.removeEventListener('keydown', onKey)
-  }, [modalOpen, shareFlow, closeModal])
+  }, [selectedKeys, slug, toast])
 
   const titleText =
     shareFlow === 'method'
@@ -249,7 +192,7 @@ export function SharePagePanel({
       <div className="mb-2 flex flex-wrap gap-2">
         <button
           type="button"
-          className="text-sm font-semibold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#003087] hover:decoration-[#005EB8]"
+          className="text-sm font-semibold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#003087] hover:decoration-[var(--nhs-blue)]"
           style={{ color: STORE_ACCENT }}
           onClick={selectAll}
         >
@@ -260,7 +203,7 @@ export function SharePagePanel({
         </span>
         <button
           type="button"
-          className="text-sm font-semibold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#003087] hover:decoration-[#005EB8]"
+          className="text-sm font-semibold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#003087] hover:decoration-[var(--nhs-blue)]"
           style={{ color: STORE_ACCENT }}
           onClick={clearAll}
         >
@@ -302,178 +245,133 @@ export function SharePagePanel({
     </>
   )
 
-  const modal =
-    modalOpen && mounted ? (
-      <div
-        className="fixed inset-0 z-[250] flex items-center justify-center p-4"
-        role="presentation"
-        style={{ background: 'rgba(15, 23, 42, 0.45)' }}
-        onMouseDown={e => {
-          if (e.target === e.currentTarget) closeModal()
-        }}
-      >
-        <div
-          ref={dialogRef}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={titleId}
-          aria-describedby={descId}
-          className="flex max-h-[min(90vh,640px)] w-full max-w-lg flex-col rounded-xl border bg-white shadow-xl"
-          style={{ borderColor: 'var(--border)', boxShadow: 'var(--shadow-lg)' }}
-          onMouseDown={e => e.stopPropagation()}
-        >
-          <div className="border-b px-5 py-4" style={{ borderColor: 'var(--border)' }}>
-            <h2 id={titleId} className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
-              {titleText}
-            </h2>
-            <p id={descId} className="mt-1 text-sm" style={{ color: 'var(--text-secondary)' }}>
-              {descText}
-            </p>
-          </div>
-
-          {shareFlow === 'method' ? (
-            <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5 space-y-3">
-              <button
-                type="button"
-                className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-slate-100 min-h-[44px]"
-                style={{ borderColor: 'var(--border)' }}
-                onClick={() => setShareFlow('link')}
-              >
-                <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
-                  Share as link
-                </span>
-                <span className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
-                  Select what sections to share. Recipients will be able to view the selected sections of this page.
-                </span>
-              </button>
-              <button
-                type="button"
-                className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-slate-100 min-h-[44px]"
-                style={{ borderColor: 'var(--border)' }}
-                onClick={() => setShareFlow('pdf')}
-              >
-                <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
-                  Print or save as a PDF
-                </span>
-                <span className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
-                  Select what sections to share, then print or save as a PDF file.
-                </span>
-              </button>
-            </div>
-          ) : null}
-
-          {shareFlow === 'pdf' ? <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3">{sectionChecklist}</div> : null}
-
-          {shareFlow === 'link' ? (
-            <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3 space-y-3">
-              {announce ? (
-                <p
-                  className="text-sm leading-snug rounded-md px-3 py-2"
-                  style={{ background: '#F7F9FC', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
-                  role="status"
-                  aria-live="polite"
-                >
-                  {announce}
-                </p>
-              ) : null}
-              {linkError ? (
-                <p className="text-sm leading-snug rounded-md px-3 py-2" role="alert" style={{ background: '#FDECEA', color: '#5A1010' }}>
-                  {linkError}
-                </p>
-              ) : null}
-              {sectionChecklist}
-              <button
-                type="button"
-                className="text-left text-sm font-semibold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[var(--text-primary)] hover:decoration-[var(--text-muted)]"
-                style={{ color: 'var(--text-muted)' }}
-                onClick={copyFullPageLink}
-              >
-                Copy full product page address instead
-              </button>
-            </div>
-          ) : null}
-
-          <div className="border-t px-5 py-4 space-y-3" style={{ borderColor: 'var(--border)' }}>
-            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between sm:items-center">
-              <div className="flex flex-col-reverse gap-2 sm:flex-row">
-                {shareFlow !== 'method' ? (
-                  <button
-                    type="button"
-                    className="rounded-lg border px-4 py-3 text-sm font-semibold min-h-[44px] transition-colors hover:bg-[#E6F0FB]"
-                    style={{ borderColor: STORE_ACCENT, color: STORE_ACCENT, background: '#fff' }}
-                    onClick={() => {
-                      setAnnounce('')
-                      setLinkError('')
-                      setShareFlow('method')
-                    }}
-                  >
-                    Back
-                  </button>
-                ) : null}
-                <button
-                  type="button"
-                  className="rounded-lg border px-4 py-3 text-sm font-semibold min-h-[44px] transition-colors hover:bg-[#E6F0FB]"
-                  style={{ borderColor: STORE_ACCENT, color: STORE_ACCENT, background: '#fff' }}
-                  onClick={closeModal}
-                >
-                  Cancel
-                </button>
-              </div>
-              <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-                {shareFlow === 'link' ? (
-                  <button
-                    type="button"
-                    className="rounded-lg px-4 py-3 text-sm font-semibold text-white min-h-[44px] transition-colors disabled:opacity-50 enabled:hover:!bg-[#004B8C]"
-                    style={{ background: STORE_ACCENT }}
-                    disabled={selectedKeys.size === 0 || linkBusy || !slug}
-                    onClick={createAndCopyShareLink}
-                  >
-                    {linkBusy ? 'Creating link…' : 'Create link and copy'}
-                  </button>
-                ) : null}
-                {shareFlow === 'pdf' ? (
-                  <button
-                    type="button"
-                    className="rounded-lg px-4 py-3 text-sm font-semibold text-white min-h-[44px] transition-colors disabled:opacity-50 enabled:hover:!bg-[#004B8C]"
-                    style={{ background: STORE_ACCENT }}
-                    disabled={selectedKeys.size === 0}
-                    onClick={printWithSelection}
-                  >
-                    Print or save as a PDF
-                  </button>
-                ) : null}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    ) : null
-
   return (
     <div className={`shrink-0 ${className}`.trim()}>
-      <button
+      <Button
         ref={triggerRef}
-        type="button"
-        className={`px-4 py-4 rounded-lg text-sm font-semibold min-h-[44px] min-w-[44px] bg-white text-[var(--nhs-blue)] transition-colors hover:bg-[#E6F0FB] hover:text-[var(--nhs-dark)] ${
-          borderlessTrigger ? 'border-0' : 'border border-[var(--nhs-blue)]'
-        }`}
+        variant="secondary"
+        borderless={borderlessTrigger}
+        size="none"
+        className="px-4 py-4 min-h-[44px] min-w-[44px]"
         aria-haspopup="dialog"
         aria-expanded={modalOpen}
         onClick={openModal}
       >
         <span className="inline-flex items-center justify-center gap-1.5">
-          <wa-icon
-            name="share"
-            family="classic"
-            variant="solid"
-            className="shrink-0 text-base leading-none inline-block align-middle text-current"
-            aria-hidden
-          />
+          <Share2 className="h-4 w-4 shrink-0" aria-hidden />
           Share
         </span>
-      </button>
+      </Button>
 
-      {mounted && modal ? createPortal(modal, document.body) : null}
+      <Modal
+        open={modalOpen}
+        onClose={closeModal}
+        labelledBy={titleId}
+        describedBy={descId}
+        restoreFocus="trigger"
+        triggerRef={triggerRef}
+        zIndexClass="z-[250]"
+        scrimClassName="bg-slate-900/45"
+        panelClassName="flex max-h-[min(90vh,640px)] w-full max-w-lg flex-col rounded-xl border border-[var(--border)] bg-white shadow-xl"
+      >
+        <div className="border-b px-5 py-4" style={{ borderColor: 'var(--border)' }}>
+          <h2 id={titleId} className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
+            {titleText}
+          </h2>
+          <p id={descId} className="mt-1 text-sm" style={{ color: 'var(--text-secondary)' }}>
+            {descText}
+          </p>
+        </div>
+
+        {shareFlow === 'method' ? (
+          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5 space-y-3">
+            <button
+              type="button"
+              className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-slate-100 min-h-[44px]"
+              style={{ borderColor: 'var(--border)' }}
+              onClick={() => setShareFlow('link')}
+            >
+              <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
+                Share as link
+              </span>
+              <span className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
+                Select what sections to share. Recipients will be able to view the selected sections of this page.
+              </span>
+            </button>
+            <button
+              type="button"
+              className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-slate-100 min-h-[44px]"
+              style={{ borderColor: 'var(--border)' }}
+              onClick={() => setShareFlow('pdf')}
+            >
+              <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
+                Print or save as a PDF
+              </span>
+              <span className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
+                Select what sections to share, then print or save as a PDF file.
+              </span>
+            </button>
+          </div>
+        ) : null}
+
+        {shareFlow === 'pdf' ? <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3">{sectionChecklist}</div> : null}
+
+        {shareFlow === 'link' ? (
+          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3 space-y-3">
+            {linkError ? (
+              <p className="text-sm leading-snug rounded-md px-3 py-2" role="alert" style={{ background: '#FDECEA', color: '#5A1010' }}>
+                {linkError}
+              </p>
+            ) : null}
+            {sectionChecklist}
+            <button
+              type="button"
+              className="text-left text-sm font-semibold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[var(--text-primary)] hover:decoration-[var(--text-muted)]"
+              style={{ color: 'var(--text-muted)' }}
+              onClick={copyFullPageLink}
+            >
+              Copy full product page address instead
+            </button>
+          </div>
+        ) : null}
+
+        <div className="border-t px-5 py-4 space-y-3" style={{ borderColor: 'var(--border)' }}>
+          <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between sm:items-center">
+            <div className="flex flex-col-reverse gap-2 sm:flex-row">
+              {shareFlow !== 'method' ? (
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setLinkError('')
+                    setShareFlow('method')
+                  }}
+                >
+                  Back
+                </Button>
+              ) : null}
+              <Button variant="secondary" onClick={closeModal}>
+                Cancel
+              </Button>
+            </div>
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+              {shareFlow === 'link' ? (
+                <Button
+                  loading={linkBusy}
+                  disabled={selectedKeys.size === 0 || linkBusy || !slug}
+                  onClick={createAndCopyShareLink}
+                >
+                  {linkBusy ? 'Creating link…' : 'Create link and copy'}
+                </Button>
+              ) : null}
+              {shareFlow === 'pdf' ? (
+                <Button disabled={selectedKeys.size === 0} onClick={printWithSelection}>
+                  Print or save as a PDF
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }

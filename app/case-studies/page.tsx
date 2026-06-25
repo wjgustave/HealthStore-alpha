@@ -30,8 +30,8 @@ export default function CaseStudiesPage() {
       <div className="mt-12">
         <Link
           href="/"
-          className="text-sm font-semibold text-[#005EB8] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-          style={{ outlineColor: '#005EB8' }}
+          className="text-sm font-semibold text-[var(--nhs-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          style={{ outlineColor: 'var(--nhs-blue)' }}
         >
           ← Back to home
         </Link>

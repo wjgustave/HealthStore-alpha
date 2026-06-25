@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Spacing &amp; layout — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="spacing">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Styles</p>
+      <h1 class="ds-page-title">Spacing &amp; layout</h1>
+    </div>
+
+    <div class="ds-note">
+      <strong>Recommendation.</strong> Adopt a named spacing scale (e.g. <code>--space-1</code>&hellip;<code>--space-8</code>) so spacing
+      is as token-driven as colour and type. Today spacing is expressed via Tailwind classes and ad-hoc inline values.
+    </div>
+
+    <h2>Base scale (Tailwind step = 4px)</h2>
+    <div class="ds-example">
+      <div class="ds-space-row"><span class="ds-space-meta">4px &middot; p-1 / gap-1</span><span class="ds-space-bar" style="width:4px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">8px &middot; p-2 / gap-2</span><span class="ds-space-bar" style="width:8px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">12px &middot; p-3 / gap-3</span><span class="ds-space-bar" style="width:12px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">16px &middot; p-4 / gap-4</span><span class="ds-space-bar" style="width:16px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">20px &middot; p-5 / gap-5</span><span class="ds-space-bar" style="width:20px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">24px &middot; p-6 / gap-6</span><span class="ds-space-bar" style="width:24px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">32px &middot; p-8 / gap-8</span><span class="ds-space-bar" style="width:32px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">48px &middot; p-12 / gap-12</span><span class="ds-space-bar" style="width:48px"></span></div>
+    </div>
+
+    <h2>Page container</h2>
+    <p>In-app pages constrain content to a max-width and pad the gutters. The dominant convention is:</p>
+<pre class="ds-code"><code>&lt;main class="mx-auto max-w-7xl px-4 sm:px-6"&gt;
+  &lt;!-- page content --&gt;
+&lt;/main&gt;</code></pre>
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Max width</div><div class="ds-meta__v">max-w-7xl (80rem / 1280px)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Gutters</div><div class="ds-meta__v">px-4 (16px) &rarr; sm:px-6 (24px)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Card padding</div><div class="ds-meta__v">p-5 / p-6 (20&ndash;24px)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Section rhythm</div><div class="ds-meta__v">mb-6 / mt-8 (24&ndash;32px)</div></div>
+    </div>
+
+    <h2>Grid conventions</h2>
+    <p>Common responsive grids in the product:</p>
+    <table class="ds-table">
+      <thead><tr><th>Surface</th><th>Grid</th></tr></thead>
+      <tbody>
+        <tr><td>Catalogue / saved apps cards</td><td><code>grid sm:grid-cols-2 lg:grid-cols-3 gap-4</code></td></tr>
+        <tr><td>Decision snapshot strip</td><td>2-up &rarr; 4-up at <code>lg</code> (<code>.hs-snapshot-strip__grid</code>)</td></tr>
+        <tr><td>Dashboard widgets</td><td>Bento / auto-fit minmax columns</td></tr>
+        <tr><td>Foundation swatch grids (this DS)</td><td><code>repeat(auto-fill, minmax(180px, 1fr))</code></td></tr>
+      </tbody>
+    </table>
+
+    <h2>Minimum touch target</h2>
+    <p>Interactive controls target a <strong>44px</strong> minimum height (visible in <code>.hs-compare-*</code> controls and the proposed <code>.ds-btn</code>). Keep this for buttons, toggles, filter selects and tappable list rows.</p>
+
+    <div class="ds-note ds-note--source">Source: Tailwind v4 (<code>@import "tailwindcss"</code> in <code>app/globals.css</code>); container conventions across <code>app/**</code> pages.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

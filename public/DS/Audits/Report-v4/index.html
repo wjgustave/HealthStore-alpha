@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Round 4 plan (v4) — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="report-v4">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Report &middot; v4</p>
+      <h1 class="ds-page-title">Round 4 &mdash; cleanup &amp; a11y polish plan</h1>
+      <p class="ds-lede">
+        With the Round 2 primitives and Round 3 consolidation shipped, Round 4 clears the
+        <strong>dead prototype code</strong> the <a href="/DS/Report-v1/index.html">v1 audit</a> flagged and finishes the
+        outstanding <strong>accessibility and consent</strong> items. Like <a href="/DS/Report-v2/index.html">v2</a> and
+        <a href="/DS/Report-v3/index.html">v3</a>, this is a <strong>decision document</strong>: each section presents
+        <strong>live Option A / B choices</strong> with a recommended default and a deletion/migration map. The choices below
+        have now been <strong>applied and shipped</strong> &mdash; see the <a href="#decision-log">decision log</a> and
+        <a href="#ships">what shipped</a>.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Round</div><div class="ds-meta__v">4 &middot; cleanup &amp; a11y polish</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Status</div><div class="ds-meta__v"><span class="ds-status ds-status--canonical">Shipped</span></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Scope</div><div class="ds-meta__v">Orphan removal &middot; Lightbox a11y &middot; Consent gating &middot; Icons / disabled state</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Implementation</div><div class="ds-meta__v">Deletions + small refactors; no new primitives</div></div>
+    </div>
+
+    <h2>1. Round 4 at a glance</h2>
+    <table class="ds-table">
+      <thead><tr><th>Item</th><th>Priority</th><th>Touches</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Remove <strong>orphaned</strong> prototype layouts / switchers</td><td><span class="ds-prio ds-prio--p3">P3</span></td><td>design switcher, home/dashboard prototypes, dead compare views</td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td><strong>Lightbox</strong> accessibility</td><td><span class="ds-prio ds-prio--p2">P2</span></td><td><code>ProductVideosSection</code> video modal</td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td><strong>Consent-gated</strong> analytics</td><td><span class="ds-prio ds-prio--p2">P2</span></td><td><code>CookieConsentRoot</code> / Hotjar</td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td>Standardise <strong>icon set</strong> + <strong>disabled state</strong></td><td><span class="ds-prio ds-prio--p3">P3</span></td><td>web-awesome icons, <code>Button</code>, toggles</td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+      </tbody>
+    </table>
+    <p>
+      How to read this report: each section presents the <strong>Option A / B</strong> that was on the table (rendered
+      live using the DS preview classes where useful), then the deletion or migration map that was applied. Every section is
+      now <span class="ds-status ds-status--canonical">Shipped</span>; the chosen option is recorded in the
+      <a href="#decision-log">decision log</a>. Several §3 items were <em>removals</em>, so the &ldquo;preview&rdquo; is the
+      reachability evidence rather than a visual.
+    </p>
+
+    <h2>2. What this round builds on</h2>
+    <p>Round 4 is mostly subtraction plus two targeted a11y fixes; it reuses Round 2/3 primitives rather than adding new ones.</p>
+    <table class="ds-table">
+      <thead><tr><th>Already shipped</th><th>Where</th><th>Round 4 use</th></tr></thead>
+      <tbody>
+        <tr><td><code>Modal</code> (portal, focus trap, escape, restore, scroll-lock)</td><td><code>components/ui/Modal.tsx</code> (R2)</td><td>Target for the video lightbox (&sect;4)</td></tr>
+        <tr><td>Live route map (<code>HomePublicContent</code>, <code>DashboardV4</code>)</td><td>v1 audit reachability pass</td><td>Confirms what is safe to delete (&sect;3)</td></tr>
+        <tr><td>Canonical <code>Button</code> (native <code>disabled</code> + <code>loading</code>)</td><td><code>components/ui/Button.tsx</code> (R2)</td><td>Home for the disabled-state convention (&sect;6)</td></tr>
+        <tr><td>lucide-react (31 files) + <code>HealthIcons</code> condition glyphs</td><td>across the app</td><td>The set to standardise on (&sect;6)</td></tr>
+      </tbody>
+    </table>
+    <h2 id="dead">3. Remove orphaned prototype code <span class="ds-prio ds-prio--p3">P3</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      A reachability pass from the live routes (<code>/</code> &rarr; hero + <code>HomePublicContent</code>; <code>/dashboard</code>
+      &rarr; <code>DashboardV4</code>) shows a whole prototype chain that nothing renders any more: an A/B design switcher, an
+      interactive home/dashboard switcher, two dashboard prototypes and several dead compare/home pieces. None are mounted
+      from a route or layout.
+    </p>
+
+    <h3>3.1 Reachability evidence</h3>
+    <div class="ds-example">
+      <div class="ds-example__stack" style="gap:8px;max-width:600px">
+        <div class="ds-space-row"><span class="ds-space-meta"><code>HomeBelowHeroInteractive</code> &rarr; <code>DashboardSwitcher</code> &rarr; <code>DashboardV2/V3</code>, full <code>HomeLayoutV4</code> &mdash; zero importers</span><span class="ds-space-bar" style="width:8%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta"><code>design/DesignProvider</code> + <code>DesignSwitcher</code> + <code>lib/design/*</code> &mdash; never mounted, cookie never set</span><span class="ds-space-bar" style="width:6%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta"><code>HomeLayoutV1/V2/V3</code> + their exclusive sections in <code>HomeFragments.tsx</code> &mdash; no importers</span><span class="ds-space-bar" style="width:10%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta"><code>CompareViewToggle</code> + <code>CompareMatrixView</code> &mdash; built, not surfaced (workspace view is canonical)</span><span class="ds-space-bar" style="width:14%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta"><code>lib/homeLayoutStorage.ts</code> &mdash; written by login / select-entity, <strong>never read</strong></span><span class="ds-space-bar" style="width:12%"></span></div>
+      </div>
+    </div>
+    <p class="ds-u-muted" style="font-size:.82rem">
+      Naming trap: <code>HomeLayoutV4</code> is <em>not</em> the live home (that is <code>HomePublicContent</code>), but it still
+      exports two <strong>live</strong> widgets (<code>NewsListConcept</code>, <code>CampaignsColumnConcept</code>). <code>DashboardV4</code>
+      <em>is</em> the live dashboard. So two files need surgical edits, not deletion.
+    </p>
+
+    <h3>3.2 Choice DEAD-1 &mdash; deletion scope</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; delete the full dead chain (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Remove <code>design/DesignProvider</code>, <code>DesignSwitcher</code>, <code>lib/design/config.ts</code>, <code>lib/design/server.ts</code>, <code>HomeBelowHeroInteractive</code>, <code>DashboardSwitcher</code>, <code>DashboardV2</code>, <code>DashboardV3</code>. Biggest cleanup, all proven unreachable.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; conservative</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Delete only the never-referenced <code>design/*</code> + switcher chain; leave the dashboard prototypes (<code>DashboardV2/V3</code>) in place for now.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.3 Choice DEAD-2 &mdash; HomeLayoutV4 (surgical)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; extract live widgets, delete the rest (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Move <code>NewsListConcept</code> + <code>CampaignsColumnConcept</code> (+ <code>HomeLayoutV4Props</code>) into a small <code>components/home/concept/</code> module; delete the dead full <code>HomeLayoutV4</code> layout and <code>FeaturedTherapeuticBand</code>.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; leave intact</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep <code>HomeLayoutV4.tsx</code> as-is (dead full layout retained). Lowest churn, but the dead code stays.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.4 Choice DEAD-3 &mdash; HomeFragments (surgical)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; trim dead layouts/sections (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Remove <code>HomeLayoutV1/V2/V3</code> and the section variants used only by them; keep the live <code>ImpactSection</code> + <code>PrototypeNoteSection</code>.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; leave untouched</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Defer; only delete whole standalone files this round.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.5 Choices DEAD-4 / 5 / 6 &mdash; the rest</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">DEAD-4 &mdash; <code>homeLayoutStorage</code> (recommend A: delete)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Remove <code>lib/homeLayoutStorage.ts</code> and the write-only calls in <code>app/login/page.tsx</code> and <code>SelectEntityForm.tsx</code>. (B = keep.)</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">DEAD-5 &mdash; compare matrix (recommend <strong>B: keep</strong>)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0"><code>REQUIREMENTS_DELTA</code> CMP-001 says the matrix view is intentionally built-but-unsurfaced. A = delete <code>CompareViewToggle</code> + <code>CompareMatrixView</code> + trim <code>compareConfig</code>.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">DEAD-6 &mdash; <code>DashboardCharts</code> (recommend A: delete)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0"><code>app/DashboardCharts.tsx</code> is only reached via the dead dataset band. (B = keep.)</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.6 Deletion / extraction map</h3>
+    <table class="ds-table">
+      <thead><tr><th>Target</th><th>File(s)</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>Design A/B switcher</td><td><code>components/design/DesignProvider.tsx</code>, <code>DesignSwitcher.tsx</code>, <code>lib/design/config.ts</code>, <code>lib/design/server.ts</code></td><td><span class="ds-status ds-status--orphan">Delete (DEAD-1)</span></td></tr>
+        <tr><td>Home/dashboard switcher</td><td><code>components/home/HomeBelowHeroInteractive.tsx</code>, <code>dashboard/DashboardSwitcher.tsx</code>, <code>DashboardV2.tsx</code>, <code>DashboardV3.tsx</code></td><td><span class="ds-status ds-status--orphan">Delete (DEAD-1)</span></td></tr>
+        <tr><td>HomeLayoutV4 file</td><td><code>components/home/HomeLayoutV4.tsx</code></td><td>Extract 2 live widgets, delete dead layout (DEAD-2)</td></tr>
+        <tr><td>HomeFragments prototypes</td><td><code>components/home/HomeFragments.tsx</code></td><td>Trim V1/V2/V3 + exclusive sections (DEAD-3)</td></tr>
+        <tr><td>Legacy layout pref</td><td><code>lib/homeLayoutStorage.ts</code> + calls in login / select-entity</td><td>Delete (DEAD-4)</td></tr>
+        <tr><td>Compare matrix</td><td><code>compare/CompareViewToggle.tsx</code>, <code>CompareMatrixView.tsx</code>, <code>lib/compareConfig.ts</code></td><td><span class="ds-status ds-status--canonical">Keep (DEAD-5 B)</span></td></tr>
+        <tr><td>Dataset charts</td><td><code>app/DashboardCharts.tsx</code></td><td>Delete (DEAD-6)</td></tr>
+        <tr><td>Concept steps band, original browse</td><td><code>components/home/ConceptStepsBand.tsx</code>, <code>HomeLayoutOriginal.tsx</code></td><td>Delete once DEAD-2/3 land</td></tr>
+      </tbody>
+    </table>
+    <div class="ds-note">
+      <strong>Safety.</strong> Each deletion is gated on a <code>tsc --noEmit</code> + <code>eslint</code> pass and a check that the
+      symbol has no remaining importers. Live widgets are extracted <em>before</em> their host file is touched.
+    </div>
+    <div class="ds-note ds-note--source">Source: v1 audit reachability pass; <code>app/page.tsx</code>, <code>app/dashboard/page.tsx</code>, <code>components/home/*</code>, <code>components/design/*</code>, <code>components/compare/*</code>.</div>
+
+    <h2 id="lightbox">4. Lightbox accessibility <span class="ds-prio ds-prio--p2">P2</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      The product-detail video lightbox (<code>components/ProductVideosSection.tsx</code>) opens a full-screen overlay with a
+      hand-rolled Escape handler and body scroll-lock, but it <strong>does not trap focus</strong>, does not restore focus to
+      the trigger on close, renders inline (not via a portal) and has <strong>no accessible name</strong> on the dialog or the
+      <code>&lt;iframe&gt;</code>. The Round 2 <code>Modal</code> already solves every one of these.
+    </p>
+
+    <h3>4.1 Current gaps</h3>
+    <table class="ds-table">
+      <thead><tr><th>Concern</th><th>Today</th><th>Via <code>Modal</code></th></tr></thead>
+      <tbody>
+        <tr><td>Focus trap</td><td><span class="ds-status ds-status--duplicate">None</span></td><td><span class="ds-status ds-status--canonical">Built-in</span></td></tr>
+        <tr><td>Focus restore on close</td><td><span class="ds-status ds-status--duplicate">None</span></td><td><span class="ds-status ds-status--canonical"><code>restoreFocus</code></span></td></tr>
+        <tr><td>Portal + scrim</td><td>Inline overlay</td><td><span class="ds-status ds-status--canonical">Portal</span></td></tr>
+        <tr><td>Escape + scroll-lock</td><td>Bespoke effect</td><td><span class="ds-status ds-status--canonical">Built-in</span></td></tr>
+        <tr><td>Accessible name</td><td><span class="ds-status ds-status--duplicate">Missing</span></td><td><code>ariaLabel</code> + iframe <code>title</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.2 Choice LIGHT-1 &mdash; approach</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; refactor onto <code>&lt;Modal variant="center"&gt;</code> (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Use <code>scrimClassName="bg-black/75"</code>, a transparent <code>panelClassName</code>, <code>initialFocusRef</code> on the close button and <code>restoreFocus="previous"</code>; delete the manual Escape/scroll-lock effect. Inherits the trap + portal for free.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; patch the bespoke overlay</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep the custom overlay but add trap / restore / portal by importing the same hooks (<code>useFocusTrap</code>, <code>useLockBodyScroll</code>). More code, diverges from the primitive.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.3 Choice LIGHT-2 &mdash; accessible name</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; dynamic <code>ariaLabel</code> + iframe <code>title</code> (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Set the dialog <code>ariaLabel</code> and the <code>&lt;iframe title&gt;</code> to the selected video&rsquo;s title. No visible chrome change.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; visible heading + <code>aria-labelledby</code></p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Add a visible title bar above the player and label the dialog from it. More visual change to the lightbox.</p>
+        </div>
+      </div>
+    </div>
+
+    <h4>Preview &mdash; trapped, labelled video dialog</h4>
+    <div class="ds-example ds-example--surface">
+      <div style="position:relative;max-width:480px;margin:0 auto;background:rgba(0,0,0,.75);border-radius:var(--radius-lg);padding:28px">
+        <div style="position:relative;background:#000;border-radius:var(--radius-md);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;color:#fff">
+          <span aria-hidden="true" style="font-size:2rem">&#9658;</span>
+          <button type="button" aria-label="Close video" style="position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:9999px;border:0;background:rgba(255,255,255,.9);color:#000;font-weight:700;cursor:pointer">&times;</button>
+        </div>
+        <p class="ds-u-muted ds-u-mt0" style="color:#fff;font-size:.78rem;margin-top:8px">role=&ldquo;dialog&rdquo; &middot; aria-label=&ldquo;myCOPD &mdash; patient overview&rdquo; &middot; focus trapped, restored on close</p>
+      </div>
+    </div>
+    <div class="ds-note ds-note--source">Source: <a href="/DS/components/modals.html">Modals</a>; <code>components/ProductVideosSection.tsx</code>, <code>components/ui/Modal.tsx</code>.</div>
+
+    <h2 id="consent">5. Consent-gated analytics <span class="ds-prio ds-prio--p2">P2</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      Today <code>HotjarWhenConsented</code> in <code>components/CookieConsentRoot.tsx</code> loads Hotjar unless the user has
+      <em>explicitly rejected</em> &mdash; so analytics runs for visitors who have not yet answered the banner. That is an
+      opt-out posture, while the <code>/cookies</code> copy and the <a href="/DS/patterns/consent.html">consent pattern</a>
+      describe opt-in. This section reconciles policy and copy.
+    </p>
+
+    <h3>5.1 Current flow</h3>
+    <div class="ds-example">
+      <div class="ds-example__stack" style="gap:8px;max-width:600px">
+        <div class="ds-space-row"><span class="ds-space-meta">consent state <code>'unset'</code> (banner unanswered) &rarr; <strong>Hotjar loads</strong></span><span class="ds-space-bar" style="width:100%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta">state <code>'analytics'</code> (accepted) &rarr; Hotjar loads</span><span class="ds-space-bar" style="width:100%"></span></div>
+        <div class="ds-space-row"><span class="ds-space-meta">state <code>'essential'</code> (rejected) &rarr; Hotjar blocked</span><span class="ds-space-bar" style="width:6%"></span></div>
+      </div>
+    </div>
+    <p class="ds-u-muted" style="font-size:.82rem">The gap is the first row: a visitor who has not chosen yet is already being tracked.</p>
+
+    <h3>5.2 Choice CONSENT-1 &mdash; policy</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; strict opt-in (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Load Hotjar only when <code>state === 'analytics'</code> &mdash; a one-line change in <code>CookieConsentRoot</code>. Unanswered &rarr; no analytics, matching the copy and GDPR/PECR opt-in.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; keep opt-out, fix docs only</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Leave the load-unless-rejected behaviour and instead rewrite the <code>/cookies</code> copy + consent pattern to describe opt-out honestly.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>5.3 Choice CONSENT-2 &mdash; align copy &amp; naming <span class="ds-u-muted" style="font-weight:400">(proposed)</span></h3>
+    <p class="ds-u-muted" style="font-size:.85rem">Reconcile the <code>HotjarWhenConsented</code> JSDoc, the <code>/cookies</code> page copy and <a href="/DS/patterns/consent.html">patterns/consent.html</a> with whichever policy CONSENT-1 picks, so all three agree.</p>
+
+    <h3>5.4 Choice CONSENT-3 &mdash; post-choice confirmation strip</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; add the strip</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Add the &ldquo;You&rsquo;ve accepted/rejected analytics &mdash; change&rdquo; confirmation strip from the DS consent pattern.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; defer (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep Round 4 tight; the strip is a nicety, not a compliance fix. Revisit later.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-note ds-note--source">Source: <a href="/DS/patterns/consent.html">Consent &amp; cookies pattern</a>; <code>components/CookieConsentRoot.tsx</code>, <code>app/cookies/</code>.</div>
+
+    <h2 id="icons">6. Standardise icon set + disabled state <span class="ds-prio ds-prio--p3">P3</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      Two small consistency items. <strong>Icons</strong> come from three sources &mdash; lucide-react (the de-facto set, 31
+      files), a handful of <code>&lt;wa-icon&gt;</code> web-awesome custom elements, and the bespoke <code>HealthIcons</code>
+      condition glyphs. <strong>Disabled state</strong> mixes native <code>disabled</code>, <code>aria-disabled</code> and a
+      drift of <code>opacity-40/45/50</code> values.
+    </p>
+
+    <h3>6.1 Icon sources today</h3>
+    <table class="ds-table">
+      <thead><tr><th>Source</th><th>Usage</th><th>Plan</th></tr></thead>
+      <tbody>
+        <tr><td>lucide-react</td><td>31 files (nav, buttons, widgets&hellip;)</td><td><span class="ds-status ds-status--canonical">Canonical set</span></td></tr>
+        <tr><td><code>&lt;wa-icon&gt;</code> (web-awesome)</td><td>5 usages: Save, Compare, EOI, Share</td><td>Migrate to lucide (ICON-1)</td></tr>
+        <tr><td>Inline hamburger SVG</td><td><code>components/Nav.tsx</code></td><td>lucide <code>Menu</code>/<code>X</code> (ICON-2)</td></tr>
+        <tr><td><code>HealthIcons</code> condition glyphs</td><td>condition chips / filters</td><td><span class="ds-status ds-status--canonical">Keep</span> (domain glyphs)</td></tr>
+        <tr><td><code>HealthIcons</code> unused exports</td><td><code>SearchIcon</code>, <code>ClipboardCheckIcon</code>, <code>BriefcaseIcon</code></td><td>Remove (ICON-3)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>6.2 Choice ICON-1 &mdash; target set</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; lucide as the single UI set (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Migrate the 5 <code>wa-icon</code> usages (<code>SaveToggleButton</code>, <code>CompareToggleButton</code>, <code>ExpressInterestWhiteButton</code>, <code>SharePagePanel</code>) to lucide (<code>Bookmark</code>/<code>Share2</code>/<code>Mail</code>/<code>GitCompare</code>), handle the saved state via lucide <code>fill</code>, and drop the <code>@awesome.me/webawesome</code> dep + <code>webawesome-elements.d.ts</code>.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; keep web-awesome for the bookmark fill</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Migrate everything except the saved-bookmark fill toggle, which stays on web-awesome. Keeps the extra dependency.</p>
+        </div>
+      </div>
+    </div>
+    <h4>Preview &mdash; lucide equivalents</h4>
+    <div class="ds-example">
+      <div class="ds-example__row" style="gap:24px;flex-wrap:wrap;align-items:center">
+        <span style="display:inline-flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:.85rem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Bookmark</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:.85rem"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--nhs-blue)" stroke="var(--nhs-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Saved (fill)</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:.85rem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share2</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:.85rem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Mail</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:.85rem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="3"/><path d="M12 6h5a2 2 0 0 1 2 2v7"/><path d="m15 9-3-3 3-3"/><circle cx="19" cy="18" r="3"/><path d="M12 18H7a2 2 0 0 1-2-2V9"/><path d="m9 15 3 3-3 3"/></svg> GitCompare</span>
+      </div>
+    </div>
+
+    <h3>6.3 Choices ICON-2 / 3 <span class="ds-u-muted" style="font-weight:400">(proposed)</span></h3>
+    <p class="ds-u-muted" style="font-size:.85rem"><strong>ICON-2</strong> &mdash; swap the inline hamburger SVG in <code>components/Nav.tsx</code> for lucide <code>Menu</code>/<code>X</code>. <strong>ICON-3</strong> &mdash; remove the 3 unused <code>HealthIcons</code> exports (<code>SearchIcon</code>, <code>ClipboardCheckIcon</code>, <code>BriefcaseIcon</code>); keep the <code>ConditionIcon</code> glyphs.</p>
+
+    <h3>6.4 Choice DIS-1 &mdash; disabled convention</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; native <code>disabled</code> + <code>Button</code> escape hatch (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep native <code>disabled</code> canonical, and add <code>ariaDisabled</code> + <code>disabledReason</code> props to <code>Button</code> for the focusable-disabled-with-tooltip case; route <code>CompareToggleButton</code> through it.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; document the exception</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep <code>CompareToggleButton</code> as the single documented <code>aria-disabled</code> exception; no <code>Button</code> change.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>6.5 Choice DIS-2 &mdash; visual tokens <span class="ds-u-muted" style="font-weight:400">(proposed)</span></h3>
+    <div class="ds-example">
+      <div class="ds-example__row" style="gap:24px;flex-wrap:wrap;align-items:center">
+        <button type="button" class="ds-btn ds-btn--primary" disabled style="opacity:.6;cursor:not-allowed">opacity-60 (canonical)</button>
+        <button type="button" class="ds-btn ds-btn--primary" disabled style="opacity:.4;cursor:not-allowed">opacity-40 (drift)</button>
+        <button type="button" class="ds-btn ds-btn--primary" disabled style="opacity:.45;cursor:not-allowed">opacity-45 (drift)</button>
+        <button type="button" class="ds-btn ds-btn--primary" disabled style="opacity:.5;cursor:not-allowed">opacity-50 (drift)</button>
+      </div>
+    </div>
+    <p class="ds-u-muted" style="font-size:.82rem">Standardise disabled on <code>opacity-60</code> + <code>cursor-not-allowed</code>, fixing the <code>opacity-40/45/50</code> drift in the AI and org-settings raw buttons.</p>
+    <div class="ds-note ds-note--source">Source: <a href="/DS/styles/iconography.html">Iconography</a>, <a href="/DS/components/buttons.html">Buttons</a>; <code>SaveToggleButton</code>, <code>CompareToggleButton</code>, <code>SharePagePanel</code>, <code>Nav.tsx</code>, <code>HealthIcons</code>, <code>components/ui/Button.tsx</code>.</div>
+
+    <h2 id="decision-log">7. Decision log</h2>
+    <p>Choices applied this round. Where the pick differed from the recommendation it is flagged.</p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th><th>Chosen &amp; applied</th></tr></thead>
+      <tbody>
+        <tr><td>DEAD-1</td><td>Dead chain deletion scope</td><td>A &mdash; delete full chain</td><td>A &mdash; full design + dashboard switcher chain deleted</td></tr>
+        <tr><td>DEAD-2</td><td>HomeLayoutV4 fate</td><td>A &mdash; extract live widgets, delete rest</td><td>A &mdash; widgets moved to <code>home/concept/</code>, file deleted</td></tr>
+        <tr><td>DEAD-3</td><td>HomeFragments trim</td><td>A &mdash; remove V1/V2/V3</td><td>A &mdash; trimmed to <code>ImpactSection</code>/<code>PrototypeNoteSection</code> + types</td></tr>
+        <tr><td>DEAD-4</td><td><code>homeLayoutStorage</code></td><td>A &mdash; delete</td><td>A &mdash; deleted + login/select-entity calls removed</td></tr>
+        <tr><td>DEAD-5</td><td>Compare matrix</td><td><strong>B &mdash; keep</strong> (CMP-001)</td><td><strong>B &mdash; kept</strong> (intentionally unsurfaced)</td></tr>
+        <tr><td>DEAD-6</td><td><code>DashboardCharts</code></td><td>A &mdash; delete</td><td>A &mdash; deleted</td></tr>
+        <tr><td>LIGHT-1</td><td>Lightbox approach</td><td>A &mdash; refactor onto <code>Modal</code></td><td><strong>B &mdash; bespoke overlay + trap/restore/portal hooks</strong></td></tr>
+        <tr><td>LIGHT-2</td><td>Accessible name</td><td>A &mdash; <code>ariaLabel</code> + iframe <code>title</code></td><td><strong>B &mdash; visible heading + <code>aria-labelledby</code></strong></td></tr>
+        <tr><td>CONSENT-1</td><td>Analytics policy</td><td>A &mdash; strict opt-in</td><td><strong>B &mdash; kept opt-out, docs/copy aligned</strong></td></tr>
+        <tr><td>CONSENT-2</td><td>Align copy &amp; naming</td><td>Proposed</td><td>As proposed &mdash; banner/cookies/JSDoc/pattern reconciled</td></tr>
+        <tr><td>CONSENT-3</td><td>Confirmation strip</td><td>B &mdash; defer</td><td>B &mdash; deferred</td></tr>
+        <tr><td>ICON-1</td><td>Target icon set</td><td>A &mdash; lucide only, drop web-awesome</td><td>A &mdash; 4 icons migrated, <code>@awesome.me/webawesome</code> dropped</td></tr>
+        <tr><td>ICON-2</td><td>Nav hamburger</td><td>Proposed &mdash; lucide <code>Menu</code>/<code>X</code></td><td>As proposed</td></tr>
+        <tr><td>ICON-3</td><td>Unused HealthIcons exports</td><td>Proposed &mdash; remove 3</td><td>As proposed &mdash; <code>SearchIcon</code>/<code>ClipboardCheckIcon</code>/<code>BriefcaseIcon</code> removed</td></tr>
+        <tr><td>DIS-1</td><td>Disabled convention</td><td>A &mdash; native + <code>Button</code> escape hatch</td><td>A &mdash; <code>ariaDisabled</code>/<code>disabledReason</code> added; <code>CompareToggleButton</code> routed</td></tr>
+        <tr><td>DIS-2</td><td>Disabled visual tokens</td><td>Proposed &mdash; <code>opacity-60</code></td><td><strong><code>opacity-40</code></strong> set as canonical (Button + raw buttons)</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="ships">8. Shipped this round</h2>
+    <ul>
+      <li><strong>Orphan removal (&sect;3)</strong> &mdash; deleted the proven-dead chain (<code>design/*</code>, <code>DesignSwitcher</code>, <code>lib/design/*</code>, <code>HomeBelowHeroInteractive</code>, <code>DashboardSwitcher</code>, <code>DashboardV2/V3</code>); extracted <code>NewsListConcept</code> + <code>CampaignsColumnConcept</code> (+ <code>HomeLayoutV4Props</code>) into <code>components/home/concept/ConceptColumns.tsx</code> and deleted <code>HomeLayoutV4</code>, <code>HomeLayoutOriginal</code>, <code>ConceptStepsBand</code>; trimmed <code>HomeFragments</code> to the live <code>ImpactSection</code>/<code>PrototypeNoteSection</code> + shared types; deleted <code>lib/homeLayoutStorage.ts</code> (+ login/select-entity calls) and <code>app/DashboardCharts.tsx</code>. Compare matrix kept (DEAD-5 B). Gated on a clean <code>tsc</code> + <code>eslint</code>.</li>
+      <li><strong>Lightbox a11y (&sect;4)</strong> &mdash; kept the bespoke overlay (LIGHT-1 B) but added a focus trap, focus restore to the trigger, body-scroll lock, Escape and a portal via the shared <code>useFocusTrap</code>/<code>useEscape</code>/<code>useLockBodyScroll</code> hooks; added a visible title bar labelling the dialog via <code>aria-labelledby</code> and set the iframe <code>title</code> to the video title (LIGHT-2 B).</li>
+      <li><strong>Consent (&sect;5)</strong> &mdash; kept the opt-out policy (CONSENT-1 B) and made it honest: aligned the <code>CookieConsentRoot</code> comment, <code>HotjarWhenConsented</code> JSDoc, <code>/cookies</code> copy and the <a href="/DS/patterns/consent.html">consent pattern</a>. Confirmation strip deferred (CONSENT-3 B).</li>
+      <li><strong>Icons + disabled (&sect;6)</strong> &mdash; migrated the 4 <code>wa-icon</code> usages to lucide (<code>Bookmark</code> with <code>fill</code>, <code>GitCompare</code>, <code>Mail</code>, <code>Share2</code>) and removed the <code>@awesome.me/webawesome</code> dependency + its type shim; swapped the nav hamburger for lucide <code>Menu</code>/<code>X</code>; removed 3 unused <code>HealthIcons</code> exports. Added <code>ariaDisabled</code> + <code>disabledReason</code> to <code>Button</code> and routed <code>CompareToggleButton</code> through it (DIS-1 A); standardised the disabled token on <strong><code>opacity-40</code></strong> + <code>cursor-not-allowed</code> (DIS-2), fixing the org-settings / EOI drift.</li>
+      <li><strong>DS pages updated:</strong> <a href="/DS/styles/iconography.html">Iconography</a>, <a href="/DS/components/buttons.html">Buttons</a>, <a href="/DS/components/modals.html">Modals</a>, <a href="/DS/patterns/consent.html">Consent</a>; plus the <a href="/DS/Report-v1/index.html">v1</a> backlog.</li>
+    </ul>
+
+    <hr class="ds-rule">
+    <p class="ds-u-muted" style="font-size:.85rem">
+      Companion to the <a href="/DS/Report-v1/index.html">v1 audit</a>, <a href="/DS/Report-v2/index.html">v2 foundations</a>
+      and <a href="/DS/Report-v3/index.html">v3 consolidation</a>. v4 is the Round 4 decision record &mdash; cleanup &amp;
+      a11y polish, decisions applied &amp; shipped. Structure follows the
+      <a href="https://design-system.service.gov.uk/">GOV.UK Design System</a>.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

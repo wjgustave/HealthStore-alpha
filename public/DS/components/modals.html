@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Modals &amp; dialogs — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="modals">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Components</p>
+      <h1 class="ds-page-title">Modals &amp; dialogs</h1>
+      <p class="ds-lede">
+        Overlay surfaces for focused tasks. The overlay/panel/focus-trap recipe is now a single shared
+        <code>Modal</code> primitive (<code>components/ui/Modal.tsx</code>) with <code>center</code> and
+        <code>drawer</code> variants. The three portal modals and the AI drawer all run on it.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Component</div><div class="ds-meta__v"><code>components/ui/Modal.tsx</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Hooks</div><div class="ds-meta__v"><code>useFocusTrap</code>, <code>useEscape</code>, <code>useLockBodyScroll</code></div></div>
+    </div>
+
+    <h2>Anatomy (static preview)</h2>
+    <p>The modal sits on a blurred/tinted scrim. A header with a title and a close button, a scrollable body, and a footer with the primary action.</p>
+    <div class="ds-example ds-example--surface">
+      <div style="position:relative;border-radius:12px;overflow:hidden;background:rgba(26,35,50,0.35);padding:32px;min-height:280px;display:flex;align-items:center;justify-content:center">
+        <div role="dialog" aria-labelledby="m-title" aria-modal="true" style="width:100%;max-width:420px;background:#fff;border-radius:16px;box-shadow:var(--shadow-lg);overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;border-bottom:1px solid var(--border)">
+            <h3 id="m-title" class="ds-u-mt0" style="margin:0;font-size:1.1rem">Express interest in Clinitouch</h3>
+            <button class="ds-btn ds-btn--ghost ds-btn--icon" type="button" aria-label="Close">&times;</button>
+          </div>
+          <div style="padding:20px">
+            <div class="ds-field" style="margin-bottom:12px"><label class="ds-field__label">Your name</label><input class="ds-input" aria-label="Name demo" value="Alex Carter" readonly style="background:#F7F9FC"></div>
+            <div class="ds-field" style="margin-bottom:0"><label class="ds-field__label">Message to supplier</label><textarea class="ds-textarea" aria-label="Message demo"></textarea></div>
+          </div>
+          <div style="padding:16px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px">
+            <button class="ds-btn ds-btn--ghost" type="button">Cancel</button>
+            <button class="ds-btn ds-btn--primary" type="button">Send interest</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Destructive confirmation</h2>
+    <p><code>ClearDataModal</code> is a multi-step destructive flow — the confirm action uses the destructive variant.</p>
+    <div class="ds-example ds-example--surface">
+      <div role="dialog" aria-labelledby="m2-title" style="max-width:420px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-lg);padding:20px">
+        <h3 id="m2-title" class="ds-u-mt0" style="margin-top:0">Clear all organisation data?</h3>
+        <p class="ds-u-mt0" style="color:var(--text-secondary);font-size:.92rem">This removes saved apps, comparisons and expressions of interest for this organisation. This cannot be undone.</p>
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px">
+          <button class="ds-btn ds-btn--ghost" type="button">Cancel</button>
+          <button class="ds-btn ds-btn--destructive" type="button">Delete everything</button>
+        </div>
+      </div>
+    </div>
+
+    <h2>Modal behaviour matrix</h2>
+    <p>Task surfaces that use the shared <code>Modal</code> primitive or the same a11y hooks.</p>
+    <table class="ds-table">
+      <thead><tr><th>Shell</th><th>Variant</th><th>Portal</th><th>Escape</th><th>Focus trap</th><th>Restore focus</th></tr></thead>
+      <tbody>
+        <tr><td><code>ExpressInterestModal</code></td><td>center</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Previous</td></tr>
+        <tr><td><code>ClearDataModal</code></td><td>center</td><td>Yes</td><td>Yes (locked while loading)</td><td>Yes</td><td>Previous</td></tr>
+        <tr><td><code>SharePagePanel</code></td><td>center</td><td>Yes</td><td>Yes</td><td>Yes</td><td>To trigger</td></tr>
+        <tr><td><code>AiAdvisorPanel</code></td><td>drawer</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Previous</td></tr>
+        <tr><td><code>ProductVideosSection</code> lightbox</td><td>bespoke</td><td>Yes</td><td>Yes</td><td>Yes</td><td>To trigger</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ds-note">
+      <strong>Primitive.</strong> <code>&lt;Modal&gt;</code> handles portal, scrim, focus trap, Escape, body-scroll lock,
+      initial focus (<code>initialFocusRef</code>) and focus restore (<code>restoreFocus="previous" | "trigger"</code>).
+      Props include <code>variant</code>, <code>lockDismiss</code>, <code>keepMounted</code> (AI drawer retains its
+      conversation while closed) and <code>dismissable</code>.
+    </div>
+
+    <div class="ds-note">
+      <strong>Video lightbox.</strong> <code>ProductVideosSection</code> keeps bespoke YouTube-overlay markup but uses
+      the same hooks &mdash; <code>useFocusTrap</code>, <code>useEscape</code>, <code>useLockBodyScroll</code> &mdash;
+      a portal, <code>aria-labelledby</code> on a visible title bar, and focus restore to the trigger on close.
+    </div>
+
+    <h2>Accessibility checklist</h2>
+    <ul>
+      <li><code>role="dialog"</code> + <code>aria-modal="true"</code> + <code>aria-labelledby</code> on the title.</li>
+      <li>Focus moves into the dialog on open and is trapped inside while open.</li>
+      <li>Escape closes; focus returns to the triggering control.</li>
+      <li>Background content is inert / not tabbable.</li>
+    </ul>
+
+    <div class="ds-note ds-note--source">Source: <code>components/ui/Modal.tsx</code> (+ <code>useFocusTrap</code>, <code>useEscape</code>, <code>useLockBodyScroll</code>). Consumers: <code>ExpressInterestModal</code>, <code>ClearDataModal</code>, <code>SharePagePanel</code>, <code>AiAdvisorPanel</code>.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

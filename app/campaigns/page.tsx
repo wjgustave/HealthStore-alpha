@@ -24,8 +24,7 @@ export default function CampaignsPage() {
         {campaigns.map((item) => (
           <li
             key={item.id}
-            className="rounded-xl border bg-white p-5 shadow-sm"
-            style={{ borderColor: 'var(--border)' }}
+            className="hs-surface-card-sm p-5"
           >
             {item.organisation ? (
               <p className="mb-1 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
@@ -45,8 +44,8 @@ export default function CampaignsPage() {
       <div className="mt-12">
         <Link
           href="/"
-          className="text-sm font-semibold text-[#005EB8] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-          style={{ outlineColor: '#005EB8' }}
+          className="text-sm font-semibold text-[var(--nhs-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          style={{ outlineColor: 'var(--nhs-blue)' }}
         >
           ← Back to home
         </Link>

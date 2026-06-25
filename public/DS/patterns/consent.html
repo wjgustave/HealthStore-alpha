@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Cookie consent — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="consent">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Patterns</p>
+      <h1 class="ds-page-title">Cookie consent</h1>
+      <p class="ds-lede">
+        Analytics consent is requested via a banner and managed via the cookies policy page. The pattern mirrors the
+        GOV.UK cookie banner: a clear choice, no pre-ticked options, and an easy way to change the decision later.
+      </p>
+    </div>
+
+    <h2>Consent banner</h2>
+    <div class="ds-example ds-example--surface">
+      <div role="region" aria-label="Cookies on HealthStore" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:var(--shadow-md)">
+        <h3 class="ds-u-mt0" style="margin-top:0">Cookies on HealthStore</h3>
+        <p class="ds-u-mt0" style="color:var(--text-secondary)">We'd like to use analytics cookies to understand how you use the service and make improvements. We also use essential cookies to keep the service working.</p>
+        <div class="ds-u-row" style="margin-top:12px">
+          <button class="ds-btn ds-btn--primary" type="button">Accept analytics cookies</button>
+          <button class="ds-btn ds-btn--secondary" type="button">Reject analytics cookies</button>
+          <a href="#ds-main" class="ds-btn ds-btn--ghost">View cookies</a>
+        </div>
+      </div>
+    </div>
+
+    <h2>Confirmation</h2>
+    <p>After a choice, a brief confirmation replaces the question, with a link to change settings.</p>
+    <div class="ds-example ds-example--surface">
+      <div role="status" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px 20px;box-shadow:var(--shadow-sm)">
+        <p class="ds-u-mt0" style="margin:0">You've accepted analytics cookies. You can <a href="#ds-main">change your cookie settings</a> at any time.</p>
+      </div>
+    </div>
+
+    <h2>Reset control</h2>
+    <p>The cookies policy page offers a reset button (<code>ResetCookieConsentButton</code>) that clears the stored choice and reloads.</p>
+    <div class="ds-example ds-example--surface">
+      <button class="ds-btn ds-btn--primary" type="button">Reset cookie choices</button>
+    </div>
+
+    <div class="ds-note">
+      <strong>Consent policy.</strong> Opt-out: Hotjar runs while the banner is showing (<code>undecided</code>) and after
+      the user accepts; it is withheld only when the user explicitly rejects. The banner copy, the
+      <a href="/cookies">cookies page</a> and <code>HotjarWhenConsented</code> document this behaviour.
+    </div>
+
+    <h2>Components used</h2>
+    <p><a href="/DS/components/buttons.html">Buttons</a> &middot; <a href="/DS/components/alerts.html">Region / status banner</a></p>
+
+    <div class="ds-note ds-note--source">Source: <code>components/CookieBanner.tsx</code>, <code>components/CookieConsentRoot.tsx</code>, <code>components/ResetCookieConsentButton.tsx</code>, <code>app/cookies/page.tsx</code>.</div>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

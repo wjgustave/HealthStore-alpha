@@ -4,26 +4,8 @@
  * See docs/COMPARE_CONTENT_MAP.md for the full inventory.
  */
 
-export type CompareViewId = 'a' | 'b'
-
-export const COMPARE_VIEW_IDS: readonly CompareViewId[] = ['a', 'b'] as const
-
-export const DEFAULT_COMPARE_VIEW: CompareViewId = 'a'
-
-export const COMPARE_VIEW_STORAGE_KEY = 'hs-compare-view'
-
-export const COMPARE_VIEW_LABELS: Record<CompareViewId, { short: string; long: string }> = {
-  a: { short: 'Matrix', long: 'Matrix view' },
-  b: { short: 'Workspace', long: 'Decision workspace' },
-}
-
-export function isCompareViewId(value: unknown): value is CompareViewId {
-  return value === 'a' || value === 'b'
-}
-
-export function coerceCompareViewId(value: string | undefined | null): CompareViewId {
-  return isCompareViewId(value) ? value : DEFAULT_COMPARE_VIEW
-}
+// R7 CMP-01: the unused matrix / view-toggle layout was removed. The decision workspace is the
+// shipped compare experience, so the dual-view config (CompareViewId, labels, storage key) is gone.
 
 export type CompareLensId = 'all' | 'clinical_safety' | 'finance_procurement' | 'ig_assurance'
 
@@ -39,7 +21,7 @@ export type CompareRowDef = {
   key: string
   label: string
   groupId: CompareGroupId
-  /** Highlighted in matrix view; default-open group in workspace view. */
+  /** Marks the group as default-open in the decision workspace. */
   decisionCritical?: boolean
   lensTags: CompareLensId[]
 }

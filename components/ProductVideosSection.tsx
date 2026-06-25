@@ -1,9 +1,13 @@
 'use client'
 
-import { useCallback, useEffect, useId, useState } from 'react'
+import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { Play } from 'lucide-react'
 import { SectionHeader } from '@/components/Badges'
+import { useEscape } from '@/components/ui/useEscape'
+import { useFocusTrap } from '@/components/ui/useFocusTrap'
+import { useLockBodyScroll } from '@/components/ui/useLockBodyScroll'
 import { youtubeEmbedUrl, youtubeThumbnailUrl, youtubeVideoIdFromUrl } from '@/lib/youtube'
 
 export type ProductVideoItem = {
@@ -19,7 +23,10 @@ type Props = {
 
 export default function ProductVideosSection({ videos, embedded = false }: Props) {
   const headingId = useId()
+  const dialogTitleId = useId()
   const [activeId, setActiveId] = useState<string | null>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
 
   const resolved = videos
     .map((v) => {
@@ -29,19 +36,23 @@ export default function ProductVideosSection({ videos, embedded = false }: Props
     .filter(Boolean) as (ProductVideoItem & { id: string })[]
 
   const close = useCallback(() => setActiveId(null), [])
+  const activeVideo = activeId ? resolved.find((v) => v.id === activeId) ?? null : null
+  const activeTitle = activeVideo?.title?.trim() || 'Product video'
 
+  // Focus the close button on open; restore focus to the trigger on close.
   useEffect(() => {
     if (!activeId) return
-    function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') close()
-    }
-    document.addEventListener('keydown', onKey)
-    document.body.style.overflow = 'hidden'
+    const previouslyFocused = document.activeElement as HTMLElement | null
+    const raf = requestAnimationFrame(() => closeButtonRef.current?.focus())
     return () => {
-      document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
+      cancelAnimationFrame(raf)
+      previouslyFocused?.focus?.()
     }
-  }, [activeId, close])
+  }, [activeId])
+
+  useLockBodyScroll(!!activeId)
+  useEscape(!!activeId, close)
+  useFocusTrap(dialogRef, !!activeId)
 
   if (resolved.length === 0) return null
 
@@ -53,7 +64,7 @@ export default function ProductVideosSection({ videos, embedded = false }: Props
             type="button"
             onClick={() => setActiveId(v.id)}
             className="group relative block w-full overflow-hidden rounded-xl border text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-            style={{ borderColor: 'var(--border)', outlineColor: '#005EB8' }}
+            style={{ borderColor: 'var(--border)', outlineColor: 'var(--nhs-blue)' }}
           >
             <span className="relative block aspect-video w-full bg-black">
               <Image
@@ -70,10 +81,10 @@ export default function ProductVideosSection({ videos, embedded = false }: Props
               >
                 <span
                   className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-md ring-1 ring-slate-200/90"
-                  style={{ color: '#005EB8' }}
+                  style={{ color: 'var(--nhs-blue)' }}
                   aria-hidden
                 >
-                  <Play className="ml-0.5 h-8 w-8 shrink-0" style={{ color: '#005EB8' }} strokeWidth={2.4} aria-hidden />
+                  <Play className="ml-0.5 h-8 w-8 shrink-0" style={{ color: 'var(--nhs-blue)' }} strokeWidth={2.4} aria-hidden />
                 </span>
               </span>
             </span>
@@ -119,36 +130,49 @@ export default function ProductVideosSection({ videos, embedded = false }: Props
         </section>
       )}
 
-      {activeId && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Video player"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) close()
-          }}
-        >
-          <div className="relative w-full max-w-4xl">
-            <button
-              type="button"
-              onClick={close}
-              className="absolute -top-10 right-0 rounded-md px-2 py-1 text-sm font-semibold text-white transition-colors hover:bg-white/15 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+      {activeVideo && typeof document !== 'undefined'
+        ? createPortal(
+            <div
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4"
+              role="presentation"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) close()
+              }}
             >
-              Close
-            </button>
-            <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-black shadow-2xl">
-              <iframe
-                title="YouTube video"
-                src={youtubeEmbedUrl(activeId, true)}
-                className="absolute inset-0 h-full w-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        </div>
-      )}
+              <div
+                ref={dialogRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={dialogTitleId}
+                className="relative w-full max-w-4xl outline-none"
+              >
+                <div className="mb-2 flex items-end justify-between gap-3">
+                  <h2 id={dialogTitleId} className="m-0 min-w-0 truncate text-sm font-semibold text-white">
+                    {activeTitle}
+                  </h2>
+                  <button
+                    ref={closeButtonRef}
+                    type="button"
+                    onClick={close}
+                    className="shrink-0 rounded-md px-2 py-1 text-sm font-semibold text-white transition-colors hover:bg-white/15 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  >
+                    Close
+                  </button>
+                </div>
+                <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-black shadow-2xl">
+                  <iframe
+                    title={activeTitle}
+                    src={youtubeEmbedUrl(activeVideo.id, true)}
+                    className="absolute inset-0 h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </>
   )
 }

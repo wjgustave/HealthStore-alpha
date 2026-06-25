@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Round 6 plan (v6) — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="report-v6">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Report &middot; v6 &middot; Shipped</p>
+      <h1 class="ds-page-title">Round 6 &mdash; experience &amp; reliability</h1>
+      <p class="ds-lede">
+        With the Round 2 primitives, Round 3 consolidation and Round 4 cleanup shipped, Round 6 turned to
+        <strong>feedback and resilience</strong>: a shared toast / live-region service so actions
+        <em>say</em> what happened, dashboard widgets that <strong>tell errors apart from genuinely empty</strong>,
+        the last unmigrated forms moved onto <code>FormField</code> + <code>Button</code> with real programmatic labels,
+        and an Expression-of-Interest form that lets people fill in missing contact details. This page started as a
+        <strong>decision document</strong> (like <a href="/DS/Report-v2/index.html">v2</a>,
+        <a href="/DS/Report-v3/index.html">v3</a> and <a href="/DS/Report-v4/index.html">v4</a>); the
+        <a href="#decision-log">decision log</a> now records the choices that were made and
+        <strong>everything below has shipped</strong>. The only deviation from the recommended defaults was
+        <strong>FB-2</strong>: toasts ship as a <strong>top-centre</strong> stack.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Round</div><div class="ds-meta__v">6 &middot; experience &amp; reliability</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Status</div><div class="ds-meta__v"><span class="ds-status ds-status--canonical">Shipped</span></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Scope</div><div class="ds-meta__v">Feedback service &middot; Error vs empty &middot; Form migration &middot; EOI prefill</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Implementation</div><div class="ds-meta__v">1 new provider (toasts) + small refactors; reuses R2/R3 primitives</div></div>
+    </div>
+
+    <h2>1. Round 6 at a glance</h2>
+    <table class="ds-table">
+      <thead><tr><th>Item</th><th>IDs</th><th>Priority</th><th>Touches</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Toast / live-region feedback service</strong>; wire save/remove/copy + provider errors</td><td>UX-01, UX-02, UX-06</td><td><span class="ds-prio ds-prio--p1">P1</span></td><td>new <code>ToastProvider</code>, <code>BookmarkProvider</code>, <code>CompareBasketProvider</code>, <code>SharePagePanel</code></td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td><strong>Distinguish error from empty</strong> on dashboard widgets + stat tiles</td><td>UX-03, UX-05</td><td><span class="ds-prio ds-prio--p1">P1</span></td><td><code>SavedAppsWidget</code>, <code>EoiActivityWidget</code>, <code>DashboardStatTiles</code>, providers, <code>WidgetShell</code></td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td><strong>Migrate org-settings</strong> (+ select-entity) to <code>FormField</code> + <code>Button</code>; fix labels</td><td>FRM-01, FRM-03, A11Y-01</td><td><span class="ds-prio ds-prio--p1">P1</span></td><td><code>OrgSettingsClient</code>, <code>SelectEntityForm</code></td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+        <tr><td><strong>EOI contact fields editable</strong> when prefill is empty</td><td>FRM-02</td><td><span class="ds-prio ds-prio--p1">P1</span></td><td><code>ExpressInterestModal</code>, EOI API route</td><td><span class="ds-status ds-status--canonical">Shipped</span></td></tr>
+      </tbody>
+    </table>
+    <p>
+      How to read this report: each section presents the <strong>Option A / B</strong> that was on the table (rendered live with
+      the DS preview classes where useful), then the migration / wiring map. Every section below has now
+      <span class="ds-status ds-status--canonical">Shipped</span>; the chosen option is recorded in the
+      <a href="#decision-log">decision log</a>.
+    </p>
+
+    <h2>2. What this round builds on</h2>
+    <p>Round 6 adds exactly one new primitive (the toast/live-region service); everything else reuses what Rounds 2&ndash;4 already shipped.</p>
+    <table class="ds-table">
+      <thead><tr><th>Already shipped</th><th>Where</th><th>Round 6 use</th></tr></thead>
+      <tbody>
+        <tr><td><code>FormField</code> + <code>TextInput</code>/<code>Select</code>/<code>Textarea</code> (label↔control wiring, <code>aria-describedby</code>, <code>aria-invalid</code>)</td><td><code>components/ui/FormField.tsx</code> (R3)</td><td>Migration target for org-settings (&sect;5) and EOI (&sect;6)</td></tr>
+        <tr><td>Canonical <code>Button</code> (variants, <code>loading</code>, <code>ariaDisabled</code>/<code>disabledReason</code>)</td><td><code>components/ui/Button.tsx</code> (R2/R4)</td><td>Replaces the 8 raw org-settings buttons (&sect;5)</td></tr>
+        <tr><td><code>WidgetShell</code> + <code>WidgetHeading</code></td><td><code>components/ui/WidgetShell.tsx</code> (R3)</td><td>Home for consistent loading / empty / error states (&sect;4)</td></tr>
+        <tr><td><code>Modal</code> (portal, focus trap, escape, restore)</td><td><code>components/ui/Modal.tsx</code> (R2)</td><td>Hosts the editable EOI form (&sect;6); reference for the toast portal (&sect;3)</td></tr>
+        <tr><td>Provider <code>error</code> values (set but mostly unshown)</td><td><code>BookmarkProvider</code>, <code>EoiProvider</code></td><td>The signal the widgets + toasts will surface (&sect;3, &sect;4)</td></tr>
+        <tr><td>Ad-hoc <code>aria-live</code> / <code>role="status"</code> patterns</td><td><code>SharePagePanel</code>, <code>CatalogueClient</code>, <code>CompareWorkspaceView</code></td><td>Consolidated behind one service (&sect;3)</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="feedback">3. Toast / live-region feedback service <span class="ds-prio ds-prio--p1">P1</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      Today every feature hand-rolls its own feedback. The audit found <strong>no centralised service</strong>: save/remove
+      failures set <code>BookmarkProvider.error</code> but <code>SaveToggleButton</code> <strong>never shows it</strong>; the
+      compare basket is silent on add/remove/blocked; only <code>SharePagePanel</code> announces copy success (via its own
+      inline <code>aria-live</code>); org-settings and EOI success are visual-only with no assistive-tech announcement. This
+      section designs one shared service and decides what to wire to it (UX-01, UX-02, UX-06).
+    </p>
+
+    <h3>3.1 Current feedback patterns (the fragmentation)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Surface</th><th>Today</th><th>Gap</th></tr></thead>
+      <tbody>
+        <tr><td>Save / remove (PDP, catalogue)</td><td>Button label + <code>aria-pressed</code> only</td><td><code>error</code> set but never surfaced; no success announcement</td></tr>
+        <tr><td>Compare add / remove / blocked</td><td>Button state + <code>title</code> tooltip on blocked</td><td>No announcement of add/remove or why blocked</td></tr>
+        <tr><td>Copy link / address (Share)</td><td><code>announce</code> + <code>role="status"</code> (inline, modal-only)</td><td>Bespoke; lost when modal closes; not reusable</td></tr>
+        <tr><td>Provider load failure (bookmarks, EOI)</td><td>Inline <code>role="alert"</code> on the full pages only</td><td>Dashboard widgets show empty instead (&sect;4)</td></tr>
+        <tr><td>Org-settings save success / error</td><td>Local <code>Banner</code> (no <code>role</code>/<code>aria-live</code>)</td><td>Not announced to screen readers</td></tr>
+      </tbody>
+    </table>
+
+    <h3>3.2 Choice FB-1 &mdash; service shape &amp; API</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; <code>ToastProvider</code> + <code>useToast()</code> hook (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">A React context mounted in <code>AppShell</code>, exposing <code>toast.success()</code>, <code>toast.error()</code>, <code>toast.info()</code>. Idiomatic, testable, easy to call from any client component or provider. Renders toasts in a portal.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; imperative singleton <code>notify(msg, {type})</code></p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">A module-level event emitter + one mounted <code>&lt;Toaster/&gt;</code>; callable without a hook. No provider wiring, but harder to test and less React-idiomatic; can fire before mount.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.3 Choice FB-2 &mdash; placement &amp; visual treatment</h3>
+    <p>Both previews are live (static HTML mock-ups of the proposed NHS-styled toasts).</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+        <div>
+          <p class="ds-example__label">Option A &mdash; bottom-centre stack (recommended)</p>
+          <div style="position:relative;height:170px;border:1px dashed var(--border);border-radius:12px;background:#f8fafc;overflow:hidden">
+            <div style="position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;width:min(320px,90%)">
+              <div style="display:flex;align-items:flex-start;gap:10px;background:#fff;border:1px solid #CBD5E1;border-left:4px solid #007F3B;border-radius:10px;padding:10px 12px;box-shadow:0 6px 20px rgba(15,23,42,.12)">
+                <span aria-hidden style="color:#007F3B;font-weight:700">&#10003;</span>
+                <span style="font-size:.85rem;color:#1A2332">Saved <strong>myCOPD</strong> to your saved apps.</span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:10px;background:#fff;border:1px solid #CBD5E1;border-left:4px solid #DA291C;border-radius:10px;padding:10px 12px;box-shadow:0 6px 20px rgba(15,23,42,.12)">
+                <span aria-hidden style="color:#DA291C;font-weight:700">!</span>
+                <span style="font-size:.85rem;color:#1A2332">Couldn&rsquo;t save &mdash; try again.</span>
+              </div>
+            </div>
+          </div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Thumb-reachable on mobile, away from the top nav; stacks upward, max ~3 visible.</p>
+        </div>
+        <div>
+          <p class="ds-example__label">Option B &mdash; top-right stack</p>
+          <div style="position:relative;height:170px;border:1px dashed var(--border);border-radius:12px;background:#f8fafc;overflow:hidden">
+            <div style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;width:min(300px,80%)">
+              <div style="display:flex;align-items:flex-start;gap:10px;background:#fff;border:1px solid #CBD5E1;border-left:4px solid #005EB8;border-radius:10px;padding:10px 12px;box-shadow:0 6px 20px rgba(15,23,42,.12)">
+                <span aria-hidden style="color:#005EB8;font-weight:700">i</span>
+                <span style="font-size:.85rem;color:#1A2332">Link copied to clipboard.</span>
+              </div>
+            </div>
+          </div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Familiar desktop convention; can collide with the sticky nav / AI strip on small screens.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="ds-u-muted" style="font-size:.85rem"><strong>Shipped (FB-2):</strong> neither A nor B &mdash; toasts ship as a <strong>top-centre</strong> stack (same NHS-styled card + coloured left border), so they clear the sticky nav on desktop and stay centred and reachable on mobile.</p>
+
+    <h3>3.4 Choice FB-3 &mdash; live-region semantics</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; dual regions: polite + assertive (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Success / info toasts live in a <code>role="status"</code> (polite) region; error toasts in a <code>role="alert"</code> (assertive) region so failures interrupt and are not missed. The visible toast <em>is</em> the live region.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; single polite region</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Everything announced politely from one region. Simpler, but errors may queue behind other speech and be missed.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.5 Choice FB-4 &mdash; what to wire now</h3>
+    <p>Proposed event &rarr; message mapping:</p>
+    <table class="ds-table">
+      <thead><tr><th>Event</th><th>Type</th><th>Message</th></tr></thead>
+      <tbody>
+        <tr><td>Save success</td><td>success</td><td>&ldquo;Saved {app} to your saved apps.&rdquo;</td></tr>
+        <tr><td>Remove success</td><td>info</td><td>&ldquo;Removed {app} from saved apps.&rdquo;</td></tr>
+        <tr><td>Save / remove failure</td><td>error</td><td>&ldquo;Couldn&rsquo;t save &mdash; try again.&rdquo; (from provider <code>error</code>)</td></tr>
+        <tr><td>Copy link / address</td><td>success / error</td><td>&ldquo;Link copied to clipboard.&rdquo; / &ldquo;Couldn&rsquo;t copy &mdash; copy from the address bar.&rdquo;</td></tr>
+        <tr><td>Provider load failure</td><td>error</td><td>&ldquo;Couldn&rsquo;t load your saved apps.&rdquo; (paired with &sect;4 widget state)</td></tr>
+        <tr><td>Compare add / remove</td><td>info</td><td>&ldquo;Added to comparison ({n}/4).&rdquo; / &ldquo;Removed from comparison.&rdquo;</td></tr>
+        <tr><td>Compare blocked</td><td>info</td><td>&ldquo;Comparison is full (max 4).&rdquo; / &ldquo;Can&rsquo;t compare across conditions.&rdquo;</td></tr>
+      </tbody>
+    </table>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; wire the full set above now (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Save/remove + copy + provider errors <em>and</em> compare-basket feedback this round.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; defer compare-basket announcements</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Wire only save/remove + copy + provider errors now (UX-02/06); add compare toasts in a later round.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.6 Choice FB-5 &mdash; existing inline announcers</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; consolidate transient feedback, keep contextual regions (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Route one-off action feedback (copy, save) through the service and remove <code>SharePagePanel</code>&rsquo;s bespoke <code>announce</code>. Keep the <em>contextual</em> sr-only count regions in <code>CatalogueClient</code> / <code>CompareWorkspaceView</code> (they describe ongoing list state, not events).</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; leave existing announcers in place</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Only add toasts where there is nothing today; accept some duplication in Share.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="errors">4. Distinguish error from empty <span class="ds-prio ds-prio--p1">P1</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      The live dashboard (<code>DashboardV4</code>) widgets fetch through <code>BookmarkProvider</code> / <code>EoiProvider</code>,
+      which set an <code>error</code> value on failure but also reset to an empty array. The widgets <strong>ignore
+      <code>error</code></strong>, so a failed fetch looks identical to &ldquo;you have nothing yet&rdquo;. The stat tiles are
+      worse: they show a misleading <strong><code>0</code></strong> during loading <em>and</em> on error (UX-03, UX-05).
+    </p>
+
+    <h3>4.1 Current widget states</h3>
+    <table class="ds-table">
+      <thead><tr><th>Widget</th><th>Loading</th><th>Empty</th><th>Error</th><th>Conflated?</th></tr></thead>
+      <tbody>
+        <tr><td><code>SavedAppsWidget</code></td><td>&ldquo;Loading&hellip;&rdquo;</td><td>&ldquo;You have not saved any apps yet.&rdquo;</td><td><span class="ds-status ds-status--duplicate">missing</span></td><td>Yes &mdash; error shows empty copy</td></tr>
+        <tr><td><code>EoiActivityWidget</code></td><td>&ldquo;Loading&hellip;&rdquo;</td><td>&ldquo;No expressions of interest yet.&rdquo;</td><td><span class="ds-status ds-status--duplicate">missing</span></td><td>Yes &mdash; error shows empty copy</td></tr>
+        <tr><td><code>DashboardStatTiles</code></td><td>shows <code>0</code></td><td>shows <code>0</code></td><td>shows <code>0</code></td><td><span class="ds-status ds-status--duplicate">Yes &mdash; all three</span></td></tr>
+        <tr><td><code>CommissionedAppsWidget</code></td><td colspan="3">Static server prop &mdash; no async states (out of scope)</td><td>&mdash;</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.2 Choice ERR-1 &mdash; provider state model</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; explicit <code>status</code> field (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Add <code>status: 'loading' | 'error' | 'ready'</code> to <code>BookmarkProvider</code> + <code>EoiProvider</code> alongside the existing <code>error</code> message. Widgets branch on <code>status</code> &mdash; unambiguous, and a later success clears it cleanly.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; reuse <code>isLoading</code> + <code>error</code></p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">No new field; widgets treat <code>error != null</code> as the error branch. Smaller change, but a stale <code>error</code> after a later success can mislead unless carefully cleared.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.3 Choice ERR-2 &mdash; widget error UI (list widgets)</h3>
+    <p>Live previews of the proposed states for <code>SavedAppsWidget</code>:</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div>
+          <p class="ds-example__label">Empty (genuine)</p>
+          <div style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:16px;box-shadow:0 1px 2px rgba(15,23,42,.05)">
+            <p style="margin:0 0 10px;font-weight:700;color:#1A2332">Saved apps</p>
+            <p style="margin:0;font-size:.85rem;color:#768692">You have not saved any apps yet.</p>
+          </div>
+        </div>
+        <div>
+          <p class="ds-example__label">Error &mdash; Option A (recommended): message + retry</p>
+          <div style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:16px;box-shadow:0 1px 2px rgba(15,23,42,.05)">
+            <p style="margin:0 0 10px;font-weight:700;color:#1A2332">Saved apps</p>
+            <div role="alert" style="display:flex;align-items:flex-start;gap:8px;background:#FDECEA;border-radius:8px;padding:8px 10px;margin-bottom:10px">
+              <span aria-hidden style="color:#7A1210;font-weight:700">!</span>
+              <span style="font-size:.82rem;color:#7A1210">Couldn&rsquo;t load your saved apps.</span>
+            </div>
+            <button type="button" class="ds-btn ds-btn--secondary ds-btn--sm">Try again</button>
+          </div>
+        </div>
+        <div>
+          <p class="ds-example__label">Error &mdash; Option B: static message only</p>
+          <div style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:16px;box-shadow:0 1px 2px rgba(15,23,42,.05)">
+            <p style="margin:0 0 10px;font-weight:700;color:#1A2332">Saved apps</p>
+            <p role="alert" style="margin:0;font-size:.85rem;color:#7A1210">Couldn&rsquo;t load your saved apps.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.4 Choice ERR-3 &mdash; where the state logic lives</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; teach <code>WidgetShell</code> the states (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Add optional <code>loading</code> / <code>error</code> / <code>onRetry</code> props (or a small <code>WidgetState</code> helper) so every widget renders loading / empty / error consistently without duplicating markup.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; keep <code>WidgetShell</code> dumb</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Each widget renders its own states inline. No API change, but the empty/error/retry markup is duplicated per widget.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.5 Choice ERR-4 &mdash; stat tiles (UX-05)</h3>
+    <p>Live previews &mdash; the current tile is misleading because <code>0</code> means three different things:</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
+        <div>
+          <p class="ds-example__label">Current (all states)</p>
+          <div style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:16px;text-align:center">
+            <div style="font-size:1.75rem;font-weight:700;color:#1A2332">0</div>
+            <div style="font-size:.8rem;color:#768692">Saved apps</div>
+          </div>
+        </div>
+        <div>
+          <p class="ds-example__label">Loading &mdash; skeleton (recommended)</p>
+          <div style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:16px;text-align:center">
+            <div style="height:1.75rem;width:40%;margin:0 auto 4px;border-radius:6px;background:linear-gradient(90deg,#eef1f3,#e2e8f0,#eef1f3)"></div>
+            <div style="font-size:.8rem;color:#768692">Saved apps</div>
+          </div>
+        </div>
+        <div>
+          <p class="ds-example__label">Error &mdash; em-dash + alert</p>
+          <div style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:16px;text-align:center" title="Couldn't load count">
+            <div style="font-size:1.75rem;font-weight:700;color:#768692">&mdash;</div>
+            <div style="font-size:.8rem;color:#768692">Saved apps</div>
+          </div>
+        </div>
+        <div>
+          <p class="ds-example__label">Empty (genuine)</p>
+          <div style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:16px;text-align:center">
+            <div style="font-size:1.75rem;font-weight:700;color:#1A2332">0</div>
+            <div style="font-size:.8rem;color:#768692">Saved apps</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; skeleton while loading, &ldquo;&mdash;&rdquo; on error (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Show a skeleton bar during load and a muted em-dash (with a tooltip / sr-only &ldquo;couldn&rsquo;t load&rdquo;) on error. <code>0</code> only ever means genuinely zero.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; spinner while loading, &ldquo;&mdash;&rdquo; on error</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Tiny inline spinner instead of a skeleton; same em-dash on error. Slightly busier visually.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.6 Choice ERR-5 &mdash; expired session (401)</h3>
+    <p>Both providers currently treat a <code>401</code> as &ldquo;empty&rdquo; (so logged-out browsing is calm, not alarming).</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; soft &ldquo;session expired&rdquo; on the dashboard (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep 401-as-empty for public browsing, but in the logged-in dashboard context treat a <code>401</code> as a soft notice (&ldquo;Your session may have expired &mdash; refresh.&rdquo;) rather than a blank widget.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; keep 401-as-empty everywhere</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">No change; simplest, but an expired session on the dashboard still reads as &ldquo;nothing saved&rdquo;.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="forms">5. Migrate forms to FormField + Button <span class="ds-prio ds-prio--p1">P1</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      <code>OrgSettingsClient</code> is the last big form still on bespoke parts: it has <strong>zero <code>&lt;label&gt;</code>
+      elements</strong> (labels are <code>&lt;span&gt;</code> with no <code>htmlFor</code>), <strong>8 raw <code>&lt;button&gt;</code>s</strong>,
+      and a local <code>Banner</code> with no <code>role</code>/<code>aria-live</code>. Migrating it onto the Round 3
+      <code>FormField</code> and the canonical <code>Button</code> fixes the programmatic labels in one pass (FRM-01, A11Y-01).
+      <code>SelectEntityForm</code> is already in better shape (fieldset/legend + wrapping labels + <code>role="alert"</code>) and
+      only needs light polish (FRM-03).
+    </p>
+
+    <h3>5.1 The label gap (live before / after)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+        <div>
+          <p class="ds-example__label">Today &mdash; <code>&lt;span&gt;</code> label, not associated</p>
+          <div style="margin-bottom:6px"><span style="font-size:.85rem;font-weight:600;color:#1A2332">Organisation name</span></div>
+          <input type="text" placeholder="e.g. NHS West Yorkshire ICB" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:.85rem">
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Clicking the text does nothing; screen readers read an unlabelled edit field.</p>
+        </div>
+        <div>
+          <p class="ds-example__label">After &mdash; <code>FormField</code> with <code>&lt;label for&gt;</code></p>
+          <label for="v6-orgname-demo" style="display:block;margin-bottom:6px;font-size:.85rem;font-weight:600;color:#425563">Organisation name <span style="color:#DA291C" aria-hidden>*</span></label>
+          <input id="v6-orgname-demo" type="text" placeholder="e.g. NHS West Yorkshire ICB" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:.85rem">
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Label is clickable and announced; <code>aria-required</code> / <code>aria-invalid</code> wired automatically.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>5.2 Choice FRM-A &mdash; org-settings migration depth</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; full migration (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Replace the local <code>Field</code>/<code>FieldLabel</code>/<code>TextInput</code>/<code>TextArea</code>/<code>NumberInput</code>/<code>Select</code> with <code>FormField</code> + the shared controls (real <code>&lt;label for&gt;</code> on every input), and the 8 raw buttons with <code>&lt;Button&gt;</code>. Most consistent; deletes duplicate primitives.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; a11y-only pass</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Keep the local controls but add proper <code>&lt;label for&gt;</code> + ARIA and fix the <code>Banner</code>. Smaller diff, but leaves the duplicate form/button code in place.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>5.3 Choice FRM-B &mdash; the org-settings <code>Banner</code></h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; toasts for save result + inline banner for persistent state (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Route save success / error through the &sect;3 toast service; keep an inline <code>role="status"</code>/<code>role="alert"</code> banner only for persistent context (e.g. &ldquo;Saving is unavailable &mdash; database not connected&rdquo;).</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; just fix the Banner</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Add <code>role</code>/<code>aria-live</code> to the existing <code>Banner</code>; don&rsquo;t involve toasts. (Depends on &sect;3 not shipping.)</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>5.4 Choice FRM-C &mdash; TagEditor &amp; AddCondition inner controls</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; real labels via FormField (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Give each tag-add input and the &ldquo;Add a condition&rdquo; select a proper (visible or sr-only) label, and confirm every add/remove icon button has an <code>aria-label</code>.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; <code>aria-label</code> only</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Minimal: add <code>aria-label</code> to the inner input/select without restructuring into FormField.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>5.5 Choice FRM-D &mdash; select-entity polish (FRM-03)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; light polish, keep fieldset/legend (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Link the fieldset to its error via <code>aria-describedby</code>, add <code>aria-required</code> to the radios, and tidy the labels. Radios stay native &mdash; not a <code>FormField</code> use-case.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; new radio-group FormField wrapper</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Build a <code>FormField</code>-style fieldset/radio-group primitive and migrate select-entity onto it. More work + a new pattern, but consistent with text fields.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="eoi">6. EOI contact fields editable when empty <span class="ds-prio ds-prio--p1">P1</span> <span class="ds-status ds-status--canonical">Shipped</span></h2>
+    <p>
+      In <code>ExpressInterestModal</code> the four contact fields (<strong>name, role, organisation, email</strong>) are rendered
+      <code>readOnly</code> <em>and</em> <code>required</code>, prefilled from the session. When the prefill is supplied this is
+      fine &mdash; but if a value is <strong>empty</strong>, the field is locked: the user can&rsquo;t type, yet
+      <code>required</code> can block submit. There&rsquo;s no recovery path (FRM-02). Note: the API currently re-reads contact
+      identity from the session and <strong>ignores the form</strong>, so making fields editable also needs a submit/API decision.
+    </p>
+
+    <h3>6.1 The lock (live preview)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div>
+          <p class="ds-example__label">Prefilled &mdash; read-only (correct today)</p>
+          <label for="v6-eoi-email-ro" style="display:block;margin-bottom:6px;font-size:.85rem;font-weight:600;color:#425563">Email <span style="color:#DA291C" aria-hidden>*</span></label>
+          <input id="v6-eoi-email-ro" type="email" value="a.khan@wyicb.nhs.uk" readonly style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:.85rem;background:#F7F9FC;color:#1A2332;cursor:default">
+        </div>
+        <div>
+          <p class="ds-example__label">Empty prefill &mdash; locked &amp; required (the bug)</p>
+          <label for="v6-eoi-email-bug" style="display:block;margin-bottom:6px;font-size:.85rem;font-weight:600;color:#425563">Email <span style="color:#DA291C" aria-hidden>*</span></label>
+          <input id="v6-eoi-email-bug" type="email" value="" placeholder="(empty &mdash; cannot type)" readonly style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:.85rem;background:#F7F9FC;color:#768692;cursor:not-allowed">
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Read-only + required + empty &rarr; dead end.</p>
+        </div>
+        <div>
+          <p class="ds-example__label">Proposed &mdash; editable when empty</p>
+          <label for="v6-eoi-email-fix" style="display:block;margin-bottom:6px;font-size:.85rem;font-weight:600;color:#425563">Email <span style="color:#DA291C" aria-hidden>*</span></label>
+          <input id="v6-eoi-email-fix" type="email" value="" placeholder="you@nhs.net" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:.85rem;background:#fff;color:#1A2332">
+          <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Editable because prefill was blank.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>6.2 Choice EOI-1 &mdash; editability model</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; editable only when prefill is empty (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0"><code>readOnly = Boolean(prefillValue)</code>. Verified session data stays locked; users only fill the gaps. Smallest behaviour change, fixes the dead end.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; always editable</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Drop <code>readOnly</code> entirely; prefill just seeds values the user can change. Most flexible, but lets people overwrite verified identity.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; &ldquo;Edit contact details&rdquo; toggle</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Fields stay read-only with an explicit unlock control that makes all four editable. More UI; clearer intent.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>6.3 Choice EOI-2 &mdash; submit / API alignment</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; send contact fields, API prefers submitted values (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Include name/role/org/email in the POST body; the route uses submitted values when present, falling back to session prefill, and validates server-side. Edits actually persist.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; keep API reading from session</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Only non-identity fields (phone, etc.) stay editable; identity fields aren&rsquo;t truly editable. Simpler, but largely negates FRM-02 for empty identity fields.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>6.4 Choice EOI-3 &mdash; validation</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; required only when editable (recommended)</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">An editable+empty contact field shows a proper <code>FormField</code> error on submit; a read-only prefilled field never blocks. No more invisible validation dead ends.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; relax required entirely</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Drop <code>required</code> on contact fields; rely on server validation. Simplest client-side, weaker inline guidance.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="decision-log">7. Decision log</h2>
+    <p>
+      Choices made for Round 6 are recorded below. All recommended defaults were taken except <strong>FB-2</strong>
+      (toasts ship <strong>top-centre</strong> rather than bottom-centre). Every decision is now
+      <span class="ds-status ds-status--canonical">Shipped</span>.
+    </p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th><th>Chosen &amp; shipped</th></tr></thead>
+      <tbody>
+        <tr><td>FB-1</td><td>Feedback service shape</td><td>A &mdash; <code>ToastProvider</code> + <code>useToast()</code></td><td>A</td></tr>
+        <tr><td>FB-2</td><td>Placement &amp; visual treatment</td><td>A &mdash; bottom-centre stack</td><td><strong>Top-centre stack</strong> (override)</td></tr>
+        <tr><td>FB-3</td><td>Live-region semantics</td><td>A &mdash; dual polite + assertive</td><td>A</td></tr>
+        <tr><td>FB-4</td><td>What to wire now</td><td>A &mdash; full set incl. compare</td><td>A</td></tr>
+        <tr><td>FB-5</td><td>Existing inline announcers</td><td>A &mdash; consolidate, keep count regions</td><td>A</td></tr>
+        <tr><td>ERR-1</td><td>Provider state model</td><td>A &mdash; explicit <code>status</code> field</td><td>A</td></tr>
+        <tr><td>ERR-2</td><td>Widget error UI</td><td>A &mdash; alert + &ldquo;Try again&rdquo;</td><td>A</td></tr>
+        <tr><td>ERR-3</td><td>Where state logic lives</td><td>A &mdash; <code>WidgetShell</code> gains state props</td><td>A</td></tr>
+        <tr><td>ERR-4</td><td>Stat tiles</td><td>A &mdash; skeleton + &ldquo;&mdash;&rdquo; on error</td><td>A</td></tr>
+        <tr><td>ERR-5</td><td>Expired session (401)</td><td>A &mdash; soft notice on dashboard</td><td>A</td></tr>
+        <tr><td>FRM-A</td><td>Org-settings migration depth</td><td>A &mdash; full migration</td><td>A</td></tr>
+        <tr><td>FRM-B</td><td>Org-settings Banner</td><td>A &mdash; toasts + persistent inline banner</td><td>A</td></tr>
+        <tr><td>FRM-C</td><td>TagEditor / AddCondition labels</td><td>A &mdash; real labels via FormField</td><td>A</td></tr>
+        <tr><td>FRM-D</td><td>select-entity polish</td><td>A &mdash; light polish, keep fieldset</td><td>A</td></tr>
+        <tr><td>EOI-1</td><td>Editability model</td><td>A &mdash; editable only when prefill empty</td><td>A</td></tr>
+        <tr><td>EOI-2</td><td>Submit / API alignment</td><td>A &mdash; send fields, API prefers them</td><td>A</td></tr>
+        <tr><td>EOI-3</td><td>Validation</td><td>A &mdash; required only when editable</td><td>A</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="ships">8. What shipped</h2>
+    <p>Round 6 delivered:</p>
+    <table class="ds-table">
+      <thead><tr><th>Area</th><th>Change</th><th>Files</th></tr></thead>
+      <tbody>
+        <tr><td>New primitive</td><td><code>ToastProvider</code> + <code>useToast()</code> + portal <code>&lt;Toaster/&gt;</code> with polite + assertive regions, rendered <strong>top-centre</strong>; mounted as the outermost provider in <code>AppShell</code></td><td><code>components/ui/Toast.tsx</code>, <code>components/AppShell.tsx</code></td></tr>
+        <tr><td>Feedback wiring</td><td>Save/remove (success + failure), copy link / address, provider load failures and compare add/remove/blocked + clear emit toasts; <code>SharePagePanel</code>&rsquo;s bespoke <code>announce</code> removed</td><td><code>BookmarkProvider</code>, <code>CompareBasketProvider</code>, <code>EoiProvider</code>, <code>SharePagePanel</code></td></tr>
+        <tr><td>Error vs empty</td><td>Providers expose <code>status: 'loading' | 'ready' | 'error'</code> + <code>sessionExpired</code>; <code>WidgetShell</code> gains <code>WidgetMessage</code> + <code>WidgetError</code> (alert + &ldquo;Try again&rdquo;); <code>SavedAppsWidget</code> + <code>EoiActivityWidget</code> branch on <code>status</code>; stat tiles use a skeleton while loading and a muted &ldquo;&mdash;&rdquo; on error so <code>0</code> only means zero; a soft session notice appears on the dashboard on 401</td><td><code>components/ui/WidgetShell.tsx</code>, the two list widgets, <code>DashboardStatTiles.tsx</code>, <code>DashboardSessionNotice.tsx</code>, providers</td></tr>
+        <tr><td>Form migration</td><td><code>OrgSettingsClient</code> on <code>FormField</code> + <code>Button</code> with real <code>&lt;label for&gt;</code> on every input; <code>Banner</code> given <code>role</code>/<code>aria-live</code> and save result routed to toasts; TagEditor / AddCondition controls labelled; select-entity radios wrapped in a labelled <code>role="radiogroup"</code> with <code>aria-required</code> / <code>aria-invalid</code> / <code>aria-describedby</code></td><td><code>app/org-settings/OrgSettingsClient.tsx</code>, <code>app/select-entity/SelectEntityForm.tsx</code></td></tr>
+        <tr><td>EOI prefill</td><td>Contact fields editable when prefill empty (locked when present); POST sends contact fields and the API prefers submitted values over the session; required (and validated) only when editable; success screen announced via <code>role="status"</code></td><td><code>components/ExpressInterestModal.tsx</code>, <code>app/api/express-interest/route.ts</code></td></tr>
+        <tr><td>DS docs</td><td>Toast pattern added to the Alerts component page; Forms, dashboard widgets and Accessibility pages updated; audit (v2) findings marked resolved; Report-v1 backlog updated</td><td><code>public/DS/&hellip;</code></td></tr>
+      </tbody>
+    </table>
+    <p class="ds-u-muted" style="font-size:.9rem">
+      Net effect: actions announce their outcome, failures stop masquerading as empty states, the last bespoke form joins the
+      system, and nobody gets stuck behind a locked-but-empty required field.
+    </p>
+
+    <hr class="ds-rule">
+    <p class="ds-u-muted" style="font-size:.85rem">
+      v6 is the Round 6 record &mdash; experience &amp; reliability, <span class="ds-status ds-status--canonical">Shipped</span>. Structure follows the
+      <a href="/DS/Report-v2/index.html">v2</a> / <a href="/DS/Report-v3/index.html">v3</a> / <a href="/DS/Report-v4/index.html">v4</a> reports.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

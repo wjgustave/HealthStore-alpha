@@ -45,7 +45,7 @@ export function PdpWhereLive({
           ) : null}
         </div>
       </div>
-      <span className="hidden shrink-0 text-xs font-medium group-hover:underline sm:inline" style={{ color: '#005EB8' }}>
+      <span className="hidden shrink-0 text-xs font-medium group-hover:underline sm:inline" style={{ color: 'var(--nhs-blue)' }}>
         Where it&apos;s live →
       </span>
     </a>

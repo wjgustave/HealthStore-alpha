@@ -13,9 +13,9 @@ import { SaveToggleButton } from '@/components/SaveToggleButton'
 
 type Props = { allApps: App[] }
 
-function SavedAppCard({ app, onRemove }: { app: App; onRemove: () => void }) {
+function SavedAppCard({ app, onRemove, removing }: { app: App; onRemove: () => void; removing: boolean }) {
   return (
-    <div className="app-card flex h-full min-h-0 flex-col rounded-xl border bg-white" style={{ borderColor: 'var(--border)' }}>
+    <div className="app-card flex h-full min-h-0 flex-col">
       <div className="flex min-h-0 flex-1 flex-col" style={{ padding: '1.25rem' }}>
         <div className="flex items-start justify-between gap-2 mb-3">
           <div className="flex items-center gap-2.5 min-w-0">
@@ -38,10 +38,12 @@ function SavedAppCard({ app, onRemove }: { app: App; onRemove: () => void }) {
               <p style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', margin: 0 }}>{app.supplier_name}</p>
             </div>
           </div>
+          {/* R7 UX-07: disable the remove control while its DELETE is in flight so rapid clicks can't fire duplicates. */}
           <button
             type="button"
             onClick={onRemove}
-            className="shrink-0 rounded-full p-2 transition-colors hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--nhs-blue)]"
+            disabled={removing}
+            className="shrink-0 rounded-full p-2 transition-colors hover:bg-gray-100 disabled:cursor-wait disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--nhs-blue)]"
             aria-label={`Remove ${app.app_name} from saved apps`}
           >
             <X className="w-4 h-4" style={{ color: 'var(--text-muted)' }} aria-hidden />
@@ -79,7 +81,7 @@ function SavedAppCard({ app, onRemove }: { app: App; onRemove: () => void }) {
 }
 
 export default function SavedAppsClient({ allApps }: Props) {
-  const { bookmarks, count, isLoading, remove, error } = useBookmarks()
+  const { bookmarks, count, isLoading, remove, error, togglingId } = useBookmarks()
 
   const savedApps = useMemo(() => {
     const byId = new Map(allApps.map(a => [a.id, a]))
@@ -105,7 +107,7 @@ export default function SavedAppsClient({ allApps }: Props) {
           Saved apps
         </h1>
         <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', maxWidth: '42rem' }}>
-          Products you have saved to revisit later. Use the comparison tool when you are ready to evaluate options side
+          DTx apps you have saved to revisit later. Use the comparison tool when you are ready to evaluate options side
           by side.
         </p>
       </div>
@@ -126,10 +128,10 @@ export default function SavedAppsClient({ allApps }: Props) {
             🔖
           </div>
           <p className="font-semibold mb-2 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
-            No saved apps yet
+            No saved DTx apps yet
           </p>
           <p className="mb-6 max-w-lg mx-auto" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
-            Browse the catalogue and save products you want to come back to.
+            Browse the catalogue and save DTx apps you want to come back to.
           </p>
           <Link
             href="/apps"
@@ -142,11 +144,11 @@ export default function SavedAppsClient({ allApps }: Props) {
       ) : (
         <>
           <p className="mb-4 text-sm" style={{ color: 'var(--text-muted)' }}>
-            {count === 1 ? '1 saved app' : `${count} saved apps`}
+            {count === 1 ? '1 saved DTx app' : `${count} saved DTx apps`}
           </p>
           <div className="grid gap-5 [grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))] xl:[grid-template-columns:repeat(auto-fill,minmax(360px,1fr))]">
             {savedApps.map(app => (
-              <SavedAppCard key={app.id} app={app} onRemove={() => void remove(app.id)} />
+              <SavedAppCard key={app.id} app={app} onRemove={() => void remove(app.id)} removing={togglingId === app.id} />
             ))}
           </div>
         </>
