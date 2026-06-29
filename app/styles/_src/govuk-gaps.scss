@@ -1,0 +1,24 @@
+// GOV.UK Frontend gap-fill components, recoloured to the NHS palette.
+//
+// NHS Frontend v9 already ships Button, Card, Tabs, Tag, Details, Table,
+// Pagination, Warning callout, Inset text, etc. The only GOV.UK components we
+// pull in are the ones with no NHS equivalent:
+//  - Cookie banner (consent pattern)
+//  - Accordion   (long-form collapsible groups)
+//
+// Provenance: GOV.UK-recoloured. Brand / link / focus tokens are overridden to
+// NHS values so these read as NHS, not GDS.
+
+$govuk-brand-colour: #005eb8; // NHS blue
+$govuk-link-colour: #005eb8;
+$govuk-link-hover-colour: #7c2855; // NHS dark pink (matches nhsuk link hover)
+$govuk-link-visited-colour: #330072; // NHS purple
+$govuk-link-active-colour: #002f5c;
+$govuk-focus-colour: #ffeb3b; // NHS yellow
+$govuk-focus-text-colour: #212b32; // NHS black
+$govuk-include-default-font-face: false;
+$govuk-font-family: "Frutiger", arial, sans-serif;
+
+@import "govuk/base.import";
+@import "govuk/components/cookie-banner/index.import";
+@import "govuk/components/accordion/index.import";

@@ -24,7 +24,7 @@ export default function ToolCallIndicator({ toolCalls }: Props) {
         <div className="flex items-center gap-2">
           <span className="ai-thinking-dot" />
           <span
-            className="text-xs font-medium"
+            className="hs-text-caption hs-font-normal"
             style={{ color: 'var(--text-muted)' }}
           >
             Thinking
@@ -33,7 +33,7 @@ export default function ToolCallIndicator({ toolCalls }: Props) {
         {toolCalls.map((tool, i) => (
           <span
             key={`${tool}-${i}`}
-            className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium"
+            className="inline-flex items-center gap-1 rounded-full px-2 py-1 hs-text-caption hs-font-normal"
             style={{
               background: '#E6F0FB',
               color: 'var(--nhs-blue)',

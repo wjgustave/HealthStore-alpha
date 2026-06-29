@@ -2,6 +2,11 @@
 
 import { COMPARE_LENSES, type CompareLensId } from '@/lib/compareConfig'
 
+/**
+ * [Provenance: Bespoke — no NHS/GOV.UK equivalent.] Segmented "lens" control built
+ * to NHS principles: native radio-group semantics, NHS-blue active state, 44px
+ * targets, NHS focus ring. Proposed for the NHS backlog.
+ */
 type Props = {
   value: CompareLensId
   onChange: (lens: CompareLensId) => void

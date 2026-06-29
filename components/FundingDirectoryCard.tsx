@@ -40,11 +40,11 @@ function formatClosingSummary(f: FundingDirectoryRecord): string {
 function LinkedCatalogueApps({ appTags, apps }: { appTags: string[]; apps: App[] }) {
   if (!appTags.length) return null
   return (
-    <div className="border-t px-4 py-3 sm:px-6" style={{ borderColor: 'var(--border)', background: '#F7F9FC' }}>
-      <p className="m-0 mb-2 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+    <div className="border-t px-4 py-4 sm:px-6" style={{ borderColor: 'var(--border)', background: '#F0F4F5' }}>
+      <p className="m-0 mb-2 hs-text-caption hs-font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
         Linked in this catalogue
       </p>
-      <div className="flex flex-wrap justify-center gap-1.5 sm:justify-start">
+      <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
         {appTags.map(id => {
           const app = apps.find(a => a.id === id || a.slug === id)
           return app ? (
@@ -67,42 +67,35 @@ export function FundingDirectoryCard({ f, apps }: { f: FundingDirectoryRecord; a
   const metaLine = `${f.sponsoring_body || 'Sponsor not stated'} · ${formatClosingSummary(f)}`
 
   return (
-    <article
-      aria-labelledby={titleId}
-      className="hs-surface-card overflow-hidden rounded-xl border bg-white"
-      style={{ borderColor: 'var(--border)' }}
-    >
-      <div className="p-5 sm:p-6">
-        <div className="mb-2 flex items-start justify-between gap-3">
-          <h3
-            id={titleId}
-            className="m-0 flex-1 text-base font-bold leading-snug"
-            style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
-          >
+    // [Provenance: NHS] NHS Card.
+    <article aria-labelledby={titleId} className="nhsuk-card overflow-hidden">
+      <div className="nhsuk-card__content">
+        <div className="mb-2 flex items-start justify-between gap-4">
+          <h3 id={titleId} className="nhsuk-card__heading m-0 flex-1 hs-text-body leading-snug">
             {f.title}
           </h3>
           <FundingStatusBadge status={f.status} />
         </div>
 
         {f.total_value ? (
-          <p className="mb-3 m-0 text-[16px] font-bold leading-tight" style={{ color: 'var(--nhs-blue)' }}>
+          <p className="mb-4 m-0 hs-text-body hs-font-bold leading-tight" style={{ color: 'var(--nhs-blue)' }}>
             {f.total_value}
           </p>
         ) : (
-          <p className="mb-3 m-0 text-sm font-medium leading-tight" style={{ color: 'var(--text-muted)' }}>
+          <p className="mb-4 m-0 hs-text-label hs-font-normal leading-tight" style={{ color: 'var(--text-muted)' }}>
             Amount not stated
           </p>
         )}
 
-        <p className="mb-3 m-0 leading-relaxed" style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)' }}>
+        <p className="mb-4 m-0 leading-relaxed" style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)' }}>
           {f.description}
         </p>
 
-        <p className="mb-3 m-0 text-sm leading-snug" style={{ color: 'var(--text-muted)' }}>
+        <p className="mb-4 m-0 hs-text-label leading-snug" style={{ color: 'var(--text-muted)' }}>
           {metaLine}
         </p>
 
-        <div className="mb-3 flex flex-wrap gap-1">
+        <div className="mb-4 flex flex-wrap gap-1">
           {f.condition_tags
             .filter(isVisibleCondition)
             .map(t => (
@@ -121,7 +114,7 @@ export function FundingDirectoryCard({ f, apps }: { f: FundingDirectoryRecord; a
             href={f.external_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 py-1 text-sm font-semibold transition-colors hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="inline-flex items-center gap-2 py-1 hs-text-label hs-font-bold transition-colors hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
             style={{ color: 'var(--nhs-blue)', outlineColor: 'var(--nhs-blue)' }}
           >
             <span>{f.external_url_label ?? 'More information'}</span>

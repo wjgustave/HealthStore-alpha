@@ -24,8 +24,8 @@ export function PdpWhereLive({
       href="#scale-and-maturity"
       className={
         embedded
-          ? 'group flex w-full items-center gap-3 rounded-lg border px-4 py-3 transition-colors hover:opacity-95'
-          : 'hs-surface-card-sm group flex items-center gap-3 rounded-lg border bg-white px-4 py-3 transition-shadow hover:shadow-md'
+          ? 'group flex w-full items-center gap-4 rounded-lg border px-4 py-4 transition-colors hover:opacity-95'
+          : 'hs-surface-card-sm group flex items-center gap-4 rounded-lg border bg-white px-4 py-4 transition-colors hover:border-[var(--nhs-blue)]'
       }
       style={{
         borderColor: 'var(--border)',
@@ -36,16 +36,16 @@ export function PdpWhereLive({
     >
       <MapPin className="h-5 w-5 flex-shrink-0" style={{ color: '#007F3B' }} aria-hidden />
       <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0">
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0">
           {sitesText ? (
-            <span className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>{sitesText}</span>
+            <span className="hs-text-card-title-sm hs-font-bold" style={{ color: 'var(--text-primary)' }}>{sitesText}</span>
           ) : null}
           {statusText ? (
-            <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>{statusText}</span>
+            <span className="hs-text-caption" style={{ color: 'var(--text-secondary)' }}>{statusText}</span>
           ) : null}
         </div>
       </div>
-      <span className="hidden shrink-0 text-xs font-medium group-hover:underline sm:inline" style={{ color: 'var(--nhs-blue)' }}>
+      <span className="hidden shrink-0 hs-text-caption hs-font-normal group-hover:underline sm:inline" style={{ color: 'var(--nhs-blue)' }}>
         Where it&apos;s live →
       </span>
     </a>
@@ -64,14 +64,14 @@ export function PdpWhereLiveSegment({ app }: { app: WhereLiveApp }) {
         </a>
       </h2>
       <div className="hs-snapshot-strip__body">
-        <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0">
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0">
           {sitesText ? (
-            <span className="text-lg font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
+            <span className="hs-text-card-title-sm hs-font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
               {sitesText}
             </span>
           ) : null}
           {statusText ? (
-            <span className="text-xs leading-snug" style={{ color: 'var(--text-secondary)' }}>
+            <span className="hs-text-caption leading-snug" style={{ color: 'var(--text-secondary)' }}>
               {statusText}
             </span>
           ) : null}

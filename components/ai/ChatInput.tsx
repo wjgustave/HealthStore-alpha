@@ -41,7 +41,7 @@ export default function ChatInput({ onSend, disabled }: Props) {
 
   return (
     <div
-      className="border-t px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+      className="border-t px-4 py-4 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
       style={{ borderColor: 'var(--border)', background: 'var(--card)' }}
     >
       <div className="mx-auto flex max-w-3xl items-end gap-2">
@@ -54,7 +54,7 @@ export default function ChatInput({ onSend, disabled }: Props) {
           placeholder="Ask about apps, funding, costs, business cases..."
           disabled={disabled}
           rows={1}
-          className="flex-1 resize-none rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:ring-2"
+          className="flex-1 resize-none rounded-xl border px-4 py-2 hs-text-label outline-none transition-colors focus:ring-2"
           style={{
             borderColor: 'var(--border)',
             background: 'var(--surface)',

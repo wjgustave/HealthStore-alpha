@@ -1,13 +1,25 @@
 import { dtacLabels, maturityLabels, effortLabels, evidenceLabels, supervisionLabels } from '@/lib/data'
 import { isVisibleCondition } from '@/lib/visibleConditions'
 
+/**
+ * Status/metadata tags. [Provenance: NHS] — rendered with the official NHS Tag
+ * (`.nhsuk-tag` + colour modifier). NHS Tag has no generic semantic colours, so we
+ * map the product's status palette to the nearest NHS tag colour.
+ */
+type TagColour =
+  | 'white' | 'grey' | 'green' | 'aqua-green' | 'blue' | 'purple' | 'pink' | 'red' | 'orange' | 'yellow'
+
+function Tag({ colour, children }: { colour: TagColour; children: React.ReactNode }) {
+  return <span className={`nhsuk-tag nhsuk-tag--${colour}`}>{children}</span>
+}
+
 export function DtacBadge({ status }: { status: string }) {
   const label = dtacLabels[status] ?? status
-  const cls = status === 'passed' ? 'badge-green'
-    : status === 'passed_refresh_required' ? 'badge-amber'
-    : status === 'required_not_confirmed' ? 'badge-green'
-    : 'badge-grey'
-  return <span className={`badge ${cls}`}>{label}</span>
+  const colour: TagColour = status === 'passed' ? 'green'
+    : status === 'passed_refresh_required' ? 'orange'
+    : status === 'required_not_confirmed' ? 'green'
+    : 'grey'
+  return <Tag colour={colour}>{label}</Tag>
 }
 
 const ESTABLISHED_MATURITY_LEVELS = new Set(['scaled', 'multi_site_live'])
@@ -22,47 +34,46 @@ export function MaturityBadge({
 }) {
   if (hideEstablished && ESTABLISHED_MATURITY_LEVELS.has(level)) return null
   const label = maturityLabels[level] ?? level
-  const cls = level === 'scaled' ? 'badge-green'
-    : level === 'multi_site_live' ? 'badge-blue'
-    : level === 'limited_live' ? 'badge-amber'
-    : 'badge-grey'
-  return <span className={`badge ${cls}`}>{label}</span>
+  const colour: TagColour = level === 'scaled' ? 'green'
+    : level === 'multi_site_live' ? 'blue'
+    : level === 'limited_live' ? 'orange'
+    : 'grey'
+  return <Tag colour={colour}>{label}</Tag>
 }
 
 export function EvidenceBadge({ strength }: { strength: string }) {
   const label = evidenceLabels[strength] ?? strength
-  const cls = strength === 'strong' ? 'badge-green'
-    : strength === 'moderate' ? 'badge-blue'
-    : strength === 'low' ? 'badge-grey'
-    : 'badge-grey'
-  return <span className={`badge ${cls}`}>{label}</span>
+  const colour: TagColour = strength === 'strong' ? 'green'
+    : strength === 'moderate' ? 'blue'
+    : 'grey'
+  return <Tag colour={colour}>{label}</Tag>
 }
 
 export function EffortBadge({ level }: { level: string }) {
   const label = effortLabels[level] ?? level
-  const cls = `badge effort-${level}`
-  return <span className={`badge ${cls}`}>{label}</span>
+  const colour: TagColour = level === 'low' ? 'green' : level === 'medium' ? 'orange' : level === 'high' ? 'red' : 'grey'
+  return <Tag colour={colour}>{label}</Tag>
 }
 
 export function SupervisionBadge({ model }: { model: string }) {
   const label = supervisionLabels[model] ?? model
   if (model === 'guided_self_help') {
-    return <span className="badge badge-grey">{label}</span>
+    return <Tag colour="grey">{label}</Tag>
   }
-  const cls = model === 'active_remote_management' ? 'badge-purple'
-    : model === 'non_continuous_review' ? 'badge-blue'
-    : model === 'self_management_only' ? 'badge-teal'
-    : 'badge-grey'
-  return <span className={`badge ${cls}`}>{label}</span>
+  const colour: TagColour = model === 'active_remote_management' ? 'purple'
+    : model === 'non_continuous_review' ? 'blue'
+    : model === 'self_management_only' ? 'aqua-green'
+    : 'grey'
+  return <Tag colour={colour}>{label}</Tag>
 }
 
 export function NiceTypeBadge({ type }: { type: string }) {
-  const cls = type === 'EVA' ? 'badge-blue' : type === 'HTG' ? 'badge-teal' : type === 'MTG' ? 'badge-purple' : 'badge-grey'
-  return <span className={`badge ${cls}`}>{type}</span>
+  const colour: TagColour = type === 'EVA' ? 'blue' : type === 'HTG' ? 'aqua-green' : type === 'MTG' ? 'purple' : 'grey'
+  return <Tag colour={colour}>{type}</Tag>
 }
 
 export function TopicPill({ label }: { label: string }) {
-  return <span className="badge badge-topic">{label}</span>
+  return <Tag colour="grey">{label}</Tag>
 }
 
 const CONDITION_LABELS: Record<string, string> = {
@@ -71,7 +82,7 @@ const CONDITION_LABELS: Record<string, string> = {
 }
 
 export function ConditionTag({ tag }: { tag: string }) {
-  return <span className="badge badge-condition">{CONDITION_LABELS[tag] ?? tag}</span>
+  return <Tag colour="blue">{CONDITION_LABELS[tag] ?? tag}</Tag>
 }
 
 /**
@@ -88,7 +99,7 @@ export function EditorialPillRow({
   className?: string
 }) {
   return (
-    <div className={`flex flex-wrap gap-1.5 ${className}`}>
+    <div className={`flex flex-wrap gap-2 ${className}`}>
       {topics.map((t) => (
         <TopicPill key={t} label={t} />
       ))}
@@ -109,7 +120,7 @@ export function EditorialEvidenceMetaRow({
   className?: string
 }) {
   return (
-    <div className={`flex flex-wrap items-center gap-1.5 ${className}`}>
+    <div className={`flex flex-wrap items-center gap-2 ${className}`}>
       <TopicPill label={evidenceType} />
       {conditions.filter(isVisibleCondition).map((t) => (
         <ConditionTag key={t} tag={t} />
@@ -127,28 +138,35 @@ export function FundingStatusBadge({ status }: { status: string }) {
     periodic: 'Upcoming',
   }
   const isUpcoming = status === 'upcoming' || status === 'periodic'
-  const cls =
-    status === 'open' ? 'badge-green' : isUpcoming ? 'badge-amber' : 'badge-grey'
-  return <span className={`badge ${cls}`}>{labels[status] ?? status}</span>
+  const colour: TagColour = status === 'open' ? 'green' : isUpcoming ? 'orange' : 'grey'
+  return <Tag colour={colour}>{labels[status] ?? status}</Tag>
 }
 
+/**
+ * Inline alert. [Provenance: NHS]
+ *  - `info`             -> NHS Inset text (`.nhsuk-inset-text`)
+ *  - `warning`/`danger` -> NHS Warning callout (`.nhsuk-warning-callout`)
+ * NHS has no distinct "danger" callout; the warning callout is the nearest
+ * equivalent, with the label varied by severity.
+ */
 export function AlertBox({ type, children }: { type: 'warning' | 'info' | 'danger'; children: React.ReactNode }) {
-  const styles = {
-    warning: { bg: '#FEF5E6', border: '#D5840D', text: '#7A4800', icon: '⚠' },
-    info: { bg: '#E6F0FB', border: '#005EB8', text: '#003087', icon: 'ℹ' },
-    danger: { bg: '#FDECEA', border: '#DA291C', text: '#7A1210', icon: '✕' },
+  if (type === 'info') {
+    return (
+      <div className="nhsuk-inset-text" role="status">
+        <span className="nhsuk-u-visually-hidden">Information: </span>
+        <div>{children}</div>
+      </div>
+    )
   }
-  const s = styles[type]
-  const role = type === 'danger' ? 'alert' : 'status'
+  const label = type === 'danger' ? 'Warning' : 'Important'
   return (
-    <div
-      role={role}
-      className="rounded-lg p-4 flex gap-3 text-sm"
-      style={{ background: s.bg, borderLeft: `4px solid ${s.border}`, color: s.text }}
-    >
-      <span className="font-bold flex-shrink-0" aria-hidden>
-        {s.icon}
-      </span>
+    <div className="nhsuk-warning-callout" role={type === 'danger' ? 'alert' : 'status'}>
+      <h3 className="nhsuk-warning-callout__label">
+        <span role="text">
+          <span className="nhsuk-u-visually-hidden">{label}: </span>
+          {label}
+        </span>
+      </h3>
       <div>{children}</div>
     </div>
   )
@@ -167,13 +185,13 @@ export function SectionHeader({
     <div className="mb-6">
       <h2
         id={id}
-        className="font-bold mb-1"
+        className="hs-font-bold mb-1"
         style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--text-primary)' }}
       >
         {title}
       </h2>
-      {description && <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{description}</p>}
-      <div className="mt-3 h-0.5 rounded" style={{ background: 'linear-gradient(90deg, var(--nhs-blue), transparent)' }} />
+      {description && <p className="hs-text-label" style={{ color: 'var(--text-muted)' }}>{description}</p>}
+      <div className="mt-4 h-0.5 rounded" style={{ background: 'linear-gradient(90deg, var(--nhs-blue), transparent)' }} />
     </div>
   )
 }

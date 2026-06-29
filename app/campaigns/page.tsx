@@ -8,12 +8,12 @@ export default function CampaignsPage() {
   const campaigns = getHomeCampaigns()
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+    <div className="hs-page-narrow">
       <PageBreadcrumb items={[{ label: 'Campaigns and initiatives' }]} />
-      <div className="mb-10">
+      <div className="hs-section">
         <h1 className="page-title-h1">Campaigns and initiatives</h1>
         <p
-          className="m-0 max-w-2xl leading-relaxed"
+          className="m-0 hs-measure leading-relaxed"
           style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}
         >
           Programmes and campaigns that may shape local commissioning conversations. Placeholder page — more to follow.
@@ -24,17 +24,17 @@ export default function CampaignsPage() {
         {campaigns.map((item) => (
           <li
             key={item.id}
-            className="hs-surface-card-sm p-5"
+            className="hs-surface-card-sm p-6"
           >
             {item.organisation ? (
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+              <p className="mb-1 hs-text-caption hs-font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
                 {item.organisation}
               </p>
             ) : null}
-            <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
+            <h2 className="hs-text-card-title-sm hs-font-bold" style={{ color: 'var(--text-primary)' }}>
               {item.title}
             </h2>
-            <p className="mt-1 mb-0 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+            <p className="mt-1 mb-0 hs-text-label leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
               {item.summary}
             </p>
           </li>
@@ -44,7 +44,7 @@ export default function CampaignsPage() {
       <div className="mt-12">
         <Link
           href="/"
-          className="text-sm font-semibold text-[var(--nhs-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="hs-text-label hs-font-bold text-[var(--nhs-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
           style={{ outlineColor: 'var(--nhs-blue)' }}
         >
           ← Back to home

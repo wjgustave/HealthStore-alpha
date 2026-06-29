@@ -100,7 +100,7 @@ export default function ClearDataModal({ open, onClose }: Props) {
         <>
           <h2
             id={titleId}
-            className="font-bold mb-2 pr-8"
+            className="hs-font-bold mb-2 pr-8"
             style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--nhs-dark)' }}
           >
             Manage organisation data
@@ -108,13 +108,13 @@ export default function ClearDataModal({ open, onClose }: Props) {
           <p className="mb-6" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
             Select which data to clear for your organisation. This will permanently delete the records for all users in your organisation.
           </p>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             {(['bookmarks', 'eoi', 'all'] as Dataset[]).map(d => (
               <button
                 key={d}
                 type="button"
                 onClick={() => pickDataset(d)}
-                className="flex items-center gap-3 w-full rounded-xl border px-4 py-3.5 text-sm font-semibold text-left transition-colors hover:bg-[#F7F9FC]"
+                className="flex items-center gap-4 w-full rounded-xl border px-4 py-4 hs-text-label hs-font-bold text-left transition-colors hover:bg-[#F0F4F5]"
                 style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
               >
                 <Trash2 className="w-4 h-4 shrink-0" style={{ color: d === 'all' ? 'var(--nhs-red, #d5281b)' : 'var(--nhs-blue)' }} aria-hidden />
@@ -129,7 +129,7 @@ export default function ClearDataModal({ open, onClose }: Props) {
         <>
           <h2
             id={titleId}
-            className="font-bold mb-2 pr-8"
+            className="hs-font-bold mb-2 pr-8"
             style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--nhs-dark)' }}
           >
             Clear {DATASET_LABELS[chosen]}?
@@ -141,7 +141,7 @@ export default function ClearDataModal({ open, onClose }: Props) {
             </strong>{' '}
             for your entire organisation. This action cannot be undone.
           </p>
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             <Button variant="destructive" onClick={handleConfirm} className="flex-1">
               Yes, clear data
             </Button>
@@ -155,7 +155,7 @@ export default function ClearDataModal({ open, onClose }: Props) {
       {stage === 'loading' && (
         <div className="text-center py-8">
           <Loader2 className="w-10 h-10 mx-auto mb-4 animate-spin" style={{ color: 'var(--nhs-blue)' }} aria-hidden />
-          <p id={titleId} className="font-semibold" style={{ color: 'var(--text-primary)' }}>
+          <p id={titleId} className="hs-font-bold" style={{ color: 'var(--text-primary)' }}>
             Clearing data…
           </p>
         </div>
@@ -172,7 +172,7 @@ export default function ClearDataModal({ open, onClose }: Props) {
           </div>
           <h2
             id={titleId}
-            className="font-bold mb-2"
+            className="hs-font-bold mb-2"
             style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--nhs-dark)' }}
           >
             Data cleared
@@ -188,12 +188,12 @@ export default function ClearDataModal({ open, onClose }: Props) {
 
       {stage === 'error' && (
         <>
-          <div className="flex items-start gap-3 mb-5">
-            <AlertCircle className="w-6 h-6 shrink-0 mt-0.5" style={{ color: 'var(--nhs-red, #d5281b)' }} aria-hidden />
+          <div className="flex items-start gap-4 mb-6">
+            <AlertCircle className="w-6 h-6 shrink-0 mt-1" style={{ color: 'var(--nhs-red, #d5281b)' }} aria-hidden />
             <div>
               <h2
                 id={titleId}
-                className="font-bold mb-1"
+                className="hs-font-bold mb-1"
                 style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--nhs-dark)' }}
               >
                 Could not clear data
@@ -203,7 +203,7 @@ export default function ClearDataModal({ open, onClose }: Props) {
               </p>
             </div>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             <Button onClick={handleConfirm} className="flex-1">
               Try again
             </Button>

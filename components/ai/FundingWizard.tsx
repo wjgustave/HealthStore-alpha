@@ -25,7 +25,7 @@ type Props = {
 }
 
 const optionButtonClass =
-  'w-full rounded-xl border px-4 py-3 text-left text-sm font-medium transition-all hover:shadow-sm disabled:opacity-40'
+  'w-full rounded-xl border px-4 py-4 text-left hs-text-label hs-font-normal transition-colors disabled:opacity-40'
 
 const optionButtonStyle = {
   borderColor: 'var(--border)',
@@ -35,7 +35,7 @@ const optionButtonStyle = {
 } as const
 
 function Chip({ children, tone = 'blue' }: { children: React.ReactNode; tone?: 'blue' | 'green' }) {
-  return <span className={`badge ${tone === 'blue' ? 'badge-blue' : 'badge-green'} gap-1.5 text-xs`}>{children}</span>
+  return <span className={`badge ${tone === 'blue' ? 'badge-blue' : 'badge-green'} gap-2 hs-text-caption`}>{children}</span>
 }
 
 export default function FundingWizard({ onComplete, onCancel, disabled }: Props) {
@@ -61,7 +61,7 @@ export default function FundingWizard({ onComplete, onCancel, disabled }: Props)
   return (
     <div className="w-full max-w-lg">
       <div className="mb-4 flex items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-2">
           {region && <Chip>{region}</Chip>}
           {mode && (
             <Chip tone="green">{mode === SEARCH_MODE.CONDITION ? 'By condition' : 'By DTx app'}</Chip>
@@ -71,7 +71,7 @@ export default function FundingWizard({ onComplete, onCancel, disabled }: Props)
           type="button"
           onClick={onCancel}
           disabled={disabled}
-          className="flex flex-shrink-0 items-center gap-1 text-xs font-medium transition-colors hover:underline disabled:opacity-40"
+          className="flex flex-shrink-0 items-center gap-1 hs-text-caption hs-font-normal transition-colors hover:underline disabled:opacity-40"
           style={{ color: 'var(--text-secondary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
         >
           <X className="h-3.5 w-3.5" />
@@ -83,7 +83,7 @@ export default function FundingWizard({ onComplete, onCancel, disabled }: Props)
       {step === 0 && (
         <div>
           <label
-            className="mb-2 block text-sm font-semibold"
+            className="mb-2 block hs-text-label hs-font-bold"
             style={{ color: 'var(--text-primary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
           >
             Which NHS England region are you in?
@@ -118,14 +118,14 @@ export default function FundingWizard({ onComplete, onCancel, disabled }: Props)
               setRegion('')
             }}
             disabled={disabled}
-            className="mb-3 flex items-center gap-1 text-xs font-medium transition-colors hover:underline disabled:opacity-40"
+            className="mb-4 flex items-center gap-1 hs-text-caption hs-font-normal transition-colors hover:underline disabled:opacity-40"
             style={{ color: 'var(--text-secondary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Back
           </button>
           <label
-            className="mb-2 block text-sm font-semibold"
+            className="mb-2 block hs-text-label hs-font-bold"
             style={{ color: 'var(--text-primary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
           >
             What do you want to find funding for?
@@ -138,11 +138,11 @@ export default function FundingWizard({ onComplete, onCancel, disabled }: Props)
                 setMode(SEARCH_MODE.CONDITION)
                 setStep(2)
               }}
-              className={`${optionButtonClass} flex flex-col gap-0.5`}
+              className={`${optionButtonClass} flex flex-col gap-1`}
               style={optionButtonStyle}
             >
-              <span className="font-semibold">By condition</span>
-              <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+              <span className="hs-font-bold">By condition</span>
+              <span className="hs-text-caption" style={{ color: 'var(--text-secondary)' }}>
                 COPD, PR, or Cardiac Rehab
               </span>
             </button>
@@ -153,11 +153,11 @@ export default function FundingWizard({ onComplete, onCancel, disabled }: Props)
                 setMode(SEARCH_MODE.APP)
                 setStep(2)
               }}
-              className={`${optionButtonClass} flex flex-col gap-0.5`}
+              className={`${optionButtonClass} flex flex-col gap-1`}
               style={optionButtonStyle}
             >
-              <span className="font-semibold">By specific DTx app</span>
-              <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+              <span className="hs-font-bold">By specific DTx app</span>
+              <span className="hs-text-caption" style={{ color: 'var(--text-secondary)' }}>
                 myCOPD, Luscii, KiActiv, etc.
               </span>
             </button>
@@ -176,14 +176,14 @@ export default function FundingWizard({ onComplete, onCancel, disabled }: Props)
               setSelection('')
             }}
             disabled={disabled}
-            className="mb-3 flex items-center gap-1 text-xs font-medium transition-colors hover:underline disabled:opacity-40"
+            className="mb-4 flex items-center gap-1 hs-text-caption hs-font-normal transition-colors hover:underline disabled:opacity-40"
             style={{ color: 'var(--text-secondary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Back
           </button>
           <label
-            className="mb-2 block text-sm font-semibold"
+            className="mb-2 block hs-text-label hs-font-bold"
             style={{ color: 'var(--text-primary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
           >
             {mode === SEARCH_MODE.CONDITION ? 'Select a condition' : 'Select a DTx app'}
@@ -198,12 +198,12 @@ export default function FundingWizard({ onComplete, onCancel, disabled }: Props)
                   setSelection(item.id)
                   setStep(3)
                 }}
-                className={`${optionButtonClass} flex flex-col gap-0.5`}
+                className={`${optionButtonClass} flex flex-col gap-1`}
                 style={optionButtonStyle}
               >
                 <span>{item.label}</span>
                 {'area' in item && item.area && (
-                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                  <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>
                     {item.area}
                   </span>
                 )}
@@ -223,44 +223,44 @@ export default function FundingWizard({ onComplete, onCancel, disabled }: Props)
               setSelection('')
             }}
             disabled={disabled}
-            className="mb-3 flex items-center gap-1 text-xs font-medium transition-colors hover:underline disabled:opacity-40"
+            className="mb-4 flex items-center gap-1 hs-text-caption hs-font-normal transition-colors hover:underline disabled:opacity-40"
             style={{ color: 'var(--text-secondary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Back
           </button>
           <div
-            className="mb-4 rounded-xl border px-4 py-3"
+            className="mb-4 rounded-xl border px-4 py-4"
             style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
           >
             <div
-              className="mb-2 text-xs font-semibold uppercase tracking-wide"
+              className="mb-2 hs-text-caption hs-font-bold uppercase tracking-wide"
               style={{ color: 'var(--text-muted)', fontFamily: 'Frutiger, Arial, sans-serif' }}
             >
               Search parameters
             </div>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               <div>
-                <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                <div className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>
                   Region
                 </div>
-                <div className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                <div className="hs-text-label hs-font-bold" style={{ color: 'var(--text-primary)' }}>
                   {region}
                 </div>
               </div>
               <div>
-                <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                <div className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>
                   Search type
                 </div>
-                <div className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                <div className="hs-text-label hs-font-bold" style={{ color: 'var(--text-primary)' }}>
                   {mode === SEARCH_MODE.CONDITION ? 'Condition' : 'DTx app'}
                 </div>
               </div>
               <div>
-                <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                <div className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>
                   Target
                 </div>
-                <div className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                <div className="hs-text-label hs-font-bold" style={{ color: 'var(--text-primary)' }}>
                   {selectionLabel}
                 </div>
               </div>
@@ -271,7 +271,7 @@ export default function FundingWizard({ onComplete, onCancel, disabled }: Props)
               type="button"
               onClick={confirm}
               disabled={disabled}
-              className="rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition-all disabled:opacity-40"
+              className="rounded-xl px-6 py-2 hs-text-label hs-font-bold text-white transition-all disabled:opacity-40"
               style={{ background: 'var(--nhs-blue)' }}
             >
               Search for funding
@@ -280,7 +280,7 @@ export default function FundingWizard({ onComplete, onCancel, disabled }: Props)
               type="button"
               onClick={startOver}
               disabled={disabled}
-              className="rounded-xl border px-4 py-2.5 text-sm font-medium transition-all disabled:opacity-40"
+              className="rounded-xl border px-4 py-2 hs-text-label hs-font-normal transition-all disabled:opacity-40"
               style={{
                 borderColor: 'var(--border)',
                 background: 'var(--card)',

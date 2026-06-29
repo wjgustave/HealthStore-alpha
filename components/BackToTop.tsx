@@ -29,7 +29,7 @@ export default function BackToTop() {
       pill
       size="none"
       aria-label="Back to top"
-      className="fixed bottom-6 right-6 z-50 gap-2 px-4 py-2.5 text-sm shadow-md"
+      className="fixed bottom-6 right-6 z-50 gap-2 px-4 py-2 hs-text-label shadow-md"
     >
       <span aria-hidden>↑</span>
       Back to top

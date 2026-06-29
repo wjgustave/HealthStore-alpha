@@ -24,12 +24,12 @@ export function WidgetShell({
   className?: string
 }) {
   return (
-    <div className={`hs-surface-card flex h-full min-h-0 w-full min-w-0 flex-col p-5 ${className}`.trim()}>
+    <div className={`hs-surface-card flex h-full min-h-0 w-full min-w-0 flex-col p-6 ${className}`.trim()}>
       {children}
       {footerHref ? (
         <Link
           href={footerHref}
-          className="mt-5 flex shrink-0 items-center justify-between rounded-lg border px-4 py-3 text-sm font-semibold transition-colors hover:bg-slate-50"
+          className="mt-6 flex shrink-0 items-center justify-between rounded-lg border px-4 py-4 hs-text-label hs-font-bold transition-colors hover:bg-slate-50"
           style={{ borderColor: 'var(--border)', color: 'var(--nhs-blue)' }}
         >
           {footerLabel}
@@ -43,7 +43,7 @@ export function WidgetShell({
 /** Muted body line for loading / empty states (keeps widgets visually consistent). */
 export function WidgetMessage({ children }: { children: ReactNode }) {
   return (
-    <p className="flex-1 text-sm" style={{ color: 'var(--text-muted)' }}>
+    <p className="flex-1 hs-text-label" style={{ color: 'var(--text-muted)' }}>
       {children}
     </p>
   )
@@ -58,14 +58,14 @@ export function WidgetError({ message, onRetry }: { message: string; onRetry?: (
     <div className="flex-1">
       <div
         role="alert"
-        className="flex items-start gap-2 rounded-lg px-3 py-2.5 text-sm"
+        className="flex items-start gap-2 rounded-lg px-4 py-2 hs-text-label"
         style={{ background: '#FDECEA', color: '#7A1210' }}
       >
-        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+        <AlertTriangle className="mt-1 h-4 w-4 shrink-0" aria-hidden />
         <span className="min-w-0">{message}</span>
       </div>
       {onRetry ? (
-        <Button variant="secondary" size="sm" onClick={onRetry} className="mt-3 gap-1.5">
+        <Button variant="secondary" size="sm" onClick={onRetry} className="mt-4 gap-2">
           <RotateCcw className="h-3.5 w-3.5" aria-hidden />
           Try again
         </Button>
@@ -90,13 +90,13 @@ export function WidgetHeading({
 }) {
   return (
     <div className={`flex items-center justify-between gap-2 ${className}`.trim()}>
-      <h3 className="flex items-center gap-2 text-lg font-bold" style={{ ...fr, color: 'var(--text-primary)' }}>
+      <h3 className="flex items-center gap-2 hs-text-card-title-sm hs-font-bold" style={{ ...fr, color: 'var(--text-primary)' }}>
         {icon}
         {title}
       </h3>
       {count != null ? (
         <span
-          className="min-w-[1.5rem] rounded-md px-2 py-0.5 text-center text-xs font-bold text-white"
+          className="min-w-[1.5rem] rounded-md px-2 py-1 text-center hs-text-caption hs-font-bold text-white"
           style={{ background: countColor ?? 'var(--nhs-blue)' }}
         >
           {count}

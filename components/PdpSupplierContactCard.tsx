@@ -5,16 +5,16 @@ export default function PdpSupplierContactCard({ email }: { email?: string | nul
   const showEmailLink = trimmed.length > 0
 
   return (
-    <div className="hs-surface-card-sm bg-white rounded-xl border p-5 space-y-3" style={{ borderColor: 'var(--border)' }}>
-      <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+    <div className="hs-surface-card-sm bg-white rounded-xl border p-6 space-y-4" style={{ borderColor: 'var(--border)' }}>
+      <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
         Supplier contact information
       </div>
-      <div className="text-sm">
-        <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+      <div className="hs-text-label">
+        <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
           Email
         </div>
         {showEmailLink ? (
-          <a href={`mailto:${trimmed}`} className="font-medium break-all hover:underline" style={{ color: 'var(--nhs-blue)' }}>
+          <a href={`mailto:${trimmed}`} className="hs-font-normal break-all hover:underline" style={{ color: 'var(--nhs-blue)' }}>
             {trimmed}
           </a>
         ) : (

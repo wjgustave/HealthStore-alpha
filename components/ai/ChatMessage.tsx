@@ -16,9 +16,9 @@ type Props = {
 
 const mdComponents: Components = {
   table: ({ children, ...props }) => (
-    <div className="overflow-x-auto my-3">
+    <div className="overflow-x-auto my-4">
       <table
-        className="w-full text-sm border-collapse"
+        className="w-full hs-text-label border-collapse"
         style={{ borderColor: 'var(--border)' }}
         {...props}
       >
@@ -33,7 +33,7 @@ const mdComponents: Components = {
   ),
   th: ({ children, ...props }) => (
     <th
-      className="px-3 py-2 text-left text-xs font-semibold border-b"
+      className="px-4 py-2 text-left hs-text-caption hs-font-bold border-b"
       style={{ borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
       {...props}
     >
@@ -42,7 +42,7 @@ const mdComponents: Components = {
   ),
   td: ({ children, ...props }) => (
     <td
-      className="px-3 py-2 text-sm border-b"
+      className="px-4 py-2 hs-text-label border-b"
       style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
       {...props}
     >
@@ -56,7 +56,7 @@ const mdComponents: Components = {
         href={href}
         target={isExternal ? '_blank' : undefined}
         rel={isExternal ? 'noopener noreferrer' : undefined}
-        className="inline-flex items-center gap-0.5 underline decoration-1 underline-offset-2"
+        className="inline-flex items-center gap-1 underline decoration-1 underline-offset-2"
         style={{ color: 'var(--nhs-blue)' }}
         {...props}
       >
@@ -71,12 +71,12 @@ const mdComponents: Components = {
     </strong>
   ),
   ul: ({ children, ...props }) => (
-    <ul className="list-disc pl-5 my-2 space-y-1" {...props}>
+    <ul className="list-disc pl-6 my-2 space-y-1" {...props}>
       {children}
     </ul>
   ),
   ol: ({ children, ...props }) => (
-    <ol className="list-decimal pl-5 my-2 space-y-1" {...props}>
+    <ol className="list-decimal pl-6 my-2 space-y-1" {...props}>
       {children}
     </ol>
   ),
@@ -86,18 +86,18 @@ const mdComponents: Components = {
     </p>
   ),
   h3: ({ children, ...props }) => (
-    <h3 className="text-base font-bold mt-4 mb-1" style={{ color: 'var(--text-primary)' }} {...props}>
+    <h3 className="hs-text-body hs-font-bold mt-4 mb-1" style={{ color: 'var(--text-primary)' }} {...props}>
       {children}
     </h3>
   ),
   h4: ({ children, ...props }) => (
-    <h4 className="text-sm font-bold mt-3 mb-1" style={{ color: 'var(--text-primary)' }} {...props}>
+    <h4 className="hs-text-label hs-font-bold mt-4 mb-1" style={{ color: 'var(--text-primary)' }} {...props}>
       {children}
     </h4>
   ),
   blockquote: ({ children, ...props }) => (
     <blockquote
-      className="border-l-3 pl-3 my-2 italic"
+      className="border-l-3 pl-4 my-2 italic"
       style={{ borderColor: 'var(--nhs-blue)', color: 'var(--text-secondary)' }}
       {...props}
     >
@@ -122,7 +122,7 @@ export default function ChatMessage({
     return (
       <div className="flex justify-end">
         <div
-          className="max-w-[80%] rounded-2xl rounded-br-md px-4 py-3 text-sm leading-relaxed"
+          className="max-w-[80%] rounded-2xl rounded-br-md px-4 py-4 hs-text-label leading-relaxed"
           style={{
             background: 'var(--nhs-blue)',
             color: '#fff',
@@ -141,7 +141,7 @@ export default function ChatMessage({
     <div className="flex justify-start">
       <div className="max-w-[90%]">
         <div
-          className="rounded-2xl rounded-bl-md border px-4 py-3 text-sm leading-relaxed"
+          className="rounded-2xl rounded-bl-md border px-4 py-4 hs-text-label leading-relaxed"
           style={{
             background: 'var(--card)',
             borderColor: 'var(--border)',

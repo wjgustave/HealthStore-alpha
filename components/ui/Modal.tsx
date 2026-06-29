@@ -7,6 +7,13 @@ import { useEscape } from './useEscape'
 import { useFocusTrap } from './useFocusTrap'
 import { useLockBodyScroll } from './useLockBodyScroll'
 
+/**
+ * [Provenance: Bespoke — no NHS/GOV.UK equivalent.] Both design systems prefer a
+ * dedicated page over a modal dialog. This is built to NHS principles: NHS-blue
+ * scrim, focus trap + restore, Escape/backdrop dismissal, `role="dialog"` +
+ * `aria-modal`, and the NHS focus ring on controls. Proposed for the NHS backlog.
+ */
+
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 

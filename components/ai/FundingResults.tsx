@@ -30,11 +30,14 @@ const APPLICANT_FIT_META: Record<
   developer_or_academic_only: null,
 }
 
-function confidenceBand(score: number): { label: string; color: string } {
-  if (score >= 75) return { label: 'Strong match', color: 'var(--nhs-green)' }
-  if (score >= 50) return { label: 'Moderate match', color: 'var(--nhs-blue)' }
-  if (score >= 30) return { label: 'Weak match', color: 'var(--nhs-amber)' }
-  return { label: 'Low match', color: 'var(--nhs-red)' }
+function confidenceBand(score: number): { label: string; color: string; text: string } {
+  // `color` drives the (decorative) progress-bar fill; `text` is the label colour,
+  // which must stay WCAG-readable on white. NHS orange isn't text-safe, so the amber
+  // band uses the readable amber-brown text shade.
+  if (score >= 75) return { label: 'Strong match', color: 'var(--nhs-green)', text: 'var(--nhs-green)' }
+  if (score >= 50) return { label: 'Moderate match', color: 'var(--nhs-blue)', text: 'var(--nhs-blue)' }
+  if (score >= 30) return { label: 'Weak match', color: 'var(--nhs-amber)', text: '#7A4800' }
+  return { label: 'Low match', color: 'var(--nhs-red)', text: 'var(--nhs-red)' }
 }
 
 function ResultCard({ result, disabled }: { result: FundingResult; disabled?: boolean }) {
@@ -46,15 +49,15 @@ function ResultCard({ result, disabled }: { result: FundingResult; disabled?: bo
       className="rounded-xl border p-4"
       style={{ borderColor: 'var(--border)', background: 'var(--card)' }}
     >
-      <div className="mb-2 flex flex-wrap items-center gap-1.5">
+      <div className="mb-2 flex flex-wrap items-center gap-2">
         <span
-          className="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold"
+          className="inline-flex items-center rounded-md px-2 py-1 hs-text-caption hs-font-bold"
           style={{ background: '#E6F0FB', color: 'var(--nhs-blue)' }}
         >
           {MATCH_TYPE_LABELS[result.match_type]}
         </span>
         <span
-          className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium"
+          className="inline-flex items-center gap-1 rounded-md px-2 py-1 hs-text-caption hs-font-normal"
           style={{ background: 'var(--surface)', color: 'var(--text-secondary)' }}
         >
           <MapPin className="h-3 w-3" />
@@ -62,7 +65,7 @@ function ResultCard({ result, disabled }: { result: FundingResult; disabled?: bo
         </span>
         {APPLICANT_FIT_META[result.applicant_fit] && (
           <span
-            className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold"
+            className="inline-flex items-center gap-1 rounded-md px-2 py-1 hs-text-caption hs-font-bold"
             style={{
               background: APPLICANT_FIT_META[result.applicant_fit]!.bg,
               color: APPLICANT_FIT_META[result.applicant_fit]!.color,
@@ -75,19 +78,19 @@ function ResultCard({ result, disabled }: { result: FundingResult; disabled?: bo
       </div>
 
       <h4
-        className="text-base font-bold leading-snug"
+        className="hs-text-body hs-font-bold leading-snug"
         style={{ color: 'var(--text-primary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
       >
         {result.fund_name}
       </h4>
-      <p className="mt-0.5 text-sm" style={{ color: 'var(--text-secondary)' }}>
+      <p className="mt-1 hs-text-label" style={{ color: 'var(--text-secondary)' }}>
         {result.provider}
       </p>
 
       {/* Confidence bar */}
-      <div className="mt-3">
+      <div className="mt-4">
         <div className="mb-1 flex items-center justify-between">
-          <span className="text-xs font-semibold" style={{ color: band.color }}>
+          <span className="hs-text-caption hs-font-bold" style={{ color: band.text }}>
             {result._score}/100 — {band.label}
           </span>
         </div>
@@ -106,7 +109,7 @@ function ResultCard({ result, disabled }: { result: FundingResult; disabled?: bo
         type="button"
         onClick={() => setExpanded(v => !v)}
         disabled={disabled}
-        className="mt-3 flex items-center gap-1 text-xs font-medium transition-colors hover:underline disabled:opacity-40"
+        className="mt-4 flex items-center gap-1 hs-text-caption hs-font-normal transition-colors hover:underline disabled:opacity-40"
         style={{ color: 'var(--nhs-blue)', fontFamily: 'Frutiger, Arial, sans-serif' }}
       >
         {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
@@ -114,29 +117,29 @@ function ResultCard({ result, disabled }: { result: FundingResult; disabled?: bo
       </button>
 
       {expanded && (
-        <dl className="mt-3 space-y-2 border-t pt-3 text-sm" style={{ borderColor: 'var(--border)' }}>
+        <dl className="mt-4 space-y-2 border-t pt-4 hs-text-label" style={{ borderColor: 'var(--border)' }}>
           <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+            <dt className="hs-text-caption hs-font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
               Eligibility
             </dt>
             <dd style={{ color: 'var(--text-primary)' }}>{result.eligibility_summary || '—'}</dd>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <dt className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+              <dt className="hs-text-caption hs-font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
                 Amount
               </dt>
               <dd style={{ color: 'var(--text-primary)' }}>{result.amount_range ?? 'Not specified'}</dd>
             </div>
             <div>
-              <dt className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+              <dt className="hs-text-caption hs-font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
                 Deadline
               </dt>
               <dd style={{ color: 'var(--text-primary)' }}>{result.deadline ?? 'Ongoing / unknown'}</dd>
             </div>
           </div>
           <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+            <dt className="hs-text-caption hs-font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
               Why this matches
             </dt>
             <dd style={{ color: 'var(--text-primary)' }}>{result.match_rationale || '—'}</dd>
@@ -158,9 +161,9 @@ export default function FundingResults({
 
   return (
     <div className="w-full">
-      <div className="mb-3">
+      <div className="mb-4">
         <p
-          className="text-sm font-semibold"
+          className="hs-text-label hs-font-bold"
           style={{ color: 'var(--text-primary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
         >
           {empty
@@ -178,12 +181,12 @@ export default function FundingResults({
           className="rounded-xl border px-4 py-6 text-center"
           style={{ borderColor: 'var(--border)', background: 'var(--card)' }}
         >
-          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+          <p className="hs-text-label" style={{ color: 'var(--text-secondary)' }}>
             No matches were returned. Try the broader condition area, or a different region.
           </p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {results.map((r, i) => (
             <ResultCard key={`${r.fund_name}-${i}`} result={r} disabled={disabled} />
           ))}
@@ -191,10 +194,10 @@ export default function FundingResults({
       )}
 
       <div
-        className="mt-3 flex items-start gap-2 rounded-lg px-3 py-2 text-xs"
+        className="mt-4 flex items-start gap-2 rounded-lg px-4 py-2 hs-text-caption"
         style={{ background: 'var(--surface)', color: 'var(--text-muted)' }}
       >
-        <AlertTriangle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" style={{ color: 'var(--nhs-amber)' }} />
+        <AlertTriangle className="mt-1 h-3.5 w-3.5 flex-shrink-0" style={{ color: '#7A4800' }} />
         <span>
           AI-generated results may be incomplete or out of date. Always verify eligibility, amounts,
           and deadlines directly with the funder before relying on them.
@@ -202,9 +205,9 @@ export default function FundingResults({
       </div>
 
       {!empty && (
-        <div className="mt-3">
+        <div className="mt-4">
           <p
-            className="mb-2 text-xs font-semibold uppercase tracking-wide"
+            className="mb-2 hs-text-caption hs-font-bold uppercase tracking-wide"
             style={{ color: 'var(--text-muted)', fontFamily: 'Frutiger, Arial, sans-serif' }}
           >
             Follow-up questions
@@ -214,7 +217,7 @@ export default function FundingResults({
               type="button"
               onClick={() => onFollowUp('Compare the top two funds')}
               disabled={disabled}
-              className="rounded-full border px-3 py-1.5 text-xs font-medium transition-all hover:shadow-sm disabled:opacity-40"
+              className="rounded-full border px-4 py-2 hs-text-caption hs-font-normal transition-colors disabled:opacity-40"
               style={{
                 borderColor: 'var(--border)',
                 background: 'var(--card)',
@@ -228,7 +231,7 @@ export default function FundingResults({
               type="button"
               onClick={() => onFollowUp('How do I apply for the strongest match?')}
               disabled={disabled}
-              className="rounded-full border px-3 py-1.5 text-xs font-medium transition-all hover:shadow-sm disabled:opacity-40"
+              className="rounded-full border px-4 py-2 hs-text-caption hs-font-normal transition-colors disabled:opacity-40"
               style={{
                 borderColor: 'var(--border)',
                 background: 'var(--card)',

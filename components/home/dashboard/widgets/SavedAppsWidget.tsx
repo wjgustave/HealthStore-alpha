@@ -27,7 +27,7 @@ export function SavedAppsWidget({ apps, limit = 4 }: { apps: App[]; limit?: numb
       ) : count === 0 ? (
         <WidgetMessage>You have not saved any apps yet.</WidgetMessage>
       ) : (
-        <ul className="m-0 min-h-0 flex-1 list-none space-y-3 p-0">
+        <ul className="m-0 min-h-0 flex-1 list-none space-y-4 p-0">
           {recent.map(b => {
             const app = byId.get(b.appId)
             if (!app) return null
@@ -35,16 +35,16 @@ export function SavedAppsWidget({ apps, limit = 4 }: { apps: App[]; limit?: numb
               <li key={b.appId}>
                 <Link
                   href={`/apps/${app.slug}`}
-                  className="flex items-center gap-2.5 rounded-lg p-1 -m-1 transition-colors hover:bg-[#F7F9FC]"
+                  className="flex items-center gap-2 rounded-lg p-1 -m-1 transition-colors hover:bg-[#F0F4F5]"
                 >
                   {app.logo_path ? (
                     <Image src={app.logo_path} alt="" width={28} height={28} className="rounded-md flex-shrink-0" />
                   ) : null}
                   <span className="min-w-0">
-                    <span className="block truncate text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                    <span className="block truncate hs-text-label hs-font-bold" style={{ color: 'var(--text-primary)' }}>
                       {app.app_name}
                     </span>
-                    <span className="block truncate text-xs" style={{ color: 'var(--text-muted)' }}>
+                    <span className="block truncate hs-text-caption" style={{ color: 'var(--text-muted)' }}>
                       {app.supplier_name}
                     </span>
                   </span>

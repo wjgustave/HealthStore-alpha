@@ -190,7 +190,7 @@ export default function ExpressInterestModal({
           </div>
           <h2
             id={titleId}
-            className="font-bold mb-2"
+            className="hs-font-bold mb-2"
             style={{
               fontFamily: 'Frutiger, Arial, sans-serif',
               fontSize: 'var(--text-section-alt)',
@@ -213,7 +213,7 @@ export default function ExpressInterestModal({
         <>
           <h2
             id={titleId}
-            className="font-bold mb-1 pr-8"
+            className="hs-font-bold mb-1 pr-8"
             style={{
               fontFamily: 'Frutiger, Arial, sans-serif',
               fontSize: 'var(--text-section-alt)',
@@ -222,7 +222,7 @@ export default function ExpressInterestModal({
           >
             Express interest in {appName}
           </h2>
-          <p className="mb-5" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
+          <p className="mb-6" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
             Complete this form and a commissioning support team member will contact you.
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -313,13 +313,13 @@ export default function ExpressInterestModal({
             {submitError ? (
               <p
                 role="alert"
-                className="text-sm rounded-md px-3 py-2"
+                className="hs-text-label rounded-md px-4 py-2"
                 style={{ background: '#FEF3F2', color: '#912018', border: '1px solid #FECDCA' }}
               >
                 {submitError}
               </p>
             ) : null}
-            <div className="pt-2 flex items-center gap-3">
+            <div className="pt-2 flex items-center gap-4">
               <Button type="submit" loading={submitting} className="flex-1 disabled:cursor-wait">
                 <Send className="w-4 h-4" aria-hidden />
                 {submitting ? 'Submitting…' : 'Submit expression of interest'}

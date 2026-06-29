@@ -23,12 +23,12 @@ export function PdpReadOnlySection({
       className={`rounded-xl border bg-white overflow-hidden ${className}`.trim()}
       style={{ borderColor: 'var(--border)' }}
     >
-      <div className="px-4 py-3 border-b" style={{ borderColor: 'var(--border)', background: '#F7F9FC' }}>
-        <h2 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>
+      <div className="px-4 py-4 border-b" style={{ borderColor: 'var(--border)', background: '#F0F4F5' }}>
+        <h2 className="hs-text-body hs-font-bold" style={{ color: 'var(--text-primary)' }}>
           {title}
         </h2>
         {description ? (
-          <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
+          <p className="hs-text-label mt-1" style={{ color: 'var(--text-muted)' }}>
             {description}
           </p>
         ) : null}

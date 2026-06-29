@@ -27,13 +27,13 @@ export function PdpSection({
     <PdpShareRegion shareKey={shareKey} label={label ?? title} description={description} className={`mb-8 last:mb-0 ${className}`.trim()}>
       <section id={id}>
         <h2
-          className={`font-bold leading-snug ${description ? 'mb-1' : 'mb-4'}`}
+          className={`hs-font-bold leading-snug ${description ? 'mb-1' : 'mb-4'}`}
           style={{ fontSize: 'var(--text-section-alt)', color: 'var(--nhs-blue)' }}
         >
           {title}
         </h2>
         {description ? (
-          <p className="mb-4 text-sm leading-normal" style={{ color: 'var(--text-muted)' }}>
+          <p className="mb-4 hs-text-label leading-normal" style={{ color: 'var(--text-muted)' }}>
             {description}
           </p>
         ) : null}

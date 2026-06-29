@@ -17,8 +17,8 @@ function SavedAppCard({ app, onRemove, removing }: { app: App; onRemove: () => v
   return (
     <div className="app-card flex h-full min-h-0 flex-col">
       <div className="flex min-h-0 flex-1 flex-col" style={{ padding: '1.25rem' }}>
-        <div className="flex items-start justify-between gap-2 mb-3">
-          <div className="flex items-center gap-2.5 min-w-0">
+        <div className="flex items-start justify-between gap-2 mb-4">
+          <div className="flex items-center gap-2 min-w-0">
             {app.logo_path ? (
               <Image src={app.logo_path} alt="" width={32} height={32} className="rounded-md flex-shrink-0" />
             ) : null}
@@ -27,7 +27,7 @@ function SavedAppCard({ app, onRemove, removing }: { app: App; onRemove: () => v
                 className="truncate"
                 style={{
                   fontFamily: 'Frutiger, Arial, sans-serif',
-                  fontWeight: 700,
+                  fontWeight: 600,
                   fontSize: 'var(--text-card-title-sm)',
                   color: 'var(--text-primary)',
                   marginBottom: 2,
@@ -50,7 +50,7 @@ function SavedAppCard({ app, onRemove, removing }: { app: App; onRemove: () => v
           </button>
         </div>
 
-        <div className="flex flex-wrap gap-1 mb-3">
+        <div className="flex flex-wrap gap-1 mb-4">
           {app.condition_tags.map((t: string) => (
             <ConditionTag key={t} tag={t} />
           ))}
@@ -68,7 +68,7 @@ function SavedAppCard({ app, onRemove, removing }: { app: App; onRemove: () => v
         <div className="mt-auto grid grid-cols-1 gap-2 sm:grid-cols-2">
           <Link
             href={`/apps/${app.slug}`}
-            className="block rounded-lg py-4 text-center text-sm font-semibold transition-colors hover:!bg-[#004B8C]"
+            className="block rounded-lg py-4 text-center hs-text-label hs-font-bold transition-colors hover:!bg-[#004B8C]"
             style={{ background: STORE_ACCENT, color: '#fff' }}
           >
             View details →
@@ -91,7 +91,7 @@ export default function SavedAppsClient({ allApps }: Props) {
   }, [bookmarks, allApps])
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div className="hs-page">
       <PageBreadcrumb items={[{ label: 'Find apps', href: '/apps' }, { label: 'Saved apps' }]} />
 
       <div className="mb-8">
@@ -99,7 +99,7 @@ export default function SavedAppsClient({ allApps }: Props) {
           className="mb-2"
           style={{
             fontFamily: 'Frutiger, Arial, sans-serif',
-            fontWeight: 700,
+            fontWeight: 600,
             fontSize: 'var(--text-page-title)',
             color: 'var(--text-primary)',
           }}
@@ -113,7 +113,7 @@ export default function SavedAppsClient({ allApps }: Props) {
       </div>
 
       {error ? (
-        <p className="mb-4 text-sm rounded-md px-3 py-2" role="alert" style={{ background: '#FEF3F2', color: '#912018', border: '1px solid #FECDCA' }}>
+        <p className="mb-4 hs-text-label rounded-md px-4 py-2" role="alert" style={{ background: '#FEF3F2', color: '#912018', border: '1px solid #FECDCA' }}>
           {error}
         </p>
       ) : null}
@@ -123,11 +123,11 @@ export default function SavedAppsClient({ allApps }: Props) {
           <p style={{ color: 'var(--text-muted)' }}>Loading saved apps…</p>
         </div>
       ) : savedApps.length === 0 ? (
-        <div className="hs-surface-card text-center py-20 px-4 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
-          <div className="text-4xl mb-4" aria-hidden>
+        <div className="hs-surface-card text-center py-16 px-4 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
+          <div className="hs-text-section mb-4" aria-hidden>
             🔖
           </div>
-          <p className="font-semibold mb-2 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
+          <p className="hs-font-bold mb-2 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
             No saved DTx apps yet
           </p>
           <p className="mb-6 max-w-lg mx-auto" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
@@ -135,7 +135,7 @@ export default function SavedAppsClient({ allApps }: Props) {
           </p>
           <Link
             href="/apps"
-            className="inline-flex items-center justify-center text-sm font-semibold rounded-lg px-5 py-3 min-h-[44px]"
+            className="inline-flex items-center justify-center hs-text-label hs-font-bold rounded-lg px-6 py-4 min-h-[44px]"
             style={{ background: STORE_ACCENT, color: '#fff' }}
           >
             Find apps
@@ -143,10 +143,10 @@ export default function SavedAppsClient({ allApps }: Props) {
         </div>
       ) : (
         <>
-          <p className="mb-4 text-sm" style={{ color: 'var(--text-muted)' }}>
+          <p className="mb-4 hs-text-label" style={{ color: 'var(--text-muted)' }}>
             {count === 1 ? '1 saved DTx app' : `${count} saved DTx apps`}
           </p>
-          <div className="grid gap-5 [grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))] xl:[grid-template-columns:repeat(auto-fill,minmax(360px,1fr))]">
+          <div className="grid gap-6 [grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))] xl:[grid-template-columns:repeat(auto-fill,minmax(360px,1fr))]">
             {savedApps.map(app => (
               <SavedAppCard key={app.id} app={app} onRemove={() => void remove(app.id)} removing={togglingId === app.id} />
             ))}

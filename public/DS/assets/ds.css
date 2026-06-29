@@ -21,52 +21,128 @@
   src: url('/fonts/Frutiger-Bold.ttf') format('truetype');
   font-weight: 700; font-style: normal; font-display: swap;
 }
+/* NHS bold = 600; map to Bold.ttf so NHS headings render crisply (mirrors app). */
+@font-face {
+  font-family: 'Frutiger';
+  src: url('/fonts/Frutiger-Bold.ttf') format('truetype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
 
 /* ---------- Design tokens (copied from app/globals.css :root) ---------- */
 :root {
   --nhs-blue: #005EB8;
-  --nhs-dark: #003087;
+  --nhs-dark: #003087;          /* NHS dark blue */
   --nhs-green: #007F3B;
   --nhs-purple: #330072;
-  --nhs-red: #DA291C;
-  --nhs-amber: #D5840D;
-  --nhs-grey: #425563;
-  --surface: #F7F9FC;
+  --nhs-red: #D5281B;           /* NHS red */
+  --nhs-amber: #ED8B00;         /* NHS orange (secondary) */
+  --nhs-grey: #4C6272;          /* NHS grey 1 */
+  --surface: #F0F4F5;           /* NHS grey 5 */
   --card: #FFFFFF;
-  --border: #DEE4EA;
-  --text-primary: #1A2332;
-  --text-secondary: #485768;
-  --text-muted: #68757c;
-  --text-muted-low-con: #768692;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --border: #D8DDE0;            /* NHS grey 4 */
+  --text-primary: #212B32;      /* NHS black */
+  --text-secondary: #4C6272;    /* NHS grey 1 */
+  --text-muted: #4C6272;        /* NHS grey 1 (body-safe) */
+  --text-muted-low-con: #768692;/* NHS grey 2 */
+  /* NHS surfaces are flat; --shadow-lg kept for overlays only. */
+  --shadow-sm: none;
+  --shadow-md: none;
   --shadow-lg: 0 10px 30px rgba(0,0,0,0.10);
   --font-display: 'Frutiger', Arial, sans-serif;
   --font-body: 'Frutiger', Arial, sans-serif;
-  --font-body-weight: 300;
-  --text-hero: 2.8rem;
-  --text-page-title: 2rem;
-  --text-section: 1.5rem;
-  --text-section-alt: 1.4rem;
-  --text-card-title: 1.05rem;
-  --text-card-title-sm: 1rem;
-  --text-body: 1rem;
-  --text-xs: 0.875rem;
+  /* NHS body weight is 400 (Regular); 600 is NHS bold. */
+  --font-body-weight: 400;
+  /* Exact nhsuk-frontend responsive type scale (mobile step; tablet ≥641px
+     re-declared below). hero=64 page-title=48 section=36 section-alt=26
+     card-title=22 card-title-sm/body=19 xs/badge=16. */
+  --text-hero: 3rem;            /* 48 → 64 */
+  --text-page-title: 2rem;      /* 32 → 48 */
+  --text-section: 1.6875rem;    /* 27 → 36 */
+  --text-section-alt: 1.375rem; /* 22 → 26 */
+  --text-lede: 1.25rem;         /* 20 → 24 (NHS 24 / body-l) */
+  --text-card-title: 1.1875rem; /* 19 → 22 */
+  --text-card-title-sm: 1rem;   /* 16 → 19 */
+  --text-body: 1rem;            /* 16 → 19 */
+  --text-xs: 0.875rem;          /* 14 → 16 (NHS body-s) */
+  --text-caption: 0.75rem;      /* 12 → 14 (NHS 14 — smallest) */
   --text-label: var(--text-xs);
-  --text-badge: 0.875rem;
+  --text-badge: 0.875rem;       /* 14 → 16 */
+  --leading-hero: 1.125;
+  --leading-heading: 1.1875;
+  --leading-heading-sm: 1.227;
+  --leading-lede: 1.4;
+  --leading-body: 1.5;
+  --leading-caption: 1.66667;
 
-  /* DS-only proposed radius scale (codifies the audit recommendation) */
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  /* NHS flat/square: a single 4px component radius; pill kept for chips/toggles/FABs. */
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --radius-xl: 4px;
   --radius-pill: 9999px;
+
+  /* NHS spacing scale (core/settings/_spacing.scss). */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 16px; --space-4: 24px;
+  --space-5: 32px; --space-6: 40px; --space-7: 48px; --space-8: 56px; --space-9: 64px;
+  --section-gap: 32px;
+  --section-gap-lg: 40px;
+  --gutter: 16px;
 
   /* DS chrome */
   --ds-sidenav-w: 280px;
   --ds-maxw: 1080px;
   --ds-code-bg: #1f2733;
 }
+
+/* NHS responsive spacing — section rhythm + gutter step up at tablet. */
+@media (min-width: 768px) {
+  :root {
+    --section-gap: 40px;
+    --section-gap-lg: 56px;
+    --gutter: 32px;
+  }
+}
+
+/* NHS responsive type — tablet+ step (mq breakpoint = 641px). */
+@media (min-width: 641px) {
+  :root {
+    --text-hero: 4rem;            /* 64 */
+    --text-page-title: 3rem;      /* 48 */
+    --text-section: 2.25rem;      /* 36 */
+    --text-section-alt: 1.625rem; /* 26 */
+    --text-lede: 1.5rem;          /* 24 */
+    --text-card-title: 1.375rem;  /* 22 */
+    --text-card-title-sm: 1.1875rem; /* 19 */
+    --text-body: 1.1875rem;       /* 19 */
+    --text-xs: 1rem;              /* 16 */
+    --text-caption: 0.875rem;     /* 14 */
+    --text-badge: 1rem;           /* 16 */
+    --leading-body: 1.47368;
+    --leading-lede: 1.29167;
+    --leading-caption: 1.71429;
+  }
+}
+
+/* NHS token typography utilities (mirrors app/globals.css). */
+.hs-text-caption { font-size: var(--text-caption); line-height: var(--leading-caption); }
+.hs-text-label { font-size: var(--text-label); line-height: var(--leading-body); }
+.hs-text-body { font-size: var(--text-body); line-height: var(--leading-body); }
+.hs-text-lede { font-size: var(--text-lede); line-height: var(--leading-lede); }
+.hs-text-card-title-sm { font-size: var(--text-card-title-sm); line-height: var(--leading-heading-sm); }
+.hs-text-card-title { font-size: var(--text-card-title); line-height: var(--leading-heading-sm); }
+.hs-text-section-alt { font-size: var(--text-section-alt); line-height: var(--leading-heading-sm); }
+.hs-text-section { font-size: var(--text-section); line-height: var(--leading-heading); }
+.hs-text-page-title { font-size: var(--text-page-title); line-height: var(--leading-heading); }
+.hs-text-hero { font-size: var(--text-hero); line-height: var(--leading-hero); }
+.hs-font-normal { font-weight: 400; }
+.hs-font-bold { font-weight: 600; }
+
+/* NHS layout/spacing utilities (mirrors app/globals.css). */
+.hs-page { max-width: 80rem; margin-inline: auto; padding-inline: var(--gutter); padding-block: var(--section-gap); }
+.hs-page-narrow { max-width: 48rem; margin-inline: auto; padding-inline: var(--gutter); padding-block: var(--section-gap); }
+.hs-measure { max-width: 66ch; }
+.hs-section { margin-bottom: var(--section-gap); }
+.hs-section-lg { margin-bottom: var(--section-gap-lg); }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -79,10 +155,10 @@ body {
   background-color: var(--surface);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
-  line-height: 1.55;
+  line-height: var(--leading-body);
 }
 
-h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; color: var(--text-primary); }
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; color: var(--text-primary); line-height: var(--leading-heading); }
 a { color: var(--nhs-blue); }
 
 /* Global focus token (matches app) */
@@ -99,7 +175,7 @@ a { color: var(--nhs-blue); }
 .ds-skiplink {
   position: absolute; top: -100%; left: 16px; z-index: 9999;
   padding: 8px 16px; background: #FFD800; color: #1A2332;
-  font-weight: 700; font-size: 14px; border-radius: 0 0 6px 6px; text-decoration: none;
+  font-weight: 600; font-size: var(--text-caption); border-radius: 0; text-decoration: none;
 }
 .ds-skiplink:focus { top: 0; }
 
@@ -114,10 +190,10 @@ a { color: var(--nhs-blue); }
   height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
 }
 .ds-masthead__brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; min-width: 0; }
-.ds-masthead__logo { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: var(--nhs-dark); }
-.ds-masthead__tag { font-size: 0.95rem; color: var(--text-secondary); font-weight: 400; }
+.ds-masthead__logo { font-family: var(--font-display); font-weight: 600; font-size: var(--text-card-title-sm); color: var(--nhs-dark); }
+.ds-masthead__tag { font-size: var(--text-label); color: var(--text-secondary); font-weight: 400; }
 .ds-masthead__badge {
-  flex-shrink: 0; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em;
+  flex-shrink: 0; font-size: var(--text-caption); font-weight: 600; letter-spacing: 0.02em;
   padding: 3px 10px; border-radius: var(--radius-sm);
   background: #EDF1F6; color: #425563; border: 1px solid #D8E0EA;
 }
@@ -136,13 +212,13 @@ a { color: var(--nhs-blue); }
 }
 .ds-sidenav__group { margin-bottom: 22px; }
 .ds-sidenav__title {
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  font-size: var(--text-caption); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--text-muted); margin: 0 0 8px; padding: 0 12px;
 }
 .ds-sidenav__list { list-style: none; margin: 0; padding: 0; }
 .ds-sidenav__link {
   display: block; padding: 7px 12px; border-radius: var(--radius-sm);
-  font-size: 0.9rem; color: var(--text-secondary); text-decoration: none;
+  font-size: var(--text-label); color: var(--text-secondary); text-decoration: none;
   border-left: 3px solid transparent;
 }
 .ds-sidenav__link:hover { background: #eef2f7; color: var(--text-primary); }
@@ -181,14 +257,14 @@ a { color: var(--nhs-blue); }
    DS CONTENT PRIMITIVES (page headers, prose, examples, code, do/don't)
    ============================================================================= */
 .ds-page-header { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
-.ds-eyebrow { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nhs-blue); margin: 0 0 8px; }
-.ds-page-title { font-size: var(--text-page-title); margin: 0 0 12px; line-height: 1.15; }
-.ds-lede { font-size: 1.15rem; color: var(--text-secondary); max-width: 70ch; margin: 0; line-height: 1.5; }
+.ds-eyebrow { font-size: var(--text-caption); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nhs-blue); margin: 0 0 8px; }
+.ds-page-title { font-size: var(--text-page-title); margin: 0 0 12px; line-height: var(--leading-heading); }
+.ds-lede { font-size: var(--text-lede); color: var(--text-secondary); max-width: 70ch; margin: 0; line-height: var(--leading-lede); }
 
 .ds-content h2 { font-size: var(--text-section); margin: 48px 0 8px; }
 .ds-content h2:first-of-type { margin-top: 8px; }
-.ds-content h3 { font-size: 1.2rem; margin: 32px 0 8px; }
-.ds-content h4 { font-size: 1rem; margin: 24px 0 6px; }
+.ds-content h3 { font-size: var(--text-card-title-sm); margin: 32px 0 8px; }
+.ds-content h4 { font-size: var(--text-body); margin: 24px 0 6px; }
 .ds-content p { max-width: 72ch; }
 .ds-content ul, .ds-content ol { max-width: 72ch; }
 .ds-content li { margin-bottom: 6px; }
@@ -227,7 +303,7 @@ a { color: var(--nhs-blue); }
 .ds-code__copy:hover { background: rgba(255,255,255,0.16); }
 
 /* Tables used in DS docs */
-.ds-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+.ds-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: var(--text-label); }
 .ds-table th, .ds-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
 .ds-table th { font-weight: 600; color: var(--text-primary); background: #f4f7fa; }
 .ds-table code { background: #eef2f7; padding: 1px 5px; border-radius: 4px; font-size: 0.85em; }
@@ -254,8 +330,8 @@ a { color: var(--nhs-blue); }
 
 .ds-meta-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin: 16px 0; }
 .ds-meta { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; background: #fff; }
-.ds-meta__k { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); font-weight: 600; }
-.ds-meta__v { font-size: 0.95rem; margin-top: 2px; }
+.ds-meta__k { font-size: var(--text-caption); text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); font-weight: 600; }
+.ds-meta__v { font-size: var(--text-label); margin-top: 2px; }
 
 /* Status chips for inventory/report */
 .ds-status { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill); }
@@ -276,12 +352,12 @@ a { color: var(--nhs-blue); }
 .ds-navcard {
   display: block; text-decoration: none; color: inherit;
   border: 1px solid var(--border); border-radius: var(--radius-lg); background: #fff;
-  padding: 24px; box-shadow: var(--shadow-sm); transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  padding: 24px; transition: border-color .15s ease;
 }
-.ds-navcard:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--nhs-blue); }
-.ds-navcard__title { font-weight: 700; font-size: 1.1rem; color: var(--nhs-dark); margin: 0 0 6px; }
-.ds-navcard__desc { color: var(--text-secondary); font-size: 0.92rem; margin: 0 0 12px; }
-.ds-navcard__links { font-size: 0.85rem; color: var(--text-muted); }
+.ds-navcard:hover { border-color: var(--nhs-blue); }
+.ds-navcard__title { font-weight: 600; font-size: var(--text-card-title-sm); color: var(--nhs-dark); margin: 0 0 6px; }
+.ds-navcard__desc { color: var(--text-secondary); font-size: var(--text-label); margin: 0 0 12px; }
+.ds-navcard__links { font-size: var(--text-caption); color: var(--text-muted); }
 
 /* Swatches (colour foundation) */
 .ds-swatches { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); margin: 16px 0; }
@@ -308,7 +384,7 @@ a { color: var(--nhs-blue); }
 /* Badges */
 .badge {
   display: inline-flex; align-items: center; padding: 3px 8px;
-  border: 1px solid var(--border); border-radius: 6px;
+  border: 1px solid var(--border); border-radius: 0;
   font-size: var(--text-badge); font-weight: 600; letter-spacing: 0.3px;
   line-height: 1.3; word-break: break-word; max-width: 100%; font-family: var(--font-body);
 }
@@ -335,20 +411,17 @@ a { color: var(--nhs-blue); }
   font-family: var(--font-body); background: #fff; color: var(--text-secondary);
 }
 
-/* Surfaces — own bg + border + radius (lg) + elevation as of Round 3 */
+/* Surfaces — flat (NHS): own bg + border + radius (4px), no shadow. */
 .hs-surface-card, .hs-surface-card-sm {
   background: var(--card, #fff); border: 1px solid var(--border); border-radius: var(--radius-lg);
 }
-.hs-surface-card { box-shadow: var(--shadow-md); }
-.hs-surface-card-sm { box-shadow: var(--shadow-sm); }
 .app-card {
-  box-shadow: var(--shadow-md);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  transition: border-color 0.15s ease;
 }
-.app-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: #005EB8; }
+.app-card:hover { border-color: #005EB8; }
 
 /* Evidence cards */
-.card-evidence { border-radius: 0.75rem; border: 1px solid var(--border); padding: 14px 16px; margin-bottom: 10px; background: #f7f9fc; }
+.card-evidence { border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 14px 16px; margin-bottom: 10px; background: #f7f9fc; }
 .card-evidence--gap { border-color: var(--border); background: #fffbf0; }
 .card-evidence--coi { background: #fff8f8; }
 .card-evidence--dq { border-color: #f0c070; }
@@ -362,7 +435,7 @@ a { color: var(--nhs-blue); }
 
 /* PDP tabs */
 .nhsuk-tabs { margin-bottom: 1.5rem; }
-.nhsuk-tabs__title { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; line-height: 1.4; margin: 0 0 0.5rem; color: var(--text-primary); }
+.nhsuk-tabs__title { font-family: var(--font-display); font-size: var(--text-card-title-sm); font-weight: 600; line-height: var(--leading-heading-sm); margin: 0 0 0.5rem; color: var(--text-primary); }
 .nhsuk-tabs__list { display: flex; flex-wrap: wrap; gap: 0.25rem; list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--border); }
 .nhsuk-tabs__list-item { display: flex; margin: 0; background: #f0f4f5; }
 .nhsuk-tabs__tab {
@@ -385,33 +458,32 @@ a { color: var(--nhs-blue); }
 
 /* Compare view toggle (for toggles page) */
 .hs-compare-view-toggle { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem; border-radius: 9999px; border: 1px solid var(--border); background: #fff; }
-.hs-compare-view-toggle__label { padding: 0 0.5rem 0 0.75rem; font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
-.hs-compare-view-toggle__btn { min-height: 2.75rem; padding: 0.375rem 0.875rem; border-radius: 9999px; border: none; background: transparent; font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: background 0.15s, color 0.15s; }
+.hs-compare-view-toggle__label { padding: 0 0.5rem 0 0.75rem; font-size: var(--text-caption); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+.hs-compare-view-toggle__btn { min-height: 2.75rem; padding: 0.375rem 0.875rem; border-radius: 9999px; border: none; background: transparent; font-size: var(--text-caption); font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: background 0.15s, color 0.15s; }
 .hs-compare-view-toggle__btn[data-active='true'] { background: var(--nhs-blue); color: #fff; }
 
 /* Compare lens (segmented options) */
 .hs-compare-lens { margin: 0; border: none; padding: 0; min-width: 0; }
-.hs-compare-lens__legend { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 0.5rem; }
+.hs-compare-lens__legend { font-size: var(--text-caption); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 0.5rem; }
 .hs-compare-lens__options { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.hs-compare-lens__option { display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0.375rem 0.875rem; border-radius: 0.5rem; border: 1px solid var(--border); background: rgb(247,249,252); font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.hs-compare-lens__option { display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0.375rem 0.875rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background: rgb(247,249,252); font-size: var(--text-caption); font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: border-color 0.15s, background 0.15s; }
 .hs-compare-lens__option[data-active='true'] { border-color: var(--nhs-blue); background: #E6F0FB; color: var(--nhs-dark); }
 
 /* Decision snapshot strip (PDP pattern) */
 .hs-snapshot-strip__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.75rem; }
 @media (min-width: 1024px) { .hs-snapshot-strip__grid { grid-template-columns: repeat(4, minmax(0,1fr)); } }
-.hs-snapshot-strip__segment { display: flex; flex-direction: column; min-height: 100%; padding: 1rem 1.25rem; border-radius: 0.5rem; background: rgb(247,249,252); }
-.hs-snapshot-strip__heading { flex-shrink: 0; margin: 0; font-family: var(--font-display); font-size: 0.875rem; font-weight: 600; line-height: 1.35; color: var(--text-primary); }
+.hs-snapshot-strip__segment { display: flex; flex-direction: column; min-height: 100%; padding: 1rem 1.25rem; border-radius: var(--radius-lg); background: rgb(247,249,252); }
+.hs-snapshot-strip__heading { flex-shrink: 0; margin: 0; font-family: var(--font-display); font-size: var(--text-label); font-weight: 600; line-height: var(--leading-heading-sm); color: var(--text-primary); }
 .hs-snapshot-strip__body { margin-top: auto; padding-top: 0.625rem; min-height: 0; }
 .hs-decision-snapshot { padding: 1rem; background: #fff; border: 1px solid var(--border); }
 
 /* =============================================================================
    CANONICAL BUTTON SYSTEM (.ds-btn) — SHIPPED (Round 2).
    These classes mirror the React primitive components/ui/Button.tsx, which is
-   now the canonical implementation in the app. The ~8 bespoke buttons + inline
-   CTAs have been migrated onto it. Decisions: primary radius md/8px (BTN-1),
-   primary hover #004B8C (BTN-2), toggle "on" = blue-tinted (BTN-3 B), icon
-   radius md (BTN-4). The .ds-btn CSS exists so this static doc can render
-   faithful previews of the React component.
+   now the canonical implementation in the app. In the app, primary renders the
+   official NHS button (`.nhsuk-button`) recoloured to NHS blue: square 4px corners
+   with a 4px dark-blue press-shadow, hover #004B8C, toggle "on" = blue-tinted. The
+   .ds-btn CSS exists so this static doc can render faithful previews.
    ============================================================================= */
 .ds-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -423,8 +495,9 @@ a { color: var(--nhs-blue); }
 .ds-btn:focus-visible { outline: 3px solid #FFD800; outline-offset: 2px; }
 .ds-btn[disabled], .ds-btn[aria-disabled='true'] { opacity: 0.6; cursor: not-allowed; }
 
-.ds-btn--primary { background: var(--nhs-blue); color: #fff; }
+.ds-btn--primary { background: var(--nhs-blue); color: #fff; box-shadow: 0 4px 0 var(--nhs-dark); }
 .ds-btn--primary:hover { background: #004B8C; }
+.ds-btn--primary:active { box-shadow: none; }
 .ds-btn--secondary { background: #fff; color: var(--nhs-blue); border-color: var(--nhs-blue); }
 .ds-btn--secondary:hover { background: #E6F0FB; }
 .ds-btn--ghost { background: transparent; color: var(--text-secondary); }
@@ -445,8 +518,8 @@ a { color: var(--nhs-blue); }
 
 /* Generic form field preview (forms page / canonical proposal) */
 .ds-field { margin-bottom: 16px; max-width: 420px; }
-.ds-field__label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; color: var(--text-primary); }
-.ds-field__hint { font-size: 0.82rem; color: var(--text-muted); margin: 0 0 6px; }
+.ds-field__label { display: block; font-size: var(--text-label); font-weight: 600; margin-bottom: 6px; color: var(--text-primary); }
+.ds-field__hint { font-size: var(--text-caption); color: var(--text-muted); margin: 0 0 6px; }
 .ds-input, .ds-select, .ds-textarea {
   width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-md);
   font-family: var(--font-body); font-size: 1rem; background: #fff; color: var(--text-primary);
@@ -475,3 +548,44 @@ a { color: var(--nhs-blue); }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
   .ds-skeleton { animation: none; }
 }
+
+/* ---------- Provenance labels (NHS DS migration) ---------- */
+.ds-provenance {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.ds-provenance::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+.ds-provenance--nhs { background: #e6f0fb; border-color: #1d70b8; color: #003087; }
+.ds-provenance--govuk { background: #fff3d9; border-color: #b58840; color: #594300; }
+.ds-provenance--bespoke { background: #f0f4f5; border-color: #aeb7bd; color: #425563; }
+
+.ds-provenance-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin: 0 0 20px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+.ds-provenance-legend dt { font-weight: 700; color: var(--text-primary); }
+.ds-provenance-legend dd { margin: 0; }

@@ -20,7 +20,7 @@ export default async function DashboardPage() {
   const props = getDashboardPageProps(session)
 
   return (
-    <div className="mx-auto max-w-7xl px-6 pb-16 pt-10">
+    <div className="mx-auto max-w-7xl px-4 md:px-8 pb-16 pt-10">
       <PageBreadcrumb items={[{ label: 'Dashboard' }]} />
       <DashboardV4 {...props} />
     </div>

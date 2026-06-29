@@ -36,7 +36,7 @@ function ExternalOrInternalLink({
  */
 export function CaseStudyCard({ study, href }: { study: CaseStudy; href?: string }) {
   const Title = (
-    <span className="text-base font-bold leading-snug text-white md:text-lg" style={fr}>
+    <span className="hs-text-body hs-font-bold leading-snug text-white md:hs-text-card-title-sm" style={fr}>
       {study.title}
     </span>
   )
@@ -52,20 +52,20 @@ export function CaseStudyCard({ study, href }: { study: CaseStudy; href?: string
           sizes="(max-width: 1024px) 100vw, 30vw"
         />
       </div>
-      <div className="shrink-0 bg-[#003087] px-5 py-4">
+      <div className="shrink-0 bg-[#003087] px-6 py-4">
         {href ? (
           <ExternalOrInternalLink
             href={href}
-            className="flex items-end justify-between gap-3 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="flex items-end justify-between gap-4 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             {Title}
             <ChevronRight className="h-5 w-5 shrink-0 text-white opacity-95" aria-hidden />
           </ExternalOrInternalLink>
         ) : (
-          <div className="flex items-end justify-between gap-3">{Title}</div>
+          <div className="flex items-end justify-between gap-4">{Title}</div>
         )}
         {study.description ? (
-          <p className="mt-2 mb-0 text-sm leading-relaxed text-white/80">{study.description}</p>
+          <p className="mt-2 mb-0 hs-text-label leading-relaxed text-white/80">{study.description}</p>
         ) : null}
       </div>
     </div>
@@ -75,7 +75,7 @@ export function CaseStudyCard({ study, href }: { study: CaseStudy; href?: string
 /** Large, prominent case study card used for the featured app on the home band. */
 function FeaturedCaseStudyCard({ study }: { study: CaseStudy }) {
   return (
-    <div className="hs-surface-card flex h-full min-h-[22rem] w-full min-w-0 flex-col overflow-hidden shadow-lg">
+    <div className="hs-surface-card flex h-full min-h-[22rem] w-full min-w-0 flex-col overflow-hidden">
       <div className="relative min-h-[14rem] flex-1 overflow-hidden">
         <Image
           src={study.image}
@@ -86,15 +86,15 @@ function FeaturedCaseStudyCard({ study }: { study: CaseStudy }) {
           priority
         />
       </div>
-      <div className="shrink-0 bg-[#003087] px-6 py-5">
-        <span className="mb-2 inline-block rounded bg-white/15 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-white">
+      <div className="shrink-0 bg-[#003087] px-6 py-6">
+        <span className="mb-2 inline-block rounded bg-white/15 px-2 py-1 hs-text-caption hs-font-bold uppercase tracking-wide text-white">
           Featured
         </span>
-        <h3 className="text-xl font-bold leading-snug text-white md:text-2xl" style={fr}>
+        <h3 className="hs-text-lede hs-font-bold leading-snug text-white md:hs-text-section-alt" style={fr}>
           {study.title}
         </h3>
         {study.description ? (
-          <p className="mt-2 mb-0 text-sm leading-relaxed text-white/80">{study.description}</p>
+          <p className="mt-2 mb-0 hs-text-label leading-relaxed text-white/80">{study.description}</p>
         ) : null}
       </div>
     </div>
@@ -114,8 +114,8 @@ function CompactCaseStudyCard({ study }: { study: CaseStudy }) {
           sizes="112px"
         />
       </div>
-      <div className="flex min-w-0 flex-1 items-center bg-[#003087] px-4 py-3">
-        <span className="text-sm font-bold leading-snug text-white" style={fr}>
+      <div className="flex min-w-0 flex-1 items-center bg-[#003087] px-4 py-4">
+        <span className="hs-text-label hs-font-bold leading-snug text-white" style={fr}>
           {study.title}
         </span>
       </div>
@@ -133,19 +133,19 @@ export function HomeCaseStudiesBand({ caseStudies }: { caseStudies: CaseStudy[] 
       style={{ background: 'linear-gradient(135deg, #003087 0%, #00449E 55%, var(--nhs-blue) 100%)' }}
       aria-labelledby="case-studies-heading"
     >
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mx-auto max-w-7xl px-4 md:px-8">
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
-            <h2 id="case-studies-heading" className="text-2xl font-bold leading-tight text-white md:text-3xl" style={fr}>
+            <h2 id="case-studies-heading" className="hs-text-section-alt hs-font-bold leading-tight text-white md:hs-text-section" style={fr}>
               Case studies
             </h2>
-            <p className="mt-3 mb-0 text-base leading-relaxed text-white/85">
+            <p className="mt-4 mb-0 hs-text-body leading-relaxed text-white/85">
               Real-world examples of how NHS systems are commissioning and scaling digital therapeutics.
             </p>
           </div>
           <Link
             href="/case-studies"
-            className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-white underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="inline-flex shrink-0 items-center gap-1 hs-text-label hs-font-bold text-white underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             See all case studies
             <ChevronRight className="h-4 w-4" aria-hidden />

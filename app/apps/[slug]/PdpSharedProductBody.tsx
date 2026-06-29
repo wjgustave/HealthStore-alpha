@@ -58,11 +58,11 @@ export default function PdpSharedProductBody({
   return (
     <>
       {a.has('hero') ? (
-        <div className="mb-3 hs-surface-card-sm rounded-t-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-          <div className="px-8 pt-8 pb-3">
+        <div className="mb-4 hs-surface-card-sm rounded-t-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
+          <div className="px-8 pt-8 pb-4">
             <div className="flex flex-col gap-6 items-start">
               <div className="flex-1 w-full min-w-0">
-                <div className="flex flex-wrap gap-2 mb-3">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {app.condition_tags.map((t: string) => (
                     <ConditionTag key={t} tag={t} />
                   ))}
@@ -110,7 +110,7 @@ export default function PdpSharedProductBody({
                 </p>
                 <NhsIntegrationBadges app={app} />
                 {catalogueDemoAvailable(app) ? (
-                  <div className="mt-3 pt-3 border-t flex" style={{ borderColor: 'var(--border)' }}>
+                  <div className="mt-4 pt-4 border-t flex" style={{ borderColor: 'var(--border)' }}>
                     <ProductHeroDemoBadge app={app} />
                   </div>
                 ) : null}
@@ -131,7 +131,7 @@ export default function PdpSharedProductBody({
       ) : null}
 
       <div className="grid md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 space-y-3">
+        <div className="md:col-span-2 space-y-4">
           {a.has('why-it-matters') ? (
             <PdpReadOnlySection
               title="Why it matters locally"
@@ -141,7 +141,7 @@ export default function PdpSharedProductBody({
                 {app.why_it_matters_locally}
               </p>
               {app.sustainability_highlight && (
-                <div className="mt-4 rounded-lg p-3 text-sm" style={{ background: '#E6F5EC', color: '#004B22' }}>
+                <div className="mt-4 rounded-lg p-4 hs-text-label" style={{ background: '#E6F5EC', color: '#004B22' }}>
                   🌿 {app.sustainability_highlight}
                 </div>
               )}
@@ -194,7 +194,7 @@ export default function PdpSharedProductBody({
                   <div
                     style={{
                       fontSize: 'var(--text-label)',
-                      fontWeight: 700,
+                      fontWeight: 600,
                       textTransform: 'uppercase',
                       letterSpacing: '0.6px',
                       color: 'var(--text-muted)',
@@ -214,7 +214,7 @@ export default function PdpSharedProductBody({
                   <div
                     style={{
                       fontSize: 'var(--text-label)',
-                      fontWeight: 700,
+                      fontWeight: 600,
                       textTransform: 'uppercase',
                       letterSpacing: '0.6px',
                       color: 'var(--text-muted)',
@@ -234,7 +234,7 @@ export default function PdpSharedProductBody({
                   <div
                     style={{
                       fontSize: 'var(--text-label)',
-                      fontWeight: 700,
+                      fontWeight: 600,
                       textTransform: 'uppercase',
                       letterSpacing: '0.6px',
                       color: 'var(--text-muted)',
@@ -256,12 +256,12 @@ export default function PdpSharedProductBody({
               title="NICE guidance"
               description="NICE publications and programme references linked to this product."
             >
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {app.nice_guidance_refs.map((r: any) => (
                   <div
                     key={r.ref}
-                    className="flex items-start gap-3 p-3 rounded-lg"
-                    style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}
+                    className="flex items-start gap-4 p-4 rounded-lg"
+                    style={{ background: '#F0F4F5', border: '1px solid var(--border)' }}
                   >
                     <NiceTypeBadge type={r.type} />
                     <div>
@@ -269,12 +269,12 @@ export default function PdpSharedProductBody({
                         href={r.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-semibold text-sm hover:underline"
+                        className="hs-font-bold hs-text-label hover:underline"
                         style={{ color: accent }}
                       >
                         {r.ref} ↗
                       </a>
-                      <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                      <div className="hs-text-caption mt-1" style={{ color: 'var(--text-muted)' }}>
                         {r.date}
                         {r.note ? ` · ${r.note}` : ''}
                       </div>
@@ -295,12 +295,12 @@ export default function PdpSharedProductBody({
                   <div
                     key={i}
                     className="rounded-xl border p-4"
-                    style={{ background: '#FDECEA', borderColor: '#DA291C33' }}
+                    style={{ background: '#FDECEA', borderColor: '#D5281B33' }}
                   >
-                    <div className="font-semibold text-sm mb-2" style={{ color: '#7A1210' }}>
+                    <div className="hs-font-bold hs-text-label mb-2" style={{ color: '#7A1210' }}>
                       {c.domain}
                     </div>
-                    <div className="text-xs space-y-1.5" style={{ color: '#5A1010' }}>
+                    <div className="hs-text-caption space-y-2" style={{ color: '#5A1010' }}>
                       <div>
                         <strong>Company claim:</strong> {c.claim_a}
                       </div>
@@ -369,55 +369,55 @@ export default function PdpSharedProductBody({
         </div>
 
         {a.has('sidebar-summary') ? (
-          <aside className="space-y-5">
-            <div className="hs-surface-card-sm bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
-              <div className="text-xs font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>
+          <aside className="space-y-6">
+            <div className="hs-surface-card-sm bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
+              <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>
                 Quick facts
               </div>
-              <div className="space-y-3 text-sm">
+              <div className="space-y-4 hs-text-label">
                 <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+                  <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
                     Maturity
                   </div>
                   <MaturityBadge level={app.maturity_level} />
                 </div>
                 <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+                  <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
                     Local effort
                   </div>
                   <EffortBadge level={app.local_wraparound} />
                 </div>
                 <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+                  <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
                     Device class
                   </div>
                   <div style={{ fontWeight: 600 }}>{app.device_class}</div>
                   {app.device_class_note && (
-                    <div className="text-xs mt-0.5" style={{ color: '#D5840D' }}>
+                    <div className="hs-text-caption mt-1" style={{ color: '#7A4800' }}>
                       ⚠ {app.device_class_note}
                     </div>
                   )}
                   <DeviceClassDetails deviceClass={app.device_class} />
                 </div>
                 <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+                  <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
                     Supervision model
                   </div>
                   <SupervisionBadge model={app.supervision_model} />
                 </div>
                 <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+                  <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
                     Target patients
                   </div>
-                  <div className="text-xs" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                  <div className="hs-text-caption" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                     {app.target_patients}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="hs-surface-card-sm bg-white rounded-xl border p-5 space-y-3" style={{ borderColor: 'var(--border)' }}>
-              <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+            <div className="hs-surface-card-sm bg-white rounded-xl border p-6 space-y-4" style={{ borderColor: 'var(--border)' }}>
+              <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
                 Assurance
               </div>
               {[
@@ -428,15 +428,15 @@ export default function PdpSharedProductBody({
                 { label: 'Cyber Essentials', val: app.cyber_essentials },
                 { label: 'DSP Toolkit', val: app.dspt_status },
               ].map(r => (
-                <div key={r.label} className="flex items-start gap-2 text-xs">
-                  <span className="w-28 flex-shrink-0 font-medium" style={{ color: 'var(--text-muted)' }}>
+                <div key={r.label} className="flex items-start gap-2 hs-text-caption">
+                  <span className="w-28 flex-shrink-0 hs-font-normal" style={{ color: 'var(--text-muted)' }}>
                     {r.label}
                   </span>
                   {typeof r.val === 'string' ? <span style={{ color: 'var(--text-secondary)' }}>{r.val}</span> : r.val}
                 </div>
               ))}
               {app.cyber_notes && (
-                <div className="text-xs p-2 rounded mt-2" style={{ background: '#FEF5E6', color: '#7A4800' }}>
+                <div className="hs-text-caption p-2 rounded mt-2" style={{ background: '#FEF5E6', color: '#7A4800' }}>
                   {app.cyber_notes}
                 </div>
               )}
@@ -445,16 +445,16 @@ export default function PdpSharedProductBody({
             <PdpSupplierContactCard email={app.supplier_contact_email} />
 
             {app.product_tiers?.length > 0 && (
-              <div className="hs-surface-card-sm bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
-                <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>
+              <div className="hs-surface-card-sm bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
+                <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>
                   Product tiers
                 </div>
                 {app.product_tiers.map((t: any) => (
-                  <div key={t.tier_name} className="mb-3 last:mb-0">
-                    <div className="font-semibold text-sm" style={{ color: accent }}>
+                  <div key={t.tier_name} className="mb-4 last:mb-0">
+                    <div className="hs-font-bold hs-text-label" style={{ color: accent }}>
                       {t.tier_name}
                     </div>
-                    <div className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                    <div className="hs-text-caption mt-1" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                       {t.description}
                     </div>
                   </div>
@@ -463,9 +463,9 @@ export default function PdpSharedProductBody({
             )}
 
             <div
-              className="hs-surface-card-sm rounded-lg p-4 text-xs"
+              className="hs-surface-card-sm rounded-lg p-4 hs-text-caption"
               style={{
-                background: '#F7F9FC',
+                background: '#F0F4F5',
                 border: '1px solid var(--border)',
                 color: 'var(--text-muted)',
                 lineHeight: 1.5,

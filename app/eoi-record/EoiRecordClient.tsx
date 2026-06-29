@@ -39,7 +39,7 @@ export default function EoiRecordClient({
         className="mb-1"
         style={{
           fontFamily: 'Frutiger, Arial, sans-serif',
-          fontWeight: 700,
+          fontWeight: 600,
           fontSize: 'var(--text-section-alt)',
           color: 'var(--text-primary)',
         }}
@@ -52,7 +52,7 @@ export default function EoiRecordClient({
       <button
         type="button"
         disabled
-        className="inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold cursor-not-allowed opacity-40"
+        className="inline-flex items-center justify-center rounded-xl px-6 py-4 hs-text-label hs-font-bold cursor-not-allowed opacity-40"
         style={{ background: 'var(--nhs-blue)', color: '#fff' }}
       >
         Procurement confirmation
@@ -61,7 +61,7 @@ export default function EoiRecordClient({
   )
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div className="hs-page">
       <PageBreadcrumb items={[{ label: 'EOI record' }]} />
 
       <div className="mb-8">
@@ -73,7 +73,7 @@ export default function EoiRecordClient({
 
       {error ? (
         <p
-          className="mb-4 text-sm rounded-md px-3 py-2"
+          className="mb-4 hs-text-label rounded-md px-4 py-2"
           role="alert"
           style={{ background: '#FEF3F2', color: '#912018', border: '1px solid #FECDCA' }}
         >
@@ -86,11 +86,11 @@ export default function EoiRecordClient({
           <p style={{ color: 'var(--text-muted)' }}>Loading expressions of interest…</p>
         </div>
       ) : count === 0 ? (
-        <div className="hs-surface-card text-center py-20 px-4 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
-          <div className="text-4xl mb-4" aria-hidden>
+        <div className="hs-surface-card text-center py-16 px-4 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
+          <div className="hs-text-section mb-4" aria-hidden>
             📩
           </div>
-          <p className="font-semibold mb-2 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
+          <p className="hs-font-bold mb-2 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
             No expressions of interest yet
           </p>
           <p className="mb-6 max-w-lg mx-auto" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
@@ -98,7 +98,7 @@ export default function EoiRecordClient({
           </p>
           <Link
             href="/apps"
-            className="inline-flex items-center justify-center text-sm font-semibold rounded-lg px-5 py-3 min-h-[44px]"
+            className="inline-flex items-center justify-center hs-text-label hs-font-bold rounded-lg px-6 py-4 min-h-[44px]"
             style={{ background: 'var(--nhs-blue)', color: '#fff' }}
           >
             Find apps
@@ -106,7 +106,7 @@ export default function EoiRecordClient({
         </div>
       ) : (
         <>
-          <p className="mb-4 text-sm" style={{ color: 'var(--text-muted)' }}>
+          <p className="mb-4 hs-text-label" style={{ color: 'var(--text-muted)' }}>
             {count === 1 ? '1 expression of interest' : `${count} expressions of interest`}
           </p>
           <div className="hs-surface-card overflow-hidden rounded-xl border bg-white" style={{ borderColor: 'var(--border)' }}>
@@ -115,10 +115,10 @@ export default function EoiRecordClient({
                 const slug = appSlugById[eoi.appId]
                 const timelineLabel = eoi.timeline ? TIMELINE_LABELS[eoi.timeline] : null
                 return (
-                  <li key={eoi.id} className="p-4 sm:p-5">
+                  <li key={eoi.id} className="p-4 sm:p-6">
                     <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-1">
                       <div className="min-w-0">
-                        <div className="font-semibold" style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}>
+                        <div className="hs-font-bold" style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}>
                           {slug ? (
                             <Link href={`/apps/${slug}`} className="hover:underline" style={{ color: 'var(--nhs-blue)' }}>
                               {eoi.appName}
@@ -127,20 +127,20 @@ export default function EoiRecordClient({
                             eoi.appName
                           )}
                         </div>
-                        <div className="mt-0.5 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                        <div className="mt-1 hs-text-label" style={{ color: 'var(--text-secondary)' }}>
                           {eoi.submittedByName || 'Unknown user'}
                           {eoi.organisationName ? ` · ${eoi.organisationName}` : ''}
                         </div>
                       </div>
-                      <div className="shrink-0 text-sm" style={{ color: 'var(--text-muted)' }}>
+                      <div className="shrink-0 hs-text-label" style={{ color: 'var(--text-muted)' }}>
                         {formatDateTime(eoi.createdAt)}
                       </div>
                     </div>
                     {(timelineLabel || eoi.populationEstimate || eoi.notes) ? (
-                      <div className="mt-2 flex flex-col gap-1 text-xs" style={{ color: 'var(--text-muted)' }}>
-                        {timelineLabel ? <div><span className="font-medium">Timeline:</span> {timelineLabel}</div> : null}
-                        {eoi.populationEstimate ? <div><span className="font-medium">Population:</span> {eoi.populationEstimate}</div> : null}
-                        {eoi.notes ? <div><span className="font-medium">Notes:</span> {eoi.notes}</div> : null}
+                      <div className="mt-2 flex flex-col gap-1 hs-text-caption" style={{ color: 'var(--text-muted)' }}>
+                        {timelineLabel ? <div><span className="hs-font-bold">Timeline:</span> {timelineLabel}</div> : null}
+                        {eoi.populationEstimate ? <div><span className="hs-font-bold">Population:</span> {eoi.populationEstimate}</div> : null}
+                        {eoi.notes ? <div><span className="hs-font-bold">Notes:</span> {eoi.notes}</div> : null}
                       </div>
                     ) : null}
                   </li>

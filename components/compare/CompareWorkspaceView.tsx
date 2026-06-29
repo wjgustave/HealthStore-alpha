@@ -81,16 +81,16 @@ export default function CompareWorkspaceView({ selected, lens, differencesOnly, 
           className="hs-compare-workspace__empty rounded-xl border bg-white px-6 py-12 text-center"
           style={{ borderColor: 'var(--border)' }}
         >
-          <p className="mx-auto mb-1 max-w-md font-semibold" style={{ color: 'var(--text-primary)' }}>
+          <p className="mx-auto mb-1 max-w-md hs-font-bold" style={{ color: 'var(--text-primary)' }}>
             No differences to show
           </p>
-          <p className="mx-auto mb-5 max-w-md text-sm" style={{ color: 'var(--text-muted)' }}>
+          <p className="mx-auto mb-6 max-w-md hs-text-label" style={{ color: 'var(--text-muted)' }}>
             The selected DTx apps match on every comparison dimension. Turn off the filter to see the full comparison.
           </p>
           <button
             type="button"
             onClick={onShowAllRows}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-lg border px-5 text-sm font-semibold transition-colors hover:bg-[#E6F0FB]"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-lg border px-6 hs-text-label hs-font-bold transition-colors hover:bg-[#E6F0FB]"
             style={{ borderColor: 'var(--nhs-blue)', color: 'var(--nhs-blue)' }}
           >
             Show all rows
@@ -122,7 +122,7 @@ export default function CompareWorkspaceView({ selected, lens, differencesOnly, 
             <div key={app.id} className="hs-compare-workspace__cell">
               <Link
                 href={`/apps/${app.slug}`}
-                className="block text-center text-sm font-semibold rounded-lg py-2.5 min-h-[44px] flex items-center justify-center transition-colors hover:!bg-[#004B8C]"
+                className="block text-center hs-text-label hs-font-bold rounded-lg py-2 min-h-[44px] flex items-center justify-center transition-colors hover:!bg-[#004B8C]"
                 style={{ background: STORE_ACCENT, color: '#fff' }}
               >
                 View {app.app_name} →

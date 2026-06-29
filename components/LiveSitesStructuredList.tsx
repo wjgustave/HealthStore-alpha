@@ -12,7 +12,7 @@ function normalizeNamedSiteStatus(status: string | undefined): 'active' | 'decom
 /** Structured Live sites rows with placeholder contact tooltip (see `liveSiteContactEmail`). */
 export function NamedSitesStructuredList({ rows }: { rows: NamedSiteRow[] }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
       {rows.map((s, i) => {
         const st = normalizeNamedSiteStatus(s.status)
         const dot =
@@ -23,11 +23,11 @@ export function NamedSitesStructuredList({ rows }: { rows: NamedSiteRow[] }) {
 
         return (
           <div key={i} className="flex items-start gap-2 min-w-0">
-            <span className={`mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${dot}`} aria-hidden />
+            <span className={`mt-2 w-2 h-2 rounded-full flex-shrink-0 ${dot}`} aria-hidden />
             <div className="min-w-0 flex-1">
-              <div className="inline-flex max-w-full min-w-0 flex-wrap items-baseline gap-x-[1ch] gap-y-0.5">
+              <div className="inline-flex max-w-full min-w-0 flex-wrap items-baseline gap-x-[1ch] gap-y-1">
                 <span
-                  className="font-medium text-sm break-words"
+                  className="hs-font-normal hs-text-label break-words"
                   style={{ color: 'var(--text-primary)' }}
                 >
                   {s.name}
@@ -38,7 +38,7 @@ export function NamedSitesStructuredList({ rows }: { rows: NamedSiteRow[] }) {
                   </span>
                   <button
                     type="button"
-                    className="rounded p-0.5 outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-[color:var(--nhs-blue)] focus-visible:ring-offset-1"
+                    className="rounded p-1 outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-[color:var(--nhs-blue)] focus-visible:ring-offset-1"
                     style={{ color: 'var(--nhs-blue)' }}
                     aria-describedby={srId}
                     aria-label={`Contact email for ${siteName || 'this site'}`}
@@ -51,15 +51,15 @@ export function NamedSitesStructuredList({ rows }: { rows: NamedSiteRow[] }) {
                     className="pointer-events-none invisible absolute right-0 top-full z-[60] max-w-[min(100vw-2rem,44rem)] min-w-[min(22rem,calc(100vw-2rem))] w-max -mt-2 pt-2 opacity-0 transition-opacity duration-150 focus-within:pointer-events-auto focus-within:visible focus-within:opacity-100 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100"
                   >
                     <div
-                      className="rounded-lg border p-3 shadow-md overflow-x-auto"
+                      className="rounded-lg border p-4 overflow-x-auto"
                       style={{
                         background: 'var(--card)',
                         borderColor: 'var(--border)',
-                        boxShadow: 'var(--shadow-md)',
+                        boxShadow: 'var(--shadow-lg)',
                       }}
                     >
                       <div
-                        className="mb-1 text-xs font-semibold uppercase tracking-wide"
+                        className="mb-1 hs-text-caption hs-font-bold uppercase tracking-wide"
                         style={{ color: 'var(--text-muted)' }}
                       >
                         Contact
@@ -68,7 +68,7 @@ export function NamedSitesStructuredList({ rows }: { rows: NamedSiteRow[] }) {
                         href={`mailto:${email}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-block whitespace-nowrap text-[11px] leading-tight underline underline-offset-2 outline-none hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[color:var(--nhs-blue)] focus-visible:ring-offset-1 rounded-sm"
+                        className="inline-block whitespace-nowrap hs-text-caption leading-tight underline underline-offset-2 outline-none hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[color:var(--nhs-blue)] focus-visible:ring-offset-1 rounded-sm"
                         style={{ color: 'var(--nhs-blue)' }}
                       >
                         {email}

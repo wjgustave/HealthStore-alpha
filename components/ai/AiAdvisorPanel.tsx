@@ -195,7 +195,7 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
           {isEmpty ? (
             <div className="flex flex-col items-center justify-center pt-8 pb-8">
               <div
-                className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl"
+                className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl"
                 style={{ background: '#E6F0FB' }}
               >
                 <BotMessageSquare
@@ -204,7 +204,7 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
                 />
               </div>
               <h2
-                className="mb-1 text-xl font-bold"
+                className="mb-1 hs-text-lede hs-font-bold"
                 style={{
                   color: 'var(--text-primary)',
                   fontFamily: 'Frutiger, Arial, sans-serif',
@@ -213,20 +213,20 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
                 Hello, {profile.commissionerName}
               </h2>
               <p
-                className="mb-1 text-sm font-medium"
+                className="mb-1 hs-text-label hs-font-normal"
                 style={{ color: 'var(--nhs-blue)' }}
               >
                 {profile.roleTitle}
               </p>
               <p
-                className="mb-6 text-sm"
+                className="mb-6 hs-text-label"
                 style={{ color: 'var(--text-secondary)' }}
               >
                 {profile.icbName}
                 {profile.region ? ` · ${profile.region}` : ''}
               </p>
               <p
-                className="mb-8 max-w-md text-center text-sm leading-relaxed"
+                className="mb-8 max-w-md text-center hs-text-label leading-relaxed"
                 style={{ color: 'var(--text-secondary)' }}
               >
                 I can help you explore digital health options, model costs for your
@@ -238,7 +238,7 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
                   type="button"
                   onClick={startFundingConversation}
                   disabled={isLoading}
-                  className="group flex w-full items-start gap-2.5 rounded-xl border px-4 py-3 text-left text-sm transition-all hover:shadow-sm disabled:opacity-40"
+                  className="group flex w-full items-start gap-2 rounded-xl border px-4 py-4 text-left hs-text-label transition-colors disabled:opacity-40"
                   style={{
                     borderColor: 'var(--border)',
                     background: 'var(--card)',
@@ -247,14 +247,14 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
                   }}
                 >
                   <PoundSterling
-                    className="mt-0.5 h-4 w-4 flex-shrink-0"
+                    className="mt-1 h-4 w-4 flex-shrink-0"
                     style={{ color: 'var(--nhs-blue)' }}
                   />
                   <span>Find NHS funding &amp; deployment routes</span>
                 </button>
               </div>
               <p
-                className="mt-8 text-xs"
+                className="mt-8 hs-text-caption"
                 style={{ color: 'var(--text-muted)' }}
               >
                 Data sourced from HealthStore catalogue. Verify all information with
@@ -264,7 +264,7 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
           ) : (
             <div className="space-y-4">
               {messages.map(m => (
-                <div key={m.id} className="space-y-3">
+                <div key={m.id} className="space-y-4">
                   {(m.content || !m.funding) && (
                     <ChatMessage
                       role={m.role}
@@ -289,7 +289,7 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
               ))}
               {error && (
                 <div
-                  className="rounded-lg border px-4 py-3 text-sm"
+                  className="rounded-lg border px-4 py-4 hs-text-label"
                   style={{
                     borderColor: 'var(--nhs-red)',
                     background: '#FEF2F2',
@@ -310,7 +310,7 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
             <div className="mx-auto flex max-w-3xl items-center gap-2 py-2">
               <span className="ai-thinking-dot" />
               <span
-                className="text-xs"
+                className="hs-text-caption"
                 style={{ color: 'var(--text-muted)', fontFamily: 'Frutiger, Arial, sans-serif' }}
               >
                 {commentary}
@@ -366,9 +366,9 @@ export default function AiAdvisorPanel({ open, onClose, profile }: Props) {
             <PanelRightClose className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--nhs-blue)' }} />
             <span className="hidden md:inline">AI Advisor</span>
           </button>
-          <div className="flex min-w-0 flex-1 items-center justify-between gap-3 px-4">
+          <div className="flex min-w-0 flex-1 items-center justify-between gap-4 px-4">
             <span
-              className="truncate text-sm font-semibold"
+              className="truncate hs-text-label hs-font-bold"
               style={{ color: 'var(--nhs-blue)', fontFamily: 'Frutiger, Arial, sans-serif' }}
             >
               HealthStore AI Advisor
@@ -376,7 +376,7 @@ export default function AiAdvisorPanel({ open, onClose, profile }: Props) {
             <button
               type="button"
               onClick={() => setIsFullScreen(prev => !prev)}
-              className="hidden flex-shrink-0 text-sm font-medium transition-colors hover:underline md:block"
+              className="hidden flex-shrink-0 hs-text-label hs-font-normal transition-colors hover:underline md:block"
               style={{ color: 'var(--text-secondary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
             >
               {isFullScreen ? 'Exit full screen view' : 'Full screen view'}

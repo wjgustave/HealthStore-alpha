@@ -41,7 +41,7 @@ export default async function HomePage() {
           />
         </div>
         <div
-          className="relative z-10 mx-auto max-w-7xl px-6"
+          className="relative z-10 mx-auto max-w-7xl px-4 md:px-8"
           style={{
             paddingTop: '5rem',
             paddingBottom: '5rem',
@@ -55,7 +55,7 @@ export default async function HomePage() {
                   fontFamily: 'Frutiger, Arial, sans-serif',
                   fontSize: 'var(--text-hero)',
                   lineHeight: 1.15,
-                  fontWeight: 700,
+                  fontWeight: 600,
                   color: '#fff',
                   marginBottom: '1.25rem',
                 }}
@@ -71,10 +71,10 @@ export default async function HomePage() {
               {isLoggedIn ? (
                 <div className="flex flex-wrap items-center gap-4">
                   <HomeHeroSearch />
-                  <span className="text-lg font-bold text-white">Or</span>
+                  <span className="hs-text-card-title-sm hs-font-bold text-white">Or</span>
                   <Link
                     href="/apps"
-                    className="inline-flex min-h-[52px] items-center justify-center rounded-xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-95"
+                    className="inline-flex min-h-[52px] items-center justify-center rounded-xl px-8 py-4 hs-text-body hs-font-bold transition-opacity hover:opacity-95"
                     style={{ background: '#fff', color: '#003087' }}
                   >
                     Find apps
@@ -84,7 +84,7 @@ export default async function HomePage() {
                 <div className="mb-6">
                   <Link
                     href="/login"
-                    className="inline-flex min-h-[52px] items-center justify-center rounded-xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-95"
+                    className="inline-flex min-h-[52px] items-center justify-center rounded-xl px-8 py-4 hs-text-body hs-font-bold transition-opacity hover:opacity-95"
                     style={{ background: '#fff', color: '#003087' }}
                   >
                     Find out more

@@ -49,13 +49,13 @@ export default function LoginPage() {
       subtitle="Enter your credentials to access the store."
       footer={
         <>
-          <p className="mt-6 text-center text-xs" style={{ color: 'rgba(255,255,255,0.55)' }}>
+          <p className="mt-6 text-center hs-text-caption" style={{ color: 'rgba(255,255,255,0.55)' }}>
             Prototype based on publicly available information as of March 2026.
           </p>
-          <p className="mt-2 text-center text-xs">
+          <p className="mt-2 text-center hs-text-caption">
             <a
               href="/cookies"
-              className="font-medium underline underline-offset-2 hover:opacity-90"
+              className="hs-font-normal underline underline-offset-2 hover:opacity-90"
               style={{ color: 'rgba(255,255,255,0.85)' }}
             >
               Cookies
@@ -66,9 +66,9 @@ export default function LoginPage() {
     >
       {error && (
         <div role="alert" aria-live="assertive"
-          className="mb-4 flex items-center gap-2 rounded-lg p-3 text-sm font-medium"
-          style={{ background: '#FDECEA', color: '#7A1210', border: '1px solid #DA291C33' }}>
-          <span className="flex-shrink-0 font-bold" aria-hidden>✕</span>
+          className="mb-4 flex items-center gap-2 rounded-lg p-4 hs-text-label hs-font-normal"
+          style={{ background: '#FDECEA', color: '#7A1210', border: '1px solid #D5281B33' }}>
+          <span className="flex-shrink-0 hs-font-bold" aria-hidden>✕</span>
           {error}
         </div>
       )}

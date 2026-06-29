@@ -58,23 +58,23 @@ export default function AppsDiscoveryClient({
   }, [openSuggestions])
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div className="hs-page">
       <PageBreadcrumb items={[{ label: 'Find apps' }]} />
-      <div className="mb-10 max-w-3xl">
-        <h1 className="page-title-h1 mb-3">Find apps</h1>
+      <div className="hs-section max-w-3xl">
+        <h1 className="page-title-h1 mb-4">Find apps</h1>
         <div className="space-y-2 text-balance" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', lineHeight: 1.6 }}>
           <p className="m-0">Search by app name, supplier, or condition.</p>
           <p className="m-0">Or use the Condition catalogue to find relevant digital therapeutics.</p>
         </div>
       </div>
 
-      <form onSubmit={onSubmit} className="mb-10 max-w-2xl" role="search" aria-label="Search catalogue">
+      <form onSubmit={onSubmit} className="hs-section max-w-2xl" role="search" aria-label="Search catalogue">
         <label htmlFor="apps-hub-search" className="sr-only">
           Search by app name, supplier, or condition
         </label>
         <div className="relative">
           <div
-            className="flex items-stretch rounded-xl border bg-white overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-offset-2"
+            className="flex items-stretch rounded-xl border bg-white overflow-hidden focus-within:ring-2 focus-within:ring-offset-2"
             style={{ borderColor: 'var(--border)', outlineColor: 'var(--nhs-blue)' }}
           >
             <span className="flex items-center pl-4" style={{ color: 'var(--text-muted)' }} aria-hidden>
@@ -115,7 +115,7 @@ export default function AppsDiscoveryClient({
                 }
               }}
               placeholder="Search by app name, supplier, or condition"
-              className="min-h-[52px] flex-1 border-0 bg-transparent px-3 py-3 text-sm outline-none"
+              className="min-h-[52px] flex-1 border-0 bg-transparent px-4 py-4 hs-text-label outline-none"
               style={{ color: 'var(--text-primary)' }}
               aria-autocomplete="list"
               aria-controls={suggestions.length > 0 ? listId : undefined}
@@ -123,7 +123,7 @@ export default function AppsDiscoveryClient({
             />
             <button
               type="submit"
-              className="shrink-0 px-5 py-3 text-sm font-semibold text-white transition-colors hover:!bg-[#004B8C]"
+              className="shrink-0 px-6 py-4 hs-text-label hs-font-bold text-white transition-colors hover:!bg-[#004B8C]"
               style={{ background: STORE_ACCENT }}
             >
               Search
@@ -142,7 +142,7 @@ export default function AppsDiscoveryClient({
                     type="button"
                     role="option"
                     aria-selected={idx === activeIndex}
-                    className="flex w-full flex-col items-start gap-0.5 px-4 py-2.5 text-left text-sm transition-colors hover:bg-[#F7F9FC]"
+                    className="flex w-full flex-col items-start gap-1 px-4 py-2 text-left hs-text-label transition-colors hover:bg-[#F0F4F5]"
                     style={{
                       background: idx === activeIndex ? '#E6F0FB' : undefined,
                       color: 'var(--text-primary)',
@@ -150,7 +150,7 @@ export default function AppsDiscoveryClient({
                     onMouseDown={e => e.preventDefault()}
                     onClick={() => goToBrowse(item.app_name)}
                   >
-                    <span className="font-semibold">{item.app_name}</span>
+                    <span className="hs-font-bold">{item.app_name}</span>
                     <span style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>{item.supplier_name}</span>
                   </button>
                 </li>
@@ -163,7 +163,7 @@ export default function AppsDiscoveryClient({
       <section aria-labelledby="condition-catalogue-heading">
         <h2
           id="condition-catalogue-heading"
-          className="mb-4 font-bold"
+          className="mb-4 hs-font-bold"
           style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--text-primary)' }}
         >
           Condition catalogue
@@ -173,7 +173,7 @@ export default function AppsDiscoveryClient({
             <Link
               key={c.id}
               href={`/apps/condition-catalogue?condition=${encodeURIComponent(c.id)}`}
-              className="group flex gap-4 rounded-xl border bg-white p-5 text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="group flex gap-4 rounded-xl border bg-white p-6 text-left transition-colors hover:border-[var(--nhs-blue)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
               style={{ borderColor: 'var(--border)', textDecoration: 'none', outlineColor: 'var(--nhs-blue)' }}
             >
               <div
@@ -183,20 +183,20 @@ export default function AppsDiscoveryClient({
                 <ConditionIcon condition={c.id} className="h-7 w-7" />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="font-bold" style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)' }}>
+                <div className="hs-font-bold" style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)' }}>
                   {c.label}
                 </div>
                 <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', marginTop: 4 }}>
                   {c.count} {c.count === 1 ? 'app' : 'apps'}
                 </div>
-                <span className="mt-2 inline-block text-sm font-semibold text-[var(--nhs-blue)] group-hover:underline">View apps</span>
+                <span className="mt-2 inline-block hs-text-label hs-font-bold text-[var(--nhs-blue)] group-hover:underline">View apps</span>
               </div>
             </Link>
           ))}
 
           <Link
             href="/apps/condition-catalogue"
-            className="group flex gap-4 rounded-xl border bg-white p-5 text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:col-span-2 lg:col-span-1"
+            className="group flex gap-4 rounded-xl border bg-white p-6 text-left transition-colors hover:border-[var(--nhs-blue)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:col-span-2 lg:col-span-1"
             style={{ borderColor: 'var(--border)', textDecoration: 'none', outlineColor: 'var(--nhs-blue)' }}
           >
             <div
@@ -207,13 +207,13 @@ export default function AppsDiscoveryClient({
               <LayoutGrid className="h-7 w-7" strokeWidth={2} />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="font-bold" style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)' }}>
+              <div className="hs-font-bold" style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)' }}>
                 All apps
               </div>
               <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', marginTop: 4 }}>
                 {totalAppCount} digital therapeutics in the catalogue
               </div>
-              <span className="mt-2 inline-block text-sm font-semibold text-[var(--nhs-blue)] group-hover:underline">Browse entire catalogue</span>
+              <span className="mt-2 inline-block hs-text-label hs-font-bold text-[var(--nhs-blue)] group-hover:underline">Browse entire catalogue</span>
             </div>
           </Link>
         </div>

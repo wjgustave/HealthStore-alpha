@@ -44,7 +44,7 @@ function CompareSummaryCard({
         )}
         <Link
           href={`/apps/${app.slug}`}
-          className="min-w-0 font-bold text-sm hover:underline truncate"
+          className="min-w-0 hs-font-bold hs-text-label hover:underline truncate"
           style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
         >
           {app.app_name}
@@ -53,7 +53,7 @@ function CompareSummaryCard({
       <button
         type="button"
         onClick={onRemove}
-        className="shrink-0 text-xs hover:underline"
+        className="shrink-0 hs-text-caption hover:underline"
         style={{ color: 'var(--nhs-blue)', marginLeft: '24px' }}
         aria-label={`Remove ${app.app_name}`}
       >
@@ -82,7 +82,7 @@ export default function CompareClient({ allApps }: Props) {
   const sharedTags = useMemo(() => sharedConditionTags(selected), [selected])
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div className="hs-page">
       <PageBreadcrumb items={[{ label: 'Comparison tool' }]} />
 
       <div className="mb-8">
@@ -95,15 +95,15 @@ export default function CompareClient({ allApps }: Props) {
 
       {selected.length > 0 && (
         <>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-4">
             <div>
-              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+              <p className="hs-text-label" style={{ color: 'var(--text-muted)' }}>
                 {selected.length} DTx app{selected.length !== 1 ? 's' : ''} selected
               </p>
               {sharedTags.length > 0 && (
-                <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+                <p className="hs-text-label mt-1" style={{ color: 'var(--text-muted)' }}>
                   Shared condition{sharedTags.length > 1 ? 's' : ''}:{' '}
-                  <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>
+                  <span className="hs-font-normal" style={{ color: 'var(--text-secondary)' }}>
                     {formatConditionLabels(sharedTags)}
                   </span>
                 </p>
@@ -112,14 +112,14 @@ export default function CompareClient({ allApps }: Props) {
             <button
               type="button"
               onClick={() => clear()}
-              className="self-start text-sm rounded-md px-2 py-1 -mx-2 -my-1 transition-colors hover:bg-[#FEF2F2] hover:text-red-600 sm:shrink-0 min-h-[44px]"
+              className="self-start hs-text-label rounded-md px-2 py-1 -mx-2 -my-1 transition-colors hover:bg-[#FEF2F2] hover:text-red-600 sm:shrink-0 min-h-[44px]"
               style={{ color: 'var(--text-muted)' }}
             >
               Clear all
             </button>
           </div>
 
-          <div className="hs-compare-panel hs-compare-workspace__controls mb-3">
+          <div className="hs-compare-panel hs-compare-workspace__controls mb-4">
             <CompareLensControl value={lens} onChange={setLens} />
             <label className="hs-compare-diff-toggle">
               <input
@@ -132,7 +132,7 @@ export default function CompareClient({ allApps }: Props) {
             </label>
           </div>
 
-          <div className="hs-compare-panel hs-compare-panel--summary mb-3">
+          <div className="hs-compare-panel hs-compare-panel--summary mb-4">
             <h2 className="sr-only">Selected DTx apps summary</h2>
             <div className="hs-compare-summary-row">
               <div className="hs-compare-summary-row__spacer" aria-hidden="true" />
@@ -154,16 +154,16 @@ export default function CompareClient({ allApps }: Props) {
       )}
 
       {selected.length === 0 ? (
-        <div className="hs-surface-card text-center py-20 px-4 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
-          <div className="text-4xl mb-4" aria-hidden>
+        <div className="hs-surface-card text-center py-16 px-4 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
+          <div className="hs-text-section mb-4" aria-hidden>
             ⚖️
           </div>
-          <p className="font-semibold mb-3 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
+          <p className="hs-font-bold mb-4 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
             No DTx apps selected for the comparison tool. Browse the catalogue and add DTx apps to compare them side by side.
           </p>
           <Link
             href="/apps"
-            className="inline-flex items-center justify-center text-sm font-semibold rounded-lg px-5 py-3 min-h-[44px]"
+            className="inline-flex items-center justify-center hs-text-label hs-font-bold rounded-lg px-6 py-4 min-h-[44px]"
             style={{ background: STORE_ACCENT, color: '#fff' }}
           >
             Find apps

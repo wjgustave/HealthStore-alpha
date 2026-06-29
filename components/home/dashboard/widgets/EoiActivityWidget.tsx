@@ -24,13 +24,13 @@ export function EoiActivityWidget({ limit = 5 }: { limit?: number }) {
       ) : count === 0 ? (
         <WidgetMessage>No expressions of interest yet.</WidgetMessage>
       ) : (
-        <ul className="m-0 min-h-0 flex-1 list-none space-y-3 p-0">
+        <ul className="m-0 min-h-0 flex-1 list-none space-y-4 p-0">
           {recent.map(eoi => (
-            <li key={eoi.id} className="border-t border-[var(--border)] pt-3 first:border-t-0 first:pt-0">
-              <div className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+            <li key={eoi.id} className="border-t border-[var(--border)] pt-4 first:border-t-0 first:pt-0">
+              <div className="hs-text-label hs-font-bold" style={{ color: 'var(--text-primary)' }}>
                 {eoi.appName}
               </div>
-              <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
+              <div className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>
                 {eoi.submittedByName || 'Unknown user'} · {formatHomeDate(eoi.createdAt)}
               </div>
             </li>

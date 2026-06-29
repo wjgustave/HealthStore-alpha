@@ -19,14 +19,14 @@ export function DashboardV4(props: DashboardVariantProps) {
 
       <DashboardSessionNotice />
 
-      <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+      <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
         <HomeHeroSearch />
-        <span className="text-lg font-bold sm:px-1" style={{ color: 'var(--text-secondary)' }}>
+        <span className="hs-text-card-title-sm hs-font-bold sm:px-1" style={{ color: 'var(--text-secondary)' }}>
           Or
         </span>
         <Link
           href="/apps"
-          className="inline-flex min-h-[52px] shrink-0 items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-colors hover:bg-slate-50"
+          className="inline-flex min-h-[52px] shrink-0 items-center justify-center gap-2 rounded-xl px-6 py-4 hs-text-label hs-font-bold transition-colors hover:bg-slate-50"
           style={{ border: '1px solid var(--border)', color: 'var(--nhs-blue)', background: '#fff' }}
         >
           <LayoutGrid className="h-4 w-4" aria-hidden />

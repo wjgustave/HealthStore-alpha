@@ -10,7 +10,7 @@ function StatusBadge({ status }: { status: string | undefined }) {
   const meta = statusMeta(status)
   return (
     <span
-      className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-semibold leading-tight"
+      className="inline-flex items-center rounded-md border px-2 py-1 hs-text-caption hs-font-bold leading-tight"
       style={{ color: meta.fg, background: meta.bg, borderColor: meta.border }}
     >
       {meta.label}
@@ -26,16 +26,16 @@ function DetailContent({ row, index }: { row: DeploymentRow; index: number }) {
   const email = liveSiteContactEmailShort(row.site, index)
   return (
     <>
-      {row.notes ? <p className="m-0 mb-3">{row.notes}</p> : null}
+      {row.notes ? <p className="m-0 mb-4">{row.notes}</p> : null}
       {row.delivery ? (
-        <p className="m-0 mb-3">
-          <strong className="font-semibold text-[var(--text-primary)]">How it&apos;s delivered: </strong>
+        <p className="m-0 mb-4">
+          <strong className="hs-font-bold text-[var(--text-primary)]">How it&apos;s delivered: </strong>
           {row.delivery}
         </p>
       ) : null}
       <p className="m-0">
-        <strong className="font-semibold text-[var(--text-primary)]">Contact: </strong>
-        <a href={`mailto:${email}`} className="font-medium underline" style={{ color: 'var(--nhs-blue)' }}>
+        <strong className="hs-font-bold text-[var(--text-primary)]">Contact: </strong>
+        <a href={`mailto:${email}`} className="hs-font-normal underline" style={{ color: 'var(--nhs-blue)' }}>
           {email}
         </a>
       </p>
@@ -57,7 +57,7 @@ export function DeploymentRegisterTable({ rows }: { rows: DeploymentRow[] }) {
 
   if (rows.length === 0) {
     return (
-      <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+      <p className="hs-text-label" style={{ color: 'var(--text-muted)' }}>
         No named NHS deployments are recorded for this product in catalogue sources.
       </p>
     )
@@ -84,8 +84,8 @@ export function DeploymentRegisterTable({ rows }: { rows: DeploymentRow[] }) {
 
   return (
     <div>
-      <p className="mb-4 text-sm" style={{ color: 'var(--text-secondary)' }}>
-        <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>
+      <p className="mb-4 hs-text-label" style={{ color: 'var(--text-secondary)' }}>
+        <span className="hs-font-bold" style={{ color: 'var(--text-primary)' }}>
           {summaryParts.join(' ')}
         </span>
         {extras.length > 0 ? (
@@ -93,31 +93,24 @@ export function DeploymentRegisterTable({ rows }: { rows: DeploymentRow[] }) {
         ) : null}
       </p>
 
+      {/* [Provenance: NHS] Official NHS Table. Expandable detail rows are bespoke. */}
       <div className="hidden overflow-x-auto sm:block">
-        <table className="w-full border-collapse text-sm">
-          <caption className="sr-only">
+        <table className="nhsuk-table">
+          <caption className="nhsuk-table__caption nhsuk-u-visually-hidden">
             Where this product is deployed across NHS England, by site, ICB, care setting and status.
           </caption>
-          <thead>
-            <tr className="border-b text-left" style={{ borderColor: 'var(--border)' }}>
-              <th scope="col" className="py-2 pr-3 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
-                Site / service
-              </th>
-              <th scope="col" className="py-2 pr-3 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
-                ICB / place
-              </th>
-              <th scope="col" className="py-2 pr-3 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
-                Care setting
-              </th>
-              <th scope="col" className="py-2 pr-3 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
-                Status
-              </th>
-              <th scope="col" className="py-2 text-xs font-semibold uppercase tracking-wide print:hidden" style={{ color: 'var(--text-muted)' }}>
-                <span className="sr-only">Details</span>
+          <thead className="nhsuk-table__head">
+            <tr className="nhsuk-table__row">
+              <th scope="col" className="nhsuk-table__header">Site / service</th>
+              <th scope="col" className="nhsuk-table__header">ICB / place</th>
+              <th scope="col" className="nhsuk-table__header">Care setting</th>
+              <th scope="col" className="nhsuk-table__header">Status</th>
+              <th scope="col" className="nhsuk-table__header print:hidden">
+                <span className="nhsuk-u-visually-hidden">Details</span>
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="nhsuk-table__body">
             {rows.map((r, i) => {
               const open = printing || expanded.has(i)
               return (
@@ -135,30 +128,30 @@ export function DeploymentRegisterTable({ rows }: { rows: DeploymentRow[] }) {
         </table>
       </div>
 
-      <ul className="space-y-3 sm:hidden">
+      <ul className="space-y-4 sm:hidden">
         {rows.map((r, i) => {
           const open = printing || expanded.has(i)
           return (
-            <li key={i} className="rounded-lg border p-3" style={{ borderColor: 'var(--border)', background: '#F7F9FC' }}>
+            <li key={i} className="rounded-lg border p-4" style={{ borderColor: 'var(--border)', background: '#F0F4F5' }}>
               <div className="mb-2 flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <div className="font-semibold" style={{ color: 'var(--text-primary)' }}>{r.site}</div>
+                  <div className="hs-font-bold" style={{ color: 'var(--text-primary)' }}>{r.site}</div>
                   {r.condition ? (
-                    <div className="text-xs" style={{ color: 'var(--text-muted)' }}>{r.condition}</div>
+                    <div className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{r.condition}</div>
                   ) : null}
                 </div>
                 <StatusBadge status={r.status} />
               </div>
-              <dl className="space-y-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
+              <dl className="space-y-1 hs-text-caption" style={{ color: 'var(--text-secondary)' }}>
                 <div>
-                  <dt className="inline font-medium" style={{ color: 'var(--text-muted)' }}>ICB / place: </dt>
+                  <dt className="inline hs-font-bold" style={{ color: 'var(--text-muted)' }}>ICB / place: </dt>
                   <dd className="inline">
                     {dash(r.icb)}
                     {r.location ? ` — ${r.location}` : ''}
                   </dd>
                 </div>
                 <div>
-                  <dt className="inline font-medium" style={{ color: 'var(--text-muted)' }}>Care setting: </dt>
+                  <dt className="inline hs-font-bold" style={{ color: 'var(--text-muted)' }}>Care setting: </dt>
                   <dd className="inline">{dash(r.care_setting)}</dd>
                 </div>
               </dl>
@@ -167,7 +160,7 @@ export function DeploymentRegisterTable({ rows }: { rows: DeploymentRow[] }) {
                   type="button"
                   aria-expanded={open}
                   onClick={() => toggle(i)}
-                  className="mt-3 flex items-center gap-1 text-xs font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFD800]"
+                  className="mt-4 flex items-center gap-1 hs-text-caption hs-font-normal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFD800]"
                   style={{ color: 'var(--nhs-blue)' }}
                 >
                   {open ? 'Less' : 'More'}
@@ -175,7 +168,7 @@ export function DeploymentRegisterTable({ rows }: { rows: DeploymentRow[] }) {
                 </button>
               ) : null}
               {open ? (
-                <div className="mt-3 rounded-lg p-3 text-sm leading-relaxed" style={{ background: '#fff', color: 'var(--text-secondary)' }}>
+                <div className="mt-4 rounded-lg p-4 hs-text-label leading-relaxed" style={{ background: '#fff', color: 'var(--text-secondary)' }}>
                   <DetailContent row={r} index={i} />
                 </div>
               ) : null}
@@ -203,33 +196,33 @@ function RowGroup({
   const detailId = `deployment-detail-${index}`
   return (
     <>
-      <tr className="border-b align-top" style={{ borderColor: 'var(--border)' }}>
-        <td className="py-2.5 pr-3">
-          <div className="font-medium" style={{ color: 'var(--text-primary)' }}>{row.site}</div>
+      <tr className="nhsuk-table__row align-top">
+        <td className="nhsuk-table__cell">
+          <div className="hs-font-normal" style={{ color: 'var(--text-primary)' }}>{row.site}</div>
           {row.condition ? (
-            <div className="text-xs" style={{ color: 'var(--text-muted)' }}>{row.condition}</div>
+            <div className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{row.condition}</div>
           ) : null}
         </td>
-        <td className="py-2.5 pr-3" style={{ color: 'var(--text-secondary)' }}>
+        <td className="nhsuk-table__cell" style={{ color: 'var(--text-secondary)' }}>
           <div>{dash(row.icb)}</div>
           {row.location ? (
-            <div className="text-xs" style={{ color: 'var(--text-muted)' }}>{row.location}</div>
+            <div className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{row.location}</div>
           ) : null}
         </td>
-        <td className="py-2.5 pr-3" style={{ color: 'var(--text-secondary)' }}>
+        <td className="nhsuk-table__cell" style={{ color: 'var(--text-secondary)' }}>
           {dash(row.care_setting)}
         </td>
-        <td className="py-2.5 pr-3">
+        <td className="nhsuk-table__cell">
           <StatusBadge status={row.status} />
         </td>
-        <td className="py-2.5 print:hidden">
+        <td className="nhsuk-table__cell print:hidden">
           {!printing ? (
             <button
               type="button"
               aria-expanded={open}
               aria-controls={detailId}
               onClick={() => onToggle(index)}
-              className="flex items-center gap-1 rounded p-1 text-xs font-medium hover:bg-[#F7F9FC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFD800]"
+              className="flex items-center gap-1 rounded p-1 hs-text-caption hs-font-normal hover:bg-[#F0F4F5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFD800]"
               style={{ color: 'var(--nhs-blue)' }}
             >
               {open ? 'Less' : 'More'}
@@ -239,11 +232,11 @@ function RowGroup({
         </td>
       </tr>
       {open ? (
-        <tr id={detailId} className="border-b" style={{ borderColor: 'var(--border)' }}>
-          <td colSpan={5} className="px-3 pb-3 pt-0">
+        <tr id={detailId} className="nhsuk-table__row">
+          <td colSpan={5} className="nhsuk-table__cell px-4 pb-4 pt-0">
             <div
-              className="rounded-lg p-3 text-sm leading-relaxed"
-              style={{ background: '#F7F9FC', color: 'var(--text-secondary)' }}
+              className="rounded-lg p-4 hs-text-label leading-relaxed"
+              style={{ background: '#F0F4F5', color: 'var(--text-secondary)' }}
             >
               <DetailContent row={row} index={index} />
             </div>

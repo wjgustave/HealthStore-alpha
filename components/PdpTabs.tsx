@@ -77,7 +77,9 @@ export function PdpTabs({ tabs }: { tabs: PdpTab[] }) {
   }
 
   return (
-    <div className="nhsuk-tabs">
+    // [Provenance: NHS] Official NHS Tabs CSS. `js-enabled` activates the NHS
+    // tab-strip styling (NHS gates it on JS); our React controls active state.
+    <div className="nhsuk-tabs js-enabled">
       <h2 className="nhsuk-tabs__title">Contents</h2>
       <ul
         className="nhsuk-tabs__list print:hidden"
@@ -127,7 +129,7 @@ export function PdpTabs({ tabs }: { tabs: PdpTab[] }) {
             tabIndex={0}
           >
             {printing ? (
-              <h2 className="mb-4 mt-2 text-lg font-bold" style={{ color: 'var(--nhs-blue)' }}>
+              <h2 className="mb-4 mt-2 hs-text-card-title-sm hs-font-bold" style={{ color: 'var(--nhs-blue)' }}>
                 {t.label}
               </h2>
             ) : null}

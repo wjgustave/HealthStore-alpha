@@ -27,13 +27,13 @@ export function AuthCard({
       style={{ background: 'linear-gradient(135deg, #003087 0%, var(--nhs-blue) 60%, #0072CE 100%)' }}
     >
       <div className="w-full max-w-md">
-        <div className="overflow-hidden rounded-2xl bg-white shadow-lg">
+        <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
           <div style={{ background: 'var(--nhs-blue)', height: 6 }} />
           <div className="p-8">
             <div className="mb-8 flex flex-col items-center">
-              <div className="mb-3 flex items-center gap-2.5">
+              <div className="mb-4 flex items-center gap-2">
                 <Image src="/logos/nhs-blue-alt.svg" alt="" width={90} height={36} className="flex-shrink-0" />
-                <span style={{ ...fr, fontWeight: 700, fontSize: 'var(--text-card-title)', color: '#003087' }}>
+                <span style={{ ...fr, fontWeight: 600, fontSize: 'var(--text-card-title)', color: '#003087' }}>
                   HealthStore
                 </span>
               </div>
@@ -42,7 +42,7 @@ export function AuthCard({
 
             <h1
               className="mb-1 text-center"
-              style={{ ...fr, fontSize: 'var(--text-page-title)', fontWeight: 700, color: '#1A2332' }}
+              style={{ ...fr, fontSize: 'var(--text-page-title)', fontWeight: 600, color: '#212B32' }}
             >
               {title}
             </h1>

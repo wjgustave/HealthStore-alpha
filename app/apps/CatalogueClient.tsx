@@ -64,7 +64,7 @@ function FilterSelect({ label, value, onChange, options }: {
   const id = useId()
   return (
     <div>
-      <label htmlFor={id} className="mb-1.5 block font-semibold uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
+      <label htmlFor={id} className="mb-2 block hs-font-bold uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
         {label}
       </label>
       <Select id={id} value={value} onChange={e => onChange(e.target.value)} className="min-h-[44px]">
@@ -76,9 +76,9 @@ function FilterSelect({ label, value, onChange, options }: {
 
 function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span className="pill text-xs" style={{ background: '#E6F0FB', color: '#003087', borderColor: '#E6F0FB' }}>
+    <span className="pill hs-text-caption" style={{ background: '#E6F0FB', color: '#003087', borderColor: '#E6F0FB' }}>
       {label}
-      <button type="button" onClick={onRemove} className="rounded-sm p-0.5 transition-colors hover:bg-white/60 hover:opacity-90" aria-label={`Remove ${label} filter`}>
+      <button type="button" onClick={onRemove} className="rounded-sm p-1 transition-colors hover:bg-white/60 hover:opacity-90" aria-label={`Remove ${label} filter`}>
         <X className="w-3 h-3" />
       </button>
     </span>
@@ -189,7 +189,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
   const searchOnlyEmpty = hasAttrResults && filteredSorted.length === 0 && searchInput.trim().length > 0
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div className="hs-page">
       <PageBreadcrumb
         items={[
           { label: 'Find apps', href: '/apps' },
@@ -209,9 +209,9 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
       <div className="hs-surface-card rounded-xl bg-white border p-4 mb-4" style={{ borderColor: 'var(--border)' }}>
         <div className="flex flex-col gap-4">
           <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{resultText}</p>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <div>
-              <label htmlFor="catalogue-search" className="block font-semibold mb-1.5 uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
+              <label htmlFor="catalogue-search" className="block hs-font-bold mb-2 uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
                 Search
               </label>
               <input
@@ -220,19 +220,19 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                 value={searchInput}
                 onChange={e => onSearchInputChange(e.target.value)}
                 placeholder="Filter by app name, supplier, or condition"
-                className="w-full min-h-[44px] text-sm rounded-lg border px-3 py-2.5 bg-white"
+                className="w-full min-h-[44px] hs-text-label rounded-lg border px-4 py-2 bg-white"
                 style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
                 autoComplete="off"
               />
             </div>
-            <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:gap-3">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 flex-1 min-w-0">
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 flex-1 min-w-0">
                 <FilterSelect label="Condition" value={condition} onChange={onConditionChange} options={conditionOptions} />
                 <FilterSelect label="Supervision model" value={supervision} onChange={setSupervision} options={supervisionOptions} />
                 <FilterSelect label="Deployment maturity" value={maturity} onChange={setMaturity} options={maturityOptions} />
               </div>
               <div className="flex flex-wrap items-end gap-4 shrink-0 xl:ml-auto">
-                <div className="flex min-h-[44px] items-center gap-2.5">
+                <div className="flex min-h-[44px] items-center gap-2">
                   <input
                     id="catalogue-demo-only"
                     type="checkbox"
@@ -243,7 +243,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                   />
                   <label
                     htmlFor="catalogue-demo-only"
-                    className="cursor-pointer select-none text-sm font-medium"
+                    className="cursor-pointer select-none hs-text-label hs-font-normal"
                     style={{ color: 'var(--text-primary)' }}
                   >
                     Demo
@@ -260,7 +260,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                     setSearchInput('')
                     router.replace('/apps/condition-catalogue', { scroll: false })
                   }}
-                  className="min-h-[44px] text-sm px-4 rounded-lg border transition-colors hover:bg-[#F7F9FC] hover:border-[var(--text-muted-low-con)]"
+                  className="min-h-[44px] hs-text-label px-4 rounded-lg border transition-colors hover:bg-[#F0F4F5] hover:border-[var(--text-muted-low-con)]"
                   style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
                 >
                   Clear filters
@@ -285,7 +285,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
 
       {filteredSorted.length === 0 ? (
         <div className="hs-surface-card text-center py-16 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }} aria-hidden>
+          <div className="hs-text-page-title mb-4" style={{ marginBottom: '0.75rem' }} aria-hidden>
             🔍
           </div>
           <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>
@@ -297,10 +297,10 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
               : 'Try adjusting your filter criteria'}
           </div>
           {searchOnlyEmpty ? (
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap justify-center gap-4">
               <button
                 type="button"
-                className="rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:!bg-[#004B8C]"
+                className="rounded-lg px-4 py-2 hs-text-label hs-font-bold text-white transition-colors hover:!bg-[#004B8C]"
                 style={{ background: STORE_ACCENT }}
                 onClick={clearSearchOnly}
               >
@@ -308,7 +308,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
               </button>
               <Link
                 href="/apps/condition-catalogue"
-                className="inline-flex items-center rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-[#F7F9FC]"
+                className="inline-flex items-center rounded-lg border px-4 py-2 hs-text-label hs-font-bold transition-colors hover:bg-[#F0F4F5]"
                 style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
               >
                 Browse all apps
@@ -318,7 +318,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
         </div>
       ) : (
         <div
-          className="grid gap-5 [grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))] xl:[grid-template-columns:repeat(auto-fill,minmax(360px,1fr))] 2xl:[grid-template-columns:repeat(auto-fill,minmax(380px,1fr))]"
+          className="grid gap-6 [grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))] xl:[grid-template-columns:repeat(auto-fill,minmax(360px,1fr))] 2xl:[grid-template-columns:repeat(auto-fill,minmax(380px,1fr))]"
         >
           {filteredSorted.map((app: App) => {
             const priceLabel = getCataloguePriceLabel(app)
@@ -328,7 +328,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
             <div key={app.id} className="app-card flex h-full min-h-0 flex-col">
               <div className="flex min-h-0 flex-1 flex-col" style={{ padding: '1.25rem' }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: '0.75rem' }}>
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex items-center gap-2">
                     {app.logo_path && (
                       <Image src={app.logo_path} alt="" width={32} height={32} className="rounded-md flex-shrink-0" />
                     )}
@@ -336,7 +336,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                       <h3
                         style={{
                           fontFamily: 'Frutiger, Arial, sans-serif',
-                          fontWeight: 700,
+                          fontWeight: 600,
                           fontSize: 'var(--text-card-title-sm)',
                           color: 'var(--text-primary)',
                           marginBottom: 2,
@@ -372,13 +372,13 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                 <div className="mt-auto flex min-w-0 flex-col">
                   {priceLabel || showDemo || showFunding ? (
                     <>
-                      <div className="mb-[10px] flex flex-row flex-wrap items-center gap-x-2 gap-y-1 sm:mb-3 lg:mb-[15px] xl:flex-nowrap xl:gap-x-1.5 2xl:gap-x-2">
+                      <div className="mb-[10px] flex flex-row flex-wrap items-center gap-x-2 gap-y-1 sm:mb-4 lg:mb-[15px] xl:flex-nowrap xl:gap-x-2 2xl:gap-x-2">
                         {priceLabel ? <CatalogueSignalDotRow tone="green" label={priceLabel} /> : null}
                         {showDemo ? <CatalogueSignalDotRow tone="orange" label="Demo" /> : null}
                         {showFunding ? <CatalogueSignalDotRow tone="blue" label="Related funding" /> : null}
                       </div>
                       <div
-                        className="mb-[12px] border-t border-solid sm:mb-4 lg:mb-5"
+                        className="mb-[12px] border-t border-solid sm:mb-4 lg:mb-6"
                         style={{
                           borderTopColor: 'color-mix(in srgb, var(--text-muted) 15%, var(--border))',
                         }}
@@ -390,7 +390,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                   <div className="grid grid-cols-1 gap-2">
                     <Link
                       href={`/apps/${app.slug}`}
-                      className="block rounded-lg py-4 text-center text-sm font-semibold transition-colors hover:!bg-[#004B8C]"
+                      className="block rounded-lg py-4 text-center hs-text-label hs-font-bold transition-colors hover:!bg-[#004B8C]"
                       style={{ background: STORE_ACCENT, color: '#fff' }}
                     >
                       View details →

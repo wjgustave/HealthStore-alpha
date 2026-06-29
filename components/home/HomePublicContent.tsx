@@ -26,7 +26,7 @@ export default function HomePublicContent({
 }: HomePublicContentProps) {
   return (
     <>
-      <div className="max-w-7xl mx-auto px-6 pt-10">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-10">
         <div className="flex flex-col gap-12 md:gap-14">
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
             <NewsListConcept news={news} title="News" hrefless seeAllHref="/news" />
@@ -39,7 +39,7 @@ export default function HomePublicContent({
         <HomeCaseStudiesBand caseStudies={caseStudies} />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 pb-16 pt-12 md:pt-14">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-16 pt-12 md:pt-14">
         <div className="flex flex-col gap-12 md:gap-14">
           <ImpactSection dash={dash} />
           <PrototypeNoteSection dash={dash} />

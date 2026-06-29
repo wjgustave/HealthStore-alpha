@@ -196,10 +196,10 @@ export default function OrgSettingsClient({
       <PageBreadcrumb items={[{ label: 'Organisation settings' }]} className="mb-4" />
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--nhs-dark)' }}>
+          <h1 className="hs-text-section-alt hs-font-bold" style={{ color: 'var(--nhs-dark)' }}>
             Organisation settings
           </h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
+          <p className="mt-1 hs-text-label" style={{ color: 'var(--text-muted)' }}>
             Shared across everyone in your organisation.
           </p>
         </div>
@@ -209,7 +209,7 @@ export default function OrgSettingsClient({
             size="sm"
             disabled
             title="Coming soon — auto-fill from an AI search"
-            className="gap-1.5"
+            className="gap-2"
           >
             <Sparkles className="h-4 w-4" aria-hidden />
             Find this information
@@ -219,7 +219,7 @@ export default function OrgSettingsClient({
               <Button variant="secondary" size="sm" onClick={handleCancel} disabled={saving}>
                 Cancel
               </Button>
-              <Button variant="primary" size="sm" onClick={handleSave} loading={saving} className="gap-1.5">
+              <Button variant="primary" size="sm" onClick={handleSave} loading={saving} className="gap-2">
                 {saving ? (
                   <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
                 ) : (
@@ -234,7 +234,7 @@ export default function OrgSettingsClient({
               size="sm"
               onClick={() => setEditing(true)}
               disabled={!dbAvailable}
-              className="gap-1.5"
+              className="gap-2"
             >
               <Pencil className="h-4 w-4" aria-hidden />
               Edit
@@ -413,7 +413,7 @@ export default function OrgSettingsClient({
               style={{ borderColor: 'var(--border)', background: 'var(--surface, #f7fafc)' }}
             >
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold" style={{ color: 'var(--nhs-dark)' }}>
+                <h3 className="hs-text-label hs-font-bold" style={{ color: 'var(--nhs-dark)' }}>
                   {conditionLabel(condition.conditionId)}
                 </h3>
                 {editing && (
@@ -431,7 +431,7 @@ export default function OrgSettingsClient({
                 )}
               </div>
 
-              <div className="mt-3">
+              <div className="mt-4">
                 <OrgField
                   label="Cohort"
                   hint={`How many people in your population have ${conditionLabel(condition.conditionId)}?`}
@@ -459,7 +459,7 @@ export default function OrgSettingsClient({
                 </OrgField>
               </div>
 
-              <div className="mt-3">
+              <div className="mt-4">
                 <TagField
                   label="Condition priorities"
                   tags={condition.priorities}
@@ -483,11 +483,11 @@ export default function OrgSettingsClient({
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="hs-surface-card mt-6 p-5 sm:p-6">
-      <h2 className="text-lg font-semibold" style={{ color: 'var(--nhs-dark)' }}>
+    <section className="hs-surface-card mt-6 p-6 sm:p-6">
+      <h2 className="hs-text-card-title-sm hs-font-bold" style={{ color: 'var(--nhs-dark)' }}>
         {title}
       </h2>
-      <div className="mt-4 space-y-5">{children}</div>
+      <div className="mt-4 space-y-6">{children}</div>
     </section>
   )
 }
@@ -519,12 +519,12 @@ function OrgField({
   }
   return (
     <div>
-      <div className="mb-1.5">
-        <span className="block font-semibold" style={labelStyle}>
+      <div className="mb-2">
+        <span className="block hs-font-bold" style={labelStyle}>
           {label}
         </span>
         {hint ? (
-          <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+          <p className="mt-1 hs-text-caption" style={{ color: 'var(--text-muted)' }}>
             {hint}
           </p>
         ) : null}
@@ -537,14 +537,14 @@ function OrgField({
 function ReadValue({ value, multiline }: { value: string; multiline?: boolean }) {
   if (!value) {
     return (
-      <span className="text-sm italic" style={{ color: 'var(--text-muted)' }}>
+      <span className="hs-text-label italic" style={{ color: 'var(--text-muted)' }}>
         Not set
       </span>
     )
   }
   return (
     <p
-      className={`text-sm ${multiline ? 'whitespace-pre-wrap leading-relaxed' : ''}`}
+      className={`hs-text-label ${multiline ? 'whitespace-pre-wrap leading-relaxed' : ''}`}
       style={{ color: 'var(--text-secondary)' }}
     >
       {value}
@@ -570,12 +570,12 @@ function TagField({
 }) {
   return (
     <div>
-      <div className="mb-1.5">
-        <span className="block font-semibold" style={labelStyle}>
+      <div className="mb-2">
+        <span className="block hs-font-bold" style={labelStyle}>
           {label}
         </span>
         {hint ? (
-          <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+          <p className="mt-1 hs-text-caption" style={{ color: 'var(--text-muted)' }}>
             {hint}
           </p>
         ) : null}
@@ -620,7 +620,7 @@ function TagEditor({
   if (!editing) {
     if (tags.length === 0) {
       return (
-        <span className="text-sm italic" style={{ color: 'var(--text-muted)' }}>
+        <span className="hs-text-label italic" style={{ color: 'var(--text-muted)' }}>
           Not set
         </span>
       )
@@ -630,7 +630,7 @@ function TagEditor({
         {tags.map((tag, i) => (
           <span
             key={`${tag}-${i}`}
-            className="pill text-xs"
+            className="pill hs-text-caption"
             style={{ background: '#E6F0FB', color: 'var(--nhs-blue)', borderColor: '#E6F0FB' }}
           >
             {tag}
@@ -647,14 +647,14 @@ function TagEditor({
           {tags.map((tag, i) => (
             <span
               key={`${tag}-${i}`}
-              className="pill text-xs"
+              className="pill hs-text-caption"
               style={{ background: '#E6F0FB', color: 'var(--nhs-blue)', borderColor: '#E6F0FB' }}
             >
               {tag}
               <button
                 type="button"
                 onClick={() => removeAt(i)}
-                className="rounded-full p-0.5 transition-colors hover:bg-white/60"
+                className="rounded-full p-1 transition-colors hover:bg-white/60"
                 aria-label={`Remove ${tag}`}
               >
                 <X className="h-3 w-3" aria-hidden />
@@ -682,7 +682,7 @@ function TagEditor({
           size="none"
           onClick={addDraft}
           aria-label={addLabel}
-          className="flex-shrink-0 p-2.5"
+          className="flex-shrink-0 p-2"
         >
           <Plus className="h-4 w-4" aria-hidden />
         </Button>
@@ -702,14 +702,14 @@ function AddCondition({
 
   if (options.length === 0) {
     return (
-      <p className="mt-3 text-xs italic" style={{ color: 'var(--text-muted)' }}>
+      <p className="mt-4 hs-text-caption italic" style={{ color: 'var(--text-muted)' }}>
         All available conditions have been added.
       </p>
     )
   }
 
   return (
-    <div className="mt-3 flex items-center gap-2">
+    <div className="mt-4 flex items-center gap-2">
       <Select
         value={selected}
         aria-label="Add a condition"
@@ -732,7 +732,7 @@ function AddCondition({
             setSelected('')
           }
         }}
-        className="flex-shrink-0 gap-1.5"
+        className="flex-shrink-0 gap-2"
       >
         <Plus className="h-4 w-4" aria-hidden />
         Add condition
@@ -759,10 +759,10 @@ function Banner({
     <div
       role={tone === 'error' ? 'alert' : 'status'}
       aria-live={tone === 'error' ? 'assertive' : 'polite'}
-      className="mt-4 flex items-start gap-2 rounded-md border px-3 py-2 text-sm"
+      className="mt-4 flex items-start gap-2 rounded-md border px-4 py-2 hs-text-label"
       style={{ background: palette.bg, borderColor: palette.border, color: palette.color }}
     >
-      <Icon className="mt-0.5 h-4 w-4 flex-shrink-0" aria-hidden />
+      <Icon className="mt-1 h-4 w-4 flex-shrink-0" aria-hidden />
       <span>{children}</span>
     </div>
   )

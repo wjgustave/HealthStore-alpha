@@ -52,7 +52,7 @@ export function EvidenceCard({ study, accent }: { study: any; accent: string }) 
         )}
       </div>
 
-      <div className="mb-3 min-w-0 w-full">
+      <div className="mb-4 min-w-0 w-full">
         <div
           style={{ fontWeight: 600, fontSize: 'var(--text-label)', color: 'var(--text-primary)', marginBottom: study.authors ? 4 : 0 }}
         >
@@ -79,7 +79,7 @@ export function EvidenceCard({ study, accent }: { study: any; accent: string }) 
         (study.url_full_text && !study.url_doi && !study.url_pubmed) ||
         study.url_trial_reg ||
         study.url_case_study) && (
-        <div className="mb-3 flex min-w-0 w-full flex-wrap gap-x-4 gap-y-2">
+        <div className="mb-4 flex min-w-0 w-full flex-wrap gap-x-4 gap-y-2">
           {study.url_doi && (
             <a href={study.url_doi} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: accent }}>
               DOI ↗
@@ -138,12 +138,12 @@ export function EvidenceCard({ study, accent }: { study: any; accent: string }) 
       )}
 
       {study.data_quality_note && (
-        <div style={{ fontSize: 'var(--text-label)', background: '#FEF5E6', borderLeft: '3px solid #D5840D', color: '#7A4800', borderRadius: 4, padding: '6px 8px', marginTop: 6, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 'var(--text-label)', background: '#FEF5E6', borderLeft: '3px solid #ED8B00', color: '#7A4800', borderRadius: 4, padding: '6px 8px', marginTop: 6, lineHeight: 1.5 }}>
           <strong>⚠ Commissioner note: </strong>{study.data_quality_note}
         </div>
       )}
       {study.coi_note && !study.data_quality_note && (
-        <div style={{ fontSize: 'var(--text-label)', background: '#FEF5E6', borderLeft: '3px solid #D5840D', color: '#7A4800', borderRadius: 4, padding: '6px 8px', marginTop: 6, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 'var(--text-label)', background: '#FEF5E6', borderLeft: '3px solid #ED8B00', color: '#7A4800', borderRadius: 4, padding: '6px 8px', marginTop: 6, lineHeight: 1.5 }}>
           <strong>⚠ COI note: </strong>{study.coi_note}
         </div>
       )}
@@ -165,11 +165,11 @@ export function ContextOfUseGrid({ app }: { app: any }) {
   return (
     <div className="grid sm:grid-cols-2 gap-4">
       {items.map(item => (
-        <div key={item.label} className="rounded-lg p-3" style={{ background: '#F7F9FC' }}>
-          <div className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
+        <div key={item.label} className="rounded-lg p-4" style={{ background: '#F0F4F5' }}>
+          <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
             {item.label}
           </div>
-          <div className="text-sm" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+          <div className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>
             {item.value || 'Not specified'}
           </div>
         </div>
@@ -196,7 +196,7 @@ export function ProductHeroDemoBadge({ app }: { app: any }) {
 export function NhsIntegrationBadges({ app }: { app: any }) {
   if (app.nhs_app_integration !== true) return null
   return (
-    <div className="flex flex-wrap gap-2 mt-3">
+    <div className="flex flex-wrap gap-2 mt-4">
       <span className="badge badge-blue">✓ NHS App</span>
     </div>
   )

@@ -52,7 +52,7 @@ function SegmentLink({
   return (
     <a
       href={href}
-      className={`inline-block text-sm font-medium underline-offset-2 hover:underline ${className}`.trim()}
+      className={`inline-block hs-text-label hs-font-normal underline-offset-2 hover:underline ${className}`.trim()}
       style={{ color: 'var(--nhs-blue)' }}
     >
       {children}
@@ -99,7 +99,7 @@ function GovernanceSegment({
 }) {
   return (
     <SegmentShell label={label} labelHref={href}>
-      <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0">
+      <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
         {pills.map(p => (
           <li key={p.label}>
             <span className={`badge badge-blue max-w-full ${p.muted ? 'opacity-50' : ''}`}>{p.label}</span>
@@ -118,23 +118,23 @@ function CostSegment({
   return (
     <SegmentShell label={card.label} labelHref={card.href}>
       {card.modelPills.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-2">
           {card.modelPills.map(text => (
             <SnapshotPill key={text}>{text}</SnapshotPill>
           ))}
           {card.indicativeNote ? (
-            <span className="text-xs font-normal" style={{ color: 'var(--text-muted)' }}>
+            <span className="hs-text-caption font-normal" style={{ color: 'var(--text-muted)' }}>
               {card.indicativeNote}
             </span>
           ) : null}
         </div>
       ) : (
-        <p className="m-0 text-xs leading-snug" style={{ color: 'var(--text-muted)' }}>
+        <p className="m-0 hs-text-caption leading-snug" style={{ color: 'var(--text-muted)' }}>
           Not listed in profile
         </p>
       )}
       {card.subline ? (
-        <p className="mt-2 mb-0 text-xs leading-snug" style={{ color: 'var(--text-muted)' }}>
+        <p className="mt-2 mb-0 hs-text-caption leading-snug" style={{ color: 'var(--text-muted)' }}>
           {card.subline}
         </p>
       ) : null}
@@ -147,7 +147,7 @@ function FundingFullWidthSegment({ card }: { card: FundingSnapshotCard }) {
     <article className="hs-snapshot-strip__segment hs-snapshot-strip__segment--row">
       <div className="hs-snapshot-strip__row hs-snapshot-strip__row--funding">
         <h2 className="sr-only">{card.label}</h2>
-        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
           {card.pills.map((text, i) => (
             <span key={`${i}-${text}`} className="shrink-0 whitespace-nowrap">
               <SnapshotPill>{text}</SnapshotPill>
@@ -175,14 +175,14 @@ function IntegrationSegment({
   return (
     <SegmentShell label={card.label} labelHref={card.href}>
       {logoRow.length === 0 && bottomRow.length === 0 ? (
-        <p className="m-0 text-xs leading-snug" style={{ color: 'var(--text-muted)' }}>
+        <p className="m-0 hs-text-caption leading-snug" style={{ color: 'var(--text-muted)' }}>
           None listed in profile
         </p>
       ) : (
         <div className="flex flex-col gap-2" role="group" aria-label="Confirmed integrations">
           {logoRow.length > 0 ? (
-            <div className="flex flex-wrap items-center gap-1.5" aria-label="NHS service integrations">
-              <span className="text-sm font-semibold leading-none" style={{ color: 'var(--nhs-dark)' }}>
+            <div className="flex flex-wrap items-center gap-2" aria-label="NHS service integrations">
+              <span className="hs-text-label hs-font-bold leading-none" style={{ color: 'var(--nhs-dark)' }}>
                 NHS:
               </span>
               {logoRow.map(item => (
@@ -193,7 +193,7 @@ function IntegrationSegment({
             </div>
           ) : null}
           {bottomRow.length > 0 ? (
-            <div className="flex flex-wrap gap-1.5" aria-label="FHIR and EMIS">
+            <div className="flex flex-wrap gap-2" aria-label="FHIR and EMIS">
               {bottomRow.map(item => (
                 <SnapshotPill key={item.key}>{item.textLabel ?? item.name}</SnapshotPill>
               ))}

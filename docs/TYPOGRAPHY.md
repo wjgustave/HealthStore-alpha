@@ -20,43 +20,70 @@ Frutiger is the **only** brand typeface for HealthStore. This document is the si
 
 ## 2. Font hierarchy (role → weight)
 
+Weights follow the **NHS Design System**: body is **400 (Regular)**, bold/headings are **600**.
+(In this project both `600` and `700` resolve to `Frutiger-Bold.ttf`, so legacy inline `700`
+renders identically to NHS `600`.)
+
 | Role | Weight | Typical use |
 |------|--------|-------------|
-| **Display / headings** | **700 (Bold)** | Page h1, section h2/h3, brand name, large stats |
-| **Body (default)** | **300 (Light)** | Paragraphs, descriptions, inherited copy, inputs — `body` uses `--font-body-weight: 300` |
-| **Labels & UI chrome** | **600 (semibold)** or **700** | Form labels, filter labels, uppercase table headers, badges |
-| **Stronger than body** | **400 (Regular)** or **700** | Use `font-medium` / `font-semibold` / `font-bold` where you need more weight than Light |
+| **Display / headings** | **600 (Bold)** — NHS | Page h1, section h2/h3, brand name, large stats |
+| **Body (default)** | **400 (Regular)** — NHS | Paragraphs, descriptions, inherited copy, inputs — `body` uses `--font-body-weight: 400` |
+| **Labels & UI chrome** | **600** | Form labels, filter labels, uppercase table headers, badges |
 
-`h1`, `h2`, and `h3` in global CSS use Frutiger Bold by default and override body weight.
+`h1`–`h4` in global CSS use Frutiger Bold (`600`) by default and override body weight, with NHS heading line-heights.
 
 ---
 
 ## 3. Type scale (size tokens)
 
-Assume `html` root **16px** unless you change it. All rem values below are relative to that root.
+Matches the **nhsuk-frontend responsive type scale** (`core/settings/_typography.scss`).
+Tokens are **responsive**: the mobile size is declared in `:root`, and the tablet/desktop step
+is re-declared in a `@media (min-width: 641px)` block (the NHS tablet breakpoint). Each token is
+mapped to an NHS scale point. Assume `html` root **16px**.
 
-| Token | CSS variable | Value | Approx. px |
-|-------|----------------|-------|------------|
-| Hero title | `--text-hero` | `2.8rem` | ~45px |
-| Page title | `--text-page-title` | `2rem` | 32px |
-| Section heading (primary) | `--text-section` | `1.5rem` | 24px |
-| Section heading (secondary) | `--text-section-alt` | `1.4rem` | ~22px |
-| Card / featured title | `--text-card-title` | `1.05rem` | ~17px |
-| Card title (compact) | `--text-card-title-sm` | `1rem` | 16px |
-| **Body (default)** | `--text-body` | `1rem` | **16px** at weight **300** (Frutiger Light) |
-| Extra small / labels | `--text-xs` | `0.875rem` | **14px** (14÷16 rem at 16px root) |
+| Token | CSS variable | Mobile → Desktop | NHS point |
+|-------|----------------|------------------|-----------|
+| Hero title | `--text-hero` | 48 → 64px | 64 |
+| Page title | `--text-page-title` | 32 → 48px | 48 (heading-xl) |
+| Section heading (primary) | `--text-section` | 27 → 36px | 36 (heading-m) |
+| Section heading (secondary) | `--text-section-alt` | 22 → 26px | 26 (heading-s) |
+| Lede / intro | `--text-lede` | 20 → 24px | 24 (body-l) |
+| Card / featured title | `--text-card-title` | 19 → 22px | 22 |
+| Card title (compact) | `--text-card-title-sm` | 16 → 19px | 19 |
+| **Body (default)** | `--text-body` | **16 → 19px** at weight **400** | 19 (body) |
+| Extra small / labels | `--text-xs` | 14 → 16px | 16 (body-s) |
 | Labels / meta | `--text-label` | `var(--text-xs)` | Same as **`--text-xs`** |
-| Badges (component) | `--text-badge` | `13px` | 13px (within 12–14px band) |
+| Caption (smallest) | `--text-caption` | 12 → 14px | 14 |
+| Badges (component) | `--text-badge` | 14 → 16px | 16 |
+
+### Utility classes
+
+Prefer `.hs-text-*` utilities over Tailwind `text-xs`/`text-sm`/`text-lg` etc. They bind to the responsive NHS tokens:
+
+| Class | Token | Replaces |
+|-------|-------|----------|
+| `.hs-text-caption` | `--text-caption` | `text-xs` |
+| `.hs-text-label` | `--text-label` | `text-sm` |
+| `.hs-text-body` | `--text-body` | `text-base` |
+| `.hs-text-lede` | `--text-lede` | `text-xl` |
+| `.hs-text-card-title-sm` | `--text-card-title-sm` | `text-lg` |
+| `.hs-text-section-alt` | `--text-section-alt` | `text-2xl` |
+| `.hs-text-section` | `--text-section` | `text-3xl` / `text-4xl` |
+| `.hs-font-bold` | weight 600 | `font-bold` / `font-semibold` |
+| `.hs-font-normal` | weight 400 | body / link copy |
+
+Line-heights also follow NHS: body `1.5` (mobile) → `1.47` (≥641px); headings ~`1.12`–`1.19`
+(`--leading-body`, `--leading-heading`, `--leading-hero`).
 
 **Usage in React / inline styles:**
 
 ```tsx
 style={{ fontSize: 'var(--text-body)' }}
 style={{ fontSize: 'var(--text-xs)' }}
-style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-page-title)', fontWeight: 700 }}
+style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-page-title)', fontWeight: 600 }}
 ```
 
-`--text-xs` is **0.875rem** (14px when the root is 16px). `--text-label` is an alias: `var(--text-xs)`.
+`--text-label` is an alias: `var(--text-xs)`.
 
 **Do not** hard-code sizes that fight this scale (e.g. `10px` body copy) unless there is a documented exception.
 
@@ -95,21 +122,29 @@ Copy for quick reference (authoritative list is in `globals.css`):
 :root {
   --font-display: 'Frutiger', Arial, sans-serif;
   --font-body: 'Frutiger', Arial, sans-serif;
-  --font-body-weight: 300;
-  --text-hero: 2.8rem;
-  --text-page-title: 2rem;
-  --text-section: 1.5rem;
-  --text-section-alt: 1.4rem;
-  --text-card-title: 1.05rem;
-  --text-card-title-sm: 1rem;
-  --text-body: 1rem;
-  --text-xs: 0.875rem;
+  --font-body-weight: 400;          /* NHS Regular */
+  /* Mobile step (tablet/desktop re-declared at min-width: 641px) */
+  --text-hero: 3rem;                /* 48 → 64px */
+  --text-page-title: 2rem;          /* 32 → 48px */
+  --text-section: 1.6875rem;        /* 27 → 36px */
+  --text-section-alt: 1.375rem;     /* 22 → 26px */
+  --text-lede: 1.25rem;             /* 20 → 24px */
+  --text-card-title: 1.1875rem;     /* 19 → 22px */
+  --text-card-title-sm: 1rem;       /* 16 → 19px */
+  --text-body: 1rem;                /* 16 → 19px */
+  --text-xs: 0.875rem;              /* 14 → 16px */
+  --text-caption: 0.75rem;          /* 12 → 14px */
   --text-label: var(--text-xs);
-  --text-badge: 13px;
+  --text-badge: 0.875rem;           /* 14 → 16px */
+  --leading-hero: 1.125;
+  --leading-heading: 1.1875;
+  --leading-body: 1.5;              /* → 1.47368 at ≥641px */
 }
 ```
 
-`body` uses `font-family: 'Frutiger', Arial, sans-serif`, `font-size: var(--text-body)`, and `font-weight: var(--font-body-weight)` (**300** = Frutiger Light).
+`body` uses `font-family: 'Frutiger', Arial, sans-serif`, `font-size: var(--text-body)`,
+`font-weight: var(--font-body-weight)` (**400** = Frutiger Regular, NHS), and
+`line-height: var(--leading-body)`.
 
 ---
 
@@ -117,8 +152,9 @@ Copy for quick reference (authoritative list is in `globals.css`):
 
 - Use **DM Sans**, **DM Serif Display**, or other brand fonts for UI text.
 - Use **serif system fonts** (e.g. Georgia) for headings.
-- Use **`font-weight: 500`** for heading styles meant to read as Frutiger Bold — use **700** with the Bold font file.
-- Switch **body** back to Regular (400) without updating `--font-body-weight` and this guide.
+- Use **`font-weight: 500`** for heading styles meant to read as Frutiger Bold — use **600** (NHS bold) with the Bold font file.
+- Switch **body** back to Light (300) — NHS body is **400 (Regular)**; changing it diverges from NHS.
+- Replace the responsive `--text-*` tokens with fixed sizes — they intentionally step at the NHS 641px breakpoint.
 - Override **`.badge`** with a font size smaller than **12px** without design sign-off.
 - Add **inline `fontSize` on badges** unless necessary; prefer the global `.badge` rule.
 

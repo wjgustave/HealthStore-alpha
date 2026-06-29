@@ -192,7 +192,7 @@ export function SharePagePanel({
       <div className="mb-2 flex flex-wrap gap-2">
         <button
           type="button"
-          className="text-sm font-semibold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#003087] hover:decoration-[var(--nhs-blue)]"
+          className="hs-text-label hs-font-bold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#003087] hover:decoration-[var(--nhs-blue)]"
           style={{ color: STORE_ACCENT }}
           onClick={selectAll}
         >
@@ -203,7 +203,7 @@ export function SharePagePanel({
         </span>
         <button
           type="button"
-          className="text-sm font-semibold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#003087] hover:decoration-[var(--nhs-blue)]"
+          className="hs-text-label hs-font-bold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#003087] hover:decoration-[var(--nhs-blue)]"
           style={{ color: STORE_ACCENT }}
           onClick={clearAll}
         >
@@ -213,7 +213,7 @@ export function SharePagePanel({
       <ul className="space-y-2" role="list">
         {registeredBlocks.map(({ key, label, description }) => (
           <li key={key}>
-            <label className="flex cursor-pointer items-start gap-3 rounded-lg px-2 py-2 hover:bg-slate-50">
+            <label className="flex cursor-pointer items-start gap-4 rounded-lg px-2 py-2 hover:bg-slate-50">
               <input
                 type="checkbox"
                 className="mt-1 h-4 w-4 shrink-0 rounded border-slate-300"
@@ -221,12 +221,12 @@ export function SharePagePanel({
                 onChange={() => toggleKey(key)}
               />
               <span className="min-w-0 flex-1">
-                <span className="block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                <span className="block hs-text-label hs-font-normal" style={{ color: 'var(--text-primary)' }}>
                   {label}
                 </span>
                 {description ? (
                   <span
-                    className="mt-0.5 block text-xs leading-snug"
+                    className="mt-1 block hs-text-caption leading-snug"
                     style={{ color: 'var(--text-muted)' }}
                   >
                     {description}
@@ -238,7 +238,7 @@ export function SharePagePanel({
         ))}
       </ul>
       {registeredBlocks.length === 0 ? (
-        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+        <p className="hs-text-label" style={{ color: 'var(--text-muted)' }}>
           No sections available yet. Try again in a moment.
         </p>
       ) : null}
@@ -257,7 +257,7 @@ export function SharePagePanel({
         aria-expanded={modalOpen}
         onClick={openModal}
       >
-        <span className="inline-flex items-center justify-center gap-1.5">
+        <span className="inline-flex items-center justify-center gap-2">
           <Share2 className="h-4 w-4 shrink-0" aria-hidden />
           Share
         </span>
@@ -274,27 +274,27 @@ export function SharePagePanel({
         scrimClassName="bg-slate-900/45"
         panelClassName="flex max-h-[min(90vh,640px)] w-full max-w-lg flex-col rounded-xl border border-[var(--border)] bg-white shadow-xl"
       >
-        <div className="border-b px-5 py-4" style={{ borderColor: 'var(--border)' }}>
-          <h2 id={titleId} className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
+        <div className="border-b px-6 py-4" style={{ borderColor: 'var(--border)' }}>
+          <h2 id={titleId} className="hs-text-card-title-sm hs-font-bold" style={{ color: 'var(--text-primary)' }}>
             {titleText}
           </h2>
-          <p id={descId} className="mt-1 text-sm" style={{ color: 'var(--text-secondary)' }}>
+          <p id={descId} className="mt-1 hs-text-label" style={{ color: 'var(--text-secondary)' }}>
             {descText}
           </p>
         </div>
 
         {shareFlow === 'method' ? (
-          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5 space-y-3">
+          <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 space-y-4">
             <button
               type="button"
               className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-slate-100 min-h-[44px]"
               style={{ borderColor: 'var(--border)' }}
               onClick={() => setShareFlow('link')}
             >
-              <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
+              <span className="hs-text-label hs-font-bold" style={{ color: 'var(--text-primary)' }}>
                 Share as link
               </span>
-              <span className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
+              <span className="mt-1 hs-text-label" style={{ color: 'var(--text-muted)' }}>
                 Select what sections to share. Recipients will be able to view the selected sections of this page.
               </span>
             </button>
@@ -304,29 +304,29 @@ export function SharePagePanel({
               style={{ borderColor: 'var(--border)' }}
               onClick={() => setShareFlow('pdf')}
             >
-              <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
+              <span className="hs-text-label hs-font-bold" style={{ color: 'var(--text-primary)' }}>
                 Print or save as a PDF
               </span>
-              <span className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
+              <span className="mt-1 hs-text-label" style={{ color: 'var(--text-muted)' }}>
                 Select what sections to share, then print or save as a PDF file.
               </span>
             </button>
           </div>
         ) : null}
 
-        {shareFlow === 'pdf' ? <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3">{sectionChecklist}</div> : null}
+        {shareFlow === 'pdf' ? <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">{sectionChecklist}</div> : null}
 
         {shareFlow === 'link' ? (
-          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3 space-y-3">
+          <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4 space-y-4">
             {linkError ? (
-              <p className="text-sm leading-snug rounded-md px-3 py-2" role="alert" style={{ background: '#FDECEA', color: '#5A1010' }}>
+              <p className="hs-text-label leading-snug rounded-md px-4 py-2" role="alert" style={{ background: '#FDECEA', color: '#5A1010' }}>
                 {linkError}
               </p>
             ) : null}
             {sectionChecklist}
             <button
               type="button"
-              className="text-left text-sm font-semibold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[var(--text-primary)] hover:decoration-[var(--text-muted)]"
+              className="text-left hs-text-label hs-font-bold underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[var(--text-primary)] hover:decoration-[var(--text-muted)]"
               style={{ color: 'var(--text-muted)' }}
               onClick={copyFullPageLink}
             >
@@ -335,7 +335,7 @@ export function SharePagePanel({
           </div>
         ) : null}
 
-        <div className="border-t px-5 py-4 space-y-3" style={{ borderColor: 'var(--border)' }}>
+        <div className="border-t px-6 py-4 space-y-4" style={{ borderColor: 'var(--border)' }}>
           <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between sm:items-center">
             <div className="flex flex-col-reverse gap-2 sm:flex-row">
               {shareFlow !== 'method' ? (

@@ -37,17 +37,17 @@ export default function AppShell({
   if (isLoginPage) {
     return (
       <>
-        <a href="#main-content" className="skip-link">
+        <a href="#main-content" className="nhsuk-skip-link">
           Skip to main content
         </a>
-        <main id="main-content">{children}</main>
+        <main id="main-content" tabIndex={-1}>{children}</main>
       </>
     )
   }
 
   return (
     <>
-      <a href="#main-content" className="skip-link">Skip to main content</a>
+      <a href="#main-content" className="nhsuk-skip-link">Skip to main content</a>
       <ToastProvider>
         <CompareBasketProvider allApps={allApps}>
           <BookmarkProvider>
@@ -57,7 +57,7 @@ export default function AppShell({
                 isLoggedIn={isLoggedIn}
                 onOpenAiPanel={isLoggedIn && aiProfile ? () => setAiPanelOpen(true) : undefined}
               />
-              <main id="main-content">{children}</main>
+              <main id="main-content" tabIndex={-1}>{children}</main>
               {isLoggedIn && aiProfile && (
                 <AiAdvisorPanel
                   open={aiPanelOpen}
@@ -73,38 +73,45 @@ export default function AppShell({
         </CompareBasketProvider>
       </ToastProvider>
       <BackToTop />
-      <footer
-        className="mt-20 border-t px-4 pt-10 pb-[calc(2.5rem+30px)] sm:px-6"
-        style={{ borderColor: 'var(--border)', background: '#fff' }}
-      >
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="font-bold text-sm" style={{ color: 'var(--nhs-blue)' }}>HealthStore</span>
-              <span className="badge badge-prototype">Prototype</span>
+      {/* [Provenance: NHS] Official NHS Footer markup. */}
+      <footer role="contentinfo" className="mt-16">
+        <div className="nhsuk-footer-container">
+          <div className="nhsuk-width-container">
+            <h2 className="nhsuk-u-visually-hidden">Support links</h2>
+            <div className="nhsuk-footer">
+              <ul className="nhsuk-footer__list">
+                {isLoggedIn && (
+                  <>
+                    <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
+                      <Link className="nhsuk-footer__list-item-link" href="/apps">Find apps</Link>
+                    </li>
+                    <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
+                      <Link className="nhsuk-footer__list-item-link" href="/funding">Funding directory</Link>
+                    </li>
+                  </>
+                )}
+                <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
+                  <Link className="nhsuk-footer__list-item-link" href="/cookies">Cookies</Link>
+                </li>
+                {isLoggedIn && (
+                  <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
+                    <button
+                      type="button"
+                      onClick={() => setShowClearData(true)}
+                      className="nhsuk-footer__list-item-link nhsuk-u-padding-0"
+                      style={{ background: 'none', border: 0, cursor: 'pointer' }}
+                    >
+                      Manage data
+                    </button>
+                  </li>
+                )}
+              </ul>
+              <div>
+                <p className="nhsuk-footer__copyright">
+                  HealthStore — prototype based on publicly available information as of March 2026.
+                </p>
+              </div>
             </div>
-            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-              Prototype based on publicly available information as of March 2026.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-6 text-xs" style={{ color: 'var(--text-muted)' }}>
-            {isLoggedIn && (
-              <>
-                <Link href="/apps" className="hover:underline">Find apps</Link>
-                <Link href="/funding" className="hover:underline">Funding directory</Link>
-              </>
-            )}
-            <Link href="/cookies" className="hover:underline">Cookies</Link>
-            {isLoggedIn && (
-              <button
-                type="button"
-                onClick={() => setShowClearData(true)}
-                className="hover:underline"
-                style={{ color: 'var(--text-muted)' }}
-              >
-                Manage data
-              </button>
-            )}
           </div>
         </div>
       </footer>

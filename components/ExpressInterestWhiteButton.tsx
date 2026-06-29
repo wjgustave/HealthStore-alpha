@@ -11,9 +11,9 @@ export function ExpressInterestWhiteButton({ accent }: { accent: string }) {
       data-express-interest
       size="none"
       style={{ color: accent }}
-      className="w-full sm:w-auto min-w-[200px] px-6 py-3 text-[var(--text-label)]"
+      className="w-full sm:w-auto min-w-[200px] px-6 py-4 text-[var(--text-label)]"
     >
-      <span className="inline-flex items-center justify-center gap-1.5">
+      <span className="inline-flex items-center justify-center gap-2">
         <Mail className="h-4 w-4 shrink-0" aria-hidden />
         Express interest
       </span>

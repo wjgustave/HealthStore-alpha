@@ -19,14 +19,14 @@ function StatValue({ value, state }: { value: number | string; state: LoadStatus
   }
   if (state === 'error') {
     return (
-      <span className="block text-3xl font-bold leading-none" style={{ ...fr, color: 'var(--text-muted)' }}>
+      <span className="block hs-text-section hs-font-bold leading-none" style={{ ...fr, color: 'var(--text-muted)' }}>
         <span aria-hidden>—</span>
         <span className="sr-only">Couldn’t load count</span>
       </span>
     )
   }
   return (
-    <span className="block text-3xl font-bold leading-none" style={{ ...fr, color: 'var(--text-primary)' }}>
+    <span className="block hs-text-section hs-font-bold leading-none" style={{ ...fr, color: 'var(--text-primary)' }}>
       {value}
     </span>
   )
@@ -48,7 +48,7 @@ function StatTile({
   return (
     <Link
       href={href}
-      className="flex items-center gap-4 rounded-xl border p-5 transition-colors hover:bg-slate-50"
+      className="flex items-center gap-4 rounded-xl border p-6 transition-colors hover:bg-slate-50"
       style={{ borderColor: 'var(--border)', background: 'rgba(0, 94, 184, 0.1)' }}
     >
       <span
@@ -60,7 +60,7 @@ function StatTile({
       </span>
       <span className="min-w-0">
         <StatValue value={value} state={state} />
-        <span className="mt-1 block text-sm" style={{ color: '#425563' }}>
+        <span className="mt-1 block hs-text-label" style={{ color: '#4C6272' }}>
           {label}
         </span>
       </span>

@@ -8,40 +8,69 @@
   <link rel="stylesheet" href="/DS/assets/ds.css">
 </head>
 <body>
-  <div id="ds-root" data-ds-page="spacing">
+  <div id="ds-root" data-ds-page="spacing" data-ds-provenance="NHS">
     <div class="ds-page-header">
       <p class="ds-eyebrow">Styles</p>
       <h1 class="ds-page-title">Spacing &amp; layout</h1>
     </div>
 
     <div class="ds-note">
-      <strong>Recommendation.</strong> Adopt a named spacing scale (e.g. <code>--space-1</code>&hellip;<code>--space-8</code>) so spacing
-      is as token-driven as colour and type. Today spacing is expressed via Tailwind classes and ad-hoc inline values.
+      Spacing follows the <strong>NHS spacing scale</strong> (<code>nhsuk-frontend/core/settings/_spacing.scss</code>): a 4px base grid with
+      points 0&ndash;9. Tailwind shares the 4px base, so <code>p-1/2/4/6/8/10/12/14/16</code> map onto NHS points; off-scale Tailwind steps
+      (12px <code>*-3</code>, 20px <code>*-5</code>, 28px <code>*-7</code>, and fractional 2/6/10/14px) are avoided.
     </div>
 
-    <h2>Base scale (Tailwind step = 4px)</h2>
+    <h2>NHS spacing scale (4px base grid)</h2>
     <div class="ds-example">
-      <div class="ds-space-row"><span class="ds-space-meta">4px &middot; p-1 / gap-1</span><span class="ds-space-bar" style="width:4px"></span></div>
-      <div class="ds-space-row"><span class="ds-space-meta">8px &middot; p-2 / gap-2</span><span class="ds-space-bar" style="width:8px"></span></div>
-      <div class="ds-space-row"><span class="ds-space-meta">12px &middot; p-3 / gap-3</span><span class="ds-space-bar" style="width:12px"></span></div>
-      <div class="ds-space-row"><span class="ds-space-meta">16px &middot; p-4 / gap-4</span><span class="ds-space-bar" style="width:16px"></span></div>
-      <div class="ds-space-row"><span class="ds-space-meta">20px &middot; p-5 / gap-5</span><span class="ds-space-bar" style="width:20px"></span></div>
-      <div class="ds-space-row"><span class="ds-space-meta">24px &middot; p-6 / gap-6</span><span class="ds-space-bar" style="width:24px"></span></div>
-      <div class="ds-space-row"><span class="ds-space-meta">32px &middot; p-8 / gap-8</span><span class="ds-space-bar" style="width:32px"></span></div>
-      <div class="ds-space-row"><span class="ds-space-meta">48px &middot; p-12 / gap-12</span><span class="ds-space-bar" style="width:48px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">4px &middot; point 1 &middot; p-1</span><span class="ds-space-bar" style="width:4px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">8px &middot; point 2 &middot; p-2</span><span class="ds-space-bar" style="width:8px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">16px &middot; point 3 &middot; p-4</span><span class="ds-space-bar" style="width:16px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">24px &middot; point 4 &middot; p-6</span><span class="ds-space-bar" style="width:24px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">32px &middot; point 5 &middot; p-8</span><span class="ds-space-bar" style="width:32px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">40px &middot; point 6 &middot; p-10</span><span class="ds-space-bar" style="width:40px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">48px &middot; point 7 &middot; p-12</span><span class="ds-space-bar" style="width:48px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">56px &middot; point 8 &middot; p-14</span><span class="ds-space-bar" style="width:56px"></span></div>
+      <div class="ds-space-row"><span class="ds-space-meta">64px &middot; point 9 &middot; p-16</span><span class="ds-space-bar" style="width:64px"></span></div>
     </div>
+    <p>Tokens <code>--space-1</code>&hellip;<code>--space-9</code> expose these points in CSS.</p>
+
+    <h2>Off-scale &rarr; NHS rounding</h2>
+    <p>Where Tailwind interstitial steps appear, they round to the nearest NHS point:</p>
+    <table class="ds-table">
+      <thead><tr><th>Off-scale</th><th>Rounds to</th></tr></thead>
+      <tbody>
+        <tr><td>12px (<code>*-3</code>)</td><td>16px (<code>*-4</code>)</td></tr>
+        <tr><td>20px (<code>*-5</code>)</td><td>24px (<code>*-6</code>)</td></tr>
+        <tr><td>28px (<code>*-7</code>)</td><td>32px (<code>*-8</code>)</td></tr>
+        <tr><td>2 / 6 / 10 / 14px (<code>*-0.5/1.5/2.5/3.5</code>)</td><td>4 / 8 / 8 / 16px</td></tr>
+        <tr><td>80px (<code>mt-20</code>)</td><td>64px (<code>mt-16</code>, max point)</td></tr>
+      </tbody>
+    </table>
 
     <h2>Page container</h2>
-    <p>In-app pages constrain content to a max-width and pad the gutters. The dominant convention is:</p>
-<pre class="ds-code"><code>&lt;main class="mx-auto max-w-7xl px-4 sm:px-6"&gt;
+    <p>In-app pages use the <code>.hs-page</code> container: a centred ~1280px canvas with NHS gutters (16px mobile &rarr; 32px desktop).</p>
+<pre class="ds-code"><code>&lt;main class="hs-page"&gt;
   &lt;!-- page content --&gt;
-&lt;/main&gt;</code></pre>
+&lt;/main&gt;
+
+/* narrow reading pages (news, campaigns) */
+&lt;div class="hs-page-narrow"&gt; &hellip; &lt;/div&gt;</code></pre>
     <div class="ds-meta-grid">
-      <div class="ds-meta"><div class="ds-meta__k">Max width</div><div class="ds-meta__v">max-w-7xl (80rem / 1280px)</div></div>
-      <div class="ds-meta"><div class="ds-meta__k">Gutters</div><div class="ds-meta__v">px-4 (16px) &rarr; sm:px-6 (24px)</div></div>
-      <div class="ds-meta"><div class="ds-meta__k">Card padding</div><div class="ds-meta__v">p-5 / p-6 (20&ndash;24px)</div></div>
-      <div class="ds-meta"><div class="ds-meta__k">Section rhythm</div><div class="ds-meta__v">mb-6 / mt-8 (24&ndash;32px)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Max width</div><div class="ds-meta__v">.hs-page 80rem / .hs-page-narrow 48rem</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Gutters</div><div class="ds-meta__v">16px (mobile) &rarr; 32px (&ge;768px) &mdash; NHS gutter</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Reading measure</div><div class="ds-meta__v">.hs-measure (~66ch)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Section rhythm</div><div class="ds-meta__v">.hs-section 32&rarr;40px / .hs-section-lg 40&rarr;56px</div></div>
     </div>
+
+    <h2>Responsive rhythm utilities</h2>
+    <p>Vertical section spacing steps up at the tablet breakpoint, mirroring the NHS responsive spacing scale:</p>
+    <table class="ds-table">
+      <thead><tr><th>Class</th><th>Mobile</th><th>Tablet (&ge;768px)</th></tr></thead>
+      <tbody>
+        <tr><td><code>.hs-section</code></td><td>32px</td><td>40px</td></tr>
+        <tr><td><code>.hs-section-lg</code></td><td>40px</td><td>56px</td></tr>
+      </tbody>
+    </table>
 
     <h2>Grid conventions</h2>
     <p>Common responsive grids in the product:</p>
@@ -58,7 +87,7 @@
     <h2>Minimum touch target</h2>
     <p>Interactive controls target a <strong>44px</strong> minimum height (visible in <code>.hs-compare-*</code> controls and the proposed <code>.ds-btn</code>). Keep this for buttons, toggles, filter selects and tappable list rows.</p>
 
-    <div class="ds-note ds-note--source">Source: Tailwind v4 (<code>@import "tailwindcss"</code> in <code>app/globals.css</code>); container conventions across <code>app/**</code> pages.</div>
+    <div class="ds-note ds-note--source">Source: NHS spacing scale (<code>nhsuk-frontend/core/settings/_spacing.scss</code>); tokens + <code>.hs-page</code>/<code>.hs-section</code>/<code>.hs-measure</code> utilities in <code>app/globals.css</code>.</div>
   </div>
   <script src="/DS/assets/ds.js" defer></script>
 </body>

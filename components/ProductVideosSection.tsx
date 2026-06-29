@@ -63,7 +63,7 @@ export default function ProductVideosSection({ videos, embedded = false }: Props
           <button
             type="button"
             onClick={() => setActiveId(v.id)}
-            className="group relative block w-full overflow-hidden rounded-xl border text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="group relative block w-full overflow-hidden rounded-xl border text-left transition-colors hover:border-[var(--nhs-blue)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
             style={{ borderColor: 'var(--border)', outlineColor: 'var(--nhs-blue)' }}
           >
             <span className="relative block aspect-video w-full bg-black">
@@ -84,11 +84,11 @@ export default function ProductVideosSection({ videos, embedded = false }: Props
                   style={{ color: 'var(--nhs-blue)' }}
                   aria-hidden
                 >
-                  <Play className="ml-0.5 h-8 w-8 shrink-0" style={{ color: 'var(--nhs-blue)' }} strokeWidth={2.4} aria-hidden />
+                  <Play className="ml-1 h-8 w-8 shrink-0" style={{ color: 'var(--nhs-blue)' }} strokeWidth={2.4} aria-hidden />
                 </span>
               </span>
             </span>
-            <span className="block px-3 py-2.5 text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+            <span className="block px-4 py-2 hs-text-label hs-font-bold" style={{ color: 'var(--text-primary)' }}>
               {v.title?.trim() || 'Play video'}
             </span>
           </button>
@@ -105,15 +105,15 @@ export default function ProductVideosSection({ videos, embedded = false }: Props
           style={{ borderColor: 'var(--border)' }}
           aria-labelledby={headingId}
         >
-          <div className="mb-5">
+          <div className="mb-6">
             <h3
               id={headingId}
-              className="mb-1 font-bold"
-              style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: '1.125rem', color: 'var(--text-primary)' }}
+              className="mb-1 hs-text-card-title-sm hs-font-bold"
+              style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
             >
               Product videos
             </h3>
-            <p className="m-0 text-sm" style={{ color: 'var(--text-muted)' }}>
+            <p className="m-0 hs-text-label" style={{ color: 'var(--text-muted)' }}>
               Short previews from the supplier’s YouTube channel. Opens in this page when you play.
             </p>
           </div>
@@ -146,15 +146,15 @@ export default function ProductVideosSection({ videos, embedded = false }: Props
                 aria-labelledby={dialogTitleId}
                 className="relative w-full max-w-4xl outline-none"
               >
-                <div className="mb-2 flex items-end justify-between gap-3">
-                  <h2 id={dialogTitleId} className="m-0 min-w-0 truncate text-sm font-semibold text-white">
+                <div className="mb-2 flex items-end justify-between gap-4">
+                  <h2 id={dialogTitleId} className="m-0 min-w-0 truncate hs-text-label hs-font-bold text-white">
                     {activeTitle}
                   </h2>
                   <button
                     ref={closeButtonRef}
                     type="button"
                     onClick={close}
-                    className="shrink-0 rounded-md px-2 py-1 text-sm font-semibold text-white transition-colors hover:bg-white/15 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    className="shrink-0 rounded-md px-2 py-1 hs-text-label hs-font-bold text-white transition-colors hover:bg-white/15 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                   >
                     Close
                   </button>

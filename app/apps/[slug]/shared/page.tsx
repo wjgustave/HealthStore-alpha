@@ -30,21 +30,21 @@ function ShareError({
         role="alert"
         style={{ borderColor: 'var(--border)', background: '#FEF5E6' }}
       >
-        <h1 className="text-lg font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+        <h1 className="hs-text-card-title-sm hs-font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
           {title}
         </h1>
-        <p className="text-sm" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+        <p className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
           {body}
         </p>
         {slug ? (
           <p className="mt-4">
-            <Link href={`/apps/${slug}`} className="text-sm font-semibold underline underline-offset-2" style={{ color: STORE_ACCENT }}>
+            <Link href={`/apps/${slug}`} className="hs-text-label hs-font-bold underline underline-offset-2" style={{ color: STORE_ACCENT }}>
               Open product page
             </Link>
           </p>
         ) : (
           <p className="mt-4">
-            <Link href="/apps" className="text-sm font-semibold underline underline-offset-2" style={{ color: STORE_ACCENT }}>
+            <Link href="/apps" className="hs-text-label hs-font-bold underline underline-offset-2" style={{ color: STORE_ACCENT }}>
               Find apps
             </Link>
           </p>
@@ -127,7 +127,7 @@ export default async function SharedProductPage({
   if (renderedKeys.length === 0) {
     return (
       <AppDetailClient app={app} contactPrefill={contactPrefill}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        <div className="hs-page">
           <PageBreadcrumb
             items={[
               { label: 'Find apps', href: '/apps' },
@@ -139,19 +139,19 @@ export default async function SharedProductPage({
           <div
             className="rounded-xl border p-6 mt-4"
             role="status"
-            style={{ borderColor: 'var(--border)', background: '#F7F9FC' }}
+            style={{ borderColor: 'var(--border)', background: '#F0F4F5' }}
           >
-            <h2 className="text-base font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+            <h2 className="hs-text-body hs-font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
               Nothing to show for this product
             </h2>
-            <p className="text-sm" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+            <p className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
               The sections in this link do not have content on this product page (for example, optional blocks that
               are not filled). Ask the sender to include different sections, or open the full product page.
             </p>
             <p className="mt-4">
               <Link
                 href={`/apps/${slug}`}
-                className="text-sm font-semibold underline underline-offset-2"
+                className="hs-text-label hs-font-bold underline underline-offset-2"
                 style={{ color: STORE_ACCENT }}
               >
                 Open full product page
@@ -165,7 +165,7 @@ export default async function SharedProductPage({
 
   return (
     <AppDetailClient app={app} contactPrefill={contactPrefill}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <div className="hs-page">
         <PageBreadcrumb
           items={[
             { label: 'Find apps', href: '/apps' },

@@ -30,10 +30,10 @@ export default function HomeHeroSearch() {
         Search by app name, supplier, or condition
       </label>
       <div
-        className="flex items-stretch overflow-hidden rounded-xl border bg-white/95 shadow-sm backdrop-blur-sm focus-within:ring-2 focus-within:ring-offset-2"
+        className="flex items-stretch overflow-hidden rounded-xl border bg-white/95 backdrop-blur-sm focus-within:ring-2 focus-within:ring-offset-2"
         style={{ borderColor: 'var(--border)', outlineColor: 'var(--nhs-blue)' }}
       >
-        <span className="flex items-center pl-4 text-[#425563]" aria-hidden>
+        <span className="flex items-center pl-4 text-[#4C6272]" aria-hidden>
           <Search className="h-5 w-5 shrink-0" strokeWidth={2} />
         </span>
         <input
@@ -43,11 +43,11 @@ export default function HomeHeroSearch() {
           onChange={e => setQuery(e.target.value)}
           placeholder="Search by app, supplier, or condition"
           autoComplete="off"
-          className="min-h-[52px] flex-1 border-0 bg-transparent px-3 py-3 text-sm text-[#1A2332] outline-none placeholder:text-[#768692]"
+          className="min-h-[52px] flex-1 border-0 bg-transparent px-4 py-4 hs-text-label text-[#212B32] outline-none placeholder:text-[#768692]"
         />
         <button
           type="submit"
-          className="shrink-0 px-5 py-3 text-sm font-semibold text-white transition-colors hover:!bg-[#004B8C]"
+          className="shrink-0 px-6 py-4 hs-text-label hs-font-bold text-white transition-colors hover:!bg-[#004B8C]"
           style={{ background: STORE_ACCENT }}
         >
           Search

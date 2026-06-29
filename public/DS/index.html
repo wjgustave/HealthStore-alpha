@@ -14,10 +14,24 @@
       <h1 class="ds-page-title">HealthStore Design System</h1>
       <p class="ds-lede">
         Browser-readable record of the components, styles and patterns used across the
-        HealthStore (NHS commissioner DTx store) product. It documents what exists today, codifies the
-        tokens already living in <code>app/globals.css</code>.
+        HealthStore (NHS commissioner DTx store) product. HealthStore is built on the
+        <strong>NHS Design System</strong> (<code>nhsuk-frontend</code>), with
+        <strong>GOV.UK Frontend</strong> recoloured to NHS where the NHS DS has gaps, and a
+        small set of bespoke components built to NHS principles. Tokens mirror
+        <code>app/globals.css</code>.
       </p>
     </div>
+
+    <h2>Provenance</h2>
+    <p>Each page is labelled with where its component comes from:</p>
+    <dl class="ds-provenance-legend">
+      <div><dt><span class="ds-provenance ds-provenance--nhs">NHS Design System</span></dt>
+        <dd>Official nhsuk-frontend markup + CSS.</dd></div>
+      <div><dt><span class="ds-provenance ds-provenance--govuk">GOV.UK &mdash; recoloured to NHS</span></dt>
+        <dd>GOV.UK Frontend, brand/link/focus tokens overridden to NHS.</dd></div>
+      <div><dt><span class="ds-provenance ds-provenance--bespoke">Bespoke &mdash; no DS equivalent</span></dt>
+        <dd>Built in-house to NHS principles; proposed for the NHS backlog.</dd></div>
+    </dl>
 
     <h2>Browse</h2>
     <div class="ds-cardgrid">

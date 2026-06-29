@@ -14,7 +14,12 @@ import { createPortal } from 'react-dom'
 import { AlertTriangle, CheckCircle2, Info, X } from 'lucide-react'
 
 /**
- * Global feedback service (DS Round 6, UX-01/02/06).
+ * Global feedback service.
+ *
+ * [Provenance: Bespoke — no NHS/GOV.UK equivalent.] The closest DS component is
+ * the GOV.UK Notification banner, which is not a transient toast. Built to NHS
+ * principles: NHS status colours (green/red/blue), split polite/assertive live
+ * regions, manual dismissal. Proposed for the NHS backlog.
  *
  * One `ToastProvider` mounted high in `AppShell` exposes `useToast()` with
  * `success` / `error` / `info`. Toasts render in a top-centre portal split
@@ -112,11 +117,11 @@ function ToastCard({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: num
   const Icon = tone.icon
   return (
     <div
-      className="pointer-events-auto flex w-full max-w-sm items-start gap-2.5 rounded-lg border bg-white px-3.5 py-3 shadow-lg"
+      className="pointer-events-auto flex w-full max-w-sm items-start gap-2 rounded-lg border bg-white px-4 py-4 shadow-lg"
       style={{ borderColor: '#CBD5E1', borderLeft: `4px solid ${tone.border}` }}
     >
-      <Icon className="mt-0.5 h-4 w-4 shrink-0" style={{ color: tone.iconColor }} aria-hidden />
-      <span className="min-w-0 flex-1 text-sm" style={{ color: '#1A2332' }}>
+      <Icon className="mt-1 h-4 w-4 shrink-0" style={{ color: tone.iconColor }} aria-hidden />
+      <span className="min-w-0 flex-1 hs-text-label" style={{ color: '#212B32' }}>
         {toast.message}
       </span>
       {toast.action ? (
@@ -126,7 +131,7 @@ function ToastCard({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: num
             toast.action?.onClick()
             onDismiss(toast.id)
           }}
-          className="-my-0.5 shrink-0 rounded px-2 py-1 text-sm font-semibold underline-offset-2 transition-colors hover:underline"
+          className="-my-1 shrink-0 rounded px-2 py-1 hs-text-label hs-font-bold underline-offset-2 transition-colors hover:underline"
           style={{ color: tone.iconColor }}
         >
           {toast.action.label}
@@ -136,7 +141,7 @@ function ToastCard({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: num
         type="button"
         onClick={() => onDismiss(toast.id)}
         aria-label="Dismiss notification"
-        className="-mr-1 -mt-0.5 shrink-0 rounded p-1 text-[var(--text-muted)] transition-colors hover:bg-slate-100 hover:text-[var(--text-primary)]"
+        className="-mr-1 -mt-1 shrink-0 rounded p-1 text-[var(--text-muted)] transition-colors hover:bg-slate-100 hover:text-[var(--text-primary)]"
       >
         <X className="h-3.5 w-3.5" aria-hidden />
       </button>

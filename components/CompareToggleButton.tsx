@@ -38,9 +38,9 @@ export function CompareToggleButton({
           : undefined
       }
       onClick={() => toggle(appId)}
-      className={`py-4 text-sm ${className}`}
+      className={`py-4 hs-text-label ${className}`}
     >
-      <span className="inline-flex items-center justify-center gap-1.5">
+      <span className="inline-flex items-center justify-center gap-2">
         {added ? (
           <>
             <Check className="w-4 h-4 shrink-0" strokeWidth={2.5} aria-hidden />

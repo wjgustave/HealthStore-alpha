@@ -45,16 +45,16 @@ export default function SelectEntityForm() {
       title="Select an ICB"
       subtitle="This is the ICB you are accessing the store for."
       footer={
-        <p className="mt-6 text-center text-xs" style={{ color: 'rgba(255,255,255,0.55)' }}>
+        <p className="mt-6 text-center hs-text-caption" style={{ color: 'rgba(255,255,255,0.55)' }}>
           Prototype based on publicly available information as of March 2026.
         </p>
       }
     >
       {error && (
         <div id="select-entity-error" role="alert" aria-live="assertive"
-          className="mb-4 flex items-center gap-2 rounded-lg p-3 text-sm font-medium"
-          style={{ background: '#FDECEA', color: '#7A1210', border: '1px solid #DA291C33' }}>
-          <span className="flex-shrink-0 font-bold" aria-hidden>✕</span>
+          className="mb-4 flex items-center gap-2 rounded-lg p-4 hs-text-label hs-font-normal"
+          style={{ background: '#FDECEA', color: '#7A1210', border: '1px solid #D5281B33' }}>
+          <span className="flex-shrink-0 hs-font-bold" aria-hidden>✕</span>
           {error}
         </div>
       )}
@@ -68,15 +68,15 @@ export default function SelectEntityForm() {
             aria-required
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? 'select-entity-error' : undefined}
-            className="space-y-3"
+            className="space-y-4"
           >
             {COMMISSIONING_ENTITIES.map((entity) => (
               <label
                 key={entity.id}
-                className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors ${
+                className={`flex cursor-pointer items-start gap-4 rounded-lg border p-4 transition-colors ${
                   entityId === entity.id ? 'border-[var(--nhs-blue)] bg-[#E6F0FB]' : ''
                 }`}
-                style={{ borderColor: entityId === entity.id ? 'var(--nhs-blue)' : '#DEE4EA' }}
+                style={{ borderColor: entityId === entity.id ? 'var(--nhs-blue)' : '#D8DDE0' }}
               >
                 <input
                   type="radio"
@@ -86,7 +86,7 @@ export default function SelectEntityForm() {
                   onChange={() => setEntityId(entity.id)}
                   className="mt-1"
                 />
-                <span className="text-sm font-medium" style={{ color: '#1A2332' }}>{entity.name}</span>
+                <span className="hs-text-label hs-font-normal" style={{ color: '#212B32' }}>{entity.name}</span>
               </label>
             ))}
           </div>

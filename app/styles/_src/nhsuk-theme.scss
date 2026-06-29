@@ -1,0 +1,17 @@
+// HealthStore NHS Design System theme entry.
+//
+// Compiles the official nhsuk-frontend SCSS into a single stylesheet that the
+// app and the public/DS docs site both consume. Provenance: NHS.
+//
+// Overrides:
+//  - Use the self-hosted "Frutiger" @font-face declared in app/globals.css
+//    instead of NHS's remote "Frutiger W01" web font.
+//  - Skip NHS's own @font-face block (we ship the TTFs locally).
+//
+// Build: `npm run build:ds-css` (see package.json) compiles this with the
+// nhsuk-frontend packages dir on the Sass load path.
+
+$nhsuk-font: "Frutiger";
+$nhsuk-include-font-face: false;
+
+@import "nhsuk";

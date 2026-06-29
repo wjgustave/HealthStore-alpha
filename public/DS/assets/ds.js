@@ -97,7 +97,7 @@
     var inner = el('div', { class: 'ds-masthead__inner' });
     var brand = el('a', { class: 'ds-masthead__brand', href: '/DS/index.html' },
       '<span class="ds-masthead__logo">HealthStore</span><span class="ds-masthead__tag">Design System</span>');
-    var badge = el('span', { class: 'ds-masthead__badge' }, 'Internal reference \u00B7 v1');
+    var badge = el('span', { class: 'ds-masthead__badge' }, 'NHS Design System \u00B7 internal reference');
     inner.appendChild(brand);
     inner.appendChild(badge);
     header.appendChild(inner);
@@ -185,7 +185,24 @@
 
   function buildFooter() {
     return el('footer', { class: 'ds-footer' },
-      'HealthStore Design System \u2014 internal reference. Tokens mirror <code>app/globals.css</code>.');
+      'HealthStore Design System \u2014 internal reference. Built on the <strong>NHS Design System</strong> (nhsuk-frontend), with GOV.UK Frontend recoloured to NHS for gaps. Tokens mirror <code>app/globals.css</code>.');
+  }
+
+  /* Provenance label: reads data-ds-provenance on #ds-root and renders a pill at
+     the top of the page content. Values: NHS | GOV.UK-recoloured | Bespoke. */
+  var PROVENANCE = {
+    'NHS': { cls: 'ds-provenance--nhs', text: 'NHS Design System' },
+    'GOV.UK-recoloured': { cls: 'ds-provenance--govuk', text: 'GOV.UK Frontend \u2014 recoloured to NHS' },
+    'Bespoke': { cls: 'ds-provenance--bespoke', text: 'Bespoke \u2014 no DS equivalent' }
+  };
+
+  function renderProvenance(root) {
+    var raw = root.getAttribute('data-ds-provenance');
+    if (!raw) return;
+    var meta = PROVENANCE[raw] || PROVENANCE['Bespoke'];
+    var pill = el('p', { class: 'ds-provenance ' + meta.cls }, meta.text);
+    if (root.firstChild) root.insertBefore(pill, root.firstChild);
+    else root.appendChild(pill);
   }
 
   function wireCopyButtons(scope) {
@@ -251,6 +268,8 @@
     var root = document.getElementById('ds-root');
     if (!root) return;
     var activeKey = root.getAttribute('data-ds-page') || '';
+
+    renderProvenance(root);
 
     document.body.insertBefore(buildMasthead(), root);
 

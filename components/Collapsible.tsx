@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useId, useState, type ReactNode } from 'react'
-import { ChevronDown } from 'lucide-react'
 import { SectionHeader } from '@/components/Badges'
 import { usePdpSharePrintOptional } from '@/components/PdpSharePrintContext'
 
@@ -72,46 +71,29 @@ export function Collapsible({
     const hideForPrint = mode === 'include' && !!shareKey && !printLayout.keys.has(shareKey)
     const effectiveOpen = open || expandForPrint
 
+    // [Provenance: NHS] Official NHS Expander (`.nhsuk-details.nhsuk-expander`),
+    // kept controlled so PDP print/hash deep-linking still drive the open state.
     return (
-      <section
+      <details
         id={id}
-        className={`overflow-visible rounded-xl border bg-white transition-shadow duration-200 ease-out ${effectiveOpen ? 'hs-surface-card' : 'hs-surface-card-sm'} ${hideForPrint ? 'pdp-share-excluded-print' : ''}`.trim()}
+        className={`nhsuk-details nhsuk-expander ${hideForPrint ? 'pdp-share-excluded-print' : ''}`.trim()}
+        open={effectiveOpen}
+        onToggle={e => setOpen((e.currentTarget as HTMLDetailsElement).open)}
       >
-        <button
-          type="button"
-          className="flex w-full items-start gap-3 p-6 text-left transition-colors hover:bg-[#F7F9FC]/80 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[#FFD800]"
-          style={{ fontFamily: 'var(--font-display)' }}
-          aria-expanded={effectiveOpen}
-          aria-controls={panelId}
-          aria-labelledby={headingId}
-          onClick={() => setOpen(o => !o)}
-        >
-          <div className="min-w-0 flex-1">
-            <span
-              id={headingId}
-              role="heading"
-              aria-level={2}
-              className="block font-bold leading-snug"
-              style={{ fontSize: 'var(--text-card-title)', color: 'var(--nhs-blue)' }}
-            >
-              {title}
+        <summary className="nhsuk-details__summary" aria-controls={panelId}>
+          <span className="nhsuk-details__summary-text" id={headingId}>
+            {title}
+          </span>
+          {description ? (
+            <span className="nhsuk-hint" style={{ display: 'block', marginTop: '0.25rem' }}>
+              {description}
             </span>
-            {description ? (
-              <p className="mt-1 leading-normal" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
-                {description}
-              </p>
-            ) : null}
-          </div>
-          <ChevronDown
-            className={`mt-1 h-5 w-5 shrink-0 transition-transform duration-200 ease-out ${effectiveOpen ? 'rotate-180' : ''}`}
-            style={{ color: 'var(--text-muted)' }}
-            aria-hidden
-          />
-        </button>
-        <div id={panelId} hidden={!effectiveOpen} className="border-t px-6 pb-6 pt-0" style={{ borderColor: 'var(--border)' }}>
-          <div className="pt-4">{children}</div>
+          ) : null}
+        </summary>
+        <div id={panelId} className="nhsuk-details__text">
+          {children}
         </div>
-      </section>
+      </details>
     )
   }
 
@@ -119,7 +101,7 @@ export function Collapsible({
     <button
       type="button"
       onClick={() => setOpen(o => !o)}
-      className="flex-shrink-0 rounded-md border px-2 py-1 text-xs font-semibold transition-colors hover:bg-[#F7F9FC]"
+      className="flex-shrink-0 rounded-md border px-2 py-1 hs-text-caption hs-font-bold transition-colors hover:bg-[#F0F4F5]"
       style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
       aria-expanded={open}
       aria-controls={panelId}
@@ -130,12 +112,12 @@ export function Collapsible({
 
   if (variant === 'inline') {
     return (
-      <div className="mt-5 border-t pt-5" style={{ borderColor: 'var(--border)' }}>
-        <div className="mb-0 flex items-start justify-between gap-3">
+      <div className="mt-6 border-t pt-6" style={{ borderColor: 'var(--border)' }}>
+        <div className="mb-0 flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
-            <h3 className="mb-0.5 text-sm font-bold" style={{ color: 'var(--text-primary)' }}>{title}</h3>
+            <h3 className="mb-1 hs-text-label hs-font-bold" style={{ color: 'var(--text-primary)' }}>{title}</h3>
             {description ? (
-              <p className="mb-0 text-xs" style={{ color: 'var(--text-muted)', lineHeight: 1.5 }}>{description}</p>
+              <p className="mb-0 hs-text-caption" style={{ color: 'var(--text-muted)', lineHeight: 1.5 }}>{description}</p>
             ) : null}
           </div>
           {ToggleButton}
@@ -149,7 +131,7 @@ export function Collapsible({
 
   return (
     <section className="hs-surface-card p-6">
-      <div className="mb-0 flex items-start justify-between gap-3">
+      <div className="mb-0 flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <SectionHeader title={title} description={description} />
         </div>

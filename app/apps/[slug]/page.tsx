@@ -95,7 +95,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
           >
             <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}>{app.why_it_matters_locally}</p>
             {app.sustainability_highlight && (
-              <div className="mt-4 rounded-lg p-3 text-sm" style={{ background: '#E6F5EC', color: '#004B22' }}>
+              <div className="mt-4 rounded-lg p-4 hs-text-label" style={{ background: '#E6F5EC', color: '#004B22' }}>
                 🌿 {app.sustainability_highlight}
               </div>
             )}
@@ -148,7 +148,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
           >
             {rcts.length > 0 && (
               <div style={{ marginBottom: 16 }}>
-                <div style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
+                <div style={{ fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
                   Randomised controlled trials ({rcts.length})
                 </div>
                 {rcts.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
@@ -157,7 +157,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
             {observational.length > 0 && (
               <div style={{ marginBottom: 16 }}>
-                <div style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
+                <div style={{ fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
                   Real-world, observational & service evaluation evidence ({observational.length})
                 </div>
                 {observational.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
@@ -166,7 +166,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
             {niceAndImpl.length > 0 && (
               <div>
-                <div style={{ fontSize: 'var(--text-label)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
+                <div style={{ fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
                   NICE assessments, implementation science & other sources ({niceAndImpl.length})
                 </div>
                 {niceAndImpl.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
@@ -179,16 +179,16 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             title="NICE guidance"
             description="NICE publications and programme references linked to this product."
           >
-            <div className="space-y-3">
+            <div className="space-y-4">
               {app.nice_guidance_refs.map((r: any) => (
-                <div key={r.ref} className="flex items-start gap-3 p-3 rounded-lg" style={{ background: '#F7F9FC', border: '1px solid var(--border)' }}>
+                <div key={r.ref} className="flex items-start gap-4 p-4 rounded-lg" style={{ background: '#F0F4F5', border: '1px solid var(--border)' }}>
                   <NiceTypeBadge type={r.type} />
                   <div>
                     <a href={r.url} target="_blank" rel="noopener noreferrer"
-                      className="font-semibold text-sm hover:underline" style={{ color: accent }}>
+                      className="hs-font-bold hs-text-label hover:underline" style={{ color: accent }}>
                       {r.ref} ↗
                     </a>
-                    <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                    <div className="hs-text-caption mt-1" style={{ color: 'var(--text-muted)' }}>
                       {r.date}{r.note ? ` · ${r.note}` : ''}
                     </div>
                   </div>
@@ -205,9 +205,9 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             >
               <div className="space-y-4">
                 {app.contradictory_evidence.map((c: any, i: number) => (
-                  <div key={i} className="rounded-xl border p-4" style={{ background: '#FDECEA', borderColor: '#DA291C33' }}>
-                    <div className="font-semibold text-sm mb-2" style={{ color: '#7A1210' }}>{c.domain}</div>
-                    <div className="text-xs space-y-1.5" style={{ color: '#5A1010' }}>
+                  <div key={i} className="rounded-xl border p-4" style={{ background: '#FDECEA', borderColor: '#D5281B33' }}>
+                    <div className="hs-font-bold hs-text-label mb-2" style={{ color: '#7A1210' }}>{c.domain}</div>
+                    <div className="hs-text-caption space-y-2" style={{ color: '#5A1010' }}>
                       <div><strong>Company claim:</strong> {c.claim_a}</div>
                       <div><strong>Issue:</strong> {c.claim_b}</div>
                       {c.commissioner_impact && (
@@ -319,7 +319,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
   return (
     <AppDetailClient app={app} contactPrefill={contactPrefill}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <div className="hs-page">
 
         <PdpSharePrintProvider>
         <PdpShareRegion shareKey="breadcrumb" label="Browse trail" excludeFromShareUi className="mb-4">
@@ -336,15 +336,15 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
           shareKey="hero"
           label="DTx app summary"
           description="Supplier, proposition, and actions."
-          className="mb-3"
+          className="mb-4"
         >
         <div className="hs-surface-card-sm rounded-t-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-          <div className="px-8 pt-8 pb-3">
+          <div className="px-8 pt-8 pb-4">
             <div className="flex flex-col gap-6 items-start">
               <div className="flex-1 w-full min-w-0">
                 {/* R7 PDP triage (RSP-01): hero keeps condition + decision-signal pills only;
                     supervision model, NICE refs and NHS App now live in the commissioning snapshot below. */}
-                <div className="flex flex-wrap gap-2 mb-3">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {app.condition_tags.map((t: string) => <ConditionTag key={t} tag={t} />)}
                   <MaturityBadge level={app.maturity_level} hideEstablished />
                   {app.content_confidence && app.content_confidence !== 'Confirmed' && (
@@ -363,7 +363,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                     <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{app.supplier_name}</p>
                   </div>
                 </div>
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-6 mb-3">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6 mb-4">
                   <p
                     className="min-w-0 flex-1 max-w-[640px]"
                     style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}
@@ -373,7 +373,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                   <Button
                     data-express-interest
                     size="none"
-                    className="shrink-0 self-end sm:self-auto px-5 py-4 text-sm font-semibold"
+                    className="shrink-0 self-end sm:self-auto px-6 py-4 hs-text-label hs-font-bold"
                   >
                     Express interest
                   </Button>
@@ -383,16 +383,16 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             {/* R7 PDP triage (RSP-01): Express interest is the sole primary; Save / Compare / Share
                 are demoted into one quiet, compact utility cluster on the right. */}
             <div
-              className="flex flex-wrap gap-3 items-center justify-between mt-3 pt-3 border-t"
+              className="flex flex-wrap gap-4 items-center justify-between mt-4 pt-4 border-t"
               style={{ borderColor: 'var(--border)' }}
             >
               <div className="flex flex-wrap items-center gap-2 min-w-0">
                 <ProductHeroDemoBadge app={app} />
               </div>
-              <div className="flex flex-wrap items-center gap-1 shrink-0 rounded-lg px-1 py-0.5" style={{ background: '#F7F9FC' }}>
+              <div className="flex flex-wrap items-center gap-1 shrink-0 rounded-lg px-1 py-1" style={{ background: '#F0F4F5' }}>
                 <SharePagePanel borderlessTrigger />
-                <SaveToggleButton appId={app.id} borderless className="px-3 min-h-[44px] shrink-0" />
-                <CompareToggleButton appId={app.id} borderless className="px-3 min-h-[44px] shrink-0" />
+                <SaveToggleButton appId={app.id} borderless className="px-4 min-h-[44px] shrink-0" />
+                <CompareToggleButton appId={app.id} borderless className="px-4 min-h-[44px] shrink-0" />
               </div>
             </div>
           </div>
@@ -406,45 +406,45 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
           </PdpShareRegion>
         ) : null}
 
-        <div className="mb-6 space-y-3">
+        <div className="mb-6 space-y-4">
           {showPdpFactsGrid ? (
           <PdpShareRegion
             shareKey="sidebar-summary"
             label="Quick facts, assurance and sources"
             description="Device class, assurance statements, supplier email, product tiers, and how this profile was sourced."
-            className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
           >
 
-            <div className="hs-surface-card-sm bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
-              <div className="text-xs font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>Quick facts</div>
-              <div className="space-y-3 text-sm">
+            <div className="hs-surface-card-sm bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
+              <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>Quick facts</div>
+              <div className="space-y-4 hs-text-label">
                 <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Maturity</div>
+                  <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Maturity</div>
                   <MaturityBadge level={app.maturity_level} />
                 </div>
                 <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Local effort</div>
+                  <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Local effort</div>
                   <EffortBadge level={app.local_wraparound} />
                 </div>
                 <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Device class</div>
+                  <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Device class</div>
                   <div style={{ fontWeight: 600 }}>{app.device_class}</div>
-                  {app.device_class_note && <div className="text-xs mt-0.5" style={{ color: '#D5840D' }}>⚠ {app.device_class_note}</div>}
+                  {app.device_class_note && <div className="hs-text-caption mt-1" style={{ color: '#7A4800' }}>⚠ {app.device_class_note}</div>}
                   <DeviceClassDetails deviceClass={app.device_class} />
                 </div>
                 <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Supervision model</div>
+                  <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Supervision model</div>
                   <SupervisionBadge model={app.supervision_model} />
                 </div>
                 <div>
-                  <div className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Target patients</div>
-                  <div className="text-xs" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>{app.target_patients}</div>
+                  <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Target patients</div>
+                  <div className="hs-text-caption" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>{app.target_patients}</div>
                 </div>
               </div>
             </div>
 
-            <div className="hs-surface-card-sm bg-white rounded-xl border p-5 space-y-3" style={{ borderColor: 'var(--border)' }}>
-              <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Assurance</div>
+            <div className="hs-surface-card-sm bg-white rounded-xl border p-6 space-y-4" style={{ borderColor: 'var(--border)' }}>
+              <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Assurance</div>
               {[
                 { label: 'DTAC', val: <DtacBadge status={app.dtac_status} /> },
                 { label: 'DCB0129', val: app.dcb0129_status },
@@ -453,13 +453,13 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 { label: 'Cyber Essentials', val: app.cyber_essentials },
                 { label: 'DSP Toolkit', val: app.dspt_status },
               ].map(r => (
-                <div key={r.label} className="flex items-start gap-2 text-xs">
-                  <span className="w-28 flex-shrink-0 font-medium" style={{ color: 'var(--text-muted)' }}>{r.label}</span>
+                <div key={r.label} className="flex items-start gap-2 hs-text-caption">
+                  <span className="w-28 flex-shrink-0 hs-font-normal" style={{ color: 'var(--text-muted)' }}>{r.label}</span>
                   {typeof r.val === 'string' ? <span style={{ color: 'var(--text-secondary)' }}>{r.val}</span> : r.val}
                 </div>
               ))}
               {app.cyber_notes && (
-                <div className="text-xs p-2 rounded mt-2" style={{ background: '#FEF5E6', color: '#7A4800' }}>
+                <div className="hs-text-caption p-2 rounded mt-2" style={{ background: '#FEF5E6', color: '#7A4800' }}>
                   {app.cyber_notes}
                 </div>
               )}
@@ -468,18 +468,18 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             <PdpSupplierContactCard email={app.supplier_contact_email} />
 
             {app.product_tiers?.length > 0 && (
-              <div className="hs-surface-card-sm bg-white rounded-xl border p-5" style={{ borderColor: 'var(--border)' }}>
-                <div className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>Product tiers</div>
+              <div className="hs-surface-card-sm bg-white rounded-xl border p-6" style={{ borderColor: 'var(--border)' }}>
+                <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>Product tiers</div>
                 {app.product_tiers.map((t: any) => (
-                  <div key={t.tier_name} className="mb-3 last:mb-0">
-                    <div className="font-semibold text-sm" style={{ color: accent }}>{t.tier_name}</div>
-                    <div className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>{t.description}</div>
+                  <div key={t.tier_name} className="mb-4 last:mb-0">
+                    <div className="hs-font-bold hs-text-label" style={{ color: accent }}>{t.tier_name}</div>
+                    <div className="hs-text-caption mt-1" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>{t.description}</div>
                   </div>
                 ))}
               </div>
             )}
 
-            <div className="hs-surface-card-sm rounded-lg p-4 text-xs" style={{ background: '#F7F9FC', border: '1px solid var(--border)', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+            <div className="hs-surface-card-sm rounded-lg p-4 hs-text-caption" style={{ background: '#F0F4F5', border: '1px solid var(--border)', color: 'var(--text-muted)', lineHeight: 1.5 }}>
               <strong style={{ color: 'var(--text-secondary)' }}>Sources: </strong>{app.source_summary}
               <br /><br />
               {app.confidence_note}
@@ -501,13 +501,13 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
           />
         </PdpShareRegion>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           <PdpTabs tabs={tabs} />
 
           <PdpShareRegion shareKey="express-interest" label="Express interest callout" excludeFromShareUi>
           <div className="hs-surface-card-sm rounded-b-xl border overflow-hidden" style={{ borderColor: accent }}>
             <div style={{ background: accent, padding: '20px 24px' }}>
-              <div style={{ fontWeight: 700, fontSize: 'var(--text-section-alt)', color: '#fff', marginBottom: 8 }}>
+              <div style={{ fontWeight: 600, fontSize: 'var(--text-section-alt)', color: '#fff', marginBottom: 8 }}>
                 Express interest
               </div>
               <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.9)', lineHeight: 1.6, margin: '0 0 16px', maxWidth: 640 }}>

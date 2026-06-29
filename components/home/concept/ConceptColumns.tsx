@@ -56,15 +56,15 @@ export function NewsListConcept({
   seeAllHref?: string
 }) {
   return (
-    <div className="hs-surface-card p-5">
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <h3 className="text-lg font-bold" style={{ ...fr, color: 'var(--text-primary)' }}>
+    <div className="hs-surface-card p-6">
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <h3 className="hs-text-card-title-sm hs-font-bold" style={{ ...fr, color: 'var(--text-primary)' }}>
           {title}
         </h3>
         {seeAllHref && (
           <Link
             href={seeAllHref}
-            className="shrink-0 text-sm font-semibold text-[var(--nhs-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="shrink-0 hs-text-label hs-font-bold text-[var(--nhs-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
             style={{ outlineColor: 'var(--nhs-blue)' }}
           >
             See all news →
@@ -73,19 +73,19 @@ export function NewsListConcept({
       </div>
       <ul className="m-0 list-none p-0">
         {news.map((item) => (
-          <li key={item.id} className="border-t border-[var(--border)] pt-5 first:border-t-0 first:pt-0">
+          <li key={item.id} className="border-t border-[var(--border)] pt-6 first:border-t-0 first:pt-0">
             <EditorialPillRow topics={item.topic_tags} conditions={item.condition_tags} />
-            <time className="mt-1 block text-xs" style={{ color: 'var(--text-muted)' }} dateTime={item.date}>
+            <time className="mt-1 block hs-text-caption" style={{ color: 'var(--text-muted)' }} dateTime={item.date}>
               {formatHomeDate(item.date)}
             </time>
             {hrefless ? (
-              <span className="mt-1 block font-bold text-[var(--text-primary)]">{item.title}</span>
+              <span className="mt-1 block hs-font-bold text-[var(--text-primary)]">{item.title}</span>
             ) : (
               <ExternalConceptLink href={item.href} className="mt-1 block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2" style={{ outlineColor: 'var(--nhs-blue)' }}>
-                <span className="font-bold text-[var(--text-primary)] hover:text-[var(--nhs-blue)]">{item.title}</span>
+                <span className="hs-font-bold text-[var(--text-primary)] hover:text-[var(--nhs-blue)]">{item.title}</span>
               </ExternalConceptLink>
             )}
-            <p className="mt-1 mb-0 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+            <p className="mt-1 mb-0 hs-text-label leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
               {item.summary}
             </p>
           </li>
@@ -109,14 +109,14 @@ export function CampaignsColumnConcept({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-3 md:px-1">
-        <h3 className="text-lg font-bold" style={{ ...fr, color: 'var(--text-primary)' }}>
+      <div className="flex items-center justify-between gap-4 md:px-1">
+        <h3 className="hs-text-card-title-sm hs-font-bold" style={{ ...fr, color: 'var(--text-primary)' }}>
           Campaigns and initiatives
         </h3>
         {seeAllHref && (
           <Link
             href={seeAllHref}
-            className="shrink-0 text-sm font-semibold text-[var(--nhs-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="shrink-0 hs-text-label hs-font-bold text-[var(--nhs-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
             style={{ outlineColor: 'var(--nhs-blue)' }}
           >
             See all campaigns →
@@ -124,7 +124,7 @@ export function CampaignsColumnConcept({
         )}
       </div>
       {featured && (
-        <div className="overflow-hidden rounded-xl bg-[#003087] shadow-md">
+        <div className="overflow-hidden rounded-xl bg-[#003087]">
           <div className="relative aspect-[2/1] w-full min-h-[120px] max-h-[180px] overflow-hidden sm:aspect-[21/8]">
             <EditorialImage
               itemId={featured.id}
@@ -134,36 +134,36 @@ export function CampaignsColumnConcept({
               priority
             />
           </div>
-          <div className="px-5 py-4">
-            <span className="mb-2 inline-block rounded bg-white/15 px-2 py-0.5 text-xs font-bold text-white">Featured</span>
+          <div className="px-6 py-4">
+            <span className="mb-2 inline-block rounded bg-white/15 px-2 py-1 hs-text-caption hs-font-bold text-white">Featured</span>
             {hrefless ? (
-              <span className="block font-bold text-white" style={fr}>
+              <span className="block hs-font-bold text-white" style={fr}>
                 {featured.title}
               </span>
             ) : (
               <ExternalConceptLink href={featured.href} className="flex items-start justify-between gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-                <span className="font-bold text-white" style={fr}>
+                <span className="hs-font-bold text-white" style={fr}>
                   {featured.title}
                 </span>
                 <ChevronRight className="h-5 w-5 shrink-0 text-white" aria-hidden />
               </ExternalConceptLink>
             )}
-            <p className="mt-2 mb-0 text-sm text-white/80">{featured.summary}</p>
+            <p className="mt-2 mb-0 hs-text-label text-white/80">{featured.summary}</p>
           </div>
         </div>
       )}
-      <ul className="m-0 list-none space-y-3 p-0">
+      <ul className="m-0 list-none space-y-4 p-0">
         {rest.map((item) => (
           <li key={item.id} className="hs-surface-card-sm p-4">
             <EditorialPillRow topics={item.topic_tags} conditions={item.condition_tags} className="mb-1" />
             {hrefless ? (
-              <span className="block font-bold text-[var(--text-primary)]">{item.title}</span>
+              <span className="block hs-font-bold text-[var(--text-primary)]">{item.title}</span>
             ) : (
               <ExternalConceptLink href={item.href} className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2" style={{ outlineColor: 'var(--nhs-blue)' }}>
-                <span className="font-bold text-[var(--text-primary)] hover:text-[var(--nhs-blue)]">{item.title}</span>
+                <span className="hs-font-bold text-[var(--text-primary)] hover:text-[var(--nhs-blue)]">{item.title}</span>
               </ExternalConceptLink>
             )}
-            <p className="mt-1 mb-0 text-sm" style={{ color: 'var(--text-secondary)' }}>
+            <p className="mt-1 mb-0 hs-text-label" style={{ color: 'var(--text-secondary)' }}>
               {item.summary}
             </p>
           </li>
