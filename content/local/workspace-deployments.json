@@ -1,0 +1,381 @@
+{
+  "icbs": {
+    "QWO": {
+      "icb_id": "QWO",
+      "icb_name": "NHS West Yorkshire Integrated Care Board",
+      "coverage_funnel": {
+        "eligible": 89000,
+        "invited": 36490,
+        "registered": 17800,
+        "active": 5340
+      },
+      "kpis": {
+        "live_deployments": 4,
+        "mobilising": 1,
+        "eligible_reached_pct": 41,
+        "active_users_90d": 1180,
+        "contract_utilisation_pct": 79
+      },
+      "monthly_admissions": [
+        { "month": "2025-06", "baseline": 380, "with_dtx": 362 },
+        { "month": "2025-07", "baseline": 395, "with_dtx": 348 },
+        { "month": "2025-08", "baseline": 410, "with_dtx": 335 },
+        { "month": "2025-09", "baseline": 402, "with_dtx": 318 },
+        { "month": "2025-10", "baseline": 388, "with_dtx": 305 },
+        { "month": "2025-11", "baseline": 420, "with_dtx": 298 },
+        { "month": "2025-12", "baseline": 435, "with_dtx": 290 },
+        { "month": "2026-01", "baseline": 398, "with_dtx": 272 },
+        { "month": "2026-02", "baseline": 385, "with_dtx": 265 },
+        { "month": "2026-03", "baseline": 372, "with_dtx": 248 },
+        { "month": "2026-04", "baseline": 360, "with_dtx": 238 },
+        { "month": "2026-05", "baseline": 355, "with_dtx": 228 }
+      ],
+      "retention": {
+        "you": [
+          { "day": 0, "value": 100 },
+          { "day": 30, "value": 82 },
+          { "day": 60, "value": 68 },
+          { "day": 90, "value": 57 },
+          { "day": 180, "value": 41 }
+        ],
+        "pooled": [
+          { "day": 0, "value": 100 },
+          { "day": 30, "value": 74 },
+          { "day": 60, "value": 58 },
+          { "day": 90, "value": 46 },
+          { "day": 180, "value": 31 }
+        ]
+      },
+      "benchmarks": {
+        "registration_rate": { "p10": 34, "median": 41, "p90": 52, "you": 49, "percentile": 78 },
+        "uptake_rate": { "p10": 28, "median": 35, "p90": 48, "you": 41, "percentile": 62, "rank": 12, "total_icbs": 42 }
+      },
+      "deployments": [
+        {
+          "id": "luscii-copd",
+          "product": "Luscii",
+          "pathway": "COPD remote monitoring",
+          "status": "live",
+          "route": "HealthStore",
+          "active_users": 612,
+          "vs_target_pct": 8,
+          "detail": {
+            "invited": 2400,
+            "registered": 1200,
+            "registered_pct": 50,
+            "active_90d": 612,
+            "active_pct": 26,
+            "completion_rate": 36,
+            "registration_percentile": 78,
+            "data_completeness": 96,
+            "insight": "Strong performer. Above target and median on registration. Focus on expanding invitation reach to hit 10% eligible population coverage.",
+            "insight_variant": "good"
+          }
+        },
+        {
+          "id": "mycopd-discharge",
+          "product": "myCOPD",
+          "pathway": "COPD discharge self-management",
+          "status": "live",
+          "route": "HealthStore",
+          "active_users": 281,
+          "vs_target_pct": 3,
+          "detail": {
+            "invited": 1100,
+            "registered": 490,
+            "registered_pct": 45,
+            "active_90d": 281,
+            "active_pct": 26,
+            "completion_rate": 41,
+            "registration_percentile": 62,
+            "data_completeness": 94,
+            "insight": "Solid completion rate matches the evidence base for discharge self-management. Consider extending to patients on respiratory waiting lists.",
+            "insight_variant": "default"
+          }
+        },
+        {
+          "id": "cardiac-rehab",
+          "product": "myHeart",
+          "pathway": "Cardiac rehabilitation",
+          "status": "live",
+          "route": "HealthStore",
+          "active_users": 174,
+          "vs_target_pct": -11,
+          "detail": {
+            "invited": 680,
+            "registered": 260,
+            "registered_pct": 38,
+            "active_90d": 174,
+            "active_pct": 26,
+            "completion_rate": 28,
+            "registration_percentile": 31,
+            "data_completeness": 91,
+            "insight": "Below target on registration. Low completion suggests friction in early modules. Recommend a user-journey review with the supplier.",
+            "insight_variant": "warn"
+          }
+        },
+        {
+          "id": "luscii-acute",
+          "product": "Luscii",
+          "pathway": "COPD (acute pathway)",
+          "status": "mobilising",
+          "route": "HealthStore",
+          "active_users": 0,
+          "vs_target_pct": null,
+          "detail": {
+            "weeks_live": 6,
+            "data_completeness": 92,
+            "insight": "Too early to assess. First performance review at 90 days.",
+            "insight_variant": "default"
+          }
+        }
+      ],
+      "opportunity_value_gbp": 314000,
+      "unmet_headroom": 35600
+    },
+    "QMF": {
+      "icb_id": "QMF",
+      "icb_name": "NHS Frimley Integrated Care Board",
+      "coverage_funnel": {
+        "eligible": 42000,
+        "invited": 12600,
+        "registered": 5040,
+        "active": 1260
+      },
+      "kpis": {
+        "live_deployments": 1,
+        "mobilising": 0,
+        "eligible_reached_pct": 30,
+        "active_users_90d": 340,
+        "contract_utilisation_pct": 52
+      },
+      "monthly_admissions": [
+        { "month": "2025-06", "baseline": 185, "with_dtx": 178 },
+        { "month": "2025-07", "baseline": 192, "with_dtx": 170 },
+        { "month": "2025-08", "baseline": 198, "with_dtx": 165 },
+        { "month": "2025-09", "baseline": 190, "with_dtx": 158 },
+        { "month": "2025-10", "baseline": 188, "with_dtx": 152 },
+        { "month": "2025-11", "baseline": 195, "with_dtx": 148 },
+        { "month": "2025-12", "baseline": 200, "with_dtx": 142 },
+        { "month": "2026-01", "baseline": 182, "with_dtx": 135 },
+        { "month": "2026-02", "baseline": 178, "with_dtx": 128 },
+        { "month": "2026-03", "baseline": 175, "with_dtx": 122 },
+        { "month": "2026-04", "baseline": 170, "with_dtx": 118 },
+        { "month": "2026-05", "baseline": 168, "with_dtx": 112 }
+      ],
+      "retention": {
+        "you": [
+          { "day": 0, "value": 100 },
+          { "day": 30, "value": 76 },
+          { "day": 60, "value": 62 },
+          { "day": 90, "value": 48 },
+          { "day": 180, "value": 34 }
+        ],
+        "pooled": [
+          { "day": 0, "value": 100 },
+          { "day": 30, "value": 74 },
+          { "day": 60, "value": 58 },
+          { "day": 90, "value": 46 },
+          { "day": 180, "value": 31 }
+        ]
+      },
+      "benchmarks": {
+        "registration_rate": { "p10": 34, "median": 41, "p90": 52, "you": 40, "percentile": 55 },
+        "uptake_rate": { "p10": 28, "median": 35, "p90": 48, "you": 30, "percentile": 38, "rank": 26, "total_icbs": 42 }
+      },
+      "deployments": [
+        {
+          "id": "luscii-frimley",
+          "product": "Luscii",
+          "pathway": "COPD remote monitoring",
+          "status": "live",
+          "route": "HealthStore",
+          "active_users": 340,
+          "vs_target_pct": 5,
+          "detail": {
+            "invited": 1260,
+            "registered": 504,
+            "registered_pct": 40,
+            "active_90d": 340,
+            "active_pct": 27,
+            "completion_rate": 32,
+            "registration_percentile": 55,
+            "data_completeness": 93,
+            "insight": "Early deployment with room to grow invitation reach. Frimley reference site evaluation supports expansion.",
+            "insight_variant": "default"
+          }
+        }
+      ],
+      "opportunity_value_gbp": 186000,
+      "unmet_headroom": 29400
+    },
+    "QOP": {
+      "icb_id": "QOP",
+      "icb_name": "NHS Greater Manchester Integrated Care Board",
+      "coverage_funnel": {
+        "eligible": 13000,
+        "invited": 3552,
+        "registered": 1728,
+        "active": 927
+      },
+      "kpis": {
+        "live_deployments": 3,
+        "mobilising": 1,
+        "eligible_reached_pct": 27,
+        "active_users_90d": 927,
+        "contract_utilisation_pct": 68
+      },
+      "monthly_admissions": [
+        { "month": "2025-06", "baseline": 440, "with_dtx": 418 },
+        { "month": "2025-07", "baseline": 460, "with_dtx": 398 },
+        { "month": "2025-08", "baseline": 470, "with_dtx": 382 },
+        { "month": "2025-09", "baseline": 455, "with_dtx": 365 },
+        { "month": "2025-10", "baseline": 442, "with_dtx": 348 },
+        { "month": "2025-11", "baseline": 480, "with_dtx": 338 },
+        { "month": "2025-12", "baseline": 495, "with_dtx": 330 },
+        { "month": "2026-01", "baseline": 450, "with_dtx": 315 },
+        { "month": "2026-02", "baseline": 435, "with_dtx": 300 },
+        { "month": "2026-03", "baseline": 420, "with_dtx": 285 },
+        { "month": "2026-04", "baseline": 408, "with_dtx": 272 },
+        { "month": "2026-05", "baseline": 395, "with_dtx": 258 }
+      ],
+      "retention": {
+        "you": [
+          { "day": 0, "value": 100 },
+          { "day": 30, "value": 79 },
+          { "day": 60, "value": 65 },
+          { "day": 90, "value": 54 },
+          { "day": 180, "value": 39 }
+        ],
+        "pooled": [
+          { "day": 0, "value": 100 },
+          { "day": 30, "value": 74 },
+          { "day": 60, "value": 58 },
+          { "day": 90, "value": 46 },
+          { "day": 180, "value": 31 }
+        ]
+      },
+      "benchmarks": {
+        "registration_rate": { "p10": 34, "median": 41, "p90": 52, "you": 45, "percentile": 68 },
+        "uptake_rate": { "p10": 28, "median": 35, "p90": 48, "you": 38, "percentile": 55, "rank": 16, "total_icbs": 42 }
+      },
+      "deployments": [
+        {
+          "id": "luscii-copd-gm",
+          "product": "Luscii",
+          "pathway": "COPD remote monitoring",
+          "conditionId": "copd",
+          "status": "live",
+          "route": "HealthStore",
+          "active_users": 612,
+          "vs_target_pct": 8,
+          "detail": {
+            "invited": 2400,
+            "registered": 1200,
+            "registered_pct": 50,
+            "active_90d": 612,
+            "active_pct": 26,
+            "completion_rate": 36,
+            "registration_percentile": 78,
+            "data_completeness": 96,
+            "weeks_live": 44,
+            "insight": "Strong performer — above target on registration. The opportunity is to expand invitation reach from 2,400 to the full 9,800 eligible cohort.",
+            "insight_variant": "good"
+          }
+        },
+        {
+          "id": "mycopd-selfmgmt-gm",
+          "product": "myCOPD",
+          "pathway": "COPD self-management (post-discharge)",
+          "conditionId": "copd",
+          "status": "live",
+          "route": "HealthStore",
+          "active_users": 281,
+          "vs_target_pct": 3,
+          "detail": {
+            "invited": 1100,
+            "registered": 490,
+            "registered_pct": 45,
+            "active_90d": 281,
+            "active_pct": 26,
+            "completion_rate": 41,
+            "registration_percentile": 62,
+            "data_completeness": 94,
+            "weeks_live": 32,
+            "insight": "Solid completion rate supports the self-management model. Next step: extend invitations to patients on respiratory waiting lists.",
+            "insight_variant": "default"
+          }
+        },
+        {
+          "id": "myheart-cardiac-gm",
+          "product": "myHeart",
+          "pathway": "Digital cardiac rehabilitation",
+          "conditionId": "cardiac_rehab",
+          "status": "live",
+          "route": "HealthStore",
+          "active_users": 34,
+          "vs_target_pct": null,
+          "detail": {
+            "invited": 52,
+            "registered": 38,
+            "registered_pct": 73,
+            "active_90d": 34,
+            "active_pct": 65,
+            "data_completeness": 94,
+            "weeks_live": 6,
+            "insight": "6 weeks live — too early to assess outcomes. Registration rate is exceptionally strong (73%). First performance review at 90 days.",
+            "insight_variant": "default"
+          }
+        },
+        {
+          "id": "joint-academy-msk-gm",
+          "product": "Joint Academy",
+          "pathway": "MSK lower back pain self-management",
+          "conditionId": "msk_back_pain",
+          "status": "mobilising",
+          "route": "HealthStore",
+          "active_users": 0,
+          "vs_target_pct": null,
+          "detail": {
+            "weeks_live": 0,
+            "data_completeness": 0,
+            "insight": "In procurement and implementation planning. Expected go-live Q3 2026. Integration with community MSK pathway being agreed with GM providers.",
+            "insight_variant": "default"
+          }
+        }
+      ],
+      "opportunity_value_gbp": 420000,
+      "unmet_headroom": 56160
+    },
+    "national": {
+      "icb_id": "E92000001",
+      "icb_name": "England (illustrative baseline)",
+      "coverage_funnel": {
+        "eligible": 1200000,
+        "invited": 0,
+        "registered": 0,
+        "active": 0
+      },
+      "kpis": {
+        "live_deployments": 0,
+        "mobilising": 0,
+        "eligible_reached_pct": 0,
+        "active_users_90d": 0,
+        "contract_utilisation_pct": 0
+      },
+      "benchmarks": {
+        "registration_rate": { "p10": 34, "median": 41, "p90": 52, "you": null, "percentile": null },
+        "uptake_rate": { "p10": 28, "median": 35, "p90": 48, "you": null, "percentile": null, "rank": null, "total_icbs": 42 }
+      },
+      "deployments": [],
+      "opportunity_value_gbp": 314000,
+      "unmet_headroom": 840000
+    }
+  },
+  "dtx_impact_ranges": {
+    "admission_reduction": { "conservative": 30, "central": 40, "evidence_led": 48 },
+    "ae_reduction": { "conservative": 16, "central": 25, "evidence_led": 31 },
+    "readmission_reduction": { "conservative": 15, "central": 20, "evidence_led": 53 },
+    "capacity_to_cash_pct": 40
+  }
+}

@@ -24,6 +24,13 @@ const nextConfig: NextConfig = {
       { source: "/DS/Report-v:slug", destination: "/DS/Audits/Report-v:slug/index.html", permanent: true },
       { source: "/DS/Report-v:slug/", destination: "/DS/Audits/Report-v:slug/index.html", permanent: true },
       { source: "/DS/Report-v:slug/index.html", destination: "/DS/Audits/Report-v:slug/index.html", permanent: true },
+      { source: "/apps", destination: "/products", permanent: false },
+      { source: "/apps/condition-catalogue", destination: "/products/condition-catalogue", permanent: false },
+      { source: "/apps/:slug", destination: "/products/:slug", permanent: false },
+      { source: "/dashboard", destination: "/workspace", permanent: false },
+      { source: "/eoi-record", destination: "/workspace", permanent: false },
+      { source: "/saved-apps", destination: "/workspace", permanent: false },
+      { source: "/org-settings", destination: "/account/organisation", permanent: false },
     ];
   },
 };

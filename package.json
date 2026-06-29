@@ -27,6 +27,8 @@
     "jose": "^6.2.2",
     "lucide-react": "^0.577.0",
     "next": "16.1.7",
+    "nhsuk-frontend": "^10.5.2",
+    "nhsuk-frontend-react": "^5.2.0",
     "openai": "^6.39.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",

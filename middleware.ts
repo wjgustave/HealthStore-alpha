@@ -2,6 +2,28 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getIronSession } from 'iron-session'
 import type { SessionData } from '@/lib/session'
 
+const PUBLIC_PREFIXES = [
+  '/',
+  '/cookies',
+  '/news',
+  '/campaigns',
+  '/case-studies',
+  '/start',
+  '/opportunities',
+  '/products',
+  '/apps',
+  '/compare',
+  '/how-it-helps',
+  '/guidance',
+  '/login',
+  '/account/verify',
+]
+
+function isPublicPath(pathname: string): boolean {
+  if (PUBLIC_PREFIXES.includes(pathname)) return true
+  return PUBLIC_PREFIXES.some((p) => p !== '/' && pathname.startsWith(`${p}/`))
+}
+
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   const session = await getIronSession<SessionData>(req, res, {
@@ -16,13 +38,16 @@ export async function middleware(req: NextRequest) {
       if (session.requiresCommissioningEntitySelection) {
         return NextResponse.redirect(new URL('/select-entity', req.url))
       }
-      return NextResponse.redirect(new URL('/dashboard', req.url))
+      return NextResponse.redirect(new URL('/workspace', req.url))
     }
     return res
   }
 
-  const publicPaths = ['/', '/cookies', '/news', '/campaigns', '/case-studies']
-  if (publicPaths.includes(pathname)) {
+  if (pathname === '/dashboard') {
+    return NextResponse.redirect(new URL('/workspace', req.url))
+  }
+
+  if (isPublicPath(pathname)) {
     return res
   }
 
@@ -31,7 +56,7 @@ export async function middleware(req: NextRequest) {
   }
 
   if (pathname === '/select-entity' && !session.requiresCommissioningEntitySelection) {
-    return NextResponse.redirect(new URL('/dashboard', req.url))
+    return NextResponse.redirect(new URL('/workspace', req.url))
   }
 
   if (session.requiresCommissioningEntitySelection && pathname !== '/select-entity') {
@@ -43,8 +68,6 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    // Exclude api/apps, api/ai, api/ai-advisor, api/bookmarks, api/org-profile and api/express-interest so APIs return JSON (401/403) instead of redirecting to /login for fetch clients.
-    // `DS` is the standalone, static design-system reference under public/DS — kept publicly reachable and outside auth (not linked from the product).
-    '/((?!api/auth|api/apps|api/ai|api/ai-advisor|api/bookmarks|api/org-profile|api/express-interest|DS|_next/static|_next/image|logos|favicon\\.ico|.*\\.svg|.*\\.png|.*\\.jpg).*)',
+    '/((?!api/auth|api/apps|api/ai|api/ai-advisor|api/bookmarks|api/org-profile|api/express-interest|api/cases|DS|_next/static|_next/image|logos|favicon\\.ico|.*\\.svg|.*\\.png|.*\\.jpg).*)',
   ],
 }

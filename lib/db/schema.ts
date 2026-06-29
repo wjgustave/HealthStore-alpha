@@ -63,3 +63,36 @@ export const orgExpressionsOfInterest = pgTable('org_expressions_of_interest', {
   notes: text('notes'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })
+
+export const commissioningCases = pgTable('commissioning_cases', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  reference: text('reference').notNull().unique(),
+  organizationId: uuid('organization_id').references(() => organizations.id),
+  submittedByEmail: text('submitted_by_email').notNull(),
+  submittedByName: text('submitted_by_name').notNull(),
+  role: text('role'),
+  organisationName: text('organisation_name'),
+  productSlug: text('product_slug'),
+  productName: text('product_name'),
+  contextSnapshot: jsonb('context_snapshot').notNull(),
+  supportRequested: text('support_requested').array().notNull(),
+  decisionWindow: text('decision_window'),
+  additionalContext: text('additional_context'),
+  status: text('status').notNull().default('submitted'),
+  nextAction: text('next_action').notNull().default('HealthStore will confirm your request within 5 working days'),
+  ownerQueue: text('owner_queue').default('Commissioning support triage'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const savedAnalyses = pgTable('saved_analyses', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  organizationId: uuid('organization_id').references(() => organizations.id),
+  submittedByEmail: text('submitted_by_email').notNull(),
+  title: text('title').notNull(),
+  productSlug: text('product_slug'),
+  contextSnapshot: jsonb('context_snapshot').notNull(),
+  scenarioId: text('scenario_id').notNull(),
+  modelVersion: text('model_version').notNull().default('copd-v1'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+})

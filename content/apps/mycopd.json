@@ -20,6 +20,7 @@
     "self-management",
     "admissions-reduction"
   ],
+  "platform_tags": ["iOS", "Android"],
   "supervision_model": "self_management_only",
   "catalogue_demo_available": true,
   "referral_modes": [

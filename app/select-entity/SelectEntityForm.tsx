@@ -4,7 +4,6 @@ import { useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { COMMISSIONING_ENTITIES } from '@/lib/commissioningEntities'
 import { AuthCard } from '@/components/ui/AuthCard'
-import { Button } from '@/components/ui/Button'
 
 export default function SelectEntityForm() {
   const router = useRouter()
@@ -45,7 +44,7 @@ export default function SelectEntityForm() {
       title="Select an ICB"
       subtitle="This is the ICB you are accessing the store for."
       footer={
-        <p className="mt-6 text-center text-xs" style={{ color: 'rgba(255,255,255,0.55)' }}>
+        <p className="mt-6 text-center text-xs" style={{ color: '#4c6272' }}>
           Prototype based on publicly available information as of March 2026.
         </p>
       }
@@ -68,15 +67,18 @@ export default function SelectEntityForm() {
             aria-required
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? 'select-entity-error' : undefined}
-            className="space-y-3"
+            className="hs-question-options"
           >
             {COMMISSIONING_ENTITIES.map((entity) => (
               <label
                 key={entity.id}
-                className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors ${
-                  entityId === entity.id ? 'border-[var(--nhs-blue)] bg-[#E6F0FB]' : ''
-                }`}
-                style={{ borderColor: entityId === entity.id ? 'var(--nhs-blue)' : '#DEE4EA' }}
+                className="hs-checkbox-item"
+                style={{
+                  padding: '12px 14px',
+                  border: `2px solid ${entityId === entity.id ? '#005eb8' : '#d8dde0'}`,
+                  borderRadius: 6,
+                  background: entityId === entity.id ? '#f0f6fc' : '#fff',
+                }}
               >
                 <input
                   type="radio"
@@ -84,17 +86,16 @@ export default function SelectEntityForm() {
                   value={entity.id}
                   checked={entityId === entity.id}
                   onChange={() => setEntityId(entity.id)}
-                  className="mt-1"
                 />
-                <span className="text-sm font-medium" style={{ color: '#1A2332' }}>{entity.name}</span>
+                <span style={{ fontSize: 16, color: '#212b32' }}>{entity.name}</span>
               </label>
             ))}
           </div>
         </fieldset>
 
-        <Button type="submit" block loading={loading}>
+        <button type="submit" className="hs-btn hs-btn-primary" disabled={loading} style={{ width: '100%', justifyContent: 'center' }}>
           {loading ? 'Continuing…' : 'Continue to store'}
-        </Button>
+        </button>
       </form>
     </AuthCard>
   )

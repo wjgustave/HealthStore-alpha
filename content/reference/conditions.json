@@ -1,0 +1,81 @@
+{
+  "supported": [
+    {
+      "id": "copd",
+      "label": "COPD and respiratory",
+      "shortLabel": "COPD",
+      "category": "long_term_condition",
+      "contentStatus": "fully_populated",
+      "productSlugs": ["luscii", "mycopd"],
+      "pathwayPosition": "Post-diagnosis self-management and remote monitoring",
+      "niceRef": "HTG736",
+      "colour": "#005eb8"
+    },
+    {
+      "id": "cardiac_rehab",
+      "label": "Cardiac rehabilitation",
+      "shortLabel": "Cardiac rehab",
+      "category": "rehabilitation",
+      "contentStatus": "fully_populated",
+      "productSlugs": ["myheart", "activate-your-heart"],
+      "pathwayPosition": "Post-event rehabilitation programme",
+      "niceRef": "HTG7",
+      "colour": "#7C2855"
+    },
+    {
+      "id": "msk_back_pain",
+      "label": "MSK and lower back pain",
+      "shortLabel": "MSK",
+      "category": "long_term_condition",
+      "contentStatus": "fully_populated",
+      "productSlugs": ["joint-academy", "kiactiv"],
+      "pathwayPosition": "Community MSK pathway — conservative management",
+      "niceRef": "HTG13",
+      "colour": "#330072"
+    }
+  ],
+  "horizon": [
+    {
+      "id": "insomnia",
+      "label": "Insomnia (CBT-I)",
+      "category": "mental_health",
+      "contentStatus": "horizon"
+    },
+    {
+      "id": "type2_diabetes",
+      "label": "Type 2 diabetes",
+      "category": "long_term_condition",
+      "contentStatus": "horizon"
+    },
+    {
+      "id": "depression_anxiety",
+      "label": "Depression and anxiety",
+      "category": "mental_health",
+      "contentStatus": "horizon"
+    },
+    {
+      "id": "hypertension",
+      "label": "Hypertension",
+      "category": "prevention",
+      "contentStatus": "horizon"
+    },
+    {
+      "id": "asthma",
+      "label": "Asthma",
+      "category": "long_term_condition",
+      "contentStatus": "horizon"
+    },
+    {
+      "id": "weight_management",
+      "label": "Weight management",
+      "category": "prevention",
+      "contentStatus": "horizon"
+    },
+    {
+      "id": "osteoarthritis",
+      "label": "Hip and knee osteoarthritis",
+      "category": "rehabilitation",
+      "contentStatus": "horizon"
+    }
+  ]
+}

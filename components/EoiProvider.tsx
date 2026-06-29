@@ -55,7 +55,13 @@ type EoiContextValue = {
 
 const EoiContext = createContext<EoiContextValue | null>(null)
 
-export function EoiProvider({ children }: { children: React.ReactNode }) {
+export function EoiProvider({
+  children,
+  enabled = true,
+}: {
+  children: React.ReactNode
+  enabled?: boolean
+}) {
   const toast = useToast()
   const [expressionsOfInterest, setExpressionsOfInterest] = useState<ExpressionOfInterestEntry[]>([])
   const [status, setStatus] = useState<LoadStatus>('loading')
@@ -63,14 +69,20 @@ export function EoiProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
+    if (!enabled) {
+      setExpressionsOfInterest([])
+      setSessionExpired(false)
+      setStatus('ready')
+      return
+    }
     setError(null)
     setStatus('loading')
     try {
       const res = await fetch('/api/express-interest')
       if (!res.ok) {
-        if (res.status === 401) {
+        if (res.status === 401 || res.status === 403) {
           setExpressionsOfInterest([])
-          setSessionExpired(true)
+          setSessionExpired(res.status === 401)
           setStatus('ready')
           return
         }
@@ -86,7 +98,7 @@ export function EoiProvider({ children }: { children: React.ReactNode }) {
       setStatus('error')
       toast.error('Couldn’t load expressions of interest.')
     }
-  }, [toast])
+  }, [toast, enabled])
 
   useEffect(() => {
     void refresh()

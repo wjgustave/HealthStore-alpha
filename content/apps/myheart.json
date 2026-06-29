@@ -22,6 +22,7 @@
     "cr-uptake"
   ],
   "supervision_model": "self_management_only",
+  "platform_tags": ["iOS", "Android"],
   "referral_modes": [
     "clinician_referral"
   ],

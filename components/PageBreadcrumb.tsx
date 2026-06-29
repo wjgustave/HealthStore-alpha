@@ -27,7 +27,7 @@ export function PageBreadcrumb({
 
   return (
     <nav aria-label="Breadcrumb" className={className}>
-      <ol className="flex flex-wrap items-center gap-1.5 text-sm" style={{ color: 'var(--text-muted)' }}>
+      <ol className="flex flex-wrap items-center gap-1.5 text-sm list-none m-0 p-0" style={{ color: 'var(--text-muted)' }}>
         {trail.map((item, i) => {
           const isLast = i === trail.length - 1
           return (

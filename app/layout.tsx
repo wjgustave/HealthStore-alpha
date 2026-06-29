@@ -12,6 +12,13 @@ import { getAllApps } from '@/lib/data'
 export const metadata: Metadata = {
   title: 'HealthStore',
   description: 'Decision-support tool for NHS digital health technology procurement',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-icon.png',
+  },
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -40,7 +47,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en">
       <head>
       </head>
-      <body className="min-h-screen" style={{ background: 'var(--surface)' }}>
+      <body>
         {alphaLine ? (
           <AppShell
             isLoggedIn={isLoggedIn}

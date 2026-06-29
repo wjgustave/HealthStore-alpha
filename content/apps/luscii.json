@@ -20,6 +20,7 @@
     "virtual-ward",
     "scale"
   ],
+  "platform_tags": ["iOS", "Android", "Web"],
   "supervision_model": "active_remote_management",
   "referral_modes": [
     "clinician_referral"

@@ -84,7 +84,7 @@ export function getHomeCaseStudies(): CaseStudy[] {
     description: featured.body,
     image: featured.right_image,
     image_alt: featured.right_image_alt,
-    href: `/apps/${featured.featured_app_slug}`,
+    href: `/products/${featured.featured_app_slug}`,
   }
 
   return [story, ...promos, featuredStudy]
@@ -94,16 +94,22 @@ const otherApps = otherAppsData as App[]
 
 const allAppsUnfiltered: App[] = [myCOPD, clinitouch, copdhub, luscii, sleepio, ...otherApps, jointAcademy, w8buddy, overcomingAnorexia, activateYourHeart, dReachHf, digitalHeartManual, groHealthHeartbuddy, kiactiv, myheart, pumpingMarvellous]
 
+const FEATURED_SLUGS: Record<string, string[]> = {
+  copd: ['luscii', 'mycopd'],
+  cardiac_rehab: ['myheart', 'activate-your-heart'],
+  msk: ['joint-academy', 'kiactiv'],
+}
+
 export function getAllApps(): App[] {
   return allAppsUnfiltered.filter((a: App) => {
     const hasVisibleCondition = a.condition_tags.some((t: string) => isVisibleCondition(t))
     if (!hasVisibleCondition) return false
 
-    const isCardiacRehabApp = a.condition_tags.includes('cardiac_rehab')
-    if (isCardiacRehabApp && a.slug !== 'myheart') return false
-
-    const isCopdApp = a.condition_tags.includes('copd')
-    if (isCopdApp && !['luscii', 'mycopd'].includes(a.slug)) return false
+    const matchedConditions = Object.entries(FEATURED_SLUGS).filter(([cond]) => a.condition_tags.includes(cond))
+    if (matchedConditions.length > 0) {
+      const inAnyFeaturedList = matchedConditions.some(([, slugs]) => slugs.includes(a.slug))
+      if (!inAnyFeaturedList) return false
+    }
 
     return true
   })

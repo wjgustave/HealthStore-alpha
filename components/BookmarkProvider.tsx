@@ -36,7 +36,13 @@ type BookmarkContextValue = {
 
 const BookmarkContext = createContext<BookmarkContextValue | null>(null)
 
-export function BookmarkProvider({ children }: { children: React.ReactNode }) {
+export function BookmarkProvider({
+  children,
+  enabled = true,
+}: {
+  children: React.ReactNode
+  enabled?: boolean
+}) {
   const toast = useToast()
   const [bookmarks, setBookmarks] = useState<BookmarkEntry[]>([])
   const [status, setStatus] = useState<LoadStatus>('loading')
@@ -45,14 +51,20 @@ export function BookmarkProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
+    if (!enabled) {
+      setBookmarks([])
+      setSessionExpired(false)
+      setStatus('ready')
+      return
+    }
     setError(null)
     setStatus('loading')
     try {
       const res = await fetch('/api/bookmarks')
       if (!res.ok) {
-        if (res.status === 401) {
+        if (res.status === 401 || res.status === 403) {
           setBookmarks([])
-          setSessionExpired(true)
+          setSessionExpired(res.status === 401)
           setStatus('ready')
           return
         }
@@ -68,7 +80,7 @@ export function BookmarkProvider({ children }: { children: React.ReactNode }) {
       setStatus('error')
       toast.error('Couldn’t load your saved apps.')
     }
-  }, [toast])
+  }, [toast, enabled])
 
   useEffect(() => {
     void refresh()

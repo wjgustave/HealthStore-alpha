@@ -1,0 +1,152 @@
+{
+  "geographies": {
+    "QOP": {
+      "code": "QOP",
+      "label": "NHS Greater Manchester Integrated Care Board",
+      "population": "2.87 million",
+      "reportingPeriod": "2025-06 to 2026-05",
+      "dataBasis": "synthetic_demo",
+      "summary": "Greater Manchester has significant unmet need across respiratory, cardiovascular and musculoskeletal pathways. Digital therapeutics are live in COPD and cardiac rehabilitation, with MSK in procurement. The biggest constraint across all three pathways is invitation reach — most eligible patients are never offered the intervention.",
+      "opportunities": [
+        {
+          "conditionId": "copd",
+          "label": "COPD and respiratory",
+          "pathwayPosition": "Post-diagnosis long-term management",
+          "priorityBand": "high",
+          "priorityRationale": "Large eligible cohort with strong NICE-backed evidence. Two live deployments demonstrate proof of model — the opportunity now is scaling invitation reach from 6% to 25%+ of eligible population.",
+
+          "populationHealth": {
+            "prevalence": { "value": 52400, "context": "adults on the QOF COPD register across GM", "source": "QOF 2024-25 (GM aggregate)", "date": "2025-03" },
+            "highRisk": { "value": 9800, "context": "patients with ≥2 exacerbations in last 12 months (MRC 3+)", "source": "GM respiratory network register stratification", "date": "2025-03" },
+            "admissions": { "value": 4200, "context": "COPD emergency admissions per year across GM acute trusts", "source": "SUS extract (GM trusts, ICD J41-J44 primary)", "date": "2024-25" },
+            "readmissions": { "value": "44%", "context": "readmitted within 90 days of a COPD admission", "source": "National COPD Audit Programme (NW region)", "date": "2024-25" },
+            "aeAttendances": { "value": 12600, "context": "A&E attendances with COPD as primary presenting complaint", "source": "ECDS proxy (GM trusts)", "date": "2024-25" },
+            "costBurden": { "value": "£18.2m", "context": "annual COPD emergency admission cost (GM, spell-level HRG average)", "source": "National tariff × GM volume", "date": "2024-25" },
+            "waitingList": null
+          },
+
+          "currentState": {
+            "eligible": 9800,
+            "invited": 4020,
+            "registered": 1692,
+            "active": 612,
+            "invitationRate": "41%",
+            "registrationRate": "42% of invited",
+            "activationRate": "36% of registered",
+            "coverageOfEligible": "6.2%"
+          },
+
+          "gap": {
+            "notYetInvited": 5780,
+            "headroomStatement": "5,780 eligible patients have never received an invitation. At current registration and activation rates, reaching them would add ~860 active users — more than doubling the monitored cohort.",
+            "constraintStatement": "The binding constraint is not the product or the evidence — it is systematic invitation at scale across GP practices and community respiratory teams."
+          },
+
+          "deploymentSummary": { "status": "live", "count": 2, "activeUsers": 612, "productsLive": "Luscii (remote monitoring), myCOPD (self-management)" },
+          "relevantProductIds": ["luscii", "mycopd"],
+          "evidenceStatus": "NICE HTG736 recommended; Bradford Teaching Hospitals RWE evaluation; multiple RCTs",
+          "readinessStatus": "Fully assured; buyer pack and implementation guide available",
+
+          "impactCategories": [
+            { "lens": "care_outcomes", "summary": "30–48% reduction in emergency admissions in evaluated cohorts (Bradford, Frimley)" },
+            { "lens": "demand_capacity", "summary": "~110 bed-days per year released per 500 monitored patients; 22% fewer A&E presentations" },
+            { "lens": "access_equity", "summary": "iPad provision programme removes digital exclusion barrier; no correlation between deprivation and activation rates observed" },
+            { "lens": "financial_public_value", "summary": "£245k net annual value per 500 patients (central scenario, before licence cost). At full eligible cohort: £4.8m annual opportunity." }
+          ]
+        },
+        {
+          "conditionId": "cardiac_rehab",
+          "label": "Cardiac rehabilitation",
+          "pathwayPosition": "Post-event rehabilitation programme",
+          "priorityBand": "high",
+          "priorityRationale": "National cardiac rehab uptake is below 50%. GM has 3,200 eligible patients per year with only 47% starting any form of rehab. Digital rehab can extend capacity without building new face-to-face programmes.",
+
+          "populationHealth": {
+            "prevalence": { "value": 3200, "context": "new cardiac events eligible for rehabilitation per year (MI, CABG, PCI, HF diagnosis)", "source": "NACR GM affiliate data (synthetic)", "date": "2024-25" },
+            "highRisk": { "value": 1700, "context": "patients who did NOT start cardiac rehab within 12 months of event", "source": "NACR non-starter cohort (GM)", "date": "2024-25" },
+            "admissions": { "value": 5800, "context": "cardiac-related emergency admissions per year (GM trusts)", "source": "SUS (ICD I20-I25, I50 primary)", "date": "2024-25" },
+            "readmissions": { "value": "28%", "context": "readmitted within 12 months of index cardiac event", "source": "NACR outcome tracking", "date": "2024-25" },
+            "aeAttendances": null,
+            "costBurden": { "value": "£32.4m", "context": "annual cardiac emergency admission cost (GM)", "source": "National tariff × volume", "date": "2024-25" },
+            "waitingList": { "value": "14 weeks", "context": "median wait from referral to first cardiac rehab session (face-to-face)", "source": "GM cardiac rehab waiting list data (synthetic)", "date": "2026-03" }
+          },
+
+          "currentState": {
+            "eligible": 3200,
+            "invited": 1500,
+            "registered": 52,
+            "active": 34,
+            "invitationRate": "47% (all rehab routes)",
+            "registrationRate": "Digital route only — 6 weeks live",
+            "activationRate": "65% of registered",
+            "coverageOfEligible": "1.1% (digital); 47% (all routes combined)"
+          },
+
+          "gap": {
+            "notYetInvited": 1700,
+            "headroomStatement": "1,700 patients per year are eligible but never start rehabilitation in any form. Digital rehab removes the capacity and geography barrier — patients can start within days of discharge rather than waiting 14 weeks.",
+            "constraintStatement": "Digital cardiac rehab is 6 weeks live in GM. The immediate constraint is early — establishing referral pathways from acute cardiology and embedding digital as a standard offer alongside face-to-face."
+          },
+
+          "deploymentSummary": { "status": "live", "count": 1, "activeUsers": 34, "productsLive": "HeartStep (digital cardiac rehab)" },
+          "relevantProductIds": ["myheart", "activate-your-heart"],
+          "evidenceStatus": "NICE-recommended digital cardiac rehab; NACR-registered programme; 6-minute walk test improvement in early cohort",
+          "readinessStatus": "Early deployment — 6 weeks live; 90-day review pending",
+
+          "impactCategories": [
+            { "lens": "care_outcomes", "summary": "+18% improvement in 6-minute walk distance in initial cohort (n=34, early signal)" },
+            { "lens": "demand_capacity", "summary": "Each digital place avoids a face-to-face slot. At scale: potential 800+ additional rehab completions/yr without new F2F capacity" },
+            { "lens": "access_equity", "summary": "Removes waiting list and travel barriers — patients in deprived areas face longest waits for traditional rehab" },
+            { "lens": "financial_public_value", "summary": "Not modelled at current scale. Rehab completion is associated with 26% lower readmission (NACR national data)." }
+          ]
+        },
+        {
+          "conditionId": "msk_back_pain",
+          "label": "MSK and lower back pain",
+          "pathwayPosition": "Community MSK pathway — conservative management",
+          "priorityBand": "high",
+          "priorityRationale": "MSK is the largest single referral category for GM community services. Low back pain accounts for 40% of MSK first contacts. A digital self-management programme can absorb demand that currently requires face-to-face physiotherapy slots.",
+
+          "populationHealth": {
+            "prevalence": { "value": 48000, "context": "adults seeking GP care for low back pain per year across GM", "source": "Primary care coded consultations (synthetic proxy)", "date": "2024-25" },
+            "highRisk": { "value": 12400, "context": "referred to community MSK physiotherapy from primary care", "source": "GM MSK referral data (synthetic)", "date": "2024-25" },
+            "admissions": { "value": 820, "context": "spinal surgery procedures per year (elective, GM trusts)", "source": "HES procedure codes (synthetic proxy)", "date": "2024-25" },
+            "readmissions": null,
+            "aeAttendances": null,
+            "costBurden": { "value": "£14.8m", "context": "community MSK physiotherapy cost (GM, all providers)", "source": "Community services dataset proxy", "date": "2024-25" },
+            "waitingList": { "value": "11 weeks", "context": "median wait from GP referral to first MSK physio appointment", "source": "GM community provider waiting list returns (synthetic)", "date": "2026-03" }
+          },
+
+          "currentState": {
+            "eligible": 12400,
+            "invited": 0,
+            "registered": 0,
+            "active": 0,
+            "invitationRate": "Not yet deployed",
+            "registrationRate": "N/A",
+            "activationRate": "N/A",
+            "coverageOfEligible": "0%"
+          },
+
+          "gap": {
+            "notYetInvited": 12400,
+            "headroomStatement": "Every patient currently referred for community MSK physiotherapy could be offered a digital self-management programme while waiting, or as an alternative for those with uncomplicated low back pain. Current waiting times of 11 weeks mean patients deteriorate before receiving any intervention.",
+            "constraintStatement": "No digital MSK product is currently deployed in GM. Procurement for an HTG-assured product (getUMobile) is in progress. The question is not evidence — it is commissioning decision and pathway integration."
+          },
+
+          "deploymentSummary": { "status": "absent", "count": 0, "productsLive": "None — in procurement" },
+          "relevantProductIds": ["joint-academy", "kiactiv"],
+          "evidenceStatus": "NICE HTG recommended for MSK self-management; multiple RCTs showing equivalence to face-to-face physio for uncomplicated LBP",
+          "readinessStatus": "Product assured. Procurement in progress. Implementation planning with GM MSK leads.",
+
+          "impactCategories": [
+            { "lens": "care_outcomes", "summary": "Evidence shows non-inferior outcomes to face-to-face physio for uncomplicated LBP (ODI improvement, pain reduction)" },
+            { "lens": "demand_capacity", "summary": "Could absorb 30–50% of new MSK referrals as first-line digital offer, releasing ~4,000 face-to-face physio slots/yr" },
+            { "lens": "access_equity", "summary": "Immediate access — no 11-week wait. Rural and working patients gain most from flexible digital delivery" },
+            { "lens": "financial_public_value", "summary": "Modelled: £3.7m annual opportunity if 40% of new referrals diverted to digital first (central scenario)" }
+          ]
+        }
+      ]
+    }
+  }
+}

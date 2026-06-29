@@ -4,7 +4,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { maturityLabels, type App } from '@/lib/data'
-import { STORE_ACCENT } from '@/lib/storeAccent'
 import {
   catalogueDemoAvailable,
   getCataloguePriceLabel,
@@ -55,6 +54,7 @@ const conditionOptions = [
   { id: 'all', label: 'All conditions' },
   { id: 'copd', label: 'COPD' },
   { id: 'cardiac_rehab', label: 'Cardiac rehabilitation' },
+  { id: 'msk', label: 'MSK and lower back pain' },
 ]
 
 function FilterSelect({ label, value, onChange, options }: {
@@ -150,10 +150,10 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
   const activeFilters: { label: string; clear: () => void }[] = []
   if (supervision !== 'all') activeFilters.push({ label: supervisionOptions.find(o => o.id === supervision)!.label, clear: () => setSupervision('all') })
   if (maturity !== 'all') activeFilters.push({ label: maturityOptions.find(o => o.id === maturity)!.label, clear: () => setMaturity('all') })
-  if (condition !== 'all') activeFilters.push({ label: conditionOptions.find(o => o.id === condition)!.label, clear: () => {
-    setCondition('all')
-    replaceBrowseUrl('all', searchInput)
-  } })
+  if (condition !== 'all') {
+    const condLabel = conditionOptions.find(o => o.id === condition)?.label ?? condition
+    activeFilters.push({ label: condLabel, clear: () => { setCondition('all'); replaceBrowseUrl('all', searchInput) } })
+  }
   if (demoOnly) activeFilters.push({ label: 'Demo', clear: () => setDemoOnly(false) })
   if (searchInput.trim()) {
     const st = searchInput.trim()
@@ -198,10 +198,10 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
       />
 
       <div className="mb-8">
-        <h1 className="page-title-h1">
+        <h1 style={{ fontSize: '1.8rem', fontWeight: 700, margin: '0 0 8px' }}>
           Condition catalogue
         </h1>
-        <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
+        <p style={{ fontSize: 16, color: '#4c6272' }}>
           {apps.length} apps across {conditionOptions.length - 1} condition areas · Last reviewed March 2026
         </p>
       </div>
@@ -260,8 +260,8 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                     setSearchInput('')
                     router.replace('/apps/condition-catalogue', { scroll: false })
                   }}
-                  className="min-h-[44px] text-sm px-4 rounded-lg border transition-colors hover:bg-[#F7F9FC] hover:border-[var(--text-muted-low-con)]"
-                  style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
+                  className="hs-btn hs-btn-secondary"
+                  style={{ minHeight: 44 }}
                 >
                   Clear filters
                 </button>
@@ -300,16 +300,14 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
             <div className="flex flex-wrap justify-center gap-3">
               <button
                 type="button"
-                className="rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:!bg-[#004B8C]"
-                style={{ background: STORE_ACCENT }}
+                className="hs-btn hs-btn-primary"
                 onClick={clearSearchOnly}
               >
                 Clear search
               </button>
               <Link
                 href="/apps/condition-catalogue"
-                className="inline-flex items-center rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-[#F7F9FC]"
-                style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
+                className="hs-btn hs-btn-secondary"
               >
                 Browse all apps
               </Link>
@@ -389,9 +387,9 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
 
                   <div className="grid grid-cols-1 gap-2">
                     <Link
-                      href={`/apps/${app.slug}`}
-                      className="block rounded-lg py-4 text-center text-sm font-semibold transition-colors hover:!bg-[#004B8C]"
-                      style={{ background: STORE_ACCENT, color: '#fff' }}
+                      href={`/products/${app.slug}`}
+                      className="hs-btn hs-btn-primary"
+                      style={{ display: 'block', textAlign: 'center' }}
                     >
                       View details →
                     </Link>

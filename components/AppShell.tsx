@@ -1,10 +1,7 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useState } from 'react'
-import type { App } from '@/lib/data'
-import Nav from './Nav'
+import NhsHeader from '@/components/nhs/NhsHeader'
+import NhsFooter from '@/components/nhs/NhsFooter'
 import BackToTop from './BackToTop'
 import { CompareBasketProvider } from './CompareBasketProvider'
 import { BookmarkProvider } from './BookmarkProvider'
@@ -12,6 +9,19 @@ import { EoiProvider } from './EoiProvider'
 import { ToastProvider } from './ui/Toast'
 import ClearDataModal from './ClearDataModal'
 import AiAdvisorPanel, { type AiAdvisorClientProfile } from './ai/AiAdvisorPanel'
+import type { App } from '@/lib/data'
+import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+
+function PrototypeBanner() {
+  return (
+    <div style={{ background: '#f0f4f5', borderBottom: '1px solid #d8dde0', fontSize: 14, padding: '10px 24px' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <strong>Prototype service.</strong> Decision-support for commissioners — not a purchase channel. Illustrative data unless labelled otherwise.
+      </div>
+    </div>
+  )
+}
 
 export default function AppShell({
   children,
@@ -27,87 +37,46 @@ export default function AppShell({
   aiProfile?: AiAdvisorClientProfile | null
 }) {
   const pathname = usePathname()
-  const isLoginPage = pathname === '/login'
+  const isAuthPage = pathname === '/login' || pathname === '/select-entity'
+
   const [showClearData, setShowClearData] = useState(false)
   const [aiPanelOpen, setAiPanelOpen] = useState(false)
-  /** Subheader only when logged in (login route renders no Nav here) */
-  const icbSubheaderLabel = isLoggedIn && commissioningContextLabel ? commissioningContextLabel : ''
 
-  /** Auth routes render without global nav/footer but still need landmarks + skip link (WCAG 2.4.1, 1.3.1). */
-  if (isLoginPage) {
-    return (
-      <>
-        <a href="#main-content" className="skip-link">
-          Skip to main content
-        </a>
-        <main id="main-content">{children}</main>
-      </>
-    )
+  if (isAuthPage) {
+    return <>{children}</>
   }
 
   return (
     <>
-      <a href="#main-content" className="skip-link">Skip to main content</a>
+      <a href="#main-content" className="nhsuk-skip-link">Skip to main content</a>
+      <PrototypeBanner />
       <ToastProvider>
         <CompareBasketProvider allApps={allApps}>
-          <BookmarkProvider>
-            <EoiProvider>
-              <Nav
-                commissioningContextLabel={icbSubheaderLabel}
-                isLoggedIn={isLoggedIn}
-                onOpenAiPanel={isLoggedIn && aiProfile ? () => setAiPanelOpen(true) : undefined}
-              />
-              <main id="main-content">{children}</main>
+          <BookmarkProvider enabled={isLoggedIn}>
+            <EoiProvider enabled={isLoggedIn}>
+              <NhsHeader isLoggedIn={isLoggedIn} contextLabel={commissioningContextLabel || undefined} />
+              {isLoggedIn && aiProfile ? (
+                <div style={{ maxWidth: 1100, margin: '0 auto', padding: '12px 24px' }}>
+                  <button type="button" className="hs-btn hs-btn-secondary" style={{ fontSize: 14, padding: '8px 16px' }} onClick={() => setAiPanelOpen(true)}>
+                    Open AI Advisor
+                  </button>
+                </div>
+              ) : null}
+              <main id="main-content" role="main" style={{ minHeight: 'calc(100vh - 200px)' }}>
+                <div className="hs-main-content">
+                  {children}
+                </div>
+              </main>
               {isLoggedIn && aiProfile && (
-                <AiAdvisorPanel
-                  open={aiPanelOpen}
-                  onClose={() => setAiPanelOpen(false)}
-                  profile={aiProfile}
-                />
+                <AiAdvisorPanel open={aiPanelOpen} onClose={() => setAiPanelOpen(false)} profile={aiProfile} />
               )}
-              {isLoggedIn && (
-                <ClearDataModal open={showClearData} onClose={() => setShowClearData(false)} />
-              )}
+              {isLoggedIn && <ClearDataModal open={showClearData} onClose={() => setShowClearData(false)} />}
             </EoiProvider>
           </BookmarkProvider>
         </CompareBasketProvider>
       </ToastProvider>
+      <NhsFooter isLoggedIn={isLoggedIn} />
       <BackToTop />
-      <footer
-        className="mt-20 border-t px-4 pt-10 pb-[calc(2.5rem+30px)] sm:px-6"
-        style={{ borderColor: 'var(--border)', background: '#fff' }}
-      >
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="font-bold text-sm" style={{ color: 'var(--nhs-blue)' }}>HealthStore</span>
-              <span className="badge badge-prototype">Prototype</span>
-            </div>
-            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-              Prototype based on publicly available information as of March 2026.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-6 text-xs" style={{ color: 'var(--text-muted)' }}>
-            {isLoggedIn && (
-              <>
-                <Link href="/apps" className="hover:underline">Find apps</Link>
-                <Link href="/funding" className="hover:underline">Funding directory</Link>
-              </>
-            )}
-            <Link href="/cookies" className="hover:underline">Cookies</Link>
-            {isLoggedIn && (
-              <button
-                type="button"
-                onClick={() => setShowClearData(true)}
-                className="hover:underline"
-                style={{ color: 'var(--text-muted)' }}
-              >
-                Manage data
-              </button>
-            )}
-          </div>
-        </div>
-      </footer>
     </>
   )
 }

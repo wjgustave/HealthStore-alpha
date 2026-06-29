@@ -43,7 +43,7 @@ function CompareSummaryCard({
           <div className="shrink-0" style={{ width: LOGO_SIZE, height: LOGO_SIZE }} aria-hidden />
         )}
         <Link
-          href={`/apps/${app.slug}`}
+          href={`/products/${app.slug}`}
           className="min-w-0 font-bold text-sm hover:underline truncate"
           style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
         >
@@ -162,11 +162,11 @@ export default function CompareClient({ allApps }: Props) {
             No DTx apps selected for the comparison tool. Browse the catalogue and add DTx apps to compare them side by side.
           </p>
           <Link
-            href="/apps"
+            href="/products"
             className="inline-flex items-center justify-center text-sm font-semibold rounded-lg px-5 py-3 min-h-[44px]"
             style={{ background: STORE_ACCENT, color: '#fff' }}
           >
-            Find apps
+            Browse products
           </Link>
         </div>
       ) : (

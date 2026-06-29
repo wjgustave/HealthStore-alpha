@@ -10,10 +10,6 @@ export type PdpTab = {
   panel: ReactNode
 }
 
-/**
- * NHS Design System–styled tabs for the PDP main column.
- * https://service-manual.nhs.uk/design-system/components/tabs
- */
 export function PdpTabs({ tabs }: { tabs: PdpTab[] }) {
   const [active, setActive] = useState(tabs[0]?.id)
   const baseId = useId()
@@ -77,21 +73,17 @@ export function PdpTabs({ tabs }: { tabs: PdpTab[] }) {
   }
 
   return (
-    <div className="nhsuk-tabs">
-      <h2 className="nhsuk-tabs__title">Contents</h2>
+    <div className="hs-tabs">
+      <h2 className="hs-tabs__title">Contents</h2>
       <ul
-        className="nhsuk-tabs__list print:hidden"
+        className="hs-tabs__list print:hidden"
         role="tablist"
         aria-label="Product information sections"
       >
         {tabs.map((t, i) => {
           const selected = t.id === active
           return (
-            <li
-              key={t.id}
-              className={`nhsuk-tabs__list-item${selected ? ' nhsuk-tabs__list-item--selected' : ''}`}
-              role="presentation"
-            >
+            <li key={t.id} className="hs-tabs__item" role="presentation">
               <button
                 type="button"
                 ref={el => {
@@ -102,7 +94,7 @@ export function PdpTabs({ tabs }: { tabs: PdpTab[] }) {
                 aria-selected={selected}
                 aria-controls={`${baseId}-panel-${t.id}`}
                 tabIndex={selected ? 0 : -1}
-                className="nhsuk-tabs__tab"
+                className="hs-tabs__tab"
                 onClick={() => setActive(t.id)}
                 onKeyDown={e => onKeyDown(e, i)}
               >
@@ -122,12 +114,12 @@ export function PdpTabs({ tabs }: { tabs: PdpTab[] }) {
             role="tabpanel"
             id={`${baseId}-panel-${t.id}`}
             aria-labelledby={`${baseId}-tab-${t.id}`}
-            className={`nhsuk-tabs__panel${show ? '' : ' nhsuk-tabs__panel--hidden'}`}
+            className={`hs-tabs__panel${show ? '' : ' hs-tabs__panel--hidden'}`}
             hidden={!show}
             tabIndex={0}
           >
             {printing ? (
-              <h2 className="mb-4 mt-2 text-lg font-bold" style={{ color: 'var(--nhs-blue)' }}>
+              <h2 className="mb-4 mt-2 text-lg font-bold" style={{ color: '#005eb8' }}>
                 {t.label}
               </h2>
             ) : null}

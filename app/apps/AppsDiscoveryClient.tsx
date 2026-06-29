@@ -7,7 +7,6 @@ import { LayoutGrid, Search } from 'lucide-react'
 import { ConditionIcon } from '@/components/HealthIcons'
 import type { App } from '@/lib/data'
 import { createCatalogueFuseForApps } from '@/lib/catalogueSearch'
-import { STORE_ACCENT } from '@/lib/storeAccent'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 
 type ConditionArea = { id: string; label: string; colour: string; count: number; icon: string }
@@ -58,14 +57,13 @@ export default function AppsDiscoveryClient({
   }, [openSuggestions])
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div>
       <PageBreadcrumb items={[{ label: 'Find apps' }]} />
-      <div className="mb-10 max-w-3xl">
-        <h1 className="page-title-h1 mb-3">Find apps</h1>
-        <div className="space-y-2 text-balance" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-          <p className="m-0">Search by app name, supplier, or condition.</p>
-          <p className="m-0">Or use the Condition catalogue to find relevant digital therapeutics.</p>
-        </div>
+      <div style={{ marginBottom: 40, maxWidth: 720 }}>
+        <h1 style={{ fontSize: '1.8rem', fontWeight: 700, margin: '0 0 8px' }}>Find apps</h1>
+        <p style={{ color: '#4c6272', margin: 0, lineHeight: 1.6 }}>
+          Search by app name, supplier, or condition. Or use the condition catalogue to find relevant digital therapeutics.
+        </p>
       </div>
 
       <form onSubmit={onSubmit} className="mb-10 max-w-2xl" role="search" aria-label="Search catalogue">
@@ -123,8 +121,8 @@ export default function AppsDiscoveryClient({
             />
             <button
               type="submit"
-              className="shrink-0 px-5 py-3 text-sm font-semibold text-white transition-colors hover:!bg-[#004B8C]"
-              style={{ background: STORE_ACCENT }}
+              className="hs-btn hs-btn-primary"
+              style={{ borderRadius: 0, padding: '12px 20px' }}
             >
               Search
             </button>
@@ -160,21 +158,20 @@ export default function AppsDiscoveryClient({
         </div>
       </form>
 
-      <section aria-labelledby="condition-catalogue-heading">
+      <section aria-labelledby="condition-catalogue-heading" style={{ marginTop: 40 }}>
         <h2
           id="condition-catalogue-heading"
-          className="mb-4 font-bold"
-          style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--text-primary)' }}
+          style={{ fontSize: '1.3rem', fontWeight: 700, color: '#212b32', marginBottom: 16 }}
         >
           Condition catalogue
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="hs-card-grid">
           {conditionAreas.map(c => (
             <Link
               key={c.id}
               href={`/apps/condition-catalogue?condition=${encodeURIComponent(c.id)}`}
-              className="group flex gap-4 rounded-xl border bg-white p-5 text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-              style={{ borderColor: 'var(--border)', textDecoration: 'none', outlineColor: 'var(--nhs-blue)' }}
+              className="hs-card"
+              style={{ textDecoration: 'none', display: 'flex', gap: 16, alignItems: 'flex-start' }}
             >
               <div
                 className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
@@ -196,8 +193,8 @@ export default function AppsDiscoveryClient({
 
           <Link
             href="/apps/condition-catalogue"
-            className="group flex gap-4 rounded-xl border bg-white p-5 text-left shadow-sm transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:col-span-2 lg:col-span-1"
-            style={{ borderColor: 'var(--border)', textDecoration: 'none', outlineColor: 'var(--nhs-blue)' }}
+            className="hs-card"
+            style={{ textDecoration: 'none', display: 'flex', gap: 16, alignItems: 'flex-start' }}
           >
             <div
               className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"

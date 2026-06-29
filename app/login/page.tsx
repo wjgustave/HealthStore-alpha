@@ -49,14 +49,14 @@ export default function LoginPage() {
       subtitle="Enter your credentials to access the store."
       footer={
         <>
-          <p className="mt-6 text-center text-xs" style={{ color: 'rgba(255,255,255,0.55)' }}>
+          <p className="mt-6 text-center text-xs" style={{ color: '#4c6272' }}>
             Prototype based on publicly available information as of March 2026.
           </p>
           <p className="mt-2 text-center text-xs">
             <a
               href="/cookies"
               className="font-medium underline underline-offset-2 hover:opacity-90"
-              style={{ color: 'rgba(255,255,255,0.85)' }}
+              style={{ color: '#005eb8' }}
             >
               Cookies
             </a>

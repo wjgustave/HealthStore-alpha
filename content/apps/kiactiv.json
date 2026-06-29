@@ -6,7 +6,9 @@
   "short_name": "KiActiv",
   "logo_path": "/logos/kiactiv.png",
   "condition_tags": [
-    "cardiac_rehab"
+    "cardiac_rehab",
+    "msk",
+    "msk_back_pain"
   ],
   "pathway_tags": [
     "cardiac-rehabilitation",
