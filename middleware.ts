@@ -3,6 +3,11 @@ import { getIronSession } from 'iron-session'
 import type { SessionData } from '@/lib/session'
 
 export async function middleware(req: NextRequest) {
+  // Open-access mode: skip all auth gating so every page is reachable without signing in.
+  if (process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true') {
+    return NextResponse.next()
+  }
+
   const res = NextResponse.next()
   const session = await getIronSession<SessionData>(req, res, {
     password: process.env.SESSION_SECRET!,

@@ -29,9 +29,24 @@ export const sessionOptions: SessionOptions = {
   },
 }
 
+/** When true, auth is bypassed and every visitor is treated as a signed-in guest. */
+export const AUTH_DISABLED = process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true'
+
 export async function getSession() {
   const cookieStore = await cookies()
-  return getIronSession<SessionData>(cookieStore, sessionOptions)
+  const session = await getIronSession<SessionData>(cookieStore, sessionOptions)
+
+  // Open-access mode: present a signed-in guest so all `isLoggedIn` guards pass.
+  // Mutated in memory only (never saved), so it applies to every request without a cookie.
+  if (AUTH_DISABLED && !session.isLoggedIn) {
+    session.isLoggedIn = true
+    session.requiresCommissioningEntitySelection = false
+    session.accountKey = session.accountKey ?? 'guest'
+    session.profileDisplayName = session.profileDisplayName ?? 'Guest'
+    session.profileOrganisationName = session.profileOrganisationName ?? 'HealthStore demo'
+  }
+
+  return session
 }
 
 /** Clear fields set by configured named accounts (`content/auth-user-accounts.json`). */
