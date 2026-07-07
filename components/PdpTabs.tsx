@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
+import { flushSync } from 'react-dom'
 import { usePdpSharePrintOptional } from '@/components/PdpSharePrintContext'
 
 export type PdpTab = {
@@ -22,26 +23,60 @@ export function PdpTabs({ tabs }: { tabs: PdpTab[] }) {
   const ctx = usePdpSharePrintOptional()
   const printing = (ctx?.printLayout.mode ?? 'none') !== 'none'
 
+  const anchorHashes = useMemo(
+    () => new Set(tabs.flatMap(t => t.anchors ?? [])),
+    [tabs],
+  )
+
+  const tabForHash = useCallback(
+    (hash: string) => tabs.find(t => t.anchors?.includes(hash)),
+    [tabs],
+  )
+
+  const scrollToHash = useCallback((hash: string) => {
+    requestAnimationFrame(() => {
+      document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }, [])
+
+  const activateForHash = useCallback(() => {
+    const hash = window.location.hash.replace(/^#/, '')
+    if (!hash) return
+    const match = tabForHash(hash)
+    if (!match) return
+    flushSync(() => setActive(match.id))
+    scrollToHash(hash)
+  }, [tabForHash, scrollToHash])
+
   useEffect(() => {
-    function activateForHash() {
-      const hash = window.location.hash.replace(/^#/, '')
-      if (!hash) return
-      const match = tabs.find(t => t.anchors?.includes(hash))
-      if (!match) return
-      setActive(match.id)
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        })
-      })
-    }
-    const raf = requestAnimationFrame(activateForHash)
+    activateForHash()
     window.addEventListener('hashchange', activateForHash)
-    return () => {
-      cancelAnimationFrame(raf)
-      window.removeEventListener('hashchange', activateForHash)
+    return () => window.removeEventListener('hashchange', activateForHash)
+  }, [activateForHash])
+
+  // Snapshot deep-links use plain <a href="#…">; intercept so the target tab opens
+  // before scroll (content lives inside hidden panels) and same-hash re-clicks work.
+  useEffect(() => {
+    function onAnchorClick(event: MouseEvent) {
+      if (event.defaultPrevented || event.button !== 0) return
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+      const link = (event.target as Element | null)?.closest('a[href^="#"]')
+      if (!(link instanceof HTMLAnchorElement)) return
+      const hash = link.hash.replace(/^#/, '')
+      if (!hash || !anchorHashes.has(hash)) return
+      const match = tabForHash(hash)
+      if (!match) return
+      event.preventDefault()
+      if (window.location.hash !== link.hash) {
+        window.location.hash = hash
+      } else {
+        flushSync(() => setActive(match.id))
+        scrollToHash(hash)
+      }
     }
-  }, [tabs])
+    document.addEventListener('click', onAnchorClick)
+    return () => document.removeEventListener('click', onAnchorClick)
+  }, [anchorHashes, tabForHash, scrollToHash])
 
   function focusTab(index: number) {
     const clamped = (index + tabs.length) % tabs.length

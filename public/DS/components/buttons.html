@@ -75,16 +75,34 @@
 &lt;button class="ds-btn ds-btn--primary ds-btn--block"&gt;Block&lt;/button&gt;</code></pre>
 
     <h2>Toggle button (stateful)</h2>
-    <p>Save / Compare are toggle buttons: <code>variant="toggle"</code>, <code>--secondary</code> at rest and a
-      <strong>blue-tinted</strong> &ldquo;on&rdquo; state, with <code>aria-pressed</code>. Use <code>borderless</code>
-      on the PDP hero utility cluster.</p>
+    <p>Save and Add to compare use <code>variant="toggle"</code> in <code>Button.tsx</code>: white at rest,
+      blue-tinted when <code>pressed</code>, with the NHS <strong>4px press shadow</strong>. On bordered controls the
+      shadow matches the border colour (<code>var(--nhs-blue)</code>); <code>borderless</code> toggles use grey
+      (<code>#AEB7BD</code>) at rest and NHS dark when on. Shadow flattens on <code>:active</code> and when disabled.
+      Set <code>aria-pressed</code>.</p>
     <div class="ds-example">
-      <div class="ds-example__row">
-        <button class="ds-btn ds-btn--secondary" type="button" aria-pressed="false">&#9734; Save</button>
+      <div class="ds-example__row" style="margin-bottom:16px">
+        <button class="ds-btn ds-btn--toggle" type="button" aria-pressed="false">&#9734; Save</button>
         <button class="ds-btn ds-btn--on" type="button" aria-pressed="true">&#9733; Saved</button>
+        <button class="ds-btn ds-btn--toggle" type="button" aria-pressed="false">&#8646; Add to compare</button>
+        <button class="ds-btn ds-btn--on" type="button" aria-pressed="true">&#10003; Added</button>
+      </div>
+      <p class="ds-u-muted" style="font-size:.88rem;margin:0 0 12px">PDP utility cluster (Share secondary sm; Save and Compare bordered toggles sm):</p>
+      <div style="display:inline-flex;flex-wrap:wrap;gap:8px;background:#F0F4F5;border-radius:8px;padding:4px 4px 8px">
+        <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">&#8599; Share</button>
+        <button class="ds-btn ds-btn--toggle ds-btn--sm" type="button" aria-pressed="false">&#9734; Save</button>
+        <button class="ds-btn ds-btn--toggle ds-btn--sm" type="button" aria-pressed="false">&#8646; Add to compare</button>
       </div>
     </div>
-<pre class="ds-code"><code>&lt;Button variant="toggle" pressed={saved} borderless aria-pressed={saved}&gt;Save&lt;/Button&gt;</code></pre>
+<pre class="ds-code"><code>&lt;SharePagePanel /&gt;  /* secondary, size="sm" */
+&lt;SaveToggleButton appId={id} size="sm" /&gt;
+&lt;CompareToggleButton appId={id} size="sm" /&gt;
+
+/* Button.tsx — bordered toggle press shadow */
+shadow-[0_4px_0_var(--nhs-blue)]  /* bordered off + on */
+shadow-[0_4px_0_#AEB7BD]          /* borderless off */
+shadow-[0_4px_0_var(--nhs-dark)]  /* borderless on */
+active:shadow-none                /* press feedback */</code></pre>
 
     <h2>Disabled state</h2>
     <p>Disabled buttons use <code>opacity-40</code> + <code>cursor-not-allowed</code>. <code>&lt;Button&gt;</code>
@@ -110,6 +128,7 @@
       <li>Use a real <code>&lt;button&gt;</code> for actions and <code>&lt;a&gt;</code> for navigation.</li>
       <li>Icon-only buttons need <code>aria-label</code>; decorative icons get <code>aria-hidden</code>.</li>
       <li>Toggles set <code>aria-pressed</code>; pending states set <code>aria-busy</code> and <code>disabled</code>.</li>
+      <li>Bordered secondary and toggle buttons use a 4px press shadow that matches their border colour (<code>var(--nhs-blue)</code>); borderless toggles use grey/dark shadows. Shadow removes on active press and when disabled.</li>
       <li>Disabled buttons use real <code>disabled</code> at <code>opacity-40</code> + <code>cursor-not-allowed</code>; only use the <code>ariaDisabled</code> + <code>disabledReason</code> escape hatch when the control must stay focusable, and always pair it with an explanation.</li>
       <li>Focus ring is the global 3px yellow outline.</li>
     </ul>

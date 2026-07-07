@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import {
   DtacBadge, MaturityBadge, EffortBadge,
-  SupervisionBadge, NiceTypeBadge, ConditionTag,
+  SupervisionBadge, NiceTypeBadge,
 } from '@/components/Badges'
 import { STORE_ACCENT } from '@/lib/storeAccent'
 import {
@@ -19,7 +19,6 @@ import {
 } from '@/components/AppDetailSections'
 import { PdpCommissioningSnapshot } from '@/components/PdpCommissioningSnapshot'
 import { PdpReadOnlySection } from '@/components/PdpReadOnlySection'
-import { catalogueDemoAvailable } from '@/lib/catalogueCardSignals'
 import { getCommissioningSnapshot, getFundingSnapshotCard } from '@/lib/commissioningSnapshot'
 import { getCommissionerFacingFunding, getLinkedFunding } from '@/lib/data'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
@@ -62,10 +61,25 @@ export default function PdpSharedProductBody({
           <div className="px-8 pt-8 pb-4">
             <div className="flex flex-col gap-6 items-start">
               <div className="flex-1 w-full min-w-0">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {app.condition_tags.map((t: string) => (
-                    <ConditionTag key={t} tag={t} />
-                  ))}
+                <div className="hs-product-hero__identity">
+                  {app.logo_path && (
+                    <Image
+                      src={app.logo_path}
+                      alt={`${app.app_name} logo`}
+                      width={48}
+                      height={48}
+                      className="hs-product-hero__logo flex-shrink-0"
+                    />
+                  )}
+                  <div>
+                    <h1 className="hs-product-hero__title">{app.app_name}</h1>
+                    <p className="hs-product-hero__supplier">{app.supplier_name}</p>
+                  </div>
+                </div>
+                <p className="hs-product-hero__proposition">
+                  {app.one_line_value_proposition}
+                </p>
+                <div className="hs-product-hero__tags">
                   <SupervisionBadge model={app.supervision_model} />
                   <MaturityBadge level={app.maturity_level} hideEstablished />
                   {app.nice_guidance_refs
@@ -82,38 +96,9 @@ export default function PdpSharedProductBody({
                       {app.content_confidence}
                     </span>
                   )}
+                  <ProductHeroDemoBadge app={app} />
                 </div>
-                <div className="flex items-center gap-4 mb-2">
-                  {app.logo_path && (
-                    <Image
-                      src={app.logo_path}
-                      alt={`${app.app_name} logo`}
-                      width={48}
-                      height={48}
-                      className="rounded-lg flex-shrink-0"
-                    />
-                  )}
-                  <div>
-                    <h1 className="page-title-h1 mb-1">{app.app_name}</h1>
-                    <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{app.supplier_name}</p>
-                  </div>
-                </div>
-                <p
-                  style={{
-                    fontSize: 'var(--text-body)',
-                    lineHeight: 1.7,
-                    color: 'var(--text-secondary)',
-                    maxWidth: 640,
-                  }}
-                >
-                  {app.one_line_value_proposition}
-                </p>
                 <NhsIntegrationBadges app={app} />
-                {catalogueDemoAvailable(app) ? (
-                  <div className="mt-4 pt-4 border-t flex" style={{ borderColor: 'var(--border)' }}>
-                    <ProductHeroDemoBadge app={app} />
-                  </div>
-                ) : null}
               </div>
             </div>
           </div>

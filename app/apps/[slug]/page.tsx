@@ -1,12 +1,20 @@
 import { getAllAppsUnfiltered, getAppBySlug, getCommissionerFacingFunding, getLinkedFunding } from '@/lib/data'
 import { getCommissioningSnapshot, getFundingSnapshotCard } from '@/lib/commissioningSnapshot'
+import { getDeploymentRegister } from '@/lib/deploymentRegister'
+import { resolveProductNarrative, getProductNarrative } from '@/lib/content/productNarratives'
+import PdpNarrativeSpine from '@/components/product/PdpNarrativeSpine'
+import PdpLocalValue from '@/components/product/PdpLocalValue'
+import PdpAssurancePassport from '@/components/product/PdpAssurancePassport'
+import PdpImplementation from '@/components/product/PdpImplementation'
+import PdpNhsExperience from '@/components/product/PdpNhsExperience'
+import { getServerContext } from '@/lib/context/serverContext'
 import { PdpCommissioningSnapshot } from '@/components/PdpCommissioningSnapshot'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
   DtacBadge, MaturityBadge, EffortBadge,
-  SupervisionBadge, NiceTypeBadge, AlertBox, ConditionTag
+  SupervisionBadge, NiceTypeBadge, AlertBox
 } from '@/components/Badges'
 import AppDetailClient from './AppDetailClient'
 import { CompareToggleButton } from '@/components/CompareToggleButton'
@@ -16,22 +24,19 @@ import {
   ScaleAndMaturitySection,
   WhatItTakesLocallySection,
   ImpactAndCaseStudiesSection,
-  DemoAccessSection,
-  SafetyAndGovernanceSection,
   TechnicalIntegrationTable,
   CommercialModelAndCostSection,
   IndicativeFinancialContextSection,
   RelatedFundingSection,
   hasWhatItTakesContent,
   shouldShowImpactSection,
-  shouldShowDemoAccess,
 } from '@/components/AppDetailSections'
 import { PdpSection } from '@/components/PdpSection'
 import { PdpTabs, type PdpTab } from '@/components/PdpTabs'
 import { PdpSharePrintProvider, PdpShareRegion } from '@/components/PdpSharePrintContext'
 import { SharePagePanel } from '@/components/SharePagePanel'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
-import { EvidenceCard, ContextOfUseGrid, ProductHeroDemoBadge } from './pdpBlocks'
+import { EvidenceCard, ProductHeroDemoBadge } from './pdpBlocks'
 import { ExpressInterestWhiteButton } from '@/components/ExpressInterestWhiteButton'
 import { Button } from '@/components/ui/Button'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
@@ -39,6 +44,8 @@ import PdpSupplierContactCard from '@/components/PdpSupplierContactCard'
 import { getSession } from '@/lib/session'
 import { getCommissioningContextLabel } from '@/lib/commissioningContextDisplay'
 import { getExpressionOfInterestPrefill } from '@/lib/expressionOfInterestPrefill'
+import PdpOnThisPage from '@/components/PdpOnThisPage'
+import { buildPdpOnThisPageLinks } from '@/lib/pdpOnThisPage'
 
 export async function generateStaticParams() {
   return getAllAppsUnfiltered().map(a => ({ slug: a.slug }))
@@ -50,10 +57,25 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return { title: app ? `${app.app_name} — HealthStore` : 'Not found' }
 }
 
-export default async function AppPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function AppPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
   const { slug } = await params
   const app = getAppBySlug(slug)
   if (!app) notFound()
+
+  // Round 2 content migration: commissioner context drives the personalised
+  // local-value block. Prefer the guided-start cookie; only honour URL params
+  // when an explicit geography override is present so unrelated query strings
+  // (share tokens etc.) don't reset personalisation to the national baseline.
+  const sp = await searchParams
+  const commissionerContext = await getServerContext(
+    typeof sp?.geo === 'string' ? sp : undefined
+  )
 
   const session = await getSession()
   const commissioningOrganisationLabel = getCommissioningContextLabel(session)
@@ -62,9 +84,24 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
   const accent = STORE_ACCENT
   const showPdpFactsGrid = false
 
-  const rcts = (app.clinical_evidence_detailed ?? []).filter((s: any) => s.type === 'RCT')
-  const observational = (app.clinical_evidence_detailed ?? []).filter((s: any) => ['observational', 'real_world', 'service_eval'].includes(s.type))
-  const niceAndImpl = (app.clinical_evidence_detailed ?? []).filter((s: any) => ['nice_assessment', 'implementation_science', 'grey_lit', 'evidence_gap'].includes(s.type))
+  // Content migration (hybrid page): fold the curated narrative spine onto the canonical PDP.
+  // Round 3 (R3-4 D) replaces the Luscii-only gate with data-driven gating: any product with a
+  // curated narrative gets the spine + assurance passport; the local-value block self-gates to
+  // COPD, and other products keep the reference-only layout.
+  const narrative = resolveProductNarrative(slug, app)
+  const showNarrativeSpine = getProductNarrative(slug) != null
+  const heroProposition =
+    (showNarrativeSpine && narrative.decision_summary?.one_line_proposition) || app.one_line_value_proposition
+
+  // R4-3 B: hero quick-facts stack (NICE guidance / HealthStore status),
+  // rendered vertically on the right of the hero for curated products.
+  const heroNiceRefs = app.nice_guidance_refs ?? []
+  const heroQuickFacts = showNarrativeSpine
+    ? [
+        { label: 'NICE guidance', value: heroNiceRefs.length > 0 ? heroNiceRefs[0].ref : null },
+        { label: 'HealthStore status', value: narrative.commercial_readiness?.commercial_status ?? 'Under review' },
+      ].filter((f) => !!f.value)
+    : []
 
   const linkedFundingIds = app.linked_funding_ids ?? app.funding_ids ?? []
   const commissionerFunding = getCommissionerFacingFunding(linkedFundingIds)
@@ -76,6 +113,35 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
   }))
   const commissioningCards = getCommissioningSnapshot(app)
   const fundingSnapshotCard = getFundingSnapshotCard(app, fundingRows)
+  const showLocalValue = showNarrativeSpine && (app.condition_tags?.includes('copd') ?? false)
+  const hasNhsExperience =
+    showNarrativeSpine &&
+    (getDeploymentRegister(app).length > 0 || (app.case_studies?.length ?? 0) > 0)
+  // When the NHS experience section is shown, case studies move out of the Evidence
+  // tab; the "expected impact" section should then only render for prose/videos.
+  const hasImpactProse = !!(app.expected_benefit_note && String(app.expected_benefit_note).trim())
+  const hasProductVideos = (app.product_videos?.length ?? 0) > 0
+  const showExpectedImpactSection = hasNhsExperience
+    ? hasImpactProse || hasProductVideos
+    : shouldShowImpactSection(app)
+
+  // Narrative products surface peer-reviewed studies in the NHS experience section
+  // (Case studies and evaluations), so exclude them from the Clinical evidence tab
+  // to avoid duplication. Non-narrative products keep the full record in the tab.
+  const evidenceForTab = hasNhsExperience
+    ? (app.clinical_evidence_detailed ?? []).filter((s: any) => !s.peer_reviewed)
+    : (app.clinical_evidence_detailed ?? [])
+  const rcts = evidenceForTab.filter((s: any) => s.type === 'RCT')
+  const observational = evidenceForTab.filter((s: any) => ['observational', 'real_world', 'service_eval'].includes(s.type))
+  const niceAndImpl = evidenceForTab.filter((s: any) => ['nice_assessment', 'implementation_science', 'grey_lit', 'evidence_gap'].includes(s.type))
+
+  const onThisPageLinks = buildPdpOnThisPageLinks({
+    app,
+    narrative: showNarrativeSpine ? narrative : null,
+    showNarrativeSpine,
+    showLocalValue,
+    hasLinkedFunding: linkedFundingIds.length > 0,
+  })
 
   const hasPdpAlerts =
     !!app.clinical_safety_alert ||
@@ -83,60 +149,18 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
   const tabs: PdpTab[] = [
     {
-      id: 'overview',
-      label: 'Overview & local fit',
-      anchors: ['demo-access'],
-      panel: (
-        <>
-          <PdpSection
-            shareKey="why-it-matters"
-            title="Why it matters locally"
-            description="Local commissioning angle: how this product connects to demand, outcomes, and priorities for your population and system."
-          >
-            <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}>{app.why_it_matters_locally}</p>
-            {app.sustainability_highlight && (
-              <div className="mt-4 rounded-lg p-4 hs-text-label" style={{ background: '#E6F5EC', color: '#004B22' }}>
-                🌿 {app.sustainability_highlight}
-              </div>
-            )}
-          </PdpSection>
-
-          {app.context_of_use && (
-            <PdpSection
-          shareKey="context-of-use"
-              title="Context of use"
-              description="Population, pathways, care settings and therapeutic purpose."
-            >
-              <ContextOfUseGrid app={app} />
-            </PdpSection>
-          )}
-
-          {shouldShowDemoAccess(app) && (
-            <PdpSection
-              id="demo-access"
-              shareKey="demo-access"
-              title="Demo access"
-              description="How to view the product or request a demonstration."
-            >
-              <DemoAccessSection app={app} accent={accent} />
-            </PdpSection>
-          )}
-        </>
-      ),
-    },
-    {
       id: 'evidence',
       label: 'Clinical evidence & outcomes',
       anchors: ['clinical-evidence'],
       panel: (
         <>
-          {shouldShowImpactSection(app) && (
+          {showExpectedImpactSection && (
             <PdpSection
           shareKey="expected-impact"
-              title="Expected impact and case studies"
+              title={hasNhsExperience ? 'Expected impact' : 'Expected impact and case studies'}
               description="Outcomes commissioners should expect and illustrative deployments. Distinct from the formal clinical evidence record below."
             >
-              <ImpactAndCaseStudiesSection app={app} />
+              <ImpactAndCaseStudiesSection app={app} showCaseStudies={!hasNhsExperience} />
             </PdpSection>
           )}
 
@@ -171,6 +195,12 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                 </div>
                 {niceAndImpl.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
               </div>
+            )}
+
+            {rcts.length === 0 && observational.length === 0 && niceAndImpl.length === 0 && (
+              <p className="hs-text-label m-0" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                No individual study records are currently listed for this product.
+              </p>
             )}
           </PdpSection>
 
@@ -236,7 +266,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             title="Scale and maturity"
             description="Deployment reach, evidence posture, and where the product is in use."
           >
-            <ScaleAndMaturitySection app={app} />
+            <ScaleAndMaturitySection app={app} showDeploymentRegister={!hasNhsExperience} />
           </PdpSection>
 
           {hasWhatItTakesContent(app) && (
@@ -249,21 +279,6 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             </PdpSection>
           )}
         </>
-      ),
-    },
-    {
-      id: 'safety',
-      label: 'Safety & governance',
-      anchors: ['safety-governance', 'data-information-governance'],
-      panel: (
-        <PdpSection
-          id="safety-governance"
-          shareKey="safety-governance"
-          title="Safety and governance"
-          description="Clinical safety (DTAC, DCB0129/0160, device class) and information governance (GDPR, ISO 27001, Cyber Essentials, DSP Toolkit)."
-        >
-          <SafetyAndGovernanceSection app={app} />
-        </PdpSection>
       ),
     },
     {
@@ -340,19 +355,8 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
         >
         <div className="hs-surface-card-sm rounded-t-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
           <div className="px-8 pt-8 pb-4">
-            <div className="flex flex-col gap-6 items-start">
+            <div className="flex flex-col gap-6 items-start lg:flex-row lg:items-start lg:justify-between lg:gap-10">
               <div className="flex-1 w-full min-w-0">
-                {/* R7 PDP triage (RSP-01): hero keeps condition + decision-signal pills only;
-                    supervision model, NICE refs and NHS App now live in the commissioning snapshot below. */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {app.condition_tags.map((t: string) => <ConditionTag key={t} tag={t} />)}
-                  <MaturityBadge level={app.maturity_level} hideEstablished />
-                  {app.content_confidence && app.content_confidence !== 'Confirmed' && (
-                    <span className={`badge ${app.content_confidence === 'Supplier-reported' ? 'badge-blue' : 'badge-amber'}`}>
-                      {app.content_confidence}
-                    </span>
-                  )}
-                </div>
                 <div className="flex items-center gap-4 mb-2">
                   {app.logo_path && (
                     <Image src={app.logo_path} alt={`${app.app_name} logo`} width={48} height={48}
@@ -363,36 +367,59 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
                     <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{app.supplier_name}</p>
                   </div>
                 </div>
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6 mb-4">
-                  <p
-                    className="min-w-0 flex-1 max-w-[640px]"
-                    style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}
-                  >
-                    {app.one_line_value_proposition}
-                  </p>
-                  <Button
-                    data-express-interest
-                    size="none"
-                    className="shrink-0 self-end sm:self-auto px-6 py-4 hs-text-label hs-font-bold"
-                  >
-                    Express interest
-                  </Button>
+                <p
+                  className="min-w-0 max-w-[640px] mb-4"
+                  style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}
+                >
+                  {heroProposition}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <MaturityBadge level={app.maturity_level} hideEstablished />
+                  {app.content_confidence && app.content_confidence !== 'Confirmed' && (
+                    <span className={`badge ${app.content_confidence === 'Supplier-reported' ? 'badge-blue' : 'badge-amber'}`}>
+                      {app.content_confidence}
+                    </span>
+                  )}
+                  <ProductHeroDemoBadge app={app} />
                 </div>
               </div>
+              {heroQuickFacts.length > 0 && (
+                <aside
+                  className="w-full lg:w-56 shrink-0 lg:border-l lg:pl-6 flex flex-col gap-4"
+                  style={{ borderColor: 'var(--border)' }}
+                  aria-label="Product quick facts"
+                >
+                  {heroQuickFacts.map((f) => (
+                    <div key={f.label}>
+                      <div
+                        className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1"
+                        style={{ color: 'var(--text-muted)' }}
+                      >
+                        {f.label}
+                      </div>
+                      <div className="hs-text-label hs-font-bold" style={{ color: 'var(--text-secondary)', lineHeight: 1.4 }}>
+                        {f.value}
+                      </div>
+                    </div>
+                  ))}
+                </aside>
+              )}
             </div>
-            {/* R7 PDP triage (RSP-01): Express interest is the sole primary; Save / Compare / Share
-                are demoted into one quiet, compact utility cluster on the right. */}
             <div
               className="flex flex-wrap gap-4 items-center justify-between mt-4 pt-4 border-t"
               style={{ borderColor: 'var(--border)' }}
             >
-              <div className="flex flex-wrap items-center gap-2 min-w-0">
-                <ProductHeroDemoBadge app={app} />
-              </div>
-              <div className="flex flex-wrap items-center gap-1 shrink-0 rounded-lg px-1 py-1" style={{ background: '#F0F4F5' }}>
-                <SharePagePanel borderlessTrigger />
-                <SaveToggleButton appId={app.id} borderless className="px-4 min-h-[44px] shrink-0" />
-                <CompareToggleButton appId={app.id} borderless className="px-4 min-h-[44px] shrink-0" />
+              <Button
+                data-express-interest
+                size="none"
+                className="shrink-0 px-6 py-4 hs-text-label hs-font-bold"
+              >
+                Express interest
+              </Button>
+              <div className="flex flex-wrap items-center gap-2 shrink-0 rounded-lg px-1 pt-1 pb-2" style={{ background: '#F0F4F5' }}>
+                <SharePagePanel />
+                <SaveToggleButton appId={app.id} size="sm" className="shrink-0" />
+                <CompareToggleButton appId={app.id} size="sm" className="shrink-0" />
               </div>
             </div>
           </div>
@@ -498,25 +525,72 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
             cards={commissioningCards}
             fundingCard={fundingSnapshotCard}
             whereLiveApp={app}
+            whereLiveHref={hasNhsExperience ? '#nhs-experience' : undefined}
           />
         </PdpShareRegion>
 
-        <div className="space-y-4">
-          <PdpTabs tabs={tabs} />
+        <div className={onThisPageLinks.length >= 2 ? 'hs-pdp-with-sidebar' : undefined}>
+          <div className="hs-pdp-with-sidebar__main">
+            {showNarrativeSpine && (
+              <PdpNarrativeSpine
+                app={app}
+                narrative={narrative}
+                localValue={<PdpLocalValue app={app} narrative={narrative} context={commissionerContext} />}
+                assurance={<PdpAssurancePassport app={app} narrative={narrative} />}
+                implementation={<PdpImplementation app={app} narrative={narrative} />}
+                nhsExperience={hasNhsExperience ? <PdpNhsExperience app={app} /> : undefined}
+              />
+            )}
 
-          <PdpShareRegion shareKey="express-interest" label="Express interest callout" excludeFromShareUi>
-          <div className="hs-surface-card-sm rounded-b-xl border overflow-hidden" style={{ borderColor: accent }}>
-            <div style={{ background: accent, padding: '20px 24px' }}>
-              <div style={{ fontWeight: 600, fontSize: 'var(--text-section-alt)', color: '#fff', marginBottom: 8 }}>
-                Express interest
+            <div className="space-y-4">
+              <PdpTabs tabs={tabs} />
+
+              <PdpShareRegion shareKey="express-interest" label="Express interest callout" excludeFromShareUi>
+              <div className="hs-surface-card-sm rounded-b-xl border overflow-hidden" style={{ borderColor: accent }}>
+                <div style={{ background: accent, padding: '20px 24px' }}>
+                  <div style={{ fontWeight: 600, fontSize: 'var(--text-section-alt)', color: '#fff', marginBottom: 8 }}>
+                    Express interest
+                  </div>
+                  <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.9)', lineHeight: 1.6, margin: '0 0 16px', maxWidth: 640 }}>
+                    Contact {app.supplier_contact_name ?? app.supplier_name} to discuss deployment in your ICB.
+                  </p>
+                  <ExpressInterestWhiteButton accent={accent} />
+                </div>
               </div>
-              <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.9)', lineHeight: 1.6, margin: '0 0 16px', maxWidth: 640 }}>
-                Contact {app.supplier_contact_name ?? app.supplier_name} to discuss deployment in your ICB.
-              </p>
-              <ExpressInterestWhiteButton accent={accent} />
+              </PdpShareRegion>
+
+              {showNarrativeSpine && (app.source_summary || app.confidence_note) && (
+                <PdpShareRegion
+                  shareKey="provenance"
+                  label="Sources and confidence"
+                  description="How this profile was sourced and reviewed."
+                >
+                  <div
+                    className="hs-surface-card-sm rounded-lg p-4 hs-text-caption"
+                    style={{ background: '#F0F4F5', border: '1px solid var(--border)', color: 'var(--text-muted)', lineHeight: 1.6 }}
+                  >
+                    {app.source_summary && (
+                      <p style={{ margin: 0 }}>
+                        <strong style={{ color: 'var(--text-secondary)' }}>Sources: </strong>{app.source_summary}
+                      </p>
+                    )}
+                    {app.confidence_note && (
+                      <p style={{ margin: '12px 0 0' }}>{app.confidence_note}</p>
+                    )}
+                    {app.last_reviewed_date && (
+                      <p style={{ margin: '12px 0 0' }}>Last reviewed: {app.last_reviewed_date}</p>
+                    )}
+                  </div>
+                </PdpShareRegion>
+              )}
             </div>
           </div>
-          </PdpShareRegion>
+
+          {onThisPageLinks.length >= 2 ? (
+            <aside className="hs-pdp-with-sidebar__aside">
+              <PdpOnThisPage links={onThisPageLinks} />
+            </aside>
+          ) : null}
         </div>
         </PdpSharePrintProvider>
       </div>

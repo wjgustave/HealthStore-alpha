@@ -8,13 +8,7 @@ import {
 } from '@/lib/commissioningSnapshot'
 import { getWhereLiveSummary } from '@/lib/whereLiveSummary'
 
-const INTEROP_LOGO_KEYS = ['nhs_app', 'nhs_notify', 'nhs_login'] as const
-const INTEROP_BOTTOM_KEYS = ['fhir', 'emis'] as const
-const NHS_SERVICE_PILL_LABELS: Record<(typeof INTEROP_LOGO_KEYS)[number], string> = {
-  nhs_app: 'App',
-  nhs_notify: 'Notify',
-  nhs_login: 'Login',
-}
+const INTEGRATION_READY_KEYS = ['fhir', 'emis'] as const
 
 function interopItemsInOrder(items: InteropSnapshotItem[], keys: readonly string[]): InteropSnapshotItem[] {
   return keys.flatMap(k => {
@@ -26,14 +20,6 @@ function interopItemsInOrder(items: InteropSnapshotItem[], keys: readonly string
 function SnapshotPill({ muted, children }: { muted?: boolean; children: ReactNode }) {
   return (
     <span className={`badge badge-grey max-w-full text-xs ${muted ? 'opacity-50' : ''}`}>{children}</span>
-  )
-}
-
-function NhsServicePill({ children }: { children: ReactNode }) {
-  return (
-    <span className="badge max-w-full border-0 text-xs" style={{ background: 'var(--nhs-blue)', color: '#fff' }}>
-      {children}
-    </span>
   )
 }
 
@@ -75,31 +61,22 @@ function PricingMini({ card }: { card: Extract<CommissioningSnapshotCard, { kind
 }
 
 function IntegrationsMini({ card }: { card: Extract<CommissioningSnapshotCard, { kind: 'interop' }> }) {
-  const logoRow = interopItemsInOrder(card.items, INTEROP_LOGO_KEYS)
-  const bottomRow = interopItemsInOrder(card.items, INTEROP_BOTTOM_KEYS)
-  if (logoRow.length === 0 && bottomRow.length === 0) {
+  const readyItems = interopItemsInOrder(card.items, INTEGRATION_READY_KEYS)
+  if (readyItems.length === 0) {
     return <span className="text-xs" style={{ color: 'var(--text-muted)' }}>None listed</span>
   }
   return (
-    <div className="flex flex-col gap-1">
-      {logoRow.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-1">
-          <span className="text-xs font-semibold" style={{ color: 'var(--nhs-dark)' }}>NHS:</span>
-          {logoRow.map(item => (
-            <NhsServicePill key={item.key}>
-              {NHS_SERVICE_PILL_LABELS[item.key as (typeof INTEROP_LOGO_KEYS)[number]] ?? item.name}
-            </NhsServicePill>
-          ))}
-        </div>
-      ) : null}
-      {bottomRow.length > 0 ? (
-        <div className="flex flex-wrap gap-1">
-          {bottomRow.map(item => (
-            <SnapshotPill key={item.key}>{item.textLabel ?? item.name}</SnapshotPill>
-          ))}
-        </div>
-      ) : null}
-    </div>
+    <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+      {readyItems.map(item => item.textLabel ?? item.name).join(' · ')}
+    </span>
+  )
+}
+
+function PlatformMini({ card }: { card: Extract<CommissioningSnapshotCard, { kind: 'platform' }> }) {
+  return (
+    <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+      {card.values.join(', ')}
+    </span>
   )
 }
 
@@ -119,11 +96,12 @@ function CompareSnapshotCell({ app }: { app: App }) {
   const cards = getCommissioningSnapshot(app)
   const governance = cards.find(c => c.kind === 'regulation') as Extract<CommissioningSnapshotCard, { kind: 'regulation' }> | undefined
   const pricing = cards.find(c => c.kind === 'cost') as Extract<CommissioningSnapshotCard, { kind: 'cost' }> | undefined
+  const platform = cards.find(c => c.kind === 'platform') as Extract<CommissioningSnapshotCard, { kind: 'platform' }> | undefined
   const interop = cards.find(c => c.kind === 'interop') as Extract<CommissioningSnapshotCard, { kind: 'interop' }> | undefined
 
   return (
     <div className="hs-compare-snapshot__cell">
-      <MiniSegment label="Where it's live">
+      <MiniSegment label="Live deployments">
         <WhereLiveMini app={app} />
       </MiniSegment>
       {governance ? (
@@ -131,13 +109,18 @@ function CompareSnapshotCell({ app }: { app: App }) {
           <GovernanceMini pills={governance.pills} />
         </MiniSegment>
       ) : null}
+      {platform ? (
+        <MiniSegment label="Platform">
+          <PlatformMini card={platform} />
+        </MiniSegment>
+      ) : null}
       {pricing ? (
-        <MiniSegment label="Pricing model">
+        <MiniSegment label="Indicative cost">
           <PricingMini card={pricing} />
         </MiniSegment>
       ) : null}
       {interop ? (
-        <MiniSegment label="Integrations">
+        <MiniSegment label="Integration capability">
           <IntegrationsMini card={interop} />
         </MiniSegment>
       ) : null}

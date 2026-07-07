@@ -14,7 +14,9 @@ import clsx from 'clsx'
  *    (red), on-accent -> --reverse (white, for use on dark/coloured backgrounds).
  *    [Provenance: NHS]
  *  - `ghost` / `toggle` / `iconOnly` have no NHS equivalent and stay bespoke,
- *    built to NHS principles (44px target, NHS focus ring).  [Provenance: Bespoke]
+ *    built to NHS principles (44px target, NHS focus ring, 4px press shadow on toggle;
+ *    bordered secondary/toggle shadows match border colour).
+ *    [Provenance: Bespoke]
  *
  * The public API is unchanged so existing call sites keep working; layout-only
  * props (`size`, `radius`, `pill`, `borderless`) apply to the bespoke paths and
@@ -83,16 +85,30 @@ const RADIUS: Record<ButtonRadius, string> = {
   pill: 'rounded-full',
 }
 
+/** Bespoke 4px press shadow — bordered controls match their border colour; borderless use grey/dark. */
+const BESPOKE_SHADOW_BORDERED =
+  'shadow-[0_4px_0_var(--nhs-blue)] active:shadow-none disabled:shadow-none'
+const BESPOKE_SHADOW_BORDERLESS =
+  'shadow-[0_4px_0_#AEB7BD] active:shadow-none disabled:shadow-none'
+const BESPOKE_SHADOW_BORDERLESS_PRESSED =
+  'shadow-[0_4px_0_var(--nhs-dark)] active:shadow-none disabled:shadow-none'
+
 /** Bespoke variants (no NHS equivalent) — built to NHS principles. */
 function bespokeVariantClasses(variant: ButtonVariant, pressed: boolean, borderless: boolean): string {
   const ring = borderless ? '' : 'border border-[var(--nhs-blue)]'
+  const shadowOff = borderless ? BESPOKE_SHADOW_BORDERLESS : BESPOKE_SHADOW_BORDERED
+  const shadowOn = borderless ? BESPOKE_SHADOW_BORDERLESS_PRESSED : BESPOKE_SHADOW_BORDERED
   switch (variant) {
     case 'ghost':
       return 'bg-transparent text-[var(--text-secondary)] hover:bg-[#eef2f7] hover:text-[var(--text-primary)]'
     case 'toggle':
       return pressed
-        ? clsx('bg-[#E6F0FB] text-[var(--nhs-dark)] hover:bg-[#d7e6f8]', ring)
-        : clsx('bg-white text-[var(--nhs-blue)] hover:bg-[#E6F0FB]', ring)
+        ? clsx(
+            'bg-[#E6F0FB] text-[var(--nhs-dark)] hover:bg-[#d7e6f8]',
+            ring,
+            shadowOn,
+          )
+        : clsx('bg-white text-[var(--nhs-blue)] hover:bg-[#E6F0FB]', ring, shadowOff)
     default:
       return ''
   }
@@ -136,14 +152,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         nhsClass,
         // Reset NHS's in-form bottom margin; align icon + label.
         'mb-0 inline-flex items-center gap-2 align-top',
+        size !== 'md' && SIZE[size],
         align === 'start' ? 'justify-start text-left' : 'justify-center text-center',
         block && 'w-full',
         (softDisabled || isNativeDisabled) && 'nhsuk-button--disabled',
         className,
       )
     : clsx(
-        'inline-flex hs-font-bold transition-colors disabled:opacity-40 disabled:cursor-not-allowed',
-        softDisabled && 'opacity-40 cursor-not-allowed',
+        'inline-flex hs-font-bold transition-[background-color,color,border-color,box-shadow,opacity] disabled:opacity-40 disabled:cursor-not-allowed',
+        softDisabled && 'opacity-40 cursor-not-allowed shadow-none',
         align === 'start' ? 'items-start justify-start text-left' : 'items-center justify-center text-center',
         iconOnly ? 'h-10 w-10 min-h-10 p-0' : SIZE[size],
         RADIUS[resolvedRadius],

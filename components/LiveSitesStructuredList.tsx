@@ -16,7 +16,7 @@ export function NamedSitesStructuredList({ rows }: { rows: NamedSiteRow[] }) {
       {rows.map((s, i) => {
         const st = normalizeNamedSiteStatus(s.status)
         const dot =
-          st === 'decommissioned' ? 'bg-red-400' : st === 'active' ? 'bg-green-500' : 'bg-gray-300'
+          st === 'decommissioned' ? 'bg-[#D5281B]' : st === 'active' ? 'bg-[#007F3B]' : 'bg-[#AEB7BD]'
         const siteName = typeof s.name === 'string' ? s.name : ''
         const email = liveSiteContactEmail(siteName, i)
         const srId = `live-site-contact-sr-${i}`

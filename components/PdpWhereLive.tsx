@@ -53,14 +53,14 @@ export function PdpWhereLive({
 }
 
 /** Fourth callout card in the commissioning snapshot grid. */
-export function PdpWhereLiveSegment({ app }: { app: WhereLiveApp }) {
+export function PdpWhereLiveSegment({ app, href = '#scale-and-maturity' }: { app: WhereLiveApp; href?: string }) {
   const { sitesText, statusText } = getWhereLiveSummary(app)
 
   return (
     <article className="hs-snapshot-strip__segment">
       <h2 className="hs-snapshot-strip__heading">
-        <a href="#scale-and-maturity" className="hs-snapshot-strip__heading-link">
-          Where it&apos;s live
+        <a href={href} className="hs-snapshot-strip__heading-link">
+          Live deployments
         </a>
       </h2>
       <div className="hs-snapshot-strip__body">

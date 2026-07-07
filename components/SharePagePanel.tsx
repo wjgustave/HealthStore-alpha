@@ -34,7 +34,7 @@ function legacyCopyToClipboard(text: string): boolean {
  */
 export function SharePagePanel({
   className = '',
-  /** PDP hero: no outline on the trigger (Share still reads as a control via colour + hover). */
+  /** PDP hero: omit border on trigger when a parent passes `borderlessTrigger` (rare; default is bordered). */
   borderlessTrigger = false,
 }: {
   className?: string
@@ -198,7 +198,7 @@ export function SharePagePanel({
         >
           Select all
         </button>
-        <span className="text-slate-300" aria-hidden>
+        <span className="text-[var(--border)]" aria-hidden>
           |
         </span>
         <button
@@ -213,10 +213,10 @@ export function SharePagePanel({
       <ul className="space-y-2" role="list">
         {registeredBlocks.map(({ key, label, description }) => (
           <li key={key}>
-            <label className="flex cursor-pointer items-start gap-4 rounded-lg px-2 py-2 hover:bg-slate-50">
+            <label className="flex cursor-pointer items-start gap-4 rounded-lg px-2 py-2 hover:bg-[#F0F4F5]">
               <input
                 type="checkbox"
-                className="mt-1 h-4 w-4 shrink-0 rounded border-slate-300"
+                className="mt-1 h-4 w-4 shrink-0 rounded border-[var(--border)]"
                 checked={selectedKeys.has(key)}
                 onChange={() => toggleKey(key)}
               />
@@ -251,8 +251,8 @@ export function SharePagePanel({
         ref={triggerRef}
         variant="secondary"
         borderless={borderlessTrigger}
-        size="none"
-        className="px-4 py-4 min-h-[44px] min-w-[44px]"
+        size="sm"
+        className="min-w-[44px]"
         aria-haspopup="dialog"
         aria-expanded={modalOpen}
         onClick={openModal}
@@ -271,7 +271,7 @@ export function SharePagePanel({
         restoreFocus="trigger"
         triggerRef={triggerRef}
         zIndexClass="z-[250]"
-        scrimClassName="bg-slate-900/45"
+        scrimClassName="bg-[#212B32]/45"
         panelClassName="flex max-h-[min(90vh,640px)] w-full max-w-lg flex-col rounded-xl border border-[var(--border)] bg-white shadow-xl"
       >
         <div className="border-b px-6 py-4" style={{ borderColor: 'var(--border)' }}>
@@ -287,7 +287,7 @@ export function SharePagePanel({
           <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 space-y-4">
             <button
               type="button"
-              className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-slate-100 min-h-[44px]"
+              className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-[#F0F4F5] min-h-[44px]"
               style={{ borderColor: 'var(--border)' }}
               onClick={() => setShareFlow('link')}
             >
@@ -300,7 +300,7 @@ export function SharePagePanel({
             </button>
             <button
               type="button"
-              className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-slate-100 min-h-[44px]"
+              className="flex w-full flex-col items-start rounded-xl border px-4 py-4 text-left transition-colors hover:bg-[#F0F4F5] min-h-[44px]"
               style={{ borderColor: 'var(--border)' }}
               onClick={() => setShareFlow('pdf')}
             >

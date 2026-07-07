@@ -22,6 +22,15 @@ function dash(v?: string) {
   return v && v.trim() ? v : '—'
 }
 
+function DeploymentStat({ value, label, accent }: { value: number; label: string; accent: string }) {
+  return (
+    <div className="hs-deploy-stat" style={{ ['--deploy-accent' as string]: accent }}>
+      <span className="hs-deploy-stat__value">{value}</span>
+      <span className="hs-deploy-stat__label">{label}</span>
+    </div>
+  )
+}
+
 function DetailContent({ row, index }: { row: DeploymentRow; index: number }) {
   const email = liveSiteContactEmailShort(row.site, index)
   return (
@@ -63,16 +72,6 @@ export function DeploymentRegisterTable({ rows }: { rows: DeploymentRow[] }) {
     )
   }
 
-  const summaryParts: string[] = []
-  summaryParts.push(`Live at ${summary.liveCount} ${summary.liveCount === 1 ? 'site' : 'sites'}`)
-  if (summary.icbCount > 0) {
-    summaryParts.push(`across ${summary.icbCount} ${summary.icbCount === 1 ? 'ICB' : 'ICBs'}`)
-  }
-  const extras: string[] = []
-  if (summary.pilotCount) extras.push(`${summary.pilotCount} pilot`)
-  if (summary.researchCount) extras.push(`${summary.researchCount} research`)
-  if (summary.historicCount) extras.push(`${summary.historicCount} historic`)
-
   function toggle(i: number) {
     setExpanded(prev => {
       const next = new Set(prev)
@@ -84,14 +83,21 @@ export function DeploymentRegisterTable({ rows }: { rows: DeploymentRow[] }) {
 
   return (
     <div>
-      <p className="mb-4 hs-text-label" style={{ color: 'var(--text-secondary)' }}>
-        <span className="hs-font-bold" style={{ color: 'var(--text-primary)' }}>
-          {summaryParts.join(' ')}
-        </span>
-        {extras.length > 0 ? (
-          <span style={{ color: 'var(--text-muted)' }}>{` · ${extras.join(' · ')}`}</span>
+      <div className="hs-deploy-stats" role="list" aria-label="Deployment summary">
+        <DeploymentStat value={summary.liveCount} label={summary.liveCount === 1 ? 'Live site' : 'Live sites'} accent="#00582A" />
+        {summary.icbCount > 0 ? (
+          <DeploymentStat value={summary.icbCount} label={summary.icbCount === 1 ? 'ICB area' : 'ICB areas'} accent="var(--nhs-blue)" />
         ) : null}
-      </p>
+        {summary.pilotCount > 0 ? (
+          <DeploymentStat value={summary.pilotCount} label={summary.pilotCount === 1 ? 'Pilot' : 'Pilots'} accent="#003B7A" />
+        ) : null}
+        {summary.researchCount > 0 ? (
+          <DeploymentStat value={summary.researchCount} label="Research" accent="#3A1D7A" />
+        ) : null}
+        {summary.historicCount > 0 ? (
+          <DeploymentStat value={summary.historicCount} label="Historic" accent="#7A1210" />
+        ) : null}
+      </div>
 
       {/* [Provenance: NHS] Official NHS Table. Expandable detail rows are bespoke. */}
       <div className="hidden overflow-x-auto sm:block">
@@ -131,8 +137,13 @@ export function DeploymentRegisterTable({ rows }: { rows: DeploymentRow[] }) {
       <ul className="space-y-4 sm:hidden">
         {rows.map((r, i) => {
           const open = printing || expanded.has(i)
+          const meta = statusMeta(r.status)
           return (
-            <li key={i} className="rounded-lg border p-4" style={{ borderColor: 'var(--border)', background: '#F0F4F5' }}>
+            <li
+              key={i}
+              className="border p-4"
+              style={{ borderColor: 'var(--border)', borderLeft: `4px solid ${meta.fg}`, background: '#fff' }}
+            >
               <div className="mb-2 flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <div className="hs-font-bold" style={{ color: 'var(--text-primary)' }}>{r.site}</div>
@@ -196,7 +207,7 @@ function RowGroup({
   const detailId = `deployment-detail-${index}`
   return (
     <>
-      <tr className="nhsuk-table__row align-top">
+      <tr className="nhsuk-table__row hs-deploy-row align-top">
         <td className="nhsuk-table__cell">
           <div className="hs-font-normal" style={{ color: 'var(--text-primary)' }}>{row.site}</div>
           {row.condition ? (

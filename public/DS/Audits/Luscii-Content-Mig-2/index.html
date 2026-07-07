@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Luscii Content Mig 2 — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="luscii-content-mig-2">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Content migration &middot; Luscii &middot; Round 1 record</p>
+      <h1 class="ds-page-title">Luscii Content Mig 2 &mdash; Round 1 (Story scaffolding)</h1>
+      <p class="ds-lede">
+        The implementation record for <strong>Round 1</strong> of the migration roadmap set out in
+        <a href="/DS/Audits/Luscii-Content-Mig-1/index.html">Luscii Content Mig 1</a>. This was the
+        &ldquo;story scaffolding, no data loss&rdquo; round. <strong>All items are now applied</strong> against the
+        <code>nhs_ds</code> branch. The chosen options are recorded in the
+        <a href="#decision-log">decision log</a>.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Round</div><div class="ds-meta__v">1 of 3 &middot; story scaffolding</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Status</div><div class="ds-meta__v"><span class="ds-status ds-status--canonical">Applied</span></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Page model</div><div class="ds-meta__v">Hybrid (H#1c) &middot; one page: narrative spine + reference tabs</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Scope</div><div class="ds-meta__v">Luscii pilot only &middot; <code>/apps/luscii</code></div></div>
+    </div>
+
+    <div class="ds-note">
+      <strong>What changed since Mig&nbsp;1.</strong> The <code>matt_demo</code> narrative system had already been
+      copied into the <code>nhs_ds</code> working tree, but on a <em>disconnected</em> <code>/products/[slug]</code>
+      route that nothing linked to. So Round 1 here was <strong>integration and content reconciliation</strong>, not
+      component building: fold the narrative spine onto the canonical <code>/apps/[slug]</code> PDP, reconcile the
+      flagged content conflicts, surface hidden provenance, and retire the parallel route.
+    </div>
+
+    <h2>1. Round 1 at a glance</h2>
+    <table class="ds-table">
+      <thead><tr><th>Item</th><th>Roadmap ref</th><th>This round</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Narrative content model</td><td>G1</td><td>Already present (<code>LUSCII_NARRATIVE</code>) &mdash; reused, not rebuilt</td><td><span class="ds-status ds-status--canonical">Reused</span></td></tr>
+        <tr><td>Problem + How-it-helps + pathway visual on the PDP</td><td>G1, G2</td><td>New <code>PdpNarrativeSpine</code> mounted between snapshot and tabs</td><td><span class="ds-status ds-status--canonical">Done</span></td></tr>
+        <tr><td>&ldquo;How to buy locally&rdquo; framing</td><td>G7</td><td>Curated <code>commercial_readiness</code> block in the spine</td><td><span class="ds-status ds-status--canonical">Done</span></td></tr>
+        <tr><td>Surface hidden provenance (<code>showPdpFactsGrid</code>)</td><td>&mdash;</td><td>Provenance footer (sources + confidence + last reviewed)</td><td><span class="ds-status ds-status--canonical">Done</span></td></tr>
+        <tr><td>Reconcile proposition / device class / price</td><td>Section F</td><td>Applied audit recommendations (see &sect;3)</td><td><span class="ds-status ds-status--canonical">Done</span></td></tr>
+        <tr><td>Retire the parallel <code>/products</code> route</td><td>H#1c</td><td>Redirects to <code>/apps/[slug]</code>; components kept dormant</td><td><span class="ds-status ds-status--canonical">Done</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>2. What shipped this round</h2>
+    <ul>
+      <li><strong>Narrative spine</strong> &mdash; <code>components/product/PdpNarrativeSpine.tsx</code>: a server component rendering
+        <em>The problem this addresses</em>, <em>How Luscii helps</em> (with the current&rarr;proposed pathway visual), and
+        <em>How to buy locally</em>. Each section registers with the existing selective share/print system via
+        <code>PdpSection</code>/<code>PdpShareRegion</code>.</li>
+      <li><strong>Hybrid mount</strong> &mdash; <code>app/apps/[slug]/page.tsx</code>: the spine renders between the commissioning
+        snapshot and the six reference tabs, so the page reads <em>problem &rarr; how it helps &rarr; deep detail (tabs) &rarr;
+        how to buy</em>. The tabs (Overview, Evidence, Deployment, Safety, Commercial, Technical) are untouched &mdash; no data loss.</li>
+      <li><strong>Hero proposition</strong> &mdash; the hero now leads with the commissioner-framed one-liner for Luscii.</li>
+      <li><strong>Provenance footer</strong> &mdash; the previously-hidden <code>source_summary</code> / <code>confidence_note</code> /
+        <code>last_reviewed_date</code> now render at the foot of the page.</li>
+      <li><strong>Route retired</strong> &mdash; <code>/products/[slug]</code> and <code>/products/[slug]/support</code> now
+        <code>permanentRedirect</code> to <code>/apps/[slug]</code>. <code>ProductNarrativeView</code> and the personalisation
+        libraries stay in the tree, dormant, for Rounds 2&ndash;3.</li>
+    </ul>
+
+    <div class="ds-note">
+      <strong>Scope guard.</strong> The spine and provenance footer are gated to <code>slug === 'luscii'</code> this round
+      (decision SP-3). The other curated narratives (myCOPD, myHeart, Joint Academy) exist but keep the reference-only
+      layout until their own migration records &mdash; their content conflicts have not been verified.
+    </div>
+
+    <!-- ============================== SECTION 3 ============================== -->
+    <h2 id="conflicts">3. Content conflicts resolved <span class="ds-status ds-status--canonical">Applied</span></h2>
+    <p>
+      The three Section&nbsp;F conflicts were credibility risks, not cosmetics. The steer was to apply the audit&rsquo;s
+      recommendations now, and to <strong>not publish an unverified price</strong>.
+    </p>
+
+    <h3>3.1 CNF-1 &mdash; Value proposition</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; commissioner-framed <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">&ldquo;A 24/7 remote monitoring service for high-risk COPD patients &mdash; patients report symptoms in the app, a clinical hub intervenes before an emergency.&rdquo; Now the hero headline.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; supplier-framed</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">&ldquo;Remote monitoring platform with 25 million global registrations&hellip;&rdquo; Retained in <code>luscii.json</code> but no longer the headline.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3.2 CNF-2 &mdash; Device class</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; <code>Class IIa SaMD</code> <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">The more current value from <code>luscii.json</code>. The narrative&rsquo;s <code>regulatory_position.device_class</code> and the assurance-domain summary were corrected to match.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; &ldquo;Class I transitional (HIRA-evidenced)&rdquo;</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">The narrative&rsquo;s prior value. Superseded &mdash; it contradicted the catalogue record.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-note">
+      <strong>Residual flag.</strong> The <code>confidence_note</code> still caveats the classification (&ldquo;confirm
+      COPD-specific CE certificate with Luscii&rdquo;). This is deliberate and honest &mdash; it stays until supplier
+      confirmation.
+    </div>
+
+    <h3>3.3 CNF-3 &mdash; Price</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; publish no figure yet <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Both figures (&ldquo;From &pound;110/patient/year&rdquo; and &ldquo;&pound;30&ndash;&pound;60 pppm&rdquo;) replaced with &ldquo;<em>Pricing on application &mdash; contact supplier (figures pending verification)</em>&rdquo;. The &pound;110/yr vs &pound;360&ndash;720/yr gap was too material to ship.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; pick one figure as canonical</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0">Deferred until the supplier verifies. Investment/grant figures (e.g. &pound;400k NHSE) are context, not price, and were left in place.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== SECTION 4 ============================== -->
+    <h2 id="page-decisions">4. Page decisions <span class="ds-status ds-status--canonical">Applied</span></h2>
+
+    <h3>4.1 SP-1 &mdash; hidden facts (<code>showPdpFactsGrid</code>)</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; provenance footer <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Relocate sources/confidence into a slim footer; supplier contact stays in the Express-interest area. Keeps the hero uncluttered.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; re-enable the sidebar grid</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Would resurface the full quick-facts/assurance/tiers sidebar &mdash; heavier, and duplicates the snapshot + tabs.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; leave hidden</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Status quo; provenance stays invisible. Rejected.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.2 SP-2 &mdash; spine placement</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; between snapshot and tabs <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Story leads, deep detail follows. Reads as one argument without hiding the reference tabs.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; above the snapshot</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Pushes the at-a-glance commissioning snapshot down the page.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; as a new lead tab</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Keeps the story hidden behind a tab &mdash; defeats the narrative-first goal.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>4.3 SP-3 &mdash; scope</h3>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; Luscii only <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Luscii is the test case. Other products get their own records so their conflicts are verified before shipping.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; all four curated narratives now</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Would ship unverified device-class/price content for myCOPD/myHeart/Joint Academy. Rejected for this round.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== SECTION 5 ============================== -->
+    <h2 id="decision-log">5. Decision log</h2>
+    <p>Choices applied this round.</p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th><th>Chosen &amp; applied</th></tr></thead>
+      <tbody>
+        <tr><td>PM-1</td><td>Page model</td><td>Hybrid (H#1c)</td><td>Hybrid &mdash; spine on <code>/apps/[slug]</code></td></tr>
+        <tr><td>CNF-1</td><td>Value proposition</td><td>A &mdash; commissioner-framed</td><td>A &mdash; commissioner-framed</td></tr>
+        <tr><td>CNF-2</td><td>Device class</td><td>A &mdash; <code>Class IIa SaMD</code></td><td>A &mdash; <code>Class IIa SaMD</code></td></tr>
+        <tr><td>CNF-3</td><td>Price</td><td>A &mdash; publish no figure</td><td>A &mdash; &ldquo;contact supplier, pending verification&rdquo;</td></tr>
+        <tr><td>SP-1</td><td>Hidden facts</td><td>A &mdash; provenance footer</td><td>A &mdash; provenance footer</td></tr>
+        <tr><td>SP-2</td><td>Spine placement</td><td>A &mdash; between snapshot &amp; tabs</td><td>A &mdash; between snapshot &amp; tabs</td></tr>
+        <tr><td>SP-3</td><td>Scope</td><td>A &mdash; Luscii only</td><td>A &mdash; Luscii only</td></tr>
+      </tbody>
+    </table>
+
+    <h2>6. Files touched</h2>
+    <table class="ds-table">
+      <thead><tr><th>File</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr><td><code>components/product/PdpNarrativeSpine.tsx</code></td><td>New &mdash; Round-1 narrative spine (problem / how-it-helps + pathway / how-to-buy)</td></tr>
+        <tr><td><code>app/apps/[slug]/page.tsx</code></td><td>Mount spine (Luscii-gated); commissioner-framed hero; provenance footer</td></tr>
+        <tr><td><code>lib/content/productNarratives.ts</code></td><td>Luscii device class &rarr; Class IIa SaMD; price &rarr; &ldquo;on application&rdquo;; assurance-domain summary aligned</td></tr>
+        <tr><td><code>content/apps/luscii.json</code></td><td><code>indicative_price_text</code> &rarr; removed the &pound; figure, &ldquo;pricing on application&rdquo;</td></tr>
+        <tr><td><code>app/products/[slug]/page.tsx</code>, <code>&hellip;/support/page.tsx</code></td><td>Retired &rarr; redirect to <code>/apps/[slug]</code></td></tr>
+      </tbody>
+    </table>
+
+    <h2>7. Not in this round</h2>
+    <ul>
+      <li><strong>Round 2</strong> &mdash; geography personalisation + local dataset; the projected-impact section; the COPD ROI engine wired to the local funnel.</li>
+      <li><strong>Round 3</strong> &mdash; assurance-passport reframing; evidence-schema normalisation (<code>n</code>&rarr;<code>sample_size</code> etc.); orphan placement; extract a reusable per-product template.</li>
+      <li><strong>Other products</strong> &mdash; myCOPD / myHeart / Joint Academy migration records (conflicts to verify first).</li>
+    </ul>
+
+    <hr class="ds-rule">
+    <p class="ds-u-muted" style="font-size:.85rem">
+      Companion to the <a href="/DS/Audits/Luscii-Content-Mig-1/index.html">Mig&nbsp;1 analysis</a>. This is the Round&nbsp;1
+      implementation record; Mig&nbsp;3 will track Round&nbsp;2 (quantified value) here under <code>/DS/Audits</code>.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Luscii Content Mig 5 — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="luscii-content-mig-5">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Content migration &middot; Luscii &middot; Round 4 decisions</p>
+      <h1 class="ds-page-title">Luscii Content Mig 5 &mdash; Round 4 (Remaining matt_demo parity)</h1>
+      <p class="ds-lede">
+        Rounds 1&ndash;3 brought the story, quantified value and assurance passport across from the matt_demo narrative page.
+        A handful of matt_demo sections were still not surfaced. This round closes the gap: the curated
+        <strong>&ldquo;Making it work&rdquo;</strong> implementation section is <strong>shipped now</strong> (straightforward,
+        additive); the rest are <strong>decisions</strong> (A&ndash;D) for you to pick. The curated
+        <strong>economics</strong> (funding levers, tariff/QOF, net-value settings) is deliberately <strong>carved out into its
+        own reconcile-heavy round</strong> because it re-opens the unverified-price conflict.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Round</div><div class="ds-meta__v">4 &middot; remaining parity (economics &rarr; Round 5)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Status</div><div class="ds-meta__v"><span class="ds-status ds-status--canonical">Applied</span> &middot; R4-1 D (deferred) + R4-2 B + R4-3 B shipped</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Page model</div><div class="ds-meta__v">Hybrid &middot; spine + tabs on <code>/apps/{curated}</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Basis</div><div class="ds-meta__v">Gap analysis vs <code>ProductNarrativeView.tsx</code></div></div>
+    </div>
+
+    <div class="ds-note">
+      <strong>How to use this page.</strong> Section 2 is already live (the implementation section). Sections R4-1&ndash;R4-3
+      each have options A&ndash;D and a recommendation &mdash; reply with one letter per row and I&rsquo;ll ship them. Section 5
+      scopes the economics round; nothing there ships until it is run on its own.
+    </div>
+
+    <div class="ds-note ds-note--source">
+      <strong>Where this came from.</strong> A section-by-section comparison of the matt_demo narrative page
+      (<code>components/product/ProductNarrativeView.tsx</code>) against the current hybrid PDP (spine + reference tabs). Eight
+      matt_demo sections; five fully surfaced or relocated to tabs, one reframed (projected impact), one shipped this round
+      (implementation), and the economics detail deferred.
+    </div>
+
+    <!-- ============================== 1. AT A GLANCE ============================== -->
+    <h2>1. Decisions at a glance</h2>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th><th>Visual?</th></tr></thead>
+      <tbody>
+        <tr><td>&mdash;</td><td>&ldquo;Making it work&rdquo; implementation section</td><td><span class="ds-status ds-status--canonical">Shipped</span> (see section 2)</td><td>Yes</td></tr>
+        <tr><td>R4-1</td><td>Interactive scenario model (conservative/central/evidence-led)</td><td>D &mdash; defer to the economics round</td><td><span class="ds-status ds-status--canonical">Chosen D &mdash; deferred</span></td></tr>
+        <tr><td>R4-2</td><td>Regulatory position detail (HIRA, market access)</td><td>A &mdash; add to the passport intro</td><td><span class="ds-status ds-status--canonical">Chosen B &mdash; shipped</span></td></tr>
+        <tr><td>R4-3</td><td>Header quick-facts parity (Platform, HealthStore status)</td><td>A &mdash; add to the commissioning snapshot</td><td><span class="ds-status ds-status--canonical">Chosen B &mdash; shipped (right of hero)</span></td></tr>
+        <tr><td>R5</td><td>Curated economics (funding levers, tariff/QOF, net settings)</td><td>Own reconcile-heavy round (section 5)</td><td>&mdash;</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============================== 2. SHIPPED ============================== -->
+    <h2 id="shipped">2. Shipped now &mdash; &ldquo;Making it work&rdquo;</h2>
+    <p>
+      The curated <code>narrative.implementation</code> content (human wrapper, local workforce, timeline, prerequisites) now
+      renders as a spine section titled <strong>&ldquo;Making it work at your site&rdquo;</strong>, placed after Assurance. This
+      is the curated summary; the reference <em>&ldquo;What it takes locally&rdquo;</em> tab keeps the JSON-level detail &mdash;
+      the same summary/detail split used for assurance.
+    </p>
+    <div class="ds-example">
+      <p class="ds-example__label">Where it sits in the spine</p>
+      <div style="display:flex;flex-direction:column;gap:6px;max-width:420px">
+        <div style="background:#f0f4f5;border-radius:6px;padding:8px 12px;font-size:13px;color:var(--text-muted)">Problem &middot; How it helps</div>
+        <div style="background:#f0f4f5;border-radius:6px;padding:8px 12px;font-size:13px;color:var(--text-muted)">Local value &middot; how to buy</div>
+        <div style="background:#f0f4f5;border-radius:6px;padding:8px 12px;font-size:13px;color:var(--text-muted)">Assurance &mdash; reuse the passport</div>
+        <div style="background:#e6f0fb;border:2px solid var(--nhs-blue);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--nhs-blue);font-weight:700">Making it work at your site &nbsp;&larr; new</div>
+        <div style="background:#fff;border:1px dashed var(--border);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--text-muted)">Reference tabs (&ldquo;What it takes locally&rdquo; detail retained)</div>
+      </div>
+    </div>
+    <table class="ds-table">
+      <thead><tr><th>File</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr><td><code>components/product/PdpImplementation.tsx</code></td><td><strong>New</strong> server component: human-wrapper / workforce / timeline cards, prerequisites list, supplier-support callout.</td></tr>
+        <tr><td><code>components/product/PdpNarrativeSpine.tsx</code></td><td>Added optional <code>implementation</code> slot, rendered after the assurance slot.</td></tr>
+        <tr><td><code>app/apps/[slug]/page.tsx</code></td><td>Mounts <code>PdpImplementation</code> for any product with a curated narrative (self-gates on <code>narrative.implementation</code>).</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============================== R4-1 ============================== -->
+    <h2 id="r4-1">R4-1 &mdash; Interactive scenario model</h2>
+    <p>
+      matt_demo had a <code>ScenarioControls</code> toggle (conservative / central / evidence-led) driving the ROI figures.
+      Round 2 shipped a <strong>static illustrative range</strong> instead (R2-6 A minimal, R2-3 D fixed cohort). Do we add the
+      toggle back?
+    </p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; keep static range</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Leave the current conservative&rarr;evidence-led band as-is. No new UI; no interactivity.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; add the toggle (client)</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Segmented control flexes the local-value numbers between scenarios. Makes the block a client component.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; toggle + funnel cohort</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Toggle <em>and</em> wire the cohort to the local funnel (reverses R2-3 D). Most faithful to matt_demo; largest change.</p>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option D &mdash; defer to the economics round <span class="ds-prio ds-prio--p3">rec</span> <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">The toggle mainly flexes <em>economics</em> &mdash; build it alongside Round 5 so the section isn&rsquo;t half-interactive with unverified inputs. <strong>No code change this round; carried into Round 5.</strong></p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example">
+      <p class="ds-example__label">Visual &mdash; the toggle (Options B/C)</p>
+      <div style="display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:13px">
+        <span style="padding:8px 16px;color:var(--text-muted)">Conservative</span>
+        <span style="padding:8px 16px;background:var(--nhs-blue);color:#fff;font-weight:700">Central</span>
+        <span style="padding:8px 16px;color:var(--text-muted)">Evidence-led</span>
+      </div>
+    </div>
+
+    <!-- ============================== R4-2 ============================== -->
+    <h2 id="r4-2">R4-2 &mdash; Regulatory position detail</h2>
+    <p>
+      matt_demo&rsquo;s assurance section showed <code>regulatory_position.hira_status</code> and <code>market_access</code>
+      alongside the device class. The Round 3 passport intro only uses <code>assurance_speed_note</code>. Where do the HIRA /
+      market-access lines go?
+    </p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; add to the passport intro <span class="ds-prio ds-prio--p3">rec</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Add HIRA status + market access to the &ldquo;reuse the passport&rdquo; box. Credibility lines where the reader already is.</p>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option B &mdash; separate regulatory card <span class="ds-status ds-status--canonical">Chosen &mdash; shipped</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">A dedicated &ldquo;Regulatory position&rdquo; card in the passport (device class / HIRA / market access), sitting above the status chips.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; leave in the Safety tab</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">No change &mdash; device class stays in the tab, HIRA/market access not surfaced. Simplest; loses the &ldquo;assured once&rdquo; message.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option D &mdash; derive from JSON</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Compute the regulatory line from JSON (consistent with R3-3 C). No hand-authored regulatory_position; less nuance.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example">
+      <p class="ds-example__label">Visual &mdash; Option B, as shipped (dedicated card above the status chips)</p>
+      <div style="max-width:640px;background:#fff;border:1px solid var(--border);border-left:4px solid var(--nhs-blue);border-radius:8px;padding:16px;font-size:13px">
+        <div style="font-weight:700;color:var(--text-secondary);margin-bottom:12px">Regulatory position</div>
+        <div style="display:grid;gap:12px;grid-template-columns:repeat(3,1fr)">
+          <div>
+            <div style="font-weight:700;color:var(--text-muted);font-size:11px;margin-bottom:4px">DEVICE CLASSIFICATION</div>
+            <div style="color:var(--text-secondary)">Medical device &mdash; Class IIa SaMD</div>
+          </div>
+          <div>
+            <div style="font-weight:700;color:var(--text-muted);font-size:11px;margin-bottom:4px">HIRA STATUS</div>
+            <div style="color:var(--text-secondary)">HealthStore Independent Regulatory Assurance pack complete</div>
+          </div>
+          <div>
+            <div style="font-weight:700;color:var(--text-muted);font-size:11px;margin-bottom:4px">MARKET ACCESS</div>
+            <div style="color:var(--text-secondary)">Documented UK market access with classification rationale on file</div>
+          </div>
+        </div>
+      </div>
+      <p class="ds-u-muted" style="font-size:.8rem;margin:8px 0 0">Self-gates on <code>narrative.regulatory_position</code>, so it appears for any curated product that has one.</p>
+    </div>
+
+    <!-- ============================== R4-3 ============================== -->
+    <h2 id="r4-3">R4-3 &mdash; Header quick-facts parity</h2>
+    <p>
+      matt_demo&rsquo;s header had four KPIs: Platform, NICE guidance, Indicative cost, HealthStore status. The nhs_ds hero /
+      commissioning snapshot covers condition, maturity, NICE and price, but not <strong>Platform</strong> or
+      <strong>HealthStore status</strong>. Low priority &mdash; included for completeness.
+    </p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; add to the snapshot <span class="ds-prio ds-prio--p3">rec</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Add Platform + HealthStore status rows to the commissioning snapshot. Consistent with existing facts.</p>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option B &mdash; hero quick-facts <span class="ds-status ds-status--canonical">Chosen &mdash; shipped</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Vertical stack on the <strong>right of the hero</strong> &mdash; Platform, NICE guidance, HealthStore status. Sits beside the proposition on a left border; stacks under it on narrow screens.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; technical tab only</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Platform lives in the Technical tab; status omitted. Least effort.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option D &mdash; skip</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Deem it low value &mdash; the snapshot already carries the decision-relevant facts.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example">
+      <p class="ds-example__label">Visual &mdash; Option A (two extra rows in the commissioning snapshot)</p>
+      <div style="max-width:420px;background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:13px">
+        <div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border)"><span style="color:var(--text-muted)">Condition</span><span style="color:var(--text-secondary);font-weight:600">COPD</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border)"><span style="color:var(--text-muted)">NICE guidance</span><span style="color:var(--text-secondary);font-weight:600">Referenced</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border)"><span style="color:var(--text-muted)">Indicative price</span><span style="color:var(--text-secondary);font-weight:600">On application</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:#E6F0FB"><span style="color:var(--nhs-blue);font-weight:700">Platform</span><span style="color:var(--nhs-blue);font-weight:700">iOS &middot; Android &middot; Web</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 14px;background:#E6F0FB"><span style="color:var(--nhs-blue);font-weight:700">HealthStore status</span><span style="color:var(--nhs-blue);font-weight:700">Listed &amp; assured</span></div>
+      </div>
+      <p class="ds-u-muted" style="font-size:.8rem;margin:8px 0 0">Consistent with the existing snapshot rows; the two new rows (highlighted) slot in with no layout change.</p>
+    </div>
+    <div class="ds-example">
+      <p class="ds-example__label">Visual &mdash; Option B, as shipped (vertical stack on the right of the hero)</p>
+      <div style="display:flex;gap:24px;max-width:720px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px;font-size:13px">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;gap:8px;margin-bottom:10px"><span style="background:#f0f4f5;border-radius:999px;padding:2px 10px;font-size:11px;color:var(--text-muted)">COPD</span><span style="background:#f0f4f5;border-radius:999px;padding:2px 10px;font-size:11px;color:var(--text-muted)">Established</span></div>
+          <div style="font-weight:800;font-size:18px;color:var(--text-secondary);margin-bottom:2px">Luscii</div>
+          <div style="color:var(--text-muted);margin-bottom:10px">Luscii Healthcare</div>
+          <p style="margin:0;color:var(--text-secondary);line-height:1.6">Remote monitoring platform that lets ICBs stand up virtual COPD wards at scale&hellip;</p>
+        </div>
+        <div style="width:190px;flex-shrink:0;border-left:1px solid var(--border);padding-left:20px;display:flex;flex-direction:column;gap:14px">
+          <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);margin-bottom:2px">Platform</div><div style="font-weight:700;color:var(--text-secondary)">iOS, Android, Web</div></div>
+          <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);margin-bottom:2px">NICE guidance</div><div style="font-weight:700;color:var(--text-secondary)">NICE HTE19 (HTG736)</div></div>
+          <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);margin-bottom:2px">HealthStore status</div><div style="font-weight:700;color:var(--text-secondary)">HealthStore assurance complete; buyer selection pack ready</div></div>
+        </div>
+      </div>
+      <p class="ds-u-muted" style="font-size:.8rem;margin:8px 0 0">Three facts only, stacked vertically on a left border to the right of the proposition. Values come from <code>app.platform_tags</code> (fallback iOS/Android/Web), <code>app.nice_guidance_refs[0]</code> and <code>narrative.commercial_readiness.commercial_status</code>. On narrow screens the stack drops below the proposition.</p>
+    </div>
+
+    <!-- ============================== 5. ECONOMICS ROUND ============================== -->
+    <h2 id="economics-round">5. Economics &mdash; its own reconcile-heavy round (Round 5)</h2>
+    <p>
+      matt_demo&rsquo;s &ldquo;What it could be worth&rdquo; renders the full <code>commissioner_economics</code> object:
+      a headline (e.g. Luscii <strong>&ldquo;&pound;245k net for 500 patients&rdquo;</strong>), net/cash/capacity/cost
+      <strong>settings cards</strong>, a <strong>tariff &amp; QOF note</strong>, and a <strong>funding-levers</strong> grid
+      (emergency tariff, virtual ward tariff, QOF COPD007, MedTech Funding Mandate). None of this is on the page today &mdash;
+      <code>PdpLocalValue</code> computes its own illustrative range instead.
+    </p>
+    <div class="ds-note ds-note--source">
+      <strong>Why it can&rsquo;t just be ported.</strong>
+      <ul style="margin:8px 0 0;padding-left:20px">
+        <li><strong>Price conflict.</strong> The curated net figures embed <code>&pound;110/patient/year</code> (500 &times; &pound;110 = &pound;55k cost) &mdash; the very price Round 1 suppressed as unverified.</li>
+        <li><strong>Numeric conflict.</strong> &ldquo;&pound;245k net&rdquo; contradicts the Round 2 illustrative range (&minus;&pound;65k to &plus;&pound;60k). Two different models on one page would undermine credibility.</li>
+        <li><strong>Funding levers carry &pound; figures.</strong> Tariff amounts (&pound;2,500&ndash;&pound;5,500/admission, BPT &pound;189) need a verification pass before they&rsquo;re commissioner-facing.</li>
+      </ul>
+    </div>
+    <p>
+      <strong>Scope for Round 5 (to be a its own decision page):</strong> reconcile the price to a single source of truth; decide
+      whether net figures publish at all or stay illustrative; split the <em>non-numeric</em> funding-levers / tariff-QOF
+      narrative (shippable sooner) from the <em>numeric</em> settings (price-gated); and decide interactivity (ties to R4-1).
+      <strong>Not shipped from this page.</strong>
+    </p>
+
+    <!-- ============================== DECISION LOG ============================== -->
+    <h2 id="decision-log">6. Decision log</h2>
+    <p>Reply with one letter per row (e.g. &ldquo;R4-1 D, R4-2 A, R4-3 A&rdquo;) and I&rsquo;ll ship them and flip this page to an applied record.</p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th><th>Chosen &amp; to ship</th></tr></thead>
+      <tbody>
+        <tr><td>R4-1</td><td>Interactive scenario model</td><td>D &mdash; defer to economics round</td><td><strong>D</strong> &mdash; deferred to Round 5 (no code change)</td></tr>
+        <tr><td>R4-2</td><td>Regulatory position detail</td><td>A &mdash; passport intro</td><td><strong>B</strong> &mdash; dedicated regulatory card, <span class="ds-status ds-status--canonical">shipped</span></td></tr>
+        <tr><td>R4-3</td><td>Header quick-facts parity</td><td>A &mdash; snapshot rows</td><td><strong>B</strong> &mdash; vertical quick-facts (Platform / NICE / HealthStore status) on the right of the hero, <span class="ds-status ds-status--canonical">shipped</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="ds-note">
+      <strong>Applied this round.</strong>
+      <ul style="margin:8px 0 0;padding-left:20px">
+        <li><strong>R4-1 D</strong> &mdash; scenario toggle deferred to Round 5 (economics); no code change.</li>
+        <li><strong>R4-2 B</strong> &mdash; dedicated &ldquo;Regulatory position&rdquo; card in the assurance passport, above the status chips (<code>components/product/PdpAssurancePassport.tsx</code>).</li>
+        <li><strong>R4-3 B</strong> &mdash; vertical quick-facts stack (Platform / NICE guidance / HealthStore status) on the right of the hero, gated to curated products (<code>app/apps/[slug]/page.tsx</code>).</li>
+      </ul>
+      The economics round (Round 5) will get its own decision page.
+    </div>
+
+    <p class="ds-u-muted" style="font-size:.9rem">
+      Round 4 of the Luscii content migration &middot; decision document &middot; traced against code, July 2026.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

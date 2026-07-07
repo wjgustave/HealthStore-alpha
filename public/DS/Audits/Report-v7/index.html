@@ -86,10 +86,10 @@
           <span class="ds-u-muted" style="font-size:.85rem;max-width:60%">A guided self-management app for people living with COPD.</span>
           <button class="ds-btn ds-btn--primary ds-btn--sm" type="button">Express interest</button>
         </div>
-        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;padding:4px 4px 8px;border-top:1px solid var(--border);background:#F0F4F5;border-radius:8px">
           <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">Share</button>
-          <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">Save</button>
-          <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">Compare</button>
+          <button class="ds-btn ds-btn--toggle ds-btn--sm" type="button" aria-pressed="false">Save</button>
+          <button class="ds-btn ds-btn--toggle ds-btn--sm" type="button" aria-pressed="false">Add to compare</button>
         </div>
       </div>
       <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Six pills above the title; four actions of similar weight; &ldquo;Express interest&rdquo; also repeats lower down the page.</p>
@@ -114,10 +114,10 @@
       <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
         <div>
           <p class="ds-example__label">Option A &mdash; compact icon + label cluster (recommended)</p>
-          <div style="display:flex;gap:8px;justify-content:flex-end;border:1px dashed var(--border);border-radius:10px;padding:12px;background:#f8fafc">
+          <div style="display:flex;gap:8px;justify-content:flex-end;border:1px dashed var(--border);border-radius:10px;padding:12px 12px 16px;background:#f8fafc">
             <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">&#8682; Share</button>
-            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">&#9734; Save</button>
-            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">&#8646; Compare</button>
+            <button class="ds-btn ds-btn--toggle ds-btn--sm" type="button" aria-pressed="false">&#9734; Save</button>
+            <button class="ds-btn ds-btn--toggle ds-btn--sm" type="button" aria-pressed="false">&#8646; Add to compare</button>
           </div>
           <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Keeps labels (clearer for commissioners), just smaller and visually subordinate.</p>
         </div>
@@ -290,10 +290,10 @@
           <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Only the icon distinguishes add vs added.</p>
         </div>
         <div>
-          <p class="ds-example__label">Option A &mdash; &ldquo;Add to compare&rdquo; / &ldquo;Added&rdquo; (recommended)</p>
+          <p class="ds-example__label">Option A &mdash; &ldquo;Add to compare&rdquo; / &ldquo;Added&rdquo; (recommended, shipped)</p>
           <div style="display:flex;gap:8px">
-            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">&#8646; Add to compare</button>
-            <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button" style="background:#E6F0FB">&#10003; Added</button>
+            <button class="ds-btn ds-btn--toggle ds-btn--sm" type="button" aria-pressed="false">&#8646; Add to compare</button>
+            <button class="ds-btn ds-btn--on ds-btn--sm" type="button" aria-pressed="true">&#10003; Added</button>
           </div>
           <p class="ds-u-muted" style="font-size:.8rem;margin:.5rem 0 0">Verb tells you what the click does; pressed state reads as &ldquo;Added&rdquo;.</p>
         </div>

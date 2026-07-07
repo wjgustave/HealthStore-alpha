@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Luscii Content Mig 4 — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="luscii-content-mig-4">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Content migration &middot; Luscii &middot; Round 3 decisions</p>
+      <h1 class="ds-page-title">Luscii Content Mig 4 &mdash; Round 3 (Assurance passport, reconcile, templatise)</h1>
+      <p class="ds-lede">
+        Round 3 finishes the story on the hybrid <code>/apps/luscii</code> page. Three jobs: fold in the
+        <strong>assurance passport</strong> (&ldquo;national assurance once, reuse it locally&rdquo;), <strong>reconcile</strong>
+        the assurance summary against the granular governance record so the page can&rsquo;t overstate, and
+        <strong>templatise</strong> the Luscii pattern so other curated products can light up without bespoke code. This page
+        is a <strong>decision document</strong>: pick an option (A&ndash;D) per decision, tell me which to ship, and I will
+        apply them and turn this into an &ldquo;applied&rdquo; record.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Round</div><div class="ds-meta__v">3 of 3 &middot; assurance, reconcile, templatise</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Status</div><div class="ds-meta__v"><span class="ds-status ds-status--canonical">Applied</span> &middot; shipped to <code>/apps/{curated}</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Page model</div><div class="ds-meta__v">Hybrid &middot; spine + tabs on <code>/apps/luscii</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Scope</div><div class="ds-meta__v">Luscii pilot &plus; templatise for curated products</div></div>
+    </div>
+
+    <div class="ds-note">
+      <strong>Applied 2 July 2026.</strong> Decisions <strong>R3-1 A &middot; R3-2 D &middot; R3-3 C &middot; R3-4 D &middot;
+      R3-5 A &middot; R3-6 A</strong> are shipped. The option write-ups below are kept as the record; the chosen option in each
+      is marked <span class="ds-status ds-status--canonical">Chosen</span>, and section 5 lists what went live. The reconcile
+      finding in section 2 is real: it was traced against the current <code>luscii.json</code>.
+    </div>
+
+    <div class="ds-note ds-note--source">
+      <strong>What Rounds 1&ndash;2 already shipped.</strong> The narrative spine (problem &rarr; how it helps &rarr; local
+      value &rarr; how to buy), the provenance footer, and the context-driven local-value block are live on
+      <code>/apps/luscii</code>, gated by <code>slug === 'luscii'</code>. The assurance passport component
+      (<code>components/product/AssurancePassport.tsx</code>) exists but is <strong>not mounted anywhere</strong>. Round 3 mounts
+      it, reconciles it, and removes the hard-coded slug gate.
+    </div>
+
+    <!-- ============================== 1. AT A GLANCE ============================== -->
+    <h2>1. Decisions at a glance</h2>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th><th>Visual?</th></tr></thead>
+      <tbody>
+        <tr><td>R3-1</td><td>Assurance passport placement</td><td>A &mdash; new &ldquo;Assurance&rdquo; section in the spine</td><td>Yes</td></tr>
+        <tr><td>R3-2</td><td>Assurance passport styling</td><td>C &mdash; PDP cards &plus; callout (built as <strong>D</strong> &mdash; chips + expandable)</td><td>Yes</td></tr>
+        <tr><td>R3-3</td><td>Reconcile summary vs granular JSON</td><td>D &mdash; hand-authored summary, reconcile now &plus; mapping</td><td>Yes</td></tr>
+        <tr><td>R3-4</td><td>Templatise scope (which products)</td><td>D &mdash; data-driven gating (narrative &rArr; spine; COPD &rArr; value)</td><td>Yes</td></tr>
+        <tr><td>R3-5</td><td>Authoring artifact</td><td>A &mdash; a <code>docs/</code> authoring guide</td><td>&mdash;</td></tr>
+        <tr><td>R3-6</td><td>Evidence schema normalise (roadmap item)</td><td>A &mdash; verify &amp; close as no-op on this branch</td><td>&mdash;</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============================== 2. RECONCILE FINDING ============================== -->
+    <h2 id="reconcile-finding">2. The reconcile finding (real)</h2>
+    <p>
+      The narrative assurance passport (<code>lib/content/productNarratives.ts</code>) summarises five domains. Traced against
+      the granular record in <code>content/apps/luscii.json</code>, four line up. <strong>One overstates.</strong>
+    </p>
+    <table class="ds-table">
+      <thead>
+        <tr><th>Assurance domain (summary)</th><th>Status now</th><th>Granular JSON backing</th><th>Reconciled?</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Clinical evidence</td>
+          <td><span class="nhsuk-tag nhsuk-tag--green">Verified &mdash; current</span></td>
+          <td><code>nice_guidance_refs</code> (HTG736), <code>clinical_evidence_detailed</code></td>
+          <td><span class="ds-status ds-status--canonical">OK</span></td>
+        </tr>
+        <tr>
+          <td>Medical device regulation</td>
+          <td><span class="nhsuk-tag nhsuk-tag--green">Verified &mdash; current</span></td>
+          <td><code>device_class</code> = &ldquo;Class IIa SaMD&rdquo;</td>
+          <td><span class="ds-status ds-status--canonical">OK (fixed R1)</span></td>
+        </tr>
+        <tr>
+          <td>Clinical safety</td>
+          <td><span class="nhsuk-tag nhsuk-tag--grey">Verified &mdash; review due</span></td>
+          <td><code>dcb0129_status</code> = &ldquo;Confirmed&rdquo;; DCB0160 boilerplate; residual action already present</td>
+          <td><span class="ds-status ds-status--canonical">OK</span></td>
+        </tr>
+        <tr style="background:#FDECEA">
+          <td><strong>Data protection and IG</strong></td>
+          <td><span class="nhsuk-tag nhsuk-tag--green">Verified &mdash; current</span></td>
+          <td><code>dtac_status</code> = passed &middot; <code>dspt_status</code> = Compliant &middot; <strong><code>iso27001</code> = &ldquo;Not confirmed&rdquo;</strong> &middot; <strong><code>cyber_essentials</code> = &ldquo;Not confirmed&rdquo;</strong> &middot; GDPR: AWS Germany, DPIA required</td>
+          <td><span class="ds-status ds-status--page">Conflict &mdash; overstates</span></td>
+        </tr>
+        <tr>
+          <td>Commercial readiness</td>
+          <td><span class="nhsuk-tag nhsuk-tag--green">Verified &mdash; current</span></td>
+          <td><code>commercial_readiness</code> buyer pack; price &ldquo;on application&rdquo; (R1)</td>
+          <td><span class="ds-status ds-status--canonical">OK (fixed R1)</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="ds-note ds-note--source">
+      <strong>The conflict.</strong> The passport marks <em>Data protection and IG</em> as &ldquo;Verified &mdash; current&rdquo;
+      on the strength of DTAC + DSP Toolkit, but the granular record has <strong>ISO 27001 and Cyber Essentials &ldquo;not
+      confirmed in reviewed sources&rdquo;</strong> and a DPIA still required (AWS Germany hosting). A commissioner opening the
+      Safety &amp; governance tab would see a weaker picture than the green summary chip implies. R3-3 decides how to close this.
+    </div>
+
+    <!-- ============================== R3-1 ============================== -->
+    <h2 id="r3-1">R3-1 &mdash; Assurance passport placement</h2>
+    <p>Where does the &ldquo;national assurance, reuse the passport&rdquo; summary live, relative to the existing granular Safety &amp; governance tab?</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; new section in the spine <span class="ds-prio ds-prio--p3">rec</span> <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">An &ldquo;Assurance&rdquo; <code>PdpSection</code> after How-to-buy, before the tabs. Matches the R1/R2 spine pattern; deep detail stays in the Safety &amp; governance tab.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; top of the Safety tab</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Passport sits above the granular rows inside the existing tab. Keeps all governance in one place; loses the spine narrative beat.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; snapshot chip strip</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">A compact row of domain status chips near the commissioning snapshot; full passport in the tab. Very scannable; least room for the &ldquo;reuse&rdquo; message.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option D &mdash; both spine &plus; tab</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Summary in the spine and reframed detail at the top of the tab. Most complete; some duplication to keep in sync.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example">
+      <p class="ds-example__label">Visual &mdash; where Option A sits in the spine</p>
+      <div style="display:flex;flex-direction:column;gap:6px;max-width:420px">
+        <div style="background:#f0f4f5;border-radius:6px;padding:8px 12px;font-size:13px;color:var(--text-muted)">Problem &middot; How Luscii helps</div>
+        <div style="background:#f0f4f5;border-radius:6px;padding:8px 12px;font-size:13px;color:var(--text-muted)">What this could mean for your area &middot; What it&rsquo;s worth</div>
+        <div style="background:#f0f4f5;border-radius:6px;padding:8px 12px;font-size:13px;color:var(--text-muted)">How to buy locally</div>
+        <div style="background:#e6f0fb;border:2px solid var(--nhs-blue);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--nhs-blue);font-weight:700">Assurance &mdash; national once, reuse the passport &nbsp;&larr; new (A)</div>
+        <div style="background:#fff;border:1px dashed var(--border);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--text-muted)">Reference tabs (Safety &amp; governance detail retained)</div>
+      </div>
+    </div>
+
+    <!-- ============================== R3-2 ============================== -->
+    <h2 id="r3-2">R3-2 &mdash; Assurance passport styling</h2>
+    <p>
+      The existing <code>AssurancePassport.tsx</code> is built with <strong>NHS.UK frontend classes</strong>
+      (<code>nhsuk-table</code>, <code>nhsuk-tag</code>, <code>nhsuk-warning-callout</code>). The spine everywhere else uses the
+      <strong>PDP design tokens</strong> (<code>PdpSection</code>, <code>hs-*</code>, <code>var(--nhs-blue)</code>). Which look wins?
+    </p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; restyle to PDP tokens</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Rebuild the passport with <code>hs-*</code> cards. Fully consistent with the spine; drops the nhsuk table.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; mount nhsuk as-is</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Use the component unchanged. Zero rebuild; visually foreign inside the spine.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; PDP cards &plus; material-gap callout <span class="ds-prio ds-prio--p3">rec</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">PDP-styled domain cards for the summary, but keep the explicit &ldquo;material assurance gaps&rdquo; callout behaviour. Consistent <em>and</em> keeps the safety-first surfacing.</p>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option D &mdash; status chips, table expandable <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">One row of domain chips; full table behind a &ldquo;show detail&rdquo; expander. Most compact. <em>Chosen build &mdash; the material-gap callout is kept above the toggle so safety issues stay visible.</em></p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example">
+      <p class="ds-example__label">Visual &mdash; Option B (nhsuk, as-built) vs Option C (PDP cards, recommended)</p>
+      <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+        <div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:0 0 4px">Option B &mdash; nhsuk table</p>
+          <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:13px">
+            <div style="display:flex;border-bottom:2px solid #212b32;font-weight:700;padding:8px 10px;background:#fff"><span style="flex:2">Domain</span><span style="flex:2">Status</span></div>
+            <div style="display:flex;border-bottom:1px solid #d8dde0;padding:8px 10px;background:#fff"><span style="flex:2">Clinical evidence</span><span style="flex:2"><span class="nhsuk-tag nhsuk-tag--green">Verified &mdash; current</span></span></div>
+            <div style="display:flex;border-bottom:1px solid #d8dde0;padding:8px 10px;background:#fff"><span style="flex:2">Clinical safety</span><span style="flex:2"><span class="nhsuk-tag nhsuk-tag--grey">Review due</span></span></div>
+            <div style="display:flex;padding:8px 10px;background:#fff"><span style="flex:2">Data protection &amp; IG</span><span style="flex:2"><span class="nhsuk-tag nhsuk-tag--grey">Review due</span></span></div>
+          </div>
+          <p class="ds-u-muted" style="font-size:.78rem;margin:6px 0 0">Square NHS.UK styling &mdash; reads as a different component.</p>
+        </div>
+        <div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:0 0 4px">Option C &mdash; PDP cards</p>
+          <div style="display:grid;gap:8px">
+            <div style="border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:#fff;display:flex;justify-content:space-between;align-items:center;font-size:13px"><span style="font-weight:600;color:var(--text-secondary)">Clinical evidence</span><span style="background:#e6f2ea;color:#007f3b;border-radius:12px;padding:2px 10px;font-size:12px;font-weight:700">Verified</span></div>
+            <div style="border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:#fff;display:flex;justify-content:space-between;align-items:center;font-size:13px"><span style="font-weight:600;color:var(--text-secondary)">Clinical safety</span><span style="background:#f0f4f5;color:var(--text-muted);border-radius:12px;padding:2px 10px;font-size:12px;font-weight:700">Review due</span></div>
+            <div style="border-left:8px solid #ffb81c;background:#fff9ee;border-radius:4px;padding:8px 12px;font-size:12px;color:#212b32"><strong>Local action:</strong> confirm ISO 27001 / Cyber Essentials; complete DPIA before go-live.</div>
+          </div>
+          <p class="ds-u-muted" style="font-size:.78rem;margin:6px 0 0">Matches the spine; keeps the material-gap callout.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example">
+      <p class="ds-example__label">Visual &mdash; Option D for comparison (compact status chips, table expandable)</p>
+      <div style="max-width:520px">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+          <span style="background:#e6f2ea;color:#007f3b;border-radius:999px;padding:3px 12px;font-size:12px;font-weight:700">Clinical evidence &#10003;</span>
+          <span style="background:#e6f2ea;color:#007f3b;border-radius:999px;padding:3px 12px;font-size:12px;font-weight:700">Device regulation &#10003;</span>
+          <span style="background:#f0f4f5;color:#425563;border-radius:999px;padding:3px 12px;font-size:12px;font-weight:700">Clinical safety &middot; review due</span>
+          <span style="background:#f0f4f5;color:#425563;border-radius:999px;padding:3px 12px;font-size:12px;font-weight:700">Data protection &amp; IG &middot; review due</span>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:8px;background:#fff;font-size:13px">
+          <div style="padding:8px 12px;color:var(--nhs-blue);font-weight:700;border-bottom:1px solid var(--border);cursor:pointer">&#9656; Show full assurance detail</div>
+          <div style="padding:8px 12px;color:var(--text-muted)">Domain-by-domain table collapsed by default &mdash; expands to the same rows as Option B/C.</div>
+        </div>
+      </div>
+      <p class="ds-u-muted" style="font-size:.78rem;margin:8px 0 0">
+        <strong>This is the chosen build.</strong> Most compact of the four &mdash; chips give an at-a-glance read and the full
+        table (with residual actions) sits behind the disclosure. The <em>material assurance gaps</em> callout is kept above the
+        toggle, so any incomplete/expired domain still surfaces without a click.
+      </p>
+    </div>
+
+    <!-- ============================== R3-3 ============================== -->
+    <h2 id="r3-3">R3-3 &mdash; Reconcile: summary vs granular record</h2>
+    <p>Given the IG conflict in section 2, how do we keep the summary and the detail honest and in step?</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; summary is source of truth</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Narrative domains lead; JSON is just detail. Simple, but lets the summary overstate (the current bug).</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; leave both independent</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Author maintains each by hand. No new work now; the drift stays.</p>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option C &mdash; auto-derive from JSON <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Compute domain statuses from the granular fields. Always in step; loses the curated summary voice. <em>Chosen over rec D &mdash; structurally prevents drift and needs no per-product authoring, which suits R3-4 D.</em></p>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option D &mdash; reconcile now &plus; mapping <span class="ds-prio ds-prio--p3">rec</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Keep the hand-authored summary but fix it now: downgrade IG to <em>review due</em> with a residual action, and publish the domain&rarr;JSON mapping (section 2) as the check.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example">
+      <p class="ds-example__label">Visual &mdash; the one edit Option D ships (Data protection &amp; IG domain)</p>
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+        <div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:0 0 4px">Before &mdash; overstates</p>
+          <div style="border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:#fff;font-size:13px">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:600">Data protection and IG</span><span style="background:#e6f2ea;color:#007f3b;border-radius:12px;padding:2px 10px;font-size:12px;font-weight:700">Verified &mdash; current</span></div>
+            <p style="margin:8px 0 0;color:var(--text-muted)">DTAC complete; DPIA template available for local adoption.</p>
+          </div>
+        </div>
+        <div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:0 0 4px">After &mdash; reconciled</p>
+          <div style="border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:#fff;font-size:13px">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:600">Data protection and IG</span><span style="background:#f0f4f5;color:var(--text-muted);border-radius:12px;padding:2px 10px;font-size:12px;font-weight:700">Verified &mdash; review due</span></div>
+            <p style="margin:8px 0 0;color:var(--text-muted)">DTAC complete and DSP Toolkit compliant; DPIA template available.</p>
+            <p style="margin:6px 0 0;color:#7A4800"><strong>Local action:</strong> confirm supplier ISO 27001 &amp; Cyber Essentials; complete local DPIA (AWS Germany hosting).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== R3-4 ============================== -->
+    <h2 id="r3-4">R3-4 &mdash; Templatise: which products light up</h2>
+    <p>
+      The spine is gated by <code>slug === 'luscii'</code>. Curated narratives already exist for <strong>luscii, mycopd,
+      myheart and joint-academy</strong>. Local reference/ROI data exists only for <strong>COPD</strong>. How far do we open it?
+    </p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; Luscii only (code refactor)</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Generalise the structure but keep the gate on Luscii. Safest; no new products go commissioner-facing.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; all four curated</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Turn on luscii, mycopd, myheart, joint-academy. Biggest payoff; each needs a reconcile pass first.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; COPD only</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">luscii + mycopd, where the local value block has real data. Coherent set; leaves myheart/joint-academy for later.</p>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option D &mdash; data-driven gating <span class="ds-prio ds-prio--p3">rec</span> <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Spine + assurance show for any product with a curated narrative; the local-value block self-gates to COPD (already does via <code>isCopd</code>). One rule, no per-slug list.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example">
+      <p class="ds-example__label">Visual &mdash; what each product gets under Option D</p>
+      <table class="ds-table" style="margin:0">
+        <thead><tr><th>Product</th><th>Condition</th><th>Curated narrative</th><th>Spine</th><th>Assurance passport</th><th>Local value block</th></tr></thead>
+        <tbody>
+          <tr><td>Luscii</td><td>COPD</td><td>Yes</td><td>&#10003;</td><td>&#10003;</td><td>&#10003; local</td></tr>
+          <tr><td>myCOPD</td><td>COPD</td><td>Yes</td><td>&#10003;</td><td>&#10003;</td><td>&#10003; local</td></tr>
+          <tr><td>myHeart</td><td>Cardiac</td><td>Yes</td><td>&#10003;</td><td>&#10003;</td><td>&mdash; national teaser</td></tr>
+          <tr><td>Joint Academy</td><td>MSK</td><td>Yes</td><td>&#10003;</td><td>&#10003;</td><td>&mdash; national teaser</td></tr>
+          <tr><td>Long-tail (JSON only)</td><td>&mdash;</td><td>Fallback (<code>buildNarrativeFromApp</code>)</td><td>Optional</td><td>If <code>assurance_domains</code> present</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+      <p class="ds-u-muted" style="font-size:.78rem;margin:8px 0 0">If you pick B/C instead of D, only the listed products get the spine; the mechanism is the same, just a narrower gate.</p>
+    </div>
+
+    <!-- ============================== R3-5 ============================== -->
+    <h2 id="r3-5">R3-5 &mdash; Authoring artifact</h2>
+    <p>Templatise also means documenting how the next person authors a product narrative. What artifact do we ship?</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; docs/ authoring guide <span class="ds-prio ds-prio--p3">rec</span> <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">A focused <code>docs/PRODUCT_NARRATIVE_AUTHORING.md</code>: the content model, the seven-step process, and the reconcile checklist.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; section in ADDING_APPS.md</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Fold it into the existing app-onboarding doc. One place to look; risks burying it.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; stub &plus; comments</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">A commented template narrative object in code. Closest to the work; least discoverable for non-devs.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option D &mdash; all of the above</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Guide + ADDING_APPS pointer + code stub. Most thorough; most to maintain.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== R3-6 ============================== -->
+    <h2 id="r3-6">R3-6 &mdash; Evidence schema normalise (roadmap item)</h2>
+    <p>
+      The Round 1 roadmap listed &ldquo;normalise evidence schema&rdquo; (<code>n</code>&rarr;<code>sample_size</code>,
+      <code>key_results</code>&rarr;<code>outcome</code>, <code>url_full_text</code>&rarr;<code>url</code>). That assumed the
+      matt_demo field names. On <strong>this branch it&rsquo;s already consistent</strong>.
+    </p>
+    <div class="ds-note ds-note--source">
+      <strong>Verified.</strong> <code>EvidenceCard</code> in <code>app/apps/[slug]/pdpBlocks.tsx</code> reads
+      <code>study.n</code>, <code>study.key_results</code> and <code>study.url_full_text</code>, and
+      <code>luscii.json &rarr; clinical_evidence_detailed</code> uses exactly those keys. The full evidence record renders today.
+      No rename needed.
+    </div>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; verify &amp; close as no-op <span class="ds-prio ds-prio--p3">rec</span> <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Done above &mdash; nothing to change on this branch.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; rename to newer keys</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Rename fields across JSON + card for a &ldquo;cleaner&rdquo; schema. Churn with no user-facing gain.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; add a normaliser layer</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Map both schemas at read time. Only worth it if we later import matt_demo-shaped JSON.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== CARRIED OUT NOW ============================== -->
+    <h2 id="carried-out">3. Carried out now (no decision needed)</h2>
+    <ul>
+      <li><strong>Reconcile finding traced</strong> &mdash; section 2 mapping built from the live <code>luscii.json</code> and narrative domains; the one conflict (IG) is documented and the exact fix is drafted (R3-3 visual).</li>
+      <li><strong>Evidence schema verified</strong> &mdash; confirmed as a no-op on this branch (R3-6).</li>
+      <li><strong>Audits index updated</strong> &mdash; a Round 3 card now links here.</li>
+    </ul>
+
+    <h3>Parity checklist (acceptance criteria for the build)</h3>
+    <p>Whatever ships must not regress Rounds 1&ndash;2. These are checks, not decisions:</p>
+    <table class="ds-table">
+      <thead><tr><th>Area</th><th>Check</th></tr></thead>
+      <tbody>
+        <tr><td>Share / PDF</td><td>Assurance section wrapped in a <code>PdpSection</code> / <code>PdpShareRegion</code> with a <code>shareKey</code>, so it appears in share + print like other sections.</td></tr>
+        <tr><td>Express interest</td><td>Hero and footer EOI CTAs unaffected by the new section and the un-gating.</td></tr>
+        <tr><td>Print</td><td>Assurance cards and the material-gap callout print legibly (no clipped tables).</td></tr>
+        <tr><td>Accessibility</td><td>Status conveyed by text, not colour alone; table has headers; callout is a landmark/region with a heading.</td></tr>
+        <tr><td>Server-safe</td><td>Passport renders in the server component (no client boundary), consistent with the spine and local-value block.</td></tr>
+        <tr><td>No regressions when un-gated</td><td>Products without a curated narrative keep the reference-only layout; the local-value block still self-gates to COPD.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============================== DECISION LOG ============================== -->
+    <h2 id="decision-log">4. Decision log</h2>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th><th>Chosen &amp; shipped</th></tr></thead>
+      <tbody>
+        <tr><td>R3-1</td><td>Assurance passport placement</td><td>A &mdash; spine section</td><td><strong>A</strong> <span class="ds-status ds-status--canonical">As rec</span></td></tr>
+        <tr><td>R3-2</td><td>Assurance passport styling</td><td>C &mdash; PDP cards + gap callout</td><td><strong>D</strong> <span class="ds-status ds-status--page">Differs (rec C)</span> &middot; chips + expandable, callout kept</td></tr>
+        <tr><td>R3-3</td><td>Reconcile handling</td><td>D &mdash; reconcile now + mapping</td><td><strong>C</strong> <span class="ds-status ds-status--page">Differs (rec D)</span> &middot; auto-derive from JSON</td></tr>
+        <tr><td>R3-4</td><td>Templatise scope</td><td>D &mdash; data-driven gating</td><td><strong>D</strong> <span class="ds-status ds-status--canonical">As rec</span></td></tr>
+        <tr><td>R3-5</td><td>Authoring artifact</td><td>A &mdash; docs/ guide</td><td><strong>A</strong> <span class="ds-status ds-status--canonical">As rec</span></td></tr>
+        <tr><td>R3-6</td><td>Evidence schema</td><td>A &mdash; verify &amp; close</td><td><strong>A</strong> <span class="ds-status ds-status--canonical">As rec</span></td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============================== SHIPPED ============================== -->
+    <h2 id="shipped">5. Shipped &mdash; what went live</h2>
+    <p>
+      Applied 2 July 2026. The assurance passport now renders as a spine section (after How-to-buy) on every product with a
+      curated narrative, with domains <strong>derived from each product&rsquo;s governance JSON</strong> so the summary cannot
+      overstate the detail. The Luscii-only gate is gone.
+    </p>
+    <table class="ds-table">
+      <thead><tr><th>File</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr><td><code>lib/content/assuranceDomains.ts</code></td><td><strong>New</strong> (R3-3 C). <code>deriveAssuranceDomains(app)</code> maps DTAC/DCB0129/device class/DSPT/ISO/CE/GDPR/NICE into the domain shape; weakest-substantiated status; missing DTAC surfaces a material gap.</td></tr>
+        <tr><td><code>components/product/PdpAssurancePassport.tsx</code></td><td><strong>New</strong> (R3-1 A, R3-2 D). Server component: compact status chips + &ldquo;reuse the passport&rdquo; intro + material-gap callout, with the domain-by-domain table behind a native <code>&lt;details&gt;</code> disclosure.</td></tr>
+        <tr><td><code>components/product/PdpNarrativeSpine.tsx</code></td><td>Added optional <code>assurance</code> slot, rendered after How-to-buy.</td></tr>
+        <tr><td><code>app/apps/[slug]/page.tsx</code></td><td>R3-4 D: <code>showNarrativeSpine = getProductNarrative(slug) != null</code> (was <code>slug === 'luscii'</code>); mounts the passport via the new slot.</td></tr>
+        <tr><td><code>docs/PRODUCT_NARRATIVE_AUTHORING.md</code></td><td><strong>New</strong> (R3-5 A). Content model, seven-step process, reconcile checklist.</td></tr>
+      </tbody>
+    </table>
+    <div class="ds-note">
+      <strong>Reconcile outcome (R3-3 C).</strong> Because domains derive from the JSON, Luscii&rsquo;s <em>Data protection and
+      IG</em> now resolves to <strong>&ldquo;Verified &mdash; review due&rdquo;</strong> with the residual action &ldquo;confirm
+      supplier ISO 27001 and Cyber Essentials; complete a local DPIA&rdquo; &mdash; the section-2 conflict is fixed structurally,
+      not by editing a hand-authored summary. The narrative <code>assurance_domains</code> are now unused for rendering (kept for
+      reference).
+    </div>
+    <div class="ds-note ds-note--source">
+      <strong>Now commissioner-facing under R3-4 D:</strong> myCOPD, myHeart and Joint Academy also gained the spine + a
+      JSON-derived passport. The local-value block still self-gates to COPD, so myCOPD shows it while myHeart / Joint Academy
+      do not. <strong>Follow-up:</strong> the COPD local-value framing (&ldquo;monitored cohort&rdquo;) is remote-monitoring
+      flavoured &mdash; revisit the wording for myCOPD (a discharge-bundle product) in a later pass.
+      <br><strong>Verification:</strong> <code>tsc --noEmit</code> clean on touched files; no new lint; passport is server-safe.
+    </div>
+
+    <p class="ds-u-muted" style="font-size:.9rem">
+      Round 3 of the Luscii content migration &middot; decision document &middot; traced against code, July 2026. Closes the
+      2&ndash;3 record series opened in Mig 1.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

@@ -91,7 +91,7 @@ export default function Nav({
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b" style={{ borderColor: 'var(--border)', background: 'transparent' }}>
+    <header className="z-50 border-b" style={{ borderColor: 'var(--border)', background: 'transparent' }}>
       <div className="bg-white">
         <div style={aiAdvisorBlueStripStyle} />
         <nav className={`relative ${aiAdvisorNavBarClass}`}>
@@ -143,7 +143,7 @@ export default function Nav({
                 </Link>
                 {isLoggedIn ? (
                   <button onClick={handleLogout}
-                    className="ml-2 flex items-center gap-2 px-4 py-2 rounded-md hs-text-label hs-font-normal transition-colors hover:bg-gray-100"
+                    className="ml-2 flex items-center gap-2 px-4 py-2 rounded-md hs-text-label hs-font-normal transition-colors hover:bg-[#F0F4F5]"
                     style={{ color: 'var(--text-muted)' }}>
                     <LogOut className="w-3.5 h-3.5" />
                     Sign out
@@ -159,7 +159,7 @@ export default function Nav({
                 )}
               </div>
               <button
-                className="md:hidden p-2 rounded transition-colors hover:bg-gray-100"
+                className="md:hidden p-2 rounded transition-colors hover:bg-[#F0F4F5]"
                 onClick={() => setMobileOpen(o => !o)}
                 aria-label="Toggle menu"
                 aria-expanded={mobileOpen}
@@ -299,7 +299,7 @@ export default function Nav({
           )}
           {isLoggedIn ? (
             <button onClick={handleLogout}
-              className="px-4 py-2 rounded-md hs-text-label hs-font-normal text-left flex items-center gap-2 transition-colors hover:bg-gray-100"
+              className="px-4 py-2 rounded-md hs-text-label hs-font-normal text-left flex items-center gap-2 transition-colors hover:bg-[#F0F4F5]"
               style={{ color: 'var(--text-muted)' }}>
               <LogOut className="w-3.5 h-3.5" />
               Sign out

@@ -29,7 +29,7 @@ export function WidgetShell({
       {footerHref ? (
         <Link
           href={footerHref}
-          className="mt-6 flex shrink-0 items-center justify-between rounded-lg border px-4 py-4 hs-text-label hs-font-bold transition-colors hover:bg-slate-50"
+          className="mt-6 flex shrink-0 items-center justify-between rounded-lg border px-4 py-4 hs-text-label hs-font-bold transition-colors hover:bg-[#F0F4F5]"
           style={{ borderColor: 'var(--border)', color: 'var(--nhs-blue)' }}
         >
           {footerLabel}

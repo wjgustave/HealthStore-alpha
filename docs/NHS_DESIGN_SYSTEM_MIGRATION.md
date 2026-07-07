@@ -53,7 +53,8 @@ Every component/pattern in `public/DS` and in code review carries one label:
 | Current (code) | Target | Provenance | Phase |
 | --- | --- | --- | --- |
 | `ui/Button.tsx` | `.nhsuk-button` (primary/secondary/reverse/warning); `destructive`→warning | NHS | 2 |
-| `ui/Button.tsx` `on-accent` / toggle variants | bespoke on-accent + segmented control | Bespoke | 2/4 |
+| `ui/Button.tsx` `toggle` variant | bespoke toggle (Save / Compare); bordered press shadow matches border (`var(--nhs-blue)`); borderless uses `#AEB7BD` / `--nhs-dark` | Bespoke | 2/4 |
+| `ui/Button.tsx` `on-accent` | bespoke on-accent + segmented control | Bespoke | 2/4 |
 | `ui/FormField.tsx` + TextInput/Select/Textarea | NHS Input/Select/Textarea/Fieldset/Hint/Label/Error message (+ Error summary) | NHS | 2 |
 | `Nav.tsx` (app bar: compare-basket count, AI advisor strip, commissioning-context row, prototype tag, active-state tinting) | **Bespoke** app bar to NHS principles (NHS Header can't express these without regressing features). Footer migrated to NHS Footer. | Bespoke / NHS (footer) | 2 |
 | `PageBreadcrumb.tsx` | NHS Breadcrumb + Back link (`components/BackLink.tsx`) | NHS | 2 |

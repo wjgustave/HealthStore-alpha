@@ -196,7 +196,7 @@
   ],
   "pricing_model": "Local negotiation required",
   "national_price_available": false,
-  "indicative_price_text": "Pricing is typically per-patient-per-month for active monitoring. Indicative range: £30–£60 per patient per month depending on volume and service level. Implementation costs quoted separately. Listed on NHS G-Cloud 14 (Digital Marketplace) as ‘System-wide Remote Patient Monitoring Service’ — contact Luscii via luscii.co.uk.",
+  "indicative_price_text": "Pricing on application (figures pending supplier verification). Typically charged per-patient-per-month for active monitoring, with implementation costs quoted separately and pricing varying by volume and service level. Listed on NHS G-Cloud 14 (Digital Marketplace) as ‘System-wide Remote Patient Monitoring Service’ — contact Luscii via luscii.co.uk.",
   "pricing_confidence": "supplier_reported",
   "free_offer_flag": false,
   "service_wrap_included": true,

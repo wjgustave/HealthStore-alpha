@@ -8,13 +8,7 @@ import type {
 import { PdpWhereLiveSegment } from '@/components/PdpWhereLive'
 import type { WhereLiveApp } from '@/lib/whereLiveSummary'
 
-const INTEROP_LOGO_KEYS = ['nhs_app', 'nhs_notify', 'nhs_login'] as const
-const INTEROP_BOTTOM_KEYS = ['fhir', 'emis'] as const
-const NHS_SERVICE_PILL_LABELS: Record<(typeof INTEROP_LOGO_KEYS)[number], string> = {
-  nhs_app: 'App',
-  nhs_notify: 'Notify',
-  nhs_login: 'Login',
-}
+const INTEGRATION_READY_KEYS = ['fhir', 'emis'] as const
 
 function interopItemsInOrder(items: InteropSnapshotItem[], keys: readonly string[]): InteropSnapshotItem[] {
   return keys.flatMap(k => {
@@ -23,20 +17,23 @@ function interopItemsInOrder(items: InteropSnapshotItem[], keys: readonly string
   })
 }
 
-function SnapshotPill({ muted, children }: { muted?: boolean; children: ReactNode }) {
-  return (
-    <span className={`badge badge-grey max-w-full ${muted ? 'opacity-50' : ''}`}>{children}</span>
-  )
-}
-
-function NhsServicePill({ children }: { children: ReactNode }) {
+function SnapshotText({ muted, children }: { muted?: boolean; children: ReactNode }) {
   return (
     <span
-      className="badge max-w-full border-0"
-      style={{ background: 'var(--nhs-blue)', color: '#fff' }}
+      className={`hs-text-label leading-snug ${muted ? 'opacity-50' : ''}`}
+      style={{ color: 'var(--text-secondary)' }}
     >
       {children}
     </span>
+  )
+}
+
+function SnapshotTextList({ items }: { items: string[] }) {
+  if (items.length === 0) return null
+  return (
+    <p className="m-0 hs-text-label leading-snug" style={{ color: 'var(--text-secondary)' }}>
+      {items.join(' · ')}
+    </p>
   )
 }
 
@@ -99,10 +96,15 @@ function GovernanceSegment({
 }) {
   return (
     <SegmentShell label={label} labelHref={href}>
-      <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
-        {pills.map(p => (
-          <li key={p.label}>
-            <span className={`badge badge-blue max-w-full ${p.muted ? 'opacity-50' : ''}`}>{p.label}</span>
+      <ul className="m-0 flex list-none flex-wrap gap-x-2 gap-y-1 p-0">
+        {pills.map((p, i) => (
+          <li key={p.label} className="inline">
+            {i > 0 ? (
+              <span className="hs-text-label" style={{ color: 'var(--text-muted)' }} aria-hidden>
+                {' · '}
+              </span>
+            ) : null}
+            <SnapshotText muted={p.muted}>{p.label}</SnapshotText>
           </li>
         ))}
       </ul>
@@ -118,14 +120,12 @@ function CostSegment({
   return (
     <SegmentShell label={card.label} labelHref={card.href}>
       {card.modelPills.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-2">
-          {card.modelPills.map(text => (
-            <SnapshotPill key={text}>{text}</SnapshotPill>
-          ))}
+        <div>
+          <SnapshotTextList items={card.modelPills} />
           {card.indicativeNote ? (
-            <span className="hs-text-caption font-normal" style={{ color: 'var(--text-muted)' }}>
+            <p className="mt-1 mb-0 hs-text-caption leading-snug" style={{ color: 'var(--text-muted)' }}>
               {card.indicativeNote}
-            </span>
+            </p>
           ) : null}
         </div>
       ) : (
@@ -147,12 +147,8 @@ function FundingFullWidthSegment({ card }: { card: FundingSnapshotCard }) {
     <article className="hs-snapshot-strip__segment hs-snapshot-strip__segment--row">
       <div className="hs-snapshot-strip__row hs-snapshot-strip__row--funding">
         <h2 className="sr-only">{card.label}</h2>
-        <div className="flex min-w-0 flex-wrap items-center gap-2">
-          {card.pills.map((text, i) => (
-            <span key={`${i}-${text}`} className="shrink-0 whitespace-nowrap">
-              <SnapshotPill>{text}</SnapshotPill>
-            </span>
-          ))}
+        <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+          <SnapshotTextList items={card.pills} />
         </div>
         {card.opportunitiesLink ? (
           <SegmentLink href={card.opportunitiesLink.href} className="shrink-0 whitespace-nowrap">
@@ -164,42 +160,35 @@ function FundingFullWidthSegment({ card }: { card: FundingSnapshotCard }) {
   )
 }
 
+function PlatformSegment({
+  card,
+}: {
+  card: Extract<CommissioningSnapshotCard, { kind: 'platform' }>
+}) {
+  return (
+    <SegmentShell label={card.label}>
+      <p className="m-0 hs-text-label leading-snug" style={{ color: 'var(--text-secondary)' }}>
+        {card.values.join(', ')}
+      </p>
+    </SegmentShell>
+  )
+}
+
 function IntegrationSegment({
   card,
 }: {
   card: Extract<CommissioningSnapshotCard, { kind: 'interop' }>
 }) {
-  const logoRow = interopItemsInOrder(card.items, INTEROP_LOGO_KEYS)
-  const bottomRow = interopItemsInOrder(card.items, INTEROP_BOTTOM_KEYS)
+  const readyItems = interopItemsInOrder(card.items, INTEGRATION_READY_KEYS)
 
   return (
     <SegmentShell label={card.label} labelHref={card.href}>
-      {logoRow.length === 0 && bottomRow.length === 0 ? (
+      {readyItems.length === 0 ? (
         <p className="m-0 hs-text-caption leading-snug" style={{ color: 'var(--text-muted)' }}>
           None listed in profile
         </p>
       ) : (
-        <div className="flex flex-col gap-2" role="group" aria-label="Confirmed integrations">
-          {logoRow.length > 0 ? (
-            <div className="flex flex-wrap items-center gap-2" aria-label="NHS service integrations">
-              <span className="hs-text-label hs-font-bold leading-none" style={{ color: 'var(--nhs-dark)' }}>
-                NHS:
-              </span>
-              {logoRow.map(item => (
-                <NhsServicePill key={item.key}>
-                  {NHS_SERVICE_PILL_LABELS[item.key as (typeof INTEROP_LOGO_KEYS)[number]] ?? item.name}
-                </NhsServicePill>
-              ))}
-            </div>
-          ) : null}
-          {bottomRow.length > 0 ? (
-            <div className="flex flex-wrap gap-2" aria-label="FHIR and EMIS">
-              {bottomRow.map(item => (
-                <SnapshotPill key={item.key}>{item.textLabel ?? item.name}</SnapshotPill>
-              ))}
-            </div>
-          ) : null}
-        </div>
+        <SnapshotTextList items={readyItems.map(item => item.textLabel ?? item.name)} />
       )}
     </SegmentShell>
   )
@@ -211,6 +200,8 @@ function renderGridCard(card: CommissioningSnapshotCard) {
       return <GovernanceSegment key={card.kind} label={card.label} href={card.href} pills={card.pills} />
     case 'cost':
       return <CostSegment key={card.kind} card={card} />
+    case 'platform':
+      return <PlatformSegment key={card.kind} card={card} />
     case 'interop':
       return <IntegrationSegment key={card.kind} card={card} />
     default:
@@ -226,16 +217,19 @@ export function PdpCommissioningSnapshot({
   cards,
   fundingCard,
   whereLiveApp,
+  whereLiveHref,
 }: {
   cards: CommissioningSnapshotCard[]
   fundingCard?: FundingSnapshotCard | null
   whereLiveApp: WhereLiveApp
+  /** Deep-link target for the "Live deployments" tile (defaults to #scale-and-maturity). */
+  whereLiveHref?: string
 }) {
   return (
     <section className="m-0" aria-label="Commissioning snapshot">
       <div className="hs-snapshot-strip__grid">
-        {cards.map(card => renderGridCard(card))}
-        <PdpWhereLiveSegment app={whereLiveApp} />
+        {cards.filter(card => card.kind !== 'regulation').map(card => renderGridCard(card))}
+        <PdpWhereLiveSegment app={whereLiveApp} href={whereLiveHref} />
       </div>
       {fundingCard ? (
         <div className="hs-decision-snapshot__full-width">

@@ -27,7 +27,7 @@ export function AuthCard({
       style={{ background: 'linear-gradient(135deg, #003087 0%, var(--nhs-blue) 60%, #0072CE 100%)' }}
     >
       <div className="w-full max-w-md">
-        <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
+        <div className="overflow-hidden border border-[var(--border)] bg-white">
           <div style={{ background: 'var(--nhs-blue)', height: 6 }} />
           <div className="p-8">
             <div className="mb-8 flex flex-col items-center">

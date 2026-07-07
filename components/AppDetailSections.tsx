@@ -66,7 +66,7 @@ export function TechnicalIntegrationTable({ app }: { app: any }) {
   )
 }
 
-export function ScaleAndMaturitySection({ app }: { app: any }) {
+export function ScaleAndMaturitySection({ app, showDeploymentRegister = true }: { app: any; showDeploymentRegister?: boolean }) {
   const deploymentRows = getDeploymentRegister(app)
 
   return (
@@ -101,10 +101,12 @@ export function ScaleAndMaturitySection({ app }: { app: any }) {
           </div>
         )}
       </dl>
-      <div>
-        <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>Where it&apos;s live</div>
-        <DeploymentRegisterTable rows={deploymentRows} />
-      </div>
+      {showDeploymentRegister && (
+        <div>
+          <div className="hs-text-caption hs-font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-muted)' }}>Where it&apos;s live</div>
+          <DeploymentRegisterTable rows={deploymentRows} />
+        </div>
+      )}
     </div>
   )
 }
@@ -203,21 +205,110 @@ export function WhatItTakesLocallySection({ app, accent }: { app: any; accent: s
   )
 }
 
-function CaseStudyCards({ caseStudies }: { caseStudies: any[] }) {
+function CaseStudyCard({ caseStudy: cs }: { caseStudy: any }) {
   return (
-    <div className="space-y-4 mt-4">
-      {caseStudies.map((cs: any, i: number) => (
-        <div key={i} className="rounded-xl border p-4" style={{ borderColor: 'var(--border)', background: '#F0F4F5' }}>
-          <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--text-primary)' }}>{cs.title}</div>
-          <div className="hs-text-caption mb-2" style={{ color: 'var(--text-muted)' }}>
-            {cs.setting}{cs.sample_size ? ` · n=${cs.sample_size.toLocaleString()}` : ''}
-          </div>
-          <p className="hs-text-label mb-2" style={{ color: 'var(--text-secondary)', lineHeight: 1.5 }}>{cs.outcome}</p>
-          <div className="hs-text-caption p-2 rounded" style={{ background: '#FEF5E6', color: '#7A4800' }}>
-            ⚠ Caveat: {cs.caveat}
-          </div>
-          {cs.source && <div className="hs-text-caption mt-2" style={{ color: 'var(--text-muted)' }}>Source: {cs.source}</div>}
+    <article className="hs-case-card">
+      <h4 className="hs-case-card__title">{cs.title ?? cs.setting}</h4>
+      {(cs.setting || cs.sample_size) ? (
+        <div className="flex flex-wrap items-center gap-2">
+          {cs.setting && cs.title ? (
+            <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{cs.setting}</span>
+          ) : null}
+          {cs.sample_size ? (
+            <span className="hs-case-card__pill">n = {cs.sample_size.toLocaleString()}</span>
+          ) : null}
         </div>
+      ) : null}
+      <p className="hs-text-label m-0" style={{ color: 'var(--text-primary)', lineHeight: 1.55 }}>{cs.outcome}</p>
+      {cs.caveat ? (
+        <p className="hs-case-card__caveat m-0">
+          <span aria-hidden>⚠ </span>
+          <strong className="hs-font-bold">Caveat:</strong> {cs.caveat}
+        </p>
+      ) : null}
+      {cs.source ? (
+        <p className="hs-case-card__source m-0">Source: {cs.source}</p>
+      ) : null}
+    </article>
+  )
+}
+
+/**
+ * Peer-reviewed study rendered in the case-study card visual language so it sits
+ * naturally in the "Case studies and evaluations" section. A green "Peer-reviewed"
+ * marker signals the stronger evidence tier; publication links are preserved.
+ */
+function PeerReviewedEvaluationCard({ study, accent }: { study: any; accent: string }) {
+  const meta = [study.authors, study.journal, study.year].filter(Boolean).join(' · ')
+  const links = [
+    study.url_doi && { href: study.url_doi, label: 'DOI ↗' },
+    study.url_pubmed && { href: study.url_pubmed, label: 'PubMed ↗' },
+    study.url_pmc && { href: study.url_pmc, label: 'PMC (open) ↗' },
+    study.url_full_text && !study.url_doi && !study.url_pubmed
+      ? { href: study.url_full_text, label: study.source_label ? `${study.source_label} ↗` : 'Source ↗' }
+      : null,
+  ].filter(Boolean) as { href: string; label: string }[]
+
+  return (
+    <article className="hs-case-card">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="hs-case-card__pill hs-case-card__pill--green">Peer-reviewed</span>
+        {(study.type_label || study.type) ? (
+          <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{study.type_label ?? study.type}</span>
+        ) : null}
+      </div>
+      <h4 className="hs-case-card__title">{study.ref}</h4>
+      {(meta || study.n) ? (
+        <div className="flex flex-wrap items-center gap-2">
+          {meta ? (
+            <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{meta}</span>
+          ) : null}
+          {study.n ? (
+            <span className="hs-case-card__pill">n = {study.n.toLocaleString()}</span>
+          ) : null}
+        </div>
+      ) : null}
+      {study.key_results ? (
+        <p className="hs-text-label m-0" style={{ color: 'var(--text-primary)', lineHeight: 1.55 }}>{study.key_results}</p>
+      ) : null}
+      {study.study_limitation ? (
+        <p className="hs-case-card__caveat m-0">
+          <span aria-hidden>⚠ </span>
+          <strong className="hs-font-bold">Limitation:</strong> {study.study_limitation}
+        </p>
+      ) : null}
+      {links.length > 0 ? (
+        <div className="hs-case-card__source m-0 flex flex-wrap gap-x-3 gap-y-1">
+          {links.map((l) => (
+            <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" className="hs-font-bold underline" style={{ color: accent }}>
+              {l.label}
+            </a>
+          ))}
+        </div>
+      ) : study.source_label ? (
+        <p className="hs-case-card__source m-0">Source: {study.source_label}</p>
+      ) : null}
+    </article>
+  )
+}
+
+export function CaseStudyCards({
+  caseStudies,
+  studies = [],
+  accent = 'var(--nhs-blue)',
+}: {
+  caseStudies: any[]
+  /** Peer-reviewed studies to surface alongside case studies (rendered first). */
+  studies?: any[]
+  accent?: string
+}) {
+  return (
+    <div className="hs-case-grid">
+      {studies.map((s: any, i: number) => (
+        <PeerReviewedEvaluationCard key={`study-${s.id ?? i}`} study={s} accent={accent} />
+      ))}
+      {caseStudies.map((cs: any, i: number) => (
+        <CaseStudyCard key={`case-${i}`} caseStudy={cs} />
       ))}
     </div>
   )
@@ -230,9 +321,9 @@ export function shouldShowImpactSection(app: any) {
   return !!(hasImpact || hasCases || hasVideos)
 }
 
-export function ImpactAndCaseStudiesSection({ app }: { app: any }) {
+export function ImpactAndCaseStudiesSection({ app, showCaseStudies = true }: { app: any; showCaseStudies?: boolean }) {
   const hasImpact = !!(app.expected_benefit_note && String(app.expected_benefit_note).trim())
-  const hasCases = app.case_studies?.length > 0
+  const hasCases = showCaseStudies && app.case_studies?.length > 0
   const hasVideos = app.product_videos?.length > 0
   if (!hasImpact && !hasCases && !hasVideos) return null
 

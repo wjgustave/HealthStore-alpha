@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Luscii Content Mig 3 — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="luscii-content-mig-3">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Content migration &middot; Luscii &middot; Round 2 decisions</p>
+      <h1 class="ds-page-title">Luscii Content Mig 3 &mdash; Round 2 (Quantified value)</h1>
+      <p class="ds-lede">
+        Round 2 is the heavy lift: putting <strong>local, quantified numbers</strong> on the hybrid
+        <code>/apps/luscii</code> page &mdash; projected impact for a chosen area and an interactive ROI model.
+        The narrative, context, dataset, ROI engine and charts already exist in the tree (dormant, from the retired
+        <code>/products</code> route), so this round is <strong>integration plus a set of choices</strong>. This page is a
+        <strong>decision document</strong>: pick an option (A&ndash;D) per decision, tell me which to ship, and I will
+        apply them and turn this into an &ldquo;applied&rdquo; record.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Round</div><div class="ds-meta__v">2 of 3 &middot; quantified value</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Status</div><div class="ds-meta__v"><span class="ds-status ds-status--canonical">Applied</span> &middot; shipped to <code>/apps/luscii</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Page model</div><div class="ds-meta__v">Hybrid &middot; spine + tabs on <code>/apps/luscii</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Worked example</div><div class="ds-meta__v">NHS West Yorkshire ICB (illustrative)</div></div>
+    </div>
+
+    <div class="ds-note">
+      <strong>How to use this page.</strong> Each decision (R2-1&hellip;R2-7) has options A&ndash;D, a recommendation, and a
+      visual example where it helps. Nothing here is live yet &mdash; no numbers ship to <code>/apps/luscii</code> until you
+      choose. All figures below are <em>illustrative prototype data</em> for NHS West Yorkshire ICB
+      (<strong>89,000</strong> eligible COPD, <strong>17,800</strong> high-risk, <strong>4,200</strong> annual admissions).
+    </div>
+
+    <div class="ds-note ds-note--source">
+      <strong>Carried over from Round 1.</strong> Price is unverified &mdash; the PDP publishes &ldquo;pricing on
+      application&rdquo;. But the ROI engine (<code>lib/scenarios/copdRoi.ts</code>) currently assumes
+      <code>&pound;110/patient/year</code> as its cost input. Decision <strong>R2-4</strong> is specifically about how to
+      handle that so the value model does not smuggle an unverified price back onto the page.
+    </div>
+
+    <h2>1. Decisions at a glance</h2>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th><th>Visual?</th></tr></thead>
+      <tbody>
+        <tr><td>R2-1</td><td>Personalisation source (how the area is set)</td><td>A &mdash; reuse guided start + &ldquo;Change area&rdquo;</td><td>Yes</td></tr>
+        <tr><td>R2-2</td><td>Projected-impact denominator &amp; framing</td><td>D &mdash; high-risk cohort &times; range</td><td>Yes</td></tr>
+        <tr><td>R2-3</td><td>ROI cohort wiring (replace hard-coded 500)</td><td>A &mdash; derive from coverage funnel</td><td>Yes</td></tr>
+        <tr><td>R2-4</td><td>ROI cost assumption (price unverified)</td><td>B &mdash; capacity/benefit only, no net</td><td>Yes</td></tr>
+        <tr><td>R2-5</td><td>Section placement</td><td>D &mdash; context-gated</td><td>Yes</td></tr>
+        <tr><td>R2-6</td><td>Chart density</td><td>A &mdash; minimal (bars + KPIs + callout)</td><td>Yes</td></tr>
+        <tr><td>R2-7</td><td>Scope</td><td>A &mdash; Luscii only (COPD)</td><td>&mdash;</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============================== DECISIONS CONFIRMED ============================== -->
+    <h2 id="decisions-confirmed">2. Decisions confirmed</h2>
+    <p>Choices made on 1 July 2026. These are locked for the Round 2 build; the option detail below is retained as the record.</p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Chosen</th><th>vs recommended</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>R2-1</td><td>Personalisation source</td><td><strong>A</strong> &mdash; reuse guided start + &ldquo;Change area&rdquo;</td><td><span class="ds-status ds-status--canonical">As rec</span></td><td>&mdash;</td></tr>
+        <tr><td>R2-2</td><td>Impact denominator &amp; framing</td><td><strong>D</strong> &mdash; high-risk cohort &times; range</td><td><span class="ds-status ds-status--canonical">As rec</span></td><td>Defensible denominator; fixes the overstated point estimate</td></tr>
+        <tr><td>R2-3</td><td>ROI cohort wiring</td><td><strong>D</strong> &mdash; labelled illustrative default (500) + override</td><td><span class="ds-status ds-status--page">Differs (rec A)</span></td><td><em>For now.</em> Keeps the current default rather than funnel-derived; revisit to scale with the area</td></tr>
+        <tr><td>R2-4</td><td>ROI cost assumption</td><td><strong>D</strong> &mdash; low/high price band</td><td><span class="ds-status ds-status--page">Differs (rec B)</span></td><td><em>For now, may revisit.</em> Net shown as a range; figures stay labelled illustrative and price remains unpublished elsewhere</td></tr>
+        <tr><td>R2-5</td><td>Section placement</td><td><strong>D</strong> &mdash; context-gated</td><td><span class="ds-status ds-status--canonical">As rec</span></td><td>Full inline sections once an area is set; national shows a teaser + CTA</td></tr>
+        <tr><td>R2-6</td><td>Chart density</td><td><strong>A</strong> &mdash; minimal (bars + KPIs + callout)</td><td><span class="ds-status ds-status--canonical">As rec</span></td><td>&mdash;</td></tr>
+        <tr><td>R2-7</td><td>Scope</td><td><strong>A</strong> &mdash; Luscii only (COPD)</td><td><span class="ds-status ds-status--canonical">As rec</span></td><td>Consistent with Round 1</td></tr>
+      </tbody>
+    </table>
+    <div class="ds-note">
+      <strong>Combined effect of R2-3 D + R2-4 D.</strong> The ROI model will run on a labelled <strong>500-patient
+      illustrative default</strong> (not yet scaled to the local funnel) and present the net position as a
+      <strong>price band range</strong> rather than a single figure. Both are marked &ldquo;for now&rdquo; &mdash; the
+      denominator can later move to R2-3 A (funnel-derived) and the cost to R2-4 B (benefit-only) without reworking the
+      section. All economic figures render as <em>illustrative, pending verification</em>, and the published price on the
+      PDP stays &ldquo;on application&rdquo; (unchanged from Round 1).
+    </div>
+
+    <div class="ds-note ds-note--source">
+      The option write-ups below (R2-1&hellip;R2-7) are the original decision record. The chosen option in each is now
+      marked <span class="ds-status ds-status--canonical">Chosen</span>.
+    </div>
+
+    <!-- ============================== SHIPPED ============================== -->
+    <h2 id="shipped">3. Shipped &mdash; what went live</h2>
+    <p>
+      Applied on 1 July 2026. The personalised local-value block now renders on <code>/apps/luscii</code>, gated to Luscii
+      (COPD) and driven by the guided-start commissioner context, sitting between &ldquo;How Luscii helps&rdquo; and &ldquo;How
+      to buy&rdquo;. It always shows fully-worked sections: with no area set it projects onto a labelled <strong>example ICB
+      (West Yorkshire)</strong> with a &ldquo;Set your area&rdquo; affordance; once an area is set it re-projects onto that
+      population and switches to a &ldquo;Change area&rdquo; line. <em>(Refinement of R2-5: the national case now shows the
+      example rather than a teaser + CTA, so value is visible without setup.)</em>
+    </p>
+    <table class="ds-table">
+      <thead><tr><th>File</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr><td><code>components/product/PdpLocalValue.tsx</code></td><td><strong>New</strong> server component. Projected-impact + economics sections, context-gated, all figures labelled illustrative.</td></tr>
+        <tr><td><code>components/product/PdpNarrativeSpine.tsx</code></td><td>Added optional <code>localValue</code> slot, rendered between How-it-helps and How-to-buy.</td></tr>
+        <tr><td><code>app/apps/[slug]/page.tsx</code></td><td>Resolves <code>getServerContext</code> (cookie-first, explicit <code>?geo=</code> override) and injects <code>PdpLocalValue</code> into the spine for Luscii.</td></tr>
+      </tbody>
+    </table>
+    <p>Worked example &mdash; <strong>NHS West Yorkshire ICB</strong> (illustrative), as it now renders:</p>
+    <table class="ds-table">
+      <thead><tr><th>Metric</th><th>Basis</th><th>Shown</th></tr></thead>
+      <tbody>
+        <tr><td>Monitored cohort</td><td>50% of 17,800 high-risk (R2-2 D)</td><td>~8,900</td></tr>
+        <tr><td>Admissions avoided / yr</td><td>cohort &times; 0.4 events &times; 30&ndash;48% range</td><td>~1,070&ndash;1,710</td></tr>
+        <tr><td>A&amp;E avoided / yr</td><td>cohort &times; 0.4 events &times; 16&ndash;31% range</td><td>~570&ndash;1,100</td></tr>
+        <tr><td>Capacity released / yr</td><td>500-patient illustrative cohort (R2-3 D), central effects</td><td>~&pound;115k</td></tr>
+        <tr><td>Cash-releasing / yr</td><td>~40% of capacity converted</td><td>~&pound;46k</td></tr>
+        <tr><td>Net position / yr</td><td>price band &pound;110&ndash;&pound;360/patient/yr (R2-4 D)</td><td>&minus;&pound;65k to +&pound;60k*</td></tr>
+      </tbody>
+    </table>
+    <div class="ds-note">
+      <strong>*Net is a range by design (R2-4 D).</strong> Break-even is ~<strong>&pound;229/patient/year</strong>; below that
+      the pathway is net cash-and-capacity positive before Green Book health value. Because the price is still unverified, the
+      section leads with the price-independent capacity/cash figures and shows the net as a band with an explicit &ldquo;confirm
+      pricing before using in a business case&rdquo; caveat. No verified price is published anywhere on the PDP &mdash; the
+      commercial section still reads &ldquo;pricing on application&rdquo; (unchanged from Round 1).
+    </div>
+    <div class="ds-note ds-note--source">
+      <strong>Verification.</strong> <code>tsc --noEmit</code> clean on all touched files; no new lint. All charts
+      (<code>HorizontalBarChart</code>, <code>InsightCallout</code>) are server-safe, so the block renders without a client
+      boundary. Deferred to a later round: R2-3 A (funnel-derived cohort) and R2-4 B (benefit-only), both wired to swap in
+      without reworking the section.
+    </div>
+
+    <!-- ============================== R2-1 ============================== -->
+    <h2 id="r2-1">R2-1 &mdash; Personalisation source</h2>
+    <p>How does a commissioner tell the page which area they are in, so the projected-impact and ROI numbers localise?</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; reuse guided start <span class="ds-prio ds-prio--p3">rec</span> <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0 0 10px">A one-line context banner links to the existing <code>/start/place</code> picker; choice persists in the <code>hs-commissioner-context</code> cookie. Lowest build, reuses live infra.</p>
+          <div style="background:#f0f4f5;border-left:4px solid var(--nhs-blue);border-radius:4px;padding:10px 12px;font-size:13px">Showing information for <strong>West Yorkshire ICB</strong>. <a href="#" style="color:var(--nhs-blue)">Change area</a></div>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; inline dropdown on the PDP</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0 0 10px">A selector on the page itself sets context without leaving. Fastest for the user; more UI to build and keep in sync with guided start.</p>
+          <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;display:flex;gap:8px;align-items:center">
+            <span>Area:</span>
+            <span style="border:1px solid var(--border);border-radius:6px;padding:4px 24px 4px 8px;background:#fff;position:relative">West Yorkshire ICB &#9662;</span>
+          </div>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; auto-derive from signed-in org</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0 0 10px">Use the commissioning entity from the session, with a manual override. Zero friction when signed in; needs an org&rarr;ICB mapping and a fallback.</p>
+          <div style="background:#eef7f0;border-left:4px solid var(--nhs-green);border-radius:4px;padding:10px 12px;font-size:13px">Personalised for <strong>your organisation</strong> (West Yorkshire ICB). <a href="#" style="color:var(--nhs-blue)">Not you?</a></div>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option D &mdash; national baseline only</p>
+          <p class="ds-u-muted" style="font-size:.85rem;margin:0 0 10px">Ship the quantified sections against the England baseline, defer the selector to a later round. Simplest, but the &ldquo;so what for my area&rdquo; payoff is missing.</p>
+          <div style="background:#f0f4f5;border-radius:4px;padding:10px 12px;font-size:13px;color:var(--text-muted)">Showing <strong>England illustrative baseline</strong>. Local view coming soon.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== R2-2 ============================== -->
+    <h2 id="r2-2">R2-2 &mdash; Projected-impact denominator &amp; framing</h2>
+    <p>
+      The &ldquo;What this could mean for {area}&rdquo; section multiplies a published effect size by a local population.
+      <strong>Which population, and point estimate or range?</strong> This is the biggest credibility lever on the page.
+    </p>
+    <div class="ds-note ds-note--source">
+      <strong>Why this matters.</strong> The ported code (Option A) applies the effect % to <em>eligible &times; 75%</em>. For
+      West Yorkshire that is 66,750 &times; 40% = <strong>~26,700 &ldquo;fewer admissions&rdquo;</strong> &mdash; larger than the
+      4,200 admissions the ICB actually has. That is not defensible. B/C/D fix the denominator.
+    </div>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; eligible &times; 75% uptake (current code)</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Point estimate on the whole eligible cohort. Overstates &mdash; see note above. Keep only if reframed as &ldquo;reach&rdquo;, not &ldquo;admissions avoided&rdquo;.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; high-risk monitored cohort</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Apply effect to the ~17,800 high-risk cohort at a realistic monitored fraction. Defensible for remote monitoring; single number.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; conservative&rarr;evidence-led range</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Show a band (30&ndash;48% admission effect) on the chosen denominator. Honest about uncertainty; a range is harder to headline.</p>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option D &mdash; high-risk cohort &times; range <span class="ds-prio ds-prio--p3">rec</span> <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Defensible denominator <em>and</em> a range, with the uptake assumption shown. Best evidence hygiene.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example">
+      <p class="ds-example__label">Visual &mdash; Option A (as-ported) vs Option D (recommended), West Yorkshire</p>
+      <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+        <div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:0 0 4px">Option A &mdash; overstated</p>
+          <svg viewBox="0 0 460 130" role="img" aria-label="Option A projected impact, overstated" style="width:100%;height:auto;background:#fff;border:1px solid var(--border);border-radius:8px">
+            <text x="150" y="34" text-anchor="end" fill="#4c6272" font-size="14">Admissions</text>
+            <rect x="160" y="20" width="270" height="18" rx="3" fill="#005eb8"></rect>
+            <text x="160" y="60" fill="#7a1210" font-size="15" font-weight="700">&asymp; 26,700 fewer / year</text>
+            <text x="150" y="96" text-anchor="end" fill="#4c6272" font-size="14">A&amp;E</text>
+            <rect x="160" y="82" width="210" height="18" rx="3" fill="#0072ce"></rect>
+            <text x="160" y="122" fill="#7a1210" font-size="15" font-weight="700">&asymp; 12,500 fewer / year</text>
+          </svg>
+          <p class="ds-u-muted" style="font-size:.78rem;margin:6px 0 0">Exceeds actual activity &mdash; not defensible.</p>
+        </div>
+        <div>
+          <p class="ds-u-muted" style="font-size:.8rem;margin:0 0 4px">Option D &mdash; high-risk cohort &times; range</p>
+          <svg viewBox="0 0 460 130" role="img" aria-label="Option D projected impact, ranged" style="width:100%;height:auto;background:#fff;border:1px solid var(--border);border-radius:8px">
+            <text x="150" y="34" text-anchor="end" fill="#4c6272" font-size="14">Admissions</text>
+            <rect x="160" y="22" width="140" height="14" rx="3" fill="#005eb8"></rect>
+            <rect x="160" y="22" width="200" height="14" rx="3" fill="#005eb8" opacity="0.35"></rect>
+            <text x="160" y="58" fill="#212b32" font-size="15" font-weight="700">1,070&ndash;1,710 fewer / year</text>
+            <text x="150" y="96" text-anchor="end" fill="#4c6272" font-size="14">A&amp;E</text>
+            <rect x="160" y="84" width="90" height="14" rx="3" fill="#0072ce"></rect>
+            <rect x="160" y="84" width="150" height="14" rx="3" fill="#0072ce" opacity="0.35"></rect>
+            <text x="160" y="120" fill="#212b32" font-size="15" font-weight="700">560&ndash;1,090 fewer / year</text>
+          </svg>
+          <div style="border-left:8px solid var(--nhs-green);background:#f0f7f2;padding:10px 14px;font-size:13px;margin-top:8px">
+            <strong>So what?</strong> Monitoring ~8,900 high-risk patients (50% of the high-risk cohort) could avoid roughly 1,070&ndash;1,710 admissions a year, against 4,200 today.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== R2-3 ============================== -->
+    <h2 id="r2-3">R2-3 &mdash; ROI cohort wiring</h2>
+    <p>The ROI engine currently hard-codes a <strong>500-patient</strong> monitored cohort. What should drive it once the area is known?</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; derive from coverage funnel <span class="ds-prio ds-prio--p3">rec</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">e.g. 10% of eligible (capped), so numbers scale with the area. West Yorkshire &rarr; ~8,900.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; actual local live users</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Use the real deployment (<code>active_users</code> = 612 for Luscii in West Yorkshire). Truthful, but small and reads as &ldquo;today&rdquo; not &ldquo;potential&rdquo;.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; user-adjustable input</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">A slider/number the commissioner sets, defaulting to the local-derived value. Most flexible; more UI.</p>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option D &mdash; labelled illustrative default <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Keep 500 but label it clearly and allow override. Lowest change; least local. <em>Chosen for now &mdash; revisit to funnel-derived (A).</em></p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example">
+      <p class="ds-example__label">Visual &mdash; how the cohort changes the headline (West Yorkshire, central scenario, illustrative)</p>
+      <div style="display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+        <div class="ds-u-card" style="text-align:center"><div class="ds-u-muted" style="font-size:.78rem">A &mdash; 8,900 patients</div><div style="font-size:1.6rem;font-weight:700;color:var(--nhs-blue)">~710</div><div class="ds-u-muted" style="font-size:.78rem">admissions avoided / yr</div></div>
+        <div class="ds-u-card" style="text-align:center"><div class="ds-u-muted" style="font-size:.78rem">B &mdash; 612 users</div><div style="font-size:1.6rem;font-weight:700;color:var(--nhs-blue)">~49</div><div class="ds-u-muted" style="font-size:.78rem">admissions avoided / yr</div></div>
+        <div class="ds-u-card" style="text-align:center"><div class="ds-u-muted" style="font-size:.78rem">C &mdash; you set it</div><div style="font-size:1.6rem;font-weight:700;color:var(--nhs-blue)">&#8801;</div><div class="ds-u-muted" style="font-size:.78rem">scales live</div></div>
+        <div class="ds-u-card" style="text-align:center"><div class="ds-u-muted" style="font-size:.78rem">D &mdash; 500 default</div><div style="font-size:1.6rem;font-weight:700;color:var(--nhs-blue)">~40</div><div class="ds-u-muted" style="font-size:.78rem">admissions avoided / yr</div></div>
+      </div>
+    </div>
+
+    <!-- ============================== R2-4 ============================== -->
+    <h2 id="r2-4">R2-4 &mdash; ROI cost assumption (price unverified)</h2>
+    <p>Round 1 suppressed the price as unverified. The ROI model still needs a cost input to show a &ldquo;net position&rdquo;. How do we handle it without re-publishing an unverified &pound;/patient figure?</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; keep &pound;110, labelled indicative</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0 0 10px">Show net position with an explicit &ldquo;indicative cost, pending verification&rdquo; caveat.</p>
+          <div class="ds-u-card" style="text-align:center;border-top:3px solid #007f3b;margin:0"><div style="font-size:1.4rem;font-weight:700;color:#007f3b">&pound;188k</div><div class="ds-u-muted" style="font-size:.75rem">Net annual position*</div></div>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option B &mdash; capacity/benefit only, no net <span class="ds-prio ds-prio--p3">rec</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0 0 10px">Show cash + capacity benefits; omit the net line until price is confirmed. No unverified number on the page.</p>
+          <div style="display:flex;gap:8px"><div class="ds-u-card" style="text-align:center;margin:0;flex:1"><div style="font-size:1.1rem;font-weight:700;color:var(--nhs-blue)">&pound;204k</div><div class="ds-u-muted" style="font-size:.72rem">Capacity</div></div><div class="ds-u-card" style="text-align:center;margin:0;flex:1"><div style="font-size:1.1rem;font-weight:700;color:var(--nhs-blue)">&pound;82k</div><div class="ds-u-muted" style="font-size:.72rem">Cash</div></div></div>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; user-input price</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0 0 10px">A cost field the commissioner enters for their own sensitivity. Honest; requires input to see net.</p>
+          <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px">&pound;/patient/yr: <span style="border:1px solid var(--border);border-radius:4px;padding:2px 10px">___</span></div>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option D &mdash; low/high price band <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0 0 10px">Net shown as a range across a plausible price band. Conveys uncertainty; still implies figures. <em>Chosen for now, may revisit to benefit-only (B).</em></p>
+          <div class="ds-u-card" style="text-align:center;border-top:3px solid #d5840d;margin:0"><div style="font-size:1.2rem;font-weight:700;color:#212b32">&pound;120k&ndash;&pound;250k</div><div class="ds-u-muted" style="font-size:.75rem">Net range*</div></div>
+        </div>
+      </div>
+      <p class="ds-u-muted" style="font-size:.78rem;margin-top:10px">*Illustrative only. Options A and D still surface a cost-derived figure; B keeps the page clear of unverified pricing.</p>
+    </div>
+
+    <!-- ============================== R2-5 ============================== -->
+    <h2 id="r2-5">R2-5 &mdash; Section placement</h2>
+    <p>Where do the quantified sections sit on the hybrid page relative to the Round 1 spine and the reference tabs?</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option A &mdash; inline spine sections</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Add &ldquo;Projected impact&rdquo; and &ldquo;What it could be worth&rdquo; between How-it-helps and the tabs. One scroll; long page.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; a &ldquo;Local impact &amp; value&rdquo; tab</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Keep the story short; put the numbers in a new tab. Tidier; the payoff is one click away.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; split (impact in spine, economics in a tab)</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Impact leads inline; the heavier ROI model lives in a tab.</p>
+        </div>
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option D &mdash; context-gated <span class="ds-prio ds-prio--p3">rec</span> <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Once an area is set, show the full inline sections; on national, show a compact teaser + &ldquo;set your area&rdquo; CTA.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-example">
+      <p class="ds-example__label">Visual &mdash; recommended page order (Option D, area set)</p>
+      <div style="display:flex;flex-direction:column;gap:6px;max-width:420px">
+        <div style="background:#e6f0fb;border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:13px">Hero &middot; commissioning snapshot</div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:13px">Spine: The problem &middot; How Luscii helps</div>
+        <div style="background:#eef7f0;border:1px solid var(--nhs-green);border-radius:6px;padding:8px 12px;font-size:13px"><strong>NEW</strong> &middot; What this could mean for {area}</div>
+        <div style="background:#eef7f0;border:1px solid var(--nhs-green);border-radius:6px;padding:8px 12px;font-size:13px"><strong>NEW</strong> &middot; What it could be worth (ROI)</div>
+        <div style="background:#f0f4f5;border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:13px">Reference tabs (evidence, deployment, safety&hellip;)</div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:13px">Spine: How to buy &middot; provenance</div>
+      </div>
+    </div>
+
+    <!-- ============================== R2-6 ============================== -->
+    <h2 id="r2-6">R2-6 &mdash; Chart density</h2>
+    <p>How much data visualisation to bring across. All components exist and are tested; more charts means more to keep meaningful.</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; minimal <span class="ds-prio ds-prio--p3">rec</span> <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0 0 8px">Horizontal bars + KPI tiles + &ldquo;so what&rdquo; callout. Matches the current impact section.</p>
+          <svg viewBox="0 0 200 60" style="width:100%;height:auto" aria-hidden="true"><rect x="4" y="10" width="120" height="10" rx="2" fill="#005eb8"/><rect x="4" y="28" width="80" height="10" rx="2" fill="#0072ce"/><rect x="4" y="46" width="150" height="10" rx="2" fill="#00a9ce"/></svg>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; + coverage funnel</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0 0 8px">Adds eligible&rarr;invited&rarr;registered&rarr;active. Good for &ldquo;headroom&rdquo; story.</p>
+          <svg viewBox="0 0 200 60" style="width:100%;height:auto" aria-hidden="true"><rect x="4" y="6" width="190" height="10" rx="2" fill="#003087"/><rect x="4" y="20" width="140" height="10" rx="2" fill="#005eb8"/><rect x="4" y="34" width="90" height="10" rx="2" fill="#0072ce"/><rect x="4" y="48" width="40" height="10" rx="2" fill="#00a9ce"/></svg>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; + trend &amp; retention</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0 0 8px">Admissions baseline vs with-DTx over time, plus a retention curve.</p>
+          <svg viewBox="0 0 200 60" style="width:100%;height:auto" aria-hidden="true"><polyline points="4,40 40,36 80,30 120,22 160,16 196,12" fill="none" stroke="#005eb8" stroke-width="3"/><polyline points="4,44 40,44 80,45 120,46 160,47 196,48" fill="none" stroke="#aeb7bd" stroke-width="2" stroke-dasharray="4 3"/></svg>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option D &mdash; full analytics</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0 0 8px">Funnel + benchmark range + retention. Richest, closest to the workspace dashboard &mdash; risks over-claiming on a product page.</p>
+          <svg viewBox="0 0 200 60" style="width:100%;height:auto" aria-hidden="true"><rect x="4" y="8" width="190" height="8" rx="2" fill="#003087"/><rect x="4" y="22" width="120" height="8" rx="2" fill="#005eb8"/><line x1="60" y1="40" x2="150" y2="40" stroke="#41b6e6" stroke-width="3"/><circle cx="110" cy="40" r="4" fill="#005eb8"/><polyline points="4,56 60,52 120,50 196,48" fill="none" stroke="#007f3b" stroke-width="2"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== R2-7 ============================== -->
+    <h2 id="r2-7">R2-7 &mdash; Scope</h2>
+    <p>Which products get the quantified layer this round. The ROI engine is COPD-specific (<code>buildCopdScenarios</code>).</p>
+    <div class="ds-example">
+      <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="ds-u-card" style="outline:2px solid var(--nhs-blue);outline-offset:2px">
+          <p class="ds-example__label">Option A &mdash; Luscii only (COPD) <span class="ds-prio ds-prio--p3">rec</span> <span class="ds-status ds-status--canonical">Chosen</span></p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Consistent with Round 1. Proves the pattern before spreading it.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option B &mdash; + myCOPD</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Both COPD products; the engine already models a discharge cohort.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option C &mdash; all four narratives</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">Luscii, myCOPD, myHeart, Joint Academy. Needs non-COPD economics &mdash; heavy.</p>
+        </div>
+        <div class="ds-u-card">
+          <p class="ds-example__label">Option D &mdash; national for all, local for Luscii</p>
+          <p class="ds-u-muted" style="font-size:.82rem;margin:0">A baseline everywhere, full localisation only on the pilot.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== DECISION LOG ============================== -->
+    <h2 id="decision-log">Decision log &mdash; confirmed</h2>
+    <p>Choices locked on 1 July 2026. Five as recommended; R2-3 and R2-4 taken as &ldquo;for now&rdquo; and diverge from the conservative recommendation.</p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Decision</th><th>Recommended</th><th>Chosen &amp; to ship</th></tr></thead>
+      <tbody>
+        <tr><td>R2-1</td><td>Personalisation source</td><td>A &mdash; reuse guided start</td><td><strong>A</strong> &mdash; reuse guided start</td></tr>
+        <tr><td>R2-2</td><td>Impact denominator &amp; framing</td><td>D &mdash; high-risk &times; range</td><td><strong>D</strong> &mdash; high-risk &times; range</td></tr>
+        <tr><td>R2-3</td><td>ROI cohort wiring</td><td>A &mdash; derive from funnel</td><td><strong>D</strong> &mdash; illustrative default + override <span class="ds-u-muted">(for now)</span></td></tr>
+        <tr><td>R2-4</td><td>ROI cost assumption</td><td>B &mdash; benefit only, no net</td><td><strong>D</strong> &mdash; low/high price band <span class="ds-u-muted">(for now, may revisit)</span></td></tr>
+        <tr><td>R2-5</td><td>Section placement</td><td>D &mdash; context-gated</td><td><strong>D</strong> &mdash; context-gated</td></tr>
+        <tr><td>R2-6</td><td>Chart density</td><td>A &mdash; minimal</td><td><strong>A</strong> &mdash; minimal</td></tr>
+        <tr><td>R2-7</td><td>Scope</td><td>A &mdash; Luscii only</td><td><strong>A</strong> &mdash; Luscii only</td></tr>
+      </tbody>
+    </table>
+
+    <h2>What ships once you choose</h2>
+    <ul>
+      <li>Resolve <code>getServerContext</code> on <code>app/apps/[slug]/page.tsx</code> and add the selector per <strong>R2-1</strong>.</li>
+      <li>New <code>components/product/PdpLocalValue.tsx</code> (Luscii-gated) with the projected-impact and economics sections, applying <strong>R2-2</strong>, <strong>R2-4</strong>, <strong>R2-6</strong>, placed per <strong>R2-5</strong>.</li>
+      <li>Wire the ROI cohort to the local funnel per <strong>R2-3</strong>, removing the hard-coded 500.</li>
+      <li>Update this page to an &ldquo;applied&rdquo; record with the decision log filled in; typecheck/lint and confirm no unverified figures ship.</li>
+    </ul>
+
+    <hr class="ds-rule">
+    <p class="ds-u-muted" style="font-size:.85rem">
+      Follows <a href="/DS/Audits/Luscii-Content-Mig-1/index.html">Mig&nbsp;1 (analysis)</a> and
+      <a href="/DS/Audits/Luscii-Content-Mig-2/index.html">Mig&nbsp;2 (Round&nbsp;1 record)</a>. Round&nbsp;3 (assurance
+      passport, evidence-schema normalisation, template) will follow. All figures illustrative prototype data.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

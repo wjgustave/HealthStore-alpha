@@ -26,7 +26,7 @@ function StatValue({ value, state }: { value: number | string; state: LoadStatus
     )
   }
   return (
-    <span className="block hs-text-section hs-font-bold leading-none" style={{ ...fr, color: 'var(--text-primary)' }}>
+    <span className="block hs-text-section hs-font-bold leading-none" style={{ ...fr, color: 'var(--nhs-blue)' }}>
       {value}
     </span>
   )
@@ -48,12 +48,11 @@ function StatTile({
   return (
     <Link
       href={href}
-      className="flex items-center gap-4 rounded-xl border p-6 transition-colors hover:bg-slate-50"
-      style={{ borderColor: 'var(--border)', background: 'rgba(0, 94, 184, 0.1)' }}
+      className="hs-kpi flex items-center gap-4 p-6 transition-colors hover:border-[var(--nhs-blue)]"
     >
       <span
         className="flex h-8 w-8 max-h-8 max-w-8 shrink-0 items-center justify-center rounded-md"
-        style={{ background: '#fff', color: 'var(--nhs-blue)' }}
+        style={{ background: '#E6F0FB', color: 'var(--nhs-blue)' }}
         aria-hidden
       >
         <Icon className="h-5 w-5 max-h-5 max-w-5" />

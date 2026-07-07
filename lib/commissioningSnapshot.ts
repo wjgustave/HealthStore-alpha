@@ -50,6 +50,11 @@ export type CommissioningSnapshotCard =
       href: string
       items: InteropSnapshotItem[]
     }
+  | {
+      kind: 'platform'
+      label: string
+      values: string[]
+    }
 
 export type FundingSnapshotCard = Extract<CommissioningSnapshotCard, { kind: 'funding' }>
 
@@ -118,7 +123,7 @@ function costCard(app: any): CommissioningSnapshotCard {
 
   return {
     kind: 'cost',
-    label: 'Pricing model',
+    label: 'Indicative cost',
     href: '#commercial-model',
     indicativeNote,
     modelPills,
@@ -150,30 +155,21 @@ function fundingCard(app: any, linked: SnapshotFundingRow[]): FundingSnapshotCar
   }
 }
 
+function platformCard(app: any): CommissioningSnapshotCard {
+  const platforms: string[] = app.platform_tags ?? app.platforms ?? []
+  return {
+    kind: 'platform',
+    label: 'Platform',
+    values: platforms.length > 0 ? platforms : ['iOS', 'Android', 'Web'],
+  }
+}
+
 function interopCard(app: any): CommissioningSnapshotCard {
   const ti = app.technical_integrations as { fhir?: string; emis?: string } | undefined
   const fhirState = ti ? inferProseIntegration(ti.fhir) : null
   const emisState = ti ? inferProseIntegration(ti.emis) : null
-  /** Optional per-app override: show NHS App logo in snapshot when `nhs_app_integration` is false (e.g. Luscii). */
-  const nhsAppInInteropSnapshot =
-    app.nhs_app_integration === true || app.interop_snapshot_show_nhs_app === true
 
   const items: InteropSnapshotItem[] = [
-    {
-      key: 'nhs_app',
-      name: 'NHS App',
-      integrated: nhsAppInInteropSnapshot,
-    },
-    {
-      key: 'nhs_notify',
-      name: 'NHS Notify',
-      integrated: app.nhs_notify_integration === true,
-    },
-    {
-      key: 'nhs_login',
-      name: 'NHS Login',
-      integrated: app.nhs_login_integration === true,
-    },
     {
       key: 'fhir',
       name: 'FHIR',
@@ -190,15 +186,15 @@ function interopCard(app: any): CommissioningSnapshotCard {
 
   return {
     kind: 'interop',
-    label: 'Integrations',
+    label: 'Integration capability',
     href: '#nhs-integrations',
     items,
   }
 }
 
-/** Grid callout cards: governance, pricing model, integration (where-live is the 4th slot in the UI). */
+/** Grid callout cards: governance, pricing model, platform, integration ready (where-live is the 4th slot in the UI). */
 export function getCommissioningSnapshot(app: any): CommissioningSnapshotCard[] {
-  return [regulationCard(app), costCard(app), interopCard(app)]
+  return [regulationCard(app), platformCard(app), costCard(app), interopCard(app)]
 }
 
 export function getFundingSnapshotCard(

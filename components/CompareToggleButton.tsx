@@ -2,18 +2,20 @@
 
 import { Check, GitCompare } from 'lucide-react'
 import { useCompareBasket } from '@/components/CompareBasketProvider'
-import { Button } from '@/components/ui/Button'
+import { Button, type ButtonSize } from '@/components/ui/Button'
 
 /** Matches `.badge-teal` (e.g. Self-management supervision badge). */
 export function CompareToggleButton({
   appId,
   className = '',
+  size = 'none',
   /** PDP hero: no border ring (catalogue cards keep bordered style). */
   borderless = false,
 }: {
   appId: string
   /** e.g. `sm:col-span-1 w-full` for catalogue card grid */
   className?: string
+  size?: ButtonSize
   borderless?: boolean
 }) {
   const { toggle, isInBasket, canAdd, ids, incompatibleCompareTooltip } = useCompareBasket()
@@ -27,7 +29,7 @@ export function CompareToggleButton({
       variant="toggle"
       pressed={added}
       borderless={borderless}
-      size="none"
+      size={size}
       aria-label={added ? 'Remove from comparison tool' : 'Add to comparison tool'}
       ariaDisabled={blocked}
       disabledReason={
@@ -38,7 +40,7 @@ export function CompareToggleButton({
           : undefined
       }
       onClick={() => toggle(appId)}
-      className={`py-4 hs-text-label ${className}`}
+      className={`${size === 'none' ? 'py-4 hs-text-label' : ''} ${className}`}
     >
       <span className="inline-flex items-center justify-center gap-2">
         {added ? (

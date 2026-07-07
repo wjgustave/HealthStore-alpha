@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Luscii Content Mig 1 — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="luscii-content-mig-1">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Content migration &middot; Luscii &middot; Round 1</p>
+      <h1 class="ds-page-title">Luscii Content Mig 1</h1>
+      <p class="ds-lede">
+        A field-level content analysis of the Luscii product page on two branches. The
+        <strong>matt_demo</strong> narrative page (<code>/products/luscii</code>) is treated as
+        <em>&ldquo;what good looks like&rdquo;</em>; the current <strong>nhs_ds</strong> PDP
+        (<code>/apps/luscii</code>) is the migration source. This page maps both content sets,
+        performs a two-way <strong>gap</strong> and <strong>orphan</strong> analysis, and proposes an
+        iterative 3-round migration. Luscii is the test case &mdash; the same method will be reused for
+        the other product pages.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Target (gold standard)</div><div class="ds-meta__v">matt_demo &middot; <code>/products/luscii</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Source (to migrate)</div><div class="ds-meta__v">nhs_ds &middot; <code>/apps/luscii</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Method</div><div class="ds-meta__v">Code-traced, field-by-field; headings quoted verbatim</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">This round</div><div class="ds-meta__v">Documentation only &mdash; no code change to either branch</div></div>
+    </div>
+
+    <div class="ds-note">
+      <strong>How to read this.</strong> Section A is the target blueprint, Section B is what we have today,
+      Section C contrasts the two architectures. Section D is what we are <em>missing</em>; Section E is what
+      we would <em>lose</em> (orphan) if we copied the target shape literally. Section F is the field-by-field
+      mapping; Section G is the staged plan. Sections H&ndash;I cover the decisions to make and how to repeat
+      this for other products. Nothing here changes the matt_demo branch &mdash; it was read-only.
+    </div>
+
+    <h2>1. Executive summary</h2>
+    <p>
+      The two Luscii pages differ in <strong>architecture, not just copy</strong>. The matt_demo page is a
+      <strong>curated commissioner narrative</strong> &mdash; a hand-written story object
+      (<code>LUSCII_NARRATIVE</code>) rendered as one long scrolling argument: problem &rarr; how it helps &rarr;
+      what it could mean locally &rarr; what it&rsquo;s worth &rarr; assurance &rarr; how to deliver &rarr; proof
+      &rarr; how to buy. It is <strong>personalised to the commissioner&rsquo;s geography</strong> (projected
+      impact and economics recompute against local population data) and includes an interactive
+      <strong>COPD ROI scenario engine</strong>.
+    </p>
+    <p>
+      The nhs_ds page is a <strong>catalogue product detail page</strong>: a single, very rich
+      <code>luscii.json</code> rendered into a hero, a commissioning snapshot strip, and six reference
+      <strong>tabs</strong> (Overview, Evidence, Deployment, Safety &amp; governance, Commercial, Technical). It is
+      <strong>deeper on facts</strong> (granular IG/safety, integrations, pricing, onboarding, full evidence
+      cards, deployment register, selective share/PDF, express-interest) but has <strong>no narrative spine, no
+      localisation, and no economics modelling</strong>.
+    </p>
+    <p>
+      The headline finding: this is not a copy edit. Reaching the gold standard means
+      <strong>adding a narrative layer and personalisation on top of nhs_ds&rsquo;s catalogue data</strong>, while
+      being deliberate about the substantial nhs_ds detail that the narrative shape has nowhere to put. Both
+      pages already leave most of <code>luscii.json</code> unused, so &ldquo;migration&rdquo; is as much about
+      <em>surfacing existing content</em> as adding new content.
+    </p>
+
+    <h3>Scorecard</h3>
+    <table class="ds-table">
+      <thead><tr><th>Dimension</th><th>matt_demo (target)</th><th>nhs_ds (source)</th><th>Migration weight</th></tr></thead>
+      <tbody>
+        <tr><td>Content model</td><td>Curated narrative object + selective JSON</td><td>Single rich catalogue JSON</td><td><span class="ds-prio ds-prio--p1">Heavy</span></td></tr>
+        <tr><td>Rendering</td><td>One scrolling narrative (8 sections)</td><td>Hero + snapshot + 6 tabs</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>Story / message spine</td><td><span class="ds-status ds-status--canonical">Strong</span> problem-first argument</td><td><span class="ds-status ds-status--orphan">Absent</span> reference-only</td><td><span class="ds-prio ds-prio--p1">Heavy</span></td></tr>
+        <tr><td>Local personalisation</td><td><span class="ds-status ds-status--canonical">Yes</span> geography-aware</td><td><span class="ds-status ds-status--orphan">No</span></td><td><span class="ds-prio ds-prio--p1">Heavy</span></td></tr>
+        <tr><td>Economics / ROI</td><td><span class="ds-status ds-status--canonical">Yes</span> scenario engine</td><td><span class="ds-status ds-status--page">Prose only</span></td><td><span class="ds-prio ds-prio--p1">Heavy</span></td></tr>
+        <tr><td>Governance / IG depth</td><td><span class="ds-status ds-status--page">Summary cards</span></td><td><span class="ds-status ds-status--canonical">Granular</span></td><td><span class="ds-prio ds-prio--p2">Orphan risk</span></td></tr>
+        <tr><td>Technical integrations</td><td><span class="ds-status ds-status--orphan">Not shown</span></td><td><span class="ds-status ds-status--canonical">Full table</span></td><td><span class="ds-prio ds-prio--p2">Orphan risk</span></td></tr>
+        <tr><td>Clinical evidence</td><td><span class="ds-status ds-status--page">Partial (schema gap)</span></td><td><span class="ds-status ds-status--canonical">7 full cards</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>Share / PDF &amp; EOI</td><td><span class="ds-status ds-status--orphan">No selective share</span></td><td><span class="ds-status ds-status--canonical">Yes</span></td><td><span class="ds-prio ds-prio--p3">Feature, not content</span></td></tr>
+        <tr><td>JSON utilisation</td><td>~25 fields used</td><td>~60 fields used; sidebar hidden</td><td>&mdash;</td></tr>
+      </tbody>
+    </table>
+
+    <h2>2. Scope &amp; method</h2>
+    <p>
+      Both pages were traced from route to component to data field. The matt_demo worktree was read only and
+      not modified. Headings are quoted verbatim from the rendered output. &ldquo;Used&rdquo; means the field
+      reaches the live page; many fields exist in JSON but never render.
+    </p>
+    <ul>
+      <li><strong>Target:</strong> <code>app/products/[slug]/page.tsx</code> &rarr; <code>resolveProductNarrative('luscii')</code> &rarr; <code>LUSCII_NARRATIVE</code> (<code>lib/content/productNarratives.ts</code>) rendered by <code>components/product/ProductNarrativeView.tsx</code>; types in <code>lib/content/productModel.ts</code>; personalisation via <code>lib/context/*</code>, <code>lib/localData/workspaceData.ts</code>, <code>lib/scenarios/copdRoi.ts</code>.</li>
+      <li><strong>Source:</strong> <code>app/apps/[slug]/page.tsx</code> &rarr; <code>AppDetailClient</code> + <code>PdpCommissioningSnapshot</code> + <code>PdpTabs</code> &rarr; section components in <code>components/AppDetailSections.tsx</code>, <code>app/apps/[slug]/pdpBlocks.tsx</code>, <code>components/DeploymentRegisterTable.tsx</code>, <code>components/DeviceClassDetails.tsx</code>; data from <code>content/apps/luscii.json</code>.</li>
+    </ul>
+
+    <!-- ============================== SECTION A ============================== -->
+    <h2>A. Gold-standard content map (matt_demo)</h2>
+    <p>
+      The page is a single scroll: chrome (hero, key-facts KPI strip, &ldquo;on this page&rdquo; nav, local
+      context selector) followed by eight numbered narrative sections. Content comes from a
+      <strong>two-layer model</strong>: the curated <code>LUSCII_NARRATIVE</code> object supplies the story;
+      <code>luscii.json</code> supplies selected facts (logo, conditions, deployments, case studies, NICE refs,
+      demo links). Where both exist, the narrative wins.
+    </p>
+
+    <h3>Chrome (above the narrative)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Element</th><th>Shows</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Breadcrumb</td><td>Products / Luscii</td><td><code>app.app_name</code></td></tr>
+        <tr><td>Local context strip</td><td>&ldquo;Showing information for {geography}. Change area&rdquo;</td><td><code>LocalContextSelector</code> + <code>context.geography_label</code></td></tr>
+        <tr><td>Assurance banner (conditional)</td><td>&ldquo;Assurance attention required&rdquo;</td><td><code>assurance_domains</code> with incomplete/expired status</td></tr>
+        <tr><td>Hero</td><td>Logo, H1, supplier + conditions, proposition, supervision/maturity/device tags, demo media, Support &amp; Compare CTAs</td><td><code>ProductHero</code>; <code>one_line_proposition</code>, app fields</td></tr>
+        <tr><td>Key facts KPI strip</td><td>Platform &middot; NICE guidance &middot; Indicative cost &middot; HealthStore status</td><td><code>platform_tags</code>, <code>nice_guidance_refs[0]</code>, <code>commercial_readiness.price_summary</code>, <code>commercial_readiness.commercial_status</code></td></tr>
+        <tr><td>&ldquo;On this page&rdquo; nav</td><td>Anchor links to the 8 sections (conditional)</td><td>Derived from which narrative blocks exist</td></tr>
+      </tbody>
+    </table>
+
+    <h3>The eight narrative sections</h3>
+    <table class="ds-table">
+      <thead><tr><th>#</th><th>Heading (verbatim)</th><th>Message / job</th><th>Data source</th><th>Notable sub-components</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>The problem this addresses</strong></td>
+          <td>Frame the clinical/system problem before the product. National burden + local relevance.</td>
+          <td><code>decision_summary.pathway_problem</code> (curated); overlay <code>app.why_it_matters_locally</code></td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>How Luscii helps</strong> &middot; <strong>How it changes the pathway</strong></td>
+          <td>What the product does + before/after pathway transformation.</td>
+          <td><code>what_it_does_bullets</code>; <code>pathway_model.current_steps</code> / <code>future_steps</code> (with added/changed styling)</td>
+          <td>Pathway visual (&ldquo;Current pathway&rdquo; vs &ldquo;With Luscii&rdquo;)</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>What this could mean for {geography}</strong></td>
+          <td>Localise evidence effect sizes to the commissioner&rsquo;s own population. &ldquo;So what?&rdquo;</td>
+          <td><code>evidence_claims</code> (effect sizes) &times; <code>workspaceData.coverage_funnel.eligible</code> / <code>opportunity_value_gbp</code></td>
+          <td><code>HorizontalBarChart</code>, <code>InsightCallout</code>, KPI grid</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>What it could be worth</strong></td>
+          <td>Commissioner economics: cash vs capacity, tariffs/QOF, funding levers + interactive ROI.</td>
+          <td><code>commissioner_economics</code> (headline, cash_vs_capacity, tariff_note, settings, funding_levers); COPD engine <code>copdRoi.ts</code></td>
+          <td><code>ScenarioControls</code> (Conservative/Central/Evidence-led), KPI tiles</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Assurance and evidence</strong></td>
+          <td>&ldquo;National assurance once, reuse the passport.&rdquo; Regulatory position + domain status + publications + NICE.</td>
+          <td><code>regulatory_position</code>, <code>assurance_domains</code>; <code>app.clinical_evidence_detailed</code>, <code>app.nice_guidance_refs</code></td>
+          <td>Status-coloured domain cards</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Making it work at your site</strong></td>
+          <td>Honest operational cost: the human wrapper, workforce, timeline.</td>
+          <td><code>implementation.human_wrapper</code> / <code>workforce</code> / <code>timescale</code></td>
+          <td>3 cards + &ldquo;Supplier support included&rdquo; callout (hard-coded)</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>NHS experience</strong></td>
+          <td>Peer proof: live deployments + evaluated case studies.</td>
+          <td><code>app.deployment_register</code> (live), <code>app.case_studies</code> (top 3 by sample size) &mdash; <em>no narrative fields</em></td>
+          <td>Site cards, case-study cards</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>How to buy locally</strong></td>
+          <td>Procurement route + HealthStore&rsquo;s role.</td>
+          <td><code>commercial_readiness.proposition_type</code> / <code>route_status</code> / <code>buyer_pack_status</code> / <code>healthstore_role</code></td>
+          <td>KPI grid + callout</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="ds-u-muted" style="font-size:.9rem">
+      Footer CTA &ldquo;Ready to proceed?&rdquo; links to a support route. Narrative fields defined but
+      <strong>not rendered</strong>: <code>engagement_signals</code>, <code>publishing</code>,
+      <code>implementation.prerequisites</code>/<code>owner</code>, <code>pathway_model.roles</code>/<code>changed_resources</code>,
+      <code>decision_summary.intervention_class</code>, <code>regulatory_position.market_access</code>.
+    </p>
+
+    <div class="ds-note">
+      <strong>Personalisation is the differentiator.</strong> Sections 3 and 4 recompute from
+      <code>CommissionerContext</code> (URL params or cookie) + <code>content/local/workspace-deployments.json</code>
+      (e.g. West Yorkshire <code>eligible: 89,000</code>) + the COPD ROI engine. None of this exists on nhs_ds.
+      Note the scenario cohort is currently hard-coded (500 patients) rather than wired to the local funnel.
+    </div>
+
+    <!-- ============================== SECTION B ============================== -->
+    <h2>B. Current content map (nhs_ds)</h2>
+    <p>
+      One rich <code>luscii.json</code> drives a hero, a commissioning snapshot, and six tabs. The page is a
+      <strong>reference document</strong>, not an argument: it answers &ldquo;tell me everything about this
+      product&rdquo; rather than &ldquo;why should I commission this here?&rdquo;.
+    </p>
+
+    <h3>Hero + snapshot</h3>
+    <table class="ds-table">
+      <thead><tr><th>Block</th><th>Shows</th><th>Source fields</th></tr></thead>
+      <tbody>
+        <tr><td>Hero</td><td>COPD pill, logo, H1, supplier, proposition, <strong>Express interest</strong>, Demo pill, Share, Save, Compare</td><td><code>condition_tags</code>, <code>app_name</code>, <code>supplier_name</code>, <code>one_line_value_proposition</code></td></tr>
+        <tr><td>Commissioning snapshot</td><td>Governance pills (NICE-EVA, DTAC, Cyber Essentials) &middot; Pricing model &middot; Integrations (NHS App/Notify/Login, FHIR, EMIS) &middot; Where it&rsquo;s live (5 sites &middot; 1 pilot)</td><td><code>lib/commissioningSnapshot.ts</code>, <code>technical_integrations</code>, <code>deployment_register</code></td></tr>
+        <tr><td>Sidebar quick facts</td><td><span class="ds-status ds-status--orphan">Hidden</span> &mdash; <code>showPdpFactsGrid = false</code></td><td>Would surface <code>target_patients</code>, <code>supplier_contact_email</code>, <code>source_summary</code>, <code>confidence_note</code></td></tr>
+        <tr><td>Express interest callout</td><td>Contact supplier to discuss deployment &rarr; modal with session prefill</td><td><code>supplier_contact_name</code>, <code>supplier_name</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3>The six tabs (&ldquo;Contents&rdquo;)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Tab</th><th>Sections (verbatim H2)</th><th>Key fields</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1. Overview &amp; local fit</td>
+          <td><strong>Why it matters locally</strong>; <strong>Context of use</strong>; <strong>Demo access</strong></td>
+          <td><code>why_it_matters_locally</code>; <code>context_of_use.*</code> (population, pathways, care_settings, therapeutic_purpose, hcp_involvement, nice_scope); <code>demo_notes</code>, <code>demo_variants</code></td>
+        </tr>
+        <tr>
+          <td>2. Clinical evidence &amp; outcomes</td>
+          <td><strong>Expected impact and case studies</strong>; <strong>Clinical evidence</strong>; <strong>NICE guidance</strong></td>
+          <td><code>expected_benefit_note</code>, <code>case_studies</code>; <code>clinical_evidence_detailed</code> (7 studies, grouped RCT/RWE/NICE); <code>nice_guidance_refs</code> (2)</td>
+        </tr>
+        <tr>
+          <td>3. Deployment &amp; adoption</td>
+          <td><strong>Scale and maturity</strong>; <strong>What it takes locally</strong></td>
+          <td><code>maturity_level</code>, <code>evidence_strength</code>(+rationale), <code>patients_covered_note</code>, <code>deployment_register</code> (6-row table); <code>onboarding_*</code>, <code>supplier_wrap</code>, <code>local_wraparound_*</code>, <code>training_*</code>, <code>monitoring_note</code>, <code>escalation_note</code>, <code>operating_hours_caveat</code>, <code>implementation_prerequisites</code></td>
+        </tr>
+        <tr>
+          <td>4. Safety &amp; governance</td>
+          <td><strong>Safety and governance</strong> (Clinical safety + Data &amp; IG)</td>
+          <td><code>dtac_status</code>/<code>dtac_note</code>, <code>device_class</code> (+ explainer), <code>dcb0129_status</code>, <code>dcb0160_boilerplate_available</code>, <code>supervision_model</code>; <code>gdpr_note</code>, <code>iso27001</code>, <code>cyber_essentials</code>, <code>dspt_status</code>, <code>cyber_notes</code></td>
+        </tr>
+        <tr>
+          <td>5. Commercial, cost &amp; funding</td>
+          <td><strong>Commercial model and cost</strong>; <strong>Indicative financial context</strong>; <strong>Related funding opportunities</strong></td>
+          <td><code>pricing_model</code>, <code>national_price_available</code>, <code>indicative_price_text</code>, <code>pricing_confidence</code>, <code>service_wrap_*</code>, <code>procurement_notes</code>, <code>nhse_125k_note</code>, <code>monitoring_model</code>; <code>tariff_considerations</code>, <code>provider_income_note</code>, <code>roi_note</code>, <code>minimum_conditions_for_success</code>; funding (empty &rarr; link to <code>/funding</code>)</td>
+        </tr>
+        <tr>
+          <td>6. Technical &amp; integration</td>
+          <td><strong>NHS and care system integrations</strong></td>
+          <td><code>technical_integrations</code> (FHIR, EMIS, NHS Login, NHS Notify, population health dashboard, device integration, languages, data hosting)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Functionality (not content, but in scope for parity)</h3>
+    <ul>
+      <li><strong>Selective share &amp; PDF</strong> &mdash; <code>SharePagePanel</code> + <code>lib/pdpShareKeys.ts</code> (17 registerable section keys), shared-link view at <code>/apps/luscii/shared</code> via <code>PdpSharedProductBody</code>.</li>
+      <li><strong>Express interest</strong> modal with session prefill (<code>getExpressionOfInterestPrefill</code>).</li>
+      <li><strong>Save</strong> + <strong>Compare</strong> toggles.</li>
+    </ul>
+
+    <div class="ds-note">
+      <strong>Already-orphaned today (in JSON, on neither page):</strong> <code>target_problem_statement</code>,
+      <code>exclusions</code>, <code>evidence_summary</code>, <code>pathway_tags</code>, <code>outcome_tags</code>,
+      <code>referral_modes</code>, <code>live_sites</code>/<code>named_sites</code>/<code>live_icbs</code> (legacy),
+      <code>last_reviewed_date</code>, app-level <code>data_quality_note</code>, plus the entire hidden sidebar
+      block. Migration is partly just <em>turning existing content on</em>.
+    </div>
+
+    <!-- ============================== SECTION C ============================== -->
+    <h2>C. Architecture comparison</h2>
+    <table class="ds-table">
+      <thead><tr><th>Aspect</th><th>matt_demo (target)</th><th>nhs_ds (source)</th></tr></thead>
+      <tbody>
+        <tr><td>Content source</td><td>Curated <code>LUSCII_NARRATIVE</code> + selective JSON</td><td><code>luscii.json</code> only</td></tr>
+        <tr><td>Authoring</td><td>Hand-written story per product (TS object)</td><td>Structured data entry per product (JSON)</td></tr>
+        <tr><td>Information shape</td><td>Linear argument, 8 sections</td><td>Hero + snapshot + 6 reference tabs</td></tr>
+        <tr><td>Primary question answered</td><td>&ldquo;Why commission this <em>here</em>?&rdquo;</td><td>&ldquo;What is this product?&rdquo;</td></tr>
+        <tr><td>Personalisation</td><td>Geography-aware (context + workspace data)</td><td>None</td></tr>
+        <tr><td>Economics</td><td>Curated economics + interactive ROI engine</td><td>Prose fields (tariff, ROI, provider income)</td></tr>
+        <tr><td>Evidence</td><td>Effect-size claims + partial publications list</td><td>7 full evidence cards (authors, journal, COI, flags)</td></tr>
+        <tr><td>Governance / IG</td><td>5 summary &ldquo;assurance domain&rdquo; cards</td><td>Granular row-by-row (DTAC, DCB0129/0160, ISO, CE, DSPT, GDPR)</td></tr>
+        <tr><td>Integrations</td><td>Not shown (Platform KPI only)</td><td>Full technical table</td></tr>
+        <tr><td>Deployment proof</td><td>Live cards + case studies</td><td>Full deployment register table + case studies</td></tr>
+        <tr><td>Sharing</td><td>None</td><td>Selective link + PDF, shared view</td></tr>
+        <tr><td>Lead conversion</td><td>&ldquo;Get commissioning support&rdquo; route</td><td>Express interest modal + prefill</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============================== SECTION D ============================== -->
+    <h2>D. Gap analysis &mdash; what nhs_ds lacks vs the gold standard</h2>
+    <p>What we would need to <em>add</em> to nhs_ds to reach the target. Priority = commissioner value; effort = build cost.</p>
+    <table class="ds-table">
+      <thead><tr><th>ID</th><th>Gap</th><th>What it needs</th><th>Priority</th><th>Effort</th></tr></thead>
+      <tbody>
+        <tr><td>G1</td><td><strong>Narrative / story layer</strong> (problem-first spine)</td><td>A curated narrative content model (a <code>productNarratives</code> equivalent) + <code>decision_summary.pathway_problem</code>, <code>why_relevant</code>. nhs_ds has <code>target_problem_statement</code> but never renders it.</td><td><span class="ds-prio ds-prio--p1">High</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>G2</td><td><strong>Pathway visual</strong> (current vs future)</td><td><code>pathway_model</code> data + a before/after component. No nhs_ds equivalent.</td><td><span class="ds-prio ds-prio--p1">High</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>G3</td><td><strong>Localised projected impact</strong> (&ldquo;what this could mean for {geography}&rdquo;)</td><td>Commissioner context model + local population data + effect-size <code>evidence_claims</code> + chart components.</td><td><span class="ds-prio ds-prio--p1">High</span></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>G4</td><td><strong>Commissioner economics + ROI engine</strong></td><td>Curated <code>commissioner_economics</code> + port of <code>copdRoi.ts</code> scenario engine + <code>ScenarioControls</code>. nhs_ds only has prose tariff/ROI fields.</td><td><span class="ds-prio ds-prio--p1">High</span></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>G5</td><td><strong>Commissioner context / personalisation</strong></td><td>Geography selector + URL/cookie context + workspace ICB dataset. Foundational for G3/G4.</td><td><span class="ds-prio ds-prio--p1">High</span></td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>G6</td><td><strong>Assurance-passport framing</strong></td><td>Reframe granular governance into &ldquo;national assurance, reuse the passport&rdquo; summary cards (<code>assurance_domains</code>, <code>regulatory_position</code>) <em>on top of</em> the existing detail.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>G7</td><td><strong>&ldquo;How to buy locally&rdquo; narrative</strong></td><td>Curated <code>commercial_readiness</code> (route, buyer pack, HealthStore role). nhs_ds has commercial facts but no procurement-route story.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>G8</td><td><strong>Single value-proposition source of truth</strong></td><td>matt_demo&rsquo;s proposition is commissioner-framed; nhs_ds JSON differs. Decide which wins and reconcile (see price discrepancy, Section F).</td><td><span class="ds-prio ds-prio--p2">Medium</span></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>G9</td><td><strong>&ldquo;So what?&rdquo; insight callouts</strong></td><td>Plain-language interpretation of numbers (the <code>InsightCallout</code> pattern). nhs_ds states facts without interpreting them.</td><td><span class="ds-prio ds-prio--p3">Low</span></td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============================== SECTION E ============================== -->
+    <h2>E. Orphan analysis &mdash; what the matt_demo shape would drop</h2>
+    <p>
+      If nhs_ds adopted the narrative shape <em>literally</em>, the following nhs_ds content would have no home.
+      This is the strongest argument <strong>against</strong> a straight replacement and <strong>for</strong> the
+      hybrid in Section H. Disposition: <span class="ds-status ds-status--canonical">Keep</span> as deep-detail /
+      appendix, <span class="ds-status ds-status--page">Map</span> into a narrative section, or
+      <span class="ds-status ds-status--duplicate">Retire</span>.
+    </p>
+    <table class="ds-table">
+      <thead><tr><th>nhs_ds content</th><th>Why it has no narrative home</th><th>Disposition</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Safety &amp; governance granular rows</strong> (DCB0129/0160, ISO 27001, Cyber Essentials, DSPT, GDPR, device-class explainer)</td><td>Narrative collapses all IG into 5 summary cards</td><td><span class="ds-status ds-status--canonical">Keep</span> as deep-detail under Assurance (expandable)</td></tr>
+        <tr><td><strong>Technical &amp; integration table</strong> (FHIR, EMIS, NHS Login/Notify, dashboard, device, languages, hosting)</td><td>Narrative shows none of this</td><td><span class="ds-status ds-status--canonical">Keep</span> as deep-detail / appendix tab</td></tr>
+        <tr><td><strong>Granular commercial fields</strong> (pricing_model, indicative_price_text, national_price, service_wrap_description, procurement_notes, monitoring_model)</td><td>Narrative uses a curated <code>price_summary</code> + buyer-pack story</td><td><span class="ds-status ds-status--page">Map</span> into &ldquo;How to buy&rdquo; + keep detail; reconcile price (Section F)</td></tr>
+        <tr><td><strong>&ldquo;What it takes locally&rdquo; operational detail</strong> (onboarding_detail, supplier_wrap, training_note, escalation_note, operating_hours_caveat, implementation_prerequisites)</td><td>Narrative compresses to 3 cards (human wrapper / workforce / timeline)</td><td><span class="ds-status ds-status--page">Map</span> into &ldquo;Making it work&rdquo;; keep checklist as detail</td></tr>
+        <tr><td><strong>Context of use grid</strong> (population, pathways, care settings, therapeutic purpose, HCP involvement, NICE scope)</td><td>No narrative section</td><td><span class="ds-status ds-status--page">Map</span> into Problem / How-it-helps intros; keep grid as detail</td></tr>
+        <tr><td><strong>Full clinical-evidence cards</strong> (authors, journal, peer-review, COI, per-study data-quality flags)</td><td>Narrative &ldquo;publications&rdquo; list is thinner and has a schema mismatch</td><td><span class="ds-status ds-status--canonical">Keep</span> nhs_ds richness; feed narrative from it (Section F)</td></tr>
+        <tr><td><strong>Indicative financial context</strong> (tariff_considerations, provider_income_note, roi_note, minimum_conditions_for_success)</td><td>Partly duplicated by curated economics, but more conservative/caveated</td><td><span class="ds-status ds-status--page">Map</span> as the evidence base behind the ROI engine</td></tr>
+        <tr><td><strong>Selective share + PDF</strong> and <strong>shared view</strong></td><td>Target has no equivalent</td><td><span class="ds-status ds-status--canonical">Keep</span> (feature parity &mdash; do not lose)</td></tr>
+        <tr><td><strong>Express interest</strong> modal + prefill</td><td>Target uses a support route instead</td><td><span class="ds-status ds-status--canonical">Keep</span> nhs_ds conversion flow</td></tr>
+        <tr><td><strong>Sources / confidence / data-quality</strong> (source_summary, confidence_note, data_quality_note, last_reviewed_date)</td><td>Target has <code>publishing</code> but doesn&rsquo;t render it</td><td><span class="ds-status ds-status--page">Map</span> into a provenance footer (improve on both)</td></tr>
+        <tr><td>Legacy <code>live_sites</code> / <code>named_sites</code> / <code>live_icbs</code></td><td>Superseded by <code>deployment_register</code></td><td><span class="ds-status ds-status--duplicate">Retire</span> once register is canonical</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============================== SECTION F ============================== -->
+    <h2>F. Field-level mapping</h2>
+    <p>Where each target narrative section should source its content on nhs_ds. Action: <em>Reuse</em> existing field, <em>Curate</em> new narrative copy, or <em>Normalise</em> a schema mismatch.</p>
+    <table class="ds-table">
+      <thead><tr><th>Target section</th><th>nhs_ds source field(s)</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>1. The problem this addresses</td><td><code>target_problem_statement</code> (exists, unused) + <code>why_it_matters_locally</code></td><td><span class="ds-status ds-status--page">Curate</span> a richer <code>pathway_problem</code>; the bullet-style <code>target_problem_statement</code> is too thin</td></tr>
+        <tr><td>2. How it helps + pathway</td><td><code>one_line_value_proposition</code>, <code>context_of_use</code></td><td><span class="ds-status ds-status--page">Curate</span> bullets + <code>pathway_model</code> (no nhs_ds source exists)</td></tr>
+        <tr><td>3. Projected impact</td><td><code>clinical_evidence_detailed</code> effect data; needs new local dataset</td><td><span class="ds-status ds-status--page">Curate</span> effect-size claims + <span class="ds-status ds-status--orphan">Build</span> context + workspace data</td></tr>
+        <tr><td>4. What it could be worth</td><td><code>tariff_considerations</code>, <code>provider_income_note</code>, <code>roi_note</code>, <code>minimum_conditions_for_success</code></td><td><span class="ds-status ds-status--page">Map</span> as evidence base + <span class="ds-status ds-status--orphan">Build</span> ROI engine</td></tr>
+        <tr><td>5. Assurance &amp; evidence</td><td><code>dtac_status</code>, <code>device_class</code>, <code>dcb0129_status</code>, IG fields, <code>clinical_evidence_detailed</code>, <code>nice_guidance_refs</code></td><td><span class="ds-status ds-status--canonical">Reuse</span> (summarise into domains; keep detail)</td></tr>
+        <tr><td>6. Making it work</td><td><code>onboarding_*</code>, <code>supplier_wrap</code>, <code>local_wraparound_*</code>, <code>training_*</code>, <code>implementation_prerequisites</code></td><td><span class="ds-status ds-status--canonical">Reuse</span> (summarise into 3 cards; keep checklist)</td></tr>
+        <tr><td>7. NHS experience</td><td><code>deployment_register</code>, <code>case_studies</code>, <code>patients_covered_note</code></td><td><span class="ds-status ds-status--canonical">Reuse</span> directly (already richer on nhs_ds)</td></tr>
+        <tr><td>8. How to buy locally</td><td><code>pricing_model</code>, <code>procurement_notes</code>, <code>contract_note</code>, <code>service_wrap_included</code></td><td><span class="ds-status ds-status--page">Curate</span> route + buyer-pack story; <span class="ds-status ds-status--canonical">Reuse</span> facts</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Concrete content conflicts to resolve</h3>
+    <table class="ds-table">
+      <thead><tr><th>Conflict</th><th>matt_demo</th><th>nhs_ds</th><th>Resolution</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Price</strong></td><td>&ldquo;From &pound;110 per patient per year&rdquo; (curated)</td><td>&ldquo;&pound;30&ndash;&pound;60 per patient per month&rdquo; (<code>indicative_price_text</code>)</td><td>Pick one source of truth; &pound;110/yr vs &pound;360&ndash;720/yr is a material discrepancy &mdash; verify with supplier before either ships</td></tr>
+        <tr><td><strong>Device class</strong></td><td>&ldquo;Class I transitional (HIRA-evidenced)&rdquo;</td><td>&ldquo;Class IIa SaMD&rdquo;</td><td>Reconcile &mdash; these contradict; nhs_ds value looks more current</td></tr>
+        <tr><td><strong>Evidence schema</strong></td><td>View expects <code>sample_size</code>, <code>outcome</code>, <code>url</code></td><td>JSON has <code>n</code>, <code>key_results</code>, <code>url_full_text</code></td><td><span class="ds-status ds-status--page">Normalise</span> field names so the narrative renders nhs_ds evidence fully</td></tr>
+        <tr><td><strong>Proposition</strong></td><td>Commissioner-framed (24/7 hub, intervene before emergency)</td><td>Supplier-framed (&ldquo;25 million global registrations&hellip;&rdquo;)</td><td>Adopt commissioner framing as canonical</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============================== SECTION G ============================== -->
+    <h2>G. Migration roadmap (iterative, 3 rounds)</h2>
+    <p>Each round is independently shippable and leaves the page coherent. Risk rises with personalisation/economics.</p>
+
+    <h3>Round 1 &mdash; Story scaffolding (no data loss)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Item</th><th>Detail</th><th>Risk</th></tr></thead>
+      <tbody>
+        <tr><td>Introduce a narrative content model</td><td>Add a curated narrative object for Luscii (problem, how-it-helps bullets, pathway, how-to-buy framing). Keep <code>luscii.json</code> as the fact store.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>Add Problem + How-it-helps + pathway visual</td><td>New top-of-page sections (G1, G2). Reuse <code>context_of_use</code> for the intros.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>&ldquo;How to buy&rdquo; framing</td><td>Curate <code>commercial_readiness</code>-style story over existing commercial facts (G7).</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>Surface hidden content</td><td>Decide on the disabled sidebar (<code>showPdpFactsGrid</code>) &mdash; relocate provenance/contact into the page instead of hiding.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>Reconcile proposition + price + device class</td><td>Resolve the Section F conflicts before any of it ships publicly.</td><td><span class="ds-prio ds-prio--p2">Content risk</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Round 2 &mdash; Quantified value (the heavy lift)</h3>
+    <table class="ds-table">
+      <thead><tr><th>Item</th><th>Detail</th><th>Risk</th></tr></thead>
+      <tbody>
+        <tr><td>Commissioner context</td><td>Port the geography context model (URL/cookie) + a selector (G5).</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+        <tr><td>Local workspace dataset</td><td>Bring across <code>workspace-deployments.json</code> + accessor; decide canonical ICB list.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>Projected impact section</td><td>Effect-size claims &times; local population, with charts + &ldquo;so what&rdquo; callouts (G3, G9).</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>Economics + ROI engine</td><td>Port <code>copdRoi.ts</code> + <code>ScenarioControls</code>; wire cohort to the local funnel (fix the hard-coded 500) (G4).</td><td><span class="ds-prio ds-prio--p1">High</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Round 3 &mdash; Assurance passport, reconcile, templatise</h3>
+    <table class="ds-table">
+      <thead><tr><th>Item</th><th>Detail</th><th>Risk</th></tr></thead>
+      <tbody>
+        <tr><td>Assurance passport framing</td><td>Summary domain cards over the granular governance detail (G6); keep detail expandable (orphan-safe).</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>Normalise evidence schema</td><td><code>n</code>&rarr;<code>sample_size</code>, <code>key_results</code>&rarr;<code>outcome</code>, <code>url_full_text</code>&rarr;<code>url</code> so full evidence renders.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>Resolve orphans</td><td>Place Technical, granular Commercial, &ldquo;what it takes&rdquo; checklist, context grid as deep-detail/appendix; add provenance footer; retire legacy site fields.</td><td><span class="ds-prio ds-prio--p2">Medium</span></td></tr>
+        <tr><td>Extract reusable template</td><td>Generalise the Luscii structure into a per-product pattern; document the content model + authoring guide.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+        <tr><td>Polish + parity</td><td>Confirm share/PDF + EOI survive the restructure; a11y + print.</td><td><span class="ds-prio ds-prio--p3">Low</span></td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============================== SECTION H ============================== -->
+    <h2>H. Key decisions &amp; risks</h2>
+    <table class="ds-table">
+      <thead><tr><th>Decision</th><th>Options</th><th>Recommendation</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Page model</strong></td>
+          <td>(a) Replace the tabbed PDP with the narrative page; (b) Two pages (narrative lead + catalogue detail); (c) Hybrid: one page, narrative spine on top, deep catalogue detail retained below/expandable.</td>
+          <td><strong>(c) Hybrid.</strong> Gets the gold-standard story without orphaning the substantial nhs_ds detail (Section E). Avoids a second URL to maintain.</td>
+        </tr>
+        <tr>
+          <td><strong>Narrative authoring burden</strong></td>
+          <td>Hand-curate per product vs auto-generate from JSON</td>
+          <td>Curate the high-value sections (problem, how-it-helps, economics, how-to-buy) for flagship products; fall back to a JSON-derived narrative for the long tail (matt_demo already has <code>buildNarrativeFromApp</code> as a model).</td>
+        </tr>
+        <tr>
+          <td><strong>Personalisation scope</strong></td>
+          <td>Full geography engine now vs static &ldquo;national&rdquo; baseline first</td>
+          <td>Ship Round 1 with a national baseline; add geography in Round 2 so the story lands before the engine is built.</td>
+        </tr>
+        <tr>
+          <td><strong>Content accuracy</strong></td>
+          <td>&mdash;</td>
+          <td>Resolve price, device-class and proposition conflicts (Section F) <em>before</em> anything is commissioner-facing. These are credibility risks, not cosmetics.</td>
+        </tr>
+        <tr>
+          <td><strong>Feature parity</strong></td>
+          <td>&mdash;</td>
+          <td>Share/PDF, shared view, and Express interest must survive the restructure. Treat as acceptance criteria, not nice-to-haves.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ============================== SECTION I ============================== -->
+    <h2>I. Template for other products</h2>
+    <p>Distilled from Luscii so the next product (myCOPD recommended) can follow the same path:</p>
+    <ol>
+      <li><strong>Map the source.</strong> List every <code>content/apps/{slug}.json</code> field and whether it renders today.</li>
+      <li><strong>Curate the spine.</strong> Write the narrative object: problem, how-it-helps bullets, pathway model, how-to-buy framing. Keep pathway moment distinct from sibling products (e.g. Luscii = monitoring hub; myCOPD = discharge bundle).</li>
+      <li><strong>Reuse facts.</strong> Point Assurance, NHS experience, &ldquo;making it work&rdquo; and commercial detail at existing JSON; normalise the evidence schema once.</li>
+      <li><strong>Resolve conflicts.</strong> Reconcile price / device class / proposition against a single source of truth.</li>
+      <li><strong>Layer personalisation.</strong> Add geography + effect-size claims; reuse the ROI engine where the condition has one (COPD today).</li>
+      <li><strong>Protect detail.</strong> Run the orphan checklist (Section E) so nothing rich is dropped.</li>
+      <li><strong>Confirm parity.</strong> Share/PDF + EOI still work; a11y + print pass.</li>
+    </ol>
+
+    <div class="ds-note">
+      <strong>Next.</strong> On approval, Round 1 is content-led and low-risk. Mig 2 and Mig 3 will track Rounds 2
+      and 3 here under <code>/DS/Audits</code>, mirroring the existing audit/round record series.
+    </div>
+
+    <p class="ds-u-muted" style="font-size:.9rem">
+      Analysis traced against code on both branches, June 2026. matt_demo read-only. This is the first of an
+      expected 2&ndash;3 iterative migration records for Luscii, and the template for migrating the remaining
+      product pages.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

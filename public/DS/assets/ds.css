@@ -74,12 +74,13 @@
   --leading-body: 1.5;
   --leading-caption: 1.66667;
 
-  /* NHS flat/square: a single 4px component radius; pill kept for chips/toggles/FABs. */
+  /* NHS flat/square: component radius 4px; card shells square (0). */
   --radius-sm: 4px;
   --radius-md: 4px;
   --radius-lg: 4px;
   --radius-xl: 4px;
   --radius-pill: 9999px;
+  --radius-card: 0;
 
   /* NHS spacing scale (core/settings/_spacing.scss). */
   --space-1: 4px;  --space-2: 8px;  --space-3: 16px; --space-4: 24px;
@@ -411,9 +412,9 @@ a { color: var(--nhs-blue); }
   font-family: var(--font-body); background: #fff; color: var(--text-secondary);
 }
 
-/* Surfaces — flat (NHS): own bg + border + radius (4px), no shadow. */
+/* Surfaces — flat (NHS): own bg + border + square radius, no shadow. */
 .hs-surface-card, .hs-surface-card-sm {
-  background: var(--card, #fff); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: var(--card, #fff); border: 1px solid var(--border); border-radius: var(--radius-card);
 }
 .app-card {
   transition: border-color 0.15s ease;
@@ -421,7 +422,7 @@ a { color: var(--nhs-blue); }
 .app-card:hover { border-color: #005EB8; }
 
 /* Evidence cards */
-.card-evidence { border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 14px 16px; margin-bottom: 10px; background: #f7f9fc; }
+.card-evidence { border-radius: var(--radius-card); border: 1px solid var(--border); padding: 14px 16px; margin-bottom: 10px; background: #f7f9fc; }
 .card-evidence--gap { border-color: var(--border); background: #fffbf0; }
 .card-evidence--coi { background: #fff8f8; }
 .card-evidence--dq { border-color: #f0c070; }
@@ -472,18 +473,30 @@ a { color: var(--nhs-blue); }
 /* Decision snapshot strip (PDP pattern) */
 .hs-snapshot-strip__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.75rem; }
 @media (min-width: 1024px) { .hs-snapshot-strip__grid { grid-template-columns: repeat(4, minmax(0,1fr)); } }
-.hs-snapshot-strip__segment { display: flex; flex-direction: column; min-height: 100%; padding: 1rem 1.25rem; border-radius: var(--radius-lg); background: rgb(247,249,252); }
+.hs-snapshot-strip__segment { display: flex; flex-direction: column; min-height: 100%; padding: 1rem 1.25rem; border-radius: var(--radius-card); background: rgb(247,249,252); }
 .hs-snapshot-strip__heading { flex-shrink: 0; margin: 0; font-family: var(--font-display); font-size: var(--text-label); font-weight: 600; line-height: var(--leading-heading-sm); color: var(--text-primary); }
 .hs-snapshot-strip__body { margin-top: auto; padding-top: 0.625rem; min-height: 0; }
-.hs-decision-snapshot { padding: 1rem; background: #fff; border: 1px solid var(--border); }
+.hs-decision-snapshot { padding: 1rem; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-card); }
+.hs-on-this-page { padding: 1rem 1.25rem; border-radius: var(--radius-card); background: #f0f4f5; }
+.hs-on-this-page__title { display: block; margin-bottom: 0.5rem; font-size: var(--text-label); font-weight: 600; color: var(--text-primary); }
+.hs-on-this-page__list { display: flex; flex-direction: column; gap: 0.375rem; margin: 0; padding: 0; list-style: none; }
+.hs-on-this-page__link { display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 5px solid transparent; font-size: var(--text-label); font-weight: 400; line-height: 1.4; color: var(--nhs-blue); text-decoration: none; }
+.hs-on-this-page__link:hover { text-decoration: underline; }
+.hs-on-this-page__link--active { font-weight: 700; border-left-color: var(--nhs-blue); color: var(--text-primary); text-decoration: none; }
+.hs-on-this-page__link--active:hover { text-decoration: underline; }
+.hs-pdp-with-sidebar { display: grid; gap: 1.5rem 2rem; align-items: start; }
+@media (min-width: 1024px) { .hs-pdp-with-sidebar { grid-template-columns: minmax(0, 1fr) 14rem; } .hs-pdp-with-sidebar__aside { position: sticky; top: 1rem; } }
+@media (max-width: 1023px) { .hs-pdp-with-sidebar__aside { order: -1; } }
+.hs-pdp-with-sidebar__main { min-width: 0; }
 
 /* =============================================================================
    CANONICAL BUTTON SYSTEM (.ds-btn) — SHIPPED (Round 2).
    These classes mirror the React primitive components/ui/Button.tsx, which is
    now the canonical implementation in the app. In the app, primary renders the
    official NHS button (`.nhsuk-button`) recoloured to NHS blue: square 4px corners
-   with a 4px dark-blue press-shadow, hover #004B8C, toggle "on" = blue-tinted. The
-   .ds-btn CSS exists so this static doc can render faithful previews.
+   with a 4px dark-blue press-shadow, hover #004B8C; bordered secondary/toggle press shadows
+   match their border colour (NHS blue); borderless toggles keep grey/dark shadows. The .ds-btn
+   CSS exists so this static doc can render faithful previews.
    ============================================================================= */
 .ds-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -493,22 +506,35 @@ a { color: var(--nhs-blue); }
   border: 1px solid transparent; transition: background-color .15s ease, color .15s ease, border-color .15s ease, box-shadow .15s ease;
 }
 .ds-btn:focus-visible { outline: 3px solid #FFD800; outline-offset: 2px; }
-.ds-btn[disabled], .ds-btn[aria-disabled='true'] { opacity: 0.6; cursor: not-allowed; }
+.ds-btn[disabled], .ds-btn[aria-disabled='true'] { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
 
 .ds-btn--primary { background: var(--nhs-blue); color: #fff; box-shadow: 0 4px 0 var(--nhs-dark); }
 .ds-btn--primary:hover { background: #004B8C; }
 .ds-btn--primary:active { box-shadow: none; }
-.ds-btn--secondary { background: #fff; color: var(--nhs-blue); border-color: var(--nhs-blue); }
+.ds-btn--secondary { background: #fff; color: var(--nhs-blue); border-color: var(--nhs-blue); box-shadow: 0 4px 0 var(--nhs-blue); }
 .ds-btn--secondary:hover { background: #E6F0FB; }
+.ds-btn--secondary:active { box-shadow: none; }
+.ds-btn--secondary.ds-btn--borderless { border-color: transparent; box-shadow: 0 4px 0 #AEB7BD; }
 .ds-btn--ghost { background: transparent; color: var(--text-secondary); }
 .ds-btn--ghost:hover { background: #eef2f7; color: var(--text-primary); }
-.ds-btn--destructive { background: var(--nhs-red); color: #fff; }
+.ds-btn--destructive { background: var(--nhs-red); color: #fff; box-shadow: 0 4px 0 #212b32; }
 .ds-btn--destructive:hover { background: #b21d12; }
-.ds-btn--on-accent { background: #fff; color: var(--nhs-blue); }
+.ds-btn--destructive:active { box-shadow: none; }
+.ds-btn--on-accent { background: #fff; color: var(--nhs-blue); box-shadow: 0 4px 0 var(--nhs-dark); }
 .ds-btn--on-accent:hover { background: #E6F0FB; }
-/* Toggle "on" state — BTN-3 Option B (blue-tinted). Pair with aria-pressed. */
-.ds-btn--on { background: #E6F0FB; color: var(--nhs-dark); border-color: var(--nhs-blue); }
+.ds-btn--on-accent:active { box-shadow: none; }
+/* Toggle at rest — mirrors Button variant="toggle" (Save / Compare). Pair with aria-pressed="false". */
+.ds-btn--toggle { background: #fff; color: var(--nhs-blue); border-color: var(--nhs-blue); box-shadow: 0 4px 0 var(--nhs-blue); }
+.ds-btn--toggle:hover { background: #E6F0FB; }
+.ds-btn--toggle:active { box-shadow: none; }
+/* Toggle "on" — blue-tinted; bordered press shadow matches border. Pair with aria-pressed="true". */
+.ds-btn--on { background: #E6F0FB; color: var(--nhs-dark); border-color: var(--nhs-blue); box-shadow: 0 4px 0 var(--nhs-blue); }
 .ds-btn--on:hover { background: #d7e6f8; }
+.ds-btn--on:active { box-shadow: none; }
+/* Borderless modifier — drops visible border ring; grey/dark press shadows. */
+.ds-btn--borderless { border-color: transparent; }
+.ds-btn--toggle.ds-btn--borderless { box-shadow: 0 4px 0 #AEB7BD; }
+.ds-btn--on.ds-btn--borderless { box-shadow: 0 4px 0 var(--nhs-dark); }
 
 .ds-btn--sm { padding: 8px 14px; min-height: 36px; font-size: 0.8rem; }
 .ds-btn--lg { padding: 14px 26px; min-height: 52px; font-size: 1rem; }
@@ -532,7 +558,7 @@ a { color: var(--nhs-blue); }
 @keyframes ds-shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
 
 /* Utility helpers used inside examples */
-.ds-u-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; }
+.ds-u-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px; }
 .ds-u-muted { color: var(--text-muted); }
 .ds-u-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .ds-u-stack { display: flex; flex-direction: column; gap: 8px; }

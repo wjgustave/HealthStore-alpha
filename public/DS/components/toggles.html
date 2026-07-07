@@ -13,22 +13,50 @@
       <p class="ds-eyebrow">Components</p>
       <h1 class="ds-page-title">Toggles &amp; segmented controls</h1>
       <p class="ds-lede">
-        Controls that switch between mutually exclusive views or filter options. Most live on the comparison tool and
-        are styled via dedicated <code>.hs-compare-*</code> classes.
+        Controls that switch state or filter options. Save / Compare toggles render through
+        <code>components/ui/Button.tsx</code> (<code>variant="toggle"</code>) with the NHS 4px press shadow.
+        Comparison lens and diff controls use dedicated <code>.hs-compare-*</code> classes.
       </p>
     </div>
 
-    <h2>Add-to-compare toggle</h2>
-    <p>The catalogue / PDP control that adds a DTx app to the comparison basket. It is a pressed <code>aria-pressed</code> toggle whose <strong>label changes with state</strong> so it&rsquo;s never ambiguous (CNT-02): <strong>&ldquo;Add to compare&rdquo;</strong> &rarr; <strong>&ldquo;Added&rdquo;</strong> (with a check). When the basket is full or the condition differs it becomes <code>aria-disabled</code> with a reason, staying in the tab order.</p>
+    <h2>Save toggle</h2>
+    <p>Catalogue cards and the PDP utility cluster. Label changes with state: <strong>Save</strong> &rarr;
+      <strong>Saved</strong>. Uses <code>SaveToggleButton</code> &rarr; <code>Button variant="toggle"</code>.</p>
     <div class="ds-example ds-example--surface">
-      <div class="ds-u-row" style="gap:12px">
-        <button class="ds-btn ds-btn--secondary" type="button" aria-pressed="false">&#8646; Add to compare</button>
-        <button class="ds-btn ds-btn--secondary" type="button" aria-pressed="true" style="border-color:var(--nhs-blue);background:#E6F0FB">&#10003; Added</button>
+      <div class="ds-u-row" style="gap:12px;flex-wrap:wrap">
+        <button class="ds-btn ds-btn--toggle" type="button" aria-pressed="false">&#9734; Save</button>
+        <button class="ds-btn ds-btn--on" type="button" aria-pressed="true">&#9733; Saved</button>
+        <button class="ds-btn ds-btn--toggle ds-btn--borderless" type="button" aria-pressed="false">&#9734; Save</button>
+        <button class="ds-btn ds-btn--on ds-btn--borderless" type="button" aria-pressed="true">&#9733; Saved</button>
+      </div>
+    </div>
+
+    <h2>Add-to-compare toggle</h2>
+    <p>The catalogue / PDP control that adds a DTx app to the comparison basket. Label changes with state (CNT-02):
+      <strong>&ldquo;Add to compare&rdquo;</strong> &rarr; <strong>&ldquo;Added&rdquo;</strong>. When the basket is full
+      or the condition differs it becomes <code>aria-disabled</code> with a reason, staying in the tab order (shadow
+      removed when disabled).</p>
+    <div class="ds-example ds-example--surface">
+      <div class="ds-u-row" style="gap:12px;flex-wrap:wrap">
+        <button class="ds-btn ds-btn--toggle" type="button" aria-pressed="false">&#8646; Add to compare</button>
+        <button class="ds-btn ds-btn--on" type="button" aria-pressed="true">&#10003; Added</button>
+        <button class="ds-btn ds-btn--toggle ds-btn--borderless" type="button" aria-disabled="true" title="A maximum of 4 apps can be in the comparison tool.">&#8646; Add to compare</button>
+      </div>
+    </div>
+
+    <h2>PDP utility cluster</h2>
+    <p>Share (<code>secondary</code>, <code>size="sm"</code>, bordered), Save and Compare (bordered toggles,
+      <code>size="sm"</code>) in a quiet tinted bar. Allow extra bottom padding so the 4px press shadow is not clipped.</p>
+    <div class="ds-example ds-example--surface">
+      <div style="display:inline-flex;flex-wrap:wrap;gap:8px;background:#F0F4F5;border-radius:8px;padding:4px 4px 8px">
+        <button class="ds-btn ds-btn--secondary ds-btn--sm" type="button">&#8599; Share</button>
+        <button class="ds-btn ds-btn--toggle ds-btn--sm" type="button" aria-pressed="false">&#9734; Save</button>
+        <button class="ds-btn ds-btn--toggle ds-btn--sm" type="button" aria-pressed="false">&#8646; Add to compare</button>
       </div>
     </div>
 
     <h2>Lens control (segmented options)</h2>
-    <p>A task-focused filter set rendered as a fieldset of selectable options.</p>
+    <p>A task-focused filter set rendered as a fieldset of selectable options (flat — no NHS press shadow).</p>
     <div class="ds-example ds-example--surface">
       <fieldset class="hs-compare-lens">
         <legend class="hs-compare-lens__legend">Compare by</legend>
@@ -51,22 +79,24 @@
 
     <h2>Variants &amp; states</h2>
     <table class="ds-table">
-      <thead><tr><th>Control</th><th>Active state</th><th>A11y</th></tr></thead>
+      <thead><tr><th>Control</th><th>Active state</th><th>Press shadow</th><th>A11y</th></tr></thead>
       <tbody>
-        <tr><td>Add-to-compare toggle</td><td><code>aria-pressed="true"</code> &rarr; tinted, &ldquo;Added&rdquo; + check</td><td><code>aria-pressed</code>, <code>aria-disabled</code> + reason</td></tr>
-        <tr><td>Lens option</td><td><code>data-active="true"</code> &rarr; blue border, tint bg</td><td>fieldset + legend</td></tr>
-        <tr><td>Diff toggle</td><td>Native checked</td><td>Associated label</td></tr>
+        <tr><td>Save toggle</td><td><code>aria-pressed="true"</code> &rarr; blue tint, &ldquo;Saved&rdquo;</td><td>Bordered: <code>0 4px 0 var(--nhs-blue)</code>; borderless: <code>#AEB7BD</code> off / <code>var(--nhs-dark)</code> on</td><td><code>aria-pressed</code>, <code>aria-busy</code> while saving</td></tr>
+        <tr><td>Add-to-compare toggle</td><td><code>aria-pressed="true"</code> &rarr; tinted, &ldquo;Added&rdquo; + check</td><td>Same as Save toggle</td><td><code>aria-pressed</code>, <code>aria-disabled</code> + reason</td></tr>
+        <tr><td>Lens option</td><td><code>data-active="true"</code> &rarr; blue border, tint bg</td><td>None (filter chip)</td><td>fieldset + legend</td></tr>
+        <tr><td>Diff toggle</td><td>Native checked</td><td>N/A (checkbox)</td><td>Associated label</td></tr>
       </tbody>
     </table>
 
     <h2>Accessibility</h2>
     <ul>
-      <li>Segmented toggles use <code>role="group"</code> with <code>aria-pressed</code> per button (not link styling).</li>
+      <li>Save / Compare toggles set <code>aria-pressed</code>; label text changes with state (never icon-only).</li>
+      <li>Press shadow flattens on <code>:active</code> for tactile feedback; disabled / <code>aria-disabled</code> removes shadow.</li>
       <li>Lens options are wrapped in a <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code>.</li>
-      <li>All controls meet the 44px minimum target height.</li>
+      <li>All interactive controls meet the 44px minimum target height.</li>
     </ul>
 
-    <div class="ds-note ds-note--source">Source: <code>components/CompareToggleButton.tsx</code>, <code>components/compare/CompareLensControl.tsx</code>; classes in <code>app/globals.css</code>.</div>
+    <div class="ds-note ds-note--source">Source: <code>components/SaveToggleButton.tsx</code>, <code>components/CompareToggleButton.tsx</code>, <code>components/ui/Button.tsx</code>, <code>components/compare/CompareLensControl.tsx</code>; preview classes <code>.ds-btn--toggle</code> / <code>.ds-btn--on</code> in <code>/DS/assets/ds.css</code>.</div>
   </div>
   <script src="/DS/assets/ds.js" defer></script>
 </body>

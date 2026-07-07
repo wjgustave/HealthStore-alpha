@@ -15,22 +15,23 @@
     </div>
 
     <div class="ds-note">
-      The NHS Design System is <strong>flat and square</strong>. Surfaces are bordered white
-      panels with <strong>no drop shadow</strong>, and components use a single small
-      <code>4px</code> radius. Shadows are reserved for true overlays (modals, toasts,
-      popovers) that float above the page.
+      The NHS Design System is <strong>flat and square</strong>. Card surfaces use
+      <strong>0px</strong> corners (<code>--radius-card</code>). Other components
+      (buttons, inputs) use <strong>4px</strong> (<code>--radius-md</code>). Surfaces
+      have <strong>no drop shadow</strong>. Shadows are reserved for true overlays
+      (modals, toasts, popovers).
     </div>
 
     <h2>Shadow tokens</h2>
     <div class="ds-example ds-example--surface">
       <div class="ds-example__row" style="gap:32px">
-        <div style="background:#fff;border:1px solid var(--border);border-radius:4px;padding:24px;box-shadow:var(--shadow-sm)">
+        <div style="background:#fff;border:1px solid var(--border);border-radius:0;padding:24px;box-shadow:var(--shadow-sm)">
           <strong>shadow-sm</strong><div class="ds-u-muted" style="font-size:.82rem">none (flat)</div>
         </div>
-        <div style="background:#fff;border:1px solid var(--border);border-radius:4px;padding:24px;box-shadow:var(--shadow-md)">
+        <div style="background:#fff;border:1px solid var(--border);border-radius:0;padding:24px;box-shadow:var(--shadow-md)">
           <strong>shadow-md</strong><div class="ds-u-muted" style="font-size:.82rem">none (flat)</div>
         </div>
-        <div style="background:#fff;border:1px solid var(--border);border-radius:4px;padding:24px;box-shadow:var(--shadow-lg)">
+        <div style="background:#fff;border:1px solid var(--border);border-radius:0;padding:24px;box-shadow:var(--shadow-lg)">
           <strong>shadow-lg</strong><div class="ds-u-muted" style="font-size:.82rem">0 10px 30px rgba(0,0,0,.10)</div>
         </div>
       </div>
@@ -48,22 +49,22 @@
     <p>The canonical surface classes wrap flat, bordered, square white panels (no shadow). See <a href="/DS/components/cards.html">Cards &amp; surfaces</a> for the full set.</p>
     <div class="ds-example ds-example--surface">
       <div class="ds-example__row" style="gap:24px">
-        <div class="hs-surface-card-sm" style="background:#fff;border:1px solid var(--border);border-radius:4px;padding:20px;min-width:200px"><code>.hs-surface-card-sm</code></div>
-        <div class="hs-surface-card" style="background:#fff;border:1px solid var(--border);border-radius:4px;padding:20px;min-width:200px"><code>.hs-surface-card</code></div>
+        <div class="hs-surface-card-sm" style="background:#fff;border:1px solid var(--border);border-radius:0;padding:20px;min-width:200px"><code>.hs-surface-card-sm</code></div>
+        <div class="hs-surface-card" style="background:#fff;border:1px solid var(--border);border-radius:0;padding:20px;min-width:200px"><code>.hs-surface-card</code></div>
       </div>
     </div>
 
     <h2>Radius scale</h2>
     <div class="ds-note">
-      Defined in <code>app/globals.css</code> inside an <code>@theme</code> block. To match the
-      flat NHS aesthetic, all named component radii (<code>rounded-sm/md/lg/xl/2xl/3xl</code>)
-      resolve to a single <code>4px</code> value app-wide. <code>--radius-pill</code> is kept
-      for genuinely pill-shaped elements (chips, toggles, FABs). Badges/tags are square
-      (<code>0</code>), matching the NHS Tag.
+      Defined in <code>app/globals.css</code>. Card shells use <code>--radius-card: 0</code>.
+      Buttons, inputs and other controls keep <code>4px</code> via <code>--radius-md</code> /
+      Tailwind <code>rounded-*</code>. <code>--radius-pill</code> is for chips, toggles and FABs.
+      Badges/tags are square (<code>0</code>), matching the NHS Tag.
     </div>
     <div class="ds-example">
       <div class="ds-example__row" style="gap:24px;align-items:flex-end">
-        <div style="text-align:center"><div style="width:88px;height:64px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-md)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px">--radius-* &middot; 4px</div></div>
+        <div style="text-align:center"><div style="width:88px;height:64px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:0"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px">cards &middot; <code>--radius-card</code> 0</div></div>
+        <div style="text-align:center"><div style="width:88px;height:64px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-md)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px">buttons/inputs &middot; 4px</div></div>
         <div style="text-align:center"><div style="width:88px;height:64px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:0"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px">tags / badges &middot; 0</div></div>
         <div style="text-align:center"><div style="width:88px;height:64px;background:#E6F0FB;border:1px solid var(--nhs-blue);border-radius:var(--radius-pill)"></div><div class="ds-u-muted" style="font-size:.78rem;margin-top:6px">--radius-pill</div></div>
       </div>
@@ -71,7 +72,8 @@
     <table class="ds-table">
       <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
       <tbody>
-        <tr><td><code>--radius-sm/md/lg/xl/2xl/3xl</code></td><td>4px</td><td>All components — buttons, inputs, cards, panels, callouts</td></tr>
+        <tr><td><code>--radius-card</code></td><td>0</td><td><code>.app-card</code>, <code>.hs-surface-card</code>, decision snapshot, evidence rows</td></tr>
+        <tr><td><code>--radius-sm/md/lg/xl</code></td><td>4px</td><td>Buttons, inputs, callouts (not card shells)</td></tr>
         <tr><td>tags / badges</td><td>0</td><td>Square, matching the NHS Tag</td></tr>
         <tr><td><code>--radius-pill</code></td><td>9999px</td><td>Chips, toggles, FABs, count badges</td></tr>
       </tbody>

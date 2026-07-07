@@ -1,0 +1,58 @@
+{
+  "national": {
+    "condition": "copd",
+    "eligible_cohort": 1200000,
+    "high_risk_cohort": 240000,
+    "annual_admissions": 140000,
+    "annual_ae_attendances": 420000,
+    "readmission_rate_90d": 0.432,
+    "comparator_label": "England average",
+    "data_date": "2025-03",
+    "source": "NHS England programme baseline (illustrative)",
+    "completeness": "illustrative"
+  },
+  "icbs": [
+    {
+      "icb_id": "QOP",
+      "icb_name": "NHS Greater Manchester Integrated Care Board",
+      "condition": "copd",
+      "eligible_cohort": 98000,
+      "high_risk_cohort": 19600,
+      "annual_admissions": 4800,
+      "annual_ae_attendances": 14400,
+      "readmission_rate_90d": 0.445,
+      "comparator_label": "North West",
+      "data_date": "2025-03",
+      "source": "Synthetic prototype data — Greater Manchester demonstration geography",
+      "completeness": "illustrative"
+    },
+    {
+      "icb_id": "QWO",
+      "icb_name": "NHS West Yorkshire Integrated Care Board",
+      "condition": "copd",
+      "eligible_cohort": 89000,
+      "high_risk_cohort": 17800,
+      "annual_admissions": 4200,
+      "annual_ae_attendances": 12600,
+      "readmission_rate_90d": 0.441,
+      "comparator_label": "Yorkshire and Humber",
+      "data_date": "2025-03",
+      "source": "Synthetic prototype data aligned to programme model",
+      "completeness": "illustrative"
+    },
+    {
+      "icb_id": "QMF",
+      "icb_name": "NHS Frimley Integrated Care Board",
+      "condition": "copd",
+      "eligible_cohort": 42000,
+      "high_risk_cohort": 8400,
+      "annual_admissions": 2100,
+      "annual_ae_attendances": 6300,
+      "readmission_rate_90d": 0.428,
+      "comparator_label": "South East",
+      "data_date": "2025-03",
+      "source": "Synthetic prototype data — Frimley remote monitoring reference site",
+      "completeness": "illustrative"
+    }
+  ]
+}

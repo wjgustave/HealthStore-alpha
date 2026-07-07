@@ -43,7 +43,7 @@ function SavedAppCard({ app, onRemove, removing }: { app: App; onRemove: () => v
             type="button"
             onClick={onRemove}
             disabled={removing}
-            className="shrink-0 rounded-full p-2 transition-colors hover:bg-gray-100 disabled:cursor-wait disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--nhs-blue)]"
+            className="shrink-0 rounded-full p-2 transition-colors hover:bg-[#F0F4F5] disabled:cursor-wait disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--nhs-blue)]"
             aria-label={`Remove ${app.app_name} from saved apps`}
           >
             <X className="w-4 h-4" style={{ color: 'var(--text-muted)' }} aria-hidden />

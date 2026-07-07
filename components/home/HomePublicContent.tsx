@@ -10,6 +10,7 @@ import {
   CampaignsColumnConcept,
 } from './concept/ConceptColumns'
 import { HomeCaseStudiesBand } from './CaseStudies'
+import { HomeStorytelling } from './HomeStorytelling'
 
 type HomePublicContentProps = {
   dash: HomeDashSlice
@@ -26,6 +27,8 @@ export default function HomePublicContent({
 }: HomePublicContentProps) {
   return (
     <>
+      <HomeStorytelling />
+
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-10">
         <div className="flex flex-col gap-12 md:gap-14">
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">

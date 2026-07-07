@@ -2,16 +2,18 @@
 
 import { Bookmark } from 'lucide-react'
 import { useBookmarks } from '@/components/BookmarkProvider'
-import { Button } from '@/components/ui/Button'
+import { Button, type ButtonSize } from '@/components/ui/Button'
 
 export function SaveToggleButton({
   appId,
   className = '',
-  /** PDP hero: no border ring (catalogue cards keep bordered style). */
+  size = 'none',
+  /** Omit border ring when `borderless` (e.g. catalogue cards). PDP uses bordered toggles like Compare. */
   borderless = false,
 }: {
   appId: string
   className?: string
+  size?: ButtonSize
   borderless?: boolean
 }) {
   const { isSaved, toggle, togglingId, isLoading } = useBookmarks()
@@ -23,7 +25,7 @@ export function SaveToggleButton({
       variant="toggle"
       pressed={saved}
       borderless={borderless}
-      size="none"
+      size={size}
       aria-label={saved ? 'Remove from saved apps' : 'Save app'}
       aria-pressed={saved}
       aria-busy={busy}
@@ -31,7 +33,7 @@ export function SaveToggleButton({
       onClick={() => {
         void toggle(appId)
       }}
-      className={`py-4 hs-text-label disabled:cursor-wait ${className}`}
+      className={`${size === 'none' ? 'py-4 hs-text-label' : ''} disabled:cursor-wait ${className}`}
     >
       <span className="inline-flex items-center justify-center gap-2">
         {saved ? (
