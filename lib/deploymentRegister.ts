@@ -36,7 +36,7 @@ type StatusMeta = {
 export const DEPLOYMENT_STATUS_META: Record<DeploymentStatus, StatusMeta> = {
   live: { label: 'Live', fg: '#00582A', bg: '#E6F5EC', border: '#9AD3B0' },
   pilot: { label: 'Pilot', fg: '#003B7A', bg: '#E6F0FB', border: '#A2C8E8' },
-  research: { label: 'Research / evaluation', fg: '#3A1D7A', bg: '#EEE9FB', border: '#C3B5EA' },
+  research: { label: 'Research', fg: '#3A1D7A', bg: '#EEE9FB', border: '#C3B5EA' },
   historic: { label: 'Historic / de-procured', fg: '#7A1210', bg: '#FBEAE8', border: '#E3A9A4' },
   undocumented: { label: 'Vendor claim (unverified)', fg: '#7A4800', bg: '#FEF5E6', border: '#EBC78A' },
   unknown: { label: 'Status unknown', fg: '#4B5563', bg: '#F1F3F6', border: '#D5DBE3' },
@@ -89,6 +89,8 @@ export function sortDeployments(rows: DeploymentRow[]): DeploymentRow[] {
   })
 }
 
+export type CareSettingGroup = 'Primary' | 'Secondary' | 'Community'
+
 export type DeploymentSummary = {
   total: number
   liveCount: number
@@ -97,6 +99,25 @@ export type DeploymentSummary = {
   historicCount: number
   /** Distinct ICBs among currently-relevant (non-historic) rows. */
   icbCount: number
+  /** Deployments by care-setting group (a row may count in more than one). */
+  primaryCount: number
+  secondaryCount: number
+  communityCount: number
+}
+
+/**
+ * Map free-text care_setting onto Primary / Secondary / Community.
+ * Community variants win over parenthetical "secondary-led" wording.
+ * Dual labels (e.g. "Primary & secondary care") count in both groups.
+ */
+export function careSettingGroups(careSetting?: string): CareSettingGroup[] {
+  if (!careSetting?.trim()) return []
+  const lower = careSetting.toLowerCase()
+  if (/\bcommunity\b/.test(lower)) return ['Community']
+  const groups: CareSettingGroup[] = []
+  if (/\bprimary\b/.test(lower)) groups.push('Primary')
+  if (/\bsecondary\b/.test(lower)) groups.push('Secondary')
+  return groups
 }
 
 export function summarizeDeployments(rows: DeploymentRow[]): DeploymentSummary {
@@ -105,6 +126,9 @@ export function summarizeDeployments(rows: DeploymentRow[]): DeploymentSummary {
   let pilotCount = 0
   let researchCount = 0
   let historicCount = 0
+  let primaryCount = 0
+  let secondaryCount = 0
+  let communityCount = 0
   for (const r of rows) {
     const st = r.status ?? 'unknown'
     if (st === 'live') liveCount++
@@ -112,6 +136,11 @@ export function summarizeDeployments(rows: DeploymentRow[]): DeploymentSummary {
     else if (st === 'research') researchCount++
     else if (st === 'historic') historicCount++
     if (st !== 'historic' && r.icb && r.icb.trim()) icbs.add(r.icb.trim())
+    for (const group of careSettingGroups(r.care_setting)) {
+      if (group === 'Primary') primaryCount++
+      else if (group === 'Secondary') secondaryCount++
+      else communityCount++
+    }
   }
   return {
     total: rows.length,
@@ -120,5 +149,8 @@ export function summarizeDeployments(rows: DeploymentRow[]): DeploymentSummary {
     researchCount,
     historicCount,
     icbCount: icbs.size,
+    primaryCount,
+    secondaryCount,
+    communityCount,
   }
 }

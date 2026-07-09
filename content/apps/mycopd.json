@@ -36,7 +36,7 @@
       "title": "myCOPD in use"
     }
   ],
-  "one_line_value_proposition": "Structured COPD self-management, home pulmonary rehabilitation and remote monitoring",
+  "one_line_value_proposition": "A digital discharge bundle — patients get structured self-management, inhaler training and a 6-week home pulmonary rehab programme through the app.",
   "why_it_matters_locally": "myCOPD gives patients a structured self-management toolkit, including a 6-week home PR programme, without requiring face-to-face PR capacity. The Pro tier adds a clinician dashboard for remote monitoring at population scale.",
   "target_problem_statement": "Unplanned COPD admissions, low PR uptake, poor inhaler technique and inadequate post-exacerbation support between appointments.",
   "nice_guidance_refs": [
@@ -390,34 +390,6 @@
       "coi": false,
       "data_quality_flag": false,
       "data_quality_note": "Research stage. Not deployed in current product."
-    },
-    {
-      "id": "nice-mtg68",
-      "ref": "NICE MTG68 health economics assessment",
-      "type": "nice_assessment",
-      "type_label": "NICE technology appraisal",
-      "authors": "York Health Economics Consortium (EAG); review: Davies H et al.",
-      "journal": "Applied Health Economics and Health Policy (review)",
-      "year": 2022,
-      "month": "March",
-      "volume_issue": "21:689–700 (review article, 2023)",
-      "doi": null,
-      "pmid": "37246188",
-      "pmc": null,
-      "trial_reg": null,
-      "url_doi": null,
-      "url_pubmed": "https://pubmed.ncbi.nlm.nih.gov/37246188/",
-      "url_full_text": "https://www.nice.org.uk/guidance/mtg68",
-      "n": null,
-      "setting": "England, health economics model",
-      "key_results": "EAG-adjusted models: £86,297 cost saving per CCG (AECOPD, 74% probability); £22,779 per CCG (PR, 86% probability). Reviewed 3 RCTs, 1 observational study, 22 real-world evidence documents.",
-      "study_limitation": "CCG-era model — CCGs dissolved July 2022. Recalculate using current ICB population size and local COPD prevalence for any new business case.",
-      "peer_reviewed": true,
-      "coi": false,
-      "data_quality_flag": true,
-      "data_quality_note": "Models use CCG-era population sizes. Commissioners must recalculate for ICB/PCN populations.",
-      "source_label": "NICE MTG68",
-      "source_url": "https://www.nice.org.uk/guidance/mtg68"
     }
   ],
   "supplier_contact_email": "nhs@mymhealth.com",

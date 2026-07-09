@@ -108,7 +108,7 @@ function regulationCard(app: any): CommissioningSnapshotCard {
   }
 }
 
-function costCard(app: any): CommissioningSnapshotCard {
+function costCard(app: any, opts?: { commercialHref?: string }): CommissioningSnapshotCard {
   const model = formatPricingModelDisplay(app.pricing_model)
   const indicativeConfidence = app.pricing_confidence === 'indicative'
   const indicativeNote = indicativeConfidence ? 'Indicative' : undefined
@@ -124,13 +124,17 @@ function costCard(app: any): CommissioningSnapshotCard {
   return {
     kind: 'cost',
     label: 'Indicative cost',
-    href: '#commercial-model',
+    href: opts?.commercialHref ?? '#commercial-model',
     indicativeNote,
     modelPills,
   }
 }
 
-function fundingCard(app: any, linked: SnapshotFundingRow[]): FundingSnapshotCard | null {
+function fundingCard(
+  app: any,
+  linked: SnapshotFundingRow[],
+  opts?: { opportunitiesHref?: string; opportunitiesLabel?: string },
+): FundingSnapshotCard | null {
   const pills: string[] = []
   const showNhse125Pill =
     app.nhse_125k_eligible === true && app.slug !== 'clinitouch'
@@ -151,7 +155,10 @@ function fundingCard(app: any, linked: SnapshotFundingRow[]): FundingSnapshotCar
     kind: 'funding',
     label: 'Funding opportunities',
     pills,
-    opportunitiesLink: { href: '#related-funding', label: 'Related funding opportunities' },
+    opportunitiesLink: {
+      href: opts?.opportunitiesHref ?? '#related-funding',
+      label: opts?.opportunitiesLabel ?? 'Related funding opportunities',
+    },
   }
 }
 
@@ -164,7 +171,7 @@ function platformCard(app: any): CommissioningSnapshotCard {
   }
 }
 
-function interopCard(app: any): CommissioningSnapshotCard {
+function interopCard(app: any, opts?: { interopHref?: string }): CommissioningSnapshotCard {
   const ti = app.technical_integrations as { fhir?: string; emis?: string } | undefined
   const fhirState = ti ? inferProseIntegration(ti.fhir) : null
   const emisState = ti ? inferProseIntegration(ti.emis) : null
@@ -187,19 +194,23 @@ function interopCard(app: any): CommissioningSnapshotCard {
   return {
     kind: 'interop',
     label: 'Integration capability',
-    href: '#nhs-integrations',
+    href: opts?.interopHref ?? '#nhs-integrations',
     items,
   }
 }
 
 /** Grid callout cards: governance, pricing model, platform, integration ready (where-live is the 4th slot in the UI). */
-export function getCommissioningSnapshot(app: any): CommissioningSnapshotCard[] {
-  return [regulationCard(app), platformCard(app), costCard(app), interopCard(app)]
+export function getCommissioningSnapshot(
+  app: any,
+  opts?: { commercialHref?: string; interopHref?: string },
+): CommissioningSnapshotCard[] {
+  return [regulationCard(app), platformCard(app), costCard(app, opts), interopCard(app, opts)]
 }
 
 export function getFundingSnapshotCard(
   app: any,
   linkedFunding: SnapshotFundingRow[],
+  opts?: { opportunitiesHref?: string; opportunitiesLabel?: string },
 ): FundingSnapshotCard | null {
-  return fundingCard(app, linkedFunding)
+  return fundingCard(app, linkedFunding, opts)
 }

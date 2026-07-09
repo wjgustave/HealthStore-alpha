@@ -1,76 +1,37 @@
 'use client'
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { maturityLabels, type App } from '@/lib/data'
+import { getConditionAreas, supervisionLabels, type App } from '@/lib/data'
 import { STORE_ACCENT } from '@/lib/storeAccent'
-import {
-  catalogueDemoAvailable,
-  getCataloguePriceLabel,
-  hasLinkedFunding,
-} from '@/lib/catalogueCardSignals'
 import { MaturityBadge, SupervisionBadge, ConditionTag } from '@/components/Badges'
-import { Select } from '@/components/ui/FormField'
 import { CompareToggleButton } from '@/components/CompareToggleButton'
-import { SaveToggleButton } from '@/components/SaveToggleButton'
-import { Check, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { buildBrowseSearchParams, filterAppsBySearchQuery, parseBrowseConditionParam } from '@/lib/catalogueSearch'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
+import { getProductNarrative } from '@/lib/content/productNarratives'
 
-function CatalogueSignalDotRow({ tone, label }: { tone: 'green' | 'orange' | 'blue'; label: string }) {
-  const stroke =
-    tone === 'green' ? 'var(--nhs-green)' : tone === 'orange' ? 'var(--nhs-amber)' : 'var(--nhs-blue)'
-  return (
-    <div className="flex items-center gap-1 shrink-0 whitespace-nowrap">
-      <Check
-        className="shrink-0 w-3.5 h-3.5"
-        strokeWidth={3.25}
-        style={{ color: stroke }}
-        aria-hidden
-      />
-      <span
-        className="font-light leading-tight text-[12px] sm:text-[13px] lg:text-[14px]"
-        style={{ color: 'var(--text-muted)' }}
-      >
-        {label}
-      </span>
-    </div>
-  )
-}
-
-const supervisionOptions = [
-  { id: 'all', label: 'All models' },
-  { id: 'self_management_only', label: 'Self-management' },
-  { id: 'guided_self_help', label: 'Guided self-help' },
-  { id: 'active_remote_management', label: 'Remote management' },
-]
-
-const maturityOptions = [
-  { id: 'all', label: 'Any maturity level' },
-  ...Object.entries(maturityLabels).map(([id, label]) => ({ id, label })),
-]
+const supervisionOptions = Object.entries(supervisionLabels).map(([id, label]) => ({ id, label }))
 
 const conditionOptions = [
   { id: 'all', label: 'All conditions' },
-  { id: 'copd', label: 'COPD' },
-  { id: 'cardiac_rehab', label: 'Cardiac rehabilitation' },
+  ...getConditionAreas().map(c => ({ id: c.id, label: c.label })),
 ]
 
-function FilterSelect({ label, value, onChange, options }: {
-  label: string; value: string; onChange: (v: string) => void
-  options: { id: string; label: string }[]
-}) {
-  const id = useId()
+/**
+ * Nested facet accordion — mirrors GOV.UK `.app-c-filter-section` (details/summary
+ * with a chevron that flips when open). Collapsed by default, like the live
+ * gov.uk/search/all panel.
+ */
+function FilterSection({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div>
-      <label htmlFor={id} className="mb-2 block hs-font-bold uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
-        {label}
-      </label>
-      <Select id={id} value={value} onChange={e => onChange(e.target.value)} className="min-h-[44px]">
-        {options.map(o => <option key={o.id} value={o.id}>{o.label}</option>)}
-      </Select>
-    </div>
+    <details className="hs-filter-section group">
+      <summary className="hs-filter-section__summary">
+        <span className="hs-filter-section__heading">{title}</span>
+      </summary>
+      <div className="hs-filter-section__content">{children}</div>
+    </details>
   )
 }
 
@@ -88,11 +49,23 @@ function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }
 export default function CatalogueClient({ apps }: { apps: App[] }) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [supervision, setSupervision] = useState('all')
-  const [maturity, setMaturity] = useState('all')
+  const filterPanelId = useId()
+
+  /** Applied filters — drive the result list. */
   const [condition, setCondition] = useState('all')
-  const [demoOnly, setDemoOnly] = useState(false)
+  const [supervision, setSupervision] = useState<string[]>([])
   const [searchInput, setSearchInput] = useState('')
+
+  /**
+   * Draft filters — edited inside the panel. Applied only when the user clicks
+   * Apply, matching GOV.UK's filter-panel submit interaction.
+   */
+  const [draftCondition, setDraftCondition] = useState('all')
+  const [draftSupervision, setDraftSupervision] = useState<string[]>([])
+
+  /** Panel starts collapsed (`aria-expanded=false`), same as GOV.UK. */
+  const [filtersOpen, setFiltersOpen] = useState(false)
+
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const conditionRef = useRef(condition)
   const liveRegion = useRef<HTMLDivElement>(null)
@@ -113,6 +86,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
     const c = parseBrowseConditionParam(searchParams.get('condition'))
     const q = searchParams.get('q') ?? ''
     setCondition(c)
+    setDraftCondition(c)
     setSearchInput(q)
   }, [searchParams])
 
@@ -130,12 +104,6 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
     if (debounceTimer.current) clearTimeout(debounceTimer.current)
   }, [])
 
-  const onConditionChange = (v: string) => {
-    if (debounceTimer.current) clearTimeout(debounceTimer.current)
-    setCondition(v)
-    replaceBrowseUrl(v, searchInput)
-  }
-
   const onSearchInputChange = (v: string) => {
     setSearchInput(v)
     scheduleUrlFromSearch(v)
@@ -147,14 +115,64 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
     replaceBrowseUrl(condition, '')
   }
 
-  const activeFilters: { label: string; clear: () => void }[] = []
-  if (supervision !== 'all') activeFilters.push({ label: supervisionOptions.find(o => o.id === supervision)!.label, clear: () => setSupervision('all') })
-  if (maturity !== 'all') activeFilters.push({ label: maturityOptions.find(o => o.id === maturity)!.label, clear: () => setMaturity('all') })
-  if (condition !== 'all') activeFilters.push({ label: conditionOptions.find(o => o.id === condition)!.label, clear: () => {
+  const toggleDraftSupervision = (id: string) => {
+    setDraftSupervision(prev => (prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]))
+  }
+
+  const openFilters = () => {
+    // Sync draft from applied so reopening shows the current selection.
+    setDraftCondition(condition)
+    setDraftSupervision(supervision)
+    setFiltersOpen(true)
+  }
+
+  const closeFilters = () => setFiltersOpen(false)
+
+  const toggleFilters = () => {
+    if (filtersOpen) closeFilters()
+    else openFilters()
+  }
+
+  const applyFilters = (e?: FormEvent) => {
+    e?.preventDefault()
+    if (debounceTimer.current) clearTimeout(debounceTimer.current)
+    setCondition(draftCondition)
+    setSupervision(draftSupervision)
+    replaceBrowseUrl(draftCondition, searchInput)
+    setFiltersOpen(false)
+  }
+
+  const clearAllFilters = () => {
+    if (debounceTimer.current) clearTimeout(debounceTimer.current)
+    setSupervision([])
+    setDraftSupervision([])
     setCondition('all')
-    replaceBrowseUrl('all', searchInput)
-  } })
-  if (demoOnly) activeFilters.push({ label: 'Demo', clear: () => setDemoOnly(false) })
+    setDraftCondition('all')
+    setSearchInput('')
+    router.replace('/apps/condition-catalogue', { scroll: false })
+  }
+
+  const activeFilters: { label: string; clear: () => void }[] = []
+  if (condition !== 'all') {
+    activeFilters.push({
+      label: conditionOptions.find(o => o.id === condition)!.label,
+      clear: () => {
+        setCondition('all')
+        setDraftCondition('all')
+        replaceBrowseUrl('all', searchInput)
+      },
+    })
+  }
+  for (const s of supervision) {
+    activeFilters.push({
+      label: supervisionLabels[s] ?? s,
+      clear: () => {
+        const next = supervision.filter(id => id !== s)
+        setSupervision(next)
+        setDraftSupervision(next)
+      },
+    })
+  }
   if (searchInput.trim()) {
     const st = searchInput.trim()
     activeFilters.push({
@@ -165,13 +183,11 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
 
   const attrFiltered = useMemo(() => {
     return apps.filter((app: App) => {
-      if (supervision !== 'all' && app.supervision_model !== supervision) return false
-      if (maturity !== 'all' && app.maturity_level !== maturity) return false
+      if (supervision.length > 0 && !supervision.includes(app.supervision_model)) return false
       if (condition !== 'all' && !app.condition_tags.includes(condition)) return false
-      if (demoOnly && !catalogueDemoAvailable(app)) return false
       return true
     })
-  }, [apps, supervision, maturity, condition, demoOnly])
+  }, [apps, supervision, condition])
 
   const filtered = useMemo(
     () => filterAppsBySearchQuery(attrFiltered, searchInput),
@@ -183,7 +199,9 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
     [filtered],
   )
 
-  const resultText = `Showing ${filteredSorted.length} of ${apps.length} apps`
+  const resultCount = filteredSorted.length
+  const resultText = `${resultCount.toLocaleString()} ${resultCount === 1 ? 'result' : 'results'}`
+  const resultSummary = `Showing ${resultCount} of ${apps.length} apps`
 
   const hasAttrResults = attrFiltered.length > 0
   const searchOnlyEmpty = hasAttrResults && filteredSorted.length === 0 && searchInput.trim().length > 0
@@ -206,69 +224,117 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
         </p>
       </div>
 
-      <div className="hs-surface-card rounded-xl bg-white border p-4 mb-4" style={{ borderColor: 'var(--border)' }}>
-        <div className="flex flex-col gap-4">
-          <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{resultText}</p>
-          <div className="flex flex-col gap-4">
-            <div>
-              <label htmlFor="catalogue-search" className="block hs-font-bold mb-2 uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
-                Search
-              </label>
-              <input
-                id="catalogue-search"
-                type="search"
-                value={searchInput}
-                onChange={e => onSearchInputChange(e.target.value)}
-                placeholder="Filter by app name, supplier, or condition"
-                className="w-full min-h-[44px] hs-text-label rounded-lg border px-4 py-2 bg-white"
-                style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
-                autoComplete="off"
-              />
-            </div>
-            <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:gap-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 flex-1 min-w-0">
-                <FilterSelect label="Condition" value={condition} onChange={onConditionChange} options={conditionOptions} />
-                <FilterSelect label="Supervision model" value={supervision} onChange={setSupervision} options={supervisionOptions} />
-                <FilterSelect label="Deployment maturity" value={maturity} onChange={setMaturity} options={maturityOptions} />
-              </div>
-              <div className="flex flex-wrap items-end gap-4 shrink-0 xl:ml-auto">
-                <div className="flex min-h-[44px] items-center gap-2">
-                  <input
-                    id="catalogue-demo-only"
-                    type="checkbox"
-                    checked={demoOnly}
-                    onChange={e => setDemoOnly(e.target.checked)}
-                    className="h-4 w-4 shrink-0 rounded border accent-[#003087]"
-                    style={{ borderColor: 'var(--border)' }}
-                  />
-                  <label
-                    htmlFor="catalogue-demo-only"
-                    className="cursor-pointer select-none hs-text-label hs-font-normal"
-                    style={{ color: 'var(--text-primary)' }}
-                  >
-                    Demo
-                  </label>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (debounceTimer.current) clearTimeout(debounceTimer.current)
-                    setSupervision('all')
-                    setMaturity('all')
-                    setCondition('all')
-                    setDemoOnly(false)
-                    setSearchInput('')
-                    router.replace('/apps/condition-catalogue', { scroll: false })
-                  }}
-                  className="min-h-[44px] hs-text-label px-4 rounded-lg border transition-colors hover:bg-[#F0F4F5] hover:border-[var(--text-muted-low-con)]"
-                  style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
-                >
-                  Clear filters
-                </button>
-              </div>
-            </div>
-          </div>
+      <div className="mb-4">
+        <label htmlFor="catalogue-search" className="block hs-font-bold mb-2 uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
+          Search
+        </label>
+        <input
+          id="catalogue-search"
+          type="search"
+          value={searchInput}
+          onChange={e => onSearchInputChange(e.target.value)}
+          placeholder="Filter by app name, supplier, or condition"
+          className="w-full min-h-[44px] hs-text-label rounded-lg border px-4 py-2 bg-white"
+          style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
+          autoComplete="off"
+        />
+      </div>
+
+      {/*
+        GOV.UK filter-panel interaction (gov.uk/search/all):
+        - Header row: expandable "Filter" link + result count
+        - Content region expands vertically below the header
+        - Nested details sections for each facet
+        - Apply button submits draft selections and collapses the panel
+        Colours / form controls use NHS tokens and nhsuk-radios / nhsuk-checkboxes.
+      */}
+      <div className="hs-filter-panel mb-6">
+        <div className="hs-filter-panel__header">
+          <button
+            type="button"
+            id={`${filterPanelId}-button`}
+            className="hs-filter-panel__button"
+            aria-expanded={filtersOpen}
+            aria-controls={`${filterPanelId}-content`}
+            onClick={toggleFilters}
+          >
+            <span className="hs-filter-panel__button-inner">Filter</span>
+          </button>
+          <h2 id={`${filterPanelId}-count`} className="hs-filter-panel__count">
+            {resultText}
+          </h2>
         </div>
+
+        {filtersOpen ? (
+          <div
+            id={`${filterPanelId}-content`}
+            className="hs-filter-panel__content"
+            role="region"
+            aria-labelledby={`${filterPanelId}-button`}
+          >
+            <form onSubmit={applyFilters}>
+              <FilterSection title="Condition">
+                <fieldset className="nhsuk-fieldset">
+                  <legend className="nhsuk-u-visually-hidden">Condition</legend>
+                  <div className="nhsuk-radios">
+                    {conditionOptions.map(o => (
+                      <div key={o.id} className="nhsuk-radios__item">
+                        <input
+                          className="nhsuk-radios__input"
+                          id={`filter-condition-${o.id}`}
+                          type="radio"
+                          name="filter-condition"
+                          checked={draftCondition === o.id}
+                          onChange={() => setDraftCondition(o.id)}
+                        />
+                        <label className="nhsuk-radios__label" htmlFor={`filter-condition-${o.id}`}>
+                          {o.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </fieldset>
+              </FilterSection>
+
+              <FilterSection title="Supervision model">
+                <fieldset className="nhsuk-fieldset">
+                  <legend className="nhsuk-u-visually-hidden">Supervision model</legend>
+                  <div className="nhsuk-checkboxes">
+                    {supervisionOptions.map(o => (
+                      <div key={o.id} className="nhsuk-checkboxes__item">
+                        <input
+                          className="nhsuk-checkboxes__input"
+                          id={`filter-supervision-${o.id}`}
+                          type="checkbox"
+                          checked={draftSupervision.includes(o.id)}
+                          onChange={() => toggleDraftSupervision(o.id)}
+                        />
+                        <label className="nhsuk-checkboxes__label" htmlFor={`filter-supervision-${o.id}`}>
+                          {o.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </fieldset>
+              </FilterSection>
+
+              <div className="hs-filter-panel__actions">
+                <button type="submit" className="nhsuk-button mb-0 hs-filter-panel__apply">
+                  Apply
+                </button>
+                {(condition !== 'all' || supervision.length > 0 || draftCondition !== 'all' || draftSupervision.length > 0) && (
+                  <button
+                    type="button"
+                    onClick={clearAllFilters}
+                    className="hs-filter-panel__clear"
+                  >
+                    Clear filters
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+        ) : null}
       </div>
 
       {activeFilters.length > 0 && (
@@ -280,7 +346,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
       )}
 
       <div ref={liveRegion} aria-live="polite" aria-atomic="true" className="sr-only">
-        {resultText}
+        {resultSummary}
       </div>
 
       {filteredSorted.length === 0 ? (
@@ -321,9 +387,9 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
           className="grid gap-6 [grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))] xl:[grid-template-columns:repeat(auto-fill,minmax(360px,1fr))] 2xl:[grid-template-columns:repeat(auto-fill,minmax(380px,1fr))]"
         >
           {filteredSorted.map((app: App) => {
-            const priceLabel = getCataloguePriceLabel(app)
-            const showDemo = catalogueDemoAvailable(app)
-            const showFunding = hasLinkedFunding(app)
+            const narrative = getProductNarrative(app.slug)
+            const cardDescription =
+              narrative?.decision_summary?.one_line_proposition ?? app.one_line_value_proposition
             return (
             <div key={app.id} className="app-card flex h-full min-h-0 flex-col">
               <div className="flex min-h-0 flex-1 flex-col" style={{ padding: '1.25rem' }}>
@@ -354,7 +420,14 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                   )}
                 </div>
 
-                <div className="flex flex-wrap gap-1" style={{ marginBottom: '0.75rem' }}>
+                <p
+                  className="line-clamp-5"
+                  style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.55, marginBottom: '1rem' }}
+                >
+                  {cardDescription}
+                </p>
+
+                <div className="flex flex-wrap gap-1" style={{ marginBottom: '1rem' }}>
                   {app.condition_tags.map((t: string) => (
                     <ConditionTag key={t} tag={t} />
                   ))}
@@ -362,43 +435,15 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                   <MaturityBadge level={app.maturity_level} hideEstablished />
                 </div>
 
-                <p
-                  className="line-clamp-5"
-                  style={{ fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.55, marginBottom: '1rem' }}
-                >
-                  {app.one_line_value_proposition}
-                </p>
-
                 <div className="mt-auto flex min-w-0 flex-col">
-                  {priceLabel || showDemo || showFunding ? (
-                    <>
-                      <div className="mb-[10px] flex flex-row flex-wrap items-center gap-x-2 gap-y-1 sm:mb-4 lg:mb-[15px] xl:flex-nowrap xl:gap-x-2 2xl:gap-x-2">
-                        {priceLabel ? <CatalogueSignalDotRow tone="green" label={priceLabel} /> : null}
-                        {showDemo ? <CatalogueSignalDotRow tone="orange" label="Demo" /> : null}
-                        {showFunding ? <CatalogueSignalDotRow tone="blue" label="Related funding" /> : null}
-                      </div>
-                      <div
-                        className="mb-[12px] border-t border-solid sm:mb-4 lg:mb-6"
-                        style={{
-                          borderTopColor: 'color-mix(in srgb, var(--text-muted) 15%, var(--border))',
-                        }}
-                        aria-hidden
-                      />
-                    </>
-                  ) : null}
-
                   <div className="grid grid-cols-1 gap-2">
                     <Link
                       href={`/apps/${app.slug}`}
-                      className="block rounded-lg py-4 text-center hs-text-label hs-font-bold transition-colors hover:!bg-[#004B8C]"
-                      style={{ background: STORE_ACCENT, color: '#fff' }}
+                      className="nhsuk-button mb-0 inline-flex w-full items-center justify-center gap-2 py-4 text-center align-top no-underline hs-text-label hs-font-bold"
                     >
                       View details →
                     </Link>
-                    <div className="grid grid-cols-2 gap-2">
-                      <SaveToggleButton appId={app.id} borderless className="w-full px-4 py-4" />
-                      <CompareToggleButton appId={app.id} borderless className="w-full px-4 py-4" />
-                    </div>
+                    <CompareToggleButton appId={app.id} solid size="none" className="w-full" />
                   </div>
                 </div>
               </div>

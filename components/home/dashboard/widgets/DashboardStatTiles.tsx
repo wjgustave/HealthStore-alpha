@@ -26,7 +26,7 @@ function StatValue({ value, state }: { value: number | string; state: LoadStatus
     )
   }
   return (
-    <span className="block hs-text-section hs-font-bold leading-none" style={{ ...fr, color: 'var(--nhs-blue)' }}>
+    <span className="block hs-text-section hs-font-bold leading-none" style={{ ...fr, color: 'var(--text-primary)' }}>
       {value}
     </span>
   )

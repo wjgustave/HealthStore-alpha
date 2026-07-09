@@ -9,8 +9,9 @@ import { PdpSection } from '@/components/PdpSection'
  * Round 1 rendered the story scaffolding: the problem, how the product helps
  * (+ pathway change), and how to buy locally.
  * Round 2 (quantified value) injects the personalised local-value block via the
- * optional `localValue` slot, placed between "how it helps" and "how to buy" so
- * the reader moves problem -> solution -> local impact & worth -> procurement.
+ * optional `localValue` slot after "how it helps".
+ * Spine order: problem → how it helps → projected impact & worth → funding levers →
+ * assurance → implementation → NHS experience → how to buy → resources.
  *
  * Sits between the commissioning snapshot and the reference tabs on
  * app/apps/[slug]/page.tsx, so the deep catalogue detail is retained (no data loss).
@@ -19,19 +20,28 @@ export default function PdpNarrativeSpine({
   app,
   narrative,
   localValue,
+  fundingLevers,
   assurance,
   implementation,
   nhsExperience,
+  resources,
+  expressInterest,
 }: {
   app: App
   narrative: ProductNarrative
   localValue?: ReactNode
-  /** Round 3 (R3-1 A): assurance passport section, rendered after How-to-buy. */
+  /** Tariff / QOF levers and linked funding schemes. */
+  fundingLevers?: ReactNode
+  /** Round 3 (R3-1 A): assurance passport section. */
   assurance?: ReactNode
-  /** "Making it work" curated implementation section, rendered after Assurance. */
+  /** "Making it work" curated implementation section. */
   implementation?: ReactNode
-  /** "NHS experience" section (deployment register + case studies), rendered last. */
+  /** "NHS experience" section (deployment register + case studies). */
   nhsExperience?: ReactNode
+  /** Product videos and demo links. */
+  resources?: ReactNode
+  /** Express interest callout — rendered at the end of How to buy locally. */
+  expressInterest?: ReactNode
 }) {
   const problem = narrative.decision_summary?.pathway_problem
   const bullets = narrative.what_it_does_bullets ?? []
@@ -48,13 +58,12 @@ export default function PdpNarrativeSpine({
           id="the-problem"
           shareKey="narrative-problem"
           title="The problem this addresses"
-          description="Why this matters for your population before the product itself."
         >
-          <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)', maxWidth: 720 }}>
+          <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}>
             {problem}
           </p>
           {narrative.decision_summary?.why_relevant && (
-            <p className="mt-3" style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-muted)', maxWidth: 720 }}>
+            <p className="mt-3" style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-muted)' }}>
               {narrative.decision_summary.why_relevant}
             </p>
           )}
@@ -66,10 +75,9 @@ export default function PdpNarrativeSpine({
           id="how-it-helps"
           shareKey="narrative-how-it-helps"
           title={`How ${app.app_name} helps`}
-          description="What the product does and how it changes the current pathway."
         >
           {bullets.length > 0 && (
-            <ul className="space-y-2" style={{ margin: '0 0 8px', paddingLeft: 20, maxWidth: 720, lineHeight: 1.7, color: 'var(--text-secondary)', fontSize: 'var(--text-body)' }}>
+            <ul className="space-y-2" style={{ margin: '0 0 8px', paddingLeft: 20, lineHeight: 1.7, color: 'var(--text-secondary)', fontSize: 'var(--text-body)' }}>
               {bullets.map((b) => (
                 <li key={b}>{b}</li>
               ))}
@@ -120,16 +128,23 @@ export default function PdpNarrativeSpine({
 
       {localValue}
 
+      {fundingLevers}
+
+      {assurance}
+
+      {implementation}
+
+      {nhsExperience}
+
       {commercial && (
         <PdpSection
           id="how-to-buy"
           shareKey="narrative-how-to-buy"
           title="How to buy locally"
-          description="The recommended procurement route and how HealthStore supports it."
         >
           {commercial.healthstore_role && (
             <div className="rounded-lg p-4 mb-4" style={{ background: '#E6F0FB', border: '1px solid var(--border)' }}>
-              <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--nhs-blue)' }}>
+              <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--text-primary)' }}>
                 HealthStore&rsquo;s role in procurement
               </div>
               <p className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
@@ -149,19 +164,11 @@ export default function PdpNarrativeSpine({
               </div>
             ))}
           </div>
-          {commercial.price_summary && (
-            <p className="mt-4 hs-text-caption" style={{ color: 'var(--text-muted)' }}>
-              Indicative cost: {commercial.price_summary}
-            </p>
-          )}
+          {expressInterest}
         </PdpSection>
       )}
 
-      {assurance}
-
-      {implementation}
-
-      {nhsExperience}
+      {resources}
     </div>
   )
 }

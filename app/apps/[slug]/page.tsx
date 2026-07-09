@@ -1,12 +1,17 @@
-import { getAllAppsUnfiltered, getAppBySlug, getCommissionerFacingFunding, getLinkedFunding } from '@/lib/data'
-import { getCommissioningSnapshot, getFundingSnapshotCard } from '@/lib/commissioningSnapshot'
+import { getAllAppsUnfiltered, getAppBySlug } from '@/lib/data'
+import { getCommissioningSnapshot } from '@/lib/commissioningSnapshot'
 import { getDeploymentRegister } from '@/lib/deploymentRegister'
+import { splitPdpEvidence } from '@/lib/pdpEvidence'
 import { resolveProductNarrative, getProductNarrative } from '@/lib/content/productNarratives'
 import PdpNarrativeSpine from '@/components/product/PdpNarrativeSpine'
 import PdpLocalValue from '@/components/product/PdpLocalValue'
 import PdpAssurancePassport from '@/components/product/PdpAssurancePassport'
 import PdpImplementation from '@/components/product/PdpImplementation'
 import PdpNhsExperience from '@/components/product/PdpNhsExperience'
+import PdpClinicalPublications from '@/components/product/PdpClinicalPublications'
+import PdpResources from '@/components/product/PdpResources'
+import PdpExpressInterestCallout from '@/components/product/PdpExpressInterestCallout'
+import PdpFundingLevers from '@/components/product/PdpFundingLevers'
 import { getServerContext } from '@/lib/context/serverContext'
 import { PdpCommissioningSnapshot } from '@/components/PdpCommissioningSnapshot'
 import { notFound } from 'next/navigation'
@@ -18,7 +23,6 @@ import {
 } from '@/components/Badges'
 import AppDetailClient from './AppDetailClient'
 import { CompareToggleButton } from '@/components/CompareToggleButton'
-import { SaveToggleButton } from '@/components/SaveToggleButton'
 import { STORE_ACCENT } from '@/lib/storeAccent'
 import {
   ScaleAndMaturitySection,
@@ -34,10 +38,8 @@ import {
 import { PdpSection } from '@/components/PdpSection'
 import { PdpTabs, type PdpTab } from '@/components/PdpTabs'
 import { PdpSharePrintProvider, PdpShareRegion } from '@/components/PdpSharePrintContext'
-import { SharePagePanel } from '@/components/SharePagePanel'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
 import { EvidenceCard, ProductHeroDemoBadge } from './pdpBlocks'
-import { ExpressInterestWhiteButton } from '@/components/ExpressInterestWhiteButton'
 import { Button } from '@/components/ui/Button'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 import PdpSupplierContactCard from '@/components/PdpSupplierContactCard'
@@ -104,15 +106,14 @@ export default async function AppPage({
     : []
 
   const linkedFundingIds = app.linked_funding_ids ?? app.funding_ids ?? []
-  const commissionerFunding = getCommissionerFacingFunding(linkedFundingIds)
-  const allLinkedFunding = getLinkedFunding(linkedFundingIds)
-  const fundingRows = allLinkedFunding.map((f: { id: string; title: string; status: string }) => ({
-    id: f.id,
-    title: f.title,
-    status: f.status,
-  }))
-  const commissioningCards = getCommissioningSnapshot(app)
-  const fundingSnapshotCard = getFundingSnapshotCard(app, fundingRows)
+  const showIndicativeFinancialInTab = !(showNarrativeSpine && (app.condition_tags?.includes('copd') ?? false))
+  const showCommercialTab = !showNarrativeSpine || showIndicativeFinancialInTab
+  const commissioningCards = getCommissioningSnapshot(
+    app,
+    showNarrativeSpine
+      ? { commercialHref: '#how-to-buy', interopHref: '#resources' }
+      : undefined,
+  )
   const showLocalValue = showNarrativeSpine && (app.condition_tags?.includes('copd') ?? false)
   const hasNhsExperience =
     showNarrativeSpine &&
@@ -120,19 +121,24 @@ export default async function AppPage({
   // When the NHS experience section is shown, case studies move out of the Evidence
   // tab; the "expected impact" section should then only render for prose/videos.
   const hasImpactProse = !!(app.expected_benefit_note && String(app.expected_benefit_note).trim())
-  const hasProductVideos = (app.product_videos?.length ?? 0) > 0
   const showExpectedImpactSection = hasNhsExperience
-    ? hasImpactProse || hasProductVideos
-    : shouldShowImpactSection(app)
+    ? hasImpactProse
+    : showNarrativeSpine
+      ? !!(hasImpactProse || (app.case_studies?.length ?? 0) > 0)
+      : shouldShowImpactSection(app)
 
-  // Narrative products surface peer-reviewed studies in the NHS experience section
-  // (Case studies and evaluations), so exclude them from the Clinical evidence tab
-  // to avoid duplication. Non-narrative products keep the full record in the tab.
-  const evidenceForTab = hasNhsExperience
-    ? (app.clinical_evidence_detailed ?? []).filter((s: any) => !s.peer_reviewed)
-    : (app.clinical_evidence_detailed ?? [])
+  // Narrative products surface the evidence record in the spine — publications and
+  // NICE guidance inside "Assurance and evidence", real-world programme write-ups as
+  // NHS experience case-study cards. The tab keeps only whatever isn't covered there;
+  // non-narrative products keep the full record in the tab.
+  const evidenceSplit = splitPdpEvidence(app, { showNarrativeSpine, hasNhsExperience })
+  const evidenceForTab = evidenceSplit.tab
+  const showClinicalPublicationsInTab = !showNarrativeSpine && evidenceSplit.publications.length > 0
+  const showClinicalEvidenceSection =
+    evidenceForTab.length > 0 || (!showNarrativeSpine && evidenceSplit.publications.length === 0)
+  const showNiceGuidanceSection = !showNarrativeSpine
   const rcts = evidenceForTab.filter((s: any) => s.type === 'RCT')
-  const observational = evidenceForTab.filter((s: any) => ['observational', 'real_world', 'service_eval'].includes(s.type))
+  const observational = evidenceForTab.filter((s: any) => ['observational', 'real_world'].includes(s.type))
   const niceAndImpl = evidenceForTab.filter((s: any) => ['nice_assessment', 'implementation_science', 'grey_lit', 'evidence_gap'].includes(s.type))
 
   const onThisPageLinks = buildPdpOnThisPageLinks({
@@ -151,7 +157,7 @@ export default async function AppPage({
     {
       id: 'evidence',
       label: 'Clinical evidence & outcomes',
-      anchors: ['clinical-evidence'],
+      anchors: showClinicalEvidenceSection ? ['clinical-evidence'] : [],
       panel: (
         <>
           {showExpectedImpactSection && (
@@ -160,10 +166,15 @@ export default async function AppPage({
               title={hasNhsExperience ? 'Expected impact' : 'Expected impact and case studies'}
               description="Outcomes commissioners should expect and illustrative deployments. Distinct from the formal clinical evidence record below."
             >
-              <ImpactAndCaseStudiesSection app={app} showCaseStudies={!hasNhsExperience} />
+              <ImpactAndCaseStudiesSection app={app} showCaseStudies={!hasNhsExperience} showVideos={!showNarrativeSpine} />
             </PdpSection>
           )}
 
+          {showClinicalPublicationsInTab && (
+            <PdpClinicalPublications publications={evidenceSplit.publications} className="mb-6" />
+          )}
+
+          {showClinicalEvidenceSection && (
           <PdpSection
             id="clinical-evidence"
             shareKey="clinical-evidence"
@@ -182,7 +193,7 @@ export default async function AppPage({
             {observational.length > 0 && (
               <div style={{ marginBottom: 16 }}>
                 <div style={{ fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)', marginBottom: 8 }}>
-                  Real-world, observational & service evaluation evidence ({observational.length})
+                  Real-world & observational evidence ({observational.length})
                 </div>
                 {observational.map((s: any) => <EvidenceCard key={s.id} study={s} accent={accent} />)}
               </div>
@@ -203,7 +214,9 @@ export default async function AppPage({
               </p>
             )}
           </PdpSection>
+          )}
 
+          {showNiceGuidanceSection && (
           <PdpSection
             shareKey="nice-guidance"
             title="NICE guidance"
@@ -226,6 +239,7 @@ export default async function AppPage({
               ))}
             </div>
           </PdpSection>
+          )}
 
           {app.contradictory_evidence?.length > 0 && (
             <PdpSection
@@ -284,9 +298,10 @@ export default async function AppPage({
     {
       id: 'commercial',
       label: 'Commercial, cost & funding',
-      anchors: ['commercial-model', 'related-funding'],
+      anchors: showNarrativeSpine ? [] : ['commercial-model', 'related-funding'],
       panel: (
         <>
+          {!showNarrativeSpine && (
           <PdpSection
             id="commercial-model"
             shareKey="commercial-model"
@@ -295,7 +310,9 @@ export default async function AppPage({
           >
             <CommercialModelAndCostSection app={app} />
           </PdpSection>
+          )}
 
+          {showIndicativeFinancialInTab && (
           <PdpSection
             shareKey="indicative-financial"
             title="Indicative financial context"
@@ -303,7 +320,9 @@ export default async function AppPage({
           >
             <IndicativeFinancialContextSection app={app} />
           </PdpSection>
+          )}
 
+          {!showNarrativeSpine && (
           <PdpSection
             id="related-funding"
             shareKey="related-funding"
@@ -312,6 +331,7 @@ export default async function AppPage({
           >
             <RelatedFundingSection fundingIds={linkedFundingIds} />
           </PdpSection>
+          )}
         </>
       ),
     },
@@ -330,7 +350,13 @@ export default async function AppPage({
         </PdpSection>
       ),
     },
-  ]
+  ].filter((tab) => {
+    if (tab.id === 'commercial' && !showCommercialTab) return false
+    if (tab.id === 'evidence' && showNarrativeSpine) return false
+    if (tab.id === 'technical' && showNarrativeSpine) return false
+    if (tab.id === 'deployment' && showNarrativeSpine) return false
+    return true
+  })
 
   return (
     <AppDetailClient app={app} contactPrefill={contactPrefill}>
@@ -357,7 +383,7 @@ export default async function AppPage({
           <div className="px-8 pt-8 pb-4">
             <div className="flex flex-col gap-6 items-start lg:flex-row lg:items-start lg:justify-between lg:gap-10">
               <div className="flex-1 w-full min-w-0">
-                <div className="flex items-center gap-4 mb-2">
+                <div className="flex items-start gap-4 mb-2">
                   {app.logo_path && (
                     <Image src={app.logo_path} alt={`${app.app_name} logo`} width={48} height={48}
                       className="rounded-lg flex-shrink-0" />
@@ -380,7 +406,7 @@ export default async function AppPage({
                       {app.content_confidence}
                     </span>
                   )}
-                  <ProductHeroDemoBadge app={app} />
+                  <ProductHeroDemoBadge app={app} href={showNarrativeSpine ? '#resources' : '#demo-access'} />
                 </div>
               </div>
               {heroQuickFacts.length > 0 && (
@@ -406,7 +432,7 @@ export default async function AppPage({
               )}
             </div>
             <div
-              className="flex flex-wrap gap-4 items-center justify-between mt-4 pt-4 border-t"
+              className="flex flex-wrap gap-4 items-center mt-4 pt-4 border-t"
               style={{ borderColor: 'var(--border)' }}
             >
               <Button
@@ -416,11 +442,12 @@ export default async function AppPage({
               >
                 Express interest
               </Button>
-              <div className="flex flex-wrap items-center gap-2 shrink-0 rounded-lg px-1 pt-1 pb-2" style={{ background: '#F0F4F5' }}>
-                <SharePagePanel />
-                <SaveToggleButton appId={app.id} size="sm" className="shrink-0" />
-                <CompareToggleButton appId={app.id} size="sm" className="shrink-0" />
-              </div>
+              <CompareToggleButton
+                appId={app.id}
+                solid
+                size="none"
+                className="shrink-0 px-6 py-4 hs-text-label hs-font-bold"
+              />
             </div>
           </div>
         </div>
@@ -518,12 +545,11 @@ export default async function AppPage({
         <PdpShareRegion
           shareKey="commissioning-snapshot"
           label="Commissioning snapshot"
-          description="Governance, pricing model, integration, where it's live, and funding opportunities."
+          description="Governance, pricing model, integration, and where it's live."
           className="hs-decision-snapshot mb-6"
         >
           <PdpCommissioningSnapshot
             cards={commissioningCards}
-            fundingCard={fundingSnapshotCard}
             whereLiveApp={app}
             whereLiveHref={hasNhsExperience ? '#nhs-experience' : undefined}
           />
@@ -536,53 +562,30 @@ export default async function AppPage({
                 app={app}
                 narrative={narrative}
                 localValue={<PdpLocalValue app={app} narrative={narrative} context={commissionerContext} />}
+                fundingLevers={<PdpFundingLevers narrative={narrative} fundingIds={linkedFundingIds} />}
                 assurance={<PdpAssurancePassport app={app} narrative={narrative} />}
                 implementation={<PdpImplementation app={app} narrative={narrative} />}
                 nhsExperience={hasNhsExperience ? <PdpNhsExperience app={app} /> : undefined}
+                resources={showNarrativeSpine ? <PdpResources app={app} /> : undefined}
+                expressInterest={
+                  <PdpShareRegion shareKey="express-interest" label="Express interest callout" excludeFromShareUi>
+                    <PdpExpressInterestCallout accent={accent} />
+                  </PdpShareRegion>
+                }
               />
             )}
 
             <div className="space-y-4">
-              <PdpTabs tabs={tabs} />
+              {tabs.length > 0 && <PdpTabs tabs={tabs} />}
 
+              {!showNarrativeSpine && (
               <PdpShareRegion shareKey="express-interest" label="Express interest callout" excludeFromShareUi>
               <div className="hs-surface-card-sm rounded-b-xl border overflow-hidden" style={{ borderColor: accent }}>
-                <div style={{ background: accent, padding: '20px 24px' }}>
-                  <div style={{ fontWeight: 600, fontSize: 'var(--text-section-alt)', color: '#fff', marginBottom: 8 }}>
-                    Express interest
-                  </div>
-                  <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.9)', lineHeight: 1.6, margin: '0 0 16px', maxWidth: 640 }}>
-                    Contact {app.supplier_contact_name ?? app.supplier_name} to discuss deployment in your ICB.
-                  </p>
-                  <ExpressInterestWhiteButton accent={accent} />
-                </div>
+                <PdpExpressInterestCallout accent={accent} />
               </div>
               </PdpShareRegion>
-
-              {showNarrativeSpine && (app.source_summary || app.confidence_note) && (
-                <PdpShareRegion
-                  shareKey="provenance"
-                  label="Sources and confidence"
-                  description="How this profile was sourced and reviewed."
-                >
-                  <div
-                    className="hs-surface-card-sm rounded-lg p-4 hs-text-caption"
-                    style={{ background: '#F0F4F5', border: '1px solid var(--border)', color: 'var(--text-muted)', lineHeight: 1.6 }}
-                  >
-                    {app.source_summary && (
-                      <p style={{ margin: 0 }}>
-                        <strong style={{ color: 'var(--text-secondary)' }}>Sources: </strong>{app.source_summary}
-                      </p>
-                    )}
-                    {app.confidence_note && (
-                      <p style={{ margin: '12px 0 0' }}>{app.confidence_note}</p>
-                    )}
-                    {app.last_reviewed_date && (
-                      <p style={{ margin: '12px 0 0' }}>Last reviewed: {app.last_reviewed_date}</p>
-                    )}
-                  </div>
-                </PdpShareRegion>
               )}
+
             </div>
           </div>
 

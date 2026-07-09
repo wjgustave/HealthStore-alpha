@@ -50,9 +50,12 @@
       <tbody>
         <tr><td>Title</td><td><code>--text-section-alt</code> (1.4rem), weight 700, <code>--text-primary</code></td></tr>
         <tr><td>Description</td><td><code>--text-xs</code> (0.875rem), <code>--text-muted</code></td></tr>
-        <tr><td>Rule</td><td>2px, <code>linear-gradient(90deg, var(--nhs-blue), transparent)</code></td></tr>
+        <tr><td>Rule</td><td>2px, <code>linear-gradient(90deg, var(--nhs-blue), transparent)</code> (decorative only)</td></tr>
       </tbody>
     </table>
+
+    <h2>Shared primitives</h2>
+    <p><code>SectionHeader</code> and <code>PdpSection</code> both use <code>--text-section-alt</code> + <code>--text-primary</code> for section titles. NHS blue on the gradient rule is decorative, not a link affordance.</p>
 
     <h2>Accessibility</h2>
     <ul>
@@ -61,12 +64,7 @@
       <li>The gradient rule is decorative.</li>
     </ul>
 
-    <div class="ds-note">
-      <strong>Related.</strong> The PDP also uses a plainer blue <code>#005EB8</code> <code>&lt;h2&gt;</code> in <code>PdpSection</code>.
-      Consider whether <code>SectionHeader</code> should be the single section-heading primitive.
-    </div>
-
-    <div class="ds-note ds-note--source">Source: <code>SectionHeader</code> in <code>components/Badges.tsx</code>.</div>
+    <div class="ds-note ds-note--source">Source: <code>SectionHeader</code> in <code>components/Badges.tsx</code>; <code>PdpSection</code> in <code>components/PdpSection.tsx</code>.</div>
   </div>
   <script src="/DS/assets/ds.js" defer></script>
 </body>

@@ -214,7 +214,7 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
               </h2>
               <p
                 className="mb-1 hs-text-label hs-font-normal"
-                style={{ color: 'var(--nhs-blue)' }}
+                style={{ color: 'var(--text-secondary)' }}
               >
                 {profile.roleTitle}
               </p>
@@ -369,7 +369,7 @@ export default function AiAdvisorPanel({ open, onClose, profile }: Props) {
           <div className="flex min-w-0 flex-1 items-center justify-between gap-4 px-4">
             <span
               className="truncate hs-text-label hs-font-bold"
-              style={{ color: 'var(--nhs-blue)', fontFamily: 'Frutiger, Arial, sans-serif' }}
+              style={{ color: 'var(--text-primary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
             >
               HealthStore AI Advisor
             </span>

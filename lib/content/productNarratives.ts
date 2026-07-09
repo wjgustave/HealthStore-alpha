@@ -74,7 +74,7 @@ export const LUSCII_NARRATIVE: ProductNarrative = {
     device_class: 'Medical device — Class IIa SaMD',
     hira_status: 'HealthStore Independent Regulatory Assurance pack complete',
     market_access: 'Documented UK market access with classification rationale on file',
-    assurance_speed_note: 'HealthStore runs national assurance once — your local team reuses the passport instead of repeating supplier checks.',
+    assurance_speed_note: 'HealthStore runs national assurance once and your local team reuses the passport instead of repeating supplier checks.',
   },
   assurance_domains: [
     { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG736 — recommended for use with evidence generation', verified_date: '2024-12', review_due: '2027-12' },
@@ -279,13 +279,21 @@ export const MYCOPD_NARRATIVE: ProductNarrative = {
     workforce: 'Ward staff time for introduction at discharge (2–3 minutes per patient during existing discharge conversation). No ongoing clinical monitoring required at standard tier. Pro tier: respiratory nurse reviews dashboard weekly (approximately 0.1 WTE per 500 active patients). Admin support for initial embedding: 0.1 WTE band 4 for 6 weeks.',
     timescale: '6–12 weeks. Weeks 1–2: Trust IG approvals and licence agreement. Weeks 3–4: Ward staff training (2-hour session per ward) and process mapping. Weeks 5–8: Pilot on one respiratory ward. Weeks 9–12: Roll-out to remaining wards. Supplier provides on-site training, integration support and monthly review calls during embedding.',
     prerequisites: ['Named discharge pathway owner (respiratory nurse or ward manager)', 'Ward staff briefed on app introduction process', 'Baseline BPT gateway performance documented (to measure improvement)', 'IG/DPA executed', 'Wi-Fi or 4G coverage in ward areas for patient activation'],
+    onboarding_steps: [
+      'Infrastructure assessment',
+      'Pathway embedding with clinical teams',
+      'Patient invitation',
+      'Staff training',
+    ],
+    onboarding_ongoing_step: 'Ongoing account management',
+    onboarding_note: 'Digital Health Advisors support patients throughout onboarding and ongoing use.',
   },
   publishing: { content_owner: 'HealthStore product team', review_date: '2026-06-25', next_review: '2026-09-25' },
 }
 
 const MYHEART_NARRATIVE: ProductNarrative = {
   decision_summary: {
-    one_line_proposition: 'A NICE HTG764-recommended cardiac rehabilitation app enabling home-based CR delivery — deployed across 20,800+ UK patients, with evidence of 70% CR uptake at Dorset County Hospital (surpassing the 2028 NHS target).',
+    one_line_proposition: 'A home-based cardiac rehabilitation app — patients complete Phase III and IV rehab from home with exercise prescription, and the clinical team monitors progress remotely.',
     pathway_problem: 'Only 33% of eligible cardiac patients complete rehabilitation nationally. Capacity constraints in face-to-face programmes mean most patients receive no structured recovery support after a cardiac event. The NHS Long-Term Plan requires 85% CR uptake by 2028 — at current trajectories, most areas will fall far short.',
     intervention_class: 'Home-based cardiac rehabilitation programme',
     why_relevant: 'myHeart addresses the largest single barrier to cardiac rehab uptake — limited face-to-face capacity. It offers Phase III and IV rehabilitation content with exercise prescription, enabling patients to participate from home. The Dorset deployment achieved 70% CR uptake, demonstrating that digital CR can exceed face-to-face programme completion rates.',

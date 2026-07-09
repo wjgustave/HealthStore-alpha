@@ -1,0 +1,136 @@
+import Link from 'next/link'
+import type { ProductNarrative } from '@/lib/content/productModel'
+import { getCommissionerFacingFunding } from '@/lib/data'
+import { PdpSection } from '@/components/PdpSection'
+import { FundingStatusBadge } from '@/components/Badges'
+
+/**
+ * "Funding levers and tariff alignment" — ports the matt_demo commissioner_economics
+ * levers grid (and tariff/QOF note) onto the hybrid PDP, and includes linked
+ * commissioner-facing funding schemes (formerly the Funding opportunities section).
+ *
+ * Server component — no client boundary.
+ */
+function leverStatusClass(status: string): string {
+  const s = status.toLowerCase()
+  if (s.includes('future') || s.includes('proposed') || s.includes('upcoming')) {
+    return 'badge badge-amber'
+  }
+  if (s.includes('live') || s.includes('applicable')) {
+    return 'badge badge-green'
+  }
+  if (s.includes('support') || s.includes('negotiate')) {
+    return 'badge badge-blue'
+  }
+  return 'badge badge-grey'
+}
+
+export default function PdpFundingLevers({
+  narrative,
+  fundingIds = [],
+}: {
+  narrative: ProductNarrative
+  fundingIds?: string[]
+}) {
+  const economics = narrative.commissioner_economics
+  const levers = economics?.funding_levers ?? []
+  const tariffNote = economics?.tariff_note?.trim()
+  const schemes = getCommissionerFacingFunding(fundingIds)
+
+  if (!tariffNote && levers.length === 0 && schemes.length === 0) return null
+
+  return (
+    <PdpSection
+      id="funding-levers"
+      shareKey="narrative-funding-levers"
+      title="Funding levers and tariff alignment"
+      description="Where cash, tariff and QOF incentives align with this pathway — plus linked commissioner funding schemes."
+    >
+      {tariffNote && (
+        <div className="rounded-lg p-4 mb-4" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+          <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--text-primary)' }}>
+            Tariff and QOF implications
+          </div>
+          <p className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
+            {tariffNote}
+          </p>
+        </div>
+      )}
+
+      {levers.length > 0 && (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {levers.map((f) => (
+            <div
+              key={f.label}
+              className="hs-surface-card-sm bg-white rounded-lg border p-4"
+              style={{ borderColor: 'var(--border)' }}
+            >
+              <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
+                <div className="hs-font-bold hs-text-label" style={{ color: 'var(--text-secondary)' }}>
+                  {f.label}
+                </div>
+                <span className={leverStatusClass(f.status)}>{f.status}</span>
+              </div>
+              <p className="hs-text-caption" style={{ color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
+                {f.note}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {schemes.length > 0 && (
+        <div className={levers.length > 0 || tariffNote ? 'mt-6' : undefined}>
+          <h3 className="hs-font-bold mb-3" style={{ fontSize: 'var(--text-card-title-sm)', color: 'var(--text-secondary)' }}>
+            Linked funding schemes
+          </h3>
+          <div className="grid gap-4 grid-cols-1">
+            {schemes.map((f: any) => (
+              <div
+                key={f.id}
+                className="hs-surface-card-sm bg-white rounded-lg border p-4"
+                style={{ borderColor: 'var(--border)' }}
+              >
+                <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
+                  <div className="hs-font-bold hs-text-label" style={{ color: 'var(--text-secondary)' }}>
+                    {f.title}
+                  </div>
+                  <FundingStatusBadge status={f.status} />
+                </div>
+                <p className="hs-text-caption mb-2" style={{ color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
+                  {f.description}
+                </p>
+                {f.total_value && (
+                  <div className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>
+                    Value: {f.total_value}
+                  </div>
+                )}
+                {f.external_url && (
+                  <a
+                    href={f.external_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hs-text-caption hs-font-normal mt-2 inline-block"
+                    style={{ color: 'var(--nhs-blue)' }}
+                  >
+                    {f.external_url_label ?? 'More info'} ↗
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {schemes.length === 0 && (tariffNote || levers.length > 0) && (
+        <p className="hs-text-caption mt-4" style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>
+          No commissioner-facing cash or adoption-support schemes are linked to this product profile. Browse the{' '}
+          <Link href="/funding" className="hs-font-normal underline" style={{ color: 'var(--nhs-blue)' }}>
+            funding directory
+          </Link>
+          {' '}for wider opportunities.
+        </p>
+      )}
+    </PdpSection>
+  )
+}

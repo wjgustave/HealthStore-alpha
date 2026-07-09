@@ -25,7 +25,7 @@
   "referral_modes": [
     "clinician_referral"
   ],
-  "one_line_value_proposition": "NICE HTG764-recommended cardiac rehabilitation app from the makers of myCOPD, over 20,800 UK users, DTAC completed, with the Dorset County Hospital case study showing 70% CR uptake (surpassing the 2028 NHS target).",
+  "one_line_value_proposition": "A home-based cardiac rehabilitation app — patients complete Phase III and IV rehab from home with exercise prescription, and the clinical team monitors progress remotely.",
   "why_it_matters_locally": "myHeart has the largest documented NHS deployment among HTG764-recommended platforms, with over 20,800 UK users since 2018. The Dorset County Hospital case study demonstrated 70% CR uptake, surpassing the 2028 NHS Long-Term Plan target. Built on the my mhealth platform (which also powers myCOPD), it benefits from an established NHS relationship and DTAC completion.",
   "target_problem_statement": "Low national CR uptake rates, limited capacity for home-based CR delivery, and the 2028 NHS Long-Term Plan target to increase CR uptake to 85%.",
   "nice_guidance_refs": [

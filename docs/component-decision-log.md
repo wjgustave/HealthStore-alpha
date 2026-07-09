@@ -13,3 +13,5 @@ Custom components justified where NHS.UK frontend does not meet commissioner dec
 | C-07 | CommercialReadiness | Route + buyer pack status | Inset text | Commercial | Jun 2026 |
 | C-08 | ScenarioControls | Scenario toggle with linked recalculation | Radios | Benefits | Jun 2026 |
 | C-09 | CommissioningCaseTracker | Case stage + next action | Task list pattern | Operations | Jun 2026 |
+| C-10 | Text colour | Blue reserved for interactive text; headings/KPIs use NHS black | `--text-primary` for static text | UX | Jul 2026 |
+| C-11 | Tags / badges | Softer status labels; GOV.UK Tag style (tinted bg, same-hue dark text, regular weight, no border) adopted for `.badge` and `.nhsuk-tag` | NHS Tag (bordered, bold) | UX | Jul 2026 |

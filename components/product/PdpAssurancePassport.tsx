@@ -3,6 +3,10 @@ import type { ProductNarrative } from '@/lib/content/productModel'
 import type { AssuranceDomainStatus } from '@/lib/content/productModel'
 import { PdpSection } from '@/components/PdpSection'
 import { deriveAssuranceDomains } from '@/lib/content/assuranceDomains'
+import { splitPdpEvidence } from '@/lib/pdpEvidence'
+import PdpClinicalPublications from '@/components/product/PdpClinicalPublications'
+import { NiceTypeBadge } from '@/components/Badges'
+import { STORE_ACCENT } from '@/lib/storeAccent'
 
 /**
  * Round 3 content migration — assurance passport for the hybrid PDP.
@@ -37,7 +41,18 @@ export default function PdpAssurancePassport({
   narrative: ProductNarrative
 }) {
   const domains = deriveAssuranceDomains(app)
-  if (domains.length === 0) return null
+
+  // Evidence half of the combined section (matt_demo "Assurance and evidence"):
+  // peer-reviewed / study-grade publications plus NICE guidance, migrated out of
+  // the Clinical evidence tab for curated-narrative products.
+  const { publications, niceEvidence } = splitPdpEvidence(app, {
+    showNarrativeSpine: true,
+    hasNhsExperience: false,
+  })
+  const niceRefs: any[] = (app as any).nice_guidance_refs ?? []
+  const hasEvidence = publications.length > 0 || niceEvidence.length > 0 || niceRefs.length > 0
+
+  if (domains.length === 0 && !hasEvidence) return null
 
   const material = domains.filter((d) => d.status === 'incomplete' || d.status === 'expired')
   const reg = narrative.regulatory_position
@@ -55,13 +70,13 @@ export default function PdpAssurancePassport({
     <PdpSection
       id="assurance"
       shareKey="narrative-assurance"
-      title="Assurance — national once, reuse the passport"
-      description="HealthStore runs the national assurance so your local team reuses it instead of repeating supplier checks. Status chips below; open the detail for domain-by-domain notes."
+      title="Assurance and evidence"
+      description="HealthStore has reviewed this product nationally. We certify our confidence in its assurance position based on supplier-provided documentation. Your local team retains responsibility for due diligence — we make that faster by providing access to source documents in your workspace once verified."
     >
       {speedNote && (
         <div className="rounded-lg p-4 mb-4" style={{ background: '#E6F0FB', border: '1px solid var(--border)' }}>
-          <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--nhs-blue)' }}>
-            What the passport saves you
+          <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--text-primary)' }}>
+            What our assurance pack saves you
           </div>
           <p className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
             {speedNote}
@@ -110,6 +125,8 @@ export default function PdpAssurancePassport({
       )}
 
       {/* R3-2 D: compact status chips */}
+      {domains.length > 0 && (
+      <>
       <div className="flex flex-wrap gap-2">
         {domains.map((d) => {
           const m = STATUS_META[d.status]
@@ -183,6 +200,65 @@ export default function PdpAssurancePassport({
           </table>
         </div>
       </details>
+      </>
+      )}
+
+      {/* Evidence half — "Clinical publications and evaluations" (matt_demo port). */}
+      <PdpClinicalPublications publications={publications} className="mt-6" />
+
+      {/* Evidence half — NICE guidance (moved from the Clinical evidence tab). */}
+      {(niceRefs.length > 0 || niceEvidence.length > 0) && (
+        <div className="mt-6">
+          <h3 className="hs-font-bold mb-3" style={{ fontSize: 'var(--text-card-title-sm)', color: 'var(--text-secondary)' }}>
+            NICE guidance
+          </h3>
+          <div className="space-y-3">
+            {niceRefs.map((r: any) => (
+              <div key={r.ref} className="flex items-start gap-4 p-4 rounded-lg" style={{ background: '#F0F4F5', border: '1px solid var(--border)' }}>
+                <NiceTypeBadge type={r.type} />
+                <div>
+                  <a
+                    href={r.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hs-font-bold hs-text-label hover:underline"
+                    style={{ color: STORE_ACCENT }}
+                  >
+                    {r.ref} ↗
+                  </a>
+                  <div className="hs-text-caption mt-1" style={{ color: 'var(--text-muted)' }}>
+                    {r.date}
+                    {r.note ? ` · ${r.note}` : ''}
+                  </div>
+                </div>
+              </div>
+            ))}
+            {niceEvidence.map((s: any, i: number) => (
+              <div key={s.id ?? i} className="p-4 rounded-lg" style={{ background: '#F0F4F5', border: '1px solid var(--border)' }}>
+                <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--text-secondary)' }}>
+                  {s.url_full_text ? (
+                    <a href={s.url_full_text} target="_blank" rel="noopener noreferrer" className="hover:underline" style={{ color: STORE_ACCENT }}>
+                      {s.ref} ↗
+                    </a>
+                  ) : (
+                    s.ref
+                  )}
+                </div>
+                {s.key_results && (
+                  <p className="hs-text-caption m-0" style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                    {s.key_results}
+                  </p>
+                )}
+                {s.study_limitation && (
+                  <p className="hs-text-caption m-0 mt-1" style={{ color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                    <strong>Note:</strong> {s.study_limitation}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </PdpSection>
   )
 }

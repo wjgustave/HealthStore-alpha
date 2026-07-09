@@ -13,6 +13,8 @@ export type WhereLiveSummary = {
   detail: string | null
   /** Primary callout line, e.g. "5 sites". */
   sitesText: string | null
+  /** Bare site count (live + pilot + research) for headline-number displays (null when no live sites). */
+  siteCount: number | null
   /** Inline status counts, e.g. "2 pilot · 1 research". */
   statusText: string | null
   /** Subline below, e.g. "Across 3 ICBs". */
@@ -47,6 +49,7 @@ export function getWhereLiveSummary(app: WhereLiveApp): WhereLiveSummary {
       headline,
       detail: null,
       sitesText: headline,
+      siteCount: null,
       statusText: null,
       icbText: null,
     }
@@ -60,6 +63,7 @@ export function getWhereLiveSummary(app: WhereLiveApp): WhereLiveSummary {
       headline: flatHeadline(sitesText, icbText),
       detail: statusText,
       sitesText,
+      siteCount: summary.liveCount + summary.pilotCount + summary.researchCount,
       statusText,
       icbText,
     }
@@ -71,6 +75,7 @@ export function getWhereLiveSummary(app: WhereLiveApp): WhereLiveSummary {
     headline: sitesText,
     detail,
     sitesText,
+    siteCount: null,
     statusText: detail,
     icbText: null,
   }

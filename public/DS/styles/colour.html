@@ -56,12 +56,22 @@
     </div>
 
     <h2>Usage</h2>
+    <h3>Text colour roles</h3>
+    <table class="ds-table">
+      <thead><tr><th>Token</th><th>Use for</th><th>Do not use for</th></tr></thead>
+      <tbody>
+        <tr><td><code>--text-primary</code></td><td>Headings (H1–H3), section titles, KPI values, static callout labels</td><td>Links or button labels</td></tr>
+        <tr><td><code>--text-secondary</code> / <code>--text-muted</code></td><td>Body copy, descriptions, meta</td><td>Primary headings</td></tr>
+        <tr><td><code>--nhs-blue</code></td><td>Inline links, disclosure <code>&lt;summary&gt;</code> controls, text inside buttons and tabs</td><td>Section headings or data labels “for emphasis”</td></tr>
+      </tbody>
+    </table>
     <div class="ds-dosdonts">
       <div class="ds-panel ds-panel--do">
         <p class="ds-panel__head">Do</p>
         <ul>
           <li>Reference colours via tokens (<code>var(--nhs-blue)</code> or the <code>nhs-blue</code> Tailwind utilities), not hex literals.</li>
-          <li>Keep blue as the only interactive accent.</li>
+          <li>Keep blue for interactive text only — links, summaries, tabs, and button labels.</li>
+          <li>Use <code>--text-primary</code> for all non-interactive headings and stat values.</li>
           <li>Pair semantic colour with an icon or text label, never colour alone.</li>
         </ul>
       </div>
@@ -69,6 +79,7 @@
         <p class="ds-panel__head">Don't</p>
         <ul>
           <li>Inline <code>#005EB8</code> directly — use the token or <code>nhs-blue</code> utility.</li>
+          <li>Use blue section headings that are not links.</li>
           <li>Introduce new accent hues for one-off surfaces.</li>
           <li>Use low-contrast muted text for body copy.</li>
         </ul>

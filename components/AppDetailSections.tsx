@@ -15,8 +15,16 @@ import { DeploymentRegisterTable } from '@/components/DeploymentRegisterTable'
 import { getDeploymentRegister } from '@/lib/deploymentRegister'
 import { CHECK_WITH_SUPPLIER, getCommissionerFacingFunding } from '@/lib/data'
 
-export function TechnicalIntegrationTable({ app }: { app: any }) {
+export function TechnicalIntegrationTable({
+  app,
+  excludeLabels = [],
+}: {
+  app: any
+  /** Row labels to omit (e.g. narrative Resources technical specification). */
+  excludeLabels?: string[]
+}) {
   const ti = app.technical_integrations
+  const exclude = new Set(excludeLabels)
   const nhsLoginDisplay =
     app.nhs_login_integration === true
       ? 'Yes'
@@ -30,7 +38,13 @@ export function TechnicalIntegrationTable({ app }: { app: any }) {
         ? 'No'
         : 'Not confirmed'
 
-  const rows: { label: string; value: string | undefined }[] = []
+  const platformTags: string[] = app.platform_tags ?? app.platforms ?? []
+  const platformsDisplay =
+    platformTags.length > 0 ? platformTags.join(', ') : 'iOS, Android, Web'
+
+  const rows: { label: string; value: string | undefined }[] = [
+    { label: 'Platforms', value: platformsDisplay },
+  ]
   if (ti) {
     rows.push(
       { label: 'FHIR', value: ti.fhir },
@@ -52,7 +66,7 @@ export function TechnicalIntegrationTable({ app }: { app: any }) {
     <div className="overflow-x-auto">
       <table className="w-full hs-text-label">
         <tbody>
-          {rows.map(r => (
+          {rows.filter((r) => !exclude.has(r.label)).map(r => (
             <tr key={r.label} className="border-b last:border-0" style={{ borderColor: 'var(--border)' }}>
               <td className="py-2 pr-4 hs-font-bold w-56" style={{ color: 'var(--text-muted)' }}>{r.label}</td>
               <td className="py-2" style={{ color: r.value ? 'var(--text-primary)' : 'var(--text-muted)' }}>
@@ -205,26 +219,31 @@ export function WhatItTakesLocallySection({ app, accent }: { app: any; accent: s
   )
 }
 
+/**
+ * Case study card — type tag, title, detail (setting, sample size, outcome), source footer.
+ */
 function CaseStudyCard({ caseStudy: cs }: { caseStudy: any }) {
+  const hasDetail = !!(cs.setting || cs.sample_size || cs.outcome)
   return (
     <article className="hs-case-card">
+      <span className="hs-case-card__pill">{cs.type_label ?? 'Case study'}</span>
       <h4 className="hs-case-card__title">{cs.title ?? cs.setting}</h4>
-      {(cs.setting || cs.sample_size) ? (
-        <div className="flex flex-wrap items-center gap-2">
-          {cs.setting && cs.title ? (
-            <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{cs.setting}</span>
+      {hasDetail ? (
+        <div className="hs-case-card__detail-body">
+          {(cs.setting && cs.title) || cs.sample_size ? (
+            <div className="flex flex-wrap items-center gap-2">
+              {cs.setting && cs.title ? (
+                <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{cs.setting}</span>
+              ) : null}
+              {cs.sample_size ? (
+                <span className="hs-case-card__pill">n = {cs.sample_size.toLocaleString()}</span>
+              ) : null}
+            </div>
           ) : null}
-          {cs.sample_size ? (
-            <span className="hs-case-card__pill">n = {cs.sample_size.toLocaleString()}</span>
+          {cs.outcome ? (
+            <p className="hs-text-label m-0" style={{ color: 'var(--text-primary)', lineHeight: 1.55 }}>{cs.outcome}</p>
           ) : null}
         </div>
-      ) : null}
-      <p className="hs-text-label m-0" style={{ color: 'var(--text-primary)', lineHeight: 1.55 }}>{cs.outcome}</p>
-      {cs.caveat ? (
-        <p className="hs-case-card__caveat m-0">
-          <span aria-hidden>⚠ </span>
-          <strong className="hs-font-bold">Caveat:</strong> {cs.caveat}
-        </p>
       ) : null}
       {cs.source ? (
         <p className="hs-case-card__source m-0">Source: {cs.source}</p>
@@ -234,11 +253,18 @@ function CaseStudyCard({ caseStudy: cs }: { caseStudy: any }) {
 }
 
 /**
- * Peer-reviewed study rendered in the case-study card visual language so it sits
- * naturally in the "Case studies and evaluations" section. A green "Peer-reviewed"
- * marker signals the stronger evidence tier; publication links are preserved.
+ * Clinical publication / evaluation card — shared visual language for the
+ * "Clinical publications and evaluations" subsection and peer-reviewed studies
+ * in case-study grids. Peer-reviewed entries get the green pill; others use
+ * their type_label (e.g. "Observational study") as the standard tag.
  */
-function PeerReviewedEvaluationCard({ study, accent }: { study: any; accent: string }) {
+export function PeerReviewedEvaluationCard({
+  study,
+  accent,
+}: {
+  study: any
+  accent: string
+}) {
   const meta = [study.authors, study.journal, study.year].filter(Boolean).join(' · ')
   const links = [
     study.url_doi && { href: study.url_doi, label: 'DOI ↗' },
@@ -249,33 +275,40 @@ function PeerReviewedEvaluationCard({ study, accent }: { study: any; accent: str
       : null,
   ].filter(Boolean) as { href: string; label: string }[]
 
+  const hasDetail = !!(meta || study.n || study.key_results || study.setting)
+  const typeLabel = study.type_label ?? study.type ?? 'Publication'
+
   return (
     <article className="hs-case-card">
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="hs-case-card__pill hs-case-card__pill--green">Peer-reviewed</span>
-        {(study.type_label || study.type) ? (
-          <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{study.type_label ?? study.type}</span>
-        ) : null}
-      </div>
-      <h4 className="hs-case-card__title">{study.ref}</h4>
-      {(meta || study.n) ? (
+      {study.peer_reviewed ? (
         <div className="flex flex-wrap items-center gap-2">
-          {meta ? (
-            <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{meta}</span>
-          ) : null}
-          {study.n ? (
-            <span className="hs-case-card__pill">n = {study.n.toLocaleString()}</span>
+          <span className="hs-case-card__pill hs-case-card__pill--green">Peer-reviewed</span>
+          {(study.type_label || study.type) ? (
+            <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{typeLabel}</span>
           ) : null}
         </div>
-      ) : null}
-      {study.key_results ? (
-        <p className="hs-text-label m-0" style={{ color: 'var(--text-primary)', lineHeight: 1.55 }}>{study.key_results}</p>
-      ) : null}
-      {study.study_limitation ? (
-        <p className="hs-case-card__caveat m-0">
-          <span aria-hidden>⚠ </span>
-          <strong className="hs-font-bold">Limitation:</strong> {study.study_limitation}
-        </p>
+      ) : (
+        <span className="hs-case-card__pill">{typeLabel}</span>
+      )}
+      <h4 className="hs-case-card__title">{study.ref}</h4>
+      {hasDetail ? (
+        <div className="hs-case-card__detail-body">
+          {(meta || study.n || study.setting) ? (
+            <div className="flex flex-wrap items-center gap-2">
+              {study.setting ? (
+                <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{study.setting}</span>
+              ) : meta ? (
+                <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{meta}</span>
+              ) : null}
+              {study.n ? (
+                <span className="hs-case-card__pill">n = {study.n.toLocaleString()}</span>
+              ) : null}
+            </div>
+          ) : null}
+          {study.key_results ? (
+            <p className="hs-text-label m-0" style={{ color: 'var(--text-primary)', lineHeight: 1.55 }}>{study.key_results}</p>
+          ) : null}
+        </div>
       ) : null}
       {links.length > 0 ? (
         <div className="hs-case-card__source m-0 flex flex-wrap gap-x-3 gap-y-1">
@@ -321,10 +354,18 @@ export function shouldShowImpactSection(app: any) {
   return !!(hasImpact || hasCases || hasVideos)
 }
 
-export function ImpactAndCaseStudiesSection({ app, showCaseStudies = true }: { app: any; showCaseStudies?: boolean }) {
+export function ImpactAndCaseStudiesSection({
+  app,
+  showCaseStudies = true,
+  showVideos = true,
+}: {
+  app: any
+  showCaseStudies?: boolean
+  showVideos?: boolean
+}) {
   const hasImpact = !!(app.expected_benefit_note && String(app.expected_benefit_note).trim())
   const hasCases = showCaseStudies && app.case_studies?.length > 0
-  const hasVideos = app.product_videos?.length > 0
+  const hasVideos = showVideos && app.product_videos?.length > 0
   if (!hasImpact && !hasCases && !hasVideos) return null
 
   return (
@@ -332,15 +373,7 @@ export function ImpactAndCaseStudiesSection({ app, showCaseStudies = true }: { a
       {hasImpact && (
         <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}>{app.expected_benefit_note}</p>
       )}
-      {hasCases && (
-        <>
-          <p className="hs-text-caption mt-4 mb-0 p-2 rounded" style={{ background: '#E6F0FB', color: '#003087', lineHeight: 1.5 }}>
-            <strong>Commissioner note:</strong> Case studies are illustrative local reports and may not meet the same standard as peer-reviewed trials. Use alongside the{' '}
-            <a href="#clinical-evidence" className="hs-font-bold underline" style={{ color: '#003087' }}>Clinical evidence</a> section.
-          </p>
-          <CaseStudyCards caseStudies={app.case_studies} />
-        </>
-      )}
+      {hasCases && <CaseStudyCards caseStudies={app.case_studies} />}
       {hasVideos && <ProductVideosSection videos={app.product_videos} embedded />}
     </div>
   )

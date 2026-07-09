@@ -78,7 +78,7 @@ export function FundingDirectoryCard({ f, apps }: { f: FundingDirectoryRecord; a
         </div>
 
         {f.total_value ? (
-          <p className="mb-4 m-0 hs-text-body hs-font-bold leading-tight" style={{ color: 'var(--nhs-blue)' }}>
+          <p className="mb-4 m-0 hs-text-body hs-font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>
             {f.total_value}
           </p>
         ) : (

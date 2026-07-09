@@ -140,6 +140,12 @@ export interface ProductNarrative {
     timescale: string
     prerequisites: string[]
     owner?: string
+    /** Sequential onboarding flow rendered as a pathway-style diagram. */
+    onboarding_steps?: string[]
+    /** Full-width trailing step shown under the flow (no connecting arrow). */
+    onboarding_ongoing_step?: string
+    /** Supporting note shown under the onboarding diagram. */
+    onboarding_note?: string
   }
   publishing?: {
     content_owner: string

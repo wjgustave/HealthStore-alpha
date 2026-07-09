@@ -19,8 +19,12 @@ import {
 } from '@/components/AppDetailSections'
 import { PdpCommissioningSnapshot } from '@/components/PdpCommissioningSnapshot'
 import { PdpReadOnlySection } from '@/components/PdpReadOnlySection'
-import { getCommissioningSnapshot, getFundingSnapshotCard } from '@/lib/commissioningSnapshot'
-import { getCommissionerFacingFunding, getLinkedFunding } from '@/lib/data'
+import { getCommissioningSnapshot } from '@/lib/commissioningSnapshot'
+import { getCommissionerFacingFunding } from '@/lib/data'
+import { getDeploymentRegister } from '@/lib/deploymentRegister'
+import { getProductNarrative } from '@/lib/content/productNarratives'
+import { splitPdpEvidence } from '@/lib/pdpEvidence'
+import PdpClinicalPublications from '@/components/product/PdpClinicalPublications'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
 import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges, ProductHeroDemoBadge } from './pdpBlocks'
 import PdpSupplierContactCard from '@/components/PdpSupplierContactCard'
@@ -35,24 +39,25 @@ export default function PdpSharedProductBody({
   const accent = STORE_ACCENT
   const a = allowedKeys
 
-  const rcts = (app.clinical_evidence_detailed ?? []).filter((s: any) => s.type === 'RCT')
-  const observational = (app.clinical_evidence_detailed ?? []).filter((s: any) =>
-    ['observational', 'real_world', 'service_eval'].includes(s.type),
-  )
-  const niceAndImpl = (app.clinical_evidence_detailed ?? []).filter((s: any) =>
+  const showNarrativeSpine = getProductNarrative(app.slug) != null
+  const hasNhsExperience =
+    showNarrativeSpine &&
+    (getDeploymentRegister(app).length > 0 || (app.case_studies?.length ?? 0) > 0)
+  const evidenceSplit = splitPdpEvidence(app, { showNarrativeSpine, hasNhsExperience })
+  const evidenceForTab = evidenceSplit.tab
+  const showClinicalPublicationsInTab = !showNarrativeSpine && evidenceSplit.publications.length > 0
+
+  const rcts = evidenceForTab.filter((s: any) => s.type === 'RCT')
+  const observational = evidenceForTab.filter((s: any) => ['observational', 'real_world'].includes(s.type))
+  const niceAndImpl = evidenceForTab.filter((s: any) =>
     ['nice_assessment', 'implementation_science', 'grey_lit', 'evidence_gap'].includes(s.type),
   )
+  const showClinicalEvidenceSection =
+    evidenceForTab.length > 0 || (!showNarrativeSpine && evidenceSplit.publications.length === 0)
 
   const linkedFundingIds = app.linked_funding_ids ?? app.funding_ids ?? []
   const commissionerFunding = getCommissionerFacingFunding(linkedFundingIds)
-  const allLinkedFunding = getLinkedFunding(linkedFundingIds)
-  const fundingRows = allLinkedFunding.map((f: { id: string; title: string; status: string }) => ({
-    id: f.id,
-    title: f.title,
-    status: f.status,
-  }))
   const commissioningCards = getCommissioningSnapshot(app)
-  const fundingSnapshotCard = getFundingSnapshotCard(app, fundingRows)
 
   return (
     <>
@@ -109,7 +114,6 @@ export default function PdpSharedProductBody({
         <div className="hs-decision-snapshot mb-8">
           <PdpCommissioningSnapshot
             cards={commissioningCards}
-            fundingCard={a.has('related-funding') ? fundingSnapshotCard : null}
             whereLiveApp={app}
           />
         </div>
@@ -170,6 +174,16 @@ export default function PdpSharedProductBody({
           ) : null}
 
           {a.has('clinical-evidence') ? (
+            <>
+              {showClinicalPublicationsInTab && (
+                <PdpReadOnlySection
+                  title="Clinical publications and evaluations"
+                >
+                  <PdpClinicalPublications publications={evidenceSplit.publications} className="" showHeading={false} />
+                </PdpReadOnlySection>
+              )}
+
+              {showClinicalEvidenceSection ? (
             <PdpReadOnlySection
               title="Clinical evidence"
               description="Full evidence record. Links to source publications provided where available."
@@ -206,7 +220,7 @@ export default function PdpSharedProductBody({
                       marginBottom: 8,
                     }}
                   >
-                    Real-world, observational & service evaluation evidence ({observational.length})
+                    Real-world & observational evidence ({observational.length})
                   </div>
                   {observational.map((s: any) => (
                     <EvidenceCard key={s.id} study={s} accent={accent} />
@@ -234,6 +248,8 @@ export default function PdpSharedProductBody({
                 </div>
               )}
             </PdpReadOnlySection>
+              ) : null}
+            </>
           ) : null}
 
           {a.has('nice-guidance') ? (

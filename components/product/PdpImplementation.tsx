@@ -33,7 +33,7 @@ export default function PdpImplementation({
       id="implementation"
       shareKey="narrative-implementation"
       title="Making it work at your site"
-      description="What the supplier provides and what your local team needs to organise for a successful deployment."
+      description="Successful deployment depends on three things: clinical engagement, systematic patient invitation, and ongoing monitoring. Here is what the supplier provides and what your local team needs to organise."
     >
       <div className="grid gap-4 sm:grid-cols-3">
         {cards.map((c) => (
@@ -62,13 +62,75 @@ export default function PdpImplementation({
       )}
 
       <div className="rounded-lg p-4 mt-4" style={{ background: '#E6F0FB', border: '1px solid var(--border)' }}>
-        <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--nhs-blue)' }}>
+        <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--text-primary)' }}>
           Supplier support included
         </div>
         <p className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
           The supplier provides onboarding, training materials, technical integration support and ongoing account management as
           part of the standard package. HealthStore brokers the introduction and tracks mobilisation milestones{impl.owner ? `, with the ${impl.owner} as the recommended local owner` : ''}.
         </p>
+
+        {(impl.onboarding_steps?.length ?? 0) > 0 && (
+          <div className="mt-4">
+            <div className="hs-pathway-col hs-pathway-future">
+              <h4 className="hs-pathway-heading">Ongoing support</h4>
+              {(() => {
+                const steps = impl.onboarding_steps!
+                const rows: string[][] = []
+                for (let i = 0; i < steps.length; i += 2) rows.push(steps.slice(i, i + 2))
+                const rowGrid = { display: 'grid', gridTemplateColumns: '1fr 32px 1fr', alignItems: 'center', gap: 'var(--space-1)' } as const
+                return rows.map((row, r) => {
+                  // Snake layout: even rows read left→right, odd rows right→left.
+                  // The down connector turns on the side where the previous row ended.
+                  const reversed = r % 2 === 1
+                  const turnRight = (r - 1) % 2 === 0 // previous row ended on the right
+                  return (
+                    <div key={row[0]}>
+                      {r > 0 && (
+                        <div style={rowGrid}>
+                          <div className="hs-pathway-arrow" style={{ padding: 0 }}>{turnRight ? '' : '↓'}</div>
+                          <div aria-hidden />
+                          <div className="hs-pathway-arrow" style={{ padding: 0 }}>{turnRight ? '↓' : ''}</div>
+                        </div>
+                      )}
+                      <div style={rowGrid}>
+                        <div className="hs-pathway-step" style={{ marginBottom: 0 }}>{row[0]}</div>
+                        {row.length === 2 ? (
+                          <>
+                            <div className="hs-pathway-arrow" style={{ padding: 0 }}>{reversed ? '←' : '→'}</div>
+                            <div className="hs-pathway-step" style={{ marginBottom: 0 }}>{row[1]}</div>
+                          </>
+                        ) : (
+                          <>
+                            <div aria-hidden />
+                            <div aria-hidden />
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })
+              })()}
+              {impl.onboarding_ongoing_step && (
+                <>
+                  {/* Empty connector to reserve the same vertical space as an arrow row. */}
+                  <div className="hs-pathway-arrow" style={{ padding: 0, visibility: 'hidden' }} aria-hidden>↓</div>
+                  <div
+                    className="hs-pathway-step"
+                    style={{ marginBottom: 0, width: '66.6667%', marginLeft: 'auto', marginRight: 'auto', textAlign: 'center' }}
+                  >
+                    {impl.onboarding_ongoing_step}
+                  </div>
+                </>
+              )}
+            </div>
+            {impl.onboarding_note && (
+              <p className="mt-2 hs-text-caption" style={{ color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: 720 }}>
+                {impl.onboarding_note}
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </PdpSection>
   )

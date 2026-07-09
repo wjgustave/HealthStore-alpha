@@ -54,28 +54,21 @@ export function PdpWhereLive({
 
 /** Fourth callout card in the commissioning snapshot grid. */
 export function PdpWhereLiveSegment({ app, href = '#scale-and-maturity' }: { app: WhereLiveApp; href?: string }) {
-  const { sitesText, statusText } = getWhereLiveSummary(app)
+  const { sitesText, siteCount } = getWhereLiveSummary(app)
 
   return (
     <article className="hs-snapshot-strip__segment">
       <h2 className="hs-snapshot-strip__heading">
         <a href={href} className="hs-snapshot-strip__heading-link">
-          Live deployments
+          Live NHSE sites
         </a>
       </h2>
       <div className="hs-snapshot-strip__body">
-        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0">
-          {sitesText ? (
-            <span className="hs-text-card-title-sm hs-font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
-              {sitesText}
-            </span>
-          ) : null}
-          {statusText ? (
-            <span className="hs-text-caption leading-snug" style={{ color: 'var(--text-secondary)' }}>
-              {statusText}
-            </span>
-          ) : null}
-        </div>
+        {siteCount != null || sitesText ? (
+          <span className="hs-text-card-title-sm hs-font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
+            {siteCount ?? sitesText}
+          </span>
+        ) : null}
       </div>
     </article>
   )

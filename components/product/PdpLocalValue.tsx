@@ -6,6 +6,7 @@ import { contextToSearchParams } from '@/lib/context/types'
 import { getLocalReferenceData } from '@/lib/localData/referenceData'
 import { getDtxImpactRanges } from '@/lib/localData/workspaceData'
 import { PdpSection } from '@/components/PdpSection'
+import { IndicativeFinancialContextSection } from '@/components/AppDetailSections'
 import { HorizontalBarChart, InsightCallout } from '@/components/charts'
 
 /**
@@ -138,8 +139,8 @@ export default function PdpLocalValue({
       <PdpSection
         id="local-impact"
         shareKey="narrative-projected-impact"
-        title={isExample ? 'What this could mean for your area' : `What this could mean for ${areaLabel}`}
-        description="Published effect sizes applied to a high-risk COPD population. Illustrative prototype data — a defensible basis for a business case, not a guarantee."
+        title={isExample ? 'What this could mean for your COPD cohort' : `What this could mean for ${areaLabel}`}
+        description="Projections based on published evidence applied to your local eligible population. Not a guarantee — a defensible basis for a business case."
       >
         <HorizontalBarChart
           ariaLabel={`Projected annual events avoided in ${areaLabel}`}
@@ -168,7 +169,7 @@ export default function PdpLocalValue({
         id="local-value-worth"
         shareKey="narrative-economics"
         title="What it could be worth"
-        description="Illustrative economics for a 500-patient cohort. Cash and capacity are reported separately; net is shown as a range because pricing is not yet verified."
+        description="Illustrative economics for a 500-patient cohort. Cash and capacity are reported separately."
       >
         <div className="grid gap-4 sm:grid-cols-3">
           <Tile value={formatGbp(capacity)} label="Capacity released / yr" sub="Freed acute beds & clinician time" />
@@ -190,8 +191,17 @@ export default function PdpLocalValue({
           </InsightCallout>
         </div>
         <p className="mt-3 hs-text-caption" style={{ color: 'var(--text-muted)' }}>
-          Illustrative model (v5) &middot; 500-patient cohort &middot; central effect sizes &middot; price band {formatGbp(PRICE_LOW)}&ndash;{formatGbp(PRICE_HIGH)} per patient / year, pending verification.
+          Illustrative model (v5) &middot; 500-patient cohort &middot; central effect sizes &middot; price band {formatGbp(PRICE_LOW)}&ndash;{formatGbp(PRICE_HIGH)} per patient / year.
         </p>
+
+        <details className="mt-4">
+          <summary style={{ cursor: 'pointer', fontSize: 'var(--text-label)', color: 'var(--nhs-blue)', fontWeight: 700 }}>
+            Show indicative financial context
+          </summary>
+          <div className="mt-3 hs-surface-card-sm bg-white rounded-lg border p-4" style={{ borderColor: 'var(--border)' }}>
+            <IndicativeFinancialContextSection app={app} />
+          </div>
+        </details>
       </PdpSection>
     </div>
   )

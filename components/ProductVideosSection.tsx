@@ -19,9 +19,11 @@ type Props = {
   videos: ProductVideoItem[]
   /** When true, omit outer card — for use inside another section (e.g. Expected impact and case studies). */
   embedded?: boolean
+  /** When embedded, show the "Product videos" subheading (default true). */
+  showHeading?: boolean
 }
 
-export default function ProductVideosSection({ videos, embedded = false }: Props) {
+export default function ProductVideosSection({ videos, embedded = false, showHeading = true }: Props) {
   const headingId = useId()
   const dialogTitleId = useId()
   const [activeId, setActiveId] = useState<string | null>(null)
@@ -101,22 +103,24 @@ export default function ProductVideosSection({ videos, embedded = false }: Props
     <>
       {embedded ? (
         <div
-          className="mt-8 border-t pt-8"
-          style={{ borderColor: 'var(--border)' }}
-          aria-labelledby={headingId}
+          className={showHeading ? 'mt-8 border-t pt-8' : undefined}
+          style={showHeading ? { borderColor: 'var(--border)' } : undefined}
+          aria-labelledby={showHeading ? headingId : undefined}
         >
-          <div className="mb-6">
-            <h3
-              id={headingId}
-              className="mb-1 hs-text-card-title-sm hs-font-bold"
-              style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
-            >
-              Product videos
-            </h3>
-            <p className="m-0 hs-text-label" style={{ color: 'var(--text-muted)' }}>
-              Short previews from the supplier’s YouTube channel. Opens in this page when you play.
-            </p>
-          </div>
+          {showHeading && (
+            <div className="mb-6">
+              <h3
+                id={headingId}
+                className="mb-1 hs-text-card-title-sm hs-font-bold"
+                style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
+              >
+                Product videos
+              </h3>
+              <p className="m-0 hs-text-label" style={{ color: 'var(--text-muted)' }}>
+                Short previews from the supplier’s YouTube channel. Opens in this page when you play.
+              </p>
+            </div>
+          )}
           {videoList}
         </div>
       ) : (

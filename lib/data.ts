@@ -94,19 +94,15 @@ const otherApps = otherAppsData as App[]
 
 const allAppsUnfiltered: App[] = [myCOPD, clinitouch, copdhub, luscii, sleepio, ...otherApps, jointAcademy, w8buddy, overcomingAnorexia, activateYourHeart, dReachHf, digitalHeartManual, groHealthHeartbuddy, kiactiv, myheart, pumpingMarvellous]
 
+/**
+ * Temporary catalogue allowlist — only these PDPs are surfaced in listings and
+ * condition counts. Set to `null` to show every product again.
+ */
+const VISIBLE_APP_SLUGS: string[] | null = ['luscii', 'myheart', 'mycopd']
+
 export function getAllApps(): App[] {
-  return allAppsUnfiltered.filter((a: App) => {
-    const hasVisibleCondition = a.condition_tags.some((t: string) => isVisibleCondition(t))
-    if (!hasVisibleCondition) return false
-
-    const isCardiacRehabApp = a.condition_tags.includes('cardiac_rehab')
-    if (isCardiacRehabApp && a.slug !== 'myheart') return false
-
-    const isCopdApp = a.condition_tags.includes('copd')
-    if (isCopdApp && !['luscii', 'mycopd'].includes(a.slug)) return false
-
-    return true
-  })
+  if (!VISIBLE_APP_SLUGS) return allAppsUnfiltered
+  return allAppsUnfiltered.filter((a: App) => VISIBLE_APP_SLUGS.includes(a.slug))
 }
 
 export function getRemovedApps() {

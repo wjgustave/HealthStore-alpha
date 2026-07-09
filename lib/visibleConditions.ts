@@ -1,5 +1,12 @@
-/** Condition IDs shown in catalogue and home filters — keep in sync with product scope. */
-export const VISIBLE_CONDITIONS = ['copd', 'cardiac_rehab'] as const
+/** Condition IDs shown in catalogue and home filters — all loaded condition areas. */
+export const VISIBLE_CONDITIONS = [
+  'copd',
+  'insomnia',
+  'weight_management',
+  'msk',
+  'eating_disorders',
+  'cardiac_rehab',
+] as const
 
 export type VisibleConditionId = (typeof VISIBLE_CONDITIONS)[number]
 

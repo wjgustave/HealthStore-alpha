@@ -179,11 +179,11 @@ export function ContextOfUseGrid({ app }: { app: any }) {
 }
 
 /** White “Demo available” pill; same rules as /apps catalogue (`catalogue_demo_available` or stable hash). */
-export function ProductHeroDemoBadge({ app }: { app: any }) {
+export function ProductHeroDemoBadge({ app, href = '#demo-access' }: { app: any; href?: string }) {
   if (!catalogueDemoAvailable(app)) return null
   return (
     <a
-      href="#demo-access"
+      href={href}
       className="badge"
       style={{ background: '#fff', color: 'var(--nhs-blue)' }}
     >

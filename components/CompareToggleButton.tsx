@@ -11,12 +11,15 @@ export function CompareToggleButton({
   size = 'none',
   /** PDP hero: no border ring (catalogue cards keep bordered style). */
   borderless = false,
+  /** Solid NHS grey-1 button (white text, black press shadow) — PDP hero next to Express interest. */
+  solid = false,
 }: {
   appId: string
   /** e.g. `sm:col-span-1 w-full` for catalogue card grid */
   className?: string
   size?: ButtonSize
   borderless?: boolean
+  solid?: boolean
 }) {
   const { toggle, isInBasket, canAdd, ids, incompatibleCompareTooltip } = useCompareBasket()
   const added = isInBasket(appId)
@@ -24,13 +27,18 @@ export function CompareToggleButton({
   /** Use aria-disabled (not native disabled) so the control stays in the tab order. */
   const blocked = !added && !canAdd(appId)
 
+  /* nhsuk-colour("grey-1") fill, nhsuk-colour("black") press shadow, nhsuk-colour("white") text. */
+  const solidClasses =
+    'bg-[#4C6272] text-white shadow-[0_4px_0_#212B32] hover:bg-[#425563] active:shadow-none'
+
   return (
     <Button
-      variant="toggle"
+      variant={solid ? 'primary' : 'toggle'}
       pressed={added}
       borderless={borderless}
       size={size}
       aria-label={added ? 'Remove from comparison tool' : 'Add to comparison tool'}
+      aria-pressed={added}
       ariaDisabled={blocked}
       disabledReason={
         blocked
@@ -40,7 +48,7 @@ export function CompareToggleButton({
           : undefined
       }
       onClick={() => toggle(appId)}
-      className={`${size === 'none' ? 'py-4 hs-text-label' : ''} ${className}`}
+      className={`${solid ? solidClasses : ''} ${size === 'none' ? 'py-4 hs-text-label' : ''} ${className}`}
     >
       <span className="inline-flex items-center justify-center gap-2">
         {added ? (
