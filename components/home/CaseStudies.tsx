@@ -161,7 +161,7 @@ export function HomeCaseStudiesBand({ caseStudies }: { caseStudies: CaseStudy[] 
             </p>
           </div>
           <Link
-            href="/case-studies"
+            href="/resources/case-studies"
             className="inline-flex shrink-0 items-center gap-1 hs-text-label hs-font-bold text-white underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             See all case studies

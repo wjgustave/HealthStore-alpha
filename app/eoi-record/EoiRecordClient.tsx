@@ -97,11 +97,11 @@ export default function EoiRecordClient({
             When you or a colleague expresses interest in an app, it will appear here as a shared audit trail.
           </p>
           <Link
-            href="/apps"
+            href="/product-catalogue"
             className="inline-flex items-center justify-center hs-text-label hs-font-bold rounded-lg px-6 py-4 min-h-[44px]"
             style={{ background: 'var(--nhs-blue)', color: '#fff' }}
           >
-            Find apps
+            Product catalogue
           </Link>
         </div>
       ) : (

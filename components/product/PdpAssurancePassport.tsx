@@ -154,18 +154,15 @@ export default function PdpAssurancePassport({
 
       {/* R4-2 B: dedicated regulatory-position card */}
       {regFacts.length > 0 && (
-        <div
-          className="hs-surface-card-sm bg-white rounded-lg border p-4 mb-4"
-          style={{ borderColor: 'var(--border)', borderLeft: '4px solid var(--nhs-blue)' }}
-        >
-          <div className="hs-font-bold hs-text-label mb-3" style={{ color: 'var(--text-secondary)' }}>
+        <div>
+          <div className="hs-font-bold hs-text-body mb-3" style={{ color: 'var(--text-primary)' }}>
             Regulatory position
           </div>
           <dl className="grid gap-3 sm:grid-cols-3" style={{ margin: 0 }}>
             {regFacts.map((f) => (
               <div key={f.label}>
-                <dt className="hs-text-caption hs-font-bold mb-1" style={{ color: 'var(--text-muted)' }}>{f.label}</dt>
-                <dd className="hs-text-caption" style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>{f.value}</dd>
+                <dt className="hs-text-label hs-font-bold mb-1" style={{ color: 'var(--text-primary)' }}>{f.label}</dt>
+                <dd className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>{f.value}</dd>
               </div>
             ))}
           </dl>

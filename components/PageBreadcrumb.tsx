@@ -7,8 +7,8 @@ const HOME_CRUMB: PageBreadcrumbItem = { label: 'Home', href: '/' }
 /**
  * Breadcrumb. [Provenance: NHS]
  *
- * Renders the official NHS Breadcrumb (`.nhsuk-breadcrumb`). Ancestor crumbs are
- * links; the current page is shown as a plain item to preserve product behaviour.
+ * Renders the official NHS Breadcrumb (`.nhsuk-breadcrumb`). Only ancestor crumbs
+ * are shown (the current page is omitted, per the NHS pattern).
  * The NHS mobile back-link (`.nhsuk-breadcrumb__back`) points at the parent crumb.
  */
 export function PageBreadcrumb({
@@ -26,10 +26,11 @@ export function PageBreadcrumb({
   const trail = includeHome ? [HOME_CRUMB, ...items] : items
   if (trail.length === 0) return null
 
-  // Ancestors shown in the list; the parent is also used for the mobile back link.
+  // Only ancestors are shown (the current page is omitted); the parent is also
+  // used for the mobile back link.
   const ancestors = trail.slice(0, -1)
-  const current = trail[trail.length - 1]
   const parent = ancestors[ancestors.length - 1]
+  if (ancestors.length === 0) return null
 
   return (
     <nav className={`nhsuk-breadcrumb${className ? ` ${className}` : ''}`} aria-label="Breadcrumb">
@@ -45,9 +46,6 @@ export function PageBreadcrumb({
             )}
           </li>
         ))}
-        <li className="nhsuk-breadcrumb__item" aria-current="page">
-          {current.label}
-        </li>
       </ol>
       {parent?.href ? (
         <p className="nhsuk-breadcrumb__back">

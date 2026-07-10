@@ -10,7 +10,7 @@ export default function InsightCallout({
   title?: string
 }) {
   const styles: Record<InsightVariant, React.CSSProperties> = {
-    default: { borderLeftColor: '#005eb8', background: '#fff' },
+    default: { borderLeftColor: '#005eb8', background: 'transparent' },
     warn: { borderLeftColor: '#ffb81c', background: '#fff9ee' },
     good: { borderLeftColor: '#007f3b', background: '#f0f7f2' },
   }
@@ -20,7 +20,7 @@ export default function InsightCallout({
       style={{
         borderLeft: '8px solid',
         padding: '14px 20px',
-        fontSize: 16,
+        fontSize: 'var(--text-body)',
         lineHeight: 1.5,
         color: '#212b32',
         ...styles[variant],

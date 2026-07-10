@@ -87,10 +87,10 @@ export default function AppShell({
             <div className="nhsuk-footer">
               <ul className="nhsuk-footer__list">
                 <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
-                  <Link className="nhsuk-footer__list-item-link" href="/apps">Product catalogue</Link>
+                  <Link className="nhsuk-footer__list-item-link" href="/product-catalogue">Product catalogue</Link>
                 </li>
                 <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
-                  <Link className="nhsuk-footer__list-item-link" href="/funding">Funding directory</Link>
+                  <Link className="nhsuk-footer__list-item-link" href="/funding-index">Funding index</Link>
                 </li>
                 <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
                   <Link className="nhsuk-footer__list-item-link" href="/cookies">Cookies</Link>

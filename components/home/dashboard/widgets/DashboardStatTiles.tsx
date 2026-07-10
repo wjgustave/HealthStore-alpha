@@ -75,7 +75,7 @@ export function DashboardStatTiles({ commissionedStatus }: { commissionedStatus:
     <div className="grid gap-4 sm:grid-cols-3 md:max-w-[50%]">
       <StatTile href="/saved-apps" label="Saved apps" value={savedCount} icon={Bookmark} state={savedStatus} />
       <StatTile href="/eoi-record" label="EOI record" value={eoiCount} icon={Send} state={eoiStatus} />
-      <StatTile href="/apps" label={`Commissioned · ${commissionedStatus}`} value="1" icon={Boxes} />
+      <StatTile href="/product-catalogue" label={`Commissioned · ${commissionedStatus}`} value="1" icon={Boxes} />
     </div>
   )
 }

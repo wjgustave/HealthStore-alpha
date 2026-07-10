@@ -40,6 +40,14 @@
     "colour": "#DA291C"
   },
   {
+    "id": "pulmonary_rehab",
+    "label": "Pulmonary rehab",
+    "description": "Digital pulmonary rehabilitation and home-based respiratory rehab programmes",
+    "icon": "lungs",
+    "app_count": 1,
+    "colour": "#41B6E6"
+  },
+  {
     "id": "cardiac_rehab",
     "label": "Cardiac rehabilitation",
     "description": "Digital platforms supporting cardiac rehabilitation for heart failure, post-MI and post-surgery recovery",

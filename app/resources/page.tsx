@@ -5,22 +5,22 @@ export const metadata = { title: 'Resource library — HealthStore' }
 
 const RESOURCES = [
   {
-    href: '/guidance',
+    href: '/resources/guidance',
     title: 'Guidance and evidence',
     description: 'Evidence standards, buyer guidance and methods for commissioning digital therapeutics.',
   },
   {
-    href: '/news',
+    href: '/resources/news',
     title: 'News',
     description: 'Curated updates for commissioners: policy, guidance and system context.',
   },
   {
-    href: '/campaigns',
+    href: '/resources/campaigns',
     title: 'Campaigns',
     description: 'National and regional programmes relevant to digital health commissioning.',
   },
   {
-    href: '/case-studies',
+    href: '/resources/case-studies',
     title: 'Case studies',
     description: 'Real-world deployment stories and outcomes from NHS settings.',
   },

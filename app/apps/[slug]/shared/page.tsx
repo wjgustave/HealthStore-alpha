@@ -44,8 +44,8 @@ function ShareError({
           </p>
         ) : (
           <p className="mt-4">
-            <Link href="/apps" className="hs-text-label hs-font-bold underline underline-offset-2" style={{ color: STORE_ACCENT }}>
-              Find apps
+            <Link href="/product-catalogue" className="hs-text-label hs-font-bold underline underline-offset-2" style={{ color: STORE_ACCENT }}>
+              Product catalogue
             </Link>
           </p>
         )}
@@ -130,8 +130,8 @@ export default async function SharedProductPage({
         <div className="hs-page hs-pdp">
           <PageBreadcrumb
             items={[
-              { label: 'Find apps', href: '/apps' },
-              { label: 'Condition catalogue', href: '/apps/condition-catalogue' },
+              { label: 'Product catalogue', href: '/product-catalogue' },
+              { label: 'Digital therapeutics', href: '/product-catalogue/digital-therapeutics' },
               { label: app.app_name },
             ]}
           />
@@ -168,8 +168,8 @@ export default async function SharedProductPage({
       <div className="hs-page hs-pdp">
         <PageBreadcrumb
           items={[
-            { label: 'Find apps', href: '/apps' },
-            { label: 'Condition catalogue', href: '/apps/condition-catalogue' },
+            { label: 'Product catalogue', href: '/product-catalogue' },
+            { label: 'Digital therapeutics', href: '/product-catalogue/digital-therapeutics' },
             { label: app.app_name },
           ]}
         />

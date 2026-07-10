@@ -354,7 +354,7 @@ npm run build
 
 Confirm:
 - The new app appears at `/apps/{slug}`
-- The app appears in the hub at `/apps` and in the **Condition catalogue** at `/apps/condition-catalogue`
+- The app appears in the hub at `/apps` and in the **Product catalogue** at `/apps/condition-catalogue`
 - Condition shortcut counts on the homepage update
 - The detail page renders all sections correctly
 

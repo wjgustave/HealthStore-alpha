@@ -667,11 +667,11 @@ export function SafetyAndGovernanceSection({ app }: { app: any }) {
 
 export function RelatedFundingSection({ fundingIds }: { fundingIds: string[] }) {
   const funding = getCommissionerFacingFunding(fundingIds)
+  if (funding.length === 0) return null
   return (
     <div>
-      {funding.length > 0 ? (
-        <div className="space-y-4">
-          {funding.map((f: any) => (
+      <div className="space-y-4">
+        {funding.map((f: any) => (
             <div key={f.id} className="rounded-lg border p-4" style={{ borderColor: 'var(--border)', background: '#F0F4F5' }}>
               <div className="flex items-start justify-between gap-2 mb-2">
                 <div className="hs-font-bold hs-text-label" style={{ color: 'var(--text-primary)' }}>{f.title}</div>
@@ -689,15 +689,7 @@ export function RelatedFundingSection({ fundingIds }: { fundingIds: string[] }) 
               )}
             </div>
           ))}
-        </div>
-      ) : (
-        <p className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-          No commissioner-facing cash or adoption-support schemes are linked to this product profile (supplier R&D routes
-          and NICE reporting obligations are listed elsewhere). Browse the{' '}
-          <Link href="/funding" className="hs-font-normal underline" style={{ color: 'var(--nhs-blue)' }}>funding directory</Link>
-          {' '}for wider opportunities.
-        </p>
-      )}
+      </div>
     </div>
   )
 }

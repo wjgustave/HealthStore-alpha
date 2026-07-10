@@ -424,6 +424,21 @@ a { color: var(--nhs-blue); }
 }
 .app-card:hover { border-color: #005EB8; }
 
+/* Inset card — NHS inset-text treatment (8px blue keyline) on a white card.
+   [Provenance: NHS inset text] */
+.hs-inset-card {
+  background: #fff;
+  border-left: 8px solid var(--nhs-blue);
+  padding: 16px;
+}
+@media (min-width: 641px) {
+  .hs-inset-card { padding: 24px; }
+}
+.hs-inset-card > *:first-child { margin-top: 0; }
+.hs-inset-card > *:last-child { margin-bottom: 0; }
+/* Transparent variant — stock NHS inset text (no background fill). */
+.hs-inset-card--transparent { background: transparent; }
+
 /* Evidence cards */
 .card-evidence { border-radius: var(--radius-card); border: 1px solid var(--border); padding: 14px 16px; margin-bottom: 10px; background: #f7f9fc; }
 .card-evidence--gap { border-color: var(--border); background: #fffbf0; }

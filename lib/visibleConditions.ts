@@ -6,6 +6,7 @@ export const VISIBLE_CONDITIONS = [
   'msk',
   'eating_disorders',
   'cardiac_rehab',
+  'pulmonary_rehab',
 ] as const
 
 export type VisibleConditionId = (typeof VISIBLE_CONDITIONS)[number]

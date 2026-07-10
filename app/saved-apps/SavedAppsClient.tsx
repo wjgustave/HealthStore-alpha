@@ -92,7 +92,7 @@ export default function SavedAppsClient({ allApps }: Props) {
 
   return (
     <div className="hs-page">
-      <PageBreadcrumb items={[{ label: 'Find apps', href: '/apps' }, { label: 'Saved apps' }]} />
+      <PageBreadcrumb items={[{ label: 'Product catalogue', href: '/product-catalogue' }, { label: 'Saved apps' }]} />
 
       <div className="mb-8">
         <h1
@@ -134,11 +134,11 @@ export default function SavedAppsClient({ allApps }: Props) {
             Browse the catalogue and save DTx apps you want to come back to.
           </p>
           <Link
-            href="/apps"
+            href="/product-catalogue"
             className="inline-flex items-center justify-center hs-text-label hs-font-bold rounded-lg px-6 py-4 min-h-[44px]"
             style={{ background: STORE_ACCENT, color: '#fff' }}
           >
-            Find apps
+            Product catalogue
           </Link>
         </div>
       ) : (

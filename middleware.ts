@@ -31,13 +31,14 @@ export async function middleware(req: NextRequest) {
       if (session.requiresCommissioningEntitySelection) {
         return NextResponse.redirect(new URL('/select-entity', req.url))
       }
-      return NextResponse.redirect(new URL('/apps', req.url))
+      return NextResponse.redirect(new URL('/product-catalogue', req.url))
     }
     return res
   }
 
-  const publicPaths = ['/', '/cookies', '/news', '/campaigns', '/case-studies', '/about', '/how-it-helps', '/resources', '/guidance']
-  if (publicPaths.includes(pathname)) {
+  // Legacy paths stay public so their permanent redirects into /resources/* can fire.
+  const publicPaths = ['/', '/cookies', '/about', '/how-it-helps', '/resources', '/news', '/campaigns', '/case-studies', '/guidance']
+  if (publicPaths.includes(pathname) || pathname.startsWith('/resources/')) {
     return res
   }
 
@@ -46,11 +47,11 @@ export async function middleware(req: NextRequest) {
   }
 
   if (pathname === '/dashboard') {
-    return NextResponse.redirect(new URL('/apps', req.url))
+    return NextResponse.redirect(new URL('/product-catalogue', req.url))
   }
 
   if (pathname === '/select-entity' && !session.requiresCommissioningEntitySelection) {
-    return NextResponse.redirect(new URL('/apps', req.url))
+    return NextResponse.redirect(new URL('/product-catalogue', req.url))
   }
 
   if (session.requiresCommissioningEntitySelection && pathname !== '/select-entity') {

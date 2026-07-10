@@ -1,4 +1,4 @@
-import { getAllAppsUnfiltered, getAppBySlug } from '@/lib/data'
+import { getAllAppsUnfiltered, getAppBySlug, getCommissionerFacingFunding } from '@/lib/data'
 import { getCommissioningSnapshot } from '@/lib/commissioningSnapshot'
 import { getDeploymentRegister } from '@/lib/deploymentRegister'
 import { splitPdpEvidence } from '@/lib/pdpEvidence'
@@ -321,7 +321,7 @@ export default async function AppPage({
           </PdpSection>
           )}
 
-          {!showNarrativeSpine && (
+          {!showNarrativeSpine && getCommissionerFacingFunding(linkedFundingIds).length > 0 && (
           <PdpSection
             id="related-funding"
             shareKey="related-funding"
@@ -366,8 +366,8 @@ export default async function AppPage({
         <PdpShareRegion shareKey="breadcrumb" label="Browse trail" excludeFromShareUi className="mb-4">
           <PageBreadcrumb
             items={[
-              { label: 'Find apps', href: '/apps' },
-              { label: 'Condition catalogue', href: '/apps/condition-catalogue' },
+              { label: 'Product catalogue', href: '/product-catalogue' },
+              { label: 'Digital therapeutics', href: '/product-catalogue/digital-therapeutics' },
               { label: app.app_name },
             ]}
           />

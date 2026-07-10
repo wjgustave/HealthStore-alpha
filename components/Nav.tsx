@@ -61,8 +61,15 @@ type NavEntry = {
   label: ReactNode
   ariaLabel?: string
   active?: boolean
-  homeOnly?: boolean
   onClick?: () => void
+}
+
+function flashFocusThenBlur(el: HTMLElement, fromKeyboard: boolean) {
+  // Keep keyboard focus for a11y; pointer clicks get a brief yellow flash then clear.
+  if (fromKeyboard) return
+  window.setTimeout(() => {
+    if (document.activeElement === el) el.blur()
+  }, 180)
 }
 
 function NavLinkContent({
@@ -77,9 +84,10 @@ function NavLinkContent({
       <button
         type="button"
         className="nhsuk-header__navigation-link"
-        onClick={() => {
+        onClick={e => {
           entry.onClick?.()
           onNavigate?.()
+          flashFocusThenBlur(e.currentTarget, e.detail === 0)
         }}
       >
         {entry.label}
@@ -92,7 +100,10 @@ function NavLinkContent({
       href={entry.href ?? '/'}
       aria-current={entry.active ? 'page' : undefined}
       aria-label={entry.ariaLabel}
-      onClick={onNavigate}
+      onClick={e => {
+        onNavigate?.()
+        flashFocusThenBlur(e.currentTarget, e.detail === 0)
+      }}
     >
       {entry.label}
     </Link>
@@ -139,20 +150,19 @@ export default function Nav({
     },
     {
       id: 'catalogue',
-      href: '/apps',
+      href: '/product-catalogue',
       label: 'Product catalogue',
-      active: path === '/apps' || path.startsWith('/apps/'),
+      active: path === '/product-catalogue' || path.startsWith('/product-catalogue/') || path === '/apps' || path.startsWith('/apps/'),
     },
     {
       id: 'compare',
       href: compareHref,
       label: (
         <>
-          Comparison tool
+          <span className="hs-nav-link-label">Comparison tool</span>
           {count > 0 ? (
-            <span className="nhsuk-u-font-weight-bold" aria-hidden>
-              {' '}
-              ({count})
+            <span className="hs-nav-count" aria-hidden>
+              {count}
             </span>
           ) : null}
         </>
@@ -162,9 +172,9 @@ export default function Nav({
     },
     {
       id: 'funding',
-      href: '/funding',
-      label: 'Funding directory',
-      active: path === '/funding',
+      href: '/funding-index',
+      label: 'Funding index',
+      active: path === '/funding-index' || path === '/funding',
     },
     {
       id: 'resources',
@@ -199,14 +209,6 @@ export default function Nav({
         active: path === '/login',
       })
     }
-  }
-
-  const homeEntry: NavEntry = {
-    id: 'home',
-    href: '/',
-    label: 'Home',
-    active: path === '/',
-    homeOnly: true,
   }
 
   const primaryIds = primaryEntries.map(e => e.id).join('|')
@@ -311,6 +313,7 @@ export default function Nav({
             className="nhsuk-header__link nhsuk-header__link--service"
             href="/"
             aria-label="HealthStore homepage"
+            onClick={e => flashFocusThenBlur(e.currentTarget, e.detail === 0)}
           >
             {NHS_LOGO}
             <span className="nhsuk-header__service-name">HealthStore</span>
@@ -337,16 +340,12 @@ export default function Nav({
                   if (el) itemRefs.current.set(entry.id, el)
                   else itemRefs.current.delete(entry.id)
                 }}
-                className="nhsuk-header__navigation-item"
+                className={`nhsuk-header__navigation-item${entry.active ? ' nhsuk-header__navigation-item--current' : ''}`}
                 hidden={overflowSet.has(entry.id)}
               >
                 <NavLinkContent entry={entry} onNavigate={() => setMoreOpen(false)} />
               </li>
             ))}
-
-            <li className="nhsuk-header__navigation-item nhsuk-header__navigation-item--home">
-              <NavLinkContent entry={homeEntry} onNavigate={() => setMoreOpen(false)} />
-            </li>
 
             <li
               ref={moreRef}
@@ -373,7 +372,10 @@ export default function Nav({
             className={`nhsuk-header__drop-down${moreOpen && moreVisible ? '' : ' nhsuk-header__drop-down--hidden'}`}
           >
             {overflowEntries.map(entry => (
-              <li key={entry.id} className="nhsuk-header__navigation-item">
+              <li
+                key={entry.id}
+                className={`nhsuk-header__navigation-item${entry.active ? ' nhsuk-header__navigation-item--current' : ''}`}
+              >
                 <NavLinkContent entry={entry} onNavigate={() => setMoreOpen(false)} />
               </li>
             ))}

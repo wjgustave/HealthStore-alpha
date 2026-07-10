@@ -22,10 +22,11 @@ export const aiTools = [
         condition: {
           type: 'string',
           description:
-            'Filter by clinical condition ID: copd, cardiac_rehab, insomnia, weight_management, msk, eating_disorders',
+            'Filter by clinical condition ID: copd, cardiac_rehab, pulmonary_rehab, insomnia, weight_management, msk, eating_disorders',
           enum: [
             'copd',
             'cardiac_rehab',
+            'pulmonary_rehab',
             'insomnia',
             'weight_management',
             'msk',
@@ -114,6 +115,7 @@ export const aiTools = [
           enum: [
             'copd',
             'cardiac_rehab',
+            'pulmonary_rehab',
             'insomnia',
             'weight_management',
             'msk',
@@ -160,6 +162,7 @@ export const aiTools = [
           enum: [
             'copd',
             'cardiac_rehab',
+            'pulmonary_rehab',
             'insomnia',
             'weight_management',
             'msk',

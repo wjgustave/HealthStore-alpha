@@ -32,6 +32,17 @@
       "pathwayPosition": "Community MSK pathway — conservative management",
       "niceRef": "HTG13",
       "colour": "#330072"
+    },
+    {
+      "id": "pulmonary_rehab",
+      "label": "Pulmonary rehab",
+      "shortLabel": "Pulmonary rehab",
+      "category": "rehabilitation",
+      "contentStatus": "fully_populated",
+      "productSlugs": ["mycopd"],
+      "pathwayPosition": "Home-based and community pulmonary rehabilitation",
+      "niceRef": null,
+      "colour": "#41B6E6"
     }
   ],
   "horizon": [

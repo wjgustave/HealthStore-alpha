@@ -35,18 +35,23 @@ export default function PdpImplementation({
       title="Making it work at your site"
       description="Successful deployment depends on three things: clinical engagement, systematic patient invitation, and ongoing monitoring. Here is what the supplier provides and what your local team needs to organise."
     >
-      <div className="grid gap-4 sm:grid-cols-3">
+      <ol className="hs-impl-timeline">
         {cards.map((c) => (
-          <div
-            key={c.label}
-            className="hs-surface-card-sm bg-white rounded-lg border p-4"
-            style={{ borderColor: 'var(--border)', borderLeft: '4px solid var(--nhs-blue)' }}
-          >
-            <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--text-secondary)' }}>{c.label}</div>
-            <p className="hs-text-label" style={{ color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>{c.value}</p>
-          </div>
+          <li key={c.label} className="hs-impl-timeline__item">
+            <div className="hs-impl-timeline__marker" aria-hidden>
+              <span className="hs-impl-timeline__dot">
+                <svg viewBox="0 0 24 24" width="18" height="18" focusable="false" aria-hidden="true">
+                  <path fill="currentColor" d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg>
+              </span>
+            </div>
+            <div className="hs-impl-timeline__card">
+              <div className="hs-font-bold hs-text-body mb-1" style={{ color: 'var(--text-primary)' }}>{c.label}</div>
+              <p className="hs-text-body" style={{ color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>{c.value}</p>
+            </div>
+          </li>
         ))}
-      </div>
+      </ol>
 
       {impl.prerequisites?.length > 0 && (
         <div>

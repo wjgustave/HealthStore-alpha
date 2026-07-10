@@ -25,12 +25,12 @@ export function DashboardV4(props: DashboardVariantProps) {
           Or
         </span>
         <Link
-          href="/apps"
+          href="/product-catalogue"
           className="inline-flex min-h-[52px] shrink-0 items-center justify-center gap-2 rounded-xl px-6 py-4 hs-text-label hs-font-bold transition-colors hover:bg-[#F0F4F5]"
           style={{ border: '1px solid var(--border)', color: 'var(--nhs-blue)', background: '#fff' }}
         >
           <LayoutGrid className="h-4 w-4" aria-hidden />
-          Find apps
+          Product catalogue
         </Link>
       </div>
 

@@ -344,7 +344,7 @@ export default function PdpSharedProductBody({
             </PdpReadOnlySection>
           ) : null}
 
-          {a.has('related-funding') ? (
+          {a.has('related-funding') && commissionerFunding.length > 0 ? (
             <PdpReadOnlySection
               id="related-funding"
               title="Related funding opportunities"

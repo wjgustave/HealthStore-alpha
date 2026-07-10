@@ -59,6 +59,30 @@
       </div>
     </div>
 
+    <h2>Inset card</h2>
+    <p>
+      NHS <a href="https://service-manual.nhs.uk/design-system/components/inset-text">inset text</a> treatment on a white
+      card surface: an 8px NHS blue left keyline with NHS inset padding (16px &rarr; 24px), no outline border. Used for the
+      &ldquo;Making it work at your site&rdquo; timeline cards on the PDP.
+    </p>
+    <div class="ds-example ds-example--surface">
+      <div class="hs-inset-card" style="max-width:520px">
+        <strong style="display:block;margin-bottom:4px">Clinical and human wrapper</strong>
+        <p class="ds-u-muted ds-u-mt0" style="font-size:.9rem;margin:0">Named clinical lead reviews alerts within one working day; escalation route agreed with the community respiratory team.</p>
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;div class="hs-inset-card"&gt; &hellip; &lt;/div&gt;</code></pre>
+
+    <h3>Transparent variant</h3>
+    <p>Stock NHS inset text: same keyline and padding but no background fill, so it sits directly on the page surface. Used for the &ldquo;Supplier support included&rdquo; callout on the PDP.</p>
+    <div class="ds-example">
+      <div class="hs-inset-card hs-inset-card--transparent" style="max-width:520px">
+        <strong style="display:block;margin-bottom:4px">Supplier support included</strong>
+        <p class="ds-u-muted ds-u-mt0" style="font-size:.9rem;margin:0">The supplier provides onboarding, training materials and technical integration support as part of the standard package.</p>
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;div class="hs-inset-card hs-inset-card--transparent"&gt; &hellip; &lt;/div&gt;</code></pre>
+
     <h2>Evidence cards (PDP)</h2>
     <p>Tinted variants of a base evidence row used on the product detail page.</p>
     <div class="ds-example">
@@ -88,6 +112,8 @@
       <tbody>
         <tr><td><code>.app-card</code></td><td>border + <code>--radius-card</code> (0), flat, hover border-colour</td></tr>
         <tr><td><code>.hs-surface-card</code> / <code>-sm</code></td><td>bg + border + <code>--radius-card</code> (0), flat (no shadow)</td></tr>
+        <tr><td><code>.hs-inset-card</code></td><td>White card with 8px NHS blue left keyline (NHS inset-text treatment)</td></tr>
+        <tr><td><code>.hs-inset-card--transparent</code></td><td>Inset card with no background fill (stock NHS inset text)</td></tr>
         <tr><td><code>.card-evidence(*)</code></td><td>Tinted PDP evidence rows</td></tr>
         <tr><td><code>--radius-card</code></td><td>0px — card shells only; buttons/inputs keep 4px</td></tr>
       </tbody>

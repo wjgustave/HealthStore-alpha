@@ -13,9 +13,9 @@ export default function HomeHeroSearch() {
     e.preventDefault()
     const q = query.trim()
     if (q) {
-      router.push(`/apps/condition-catalogue?q=${encodeURIComponent(q)}`)
+      router.push(`/product-catalogue/digital-therapeutics?q=${encodeURIComponent(q)}`)
     } else {
-      router.push('/apps/condition-catalogue')
+      router.push('/product-catalogue/digital-therapeutics')
     }
   }
 

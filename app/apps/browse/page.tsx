@@ -1,6 +1,6 @@
-import { redirect } from 'next/navigation'
+import { permanentRedirect } from 'next/navigation'
 
-/** Legacy `/apps/browse` URLs redirect to `/apps/condition-catalogue` (query preserved). */
+/** Legacy `/apps/browse` URLs redirect to Digital therapeutics (query preserved). */
 export default async function AppsBrowseLegacyRedirect({
   searchParams,
 }: {
@@ -14,5 +14,5 @@ export default async function AppsBrowseLegacyRedirect({
     else p.set(key, val)
   }
   const s = p.toString()
-  redirect(s ? `/apps/condition-catalogue?${s}` : '/apps/condition-catalogue')
+  permanentRedirect(s ? `/product-catalogue/digital-therapeutics?${s}` : '/product-catalogue/digital-therapeutics')
 }

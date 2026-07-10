@@ -191,7 +191,7 @@ export default function OrgSettingsClient({
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
+    <div className="mx-auto max-w-4xl px-4 sm:px-6 pb-8">
       {/* R7 NAV-03: org-settings now has a breadcrumb like every other signed-in page. */}
       <PageBreadcrumb items={[{ label: 'Organisation settings' }]} className="mb-4" />
       <div className="flex flex-wrap items-start justify-between gap-4">

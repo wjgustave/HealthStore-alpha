@@ -68,6 +68,7 @@ const conditionIcons: Record<string, (props: IconProps) => React.ReactNode> = {
   msk: JointIcon,
   eating_disorders: HeartCareIcon,
   cardiac_rehab: HeartPulseIcon,
+  pulmonary_rehab: LungsIcon,
 }
 
 export function ConditionIcon({ condition, className }: { condition: string; className?: string }) {

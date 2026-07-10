@@ -14,7 +14,7 @@
       <h1 class="ds-page-title">Navigation</h1>
       <p class="ds-lede">
         The global header, the breadcrumb trail, and the back-to-top control. Together they express the site
-        information architecture: Home is L1; Find apps, Comparison tool and Funding directory are L2 peers.
+        information architecture: Home is L1; Find apps, Comparison tool and Funding index are L2 peers.
       </p>
     </div>
 
@@ -40,7 +40,7 @@
             <a href="#ds-main" style="padding:6px 12px;border-radius:6px;font-size:.875rem;font-weight:500;text-decoration:none;color:var(--text-secondary)">Dashboard</a>
             <a href="#ds-main" style="padding:6px 12px;border-radius:6px;font-size:.875rem;font-weight:500;text-decoration:none;color:var(--text-secondary)">Find apps</a>
             <a href="#ds-main" style="padding:6px 12px;border-radius:6px;font-size:.875rem;font-weight:500;text-decoration:none;color:var(--text-secondary)">Comparison tool <span style="display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 4px;border-radius:6px;font-size:11px;font-weight:700;background:var(--nhs-blue);color:#fff">2</span></a>
-            <a href="#ds-main" style="padding:6px 12px;border-radius:6px;font-size:.875rem;font-weight:500;text-decoration:none;color:var(--text-secondary)">Funding directory</a>
+            <a href="#ds-main" style="padding:6px 12px;border-radius:6px;font-size:.875rem;font-weight:500;text-decoration:none;color:var(--text-secondary)">Funding index</a>
           </nav>
         </div>
       </header>
@@ -49,7 +49,7 @@
     <div class="ds-note"><strong>Active-state matching.</strong> &ldquo;Find apps&rdquo; owns the whole <code>/apps</code> branch &mdash; the catalogue and product pages (<code>/apps/[slug]</code>) &mdash; via prefix matching (<code>path === '/apps' || path.startsWith('/apps/')</code>), so a PDP does not leave the header with nothing highlighted. Exact-match routes (Dashboard, News) stay exact.</div>
 
     <h2>Breadcrumb</h2>
-    <p>The <code>PageBreadcrumb</code> component. Home is prepended automatically; the current page is non-linked primary text. Every signed-in page carries one &mdash; for example <code>Home / Organisation settings</code> on org-settings.</p>
+    <p>The <code>PageBreadcrumb</code> component. Home is prepended automatically; the current page is omitted (per the NHS pattern), so the trail shows the path back only. Every signed-in page carries one &mdash; for example <code>Home</code> on org-settings.</p>
     <div class="ds-example">
       <nav aria-label="Breadcrumb">
         <ol style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;list-style:none;margin:0;padding:0;font-size:.875rem;color:var(--text-muted)">

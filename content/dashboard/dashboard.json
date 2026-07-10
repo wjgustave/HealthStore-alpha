@@ -3,7 +3,7 @@
     "headline": "Enable self management of long term conditions, at scale",
     "subheadline": "The HealthStore is a commissioner decision-support tool that gives you neutral, evidence-based intelligence on digital therapeutics so you can compare, decide, and commission with confidence. Real outcomes for your population, all in one place.",
     "cta_label": "Browse all apps",
-    "cta_path": "/apps"
+    "cta_path": "/product-catalogue"
   },
   "value_props": [
     { "icon": "search", "title": "Faster down-selection", "description": "Filter by condition, NICE status, DTAC, supervision model and local effort — without trawling supplier websites." },

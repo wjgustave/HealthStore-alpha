@@ -19,13 +19,7 @@ export default function PhaseBanner({
           <strong className="govuk-tag govuk-phase-banner__content__tag">{tag}</strong>
           <span className="govuk-phase-banner__text">
             {children ?? (
-              <>
-                This is a new service. Help us improve it and{' '}
-                <a className="govuk-link" href="mailto:feedback@example.nhs.uk?subject=HealthStore%20feedback">
-                  give your feedback by email
-                </a>
-                .
-              </>
+              <>This is a new service. Help us improve it and give your feedback.</>
             )}
           </span>
         </p>

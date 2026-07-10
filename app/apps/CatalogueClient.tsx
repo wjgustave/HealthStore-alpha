@@ -4,20 +4,21 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { getConditionAreas, supervisionLabels, type App } from '@/lib/data'
-import { STORE_ACCENT } from '@/lib/storeAccent'
 import { MaturityBadge, SupervisionBadge, ConditionTag } from '@/components/Badges'
 import { CompareToggleButton } from '@/components/CompareToggleButton'
 import { X } from 'lucide-react'
-import { buildBrowseSearchParams, filterAppsBySearchQuery, parseBrowseConditionParam } from '@/lib/catalogueSearch'
+import { buildBrowseSearchParams, parseBrowseConditionParam } from '@/lib/catalogueSearch'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 import { getProductNarrative } from '@/lib/content/productNarratives'
 
 const supervisionOptions = Object.entries(supervisionLabels).map(([id, label]) => ({ id, label }))
 
+const conditionAreas = getConditionAreas()
 const conditionOptions = [
   { id: 'all', label: 'All conditions' },
-  ...getConditionAreas().map(c => ({ id: c.id, label: c.label })),
+  ...conditionAreas.map(c => ({ id: c.id, label: c.label })),
 ]
+const populatedConditionCount = conditionAreas.filter(c => c.count > 0).length
 
 /**
  * Nested facet accordion — mirrors GOV.UK `.app-c-filter-section` (details/summary
@@ -37,9 +38,22 @@ function FilterSection({ title, children }: { title: string; children: ReactNode
 
 function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span className="pill hs-text-caption" style={{ background: '#E6F0FB', color: '#003087', borderColor: '#E6F0FB' }}>
+    <span
+      className="pill hs-text-caption"
+      style={{
+        background: '#E6F0FB',
+        color: 'var(--nhs-dark)',
+        border: '1px solid var(--nhs-dark)',
+      }}
+    >
       {label}
-      <button type="button" onClick={onRemove} className="rounded-sm p-1 transition-colors hover:bg-white/60 hover:opacity-90" aria-label={`Remove ${label} filter`}>
+      <button
+        type="button"
+        onClick={onRemove}
+        className="rounded-sm p-1 transition-colors hover:bg-[#E6F0FB] hover:opacity-90"
+        aria-label={`Remove ${label} filter`}
+        style={{ color: 'var(--nhs-dark)' }}
+      >
         <X className="w-3 h-3" />
       </button>
     </span>
@@ -54,7 +68,6 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
   /** Applied filters — drive the result list. */
   const [condition, setCondition] = useState('all')
   const [supervision, setSupervision] = useState<string[]>([])
-  const [searchInput, setSearchInput] = useState('')
 
   /**
    * Draft filters — edited inside the panel. Applied only when the user clicks
@@ -66,54 +79,21 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
   /** Panel starts collapsed (`aria-expanded=false`), same as GOV.UK. */
   const [filtersOpen, setFiltersOpen] = useState(false)
 
-  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const conditionRef = useRef(condition)
   const liveRegion = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    conditionRef.current = condition
-  }, [condition])
-
   const replaceBrowseUrl = useCallback(
-    (nextCondition: string, nextQ: string) => {
-      const suffix = buildBrowseSearchParams(nextCondition, nextQ)
-      router.replace(`/apps/condition-catalogue${suffix}`, { scroll: false })
+    (nextCondition: string) => {
+      const suffix = buildBrowseSearchParams(nextCondition, '')
+      router.replace(`/product-catalogue/digital-therapeutics${suffix}`, { scroll: false })
     },
     [router],
   )
 
   useEffect(() => {
     const c = parseBrowseConditionParam(searchParams.get('condition'))
-    const q = searchParams.get('q') ?? ''
     setCondition(c)
     setDraftCondition(c)
-    setSearchInput(q)
   }, [searchParams])
-
-  const scheduleUrlFromSearch = useCallback(
-    (q: string) => {
-      if (debounceTimer.current) clearTimeout(debounceTimer.current)
-      debounceTimer.current = setTimeout(() => {
-        replaceBrowseUrl(conditionRef.current, q)
-      }, 350)
-    },
-    [replaceBrowseUrl],
-  )
-
-  useEffect(() => () => {
-    if (debounceTimer.current) clearTimeout(debounceTimer.current)
-  }, [])
-
-  const onSearchInputChange = (v: string) => {
-    setSearchInput(v)
-    scheduleUrlFromSearch(v)
-  }
-
-  const clearSearchOnly = () => {
-    if (debounceTimer.current) clearTimeout(debounceTimer.current)
-    setSearchInput('')
-    replaceBrowseUrl(condition, '')
-  }
 
   const toggleDraftSupervision = (id: string) => {
     setDraftSupervision(prev => (prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]))
@@ -135,21 +115,18 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
 
   const applyFilters = (e?: FormEvent) => {
     e?.preventDefault()
-    if (debounceTimer.current) clearTimeout(debounceTimer.current)
     setCondition(draftCondition)
     setSupervision(draftSupervision)
-    replaceBrowseUrl(draftCondition, searchInput)
+    replaceBrowseUrl(draftCondition)
     setFiltersOpen(false)
   }
 
   const clearAllFilters = () => {
-    if (debounceTimer.current) clearTimeout(debounceTimer.current)
     setSupervision([])
     setDraftSupervision([])
     setCondition('all')
     setDraftCondition('all')
-    setSearchInput('')
-    router.replace('/apps/condition-catalogue', { scroll: false })
+    router.replace('/product-catalogue/digital-therapeutics', { scroll: false })
   }
 
   const activeFilters: { label: string; clear: () => void }[] = []
@@ -159,7 +136,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
       clear: () => {
         setCondition('all')
         setDraftCondition('all')
-        replaceBrowseUrl('all', searchInput)
+        replaceBrowseUrl('all')
       },
     })
   }
@@ -173,73 +150,41 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
       },
     })
   }
-  if (searchInput.trim()) {
-    const st = searchInput.trim()
-    activeFilters.push({
-      label: `Search: “${st.length > 28 ? `${st.slice(0, 28)}…` : st}”`,
-      clear: clearSearchOnly,
-    })
-  }
 
-  const attrFiltered = useMemo(() => {
-    return apps.filter((app: App) => {
-      if (supervision.length > 0 && !supervision.includes(app.supervision_model)) return false
-      if (condition !== 'all' && !app.condition_tags.includes(condition)) return false
-      return true
-    })
+  const filteredSorted = useMemo(() => {
+    return apps
+      .filter((app: App) => {
+        if (supervision.length > 0 && !supervision.includes(app.supervision_model)) return false
+        if (condition !== 'all' && !app.condition_tags.includes(condition)) return false
+        return true
+      })
+      .sort((a, b) => a.app_name.localeCompare(b.app_name))
   }, [apps, supervision, condition])
-
-  const filtered = useMemo(
-    () => filterAppsBySearchQuery(attrFiltered, searchInput),
-    [attrFiltered, searchInput],
-  )
-
-  const filteredSorted = useMemo(
-    () => [...filtered].sort((a, b) => a.app_name.localeCompare(b.app_name)),
-    [filtered],
-  )
 
   const resultCount = filteredSorted.length
   const resultText = `${resultCount.toLocaleString()} ${resultCount === 1 ? 'result' : 'results'}`
   const resultSummary = `Showing ${resultCount} of ${apps.length} apps`
 
-  const hasAttrResults = attrFiltered.length > 0
-  const searchOnlyEmpty = hasAttrResults && filteredSorted.length === 0 && searchInput.trim().length > 0
-
   return (
     <div className="hs-page">
       <PageBreadcrumb
         items={[
-          { label: 'Find apps', href: '/apps' },
-          { label: 'Condition catalogue' },
+          { label: 'Product catalogue', href: '/product-catalogue' },
+          { label: 'Digital therapeutics' },
         ]}
       />
 
       <div className="mb-8">
         <h1 className="page-title-h1">
-          Condition catalogue
+          Digital therapeutics
         </h1>
         <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
-          {apps.length} apps across {conditionOptions.length - 1} condition areas · Last reviewed March 2026
+          {apps.length} apps across {populatedConditionCount} conditions and pathways · Last reviewed March 2026
         </p>
       </div>
 
-      <div className="mb-4">
-        <label htmlFor="catalogue-search" className="block hs-font-bold mb-2 uppercase tracking-wide" style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
-          Search
-        </label>
-        <input
-          id="catalogue-search"
-          type="search"
-          value={searchInput}
-          onChange={e => onSearchInputChange(e.target.value)}
-          placeholder="Filter by app name, supplier, or condition"
-          className="w-full min-h-[44px] hs-text-label rounded-lg border px-4 py-2 bg-white"
-          style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
-          autoComplete="off"
-        />
-      </div>
-
+      <div className="hs-catalogue-layout">
+      <div className="hs-catalogue-layout__main">
       {/*
         GOV.UK filter-panel interaction (gov.uk/search/all):
         - Header row: expandable "Filter" link + result count
@@ -280,10 +225,10 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                     {conditionOptions.map(o => (
                       <div key={o.id} className="nhsuk-radios__item">
                         <input
-                          className="nhsuk-radios__input"
                           id={`filter-condition-${o.id}`}
-                          type="radio"
+                          className="nhsuk-radios__input"
                           name="filter-condition"
+                          type="radio"
                           checked={draftCondition === o.id}
                           onChange={() => setDraftCondition(o.id)}
                         />
@@ -303,8 +248,8 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                     {supervisionOptions.map(o => (
                       <div key={o.id} className="nhsuk-checkboxes__item">
                         <input
-                          className="nhsuk-checkboxes__input"
                           id={`filter-supervision-${o.id}`}
+                          className="nhsuk-checkboxes__input"
                           type="checkbox"
                           checked={draftSupervision.includes(o.id)}
                           onChange={() => toggleDraftSupervision(o.id)}
@@ -319,14 +264,14 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
               </FilterSection>
 
               <div className="hs-filter-panel__actions">
-                <button type="submit" className="nhsuk-button mb-0 hs-filter-panel__apply">
-                  Apply
+                <button type="submit" className="nhsuk-button mb-0">
+                  Apply filters
                 </button>
-                {(condition !== 'all' || supervision.length > 0 || draftCondition !== 'all' || draftSupervision.length > 0) && (
+                {(draftCondition !== 'all' || draftSupervision.length > 0) && (
                   <button
                     type="button"
-                    onClick={clearAllFilters}
                     className="hs-filter-panel__clear"
+                    onClick={clearAllFilters}
                   >
                     Clear filters
                   </button>
@@ -351,36 +296,12 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
 
       {filteredSorted.length === 0 ? (
         <div className="hs-surface-card text-center py-16 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
-          <div className="hs-text-page-title mb-4" style={{ marginBottom: '0.75rem' }} aria-hidden>
-            🔍
-          </div>
           <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>
-            {searchOnlyEmpty ? 'No apps match your search' : 'No apps match your filters'}
+            No apps match your filters
           </div>
-          <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', marginBottom: searchOnlyEmpty ? 16 : 0 }}>
-            {searchOnlyEmpty
-              ? 'Try different words, clear the search box, or browse all apps.'
-              : 'Try adjusting your filter criteria'}
+          <div style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
+            Try adjusting your filter criteria
           </div>
-          {searchOnlyEmpty ? (
-            <div className="flex flex-wrap justify-center gap-4">
-              <button
-                type="button"
-                className="rounded-lg px-4 py-2 hs-text-label hs-font-bold text-white transition-colors hover:!bg-[#004B8C]"
-                style={{ background: STORE_ACCENT }}
-                onClick={clearSearchOnly}
-              >
-                Clear search
-              </button>
-              <Link
-                href="/apps/condition-catalogue"
-                className="inline-flex items-center rounded-lg border px-4 py-2 hs-text-label hs-font-bold transition-colors hover:bg-[#F0F4F5]"
-                style={{ borderColor: 'var(--border)', color: 'var(--text-primary)' }}
-              >
-                Browse all apps
-              </Link>
-            </div>
-          ) : null}
         </div>
       ) : (
         <div
@@ -452,6 +373,32 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
           })}
         </div>
       )}
+      </div>
+
+      {/* Related content — GOV.UK related-navigation pattern (gov.uk/personal-tax-account). */}
+      <aside className="hs-related-nav" aria-labelledby="related-content-heading">
+        <h2 id="related-content-heading" className="hs-related-nav__heading">
+          Related content
+        </h2>
+        <ul className="hs-related-nav__list">
+          <li>
+            <Link href="/compare">Comparison tool</Link>
+          </li>
+          <li>
+            <Link href="/funding-index">Funding index</Link>
+          </li>
+          <li>
+            <Link href="/resources/guidance">Guidance</Link>
+          </li>
+          <li>
+            <Link href="/how-it-helps">How it works</Link>
+          </li>
+          <li>
+            <Link href="/resources">Resource library</Link>
+          </li>
+        </ul>
+      </aside>
+      </div>
     </div>
   )
 }

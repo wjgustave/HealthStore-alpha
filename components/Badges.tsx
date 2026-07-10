@@ -79,6 +79,7 @@ export function TopicPill({ label }: { label: string }) {
 const CONDITION_LABELS: Record<string, string> = {
   copd: 'COPD', insomnia: 'Insomnia', weight_management: 'Weight management',
   msk: 'MSK', eating_disorders: 'Eating disorders', cardiac_rehab: 'Cardiac rehab',
+  pulmonary_rehab: 'Pulmonary rehab',
 }
 
 export function ConditionTag({ tag }: { tag: string }) {

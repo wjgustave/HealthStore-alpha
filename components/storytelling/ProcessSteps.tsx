@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 export type ProcessStep = {
   title: ReactNode
   description?: ReactNode
+  /** Optional media (image/placeholder) shown beside the text in the vertical variant. */
+  media?: ReactNode
 }
 
 /**
@@ -29,6 +31,7 @@ export function ProcessSteps({
           </span>
           <h3>{step.title}</h3>
           {step.description ? <p>{step.description}</p> : null}
+          {step.media ? <div className="hs-step__media">{step.media}</div> : null}
         </li>
       ))}
     </ol>

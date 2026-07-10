@@ -162,11 +162,11 @@ export default function CompareClient({ allApps }: Props) {
             No DTx apps selected for the comparison tool. Browse the catalogue and add DTx apps to compare them side by side.
           </p>
           <Link
-            href="/apps"
+            href="/product-catalogue"
             className="inline-flex items-center justify-center hs-text-label hs-font-bold rounded-lg px-6 py-4 min-h-[44px]"
             style={{ background: STORE_ACCENT, color: '#fff' }}
           >
-            Find apps
+            Product catalogue
           </Link>
         </div>
       ) : (

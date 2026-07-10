@@ -240,6 +240,17 @@
     padding-inline: var(--gutter);
     padding-block: var(--section-gap);
   }
+  /**
+   * Breadcrumb at the top of a page: cancel the page's top padding so the
+   * breadcrumb sits at the NHS distance below the header (its own 16→24px
+   * padding-top only).
+   */
+  .hs-page > .nhsuk-breadcrumb:first-child,
+  .hs-page-narrow > .nhsuk-breadcrumb:first-child,
+  .hs-page > :first-child > .nhsuk-breadcrumb:first-child {
+    margin-top: calc(var(--section-gap) * -1);
+    margin-bottom: var(--space-5);
+  }
   /** Reading measure for prose blocks (~66ch), replaces ad-hoc max-w-2xl/3xl on copy. */
   .hs-measure { max-width: 66ch; }
   /** Responsive vertical section rhythm (steps up at tablet, like NHS). */
@@ -355,8 +366,69 @@
     text-align: left;
     width: auto;
   }
-  .nhsuk-header__navigation-link[aria-current="page"] {
+  /*
+   * Active nav indicator: white 4px line flush with the bottom of the blue bar.
+   * Flex stretch can make <li> taller than the link; without height:100% the
+   * border sits mid-bar with blue below it. Stretch the link to the item bottom.
+   */
+  .nhsuk-header__navigation-list > .nhsuk-header__navigation-item {
+    display: flex;
+    align-items: stretch;
+  }
+  .nhsuk-header__navigation-list > .nhsuk-header__navigation-item > .nhsuk-header__navigation-link {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .nhsuk-header__navigation-link[aria-current="page"],
+  .nhsuk-header__navigation-item--current > .nhsuk-header__navigation-link {
     font-weight: 700;
+    border-bottom-color: #fff;
+  }
+  /* More-menu dropdown sits on white — use NHS blue for the current indicator. */
+  .nhsuk-header__drop-down .nhsuk-header__navigation-link[aria-current="page"],
+  .nhsuk-header__drop-down .nhsuk-header__navigation-item--current > .nhsuk-header__navigation-link {
+    border-bottom-color: var(--nhs-blue);
+  }
+  /* Compare basket count — coloured circle on the blue nav bar. */
+  /* Compare basket count — coloured circle on the blue nav bar. */
+  .nhsuk-header__navigation-item .nhsuk-header__navigation-link:has(.hs-nav-count) {
+    text-decoration: none;
+  }
+  .nhsuk-header__navigation-item .nhsuk-header__navigation-link:has(.hs-nav-count) .hs-nav-link-label {
+    text-decoration: underline;
+  }
+  .nhsuk-header__navigation-item .nhsuk-header__navigation-link:has(.hs-nav-count):hover .hs-nav-link-label,
+  .nhsuk-header__navigation-item .nhsuk-header__navigation-link:has(.hs-nav-count):focus .hs-nav-link-label {
+    text-decoration: none;
+  }
+  .hs-nav-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-left: 0.4rem;
+    padding: 0;
+    border-radius: 9999px;
+    background: var(--nhs-dark);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    flex-shrink: 0;
+    /* Optical vertical centering — digits sit high in the Frutiger/Arial em box. */
+    padding-top: 2px;
+    box-sizing: border-box;
+  }
+  .nhsuk-header__navigation-link:focus .hs-nav-count,
+  .nhsuk-header__navigation-link:focus:visited .hs-nav-count {
+    background: var(--nhs-dark);
+    color: #fff;
+    text-decoration: none;
   }
   /* Chevron on More toggle — NHS positions the icon inside the padded button. */
   .nhsuk-header__menu-toggle .nhsuk-icon__chevron-down {
@@ -568,11 +640,8 @@
     gap: 15px;
     padding: 20px 0;
   }
-  .hs-filter-panel__apply {
-    flex: 2 0 60%;
-  }
   .hs-filter-panel__clear {
-    flex: 1 0 30%;
+    flex: 0 0 auto;
     background: none;
     border: 0;
     padding: 5px 0;
@@ -580,7 +649,7 @@
     color: var(--nhs-blue);
     font-size: var(--text-body);
     font-family: inherit;
-    text-align: center;
+    text-align: left;
     text-decoration: underline;
     text-underline-offset: 0.1578em;
   }
@@ -1236,6 +1305,78 @@ a.hs-snapshot-strip__segment--link {
 @media (max-width: 900px) { .hs-steps-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 600px) { .hs-steps-grid { grid-template-columns: 1fr; } }
 .hs-step { text-align: center; padding: var(--space-4) var(--space-3); }
+/* Vertical variant — steps stack in a single column, number beside the text.
+   With media: text takes 2/3 of the row, image 1/3. */
+.hs-steps-grid--vertical { grid-template-columns: 1fr; gap: var(--space-4); }
+.hs-steps-grid--vertical .hs-step {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  /* Title row hugs its content; any extra height (e.g. from the media column)
+     goes to the body row so the title–body gap stays normal. */
+  grid-template-rows: auto 1fr;
+  column-gap: var(--space-3);
+  align-items: start;
+  text-align: left;
+  padding: 0;
+}
+.hs-steps-grid--vertical .hs-step:has(.hs-step__media) {
+  grid-template-columns: 40px minmax(0, 1fr) 484px;
+}
+.hs-steps-grid--vertical .hs-step-num {
+  grid-row: 1 / span 2;
+  margin: 0;
+  /* Same size as the step titles; flex centring keeps the digit dead centre. */
+  font-size: var(--text-section-alt);
+  line-height: 1;
+  /* Optical vertical centring — digits sit high in the Frutiger/Arial em box. */
+  padding-top: 2px;
+  box-sizing: border-box;
+}
+/* Match the "What HealthStore does" card typography. */
+.hs-steps-grid--vertical .hs-step h3 { font-size: var(--text-section-alt); }
+.hs-steps-grid--vertical .hs-step p { font-size: var(--text-body); }
+.hs-steps-grid--vertical .hs-step__media {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+/* Cap height to the landscape mocks' rendered height (220px × 829/1024) so
+   portrait images (business case) don't render taller than the rest. */
+.hs-step__img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 230px;
+  padding-left: var(--space-5);
+  padding-right: 64px;
+  padding-bottom: var(--space-5);
+  box-sizing: content-box;
+}
+.hs-step-img-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  aspect-ratio: 3 / 2;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: var(--text-caption);
+}
+@media (max-width: 600px) {
+  .hs-steps-grid--vertical .hs-step:has(.hs-step__media) {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+  .hs-steps-grid--vertical .hs-step__media {
+    grid-column: 2;
+    grid-row: 3;
+    margin-top: var(--space-2);
+  }
+}
 .hs-step-num {
   width: 40px;
   height: 40px;
@@ -1252,6 +1393,7 @@ a.hs-snapshot-strip__segment--link {
 .hs-step h3 { font-size: var(--text-body); font-weight: 600; color: var(--text-primary); margin: 0 0 var(--space-1); }
 .hs-step p { font-size: var(--text-xs); color: var(--text-secondary); margin: 0; line-height: var(--leading-body); }
 
+/* NHS "primary card (clickable)" treatment, same as .app-card. */
 .hs-pathway-btn {
   display: flex;
   flex-direction: column;
@@ -1259,12 +1401,16 @@ a.hs-snapshot-strip__segment--link {
   padding: var(--space-3);
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
+  box-shadow: 0 4px 0 var(--border);
   text-decoration: none;
   color: var(--text-primary);
-  transition: border-color 0.15s;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-.hs-pathway-btn:hover { border-color: var(--nhs-blue); }
+.hs-pathway-btn:hover {
+  border-color: #AEB7BD;
+  box-shadow: 0 4px 0 #AEB7BD;
+}
 .hs-pathway-btn strong { font-size: var(--text-body); }
 .hs-pathway-btn span { font-size: var(--text-caption); color: var(--text-secondary); }
 .hs-supported-pathways { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
@@ -1284,7 +1430,7 @@ a.hs-snapshot-strip__segment--link {
 .hs-pathway-col {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: 0;
   padding: var(--space-3);
 }
 .hs-pathway-heading {
@@ -1297,17 +1443,141 @@ a.hs-snapshot-strip__segment--link {
 .hs-pathway-current .hs-pathway-heading { color: var(--text-secondary); }
 .hs-pathway-future .hs-pathway-heading { color: var(--text-primary); }
 .hs-pathway-future { border-top: 3px solid var(--nhs-blue); }
+
+/* Action link — NHS ships near-black text; this product uses NHS blue. */
+.nhsuk-action-link__link,
+.nhsuk-action-link__link:visited {
+  color: var(--nhs-blue);
+}
+
+/* ─── Catalogue layout + Related content sidebar ───
+   [Provenance: GOV.UK related-navigation — gov.uk/personal-tax-account:
+   2px keyline above the block, bold heading, plain link list.] */
+.hs-catalogue-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--section-gap);
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .hs-catalogue-layout {
+    grid-template-columns: minmax(0, 1fr) 280px;
+    column-gap: var(--space-7);
+  }
+}
+.hs-related-nav {
+  border-top: 2px solid var(--nhs-blue);
+  padding-top: var(--space-2);
+}
+.hs-related-nav__heading {
+  font-family: Frutiger, Arial, sans-serif;
+  font-size: var(--text-card-title-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-2);
+}
+.hs-related-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.hs-related-nav__list li {
+  margin-bottom: var(--space-2);
+}
+.hs-related-nav__list a {
+  font-size: var(--text-label);
+  line-height: 1.45;
+  color: var(--nhs-blue);
+}
+
+/* Making it work — vertical timeline beside implementation cards. */
+.hs-impl-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.hs-impl-timeline__item {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  column-gap: var(--space-3);
+  position: relative;
+  align-items: stretch;
+  /* NHS theme adds `ol > li { margin-bottom: 8px }` — the flex gap owns spacing here. */
+  margin-bottom: 0;
+}
+/* Line from bottom of this circle down to the top of the next circle.
+   Absolutely positioned: starts under the dot (0.75rem padding + 2rem dot)
+   and overflows past the list gap and the next marker's top padding. */
+.hs-impl-timeline__item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: calc(1rem - 1px);
+  top: calc(0.75rem + 2rem);
+  bottom: calc(-1 * (var(--space-4) + 0.75rem));
+  width: 2px;
+  background: var(--nhs-blue);
+}
+.hs-impl-timeline__marker {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0.75rem;
+}
+.hs-impl-timeline__dot {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: var(--nhs-blue);
+  color: #fff;
+  flex-shrink: 0;
+}
+.hs-impl-timeline__card {
+  border-radius: var(--radius-card);
+  min-width: 0;
+}
+
+/* Inset card — NHS inset-text treatment (8px NHS blue keyline, padded) on a
+   white card surface. [Provenance: NHS inset text —
+   service-manual.nhs.uk/design-system/components/inset-text] */
+.hs-inset-card {
+  background: #fff;
+  border-left: 8px solid var(--nhs-blue);
+  padding: 16px;
+}
+@media (min-width: 641px) {
+  .hs-inset-card {
+    padding: 24px;
+  }
+}
+.hs-inset-card > *:first-child {
+  margin-top: 0;
+}
+.hs-inset-card > *:last-child {
+  margin-bottom: 0;
+}
+/* Transparent variant — stock NHS inset text (no background fill). */
+.hs-inset-card--transparent {
+  background: transparent;
+}
+
 .hs-pathway-step {
   background: var(--surface);
-  border-radius: var(--radius-lg);
+  border-radius: 0;
   padding: var(--space-2) var(--space-3);
   font-size: var(--text-xs);
   color: var(--text-primary);
   margin-bottom: var(--space-2);
 }
 .hs-pathway-step.hs-pathway-problem { background: #FDECEA; color: #7a1210; font-weight: 600; }
-.hs-pathway-step.hs-pathway-added { background: #E6F5EC; border-left: 3px solid var(--nhs-green); }
-.hs-pathway-step.hs-pathway-changed { background: #E6F0FB; border-left: 3px solid var(--nhs-blue); }
+.hs-pathway-step.hs-pathway-added { background: #E6F5EC; }
+.hs-pathway-step.hs-pathway-changed { background: #E6F0FB; }
 .hs-pathway-arrow { text-align: center; font-size: var(--text-card-title-sm); color: var(--text-muted-low-con); padding: var(--space-1) 0; }
 .hs-pathway-divider {
   display: flex;

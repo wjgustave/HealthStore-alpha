@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
       session.organizationId = dbIds.organizationId
 
       await session.save()
-      return jsonWithSession({ ok: true, redirect: '/apps' }, res)
+      return jsonWithSession({ ok: true, redirect: '/product-catalogue' }, res)
     }
 
     const namedAccount = findAuthUserAccount(username)
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
       session.organizationId = dbIds.organizationId
 
       await session.save()
-      return jsonWithSession({ ok: true, redirect: '/apps' }, res)
+      return jsonWithSession({ ok: true, redirect: '/product-catalogue' }, res)
     }
 
     if (multiUsername && multiPasswordHash && username === multiUsername) {

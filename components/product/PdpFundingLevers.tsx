@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import type { ProductNarrative } from '@/lib/content/productModel'
 import { getCommissionerFacingFunding } from '@/lib/data'
 import { PdpSection } from '@/components/PdpSection'
@@ -122,15 +121,6 @@ export default function PdpFundingLevers({
         </div>
       )}
 
-      {schemes.length === 0 && (tariffNote || levers.length > 0) && (
-        <p className="hs-text-caption mt-4" style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>
-          No commissioner-facing cash or adoption-support schemes are linked to this product profile. Browse the{' '}
-          <Link href="/funding" className="hs-font-normal underline" style={{ color: 'var(--nhs-blue)' }}>
-            funding directory
-          </Link>
-          {' '}for wider opportunities.
-        </p>
-      )}
     </PdpSection>
   )
 }

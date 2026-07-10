@@ -6,7 +6,8 @@
   "short_name": "myCOPD",
   "logo_path": "/logos/mycopd.png",
   "condition_tags": [
-    "copd"
+    "copd",
+    "pulmonary_rehab"
   ],
   "pathway_tags": [
     "self-management",

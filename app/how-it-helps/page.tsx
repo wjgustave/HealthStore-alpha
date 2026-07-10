@@ -1,16 +1,18 @@
 import Link from 'next/link'
+import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 
 export default function HowItHelpsPage() {
   return (
-    <>
-      <h1 style={{ fontSize: '1.8rem', fontWeight: 700, margin: '0 0 8px' }}>How HealthStore helps</h1>
-      <p style={{ fontSize: '1.1rem', color: '#4c6272', maxWidth: 720, marginBottom: 40 }}>
+    <div className="hs-page">
+      <PageBreadcrumb items={[{ label: 'How it works' }]} />
+      <h1 className="page-title-h1">How HealthStore helps</h1>
+      <p className="hs-measure" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', marginBottom: 40 }}>
         A nationally governed assurance and commercial-readiness layer with local commissioning accountability.
       </p>
 
       <div className="hs-card-grid">
         <div className="hs-card">
-          <h3>Assurance travels</h3>
+          <h3>Assurance Pack</h3>
           <p>Evidence, device regulation, IG assessment — maintained centrally so you don&apos;t duplicate work.</p>
         </div>
         <div className="hs-card">
@@ -42,6 +44,6 @@ export default function HowItHelpsPage() {
       <div style={{ textAlign: 'center', marginTop: 40, paddingTop: 32, borderTop: '1px solid #d8dde0' }}>
         <Link href="/start" className="hs-btn hs-btn-primary">Explore what could help my area</Link>
       </div>
-    </>
+    </div>
   )
 }

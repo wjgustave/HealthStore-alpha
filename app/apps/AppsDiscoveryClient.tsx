@@ -1,223 +1,110 @@
 'use client'
 
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { useMemo } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { LayoutGrid, Search } from 'lucide-react'
-import { ConditionIcon } from '@/components/HealthIcons'
-import type { App } from '@/lib/data'
-import { createCatalogueFuseForApps } from '@/lib/catalogueSearch'
-import { STORE_ACCENT } from '@/lib/storeAccent'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 
 type ConditionArea = { id: string; label: string; colour: string; count: number; icon: string }
 
 export default function AppsDiscoveryClient({
   conditionAreas,
-  apps,
   totalAppCount,
 }: {
   conditionAreas: ConditionArea[]
-  apps: App[]
+  /** Kept for callers that still pass catalogue apps; search is currently hidden. */
+  apps?: unknown[]
   totalAppCount: number
 }) {
-  const router = useRouter()
-  const [query, setQuery] = useState('')
-  const [openSuggestions, setOpenSuggestions] = useState(false)
-  const [activeIndex, setActiveIndex] = useState(-1)
-  const listId = useId()
-  const inputRef = useRef<HTMLInputElement>(null)
-  const fuse = useMemo(() => createCatalogueFuseForApps(apps), [apps])
-
-  const suggestions = useMemo(() => {
-    const t = query.trim()
-    if (t.length < 2) return []
-    return fuse.search(t).slice(0, 8).map(r => r.item)
-  }, [fuse, query])
-
-  const goToBrowse = useCallback(
-    (q: string) => {
-      const p = new URLSearchParams()
-      const qt = q.trim()
-      if (qt) p.set('q', qt)
-      const s = p.toString()
-      router.push(s ? `/apps/condition-catalogue?${s}` : '/apps/condition-catalogue')
-      setOpenSuggestions(false)
-      setActiveIndex(-1)
-    },
-    [router],
+  const availableConditions = useMemo(
+    () => conditionAreas.filter(c => c.count > 0),
+    [conditionAreas],
   )
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    goToBrowse(query)
-  }
-
-  useEffect(() => {
-    if (!openSuggestions) setActiveIndex(-1)
-  }, [openSuggestions])
+  const roadmapConditions = useMemo(
+    () => conditionAreas.filter(c => c.count === 0),
+    [conditionAreas],
+  )
 
   return (
     <div className="hs-page">
-      <PageBreadcrumb items={[{ label: 'Find apps' }]} />
+      <PageBreadcrumb items={[{ label: 'Product catalogue' }]} />
       <div className="hs-section max-w-3xl">
-        <h1 className="page-title-h1 mb-4">Find apps</h1>
+        <h1 className="page-title-h1 mb-4">Product catalogue</h1>
         <div className="space-y-2 text-balance" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-          <p className="m-0">Search by app name, supplier, or condition.</p>
-          <p className="m-0">Or use the Condition catalogue to find relevant digital therapeutics.</p>
+          <p className="m-0">Browse digital therapeutics by pathway and condition.</p>
         </div>
       </div>
 
-      <form onSubmit={onSubmit} className="hs-section max-w-2xl" role="search" aria-label="Search catalogue">
-        <label htmlFor="apps-hub-search" className="sr-only">
-          Search by app name, supplier, or condition
-        </label>
-        <div className="relative">
-          <div
-            className="flex items-stretch rounded-xl border bg-white overflow-hidden focus-within:ring-2 focus-within:ring-offset-2"
-            style={{ borderColor: 'var(--border)', outlineColor: 'var(--nhs-blue)' }}
-          >
-            <span className="flex items-center pl-4" style={{ color: 'var(--text-muted)' }} aria-hidden>
-              <Search className="w-5 h-5 shrink-0" strokeWidth={2} />
-            </span>
-            <input
-              ref={inputRef}
-              id="apps-hub-search"
-              type="search"
-              autoComplete="off"
-              value={query}
-              onChange={e => {
-                setQuery(e.target.value)
-                setOpenSuggestions(true)
-                setActiveIndex(-1)
-              }}
-              onFocus={() => setOpenSuggestions(true)}
-              onBlur={() => {
-                window.setTimeout(() => setOpenSuggestions(false), 180)
-              }}
-              onKeyDown={e => {
-                if (!openSuggestions || suggestions.length === 0) {
-                  if (e.key === 'Enter') goToBrowse(query)
-                  return
-                }
-                if (e.key === 'ArrowDown') {
-                  e.preventDefault()
-                  setActiveIndex(i => (i + 1) % suggestions.length)
-                } else if (e.key === 'ArrowUp') {
-                  e.preventDefault()
-                  setActiveIndex(i => (i <= 0 ? suggestions.length - 1 : i - 1))
-                } else if (e.key === 'Escape') {
-                  setOpenSuggestions(false)
-                } else if (e.key === 'Enter' && activeIndex >= 0) {
-                  e.preventDefault()
-                  const item = suggestions[activeIndex]
-                  goToBrowse(item.app_name)
-                }
-              }}
-              placeholder="Search by app name, supplier, or condition"
-              className="min-h-[52px] flex-1 border-0 bg-transparent px-4 py-4 hs-text-label outline-none"
-              style={{ color: 'var(--text-primary)' }}
-              aria-autocomplete="list"
-              aria-controls={suggestions.length > 0 ? listId : undefined}
-              aria-expanded={openSuggestions && suggestions.length > 0}
-            />
-            <button
-              type="submit"
-              className="shrink-0 px-6 py-4 hs-text-label hs-font-bold text-white transition-colors hover:!bg-[#004B8C]"
-              style={{ background: STORE_ACCENT }}
-            >
-              Search
-            </button>
-          </div>
-          {openSuggestions && suggestions.length > 0 ? (
-            <ul
-              id={listId}
-              role="listbox"
-              className="absolute left-0 right-0 top-full z-20 mt-1 max-h-72 overflow-auto rounded-xl border bg-white py-1 shadow-lg"
-              style={{ borderColor: 'var(--border)' }}
-            >
-              {suggestions.map((item, idx) => (
-                <li key={item.id} role="presentation">
-                  <button
-                    type="button"
-                    role="option"
-                    aria-selected={idx === activeIndex}
-                    className="flex w-full flex-col items-start gap-1 px-4 py-2 text-left hs-text-label transition-colors hover:bg-[#F0F4F5]"
-                    style={{
-                      background: idx === activeIndex ? '#E6F0FB' : undefined,
-                      color: 'var(--text-primary)',
-                    }}
-                    onMouseDown={e => e.preventDefault()}
-                    onClick={() => goToBrowse(item.app_name)}
-                  >
-                    <span className="hs-font-bold">{item.app_name}</span>
-                    <span style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>{item.supplier_name}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </div>
-      </form>
-
-      <section aria-labelledby="condition-catalogue-heading">
+      <section aria-labelledby="digital-therapeutics-heading">
         <h2
-          id="condition-catalogue-heading"
+          id="digital-therapeutics-heading"
           className="mb-4 hs-font-bold"
           style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--text-primary)' }}
         >
-          Condition catalogue
+          Digital therapeutics
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {conditionAreas.map(c => (
+          {availableConditions.map(c => (
             <Link
               key={c.id}
-              href={`/apps/condition-catalogue?condition=${encodeURIComponent(c.id)}`}
-              className="group flex gap-4 rounded-xl border bg-white p-6 text-left transition-colors hover:border-[var(--nhs-blue)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-              style={{ borderColor: 'var(--border)', textDecoration: 'none', outlineColor: 'var(--nhs-blue)' }}
+              href={`/product-catalogue/digital-therapeutics?condition=${encodeURIComponent(c.id)}`}
+              className="app-card group block p-6 text-left no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+              style={{ color: 'inherit', outlineColor: 'var(--nhs-blue)' }}
             >
-              <div
-                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
-                style={{ background: `${c.colour}18`, color: c.colour }}
-              >
-                <ConditionIcon condition={c.id} className="h-7 w-7" />
+              <div className="hs-font-bold" style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)' }}>
+                {c.label}
               </div>
-              <div className="min-w-0 flex-1">
+              <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', marginTop: 4 }}>
+                {c.count} {c.count === 1 ? 'app' : 'apps'}
+              </div>
+              <span className="mt-2 inline-block hs-text-label hs-font-bold text-[var(--nhs-blue)] group-hover:underline">View apps</span>
+            </Link>
+          ))}
+        </div>
+        <p className="mt-8">
+          <Link
+            href="/product-catalogue/digital-therapeutics"
+            className="hs-text-body hs-font-bold underline underline-offset-2"
+            style={{ color: 'var(--nhs-blue)' }}
+          >
+            Browse all products
+          </Link>
+          <span style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
+            {' '}
+            · {totalAppCount} digital therapeutics
+          </span>
+        </p>
+      </section>
+
+      {roadmapConditions.length > 0 ? (
+        <section aria-labelledby="coming-soon-heading" className="mt-12">
+          <h2
+            id="coming-soon-heading"
+            className="mb-2 hs-font-bold"
+            style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)' }}
+          >
+            Pathways and conditions coming to the NHS HealthStore soon
+          </h2>
+          <p className="mb-4" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
+            The NHS HealthStore is growing. Additional pathways are on our roadmap and will be available as evidence and supplier readiness are confirmed.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {roadmapConditions.map(c => (
+              <div
+                key={c.id}
+                className="rounded-xl border p-6 text-left"
+                style={{ borderColor: 'var(--border)', background: '#F0F4F5' }}
+              >
                 <div className="hs-font-bold" style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)' }}>
                   {c.label}
                 </div>
                 <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', marginTop: 4 }}>
-                  {c.count} {c.count === 1 ? 'app' : 'apps'}
+                  Coming soon
                 </div>
-                <span className="mt-2 inline-block hs-text-label hs-font-bold text-[var(--nhs-blue)] group-hover:underline">View apps</span>
               </div>
-            </Link>
-          ))}
-
-          <Link
-            href="/apps/condition-catalogue"
-            className="group flex gap-4 rounded-xl border bg-white p-6 text-left transition-colors hover:border-[var(--nhs-blue)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:col-span-2 lg:col-span-1"
-            style={{ borderColor: 'var(--border)', textDecoration: 'none', outlineColor: 'var(--nhs-blue)' }}
-          >
-            <div
-              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
-              style={{ background: 'rgba(0, 94, 184, 0.1)', color: 'var(--nhs-blue)' }}
-              aria-hidden
-            >
-              <LayoutGrid className="h-7 w-7" strokeWidth={2} />
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="hs-font-bold" style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)' }}>
-                All apps
-              </div>
-              <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', marginTop: 4 }}>
-                {totalAppCount} digital therapeutics in the catalogue
-              </div>
-              <span className="mt-2 inline-block hs-text-label hs-font-bold text-[var(--nhs-blue)] group-hover:underline">Browse entire catalogue</span>
-            </div>
-          </Link>
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </div>
   )
 }
