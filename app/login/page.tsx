@@ -29,7 +29,7 @@ export default function LoginPage() {
 
       if (res.ok) {
         const data = await res.json()
-        const next = typeof data.redirect === 'string' ? data.redirect : '/dashboard'
+        const next = typeof data.redirect === 'string' ? data.redirect : '/apps'
         router.push(next)
         router.refresh()
       } else {

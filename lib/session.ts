@@ -1,5 +1,6 @@
 import { getIronSession, type SessionOptions } from 'iron-session'
 import { cookies } from 'next/headers'
+import { AUTH_DISABLED } from '@/lib/authMode'
 
 export interface SessionData {
   isLoggedIn: boolean
@@ -29,21 +30,26 @@ export const sessionOptions: SessionOptions = {
   },
 }
 
-/** When true, auth is bypassed and every visitor is treated as a signed-in guest. */
-export const AUTH_DISABLED = process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true'
+export { AUTH_DISABLED }
 
 export async function getSession() {
   const cookieStore = await cookies()
   const session = await getIronSession<SessionData>(cookieStore, sessionOptions)
 
   // Open-access mode: present a signed-in guest so all `isLoggedIn` guards pass.
-  // Mutated in memory only (never saved), so it applies to every request without a cookie.
-  if (AUTH_DISABLED && !session.isLoggedIn) {
+  // Mutated in memory only (never saved). No real user/org binding — bookmarks/EOI
+  // resolve to a shared "Open access" org via resolveOrganizationId.
+  if (AUTH_DISABLED) {
     session.isLoggedIn = true
     session.requiresCommissioningEntitySelection = false
     session.accountKey = session.accountKey ?? 'guest'
-    session.profileDisplayName = session.profileDisplayName ?? 'Guest'
-    session.profileOrganisationName = session.profileOrganisationName ?? 'HealthStore demo'
+    session.commissioningEntityId = undefined
+    session.organizationId = undefined
+    session.userId = undefined
+    session.profileDisplayName = undefined
+    session.profileRole = undefined
+    session.profileOrganisationName = 'Open access'
+    session.profileEmail = undefined
   }
 
   return session

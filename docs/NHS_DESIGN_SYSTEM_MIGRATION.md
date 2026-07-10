@@ -7,7 +7,7 @@ kept in step with the live code as each phase lands.
 
 - NHS DS: https://service-manual.nhs.uk/design-system (+ live patterns on nhs.uk)
 - GOV.UK DS: https://design-system.service.gov.uk (gap-fill, recoloured)
-- Installed: `nhsuk-frontend@9.3.0`, `govuk-frontend@6.3.0`, `sass`.
+- Installed: `nhsuk-frontend@9.6.4`, `govuk-frontend@6.3.0`, `sass`.
 
 ## Provenance labels
 
@@ -86,7 +86,7 @@ Built to NHS principles, annotated "Bespoke" in `public/DS`, each with a backlog
 ## Delivery status (iteration 1)
 
 Landed:
-- Foundations: `nhsuk-frontend@9.3.0` + `govuk-frontend@6.3.0` + `sass`; precompiled SCSS
+- Foundations: `nhsuk-frontend@9.6.4` + `govuk-frontend@6.3.0` + `sass`; precompiled SCSS
   (`app/styles/_src/*` → `*.generated.css` via `npm run build:ds-css`, run on `prebuild`);
   Tailwind preflight reconciled via cascade layers; Frutiger wired; GOV.UK recoloured.
 - Components: Button, FormField + inputs, Tag (Badges), Card (FundingDirectoryCard), Breadcrumb,

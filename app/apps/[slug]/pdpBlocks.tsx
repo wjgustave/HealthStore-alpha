@@ -80,34 +80,34 @@ export function EvidenceCard({ study, accent }: { study: any; accent: string }) 
         study.url_trial_reg ||
         study.url_case_study) && (
         <div className="mb-4 flex min-w-0 w-full flex-wrap gap-x-4 gap-y-2">
-          {study.url_doi && (
+          {study.url_doi && !study.url_pubmed && (
             <a href={study.url_doi} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: accent }}>
-              DOI ↗
+              DOI (opens in a new tab)
             </a>
           )}
           {study.url_pubmed && (
             <a href={study.url_pubmed} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: accent }}>
-              PubMed ↗
+              PubMed (opens in a new tab)
             </a>
           )}
           {study.url_pmc && (
             <a href={study.url_pmc} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: accent }}>
-              PMC (open) ↗
+              PMC (open) (opens in a new tab)
             </a>
           )}
           {study.url_full_text && !study.url_doi && !study.url_pubmed && (
             <a href={study.url_full_text} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: accent }}>
-              {study.source_label ?? 'Source ↗'}
+              {study.source_label ? `${study.source_label} (opens in a new tab)` : 'Source (opens in a new tab)'}
             </a>
           )}
           {study.url_trial_reg && (
             <a href={study.url_trial_reg} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: 'var(--text-muted)' }}>
-              Trial reg ↗
+              Trial reg (opens in a new tab)
             </a>
           )}
           {study.url_case_study && (
             <a href={study.url_case_study} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, color: accent }}>
-              Case study ↗
+              Case study (opens in a new tab)
             </a>
           )}
         </div>

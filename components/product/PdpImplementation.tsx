@@ -43,14 +43,14 @@ export default function PdpImplementation({
             style={{ borderColor: 'var(--border)', borderLeft: '4px solid var(--nhs-blue)' }}
           >
             <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--text-secondary)' }}>{c.label}</div>
-            <p className="hs-text-caption" style={{ color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>{c.value}</p>
+            <p className="hs-text-label" style={{ color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>{c.value}</p>
           </div>
         ))}
       </div>
 
       {impl.prerequisites?.length > 0 && (
-        <div className="mt-4">
-          <h3 className="hs-font-bold mb-2" style={{ fontSize: 'var(--text-card-title-sm)', color: 'var(--text-secondary)' }}>
+        <div>
+          <h3 className="hs-pdp-subheading hs-font-bold mb-2" style={{ fontSize: 'var(--text-card-title-sm)' }}>
             Local prerequisites
           </h3>
           <ul className="space-y-1" style={{ margin: 0, paddingLeft: 20, maxWidth: 720, lineHeight: 1.7, color: 'var(--text-secondary)', fontSize: 'var(--text-label)' }}>

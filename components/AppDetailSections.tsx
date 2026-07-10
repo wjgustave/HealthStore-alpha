@@ -222,11 +222,16 @@ export function WhatItTakesLocallySection({ app, accent }: { app: any; accent: s
 /**
  * Case study card — type tag, title, detail (setting, sample size, outcome), source footer.
  */
-function CaseStudyCard({ caseStudy: cs }: { caseStudy: any }) {
+function CaseStudyCard({ caseStudy: cs, plain }: { caseStudy: any; plain?: boolean }) {
   const hasDetail = !!(cs.setting || cs.sample_size || cs.outcome)
+  const typeLabel = cs.type_label ?? 'Case study'
   return (
-    <article className="hs-case-card">
-      <span className="hs-case-card__pill">{cs.type_label ?? 'Case study'}</span>
+    <article className={`hs-case-card${plain ? ' hs-case-card--publication' : ''}`}>
+      {plain ? (
+        <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{typeLabel}</span>
+      ) : (
+        <span className="hs-case-card__pill">{typeLabel}</span>
+      )}
       <h4 className="hs-case-card__title">{cs.title ?? cs.setting}</h4>
       {hasDetail ? (
         <div className="hs-case-card__detail-body">
@@ -236,7 +241,13 @@ function CaseStudyCard({ caseStudy: cs }: { caseStudy: any }) {
                 <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{cs.setting}</span>
               ) : null}
               {cs.sample_size ? (
-                <span className="hs-case-card__pill">n = {cs.sample_size.toLocaleString()}</span>
+                plain ? (
+                  <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>
+                    n = {cs.sample_size.toLocaleString()}
+                  </span>
+                ) : (
+                  <span className="hs-case-card__pill">n = {cs.sample_size.toLocaleString()}</span>
+                )
               ) : null}
             </div>
           ) : null}
@@ -255,8 +266,7 @@ function CaseStudyCard({ caseStudy: cs }: { caseStudy: any }) {
 /**
  * Clinical publication / evaluation card — shared visual language for the
  * "Clinical publications and evaluations" subsection and peer-reviewed studies
- * in case-study grids. Peer-reviewed entries get the green pill; others use
- * their type_label (e.g. "Observational study") as the standard tag.
+ * in case-study grids. Type and peer-reviewed labels render as plain caption text.
  */
 export function PeerReviewedEvaluationCard({
   study,
@@ -267,11 +277,11 @@ export function PeerReviewedEvaluationCard({
 }) {
   const meta = [study.authors, study.journal, study.year].filter(Boolean).join(' · ')
   const links = [
-    study.url_doi && { href: study.url_doi, label: 'DOI ↗' },
-    study.url_pubmed && { href: study.url_pubmed, label: 'PubMed ↗' },
-    study.url_pmc && { href: study.url_pmc, label: 'PMC (open) ↗' },
+    study.url_doi && !study.url_pubmed && { href: study.url_doi, label: 'DOI (opens in a new tab)' },
+    study.url_pubmed && { href: study.url_pubmed, label: 'PubMed (opens in a new tab)' },
+    study.url_pmc && { href: study.url_pmc, label: 'PMC (open) (opens in a new tab)' },
     study.url_full_text && !study.url_doi && !study.url_pubmed
-      ? { href: study.url_full_text, label: study.source_label ? `${study.source_label} ↗` : 'Source ↗' }
+      ? { href: study.url_full_text, label: study.source_label ? `${study.source_label} (opens in a new tab)` : 'Source (opens in a new tab)' }
       : null,
   ].filter(Boolean) as { href: string; label: string }[]
 
@@ -279,16 +289,16 @@ export function PeerReviewedEvaluationCard({
   const typeLabel = study.type_label ?? study.type ?? 'Publication'
 
   return (
-    <article className="hs-case-card">
+    <article className="hs-case-card hs-case-card--publication">
       {study.peer_reviewed ? (
         <div className="flex flex-wrap items-center gap-2">
-          <span className="hs-case-card__pill hs-case-card__pill--green">Peer-reviewed</span>
+          <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>Peer-reviewed</span>
           {(study.type_label || study.type) ? (
             <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{typeLabel}</span>
           ) : null}
         </div>
       ) : (
-        <span className="hs-case-card__pill">{typeLabel}</span>
+        <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{typeLabel}</span>
       )}
       <h4 className="hs-case-card__title">{study.ref}</h4>
       {hasDetail ? (
@@ -301,7 +311,7 @@ export function PeerReviewedEvaluationCard({
                 <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>{meta}</span>
               ) : null}
               {study.n ? (
-                <span className="hs-case-card__pill">n = {study.n.toLocaleString()}</span>
+                <span className="hs-text-caption" style={{ color: 'var(--text-muted)' }}>n = {study.n.toLocaleString()}</span>
               ) : null}
             </div>
           ) : null}
@@ -329,11 +339,14 @@ export function CaseStudyCards({
   caseStudies,
   studies = [],
   accent = 'var(--nhs-blue)',
+  plainCards = false,
 }: {
   caseStudies: any[]
   /** Peer-reviewed studies to surface alongside case studies (rendered first). */
   studies?: any[]
   accent?: string
+  /** Flat non-clickable card chrome (no green keyline). */
+  plainCards?: boolean
 }) {
   return (
     <div className="hs-case-grid">
@@ -341,7 +354,7 @@ export function CaseStudyCards({
         <PeerReviewedEvaluationCard key={`study-${s.id ?? i}`} study={s} accent={accent} />
       ))}
       {caseStudies.map((cs: any, i: number) => (
-        <CaseStudyCard key={`case-${i}`} caseStudy={cs} />
+        <CaseStudyCard key={`case-${i}`} caseStudy={cs} plain={plainCards} />
       ))}
     </div>
   )
@@ -397,7 +410,7 @@ export function DemoAccessSection({ app, accent }: { app: any; accent: string })
           {app.demo_variants.map((d: any) => (
             <li key={d.url}>
               <a href={d.url} target="_blank" rel="noopener noreferrer" className="hs-text-label hs-font-normal hover:underline" style={{ color: accent }}>
-                {d.label} ↗
+                {d.label} (opens in a new tab)
               </a>
             </li>
           ))}
@@ -671,7 +684,7 @@ export function RelatedFundingSection({ fundingIds }: { fundingIds: string[] }) 
               {f.external_url && (
                 <a href={f.external_url} target="_blank" rel="noopener noreferrer"
                   className="hs-text-caption hs-font-normal mt-2 inline-block" style={{ color: 'var(--nhs-blue)' }}>
-                  {f.external_url_label ?? 'More info'} ↗
+                  {f.external_url_label ?? 'More info'} (opens in a new tab)
                 </a>
               )}
             </div>

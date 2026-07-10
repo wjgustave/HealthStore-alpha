@@ -37,52 +37,45 @@ function SnapshotTextList({ items }: { items: string[] }) {
   )
 }
 
-function SegmentLink({
-  href,
-  children,
-  className = '',
-}: {
-  href: string
-  children: ReactNode
-  className?: string
-}) {
-  return (
-    <a
-      href={href}
-      className={`inline-block hs-text-label hs-font-normal underline-offset-2 hover:underline ${className}`.trim()}
-      style={{ color: 'var(--nhs-blue)' }}
-    >
-      {children}
-    </a>
-  )
-}
-
+/**
+ * Snapshot tile. When `href` is set the whole card is the link (no nested
+ * heading link) so it matches NHS clickable-card behaviour.
+ * Set `linkHeading` false to keep the title in primary (black) text — e.g. Platform,
+ * where the blue affordance is a body line like "Demo available".
+ */
 function SegmentShell({
   label,
-  labelHref,
+  href,
+  linkHeading = true,
   footer,
   children,
 }: {
   label: string
-  labelHref?: string
+  href?: string
+  linkHeading?: boolean
   footer?: ReactNode
   children: ReactNode
 }) {
-  return (
-    <article className="hs-snapshot-strip__segment">
-      <h2 className="hs-snapshot-strip__heading">
-        {labelHref ? (
-          <a href={labelHref} className="hs-snapshot-strip__heading-link">
-            {label}
-          </a>
-        ) : (
-          label
-        )}
+  const headingLinked = Boolean(href) && linkHeading
+  const inner = (
+    <>
+      <h2 className={`hs-snapshot-strip__heading${headingLinked ? ' hs-snapshot-strip__heading--linked' : ''}`}>
+        {label}
       </h2>
       <div className="hs-snapshot-strip__body">{children}</div>
       {footer ? <div className="hs-snapshot-strip__footer">{footer}</div> : null}
-    </article>
+    </>
   )
+
+  if (href) {
+    return (
+      <a href={href} className="hs-snapshot-strip__segment hs-snapshot-strip__segment--link">
+        {inner}
+      </a>
+    )
+  }
+
+  return <article className="hs-snapshot-strip__segment">{inner}</article>
 }
 
 function GovernanceSegment({
@@ -95,7 +88,7 @@ function GovernanceSegment({
   pills: RegulationSnapshotPill[]
 }) {
   return (
-    <SegmentShell label={label} labelHref={href}>
+    <SegmentShell label={label} href={href}>
       <ul className="m-0 flex list-none flex-wrap gap-x-2 gap-y-1 p-0">
         {pills.map((p, i) => (
           <li key={p.label} className="inline">
@@ -117,22 +110,18 @@ function CostSegment({
 }: {
   card: Extract<CommissioningSnapshotCard, { kind: 'cost' }>
 }) {
+  if (card.modelPills.length === 0) return null
+
   return (
-    <SegmentShell label={card.label} labelHref={card.href}>
-      {card.modelPills.length > 0 ? (
-        <div>
-          <SnapshotTextList items={card.modelPills} />
-          {card.indicativeNote ? (
-            <p className="mt-1 mb-0 hs-text-caption leading-snug" style={{ color: 'var(--text-muted)' }}>
-              {card.indicativeNote}
-            </p>
-          ) : null}
-        </div>
-      ) : (
-        <p className="m-0 hs-text-caption leading-snug" style={{ color: 'var(--text-muted)' }}>
-          Not listed in profile
-        </p>
-      )}
+    <SegmentShell label={card.label} href={card.href}>
+      <div>
+        <SnapshotTextList items={card.modelPills} />
+        {card.indicativeNote ? (
+          <p className="mt-1 mb-0 hs-text-caption leading-snug" style={{ color: 'var(--text-muted)' }}>
+            {card.indicativeNote}
+          </p>
+        ) : null}
+      </div>
       {card.subline ? (
         <p className="mt-2 mb-0 hs-text-caption leading-snug" style={{ color: 'var(--text-muted)' }}>
           {card.subline}
@@ -143,19 +132,35 @@ function CostSegment({
 }
 
 function FundingFullWidthSegment({ card }: { card: FundingSnapshotCard }) {
+  const href = card.opportunitiesLink?.href
+  const inner = (
+    <div className="hs-snapshot-strip__row hs-snapshot-strip__row--funding">
+      <h2 className="sr-only">{card.label}</h2>
+      <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+        <SnapshotTextList items={card.pills} />
+      </div>
+      {card.opportunitiesLink ? (
+        <span
+          className="shrink-0 whitespace-nowrap hs-text-label hs-font-normal underline-offset-2"
+          style={{ color: 'var(--nhs-blue)' }}
+        >
+          {card.opportunitiesLink.label}
+        </span>
+      ) : null}
+    </div>
+  )
+
+  if (href) {
+    return (
+      <a href={href} className="hs-snapshot-strip__segment hs-snapshot-strip__segment--row hs-snapshot-strip__segment--link">
+        {inner}
+      </a>
+    )
+  }
+
   return (
     <article className="hs-snapshot-strip__segment hs-snapshot-strip__segment--row">
-      <div className="hs-snapshot-strip__row hs-snapshot-strip__row--funding">
-        <h2 className="sr-only">{card.label}</h2>
-        <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-          <SnapshotTextList items={card.pills} />
-        </div>
-        {card.opportunitiesLink ? (
-          <SegmentLink href={card.opportunitiesLink.href} className="shrink-0 whitespace-nowrap">
-            {card.opportunitiesLink.label}
-          </SegmentLink>
-        ) : null}
-      </div>
+      {inner}
     </article>
   )
 }
@@ -166,10 +171,15 @@ function PlatformSegment({
   card: Extract<CommissioningSnapshotCard, { kind: 'platform' }>
 }) {
   return (
-    <SegmentShell label={card.label}>
-      <p className="m-0 hs-text-label leading-snug" style={{ color: 'var(--text-secondary)' }}>
+    <SegmentShell label={card.label} href={card.demoLink?.href} linkHeading={false}>
+      <p className="m-0 hs-text-label leading-snug" style={{ color: 'var(--text-primary)' }}>
         {card.values.join(', ')}
       </p>
+      {card.demoLink ? (
+        <p className="m-0 mt-2 hs-snapshot-strip__heading hs-snapshot-strip__heading--linked">
+          {card.demoLink.label}
+        </p>
+      ) : null}
     </SegmentShell>
   )
 }
@@ -180,16 +190,11 @@ function IntegrationSegment({
   card: Extract<CommissioningSnapshotCard, { kind: 'interop' }>
 }) {
   const readyItems = interopItemsInOrder(card.items, INTEGRATION_READY_KEYS)
+  if (readyItems.length === 0) return null
 
   return (
-    <SegmentShell label={card.label} labelHref={card.href}>
-      {readyItems.length === 0 ? (
-        <p className="m-0 hs-text-caption leading-snug" style={{ color: 'var(--text-muted)' }}>
-          None listed in profile
-        </p>
-      ) : (
-        <SnapshotTextList items={readyItems.map(item => item.textLabel ?? item.name)} />
-      )}
+    <SegmentShell label={card.label} href={card.href}>
+      <SnapshotTextList items={readyItems.map(item => item.textLabel ?? item.name)} />
     </SegmentShell>
   )
 }

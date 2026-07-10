@@ -9,10 +9,11 @@ export type ChartLegendItem = {
 /**
  * Chart panel shell + legend. [Provenance: Bespoke — no NHS component]
  *
- * NHS frontend ships no data-viz, so this provides the NHS-token panel chrome (flat
- * white card, 4px corners) for bespoke SVG charts, with a visible legend. Pair the
- * NHS palette (var(--nhs-blue) / --nhs-green / --nhs-grey) for series colours and
- * always provide a text/table fallback inside `children` for accessibility.
+ * NHS frontend ships no data-viz, so this provides the NHS primary non-clickable
+ * card chrome (white fill, 1px --border, square corners) for bespoke SVG charts,
+ * with a visible legend. Pair the NHS palette (var(--nhs-blue) / --nhs-green /
+ * --nhs-grey) for series colours and always provide a text/table fallback inside
+ * `children` for accessibility.
  */
 export function ChartPanel({
   title,

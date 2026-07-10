@@ -50,7 +50,11 @@ export function buildPdpOnThisPageLinks(input: {
       evidenceSplit.publications.length > 0 ||
       evidenceSplit.niceEvidence.length > 0 ||
       (app.nice_guidance_refs?.length ?? 0) > 0
-    if (deriveAssuranceDomains(app).length > 0 || hasAssuranceEvidence) {
+    if (
+      (narrative.assurance_domains?.length ?? 0) > 0 ||
+      deriveAssuranceDomains(app).length > 0 ||
+      hasAssuranceEvidence
+    ) {
       links.push({ id: 'assurance', label: 'Assurance and evidence' })
     }
     if (narrative.implementation) {

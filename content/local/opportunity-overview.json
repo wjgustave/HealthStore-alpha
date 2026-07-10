@@ -147,6 +147,62 @@
           ]
         }
       ]
+    },
+    "GEN": {
+      "code": "GEN",
+      "label": "NHSE Average ICB",
+      "population": "illustrative",
+      "reportingPeriod": "2025-06 to 2026-05",
+      "dataBasis": "synthetic_demo",
+      "summary": "NHSE Average ICB is an illustrative reference geography for COPD remote monitoring. Figures are synthetic prototype data sized for a mid-scale ICB, so commissioners can explore local value without selecting a named system.",
+      "opportunities": [
+        {
+          "conditionId": "copd",
+          "label": "COPD and respiratory",
+          "pathwayPosition": "Post-diagnosis long-term management",
+          "priorityBand": "high",
+          "priorityRationale": "Illustrative mid-scale COPD cohort with NICE-backed remote monitoring evidence. Early Luscii deployment is live; the opportunity is scaling invitation reach across the high-risk cohort.",
+
+          "populationHealth": {
+            "prevalence": { "value": 28571, "context": "adults on the QOF COPD register (illustrative NHSE Average ICB)", "source": "Synthetic prototype data — NHSE Average ICB reference site", "date": "2026-07" },
+            "highRisk": { "value": 5714, "context": "patients with ≥2 exacerbations in last 12 months (MRC 3+)", "source": "Synthetic prototype data — NHSE Average ICB reference site", "date": "2026-07" },
+            "admissions": { "value": 3333, "context": "COPD emergency admissions per year", "source": "Synthetic prototype data — NHSE Average ICB reference site", "date": "2026-07" },
+            "readmissions": { "value": "43%", "context": "readmitted within 90 days of a COPD admission", "source": "Synthetic prototype data — NHSE Average ICB reference site", "date": "2026-07" },
+            "aeAttendances": { "value": 10000, "context": "A&E attendances with COPD as primary presenting complaint", "source": "Synthetic prototype data — NHSE Average ICB reference site", "date": "2026-07" },
+            "costBurden": { "value": "£8.8m", "context": "annual COPD emergency admission cost (illustrative, spell-level HRG average)", "source": "National tariff × NHSE Average ICB volume (synthetic)", "date": "2026-07" },
+            "waitingList": null
+          },
+
+          "currentState": {
+            "eligible": 5714,
+            "invited": 1714,
+            "registered": 686,
+            "active": 257,
+            "invitationRate": "30%",
+            "registrationRate": "40% of invited",
+            "activationRate": "37% of registered",
+            "coverageOfEligible": "4.5%"
+          },
+
+          "gap": {
+            "notYetInvited": 4000,
+            "headroomStatement": "About 4,000 high-risk patients have never received an invitation. At current registration and activation rates, reaching them would roughly treble the monitored cohort.",
+            "constraintStatement": "The binding constraint is systematic invitation at scale across primary care and community respiratory teams — not product assurance or evidence."
+          },
+
+          "deploymentSummary": { "status": "live", "count": 1, "activeUsers": 257, "productsLive": "Luscii (remote monitoring)" },
+          "relevantProductIds": ["luscii", "mycopd"],
+          "evidenceStatus": "NICE HTG736 recommended; Bradford and Frimley RWE evaluations; multiple RCTs",
+          "readinessStatus": "Fully assured; buyer pack and implementation guide available",
+
+          "impactCategories": [
+            { "lens": "care_outcomes", "summary": "30–48% reduction in emergency admissions in evaluated cohorts (Bradford, Frimley)" },
+            { "lens": "demand_capacity", "summary": "~110 bed-days per year released per 500 monitored patients; 16–31% fewer A&E presentations" },
+            { "lens": "access_equity", "summary": "Remote monitoring reduces travel burden for high-risk patients; digital inclusion support can be layered where needed" },
+            { "lens": "financial_public_value", "summary": "£245k net annual value per 500 patients (central scenario, before licence cost). Scaled to NHSE Average ICB high-risk cohort as an illustrative opportunity." }
+          ]
+        }
+      ]
     }
   }
 }

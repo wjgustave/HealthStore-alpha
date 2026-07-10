@@ -2,7 +2,6 @@
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import type { Components } from 'react-markdown'
-import { ExternalLink } from 'lucide-react'
 import { parseSuggestions } from '@/lib/ai/parseSuggestions'
 import SuggestionPromptButton from '@/components/ai/SuggestionPromptButton'
 
@@ -61,7 +60,7 @@ const mdComponents: Components = {
         {...props}
       >
         {children}
-        {isExternal && <ExternalLink className="inline h-3 w-3 flex-shrink-0" />}
+        {isExternal && <> (opens in a new tab)</>}
       </a>
     )
   },

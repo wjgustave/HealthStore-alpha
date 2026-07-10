@@ -19,7 +19,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {
   DtacBadge, MaturityBadge, EffortBadge,
-  SupervisionBadge, NiceTypeBadge, AlertBox
+  SupervisionBadge, ConditionTag, AlertBox
 } from '@/components/Badges'
 import AppDetailClient from './AppDetailClient'
 import { CompareToggleButton } from '@/components/CompareToggleButton'
@@ -39,7 +39,7 @@ import { PdpSection } from '@/components/PdpSection'
 import { PdpTabs, type PdpTab } from '@/components/PdpTabs'
 import { PdpSharePrintProvider, PdpShareRegion } from '@/components/PdpSharePrintContext'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
-import { EvidenceCard, ProductHeroDemoBadge } from './pdpBlocks'
+import { EvidenceCard } from './pdpBlocks'
 import { Button } from '@/components/ui/Button'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 import PdpSupplierContactCard from '@/components/PdpSupplierContactCard'
@@ -111,8 +111,8 @@ export default async function AppPage({
   const commissioningCards = getCommissioningSnapshot(
     app,
     showNarrativeSpine
-      ? { commercialHref: '#how-to-buy', interopHref: '#resources' }
-      : undefined,
+      ? { commercialHref: '#how-to-buy', interopHref: '#resources', demoHref: '#resources' }
+      : { demoHref: '#demo-access' },
   )
   const showLocalValue = showNarrativeSpine && (app.condition_tags?.includes('copd') ?? false)
   const hasNhsExperience =
@@ -222,22 +222,21 @@ export default async function AppPage({
             title="NICE guidance"
             description="NICE publications and programme references linked to this product."
           >
-            <div className="space-y-4">
+            <ul className="m-0 space-y-2 p-0 list-none">
               {app.nice_guidance_refs.map((r: any) => (
-                <div key={r.ref} className="flex items-start gap-4 p-4 rounded-lg" style={{ background: '#F0F4F5', border: '1px solid var(--border)' }}>
-                  <NiceTypeBadge type={r.type} />
-                  <div>
-                    <a href={r.url} target="_blank" rel="noopener noreferrer"
-                      className="hs-font-bold hs-text-label hover:underline" style={{ color: accent }}>
-                      {r.ref} ↗
-                    </a>
-                    <div className="hs-text-caption mt-1" style={{ color: 'var(--text-muted)' }}>
-                      {r.date}{r.note ? ` · ${r.note}` : ''}
-                    </div>
-                  </div>
-                </div>
+                <li key={r.ref} className="hs-text-body" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  <a href={r.url} className="hover:underline" style={{ color: accent }}>
+                    {r.ref}
+                  </a>
+                  {[r.type, r.date, r.note].filter(Boolean).length > 0 ? (
+                    <>
+                      {' — '}
+                      {[r.type, r.date, r.note].filter(Boolean).join(', ')}
+                    </>
+                  ) : null}
+                </li>
               ))}
-            </div>
+            </ul>
           </PdpSection>
           )}
 
@@ -360,9 +359,10 @@ export default async function AppPage({
 
   return (
     <AppDetailClient app={app} contactPrefill={contactPrefill}>
-      <div className="hs-page">
-
+      <div className="hs-pdp">
         <PdpSharePrintProvider>
+        <div className="hs-pdp-top">
+        <div className="hs-page">
         <PdpShareRegion shareKey="breadcrumb" label="Browse trail" excludeFromShareUi className="mb-4">
           <PageBreadcrumb
             items={[
@@ -379,8 +379,7 @@ export default async function AppPage({
           description="Supplier, proposition, and actions."
           className="mb-4"
         >
-        <div className="hs-surface-card-sm rounded-t-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-          <div className="px-8 pt-8 pb-4">
+        <div className="overflow-hidden">
             <div className="flex flex-col gap-6 items-start lg:flex-row lg:items-start lg:justify-between lg:gap-10">
               <div className="flex-1 w-full min-w-0">
                 <div className="flex items-start gap-4 mb-2">
@@ -393,21 +392,24 @@ export default async function AppPage({
                     <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{app.supplier_name}</p>
                   </div>
                 </div>
-                <p
-                  className="min-w-0 max-w-[640px] mb-4"
-                  style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}
-                >
-                  {heroProposition}
-                </p>
                 <div className="flex flex-wrap gap-2 mb-4">
+                  {(app.condition_tags ?? []).map((t: string) => (
+                    <ConditionTag key={t} tag={t} />
+                  ))}
+                  {app.supervision_model ? <SupervisionBadge model={app.supervision_model} /> : null}
                   <MaturityBadge level={app.maturity_level} hideEstablished />
                   {app.content_confidence && app.content_confidence !== 'Confirmed' && (
                     <span className={`badge ${app.content_confidence === 'Supplier-reported' ? 'badge-blue' : 'badge-amber'}`}>
                       {app.content_confidence}
                     </span>
                   )}
-                  <ProductHeroDemoBadge app={app} href={showNarrativeSpine ? '#resources' : '#demo-access'} />
                 </div>
+                <p
+                  className="min-w-0 max-w-[640px] mb-4"
+                  style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}
+                >
+                  {heroProposition}
+                </p>
               </div>
               {heroQuickFacts.length > 0 && (
                 <aside
@@ -431,10 +433,7 @@ export default async function AppPage({
                 </aside>
               )}
             </div>
-            <div
-              className="flex flex-wrap gap-4 items-center mt-4 pt-4 border-t"
-              style={{ borderColor: 'var(--border)' }}
-            >
+            <div className="flex flex-wrap gap-4 items-center mt-8 mb-6">
               <Button
                 data-express-interest
                 size="none"
@@ -449,7 +448,6 @@ export default async function AppPage({
                 className="shrink-0 px-6 py-4 hs-text-label hs-font-bold"
               />
             </div>
-          </div>
         </div>
         </PdpShareRegion>
 
@@ -546,7 +544,7 @@ export default async function AppPage({
           shareKey="commissioning-snapshot"
           label="Commissioning snapshot"
           description="Governance, pricing model, integration, and where it's live."
-          className="hs-decision-snapshot mb-6"
+          className="hs-decision-snapshot"
         >
           <PdpCommissioningSnapshot
             cards={commissioningCards}
@@ -554,8 +552,17 @@ export default async function AppPage({
             whereLiveHref={hasNhsExperience ? '#nhs-experience' : undefined}
           />
         </PdpShareRegion>
+        </div>
+        </div>
 
+        <div className="hs-page">
         <div className={onThisPageLinks.length >= 2 ? 'hs-pdp-with-sidebar' : undefined}>
+          {onThisPageLinks.length >= 2 ? (
+            <aside className="hs-pdp-with-sidebar__aside">
+              <PdpOnThisPage links={onThisPageLinks} />
+            </aside>
+          ) : null}
+
           <div className="hs-pdp-with-sidebar__main">
             {showNarrativeSpine && (
               <PdpNarrativeSpine
@@ -588,12 +595,7 @@ export default async function AppPage({
 
             </div>
           </div>
-
-          {onThisPageLinks.length >= 2 ? (
-            <aside className="hs-pdp-with-sidebar__aside">
-              <PdpOnThisPage links={onThisPageLinks} />
-            </aside>
-          ) : null}
+        </div>
         </div>
         </PdpSharePrintProvider>
       </div>

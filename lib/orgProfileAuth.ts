@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { AUTH_DISABLED } from '@/lib/authMode'
 import { getSession } from '@/lib/session'
 import { resolveOrganizationId } from '@/lib/orgIdentity'
 
@@ -20,6 +21,15 @@ export async function requireOrgProfileSession(): Promise<
   OrgProfileSessionOk | OrgProfileSessionErr
 > {
   const session = await getSession()
+
+  if (AUTH_DISABLED) {
+    return {
+      error: NextResponse.json(
+        { error: 'Organisation settings are disabled while the store is in open-access mode.' },
+        { status: 403 },
+      ),
+    }
+  }
 
   if (!session.isLoggedIn) {
     return { error: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }) }

@@ -4,7 +4,7 @@ import { STORE_ACCENT } from '@/lib/storeAccent'
 /** "Clinical publications and evaluations" card grid — shared by Assurance and evidence (narrative) and the Evidence tab (non-narrative). */
 export default function PdpClinicalPublications({
   publications,
-  className = 'mt-6',
+  className = '',
   showHeading = true,
 }: {
   publications: any[]
@@ -14,9 +14,9 @@ export default function PdpClinicalPublications({
   if (publications.length === 0) return null
 
   return (
-    <div className={className}>
+    <div className={className || undefined}>
       {showHeading && (
-        <h3 className="hs-font-bold mb-3" style={{ fontSize: 'var(--text-card-title-sm)', color: 'var(--text-secondary)' }}>
+        <h3 className="hs-pdp-subheading hs-font-bold mb-3" style={{ fontSize: 'var(--text-card-title-sm)' }}>
           Clinical publications and evaluations
         </h3>
       )}

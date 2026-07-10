@@ -347,6 +347,82 @@
       "opportunity_value_gbp": 420000,
       "unmet_headroom": 56160
     },
+    "GEN": {
+      "icb_id": "GEN",
+      "icb_name": "NHSE Average ICB",
+      "coverage_funnel": {
+        "eligible": 28571,
+        "invited": 8571,
+        "registered": 3428,
+        "active": 857
+      },
+      "kpis": {
+        "live_deployments": 1,
+        "mobilising": 0,
+        "eligible_reached_pct": 30,
+        "active_users_90d": 257,
+        "contract_utilisation_pct": 48
+      },
+      "monthly_admissions": [
+        { "month": "2025-06", "baseline": 290, "with_dtx": 278 },
+        { "month": "2025-07", "baseline": 298, "with_dtx": 268 },
+        { "month": "2025-08", "baseline": 305, "with_dtx": 258 },
+        { "month": "2025-09", "baseline": 292, "with_dtx": 248 },
+        { "month": "2025-10", "baseline": 285, "with_dtx": 240 },
+        { "month": "2025-11", "baseline": 300, "with_dtx": 232 },
+        { "month": "2025-12", "baseline": 310, "with_dtx": 225 },
+        { "month": "2026-01", "baseline": 280, "with_dtx": 215 },
+        { "month": "2026-02", "baseline": 275, "with_dtx": 208 },
+        { "month": "2026-03", "baseline": 270, "with_dtx": 200 },
+        { "month": "2026-04", "baseline": 265, "with_dtx": 192 },
+        { "month": "2026-05", "baseline": 260, "with_dtx": 185 }
+      ],
+      "retention": {
+        "you": [
+          { "day": 0, "value": 100 },
+          { "day": 30, "value": 75 },
+          { "day": 60, "value": 60 },
+          { "day": 90, "value": 47 },
+          { "day": 180, "value": 33 }
+        ],
+        "pooled": [
+          { "day": 0, "value": 100 },
+          { "day": 30, "value": 74 },
+          { "day": 60, "value": 58 },
+          { "day": 90, "value": 46 },
+          { "day": 180, "value": 31 }
+        ]
+      },
+      "benchmarks": {
+        "registration_rate": { "p10": 34, "median": 41, "p90": 52, "you": 40, "percentile": 52 },
+        "uptake_rate": { "p10": 28, "median": 35, "p90": 48, "you": 30, "percentile": 40, "rank": 24, "total_icbs": 42 }
+      },
+      "deployments": [
+        {
+          "id": "luscii-generic",
+          "product": "Luscii",
+          "pathway": "COPD remote monitoring",
+          "status": "live",
+          "route": "HealthStore",
+          "active_users": 257,
+          "vs_target_pct": 5,
+          "detail": {
+            "invited": 1714,
+            "registered": 686,
+            "registered_pct": 40,
+            "active_90d": 257,
+            "active_pct": 37,
+            "completion_rate": 32,
+            "registration_percentile": 52,
+            "data_completeness": 92,
+            "insight": "Early NHSE Average ICB reference deployment. Room to grow invitation reach across the high-risk COPD cohort.",
+            "insight_variant": "default"
+          }
+        }
+      ],
+      "opportunity_value_gbp": 126000,
+      "unmet_headroom": 20000
+    },
     "national": {
       "icb_id": "E92000001",
       "icb_name": "England (illustrative baseline)",

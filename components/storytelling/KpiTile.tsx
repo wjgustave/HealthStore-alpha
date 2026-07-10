@@ -6,7 +6,7 @@ import type { ReactNode } from 'react'
  *
  * NHS frontend ships no metric/KPI component, so this is inferred from the NHS
  * card language: a flat white surface, square 4px corners and a 4px NHS-blue top
- * keyline, with the value rendered in NHS blue. Optionally a link.
+ * keyline. Metric values use primary text colour. Optionally a link.
  */
 export function KpiTile({
   value,

@@ -1,4 +1,5 @@
 import { formatPricingModelDisplay } from '@/components/AppDetailSections'
+import { catalogueDemoAvailable } from '@/lib/catalogueCardSignals'
 
 /** Tri-state for prose fields (FHIR / EMIS); NHS rows use boolean only. */
 export type InteropIntegrationValue = boolean | null
@@ -54,6 +55,8 @@ export type CommissioningSnapshotCard =
       kind: 'platform'
       label: string
       values: string[]
+      /** Deep-link to demo access when a catalogue demo is available. */
+      demoLink?: { href: string; label: string }
     }
 
 export type FundingSnapshotCard = Extract<CommissioningSnapshotCard, { kind: 'funding' }>
@@ -162,12 +165,16 @@ function fundingCard(
   }
 }
 
-function platformCard(app: any): CommissioningSnapshotCard {
+function platformCard(app: any, opts?: { demoHref?: string }): CommissioningSnapshotCard {
   const platforms: string[] = app.platform_tags ?? app.platforms ?? []
+  const demoHref = opts?.demoHref ?? '#demo-access'
   return {
     kind: 'platform',
     label: 'Platform',
     values: platforms.length > 0 ? platforms : ['iOS', 'Android', 'Web'],
+    ...(catalogueDemoAvailable(app)
+      ? { demoLink: { href: demoHref, label: 'Demo available' } }
+      : {}),
   }
 }
 
@@ -193,7 +200,7 @@ function interopCard(app: any, opts?: { interopHref?: string }): CommissioningSn
 
   return {
     kind: 'interop',
-    label: 'Integration capability',
+    label: 'Technical integration',
     href: opts?.interopHref ?? '#nhs-integrations',
     items,
   }
@@ -202,9 +209,9 @@ function interopCard(app: any, opts?: { interopHref?: string }): CommissioningSn
 /** Grid callout cards: governance, pricing model, platform, integration ready (where-live is the 4th slot in the UI). */
 export function getCommissioningSnapshot(
   app: any,
-  opts?: { commercialHref?: string; interopHref?: string },
+  opts?: { commercialHref?: string; interopHref?: string; demoHref?: string },
 ): CommissioningSnapshotCard[] {
-  return [regulationCard(app), platformCard(app), costCard(app, opts), interopCard(app, opts)]
+  return [regulationCard(app), platformCard(app, opts), costCard(app, opts), interopCard(app, opts)]
 }
 
 export function getFundingSnapshotCard(

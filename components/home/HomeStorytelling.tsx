@@ -49,45 +49,51 @@ const PATHWAYS = [
  */
 export function HomeStorytelling() {
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12 md:pt-14">
-      <section className="hs-section">
-        <h2 className="hs-section-title">What HealthStore does</h2>
-        <p className="hs-section-note hs-measure">
-          We reduce the burden on local teams by doing nationally what would otherwise be repeated at every ICB. You
-          retain all commissioning, clinical safety and deployment accountability.
-        </p>
-        <div className="hs-card-grid">
-          {WHAT_WE_DO.map((item) => (
-            <div key={item.title} className="hs-card" style={{ borderLeft: '4px solid var(--nhs-blue)' }}>
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-            </div>
-          ))}
+    <>
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12 md:pt-14">
+        <section className="hs-section">
+          <h2 className="hs-section-title">What HealthStore does</h2>
+          <p className="hs-section-note hs-measure">
+            We reduce the burden on local teams by doing nationally what would otherwise be repeated at every ICB. You
+            retain all commissioning, clinical safety and deployment accountability.
+          </p>
+          <div className="hs-card-grid">
+            {WHAT_WE_DO.map((item) => (
+              <div key={item.title} className="hs-card" style={{ borderLeft: '4px solid var(--nhs-blue)' }}>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <section className="hs-section bg-white py-12 md:py-14">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <h2 className="hs-section-title">How it works</h2>
+          <ProcessSteps steps={HOW_IT_WORKS} />
         </div>
       </section>
 
-      <section className="hs-section">
-        <h2 className="hs-section-title">How it works</h2>
-        <ProcessSteps steps={HOW_IT_WORKS} />
-      </section>
-
-      <section className="hs-section">
-        <h2 className="hs-section-title">Pathways we support today</h2>
-        <p className="hs-section-note hs-measure">
-          Condition pathways with NICE Health Technology Guidance, nationally assured products and full local
-          opportunity data.
-        </p>
-        <div className="hs-supported-pathways">
-          {PATHWAYS.map((p) => (
-            <Link key={p.href} href={p.href} className="hs-pathway-btn">
-              <strong>{p.title}</strong>
-              <span>{p.detail}</span>
-              <span className="nhsuk-tag nhsuk-tag--blue mt-1 self-start">{p.tag}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-    </div>
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12 md:pt-14">
+        <section className="hs-section">
+          <h2 className="hs-section-title">Pathways we support today</h2>
+          <p className="hs-section-note hs-measure">
+            Condition pathways with NICE Health Technology Guidance, nationally assured products and full local
+            opportunity data.
+          </p>
+          <div className="hs-supported-pathways">
+            {PATHWAYS.map((p) => (
+              <Link key={p.href} href={p.href} className="hs-pathway-btn">
+                <strong>{p.title}</strong>
+                <span>{p.detail}</span>
+                <span className="nhsuk-tag nhsuk-tag--blue mt-1 self-start">{p.tag}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </div>
+    </>
   )
 }
 

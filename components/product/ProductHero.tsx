@@ -94,7 +94,7 @@ export default function ProductHero({
                 className="hs-btn hs-btn-primary"
                 style={{ display: 'inline-flex', marginTop: 12 }}
               >
-                {d.label} ↗
+                {d.label} (opens in a new tab)
               </a>
             ))}
           </div>
@@ -112,7 +112,7 @@ export default function ProductHero({
           <div className="hs-product-hero__demo-links">
             {demoVariants.map((d) => (
               <a key={d.url} href={d.url} target="_blank" rel="noopener noreferrer" className="hs-btn hs-btn-secondary">
-                {d.label} ↗
+                {d.label} (opens in a new tab)
               </a>
             ))}
           </div>

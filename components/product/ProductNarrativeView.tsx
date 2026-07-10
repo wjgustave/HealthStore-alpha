@@ -284,7 +284,7 @@ export default function ProductNarrativeView({
                 {narrative.commissioner_economics.settings.map((s) => (
                   <div key={s.label} className="hs-card">
                     <h3>{s.label}</h3>
-                    {s.net_value_gbp != null && <p style={{ fontSize: 22, fontWeight: 700, color: '#005eb8', margin: '8px 0' }}>{formatGbp(s.net_value_gbp)} net</p>}
+                    {s.net_value_gbp != null && <p style={{ fontSize: 22, fontWeight: 700, color: 'var(--text-primary)', margin: '8px 0' }}>{formatGbp(s.net_value_gbp)} net</p>}
                     <ul style={{ listStyle: 'none', padding: 0, margin: '12px 0 0' }}>
                       {s.cash_gbp != null && <li style={{ fontSize: 14, marginBottom: 4 }}>Cash releasing: {formatGbp(s.cash_gbp)}</li>}
                       {s.capacity_gbp != null && <li style={{ fontSize: 14, marginBottom: 4 }}>Capacity released: {formatGbp(s.capacity_gbp)}</li>}
@@ -419,7 +419,7 @@ export default function ProductNarrativeView({
                         {pub.type_label && <span className="hs-tag hs-tag-grey" style={{ marginTop: 4, display: 'inline-block' }}>{pub.type_label}</span>}
                         {pub.sample_size && <span style={{ fontSize: 13, color: '#4c6272', marginLeft: 8 }}>Deployment across {pub.sample_size.toLocaleString()} patients</span>}
                       </div>
-                      {pub.url && <a href={pub.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: '#005eb8', whiteSpace: 'nowrap' }}>View →</a>}
+                      {pub.url && <a href={pub.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: '#005eb8', whiteSpace: 'nowrap' }}>View (opens in a new tab)</a>}
                     </div>
                     {pub.outcome && <p style={{ margin: '6px 0 0', fontSize: 13, color: '#4c6272' }}>{pub.outcome}</p>}
                   </div>
@@ -449,7 +449,7 @@ export default function ProductNarrativeView({
                 <div key={ref.ref} style={{ display: 'flex', gap: 12, alignItems: 'center', padding: '8px 12px', background: '#f0f4f5', borderRadius: 6 }}>
                   <span className="hs-tag hs-tag-blue">{ref.ref}</span>
                   <span style={{ fontSize: 14, color: '#212b32' }}>{ref.note ?? ref.type} — {ref.date}</span>
-                  {ref.url && <a href={ref.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: '#005eb8', marginLeft: 'auto' }}>View guidance →</a>}
+                  {ref.url && <a href={ref.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: '#005eb8', marginLeft: 'auto' }}>View guidance (opens in a new tab)</a>}
                 </div>
               ))}
             </div>

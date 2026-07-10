@@ -117,11 +117,7 @@ export function FundingDirectoryCard({ f, apps }: { f: FundingDirectoryRecord; a
             className="inline-flex items-center gap-2 py-1 hs-text-label hs-font-bold transition-colors hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
             style={{ color: 'var(--nhs-blue)', outlineColor: 'var(--nhs-blue)' }}
           >
-            <span>{f.external_url_label ?? 'More information'}</span>
-            <span aria-hidden className="translate-y-px">
-              →
-            </span>
-            <span className="sr-only">(opens in a new tab)</span>
+            <span>{f.external_url_label ?? 'More information'} (opens in a new tab)</span>
           </a>
         ) : null}
       </div>

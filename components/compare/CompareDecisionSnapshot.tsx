@@ -63,7 +63,7 @@ function PricingMini({ card }: { card: Extract<CommissioningSnapshotCard, { kind
 function IntegrationsMini({ card }: { card: Extract<CommissioningSnapshotCard, { kind: 'interop' }> }) {
   const readyItems = interopItemsInOrder(card.items, INTEGRATION_READY_KEYS)
   if (readyItems.length === 0) {
-    return <span className="text-xs" style={{ color: 'var(--text-muted)' }}>None listed</span>
+    return <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Information not available</span>
   }
   return (
     <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
@@ -120,7 +120,7 @@ function CompareSnapshotCell({ app }: { app: App }) {
         </MiniSegment>
       ) : null}
       {interop ? (
-        <MiniSegment label="Integration capability">
+        <MiniSegment label="Technical integration">
           <IntegrationsMini card={interop} />
         </MiniSegment>
       ) : null}

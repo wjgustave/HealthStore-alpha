@@ -54,17 +54,17 @@ export default function PdpNhsExperience({ app }: { app: any }) {
       description={`Where ${app.app_name} is deployed across the NHS today, and where case studies and evaluations have taken place.`}
     >
       {hasRegister && (
-        <div className={hasCases ? 'mb-8' : ''}>
+        <div>
           <DeploymentRegisterTable rows={rows} />
         </div>
       )}
 
       {hasCases && (
         <div>
-          <h3 className="hs-font-bold mb-1" style={{ fontSize: 'var(--text-card-title-sm)', color: 'var(--text-secondary)' }}>
+          <h3 className="hs-pdp-subheading hs-font-bold mb-1" style={{ fontSize: 'var(--text-card-title-sm)' }}>
             Case studies and evaluations
           </h3>
-          <CaseStudyCards caseStudies={caseStudies} />
+          <CaseStudyCards caseStudies={caseStudies} plainCards />
         </div>
       )}
     </PdpSection>

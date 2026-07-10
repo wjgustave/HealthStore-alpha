@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import { AUTH_DISABLED } from '@/lib/authMode'
 import { getSession } from '@/lib/session'
 import { getConditionAreas } from '@/lib/data'
 import { getOrganisationProfileFromSession } from '@/lib/ai/commissionerProfiles'
@@ -10,6 +11,9 @@ import OrgSettingsClient from './OrgSettingsClient'
 export const dynamic = 'force-dynamic'
 
 export default async function OrgSettingsPage() {
+  // Open-access: org settings are not used (middleware also redirects here).
+  if (AUTH_DISABLED) redirect('/')
+
   const session = await getSession()
 
   if (!session.isLoggedIn) redirect('/login')

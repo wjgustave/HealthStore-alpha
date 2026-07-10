@@ -31,18 +31,19 @@ function ExternalOrInternalLink({
 }
 
 /**
- * Reusable case study tile: photo fills the card; navy band carries the title.
+ * Reusable case study tile: photo + white title band.
+ * Border uses NHS primary clickable card (`.app-card`).
  * When `href` is omitted the card renders static (used for non-interactive home previews).
  */
 export function CaseStudyCard({ study, href }: { study: CaseStudy; href?: string }) {
   const Title = (
-    <span className="hs-text-body hs-font-bold leading-snug text-white md:hs-text-card-title-sm" style={fr}>
+    <span className="hs-text-body hs-font-bold leading-snug md:hs-text-card-title-sm" style={{ ...fr, color: 'var(--text-primary)' }}>
       {study.title}
     </span>
   )
 
-  return (
-    <div className="hs-surface-card group flex h-full min-h-[15rem] w-full min-w-0 flex-col overflow-hidden">
+  const body = (
+    <>
       <div className="relative min-h-[10rem] flex-1 overflow-hidden">
         <Image
           src={study.image}
@@ -52,22 +53,38 @@ export function CaseStudyCard({ study, href }: { study: CaseStudy; href?: string
           sizes="(max-width: 1024px) 100vw, 30vw"
         />
       </div>
-      <div className="shrink-0 bg-[#003087] px-6 py-4">
+      <div className="shrink-0 bg-white px-6 py-4">
         {href ? (
-          <ExternalOrInternalLink
-            href={href}
-            className="flex items-end justify-between gap-4 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
+          <span className="flex items-end justify-between gap-4 text-left">
             {Title}
-            <ChevronRight className="h-5 w-5 shrink-0 text-white opacity-95" aria-hidden />
-          </ExternalOrInternalLink>
+            <ChevronRight className="h-5 w-5 shrink-0" style={{ color: 'var(--nhs-blue)' }} aria-hidden />
+          </span>
         ) : (
           <div className="flex items-end justify-between gap-4">{Title}</div>
         )}
         {study.description ? (
-          <p className="mt-2 mb-0 hs-text-label leading-relaxed text-white/80">{study.description}</p>
+          <p className="mt-2 mb-0 hs-text-label leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+            {study.description}
+          </p>
         ) : null}
       </div>
+    </>
+  )
+
+  if (href) {
+    return (
+      <ExternalOrInternalLink
+        href={href}
+        className="app-card group flex h-full min-h-[15rem] w-full min-w-0 flex-col overflow-hidden no-underline"
+      >
+        {body}
+      </ExternalOrInternalLink>
+    )
+  }
+
+  return (
+    <div className="app-card group flex h-full min-h-[15rem] w-full min-w-0 flex-col overflow-hidden">
+      {body}
     </div>
   )
 }
@@ -75,7 +92,7 @@ export function CaseStudyCard({ study, href }: { study: CaseStudy; href?: string
 /** Large, prominent case study card used for the featured app on the home band. */
 function FeaturedCaseStudyCard({ study }: { study: CaseStudy }) {
   return (
-    <div className="hs-surface-card flex h-full min-h-[22rem] w-full min-w-0 flex-col overflow-hidden">
+    <div className="app-card flex h-full min-h-[22rem] w-full min-w-0 flex-col overflow-hidden">
       <div className="relative min-h-[14rem] flex-1 overflow-hidden">
         <Image
           src={study.image}
@@ -86,15 +103,15 @@ function FeaturedCaseStudyCard({ study }: { study: CaseStudy }) {
           priority
         />
       </div>
-      <div className="shrink-0 bg-[#003087] px-6 py-6">
-        <span className="mb-2 inline-block rounded bg-white/15 px-2 py-1 hs-text-caption hs-font-bold uppercase tracking-wide text-white">
-          Featured
-        </span>
-        <h3 className="hs-text-lede hs-font-bold leading-snug text-white md:hs-text-section-alt" style={fr}>
+      <div className="shrink-0 bg-white px-6 py-6">
+        <span className="badge badge-blue mb-2 inline-block">Featured</span>
+        <h3 className="hs-text-lede hs-font-bold leading-snug md:hs-text-section-alt" style={{ ...fr, color: 'var(--text-primary)' }}>
           {study.title}
         </h3>
         {study.description ? (
-          <p className="mt-2 mb-0 hs-text-label leading-relaxed text-white/80">{study.description}</p>
+          <p className="mt-2 mb-0 hs-text-label leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+            {study.description}
+          </p>
         ) : null}
       </div>
     </div>
@@ -104,7 +121,7 @@ function FeaturedCaseStudyCard({ study }: { study: CaseStudy }) {
 /** Compact, lower-prominence horizontal case study card for the home band sidebar. */
 function CompactCaseStudyCard({ study }: { study: CaseStudy }) {
   return (
-    <div className="hs-surface-card flex min-h-[5.5rem] w-full min-w-0 overflow-hidden">
+    <div className="app-card flex min-h-[5.5rem] w-full min-w-0 overflow-hidden">
       <div className="relative w-24 shrink-0 overflow-hidden sm:w-28">
         <Image
           src={study.image}
@@ -114,8 +131,8 @@ function CompactCaseStudyCard({ study }: { study: CaseStudy }) {
           sizes="112px"
         />
       </div>
-      <div className="flex min-w-0 flex-1 items-center bg-[#003087] px-4 py-4">
-        <span className="hs-text-label hs-font-bold leading-snug text-white" style={fr}>
+      <div className="flex min-w-0 flex-1 items-center bg-white px-4 py-4">
+        <span className="hs-text-label hs-font-bold leading-snug" style={{ ...fr, color: 'var(--text-primary)' }}>
           {study.title}
         </span>
       </div>
@@ -130,7 +147,7 @@ export function HomeCaseStudiesBand({ caseStudies }: { caseStudies: CaseStudy[] 
   return (
     <section
       className="relative overflow-x-clip py-12 md:py-16"
-      style={{ background: 'linear-gradient(135deg, #003087 0%, #00449E 55%, var(--nhs-blue) 100%)' }}
+      style={{ background: 'var(--nhs-blue)' }}
       aria-labelledby="case-studies-heading"
     >
       <div className="mx-auto max-w-7xl px-4 md:px-8">

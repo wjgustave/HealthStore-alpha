@@ -441,7 +441,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                       href={`/apps/${app.slug}`}
                       className="nhsuk-button mb-0 inline-flex w-full items-center justify-center gap-2 py-4 text-center align-top no-underline hs-text-label hs-font-bold"
                     >
-                      View details →
+                      View product details
                     </Link>
                     <CompareToggleButton appId={app.id} solid size="none" className="w-full" />
                   </div>

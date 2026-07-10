@@ -80,8 +80,8 @@ export default function PdpFundingLevers({
       )}
 
       {schemes.length > 0 && (
-        <div className={levers.length > 0 || tariffNote ? 'mt-6' : undefined}>
-          <h3 className="hs-font-bold mb-3" style={{ fontSize: 'var(--text-card-title-sm)', color: 'var(--text-secondary)' }}>
+        <div>
+          <h3 className="hs-pdp-subheading hs-font-bold mb-3" style={{ fontSize: 'var(--text-card-title-sm)' }}>
             Linked funding schemes
           </h3>
           <div className="grid gap-4 grid-cols-1">
@@ -113,7 +113,7 @@ export default function PdpFundingLevers({
                     className="hs-text-caption hs-font-normal mt-2 inline-block"
                     style={{ color: 'var(--nhs-blue)' }}
                   >
-                    {f.external_url_label ?? 'More info'} ↗
+                    {f.external_url_label ?? 'More info'} (opens in a new tab)
                   </a>
                 )}
               </div>

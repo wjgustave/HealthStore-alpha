@@ -1,10 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getIronSession } from 'iron-session'
 import type { SessionData } from '@/lib/session'
+import { AUTH_DISABLED } from '@/lib/authMode'
 
 export async function middleware(req: NextRequest) {
-  // Open-access mode: skip all auth gating so every page is reachable without signing in.
-  if (process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true') {
+  const { pathname } = req.nextUrl
+
+  // Open-access mode: skip auth gating; send auth/org routes back to the home page.
+  if (AUTH_DISABLED) {
+    if (
+      pathname === '/login' ||
+      pathname === '/select-entity' ||
+      pathname === '/org-settings' ||
+      pathname === '/account/organisation' ||
+      pathname === '/dashboard'
+    ) {
+      return NextResponse.redirect(new URL('/', req.url))
+    }
     return NextResponse.next()
   }
 
@@ -14,19 +26,17 @@ export async function middleware(req: NextRequest) {
     cookieName: 'dtx-store-session',
   })
 
-  const { pathname } = req.nextUrl
-
   if (pathname === '/login') {
     if (session.isLoggedIn) {
       if (session.requiresCommissioningEntitySelection) {
         return NextResponse.redirect(new URL('/select-entity', req.url))
       }
-      return NextResponse.redirect(new URL('/dashboard', req.url))
+      return NextResponse.redirect(new URL('/apps', req.url))
     }
     return res
   }
 
-  const publicPaths = ['/', '/cookies', '/news', '/campaigns', '/case-studies']
+  const publicPaths = ['/', '/cookies', '/news', '/campaigns', '/case-studies', '/about', '/how-it-helps', '/resources', '/guidance']
   if (publicPaths.includes(pathname)) {
     return res
   }
@@ -35,8 +45,12 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/login', req.url))
   }
 
+  if (pathname === '/dashboard') {
+    return NextResponse.redirect(new URL('/apps', req.url))
+  }
+
   if (pathname === '/select-entity' && !session.requiresCommissioningEntitySelection) {
-    return NextResponse.redirect(new URL('/dashboard', req.url))
+    return NextResponse.redirect(new URL('/apps', req.url))
   }
 
   if (session.requiresCommissioningEntitySelection && pathname !== '/select-entity') {

@@ -4,6 +4,7 @@ import AppShell from '@/components/AppShell'
 import CookieConsentRoot from '@/components/CookieConsentRoot'
 import { isAiAdvisorEnabledFromEnv } from '@/lib/aiAdvisor'
 import { isAlphaLineFromEnv } from '@/lib/alphaLine'
+import { AUTH_DISABLED } from '@/lib/authMode'
 import { getSession } from '@/lib/session'
 import { getCommissioningContextLabel } from '@/lib/commissioningContextDisplay'
 import { getResolvedOrganisationProfile } from '@/lib/ai/organisationProfileResolver'
@@ -17,13 +18,15 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession()
   const isLoggedIn = session.isLoggedIn
-  const commissioningContextLabel = isLoggedIn ? getCommissioningContextLabel(session) : ''
+  // Open-access: no org context chrome.
+  const commissioningContextLabel =
+    !AUTH_DISABLED && isLoggedIn ? getCommissioningContextLabel(session) : ''
   const allApps = getAllApps()
   const alphaLine = isAlphaLineFromEnv()
   const aiAdvisorEnabled = isAiAdvisorEnabledFromEnv()
 
   const aiProfile =
-    isLoggedIn && aiAdvisorEnabled
+    !AUTH_DISABLED && isLoggedIn && aiAdvisorEnabled
       ? await (async () => {
           const profile = await getResolvedOrganisationProfile(session)
           return {

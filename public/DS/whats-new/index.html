@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>What's changed — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+  <style>
+    /* Local-only: side-by-side before/after frame for this changelog page. */
+    .wn-ba { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0 0; }
+    @media (max-width: 720px) { .wn-ba { grid-template-columns: 1fr; } }
+    .wn-ba__col { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+    .wn-ba__cap { display: flex; align-items: center; gap: 8px; margin: 0; padding: 8px 12px; font-size: var(--text-caption); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--border); }
+    .wn-ba__cap--before { color: #8a1c13; background: #fbeceb; }
+    .wn-ba__cap--after { color: #00512b; background: #e8f4ed; }
+    .wn-ba__body { padding: 16px; background: #fff; }
+    .wn-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    .wn-dot--before { background: #d5281b; }
+    .wn-dot--after { background: #007f3b; }
+    .wn-viz { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; margin-top: 12px; }
+    @media (max-width: 720px) { .wn-viz { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div id="ds-root" data-ds-page="whats-new" data-ds-provenance="NHS">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Release notes &middot; Round 9</p>
+      <h1 class="ds-page-title">What&rsquo;s changed</h1>
+      <p class="ds-lede">
+        A visual record of the design changes shipped into the prototype since the
+        <a href="/DS/Audits/Report-v8/index.html">v3 audit (Round 8)</a>. Each entry shows the
+        <strong>before</strong> and <strong>after</strong> side by side, rendered with the live
+        design-system CSS so the reference and the product stay in step. Tokens mirror
+        <code>app/globals.css</code>.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Scope</div><div class="ds-meta__v">Product detail (PDP) visual pass</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Surfaces</div><div class="ds-meta__v">Commissioning snapshot, local value, NHS experience, evidence, charts</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">New token</div><div class="ds-meta__v">Blue tint-25 (<code>--blue-tint-25</code> / <code>#5694CA</code>)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">New component</div><div class="ds-meta__v">Before/after impact charts (4 variants)</div></div>
+    </div>
+
+    <div class="ds-note">
+      <strong>How to read this page.</strong> The <span class="wn-dot wn-dot--before"></span> <strong>Before</strong>
+      column reproduces the previous styling inline; the <span class="wn-dot wn-dot--after"></span>
+      <strong>After</strong> column uses the current DS classes. Related reference pages:
+      <a href="/DS/styles/colour.html">Colour</a> &middot;
+      <a href="/DS/patterns/product-detail.html">Product detail (PDP)</a>.
+    </div>
+
+    <h2>Summary of changes</h2>
+    <table class="ds-table">
+      <thead><tr><th>#</th><th>Change</th><th>Where</th><th>Rationale</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Snapshot heading links now <strong>NHS blue</strong></td><td><code>PdpCommissioningSnapshot</code></td><td>Blue is reserved for interactive text; these headings deep-link into detail sections.</td></tr>
+        <tr><td>2</td><td>New <strong>Blue tint-25</strong> token for KPI / metric figures</td><td><code>globals.css</code>, <code>storeAccent.ts</code></td><td>Separates metric emphasis from links, which keep full NHS blue.</td></tr>
+        <tr><td>3</td><td>KPI tile values default to <strong>primary text</strong></td><td><code>KpiTile</code></td><td>Keeps NHS blue for links / controls only; metrics read as data, not links.</td></tr>
+        <tr><td>4</td><td>PDP &ldquo;On this page&rdquo; sidebar moved to the <strong>left</strong></td><td><code>globals.css</code>, <code>ds.css</code></td><td>Nav-first reading order, aligned with GOV.UK related-navigation placement.</td></tr>
+        <tr><td>5</td><td>Chart panel is now a <strong>flat white NHS card</strong> (square corners)</td><td><code>ChartPanel</code></td><td>Consistent with the NHS primary non-clickable card language.</td></tr>
+        <tr><td>6</td><td>New <strong>before/after impact charts</strong> (paired, cut, delta, tiles)</td><td><code>BeforeAfterImpact</code></td><td>Dual-metric comparison for myCOPD; NHS tokens only, no third-party viz.</td></tr>
+        <tr><td>7</td><td>Evidence / publication card is a <strong>plain NHS primary card</strong></td><td><code>PdpClinicalPublications</code></td><td>Removes the accent keyline so evidence cards read as reference, not status.</td></tr>
+        <tr><td>8</td><td>Body copy on NHS experience &amp; local value bumped to <strong>16px</strong></td><td><code>globals.css</code></td><td>Matches NHS body-s minimum for dense commissioner content.</td></tr>
+      </tbody>
+    </table>
+
+    <hr class="ds-rule">
+
+    <h2>1. Commissioning snapshot heading links</h2>
+    <p>
+      Segment headings that deep-link into a detail section &mdash; <strong>Indicative cost</strong>,
+      <strong>Integration capability</strong>, <strong>Live NHSE sites</strong> &mdash; were rendered in primary
+      text, so they didn&rsquo;t read as links. They now use <code>--nhs-blue</code> with an underline, matching every
+      other inline link. Non-linking headings (e.g. Funding) stay primary text.
+    </p>
+    <div class="wn-ba">
+      <div class="wn-ba__col">
+        <p class="wn-ba__cap wn-ba__cap--before"><span class="wn-dot wn-dot--before"></span> Before</p>
+        <div class="wn-ba__body">
+          <div class="hs-snapshot-strip__segment">
+            <h2 class="hs-snapshot-strip__heading"><a href="#ds-main" style="color:var(--text-primary);text-decoration:none">Live NHSE sites</a></h2>
+            <div class="hs-snapshot-strip__body"><span class="badge badge-blue">5 ICBs</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="wn-ba__col">
+        <p class="wn-ba__cap wn-ba__cap--after"><span class="wn-dot wn-dot--after"></span> After</p>
+        <div class="wn-ba__body">
+          <div class="hs-snapshot-strip__segment">
+            <h2 class="hs-snapshot-strip__heading"><a class="hs-snapshot-strip__heading-link" href="#ds-main">Live NHSE sites</a></h2>
+            <div class="hs-snapshot-strip__body"><span class="badge badge-blue">5 ICBs</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ds-note ds-note--source">Source: <code>components/PdpCommissioningSnapshot.tsx</code>, <code>components/PdpWhereLive.tsx</code>, <code>app/globals.css</code> (<code>.hs-pdp .hs-snapshot-strip__heading-link</code>).</div>
+
+    <h2>2. New colour token &mdash; Blue tint-25</h2>
+    <p>
+      One GOV.UK colour is adopted for KPI / metric value text that needs a blue accent:
+      <a href="https://design-system.service.gov.uk/styles/colour/">Blue tint-25</a>
+      (<code>--blue-tint-25</code> / <code>#5694CA</code>). It is lighter than NHS blue so metric figures read as
+      <em>data</em>, while full NHS blue stays reserved for links and controls. See
+      <a href="/DS/styles/colour.html">Colour</a> for the usage table.
+    </p>
+    <div class="ds-swatches">
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#005EB8"></div><div class="ds-swatch__body"><div class="ds-swatch__name">NHS blue</div><div class="ds-swatch__meta">--nhs-blue &middot; #005EB8 &middot; links / controls</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#5694CA"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Blue tint-25 <span class="badge badge-green" style="margin-left:6px">New</span></div><div class="ds-swatch__meta">--blue-tint-25 &middot; #5694CA &middot; KPI / metric values</div></div></div>
+    </div>
+    <div class="ds-note ds-note--source">Source: <code>app/globals.css</code> (<code>:root</code>), <code>lib/storeAccent.ts</code> (<code>BLUE_TINT_25</code>), <code>public/DS/assets/ds.css</code>.</div>
+
+    <h2>3. KPI tile metric colour</h2>
+    <p>
+      KPI tile values previously rendered in NHS blue, which read as a link. They now default to
+      <code>--text-primary</code>; where a blue accent is wanted (e.g. local-value tiles) the new
+      <code>--blue-tint-25</code> token is used, never full NHS blue. The 4px NHS-blue top keyline is unchanged.
+    </p>
+    <div class="wn-ba">
+      <div class="wn-ba__col">
+        <p class="wn-ba__cap wn-ba__cap--before"><span class="wn-dot wn-dot--before"></span> Before</p>
+        <div class="wn-ba__body">
+          <div class="hs-kpi">
+            <div class="hs-kpi-value" style="color:var(--nhs-blue)">1,240</div>
+            <div class="hs-kpi-label">Admissions avoided / year</div>
+            <div class="hs-kpi-sub">Modelled across 5 ICBs</div>
+          </div>
+        </div>
+      </div>
+      <div class="wn-ba__col">
+        <p class="wn-ba__cap wn-ba__cap--after"><span class="wn-dot wn-dot--after"></span> After</p>
+        <div class="wn-ba__body">
+          <div class="hs-kpi">
+            <div class="hs-kpi-value">1,240</div>
+            <div class="hs-kpi-label">Admissions avoided / year</div>
+            <div class="hs-kpi-sub">Modelled across 5 ICBs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ds-note ds-note--source">Source: <code>components/storytelling/KpiTile.tsx</code>, <code>app/globals.css</code> (<code>.hs-kpi</code>).</div>
+
+    <h2>4. PDP &ldquo;On this page&rdquo; sidebar moved left</h2>
+    <p>
+      On desktop the sticky &ldquo;On this page&rdquo; nav moved from the right of the main column to the
+      <strong>left</strong>, so the reading order is nav &rarr; content. Grid columns changed from
+      <code>minmax(0,1fr) 14rem</code> to <code>14rem minmax(0,1fr)</code>.
+    </p>
+    <div class="wn-ba">
+      <div class="wn-ba__col">
+        <p class="wn-ba__cap wn-ba__cap--before"><span class="wn-dot wn-dot--before"></span> Before &mdash; nav on the right</p>
+        <div class="wn-ba__body">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 9rem;gap:16px;align-items:start">
+            <div style="border:1px dashed var(--border);padding:12px;font-size:var(--text-caption);color:var(--text-muted)">Main column &mdash; narrative spine, tabs</div>
+            <nav class="hs-on-this-page" aria-label="On this page (before)">
+              <strong class="hs-on-this-page__title">On this page</strong>
+              <ul class="hs-on-this-page__list">
+                <li><a class="hs-on-this-page__link hs-on-this-page__link--active" href="#ds-main">The problem</a></li>
+                <li><a class="hs-on-this-page__link" href="#ds-main">How it helps</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="wn-ba__col">
+        <p class="wn-ba__cap wn-ba__cap--after"><span class="wn-dot wn-dot--after"></span> After &mdash; nav on the left</p>
+        <div class="wn-ba__body">
+          <div style="display:grid;grid-template-columns:9rem minmax(0,1fr);gap:16px;align-items:start">
+            <nav class="hs-on-this-page" aria-label="On this page (after)">
+              <strong class="hs-on-this-page__title">On this page</strong>
+              <ul class="hs-on-this-page__list">
+                <li><a class="hs-on-this-page__link hs-on-this-page__link--active" href="#ds-main">The problem</a></li>
+                <li><a class="hs-on-this-page__link" href="#ds-main">How it helps</a></li>
+              </ul>
+            </nav>
+            <div style="border:1px dashed var(--border);padding:12px;font-size:var(--text-caption);color:var(--text-muted)">Main column &mdash; narrative spine, tabs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ds-note ds-note--source">Source: <code>app/globals.css</code> &amp; <code>public/DS/assets/ds.css</code> (<code>.hs-pdp-with-sidebar</code>). See <a href="/DS/patterns/product-detail.html">Product detail (PDP)</a>.</div>
+
+    <h2>5. Chart panel &mdash; flat white NHS card</h2>
+    <p>
+      The chart panel shell moved to a flat white fill with square (4px) corners via <code>--radius-card</code>,
+      matching the NHS primary non-clickable card. Previously it used <code>--radius-lg</code> on the tinted card token.
+    </p>
+    <div class="wn-ba">
+      <div class="wn-ba__col">
+        <p class="wn-ba__cap wn-ba__cap--before"><span class="wn-dot wn-dot--before"></span> Before</p>
+        <div class="wn-ba__body" style="background:var(--surface)">
+          <div class="hs-chart-panel" style="border-radius:8px">
+            <h3>Admissions per 1,000</h3>
+            <div class="hs-before-after hs-before-after--paired">
+              <div class="hs-before-after__row"><span class="hs-before-after__row-label">Today</span><div class="hs-before-after__track"><div class="hs-before-after__bar hs-before-after__bar--today" style="width:100%"></div></div><span class="hs-before-after__row-value">42</span></div>
+              <div class="hs-before-after__row"><span class="hs-before-after__row-label">With myCOPD</span><div class="hs-before-after__track"><div class="hs-before-after__bar hs-before-after__bar--with" style="width:64%"></div></div><span class="hs-before-after__row-value">27</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wn-ba__col">
+        <p class="wn-ba__cap wn-ba__cap--after"><span class="wn-dot wn-dot--after"></span> After</p>
+        <div class="wn-ba__body" style="background:var(--surface)">
+          <div class="hs-chart-panel">
+            <h3>Admissions per 1,000</h3>
+            <div class="hs-before-after hs-before-after--paired">
+              <div class="hs-before-after__row"><span class="hs-before-after__row-label">Today</span><div class="hs-before-after__track"><div class="hs-before-after__bar hs-before-after__bar--today" style="width:100%"></div></div><span class="hs-before-after__row-value">42</span></div>
+              <div class="hs-before-after__row"><span class="hs-before-after__row-label">With myCOPD</span><div class="hs-before-after__track"><div class="hs-before-after__bar hs-before-after__bar--with" style="width:64%"></div></div><span class="hs-before-after__row-value">27</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ds-note ds-note--source">Source: <code>components/storytelling/ChartPanel.tsx</code>, <code>app/globals.css</code> (<code>.hs-chart-panel</code>).</div>
+
+    <h2>6. New component &mdash; before/after impact charts</h2>
+    <p class="ds-provenance ds-provenance--bespoke" style="display:inline-block">Bespoke &mdash; no DS equivalent</p>
+    <p>
+      NHS frontend ships no data-viz, so <code>BeforeAfterImpact</code> provides four bespoke variants for myCOPD
+      dual-metric comparison, all built from NHS tokens (NHS blue for the &ldquo;with&rdquo; state, NHS grey for
+      baseline, a hatched fill for &ldquo;avoided&rdquo;). Each renders inside a <code>hs-chart-panel</code>.
+    </p>
+    <div class="wn-viz">
+      <div class="hs-chart-panel">
+        <h3>A &mdash; Paired bars</h3>
+        <div class="hs-before-after hs-before-after--paired">
+          <div class="hs-before-after__row"><span class="hs-before-after__row-label">Today</span><div class="hs-before-after__track"><div class="hs-before-after__bar hs-before-after__bar--today" style="width:100%"></div></div><span class="hs-before-after__row-value">1,240</span></div>
+          <div class="hs-before-after__row"><span class="hs-before-after__row-label">With myCOPD</span><div class="hs-before-after__track"><div class="hs-before-after__bar hs-before-after__bar--with" style="width:66%"></div></div><span class="hs-before-after__row-value">820</span></div>
+          <p class="hs-before-after__delta">&asymp; 420 admissions avoided / year</p>
+        </div>
+      </div>
+      <div class="hs-chart-panel">
+        <h3>B &mdash; Reduction cut</h3>
+        <div class="hs-before-after hs-before-after--cut">
+          <div class="hs-before-after__cut-meta"><span>Today <strong>1,240</strong></span><span>Remaining <strong>820</strong></span></div>
+          <div class="hs-before-after__cut-track" role="img" aria-label="Today 1,240, remaining 820, 420 avoided">
+            <div class="hs-before-after__cut-remaining" style="width:66%"></div>
+            <div class="hs-before-after__cut-avoided" style="width:34%"></div>
+          </div>
+          <div class="hs-before-after__cut-legend">
+            <span><i class="hs-before-after__swatch hs-before-after__swatch--with" aria-hidden></i> Remaining</span>
+            <span><i class="hs-before-after__swatch hs-before-after__swatch--avoided" aria-hidden></i> Avoided</span>
+          </div>
+          <p class="hs-before-after__delta">&asymp; 420 admissions avoided / year</p>
+        </div>
+      </div>
+      <div class="hs-chart-panel">
+        <h3>C &mdash; Delta-first</h3>
+        <div class="hs-before-after hs-before-after--delta">
+          <div class="hs-before-after__hero">
+            <div class="hs-before-after__hero-value">&asymp; 420</div>
+            <div class="hs-before-after__hero-label">admissions avoided / year</div>
+          </div>
+          <div class="hs-before-after__mini">
+            <div class="hs-before-after__mini-row"><span>Today</span><div class="hs-before-after__mini-track"><div class="hs-before-after__bar hs-before-after__bar--today" style="width:100%"></div></div><strong>1,240</strong></div>
+            <div class="hs-before-after__mini-row"><span>With myCOPD</span><div class="hs-before-after__mini-track"><div class="hs-before-after__bar hs-before-after__bar--with" style="width:66%"></div></div><strong>820</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="hs-chart-panel">
+        <h3>D &mdash; Volume tiles</h3>
+        <div class="hs-before-after hs-before-after--tiles">
+          <div class="hs-before-after__tiles-row">
+            <div class="hs-before-after__tile"><div class="hs-before-after__tile-label">Today</div><div class="hs-before-after__tile-value">1,240</div></div>
+            <div class="hs-before-after__connector" aria-hidden>&rarr;</div>
+            <div class="hs-before-after__tile hs-before-after__tile--with"><div class="hs-before-after__tile-label">With myCOPD</div><div class="hs-before-after__tile-value">820</div></div>
+          </div>
+          <p class="hs-before-after__delta">&asymp; 420 admissions avoided / year</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-note ds-note--source">Source: <code>components/charts/BeforeAfterImpact.tsx</code>, <code>components/product/MycopdImpactCharts.tsx</code>, <code>lib/localData/mycopdImpact.ts</code>.</div>
+
+    <h2>7. Evidence / publication card</h2>
+    <p>
+      Clinical publication cards dropped the coloured accent keyline and are now a plain NHS primary card
+      (<code>.hs-case-card--publication</code>): white fill, 1px <code>--border</code>, square corners &mdash; so they
+      read as reference material rather than a status signal.
+    </p>
+    <div class="wn-ba">
+      <div class="wn-ba__col">
+        <p class="wn-ba__cap wn-ba__cap--before"><span class="wn-dot wn-dot--before"></span> Before &mdash; accent keyline</p>
+        <div class="wn-ba__body">
+          <div class="hs-case-card--publication" style="border-left:4px solid var(--nhs-green)">
+            <div class="ds-u-row" style="margin-bottom:6px"><span class="badge badge-blue">RCT</span><span class="badge badge-grey">n=240</span></div>
+            <p class="hs-case-card__title">Reduced admissions in a 12-month trial</p>
+            <p class="hs-case-card__source">Author et al., Journal 2024</p>
+          </div>
+        </div>
+      </div>
+      <div class="wn-ba__col">
+        <p class="wn-ba__cap wn-ba__cap--after"><span class="wn-dot wn-dot--after"></span> After &mdash; plain NHS card</p>
+        <div class="wn-ba__body">
+          <div class="hs-case-card--publication">
+            <div class="ds-u-row" style="margin-bottom:6px"><span class="badge badge-blue">RCT</span><span class="badge badge-grey">n=240</span></div>
+            <p class="hs-case-card__title">Reduced admissions in a 12-month trial</p>
+            <p class="hs-case-card__source">Author et al., Journal 2024</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ds-note ds-note--source">Source: <code>components/product/PdpClinicalPublications.tsx</code>, <code>app/globals.css</code> (<code>.hs-case-card--publication</code>).</div>
+
+    <h2>8. Body copy size on dense PDP sections</h2>
+    <p>
+      Intro, stat labels, badges, outcomes and disclaimers in the <strong>NHS experience</strong> and
+      <strong>local value</strong> sections were bumped to 16px (NHS body-s), the NHS minimum for body copy, so dense
+      commissioner content stays legible.
+    </p>
+    <div class="wn-ba">
+      <div class="wn-ba__col">
+        <p class="wn-ba__cap wn-ba__cap--before"><span class="wn-dot wn-dot--before"></span> Before &mdash; 14px</p>
+        <div class="wn-ba__body">
+          <p style="font-size:0.875rem;color:var(--text-secondary);margin:0">Deployed across 5 ICBs with clinician oversight and remote monitoring, reducing avoidable admissions.</p>
+        </div>
+      </div>
+      <div class="wn-ba__col">
+        <p class="wn-ba__cap wn-ba__cap--after"><span class="wn-dot wn-dot--after"></span> After &mdash; 16px</p>
+        <div class="wn-ba__body">
+          <p style="font-size:1rem;color:var(--text-secondary);margin:0">Deployed across 5 ICBs with clinician oversight and remote monitoring, reducing avoidable admissions.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ds-note ds-note--source">Source: <code>app/globals.css</code> (<code>#nhs-experience</code>, <code>#local-impact</code>, <code>#local-value-worth</code>).</div>
+
+    <hr class="ds-rule">
+    <p class="ds-u-muted" style="font-size:.85rem">
+      Round 9 visual record. Previews rendered with the live <code>/DS/assets/ds.css</code> so this page and the product
+      share one source of truth. Structure follows the
+      <a href="https://design-system.service.gov.uk/">GOV.UK Design System</a>.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

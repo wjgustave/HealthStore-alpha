@@ -24,10 +24,10 @@ export function PdpSection({
   className?: string
 }) {
   return (
-    <PdpShareRegion shareKey={shareKey} label={label ?? title} description={description} className={`mb-14 last:mb-0 ${className}`.trim()}>
+    <PdpShareRegion shareKey={shareKey} label={label ?? title} description={description} className={`mb-14 ${className}`.trim()}>
       <section id={id}>
         <h2
-          className={`hs-font-bold leading-snug ${description ? 'mb-1' : 'mb-4'}`}
+          className={`hs-pdp-heading hs-font-bold leading-snug ${description ? 'mb-1' : 'mb-4'}`}
           style={{ fontSize: 'var(--text-section-alt)', color: 'var(--text-primary)' }}
         >
           {title}

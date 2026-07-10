@@ -26,7 +26,7 @@ import { getProductNarrative } from '@/lib/content/productNarratives'
 import { splitPdpEvidence } from '@/lib/pdpEvidence'
 import PdpClinicalPublications from '@/components/product/PdpClinicalPublications'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
-import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges, ProductHeroDemoBadge } from './pdpBlocks'
+import { EvidenceCard, ContextOfUseGrid, NhsIntegrationBadges } from './pdpBlocks'
 import PdpSupplierContactCard from '@/components/PdpSupplierContactCard'
 
 export default function PdpSharedProductBody({
@@ -62,8 +62,7 @@ export default function PdpSharedProductBody({
   return (
     <>
       {a.has('hero') ? (
-        <div className="mb-4 hs-surface-card-sm rounded-t-2xl bg-white border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-          <div className="px-8 pt-8 pb-4">
+        <div className="mb-4 overflow-hidden">
             <div className="flex flex-col gap-6 items-start">
               <div className="flex-1 w-full min-w-0">
                 <div className="hs-product-hero__identity">
@@ -101,12 +100,10 @@ export default function PdpSharedProductBody({
                       {app.content_confidence}
                     </span>
                   )}
-                  <ProductHeroDemoBadge app={app} />
                 </div>
                 <NhsIntegrationBadges app={app} />
               </div>
             </div>
-          </div>
         </div>
       ) : null}
 
@@ -257,32 +254,21 @@ export default function PdpSharedProductBody({
               title="NICE guidance"
               description="NICE publications and programme references linked to this product."
             >
-              <div className="space-y-4">
+              <ul className="m-0 space-y-2 p-0 list-none">
                 {app.nice_guidance_refs.map((r: any) => (
-                  <div
-                    key={r.ref}
-                    className="flex items-start gap-4 p-4 rounded-lg"
-                    style={{ background: '#F0F4F5', border: '1px solid var(--border)' }}
-                  >
-                    <NiceTypeBadge type={r.type} />
-                    <div>
-                      <a
-                        href={r.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hs-font-bold hs-text-label hover:underline"
-                        style={{ color: accent }}
-                      >
-                        {r.ref} ↗
-                      </a>
-                      <div className="hs-text-caption mt-1" style={{ color: 'var(--text-muted)' }}>
-                        {r.date}
-                        {r.note ? ` · ${r.note}` : ''}
-                      </div>
-                    </div>
-                  </div>
+                  <li key={r.ref} className="hs-text-body" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                    <a href={r.url} className="hover:underline" style={{ color: accent }}>
+                      {r.ref}
+                    </a>
+                    {[r.type, r.date, r.note].filter(Boolean).length > 0 ? (
+                      <>
+                        {' — '}
+                        {[r.type, r.date, r.note].filter(Boolean).join(', ')}
+                      </>
+                    ) : null}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </PdpReadOnlySection>
           ) : null}
 

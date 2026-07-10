@@ -13,13 +13,16 @@
       <p class="ds-eyebrow">Styles</p>
       <h1 class="ds-page-title">Colour</h1>
       <p class="ds-lede">
-        The palette is NHS-derived.
+        The app palette is NHS-derived. One GOV.UK colour is adopted for KPI metric text:
+        <a href="https://design-system.service.gov.uk/styles/colour/">Blue tint-25</a>
+        (<code>--blue-tint-25</code> / <code>#5694CA</code>).
       </p>
     </div>
 
     <h2>Brand &amp; accent</h2>
     <div class="ds-swatches">
-      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#005EB8"></div><div class="ds-swatch__body"><div class="ds-swatch__name">NHS blue</div><div class="ds-swatch__meta">--nhs-blue &middot; #005EB8</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#005EB8"></div><div class="ds-swatch__body"><div class="ds-swatch__name">NHS blue</div><div class="ds-swatch__meta">--nhs-blue &middot; #005EB8 &middot; brand / links / controls</div></div></div>
+      <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#5694CA"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Blue tint-25</div><div class="ds-swatch__meta">--blue-tint-25 &middot; #5694CA &middot; KPI / metric values</div></div></div>
       <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#003087"></div><div class="ds-swatch__body"><div class="ds-swatch__name">NHS dark blue</div><div class="ds-swatch__meta">--nhs-dark &middot; #003087</div></div></div>
       <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#004B8C"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Primary hover</div><div class="ds-swatch__meta">(literal) &middot; #004B8C</div></div></div>
       <div class="ds-swatch"><div class="ds-swatch__chip" style="background:#FFD800"></div><div class="ds-swatch__body"><div class="ds-swatch__name">Focus yellow</div><div class="ds-swatch__meta">(literal) &middot; #FFD800</div></div></div>
@@ -60,33 +63,39 @@
     <table class="ds-table">
       <thead><tr><th>Token</th><th>Use for</th><th>Do not use for</th></tr></thead>
       <tbody>
-        <tr><td><code>--text-primary</code></td><td>Headings (H1–H3), section titles, KPI values, static callout labels</td><td>Links or button labels</td></tr>
+        <tr><td><code>--text-primary</code></td><td>Headings (H1–H3), section titles, default KPI values, static callout labels</td><td>Links or button labels</td></tr>
         <tr><td><code>--text-secondary</code> / <code>--text-muted</code></td><td>Body copy, descriptions, meta</td><td>Primary headings</td></tr>
-        <tr><td><code>--nhs-blue</code></td><td>Inline links, disclosure <code>&lt;summary&gt;</code> controls, text inside buttons and tabs</td><td>Section headings or data labels “for emphasis”</td></tr>
+        <tr><td><code>--blue-tint-25</code></td><td>KPI / metric value text that needs a blue accent (e.g. local-value tiles)</td><td>Hyperlinks (use <code>--nhs-blue</code>)</td></tr>
+        <tr><td><code>--nhs-blue</code></td><td>Inline links, disclosure <code>&lt;summary&gt;</code> controls, text inside buttons and tabs, brand chrome</td><td>KPI metric values (use <code>--blue-tint-25</code>)</td></tr>
       </tbody>
     </table>
     <div class="ds-dosdonts">
       <div class="ds-panel ds-panel--do">
         <p class="ds-panel__head">Do</p>
         <ul>
-          <li>Reference colours via tokens (<code>var(--nhs-blue)</code> or the <code>nhs-blue</code> Tailwind utilities), not hex literals.</li>
-          <li>Keep blue for interactive text only — links, summaries, tabs, and button labels.</li>
-          <li>Use <code>--text-primary</code> for all non-interactive headings and stat values.</li>
+          <li>Reference colours via tokens (<code>var(--nhs-blue)</code>, <code>var(--blue-tint-25)</code>), not hex literals.</li>
+          <li>Use <code>--blue-tint-25</code> for blue KPI / metric figures; keep <code>--nhs-blue</code> for links and controls.</li>
+          <li>Use <code>--text-primary</code> for non-interactive headings and default (non-blue) stat values.</li>
           <li>Pair semantic colour with an icon or text label, never colour alone.</li>
         </ul>
       </div>
       <div class="ds-panel ds-panel--dont">
         <p class="ds-panel__head">Don't</p>
         <ul>
-          <li>Inline <code>#005EB8</code> directly — use the token or <code>nhs-blue</code> utility.</li>
+          <li>Inline <code>#005EB8</code> or <code>#5694CA</code> directly — use the tokens.</li>
+          <li>Use NHS blue for KPI metric text — that accent is Blue tint-25.</li>
           <li>Use blue section headings that are not links.</li>
-          <li>Introduce new accent hues for one-off surfaces.</li>
+          <li>Introduce new accent hues for one-off surfaces without documenting them here.</li>
           <li>Use low-contrast muted text for body copy.</li>
         </ul>
       </div>
     </div>
 
-    <div class="ds-note ds-note--source">Source: <code>app/globals.css</code> (<code>:root</code> custom properties).</div>
+    <div class="ds-note ds-note--source">
+      Sources: <code>app/globals.css</code> (<code>:root</code> custom properties);
+      Blue tint-25 from
+      <a href="https://design-system.service.gov.uk/styles/colour/">GOV.UK Design System — Colour</a>.
+    </div>
   </div>
   <script src="/DS/assets/ds.js" defer></script>
 </body>

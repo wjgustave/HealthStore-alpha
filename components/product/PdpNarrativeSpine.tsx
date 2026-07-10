@@ -52,7 +52,7 @@ export default function PdpNarrativeSpine({
   if (!hasSpine) return null
 
   return (
-    <div className="mb-6 space-y-4">
+    <div className="hs-pdp-spine mb-6 space-y-4">
       {problem && (
         <PdpSection
           id="the-problem"
@@ -85,8 +85,8 @@ export default function PdpNarrativeSpine({
           )}
 
           {pathway && (
-            <div className="mt-6">
-              <h3 className="hs-font-bold mb-3" style={{ fontSize: 'var(--text-card-title-sm)', color: 'var(--text-secondary)' }}>
+            <div>
+              <h3 className="hs-pdp-subheading hs-font-bold mb-3" style={{ fontSize: 'var(--text-card-title-sm)' }}>
                 How it changes the pathway
               </h3>
               <div className="hs-pathway-visual">

@@ -4,9 +4,11 @@ import type { ProductNarrative } from '@/lib/content/productModel'
 import type { CommissionerContext } from '@/lib/context/types'
 import { contextToSearchParams } from '@/lib/context/types'
 import { getLocalReferenceData } from '@/lib/localData/referenceData'
+import { computeMycopdImpactMetrics } from '@/lib/localData/mycopdImpact'
 import { getDtxImpactRanges } from '@/lib/localData/workspaceData'
 import { PdpSection } from '@/components/PdpSection'
 import { IndicativeFinancialContextSection } from '@/components/AppDetailSections'
+import MycopdImpactCharts from '@/components/product/MycopdImpactCharts'
 import { HorizontalBarChart, InsightCallout } from '@/components/charts'
 
 /**
@@ -41,13 +43,12 @@ const CAPACITY_TO_CASH = 0.4
 const PRICE_LOW = 110
 const PRICE_HIGH = 360
 
-// When no area is set, project onto a representative example ICB (labelled) so the
-// sections still deliver value without setup. West Yorkshire keeps parity with the
-// worked example in the migration audit record.
+// When no area is set, project onto the NHSE Average ICB (labelled) so the
+// sections still deliver value without setup.
 const DEMO_CONTEXT: CommissionerContext = {
   geography_type: 'icb',
-  geography_id: 'QWO',
-  geography_label: 'West Yorkshire ICB',
+  geography_id: 'GEN',
+  geography_label: 'NHSE Average ICB',
   scenario_id: 'central',
 }
 
@@ -62,7 +63,7 @@ function formatGbp(n: number): string {
 function Tile({ value, label, sub, accent }: { value: string; label: string; sub?: string; accent?: string }) {
   return (
     <div className="hs-surface-card-sm bg-white rounded-lg border p-4" style={{ borderColor: 'var(--border)' }}>
-      <div className="hs-font-bold" style={{ fontSize: 'var(--text-card-title)', color: accent ?? 'var(--nhs-blue)' }}>{value}</div>
+      <div className="hs-font-bold" style={{ fontSize: 'var(--text-card-title)', color: accent ?? 'var(--text-primary)' }}>{value}</div>
       <div className="hs-text-caption hs-font-bold uppercase tracking-wide mt-1" style={{ color: 'var(--text-muted)' }}>{label}</div>
       {sub && <div className="hs-text-caption mt-1" style={{ color: 'var(--text-secondary)' }}>{sub}</div>}
     </div>
@@ -71,6 +72,7 @@ function Tile({ value, label, sub, accent }: { value: string; label: string; sub
 
 export default function PdpLocalValue({
   app,
+  narrative,
   context,
 }: {
   app: App
@@ -81,6 +83,7 @@ export default function PdpLocalValue({
   const isCopd = app.condition_tags?.includes('copd')
   if (!isCopd) return null
 
+  const isMycopd = app.slug === 'mycopd'
   const localRef = getLocalReferenceData(context)
   const isLocal = context.geography_type !== 'national' && !!context.geography_id && !!localRef
 
@@ -99,11 +102,14 @@ export default function PdpLocalValue({
   const highRisk = ref.high_risk_cohort ?? Math.round(ref.eligible_cohort * 0.2)
   const monitored = Math.round(highRisk * MONITORED_SHARE)
 
-  // R2-2: high-risk monitored cohort x conservative->evidence-led effect range.
+  // Luscii / remote-monitoring model: high-risk monitored cohort × effect range.
   const admLow = Math.round((monitored * HIGH_RISK_EVENT_RATE * ranges.admission_reduction.conservative) / 100)
   const admHigh = Math.round((monitored * HIGH_RISK_EVENT_RATE * ranges.admission_reduction.evidence_led) / 100)
   const aeLow = Math.round((monitored * HIGH_RISK_EVENT_RATE * ranges.ae_reduction.conservative) / 100)
   const aeHigh = Math.round((monitored * HIGH_RISK_EVENT_RATE * ranges.ae_reduction.evidence_led) / 100)
+
+  // myCOPD dual-metric model (GP baseline × effect; readmissions = enrolled × effect).
+  const mycopdImpact = isMycopd ? computeMycopdImpactMetrics(ref, narrative) : null
 
   // R2-3 / R2-4: illustrative 500-patient ROI, net expressed across a price band.
   const admAvoided = Math.round(ROI_COHORT * ROI_ADM_RATE * ROI_ADM_EFFECT)
@@ -119,50 +125,96 @@ export default function PdpLocalValue({
   return (
     <div className="mb-6 space-y-4">
       {/* R2-1: context line reusing the guided-start place picker */}
-      {isExample ? (
-        <div
-          className="rounded-lg p-3 hs-text-caption"
-          style={{ background: '#FFF9EE', border: '1px solid #FFD37A', color: 'var(--text-secondary)', lineHeight: 1.6 }}
-        >
-          Example figures for <strong>{areaLabel}</strong> — illustrative, so you can see the shape of the value without any
-          setup.{' '}
-          <Link href={changeHref} className="hs-font-bold" style={{ color: 'var(--nhs-blue)' }}>Set your area</Link>{' '}
-          to project onto your own population.
-        </div>
-      ) : (
+      {!isExample ? (
         <p className="hs-text-caption" style={{ color: 'var(--text-muted)', margin: 0 }}>
           Showing projected figures for <strong style={{ color: 'var(--text-secondary)' }}>{areaLabel}</strong>.{' '}
           <Link href={changeHref} style={{ color: 'var(--nhs-blue)' }}>Change area</Link>
         </p>
-      )}
+      ) : null}
 
       <PdpSection
         id="local-impact"
         shareKey="narrative-projected-impact"
         title={isExample ? 'What this could mean for your COPD cohort' : `What this could mean for ${areaLabel}`}
-        description="Projections based on published evidence applied to your local eligible population. Not a guarantee — a defensible basis for a business case."
+        description="Projections are illustrative and based on published evidence applied to your NHSE average eligible cohort."
       >
-        <HorizontalBarChart
-          ariaLabel={`Projected annual events avoided in ${areaLabel}`}
-          maxValue={Math.max(admHigh, aeHigh) * 1.25}
-          rows={[
-            { label: 'Emergency admissions', value: admHigh, displayValue: `${admLow.toLocaleString()}–${admHigh.toLocaleString()} fewer / yr` },
-            { label: 'A&E attendances', value: aeHigh, displayValue: `${aeLow.toLocaleString()}–${aeHigh.toLocaleString()} fewer / yr`, color: '#0072ce' },
-          ]}
-        />
-        <div className="grid gap-4 sm:grid-cols-3 mt-4">
-          <Tile value={monitored.toLocaleString()} label="Monitored cohort" sub={`~50% of ${highRisk.toLocaleString()} high-risk`} />
-          <Tile value={`${admLow.toLocaleString()}–${admHigh.toLocaleString()}`} label="Admissions avoided / yr" sub={`vs ${(ref.annual_admissions ?? 0).toLocaleString()} today`} />
-          <Tile value={`${aeLow.toLocaleString()}–${aeHigh.toLocaleString()}`} label="A&E avoided / yr" />
-        </div>
-        <div className="mt-4">
-          <InsightCallout variant="good" title="So what does this mean?">
-            Monitoring roughly {monitored.toLocaleString()} high-risk patients (about half the high-risk COPD cohort in{' '}
-            {areaLabel}) could avoid on the order of {admLow.toLocaleString()}–{admHigh.toLocaleString()} emergency
-            admissions a year, against about {(ref.annual_admissions ?? 0).toLocaleString()} today. The range spans conservative
-            to evidence-led NHS effect sizes.
-          </InsightCallout>
-        </div>
+        {mycopdImpact ? (
+          <>
+            <MycopdImpactCharts
+              eligibleLabel={ref.eligible_cohort.toLocaleString()}
+              gp={mycopdImpact.gp}
+              readmit={mycopdImpact.readmit}
+            />
+            <div className="grid gap-4 sm:grid-cols-3 mt-4">
+              <Tile
+                value={mycopdImpact.atUptake.toLocaleString()}
+                label="At 75% uptake"
+                sub={`of ${ref.eligible_cohort.toLocaleString()} eligible`}
+              />
+              <Tile
+                value={mycopdImpact.gp.delta.toLocaleString()}
+                label="GP appointments avoided / yr"
+                sub={`vs ${mycopdImpact.gp.todayValue.toLocaleString()} today · ${mycopdImpact.gp.effectPct}% effect`}
+              />
+              <Tile
+                value={mycopdImpact.readmit.delta.toLocaleString()}
+                label="Readmissions avoided / yr"
+                sub={`${mycopdImpact.readmit.effectPct}% effect on ${mycopdImpact.atUptake.toLocaleString()} enrolled (RESCUE RCT)`}
+              />
+            </div>
+            <div className="mt-4">
+              <p className="nhsuk-body" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+                <strong className="nhsuk-u-font-weight-bold" style={{ display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
+                  So what does this mean?
+                </strong>
+                Evidence shows myCOPD can achieve a {mycopdImpact.gp.effectPct}% reduction in GP appointments. Applied to 75% of
+                a {ref.eligible_cohort.toLocaleString()} eligible patients cohort, that&apos;s approximately{' '}
+                {mycopdImpact.gp.delta.toLocaleString()} fewer events per year.
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="hs-chart-panel">
+              <h3>
+                Based on {ref.eligible_cohort.toLocaleString()} eligible patients enrolled with a 75% uptake.
+              </h3>
+              <HorizontalBarChart
+                ariaLabel={`Projected annual events avoided in ${areaLabel}`}
+                maxValue={Math.max(admHigh, aeHigh) * 1.25}
+                rows={[
+                  {
+                    label: 'Emergency admissions',
+                    value: admHigh,
+                    displayValue: `${admLow.toLocaleString()}–${admHigh.toLocaleString()} fewer / yr`,
+                  },
+                  {
+                    label: 'A&E attendances',
+                    value: aeHigh,
+                    displayValue: `${aeLow.toLocaleString()}–${aeHigh.toLocaleString()} fewer / yr`,
+                    color: '#0072ce',
+                  },
+                ]}
+              />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-3 mt-4">
+              <Tile value={monitored.toLocaleString()} label="Monitored cohort" sub={`~50% of ${highRisk.toLocaleString()} high-risk`} />
+              <Tile value={`${admLow.toLocaleString()}–${admHigh.toLocaleString()}`} label="Admissions avoided / yr" sub={`vs ${(ref.annual_admissions ?? 0).toLocaleString()} today`} />
+              <Tile value={`${aeLow.toLocaleString()}–${aeHigh.toLocaleString()}`} label="A&E avoided / yr" />
+            </div>
+            <div className="mt-4">
+              <p className="nhsuk-body" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+                <strong className="nhsuk-u-font-weight-bold" style={{ display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
+                  So what does this mean?
+                </strong>
+                Monitoring roughly {monitored.toLocaleString()} high-risk patients (about half the high-risk COPD cohort in{' '}
+                {areaLabel}) could avoid on the order of {admLow.toLocaleString()}–{admHigh.toLocaleString()} emergency
+                admissions a year, against about {(ref.annual_admissions ?? 0).toLocaleString()} today. The range spans conservative
+                to evidence-led NHS effect sizes.
+              </p>
+            </div>
+          </>
+        )}
       </PdpSection>
 
       <PdpSection
@@ -178,11 +230,11 @@ export default function PdpLocalValue({
             value={`${formatGbp(netLow)} to ${formatGbp(netHigh)}`}
             label="Net position / yr*"
             sub="*across the indicative price band"
-            accent={netLow >= 0 ? '#007f3b' : 'var(--text-secondary)'}
+            accent={netLow >= 0 ? '#007f3b' : 'var(--text-primary)'}
           />
         </div>
         <div className="mt-4">
-          <InsightCallout title="Cash vs capacity, and why net is a range">
+          <InsightCallout title="Cash vs capacity">
             Avoided admissions free beds and clinician time first — that is capacity, not cash until you convert it (about 40%
             typically can). The net position is shown as a range because the price is not yet verified: at roughly{' '}
             <strong>{formatGbp(breakEvenPrice)} per patient per year</strong> the pathway breaks even on NHS cost alone; below

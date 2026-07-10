@@ -26,6 +26,7 @@
   --radius-3xl: 4px;
   --radius-pill: 9999px;
   --color-nhs-blue: #005EB8;
+  --color-blue-tint-25: #5694CA; /* GOV.UK Blue tint-25 — KPI metric text */
 }
 
 @font-face {
@@ -65,6 +66,9 @@
     --nhs-red: #D5281B;           /* NHS red */
     --nhs-amber: #ED8B00;         /* NHS orange (secondary) */
     --nhs-grey: #4C6272;          /* NHS grey 1 */
+    /* GOV.UK Blue tint-25 — KPI / metric value text (not for links).
+       @see https://design-system.service.gov.uk/styles/colour/ */
+    --blue-tint-25: #5694CA;
     --surface: #F0F4F5;           /* NHS grey 5 */
     --card: #FFFFFF;
     --border: #D8DDE0;            /* NHS grey 4 */
@@ -297,6 +301,83 @@
   .badge-teal { background: #d0e6e7; color: #0b4144; }
   .badge-prototype { background: #cecece; color: #0b0c0c; }
   .badge-blue-solid { background: var(--nhs-blue); color: #fff; }
+
+  /* NHS header — HealthStore additions on top of nhsuk-frontend Header.
+     [Provenance: NHS] service-manual.nhs.uk/design-system/components/header */
+  .nhsuk-header__content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .hs-header-prototype {
+    align-self: center;
+  }
+  /* Phase banner — full-bleed white bar; content aligns with header (80rem).
+     [Provenance: GOV.UK] design-system.service.gov.uk/components/phase-banner */
+  .hs-phase-banner {
+    background-color: #fff;
+    width: 100%;
+  }
+  .hs-phase-banner__inner {
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 16px;
+    box-sizing: border-box;
+    border-bottom: 0; /* outer bar owns the edge against page content */
+  }
+  @media (min-width: 641px) {
+    .hs-phase-banner__inner {
+      padding-inline: 32px;
+    }
+  }
+  @media (min-width: calc(80rem + 64px)) {
+    .hs-phase-banner__inner {
+      padding-inline: 0;
+    }
+  }
+  /* Match header/nav content width to the app page canvas (.hs-page / max-w-7xl = 80rem). */
+  .nhsuk-header__container,
+  .nhsuk-navigation {
+    max-width: 80rem;
+  }
+  @media (min-width: calc(80rem + 64px)) {
+    .nhsuk-header__container,
+    .nhsuk-navigation {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  /* Sign out / AI Advisor use the same nav link styles as anchors. */
+  button.nhsuk-header__navigation-link {
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    width: auto;
+  }
+  .nhsuk-header__navigation-link[aria-current="page"] {
+    font-weight: 700;
+  }
+  /* Chevron on More toggle — NHS positions the icon inside the padded button. */
+  .nhsuk-header__menu-toggle .nhsuk-icon__chevron-down {
+    fill: currentColor;
+    height: 16px;
+    width: 16px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -8px;
+    pointer-events: none;
+  }
+  /* Keep left-aligned nav tight (NHS default space-between looks sparse at 80rem). */
+  .nhsuk-header__navigation-list--left-aligned .nhsuk-header__navigation-item {
+    flex: 0 0 auto;
+  }
+  /* Ensure drop-down sits above page content while open. */
+  .nhsuk-navigation {
+    position: relative;
+    z-index: 10;
+  }
 
   .effort-low { background: #cfe4dc; color: #083d29; }
   .effort-medium { background: #fde4d7; color: #7a3c1c; }
@@ -687,20 +768,75 @@
 }
 @media (min-width: 1024px) {
   .hs-pdp-with-sidebar {
-    grid-template-columns: minmax(0, 1fr) 14rem;
+    grid-template-columns: 14rem minmax(0, 1fr);
   }
   .hs-pdp-with-sidebar__aside {
     position: sticky;
     top: 1rem;
   }
 }
-@media (max-width: 1023px) {
-  .hs-pdp-with-sidebar__aside {
-    order: -1;
-  }
-}
 .hs-pdp-with-sidebar__main {
   min-width: 0;
+}
+
+/**
+ * PDP top band — full-viewport white behind breadcrumb, hero, alerts, and
+ * commissioning snapshot. Content stays in .hs-page inside the band.
+ */
+.hs-pdp-top {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-6);
+}
+.hs-pdp-top > .hs-page {
+  padding-bottom: 0;
+}
+
+/* Cookie banner — white to match the PDP top band / page chrome */
+.govuk-cookie-banner {
+  background-color: #fff;
+}
+
+/**
+ * PDP section H2 — space above so sections breathe (PDP-only via .hs-pdp).
+ * First H2 in a tab panel or narrative column resets so the panel top isn’t gappy.
+ */
+.hs-pdp h2 {
+  color: var(--text-primary);
+}
+.hs-pdp .hs-snapshot-strip__heading-link,
+.hs-pdp .hs-snapshot-strip__heading--linked {
+  color: var(--nhs-blue);
+}
+.hs-pdp .hs-snapshot-strip__heading-link:hover,
+.hs-pdp .hs-snapshot-strip__segment--link:hover .hs-snapshot-strip__heading--linked {
+  color: var(--nhs-dark);
+}
+.hs-pdp .hs-pdp-heading {
+  margin-top: var(--space-7); /* 48px */
+  color: var(--text-primary);
+}
+.hs-pdp h3,
+.hs-pdp .hs-pdp-subheading {
+  color: var(--text-primary);
+}
+.hs-pdp .nhsuk-tabs__panel > *:first-child .hs-pdp-heading,
+.hs-pdp .hs-pdp-with-sidebar__main > *:first-child .hs-pdp-heading,
+.hs-pdp .hs-pdp-spine > *:first-child .hs-pdp-heading {
+  margin-top: 0;
+}
+
+/**
+ * PDP content subheading (H3) — extra space above so blocks breathe.
+ * Prefer this over ad-hoc mt-* on wrappers. Zero when it is the first
+ * content under a section title/description (PdpSection wraps children in a div).
+ */
+.hs-pdp-subheading {
+  margin-top: var(--space-6); /* 40px */
+}
+section > div > .hs-pdp-subheading:first-child,
+section > div > *:first-child > .hs-pdp-subheading:first-child {
+  margin-top: 0;
 }
 .hs-snapshot-strip__grid {
   display: grid;
@@ -708,20 +844,32 @@
   gap: 0.75rem;
 }
 @media (min-width: 1024px) {
-  /* Always four columns so card width stays consistent when funding is absent */
+  /* Fill the row with whatever tiles are present (empty tiles are hidden). */
   .hs-snapshot-strip__grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
   }
 }
-/* NHS Card (primary, non-clickable): white fill, 1px grey-4 border, square corners. */
+/* Commissioning snapshot — NHS primary card (clickable): white fill, 1px
+   grey-4 outline, 4px raised bottom edge, hover lifts border/shadow. */
 .hs-snapshot-strip__segment {
   display: flex;
   flex-direction: column;
   min-height: 100%;
   padding: 1rem 1.25rem;
   border-radius: var(--radius-card);
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--border);
+  box-shadow: 0 4px 0 var(--border);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.hs-snapshot-strip__segment:hover {
+  border-color: #AEB7BD;
+  box-shadow: 0 4px 0 #AEB7BD;
+}
+a.hs-snapshot-strip__segment--link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 .hs-snapshot-strip__heading {
   flex-shrink: 0;
@@ -732,12 +880,14 @@
   line-height: 1.35;
   color: var(--text-primary);
 }
+.hs-snapshot-strip__heading--linked,
 .hs-snapshot-strip__heading-link {
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 2px;
   color: var(--nhs-blue);
 }
+.hs-snapshot-strip__segment--link:hover .hs-snapshot-strip__heading--linked,
 .hs-snapshot-strip__heading-link:hover {
   color: var(--nhs-dark);
   text-decoration-thickness: 2px;
@@ -1052,7 +1202,8 @@
   gap: var(--space-3);
   margin-bottom: var(--space-3);
 }
-/* Static text (headings, KPI values, labels): --text-primary. NHS blue is for links and interactive controls only. */
+/* Static text (headings, default KPI values, labels): --text-primary.
+   Links and controls: --nhs-blue. */
 .hs-kpi {
   background: var(--card);
   border: 1px solid var(--border);
@@ -1238,6 +1389,18 @@
   font-weight: 600;
   color: var(--text-muted);
 }
+/* NHS experience — intro, stat labels, badges, outcomes and sources at 16px (NHS body-s). */
+#nhs-experience .hs-text-label,
+#nhs-experience .hs-deploy-stat__label,
+#nhs-experience .badge,
+#nhs-experience .hs-case-card__source {
+  font-size: 1rem;
+}
+/* Local value — tile labels/subs, footnote and disclaimer at 16px (NHS body-s). */
+#local-impact .hs-text-caption,
+#local-value-worth .hs-text-caption {
+  font-size: 1rem;
+}
 /* Subtle hover affordance on the desktop register rows (expandable). */
 .hs-deploy-row { transition: background-color .12s ease; }
 .hs-deploy-row:hover { background: #f0f4f5; }
@@ -1260,6 +1423,12 @@
   background: #fff;
   border: 1px solid var(--border);
   border-left: 4px solid var(--nhs-green);
+}
+/* Evidence / case-study cards — NHS primary non-clickable card (no accent keyline). */
+.hs-case-card--publication {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
 }
 .hs-case-card__title {
   font-size: var(--text-card-title-sm);
@@ -1319,9 +1488,9 @@
 }
 @media (max-width: 768px) { .hs-chart-section { grid-template-columns: 1fr; } }
 .hs-chart-panel {
-  background: var(--card);
+  background: #fff;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
   padding: var(--space-4);
 }
 .hs-chart-panel h3 { font-size: var(--text-card-title-sm); font-weight: 600; color: var(--text-primary); margin: 0 0 var(--space-3); }
@@ -1331,6 +1500,183 @@
 .hs-chart-legend { display: flex; flex-wrap: wrap; gap: var(--space-3); font-size: var(--text-xs); color: var(--text-secondary); margin-top: var(--space-2); }
 .hs-chart-legend span { display: inline-flex; align-items: center; gap: 7px; }
 .hs-chart-legend i { width: 13px; height: 13px; display: inline-block; border-radius: 2px; }
+
+/* ─── Before/after impact variants (myCOPD dual-metric charts) ─── */
+.hs-before-after__delta {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-body);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: var(--leading-body);
+}
+.hs-before-after__row {
+  display: grid;
+  grid-template-columns: minmax(7rem, 9rem) minmax(0, 1fr) auto;
+  gap: var(--space-2);
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+.hs-before-after__row-label {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+.hs-before-after__row-value {
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  min-width: 3.5rem;
+  text-align: right;
+}
+.hs-before-after__track,
+.hs-before-after__mini-track {
+  height: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  min-width: 0;
+}
+.hs-before-after__bar {
+  height: 100%;
+  min-width: 2px;
+}
+.hs-before-after__bar--today { background: var(--nhs-grey); }
+.hs-before-after__bar--with { background: var(--nhs-blue); }
+
+.hs-before-after--cut .hs-before-after__cut-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+.hs-before-after__cut-track {
+  display: flex;
+  width: 100%;
+  height: 1.75rem;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: var(--surface);
+}
+.hs-before-after__cut-remaining { height: 100%; background: var(--nhs-blue); }
+.hs-before-after__cut-avoided {
+  height: 100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    #d8dde0,
+    #d8dde0 4px,
+    #f0f4f5 4px,
+    #f0f4f5 8px
+  );
+}
+.hs-before-after__cut-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+.hs-before-after__cut-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.hs-before-after__swatch {
+  width: 13px;
+  height: 13px;
+  display: inline-block;
+  border: 1px solid var(--border);
+}
+.hs-before-after__swatch--with { background: var(--nhs-blue); border-color: var(--nhs-blue); }
+.hs-before-after__swatch--avoided {
+  background: repeating-linear-gradient(
+    -45deg,
+    #d8dde0,
+    #d8dde0 3px,
+    #f0f4f5 3px,
+    #f0f4f5 6px
+  );
+}
+
+.hs-before-after--delta .hs-before-after__hero {
+  margin-bottom: var(--space-3);
+}
+.hs-before-after__hero-value {
+  font-size: var(--text-card-title);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+.hs-before-after__hero-label {
+  margin-top: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+.hs-before-after__mini-row {
+  display: grid;
+  grid-template-columns: minmax(6rem, 8rem) minmax(0, 1fr) auto;
+  gap: var(--space-2);
+  align-items: center;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+.hs-before-after__mini-row strong {
+  color: var(--text-primary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.hs-before-after__mini-track { height: 0.75rem; }
+
+.hs-before-after--tiles .hs-before-after__tiles-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--space-2);
+  align-items: stretch;
+}
+.hs-before-after__tile {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  text-align: center;
+}
+.hs-before-after__tile--with { background: #fff; border-color: var(--nhs-blue); }
+.hs-before-after__tile-label {
+  font-size: var(--text-caption);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  margin-bottom: var(--space-1);
+}
+.hs-before-after__tile-value {
+  font-size: var(--text-card-title-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.hs-before-after__tile--with .hs-before-after__tile-value { color: var(--nhs-blue); }
+.hs-before-after__connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-card-title-sm);
+  font-weight: 700;
+  color: var(--text-muted-low-con);
+  padding: 0 var(--space-1);
+}
+@media (max-width: 480px) {
+  .hs-before-after__row,
+  .hs-before-after__mini-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .hs-before-after__row-value { text-align: left; }
+  .hs-before-after--tiles .hs-before-after__tiles-row {
+    grid-template-columns: 1fr;
+  }
+  .hs-before-after__connector { padding: var(--space-1) 0; transform: rotate(90deg); }
+}
 
 /* ─── Impact lenses + legacy impact cards (NHS card grid) ─── */
 .hs-impact-lenses {

@@ -127,7 +127,7 @@ export default async function SharedProductPage({
   if (renderedKeys.length === 0) {
     return (
       <AppDetailClient app={app} contactPrefill={contactPrefill}>
-        <div className="hs-page">
+        <div className="hs-page hs-pdp">
           <PageBreadcrumb
             items={[
               { label: 'Find apps', href: '/apps' },
@@ -165,7 +165,7 @@ export default async function SharedProductPage({
 
   return (
     <AppDetailClient app={app} contactPrefill={contactPrefill}>
-      <div className="hs-page">
+      <div className="hs-page hs-pdp">
         <PageBreadcrumb
           items={[
             { label: 'Find apps', href: '/apps' },

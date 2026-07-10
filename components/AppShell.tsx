@@ -12,6 +12,8 @@ import { EoiProvider } from './EoiProvider'
 import { ToastProvider } from './ui/Toast'
 import ClearDataModal from './ClearDataModal'
 import AiAdvisorPanel, { type AiAdvisorClientProfile } from './ai/AiAdvisorPanel'
+import NhsFrontendInit from '@/components/nhs/NhsFrontendInit'
+import { AUTH_DISABLED } from '@/lib/authMode'
 
 export default function AppShell({
   children,
@@ -30,11 +32,14 @@ export default function AppShell({
   const isLoginPage = pathname === '/login'
   const [showClearData, setShowClearData] = useState(false)
   const [aiPanelOpen, setAiPanelOpen] = useState(false)
-  /** Subheader only when logged in (login route renders no Nav here) */
-  const icbSubheaderLabel = isLoggedIn && commissioningContextLabel ? commissioningContextLabel : ''
+  /** Open-access treats everyone as able to use catalogue tools; hide auth/org chrome. */
+  const openAccess = AUTH_DISABLED
+  const showAuthChrome = !openAccess && isLoggedIn
+  const icbSubheaderLabel =
+    !openAccess && isLoggedIn && commissioningContextLabel ? commissioningContextLabel : ''
 
   /** Auth routes render without global nav/footer but still need landmarks + skip link (WCAG 2.4.1, 1.3.1). */
-  if (isLoginPage) {
+  if (isLoginPage && !openAccess) {
     return (
       <>
         <a href="#main-content" className="nhsuk-skip-link">
@@ -54,18 +59,18 @@ export default function AppShell({
             <EoiProvider>
               <Nav
                 commissioningContextLabel={icbSubheaderLabel}
-                isLoggedIn={isLoggedIn}
-                onOpenAiPanel={isLoggedIn && aiProfile ? () => setAiPanelOpen(true) : undefined}
+                isLoggedIn={showAuthChrome}
+                onOpenAiPanel={showAuthChrome && aiProfile ? () => setAiPanelOpen(true) : undefined}
               />
               <main id="main-content" tabIndex={-1}>{children}</main>
-              {isLoggedIn && aiProfile && (
+              {showAuthChrome && aiProfile && (
                 <AiAdvisorPanel
                   open={aiPanelOpen}
                   onClose={() => setAiPanelOpen(false)}
                   profile={aiProfile}
                 />
               )}
-              {isLoggedIn && (
+              {showAuthChrome && (
                 <ClearDataModal open={showClearData} onClose={() => setShowClearData(false)} />
               )}
             </EoiProvider>
@@ -73,6 +78,7 @@ export default function AppShell({
         </CompareBasketProvider>
       </ToastProvider>
       <BackToTop />
+      <NhsFrontendInit />
       {/* [Provenance: NHS] Official NHS Footer markup. */}
       <footer role="contentinfo" className="mt-16">
         <div className="nhsuk-footer-container">
@@ -80,20 +86,16 @@ export default function AppShell({
             <h2 className="nhsuk-u-visually-hidden">Support links</h2>
             <div className="nhsuk-footer">
               <ul className="nhsuk-footer__list">
-                {isLoggedIn && (
-                  <>
-                    <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
-                      <Link className="nhsuk-footer__list-item-link" href="/apps">Find apps</Link>
-                    </li>
-                    <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
-                      <Link className="nhsuk-footer__list-item-link" href="/funding">Funding directory</Link>
-                    </li>
-                  </>
-                )}
+                <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
+                  <Link className="nhsuk-footer__list-item-link" href="/apps">Product catalogue</Link>
+                </li>
+                <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
+                  <Link className="nhsuk-footer__list-item-link" href="/funding">Funding directory</Link>
+                </li>
                 <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
                   <Link className="nhsuk-footer__list-item-link" href="/cookies">Cookies</Link>
                 </li>
-                {isLoggedIn && (
+                {showAuthChrome && (
                   <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
                     <button
                       type="button"

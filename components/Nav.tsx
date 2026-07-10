@@ -1,58 +1,106 @@
 'use client'
-import { useState, type CSSProperties } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { usePathname, useRouter } from 'next/navigation'
-import { Home, LogOut, Menu, PanelRightOpen, Settings, X } from 'lucide-react'
-import { useCompareBasket } from '@/components/CompareBasketProvider'
-import { SELECT_ICB_CONTINUE_MESSAGE } from '@/lib/commissioningContextDisplay'
+
+/**
+ * Global header — NHS.UK frontend Header styling + React-safe “More” overflow menu.
+ * Official header.js moves DOM nodes (incompatible with React reconciliation); this
+ * mirrors the same visual/interaction pattern with ResizeObserver instead.
+ * [Provenance: NHS] service-manual.nhs.uk/design-system/components/header
+ */
+
 import {
-  aiAdvisorBlueStripStyle,
-  aiAdvisorNavBarClass,
-  aiAdvisorStripButtonClass,
-} from '@/components/ai/aiAdvisorChrome'
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { useCompareBasket } from '@/components/CompareBasketProvider'
+import { AUTH_DISABLED } from '@/lib/authMode'
+import PhaseBanner from '@/components/PhaseBanner'
 
+const NHS_LOGO = (
+  <svg
+    className="nhsuk-logo"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 40 16"
+    height={40}
+    width={100}
+    focusable="false"
+    aria-hidden="true"
+  >
+    <path className="nhsuk-logo__background" fill="#005eb8" d="M0 0h40v16H0z" />
+    <path
+      className="nhsuk-logo__text"
+      fill="#fff"
+      d="M3.9 1.5h4.4l2.6 9h.1l1.8-9h3.3l-2.8 13H9l-2.7-9h-.1l-1.8 9H1.1M17.3 1.5h3.6l-1 4.9h4L25 1.5h3.5l-2.7 13h-3.5l1.1-5.6h-4.1l-1.2 5.6h-3.4M37.7 4.4c-.7-.3-1.6-.6-2.9-.6-1.4 0-2.5.2-2.5 1.3 0 1.8 5.1 1.2 5.1 5.1 0 3.6-3.3 4.5-6.4 4.5-1.3 0-2.9-.3-4-.7l.8-2.7c.7.4 2.1.7 3.2.7s2.8-.2 2.8-1.5c0-2.1-5.1-1.3-5.1-5 0-3.4 2.9-4.4 5.8-4.4 1.6 0 3.1.2 4 .6"
+    />
+  </svg>
+)
 
-function CompareNavLink({
-  path,
+const CHEVRON_DOWN = (
+  <svg
+    className="nhsuk-icon nhsuk-icon__chevron-down"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width={16}
+    height={16}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z" />
+  </svg>
+)
+
+type NavEntry = {
+  id: string
+  href?: string
+  label: ReactNode
+  ariaLabel?: string
+  active?: boolean
+  homeOnly?: boolean
+  onClick?: () => void
+}
+
+function NavLinkContent({
+  entry,
   onNavigate,
-  className,
 }: {
-  path: string
+  entry: NavEntry
   onNavigate?: () => void
-  className: string
 }) {
-  const { ids, count } = useCompareBasket()
-  const href =
-    ids.length > 0 ? `/compare?ids=${ids.map(id => encodeURIComponent(id)).join(',')}` : '/compare'
-  const active = path === '/compare'
+  if (entry.onClick) {
+    return (
+      <button
+        type="button"
+        className="nhsuk-header__navigation-link"
+        onClick={() => {
+          entry.onClick?.()
+          onNavigate?.()
+        }}
+      >
+        {entry.label}
+      </button>
+    )
+  }
   return (
     <Link
-      href={href}
+      className="nhsuk-header__navigation-link"
+      href={entry.href ?? '/'}
+      aria-current={entry.active ? 'page' : undefined}
+      aria-label={entry.ariaLabel}
       onClick={onNavigate}
-      className={`inline-flex items-center gap-2 ${className}`}
-      aria-label={count > 0 ? `Comparison tool, ${count} selected` : 'Comparison tool'}
-      style={{
-        color: active ? 'var(--nhs-blue)' : 'var(--text-secondary)',
-        background: active ? '#E6F0FB' : 'transparent',
-      }}
     >
-      Comparison tool
-      {count > 0 ? (
-        <span
-          className="min-w-[1.25rem] h-5 px-1 rounded-md hs-text-caption hs-font-bold leading-none inline-flex items-center justify-center"
-          style={{ background: 'var(--nhs-blue)', color: '#fff' }}
-          aria-hidden
-        >
-          {count}
-        </span>
-      ) : null}
+      {entry.label}
     </Link>
   )
 }
 
 export default function Nav({
-  commissioningContextLabel,
+  commissioningContextLabel: _commissioningContextLabel,
   isLoggedIn,
   onOpenAiPanel,
 }: {
@@ -60,22 +108,21 @@ export default function Nav({
   isLoggedIn: boolean
   onOpenAiPanel?: () => void
 }) {
-  const path = usePathname()
+  const path = usePathname() ?? ''
   const router = useRouter()
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const { ids, count } = useCompareBasket()
+  const menuId = useId()
 
-  // R7 NAV-02: "Find apps" owns the whole /apps branch — landing, catalogue, and PDPs (/apps/[slug]) —
-  // via prefix matching, so a product page no longer leaves the nav with nothing active.
-  const browseAppsActive = path === '/apps' || (path?.startsWith('/apps/') ?? false)
-  const dashboardActive = path === '/dashboard'
-  const homePageActive = path === '/'
-  const newsActive = path === '/news'
-  const campaignsActive = path === '/campaigns'
-  const caseStudiesActive = path === '/case-studies'
-  const canOpenOrgSettings =
-    isLoggedIn &&
-    !!commissioningContextLabel &&
-    commissioningContextLabel !== SELECT_ICB_CONTINUE_MESSAGE
+  const navRef = useRef<HTMLElement>(null)
+  const listRef = useRef<HTMLUListElement>(null)
+  const itemRefs = useRef<Map<string, HTMLLIElement>>(new Map())
+  const moreRef = useRef<HTMLLIElement>(null)
+
+  const [overflowIds, setOverflowIds] = useState<string[]>([])
+  const [moreOpen, setMoreOpen] = useState(false)
+
+  const compareHref =
+    ids.length > 0 ? `/compare?ids=${ids.map(id => encodeURIComponent(id)).join(',')}` : '/compare'
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' })
@@ -83,239 +130,259 @@ export default function Nav({
     router.refresh()
   }
 
-  function navItemStyle(active: boolean): CSSProperties {
-    return {
-      color: active ? 'var(--nhs-blue)' : 'var(--text-secondary)',
-      background: active ? '#E6F0FB' : 'transparent',
+  const primaryEntries: NavEntry[] = [
+    {
+      id: 'about',
+      href: '/about',
+      label: 'About',
+      active: path === '/about' || path.startsWith('/how-it-helps'),
+    },
+    {
+      id: 'catalogue',
+      href: '/apps',
+      label: 'Product catalogue',
+      active: path === '/apps' || path.startsWith('/apps/'),
+    },
+    {
+      id: 'compare',
+      href: compareHref,
+      label: (
+        <>
+          Comparison tool
+          {count > 0 ? (
+            <span className="nhsuk-u-font-weight-bold" aria-hidden>
+              {' '}
+              ({count})
+            </span>
+          ) : null}
+        </>
+      ),
+      ariaLabel: count > 0 ? `Comparison tool, ${count} selected` : 'Comparison tool',
+      active: path === '/compare',
+    },
+    {
+      id: 'funding',
+      href: '/funding',
+      label: 'Funding directory',
+      active: path === '/funding',
+    },
+    {
+      id: 'resources',
+      href: '/resources',
+      label: 'Resource library',
+      active: path === '/resources' || path.startsWith('/resources/'),
+    },
+  ]
+
+  if (isLoggedIn && onOpenAiPanel) {
+    primaryEntries.push({
+      id: 'ai',
+      label: 'AI Advisor',
+      onClick: onOpenAiPanel,
+    })
+  }
+
+  if (!AUTH_DISABLED) {
+    if (isLoggedIn) {
+      primaryEntries.push({
+        id: 'signout',
+        label: 'Sign out',
+        onClick: () => {
+          void handleLogout()
+        },
+      })
+    } else {
+      primaryEntries.push({
+        id: 'signin',
+        href: '/login',
+        label: 'Sign in',
+        active: path === '/login',
+      })
     }
   }
 
+  const homeEntry: NavEntry = {
+    id: 'home',
+    href: '/',
+    label: 'Home',
+    active: path === '/',
+    homeOnly: true,
+  }
+
+  const primaryIds = primaryEntries.map(e => e.id).join('|')
+
+  const measure = useCallback(() => {
+    const list = listRef.current
+    if (!list) return
+
+    // Reveal all primary items so widths are measurable (hidden → offsetWidth 0).
+    for (const id of primaryIds.split('|')) {
+      const el = itemRefs.current.get(id)
+      if (el) {
+        el.hidden = false
+        el.style.display = ''
+      }
+    }
+    if (moreRef.current) {
+      moreRef.current.hidden = false
+      moreRef.current.style.display = ''
+      moreRef.current.classList.add('nhsuk-mobile-menu-container--visible')
+    }
+
+    const available = list.clientWidth
+    const moreWidth = moreRef.current?.offsetWidth ?? 72
+    const widths: { id: string; width: number }[] = []
+    for (const id of primaryIds.split('|')) {
+      const el = itemRefs.current.get(id)
+      if (el) widths.push({ id, width: el.offsetWidth })
+    }
+
+    let used = 0
+    const overflow: string[] = []
+    for (const item of widths) {
+      if (used + item.width > available - moreWidth) overflow.push(item.id)
+      else used += item.width
+    }
+
+    if (overflow.length === 0) {
+      // Fits without More — confirm without reserving More width.
+      used = widths.reduce((s, w) => s + w.width, 0)
+      if (used <= available) {
+        setOverflowIds(prev => (prev.length === 0 ? prev : []))
+        setMoreOpen(false)
+        return
+      }
+    }
+
+    setOverflowIds(prev => {
+      if (prev.length === overflow.length && prev.every((id, i) => id === overflow[i])) return prev
+      return overflow
+    })
+  }, [primaryIds])
+
+  useLayoutEffect(() => {
+    measure()
+  }, [measure, path, count, isLoggedIn])
+
+  useEffect(() => {
+    document.body.classList.add('js-enabled')
+    const onResize = () => {
+      window.requestAnimationFrame(measure)
+    }
+    window.addEventListener('resize', onResize)
+    const ro = listRef.current ? new ResizeObserver(onResize) : null
+    if (listRef.current && ro) ro.observe(listRef.current)
+    return () => {
+      window.removeEventListener('resize', onResize)
+      ro?.disconnect()
+    }
+  }, [measure])
+
+  useEffect(() => {
+    if (!moreOpen) return
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setMoreOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [moreOpen])
+
+  // Push page content down while More is open (NHS WCAG: do not cover content).
+  useEffect(() => {
+    const nav = navRef.current
+    if (!nav) return
+    if (moreOpen) {
+      const dropdown = nav.querySelector('.nhsuk-header__drop-down:not(.nhsuk-header__drop-down--hidden)') as HTMLElement | null
+      nav.style.marginBottom = dropdown ? `${dropdown.offsetHeight}px` : '0'
+    } else {
+      nav.style.marginBottom = '0'
+    }
+  }, [moreOpen, overflowIds])
+
+  const overflowSet = new Set(overflowIds)
+  const moreVisible = overflowIds.length > 0
+  const overflowEntries = primaryEntries.filter(e => overflowSet.has(e.id))
+
   return (
-    <header className="z-50 border-b" style={{ borderColor: 'var(--border)', background: 'transparent' }}>
-      <div className="bg-white">
-        <div style={aiAdvisorBlueStripStyle} />
-        <nav className={`relative ${aiAdvisorNavBarClass}`}>
-          <div className="absolute inset-y-0 left-0 z-10 hidden items-center px-4 sm:px-6 md:flex">
-            <span className="badge badge-prototype">Prototype</span>
-          </div>
-          {isLoggedIn && onOpenAiPanel && (
-            <button
-              type="button"
-              onClick={onOpenAiPanel}
-              className={`absolute inset-y-0 right-0 z-10 hidden md:flex ${aiAdvisorStripButtonClass} border-l`}
-              style={{ borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
-              aria-label="Open AI Advisor panel"
+    <header className="nhsuk-header" role="banner">
+      <div className="nhsuk-header__container">
+        <div className="nhsuk-header__logo">
+          <Link
+            className="nhsuk-header__link nhsuk-header__link--service"
+            href="/"
+            aria-label="HealthStore homepage"
+          >
+            {NHS_LOGO}
+            <span className="nhsuk-header__service-name">HealthStore</span>
+          </Link>
+        </div>
+      </div>
+
+      <div className="nhsuk-navigation-container">
+        <nav
+          ref={navRef}
+          className="nhsuk-navigation"
+          id="header-navigation"
+          role="navigation"
+          aria-label="Menu"
+        >
+          <ul
+            ref={listRef}
+            className="nhsuk-header__navigation-list nhsuk-header__navigation-list--left-aligned"
+          >
+            {primaryEntries.map(entry => (
+              <li
+                key={entry.id}
+                ref={el => {
+                  if (el) itemRefs.current.set(entry.id, el)
+                  else itemRefs.current.delete(entry.id)
+                }}
+                className="nhsuk-header__navigation-item"
+                hidden={overflowSet.has(entry.id)}
+              >
+                <NavLinkContent entry={entry} onNavigate={() => setMoreOpen(false)} />
+              </li>
+            ))}
+
+            <li className="nhsuk-header__navigation-item nhsuk-header__navigation-item--home">
+              <NavLinkContent entry={homeEntry} onNavigate={() => setMoreOpen(false)} />
+            </li>
+
+            <li
+              ref={moreRef}
+              className={`nhsuk-mobile-menu-container${moreVisible ? ' nhsuk-mobile-menu-container--visible' : ''}`}
+              hidden={!moreVisible}
             >
-              <PanelRightOpen className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--nhs-blue)' }} />
-              AI Advisor
-            </button>
-          )}
-          <div className="w-full px-4 sm:px-6">
-            <div className="mx-auto flex h-14 max-w-7xl items-center justify-between">
-              <Link
-                href={isLoggedIn ? '/dashboard' : '/'}
-                className="flex min-w-0 items-center gap-2 hs-font-bold hs-text-body"
-                style={{ color: 'var(--nhs-dark)', fontFamily: 'Frutiger, Arial, sans-serif' }}
-              >
-                <Image src="/logos/nhs-blue-alt.svg" alt="" width={56} height={22} className="flex-shrink-0" />
-                <span>HealthStore</span>
-              </Link>
-              <div className="hidden md:flex items-center gap-1">
-                <Link href="/"
-                  className="px-4 py-2 rounded-md hs-text-label hs-font-normal transition-colors"
-                  style={navItemStyle(homePageActive)}>
-                  Home
-                </Link>
-                <Link href="/news"
-                  className="px-4 py-2 rounded-md hs-text-label hs-font-normal transition-colors"
-                  style={navItemStyle(newsActive)}>
-                  News
-                </Link>
-                <Link href="/campaigns"
-                  className="px-4 py-2 rounded-md hs-text-label hs-font-normal transition-colors"
-                  style={navItemStyle(campaignsActive)}>
-                  Campaigns
-                </Link>
-                <Link href="/case-studies"
-                  className="px-4 py-2 rounded-md hs-text-label hs-font-normal transition-colors"
-                  style={navItemStyle(caseStudiesActive)}>
-                  Case studies
-                </Link>
-                {isLoggedIn ? (
-                  <button onClick={handleLogout}
-                    className="ml-2 flex items-center gap-2 px-4 py-2 rounded-md hs-text-label hs-font-normal transition-colors hover:bg-[#F0F4F5]"
-                    style={{ color: 'var(--text-muted)' }}>
-                    <LogOut className="w-3.5 h-3.5" />
-                    Sign out
-                  </button>
-                ) : (
-                  <Link
-                    href="/login"
-                    className="ml-2 inline-flex items-center px-4 py-2 rounded-md hs-text-label hs-font-normal transition-colors"
-                    style={{ color: 'var(--nhs-blue)', background: path === '/login' ? '#E6F0FB' : 'transparent' }}
-                  >
-                    Sign in
-                  </Link>
-                )}
-              </div>
               <button
-                className="md:hidden p-2 rounded transition-colors hover:bg-[#F0F4F5]"
-                onClick={() => setMobileOpen(o => !o)}
-                aria-label="Toggle menu"
-                aria-expanded={mobileOpen}
+                type="button"
+                className={`nhsuk-header__menu-toggle nhsuk-header__navigation-link${moreVisible ? ' nhsuk-header__menu-toggle--visible' : ''}`}
+                id="toggle-menu"
+                aria-expanded={moreOpen}
+                aria-controls={menuId}
+                onClick={() => setMoreOpen(o => !o)}
               >
-                {mobileOpen
-                  ? <X className="h-5 w-5" style={{ color: '#212B32' }} aria-hidden />
-                  : <Menu className="h-5 w-5" style={{ color: '#212B32' }} aria-hidden />
-                }
+                <span className="nhsuk-u-visually-hidden">Browse </span>
+                More
+                {CHEVRON_DOWN}
               </button>
-            </div>
-          </div>
+            </li>
+          </ul>
+
+          <ul
+            id={menuId}
+            className={`nhsuk-header__drop-down${moreOpen && moreVisible ? '' : ' nhsuk-header__drop-down--hidden'}`}
+          >
+            {overflowEntries.map(entry => (
+              <li key={entry.id} className="nhsuk-header__navigation-item">
+                <NavLinkContent entry={entry} onNavigate={() => setMoreOpen(false)} />
+              </li>
+            ))}
+          </ul>
         </nav>
       </div>
-      {isLoggedIn ? (
-        <div
-          className="border-t px-4 sm:px-6 py-2"
-          style={{
-            borderColor: 'var(--border)',
-            background: 'rgba(240, 244, 245, 0.9)',
-          }}
-        >
-          <div className="mx-auto flex max-w-7xl items-center gap-4 justify-between">
-            {canOpenOrgSettings ? (
-              <Link
-                href="/org-settings"
-                className="group inline-flex min-w-0 items-center gap-2 hs-text-label leading-snug hover:underline"
-                style={{ color: '#4C6272', fontFamily: 'Frutiger, Arial, sans-serif' }}
-                aria-label={`Organisation settings for ${commissioningContextLabel}`}
-                title="Edit organisation settings"
-              >
-                <span className="truncate">{commissioningContextLabel}</span>
-                <Settings
-                  className="h-3.5 w-3.5 flex-shrink-0 opacity-60 group-hover:opacity-100"
-                  style={{ color: 'var(--nhs-blue)' }}
-                />
-              </Link>
-            ) : commissioningContextLabel ? (
-              <p
-                className="min-w-0 hs-text-label leading-snug"
-                style={{ color: '#4C6272', fontFamily: 'Frutiger, Arial, sans-serif' }}
-              >
-                {commissioningContextLabel}
-              </p>
-            ) : (
-              <span aria-hidden />
-            )}
-            <div className="hidden md:flex items-center gap-1">
-              <Link href="/dashboard"
-                className="px-4 py-2 rounded-md hs-text-label hs-font-normal transition-colors"
-                style={navItemStyle(dashboardActive)}>
-                Dashboard
-              </Link>
-              <Link href="/apps"
-                className="px-4 py-2 rounded-md hs-text-label hs-font-normal transition-colors"
-                style={navItemStyle(browseAppsActive)}>
-                Find apps
-              </Link>
-              <CompareNavLink path={path} className="px-4 py-2 rounded-md hs-text-label hs-font-normal transition-colors" />
-              <Link href="/funding"
-                className="px-4 py-2 rounded-md hs-text-label hs-font-normal transition-colors"
-                style={navItemStyle(path === '/funding')}>
-                Funding directory
-              </Link>
-            </div>
-          </div>
-        </div>
-      ) : null}
-      {mobileOpen && (
-        <div className="md:hidden border-t px-4 py-4 flex flex-col gap-1" style={{ borderColor: 'var(--border)', background: '#fff' }}>
-          <Link href="/" onClick={() => setMobileOpen(false)}
-            className="flex items-center gap-2 px-4 py-2 rounded-md hs-text-label hs-font-normal"
-            style={navItemStyle(homePageActive)}>
-            <Home className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--nhs-blue)' }} />
-            Home
-          </Link>
-          <Link href="/news" onClick={() => setMobileOpen(false)}
-            className="px-4 py-2 rounded-md hs-text-label hs-font-normal"
-            style={navItemStyle(newsActive)}>
-            News
-          </Link>
-          <Link href="/campaigns" onClick={() => setMobileOpen(false)}
-            className="px-4 py-2 rounded-md hs-text-label hs-font-normal"
-            style={navItemStyle(campaignsActive)}>
-            Campaigns
-          </Link>
-          <Link href="/case-studies" onClick={() => setMobileOpen(false)}
-            className="px-4 py-2 rounded-md hs-text-label hs-font-normal"
-            style={navItemStyle(caseStudiesActive)}>
-            Case studies
-          </Link>
-          {isLoggedIn && (
-            <>
-              <div className="my-1 border-t" style={{ borderColor: 'var(--border)' }} />
-              <Link href="/dashboard" onClick={() => setMobileOpen(false)}
-                className="px-4 py-2 rounded-md hs-text-label hs-font-normal"
-                style={navItemStyle(dashboardActive)}>
-                Dashboard
-              </Link>
-              <Link href="/apps" onClick={() => setMobileOpen(false)}
-                className="px-4 py-2 rounded-md hs-text-label hs-font-normal"
-                style={navItemStyle(browseAppsActive)}>
-                Find apps
-              </Link>
-              <CompareNavLink
-                path={path}
-                onNavigate={() => setMobileOpen(false)}
-                className="px-4 py-2 rounded-md hs-text-label hs-font-normal"
-              />
-              <Link href="/funding" onClick={() => setMobileOpen(false)}
-                className="px-4 py-2 rounded-md hs-text-label hs-font-normal"
-                style={navItemStyle(path === '/funding')}>
-                Funding directory
-              </Link>
-              {canOpenOrgSettings && (
-                <Link href="/org-settings" onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-md hs-text-label hs-font-normal"
-                  style={{ color: path === '/org-settings' ? 'var(--nhs-blue)' : 'var(--text-secondary)', background: path === '/org-settings' ? '#E6F0FB' : 'transparent' }}>
-                  <Settings className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--nhs-blue)' }} />
-                  Org settings
-                </Link>
-              )}
-              {onOpenAiPanel && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileOpen(false)
-                    onOpenAiPanel()
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-md hs-text-label hs-font-normal text-left"
-                  style={{ color: 'var(--text-secondary)' }}
-                >
-                  <PanelRightOpen className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--nhs-blue)' }} />
-                  AI Advisor
-                </button>
-              )}
-            </>
-          )}
-          {isLoggedIn ? (
-            <button onClick={handleLogout}
-              className="px-4 py-2 rounded-md hs-text-label hs-font-normal text-left flex items-center gap-2 transition-colors hover:bg-[#F0F4F5]"
-              style={{ color: 'var(--text-muted)' }}>
-              <LogOut className="w-3.5 h-3.5" />
-              Sign out
-            </button>
-          ) : (
-            <Link
-              href="/login"
-              onClick={() => setMobileOpen(false)}
-              className="px-4 py-2 rounded-md hs-text-label hs-font-normal"
-              style={{ color: 'var(--nhs-blue)', background: path === '/login' ? '#E6F0FB' : 'transparent' }}
-            >
-              Sign in
-            </Link>
-          )}
-        </div>
-      )}
+
+      {/* GOV.UK: phase banner sits inside <header>, after service navigation. */}
+      <PhaseBanner tag="Alpha" />
     </header>
   )
 }

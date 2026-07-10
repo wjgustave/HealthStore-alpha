@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { AUTH_DISABLED } from '@/lib/authMode'
+import { resolveOrganizationId } from '@/lib/orgIdentity'
 import { getSession } from '@/lib/session'
 
 type EoiSessionOk = {
@@ -12,6 +14,21 @@ type EoiSessionErr = {
 
 export async function requireEoiSession(): Promise<EoiSessionOk | EoiSessionErr> {
   const session = await getSession()
+
+  if (AUTH_DISABLED) {
+    try {
+      const organizationId = await resolveOrganizationId(session)
+      return { organizationId, userId: undefined }
+    } catch (err) {
+      console.error('[EOI] Failed to resolve open-access organisation id:', err)
+      return {
+        error: NextResponse.json(
+          { error: 'Express interest is temporarily unavailable. Please try again later.' },
+          { status: 503 },
+        ),
+      }
+    }
+  }
 
   if (!session.isLoggedIn) {
     return { error: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }) }

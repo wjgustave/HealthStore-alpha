@@ -71,7 +71,7 @@ function SavedAppCard({ app, onRemove, removing }: { app: App; onRemove: () => v
             className="block rounded-lg py-4 text-center hs-text-label hs-font-bold transition-colors hover:!bg-[#004B8C]"
             style={{ background: STORE_ACCENT, color: '#fff' }}
           >
-            View details →
+            View product details
           </Link>
           <SaveToggleButton appId={app.id} borderless className="w-full px-4 py-4" />
         </div>

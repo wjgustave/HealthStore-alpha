@@ -162,6 +162,8 @@ export interface IcbReferenceData {
   high_risk_cohort?: number
   annual_admissions?: number
   annual_ae_attendances?: number
+  /** Unscheduled / COPD-related GP appointments per year (illustrative). */
+  annual_gp_appointments?: number
   readmission_rate_90d?: number
   comparator_label?: string
   data_date: string

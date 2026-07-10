@@ -56,20 +56,18 @@ export function PdpWhereLive({
 export function PdpWhereLiveSegment({ app, href = '#scale-and-maturity' }: { app: WhereLiveApp; href?: string }) {
   const { sitesText, siteCount } = getWhereLiveSummary(app)
 
+  if (siteCount == null && !sitesText) return null
+
   return (
-    <article className="hs-snapshot-strip__segment">
-      <h2 className="hs-snapshot-strip__heading">
-        <a href={href} className="hs-snapshot-strip__heading-link">
-          Live NHSE sites
-        </a>
+    <a href={href} className="hs-snapshot-strip__segment hs-snapshot-strip__segment--link">
+      <h2 className="hs-snapshot-strip__heading hs-snapshot-strip__heading--linked">
+        Live NHSE sites
       </h2>
       <div className="hs-snapshot-strip__body">
-        {siteCount != null || sitesText ? (
-          <span className="hs-text-card-title-sm hs-font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
-            {siteCount ?? sitesText}
-          </span>
-        ) : null}
+        <span className="hs-text-card-title-sm hs-font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
+          {siteCount ?? sitesText}
+        </span>
       </div>
-    </article>
+    </a>
   )
 }

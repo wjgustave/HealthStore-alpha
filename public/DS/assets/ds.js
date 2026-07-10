@@ -24,7 +24,8 @@
     {
       title: 'Overview',
       items: [
-        { key: 'home', label: 'Home', href: '/DS/index.html' }
+        { key: 'home', label: 'Home', href: '/DS/index.html' },
+        { key: 'whats-new', label: "What's changed", href: '/DS/whats-new/index.html' }
       ]
     },
     {
