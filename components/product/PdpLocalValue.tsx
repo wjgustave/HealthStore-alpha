@@ -3,7 +3,7 @@ import type { App } from '@/lib/data'
 import type { ProductNarrative } from '@/lib/content/productModel'
 import type { CommissionerContext } from '@/lib/context/types'
 import { contextToSearchParams } from '@/lib/context/types'
-import { getLocalReferenceData } from '@/lib/localData/referenceData'
+import { pdpSectionTitle, resolvePdpLocalArea } from '@/lib/pdpSections'
 import { computeMycopdImpactMetrics } from '@/lib/localData/mycopdImpact'
 import { getDtxImpactRanges } from '@/lib/localData/workspaceData'
 import { PdpSection } from '@/components/PdpSection'
@@ -43,15 +43,6 @@ const CAPACITY_TO_CASH = 0.4
 const PRICE_LOW = 110
 const PRICE_HIGH = 360
 
-// When no area is set, project onto the NHSE Average ICB (labelled) so the
-// sections still deliver value without setup.
-const DEMO_CONTEXT: CommissionerContext = {
-  geography_type: 'icb',
-  geography_id: 'GEN',
-  geography_label: 'NHSE Average ICB',
-  scenario_id: 'central',
-}
-
 function formatGbp(n: number): string {
   const abs = Math.abs(n)
   const sign = n < 0 ? '-' : ''
@@ -79,23 +70,13 @@ export default function PdpLocalValue({
   narrative: ProductNarrative
   context: CommissionerContext
 }) {
-  // Scope guard: the ROI model is COPD-specific (R2-7 A = Luscii only).
-  const isCopd = app.condition_tags?.includes('copd')
-  if (!isCopd) return null
+  // Scope guard + area resolution shared with the "On this page" nav (single
+  // source of truth so the projected-impact title and nav label stay in sync).
+  const area = resolvePdpLocalArea(app, context)
+  if (!area) return null
+  const { areaLabel, isExample, ref } = area
 
   const isMycopd = app.slug === 'mycopd'
-  const localRef = getLocalReferenceData(context)
-  const isLocal = context.geography_type !== 'national' && !!context.geography_id && !!localRef
-
-  // When no area is set we still show fully-worked sections, using a representative
-  // example ICB rather than a teaser or the (huge, abstract) national baseline. The
-  // block is clearly labelled as an example with a "Set your area" affordance.
-  const effectiveContext = isLocal ? context : DEMO_CONTEXT
-  const ref = isLocal ? localRef! : getLocalReferenceData(DEMO_CONTEXT)
-  if (!ref) return null
-
-  const isExample = !isLocal
-  const areaLabel = effectiveContext.geography_label
   const changeHref = `/start/place?${contextToSearchParams(context).toString()}`
 
   const ranges = getDtxImpactRanges()
@@ -123,7 +104,7 @@ export default function PdpLocalValue({
   const breakEvenPrice = Math.round(capacity / ROI_COHORT)
 
   return (
-    <div className="mb-6 space-y-4">
+    <div className="hs-pdp-spine-group mb-6 space-y-4">
       {/* R2-1: context line reusing the guided-start place picker */}
       {!isExample ? (
         <p className="hs-text-caption" style={{ color: 'var(--text-muted)', margin: 0 }}>
@@ -135,7 +116,7 @@ export default function PdpLocalValue({
       <PdpSection
         id="local-impact"
         shareKey="narrative-projected-impact"
-        title={isExample ? 'What this could mean for your COPD cohort' : `What this could mean for ${areaLabel}`}
+        title={pdpSectionTitle('local-impact', { appName: app.app_name, areaLabel, isExample })}
         description="Projections are illustrative and based on published evidence applied to your NHSE average eligible cohort."
       >
         {mycopdImpact ? (
@@ -220,7 +201,7 @@ export default function PdpLocalValue({
       <PdpSection
         id="local-value-worth"
         shareKey="narrative-economics"
-        title="What it could be worth"
+        title={pdpSectionTitle('local-value-worth', { appName: app.app_name })}
         description="Illustrative economics for a 500-patient cohort. Cash and capacity are reported separately."
       >
         <div className="grid gap-4 sm:grid-cols-3">

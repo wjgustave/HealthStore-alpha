@@ -2,6 +2,7 @@ import type { ProductNarrative } from '@/lib/content/productModel'
 import { getCommissionerFacingFunding } from '@/lib/data'
 import { PdpSection } from '@/components/PdpSection'
 import { FundingStatusBadge } from '@/components/Badges'
+import { pdpSectionTitle } from '@/lib/pdpSections'
 
 /**
  * "Funding levers and tariff alignment" — ports the matt_demo commissioner_economics
@@ -42,7 +43,7 @@ export default function PdpFundingLevers({
     <PdpSection
       id="funding-levers"
       shareKey="narrative-funding-levers"
-      title="Funding levers and tariff alignment"
+      title={pdpSectionTitle('funding-levers')}
       description="Where cash, tariff and QOF incentives align with this pathway — plus linked commissioner funding schemes."
     >
       {tariffNote && (

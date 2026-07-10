@@ -1,6 +1,7 @@
 import type { App } from '@/lib/data'
 import type { ProductNarrative } from '@/lib/content/productModel'
 import { PdpSection } from '@/components/PdpSection'
+import { pdpSectionTitle } from '@/lib/pdpSections'
 
 /**
  * "Making it work at your site" — the curated implementation narrative.
@@ -32,7 +33,7 @@ export default function PdpImplementation({
     <PdpSection
       id="implementation"
       shareKey="narrative-implementation"
-      title="Making it work at your site"
+      title={pdpSectionTitle('implementation')}
       description="Successful deployment depends on three things: clinical engagement, systematic patient invitation, and ongoing monitoring. Here is what the supplier provides and what your local team needs to organise."
     >
       <ol className="hs-impl-timeline">

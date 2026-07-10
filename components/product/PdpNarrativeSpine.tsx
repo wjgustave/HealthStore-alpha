@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import type { App } from '@/lib/data'
 import type { ProductNarrative } from '@/lib/content/productModel'
 import { PdpSection } from '@/components/PdpSection'
+import { pdpSectionTitle } from '@/lib/pdpSections'
 
 /**
  * Narrative spine for the hybrid PDP.
@@ -52,12 +53,13 @@ export default function PdpNarrativeSpine({
   if (!hasSpine) return null
 
   return (
-    <div className="hs-pdp-spine mb-6 space-y-4">
+    // Section rhythm: each section's mb-14 + divider padding (see .hs-pdp-spine in globals.css).
+    <div className="hs-pdp-spine mb-6">
       {problem && (
         <PdpSection
           id="the-problem"
           shareKey="narrative-problem"
-          title="The problem this addresses"
+          title={pdpSectionTitle('the-problem', { appName: app.app_name })}
         >
           <p style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}>
             {problem}
@@ -74,7 +76,7 @@ export default function PdpNarrativeSpine({
         <PdpSection
           id="how-it-helps"
           shareKey="narrative-how-it-helps"
-          title={`How ${app.app_name} helps`}
+          title={pdpSectionTitle('how-it-helps', { appName: app.app_name })}
         >
           {bullets.length > 0 && (
             <ul className="space-y-2" style={{ margin: '0 0 8px', paddingLeft: 20, lineHeight: 1.7, color: 'var(--text-secondary)', fontSize: 'var(--text-body)' }}>
@@ -140,7 +142,7 @@ export default function PdpNarrativeSpine({
         <PdpSection
           id="how-to-buy"
           shareKey="narrative-how-to-buy"
-          title="How to buy locally"
+          title={pdpSectionTitle('how-to-buy', { appName: app.app_name })}
         >
           {commercial.healthstore_role && (
             <div className="rounded-lg p-4 mb-4" style={{ background: '#E6F0FB', border: '1px solid var(--border)' }}>

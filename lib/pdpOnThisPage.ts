@@ -1,8 +1,11 @@
 import type { App } from '@/lib/data'
 import type { ProductNarrative } from '@/lib/content/productModel'
+import type { CommissionerContext } from '@/lib/context/types'
 import { deriveAssuranceDomains } from '@/lib/content/assuranceDomains'
 import { getDeploymentRegister } from '@/lib/deploymentRegister'
 import { splitPdpEvidence } from '@/lib/pdpEvidence'
+import { pdpSectionTitle, resolvePdpLocalArea } from '@/lib/pdpSections'
+import type { PdpSectionId } from '@/lib/pdpSections'
 
 export type PdpOnThisPageLink = { id: string; label: string }
 
@@ -16,9 +19,24 @@ export function buildPdpOnThisPageLinks(input: {
   showNarrativeSpine: boolean
   showLocalValue: boolean
   hasLinkedFunding: boolean
+  /** Commissioner context — needed to resolve the projected-impact area label. */
+  context?: CommissionerContext
 }): PdpOnThisPageLink[] {
-  const { app, narrative, showNarrativeSpine, showLocalValue, hasLinkedFunding } = input
+  const { app, narrative, showNarrativeSpine, showLocalValue, hasLinkedFunding, context } = input
   const links: PdpOnThisPageLink[] = []
+
+  // Labels come from the same title source as the rendered sections, so editing a
+  // section title automatically updates its nav entry (single source of truth).
+  const localArea = showLocalValue && context ? resolvePdpLocalArea(app, context) : null
+  const push = (id: PdpSectionId) =>
+    links.push({
+      id,
+      label: pdpSectionTitle(id, {
+        appName: app.app_name,
+        areaLabel: localArea?.areaLabel,
+        isExample: localArea?.isExample,
+      }),
+    })
 
   const hasNhsExperience =
     showNarrativeSpine &&
@@ -33,18 +51,18 @@ export function buildPdpOnThisPageLinks(input: {
     const pathway = narrative.pathway_model
 
     if (problem) {
-      links.push({ id: 'the-problem', label: 'The problem' })
+      push('the-problem')
     }
     if (bullets.length > 0 || pathway) {
-      links.push({ id: 'how-it-helps', label: `How ${app.app_name} helps` })
+      push('how-it-helps')
     }
     if (showLocalValue) {
-      links.push({ id: 'local-impact', label: 'Projected impact' })
-      links.push({ id: 'local-value-worth', label: 'What it could be worth' })
+      push('local-impact')
+      push('local-value-worth')
     }
     const economics = narrative.commissioner_economics
     if ((economics?.funding_levers?.length ?? 0) > 0 || !!economics?.tariff_note?.trim() || hasLinkedFunding) {
-      links.push({ id: 'funding-levers', label: 'Funding levers' })
+      push('funding-levers')
     }
     const hasAssuranceEvidence =
       evidenceSplit.publications.length > 0 ||
@@ -55,18 +73,18 @@ export function buildPdpOnThisPageLinks(input: {
       deriveAssuranceDomains(app).length > 0 ||
       hasAssuranceEvidence
     ) {
-      links.push({ id: 'assurance', label: 'Assurance and evidence' })
+      push('assurance')
     }
     if (narrative.implementation) {
-      links.push({ id: 'implementation', label: 'Making it work' })
+      push('implementation')
     }
     if (hasNhsExperience) {
-      links.push({ id: 'nhs-experience', label: 'NHS experience' })
+      push('nhs-experience')
     }
     if (narrative.commercial_readiness) {
-      links.push({ id: 'how-to-buy', label: 'How to buy locally' })
+      push('how-to-buy')
     }
-    links.push({ id: 'resources', label: 'Resources' })
+    push('resources')
   }
 
   if (!showNarrativeSpine) {

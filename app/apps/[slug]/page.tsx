@@ -147,6 +147,7 @@ export default async function AppPage({
     showNarrativeSpine,
     showLocalValue,
     hasLinkedFunding: linkedFundingIds.length > 0,
+    context: commissionerContext,
   })
 
   const hasPdpAlerts =
@@ -559,7 +560,7 @@ export default async function AppPage({
         <div className={onThisPageLinks.length >= 2 ? 'hs-pdp-with-sidebar' : undefined}>
           {onThisPageLinks.length >= 2 ? (
             <aside className="hs-pdp-with-sidebar__aside">
-              <PdpOnThisPage links={onThisPageLinks} />
+              <PdpOnThisPage links={onThisPageLinks} title={app.app_name} />
             </aside>
           ) : null}
 

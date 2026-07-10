@@ -13,7 +13,14 @@ function isSectionVisible(el: HTMLElement): boolean {
  * In-page section nav — sticky sidebar beside PDP content.
  * Active section: bold label + 5px vertical line (GOV.UK contents-list pattern).
  */
-export default function PdpOnThisPage({ links }: { links: PdpOnThisPageLink[] }) {
+export default function PdpOnThisPage({
+  links,
+  title = 'On this page',
+}: {
+  links: PdpOnThisPageLink[]
+  /** Heading above the contents list — defaults to "On this page" (PDP passes the product name). */
+  title?: string
+}) {
   const [activeId, setActiveId] = useState<string | null>(links[0]?.id ?? null)
 
   useEffect(() => {
@@ -66,7 +73,7 @@ export default function PdpOnThisPage({ links }: { links: PdpOnThisPageLink[] })
 
   return (
     <nav className="hs-on-this-page" aria-label="On this page">
-      <strong className="hs-on-this-page__title">On this page</strong>
+      <strong className="hs-on-this-page__title">{title}</strong>
       <ul className="hs-on-this-page__list">
         {links.map((link) => {
           const isActive = link.id === activeId

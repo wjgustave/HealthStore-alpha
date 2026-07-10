@@ -1,5 +1,6 @@
 import type { App } from '@/lib/data'
 import { PdpSection } from '@/components/PdpSection'
+import { pdpSectionTitle } from '@/lib/pdpSections'
 import ProductVideosSection from '@/components/ProductVideosSection'
 import { DemoAccessSection, shouldShowDemoAccess, TechnicalIntegrationTable } from '@/components/AppDetailSections'
 import { STORE_ACCENT } from '@/lib/storeAccent'
@@ -17,7 +18,7 @@ export default function PdpResources({ app }: { app: App }) {
     <PdpSection
       id="resources"
       shareKey="narrative-resources"
-      title="Resources"
+      title={pdpSectionTitle('resources')}
       description="Product videos, demo links, documentation and technical integration detail."
     >
       {hasVideos && (

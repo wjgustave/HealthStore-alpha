@@ -332,31 +332,23 @@
   .hs-phase-banner__inner {
     max-width: 80rem;
     margin-inline: auto;
-    padding-inline: 16px;
+    padding-inline: var(--gutter);
     box-sizing: border-box;
     border-bottom: 0; /* outer bar owns the edge against page content */
   }
-  @media (min-width: 641px) {
-    .hs-phase-banner__inner {
-      padding-inline: 32px;
-    }
-  }
-  @media (min-width: calc(80rem + 64px)) {
-    .hs-phase-banner__inner {
-      padding-inline: 0;
-    }
-  }
-  /* Match header/nav content width to the app page canvas (.hs-page / max-w-7xl = 80rem). */
+  /*
+   * Match header/nav geometry to the page canvas (.hs-page): same 80rem
+   * border-box with the NHS gutter as padding. The NHS theme positions these
+   * with side margins (16/32px) that collapse to `margin: 0 auto` at 1024px,
+   * which made the header content sit flush with the 80rem edge — 32px wider
+   * than page content. Auto margins + gutter padding keeps them aligned at
+   * every viewport width.
+   */
   .nhsuk-header__container,
   .nhsuk-navigation {
     max-width: 80rem;
-  }
-  @media (min-width: calc(80rem + 64px)) {
-    .nhsuk-header__container,
-    .nhsuk-navigation {
-      margin-left: auto;
-      margin-right: auto;
-    }
+    margin-inline: auto;
+    padding-inline: var(--gutter);
   }
   /* Sign out / AI Advisor use the same nav link styles as anchors. */
   button.nhsuk-header__navigation-link {
@@ -893,6 +885,23 @@
 .hs-pdp .hs-pdp-with-sidebar__main > *:first-child .hs-pdp-heading,
 .hs-pdp .hs-pdp-spine > *:first-child .hs-pdp-heading {
   margin-top: 0;
+}
+
+/**
+ * PDP narrative spine — horizontal rule between narrative sections.
+ * Sections carry mb-14 (56px) below their content; the divider then gets the
+ * section gap above the next title. [Provenance: GOV.UK] section break pattern.
+ */
+.hs-pdp-spine > * + * {
+  border-top: 2px solid var(--border);
+  padding-top: var(--section-gap);
+}
+/* Same divider between sub-sections rendered inside a single spine slot
+   (e.g. PdpLocalValue: projected impact + economics). The optional context
+   <p> is skipped — only the second PdpSection wrapper (div + div) gets a rule. */
+.hs-pdp-spine-group > div + div {
+  border-top: 2px solid var(--border);
+  padding-top: var(--section-gap);
 }
 
 /**

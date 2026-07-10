@@ -1,4 +1,5 @@
 import { PdpSection } from '@/components/PdpSection'
+import { pdpSectionTitle } from '@/lib/pdpSections'
 import { DeploymentRegisterTable } from '@/components/DeploymentRegisterTable'
 import { CaseStudyCards } from '@/components/AppDetailSections'
 import { getDeploymentRegister } from '@/lib/deploymentRegister'
@@ -50,7 +51,7 @@ export default function PdpNhsExperience({ app }: { app: any }) {
     <PdpSection
       id="nhs-experience"
       shareKey="narrative-nhs-experience"
-      title="NHS experience"
+      title={pdpSectionTitle('nhs-experience')}
       description={`Where ${app.app_name} is deployed across the NHS today, and where case studies and evaluations have taken place.`}
     >
       {hasRegister && (

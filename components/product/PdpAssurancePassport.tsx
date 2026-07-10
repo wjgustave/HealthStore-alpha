@@ -2,6 +2,7 @@ import type { App } from '@/lib/data'
 import type { ProductNarrative } from '@/lib/content/productModel'
 import type { AssuranceDomainStatus } from '@/lib/content/productModel'
 import { PdpSection } from '@/components/PdpSection'
+import { pdpSectionTitle } from '@/lib/pdpSections'
 import { deriveAssuranceDomains } from '@/lib/content/assuranceDomains'
 import { splitPdpEvidence } from '@/lib/pdpEvidence'
 import PdpClinicalPublications from '@/components/product/PdpClinicalPublications'
@@ -118,7 +119,7 @@ export default function PdpAssurancePassport({
     <PdpSection
       id="assurance"
       shareKey="narrative-assurance"
-      title="Assurance and evidence"
+      title={pdpSectionTitle('assurance')}
       description="HealthStore has reviewed this product nationally. We certify our confidence in its assurance position based on supplier-provided documentation. Your local team retains responsibility for due diligence — we make that faster by providing access to source documents in your workspace once verified."
     >
       {speedNote && (
