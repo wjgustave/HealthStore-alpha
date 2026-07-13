@@ -5,27 +5,27 @@ import { ProcessSteps } from '@/components/storytelling'
 const WHAT_WE_DO = [
   {
     title: 'Assurance and certification',
-    body: 'We review each product against clinical safety, information governance, interoperability and evidence standards — a national assurance passport that underpins your local due diligence.',
+    body: 'Each product is reviewed against clinical safety, information governance, interoperability and evidence standards — national assurance that underpins your local due diligence.',
   },
   {
     title: 'Opportunity identification',
-    body: 'We derive local unmet need from published population data — QOF registers, secondary care activity and waiting lists — so you can see where the addressable gap is largest.',
+    body: 'We learn of the local, unmet needs from published population data — QOF registers, secondary care activity and waiting lists — helping you address priority unmet needs.',
   },
   {
     title: 'Procurement and commercial support',
-    body: 'Buyer packs, commercial route notes, standard terms and pricing transparency to reduce procurement lead time from months to weeks.',
+    body: 'We provide Buyer Packs and commercial route notes, and standard terms and pricing transparency reduces procurement lead time from months to weeks.',
   },
   {
     title: 'Deployment and implementation',
-    body: 'Every product ships with an implementation playbook — site readiness, the clinical wrapper, IT integration steps and the supplier support available.',
+    body: 'Each product comes with an implementation manual that guides the integration process and offers supplier support.',
   },
   {
     title: 'Performance and benefit tracking',
-    body: 'Once live, your workspace shows coverage, activation, retention and outcomes, benchmarked against peer deployments and categorised by evidential basis.',
+    body: 'Once live, your workspace shows coverage, activation, retention and outcomes, benchmarked against peer deployments and categorised using an evidential basis.',
   },
   {
     title: 'Ongoing support to improve',
-    body: 'Underperforming deployments are flagged with actionable recommendations so invitation, registration and engagement keep improving.',
+    body: 'Underperforming deployments are brought to your attention with actionable recommendations so that invitation, registration, and engagement continue to improve.',
   },
 ]
 
@@ -63,19 +63,19 @@ const HOW_IT_WORKS = [
   },
   {
     title: 'Get support to commission',
-    description: 'Buyer materials, supplier introductions and governance guidance. You sign the contract — we make it easier to get there.',
+    description: 'We’ll manage buyer materials, supplier introductions and governance guidance.',
     media: <Image src="/images/how-it-works-step-3.png" alt="" width={1021} height={880} className="hs-step__img" />,
   },
   {
     title: 'Track outcomes and improve',
-    description: 'Your workspace shows deployment performance, peer benchmarks and benefit accrual, with alerts when something needs attention.',
+    description: 'We’ll ensure your workspace shows deployment performance, peer benchmarks and benefit accrual, with alerts when something needs attention.',
     media: <Image src="/images/how-it-works-step-4.png" alt="" width={1024} height={829} className="hs-step__img" />,
   },
 ]
 
 const PATHWAYS = [
   { href: '/product-catalogue/digital-therapeutics?condition=copd', title: 'COPD and pulmonary rehab', detail: 'Remote monitoring and self-management', tags: ['NICE HTG736', 'NICE HTG718'] },
-  { href: '/product-catalogue/digital-therapeutics?condition=cardiac_rehab', title: 'Cardiac rehabilitation', detail: 'Digital post-event rehab programme', tags: ['NICE HTG7'] },
+  { href: '/product-catalogue/digital-therapeutics?condition=cardiac_rehab', title: 'Cardiac rehabilitation', detail: 'Digital post-event rehab programme', tags: ['NICE HTG761'] },
 ]
 
 /**
@@ -88,10 +88,10 @@ export function HomeStorytelling() {
     <>
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12 md:pt-14">
         <section className="hs-section">
-          <h2 className="hs-section-title" style={{ fontSize: 'var(--text-section)' }}>What HealthStore does</h2>
+          <h2 className="hs-section-title" style={{ fontSize: 'var(--text-section)' }}>What the NHS HealthStore addresses</h2>
           <p className="hs-section-note hs-measure" style={{ fontSize: 'var(--text-body)' }}>
-            We reduce the burden on local teams by doing nationally what would otherwise be repeated at every ICB. You
-            retain all commissioning, clinical safety and deployment accountability.
+            It reduces the burden on local teams by doing nationally what would otherwise be repeated at every Integrated
+            Care Board (ICB). Commissioners retain all commissioning, clinical safety and deployment accountability.
           </p>
           <div className="hs-card-grid">
             {WHAT_WE_DO.map((item) => (
@@ -113,7 +113,7 @@ export function HomeStorytelling() {
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12 md:pt-14">
         <section className="hs-section">
-          <h2 className="hs-section-title" style={{ fontSize: 'var(--text-section)' }}>Pathways we support today</h2>
+          <h2 className="hs-section-title" style={{ fontSize: 'var(--text-section)' }}>Conditions and pathways we currently support</h2>
           <p className="hs-section-note hs-measure">
             Condition pathways with NICE Health Technology Guidance, nationally assured products and full local
             opportunity data.

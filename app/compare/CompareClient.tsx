@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -11,9 +11,7 @@ import {
   sharedConditionTags,
 } from '@/lib/compareConditions'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
-import CompareLensControl from '@/components/compare/CompareLensControl'
 import CompareWorkspaceView from '@/components/compare/CompareWorkspaceView'
-import type { CompareLensId } from '@/lib/compareConfig'
 
 type Props = { allApps: App[] }
 
@@ -66,8 +64,6 @@ function CompareSummaryCard({
 export default function CompareClient({ allApps }: Props) {
   const searchParams = useSearchParams()
   const { ids: selectedIds, remove, clear, setFromUrlIds } = useCompareBasket()
-  const [lens, setLens] = useState<CompareLensId>('all')
-  const [differencesOnly, setDifferencesOnly] = useState(false)
 
   const idsParam = searchParams?.get('ids') ?? ''
   useEffect(() => {
@@ -88,8 +84,7 @@ export default function CompareClient({ allApps }: Props) {
       <div className="mb-8">
         <h1 className="page-title-h1">Comparison tool</h1>
         <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
-          Add up to four DTx apps from the catalogue in the <strong>same condition area</strong>.
-          Compare decision snapshot signals — where it&apos;s live, governance, pricing model, and integrations — then drill into the detail groups below.
+          The comparison tool enables you to select up to four Digital Therapeutics (DTx) apps from the catalogue within the same condition area. Once you have selected the apps you would like to compare, choose ‘add to compare’. The NHS HealthStore will then compare your chosen apps and show you, where your app is live, its governance, pricing model, and integrations.
         </p>
       </div>
 
@@ -117,19 +112,6 @@ export default function CompareClient({ allApps }: Props) {
             >
               Clear all
             </button>
-          </div>
-
-          <div className="hs-compare-panel hs-compare-workspace__controls mb-4">
-            <CompareLensControl value={lens} onChange={setLens} />
-            <label className="hs-compare-diff-toggle">
-              <input
-                type="checkbox"
-                checked={differencesOnly}
-                onChange={e => setDifferencesOnly(e.target.checked)}
-                className="hs-compare-diff-toggle__input"
-              />
-              <span>Differences only</span>
-            </label>
           </div>
 
           <div className="hs-compare-panel hs-compare-panel--summary mb-4">
@@ -172,9 +154,8 @@ export default function CompareClient({ allApps }: Props) {
       ) : (
         <CompareWorkspaceView
           selected={selected}
-          lens={lens}
-          differencesOnly={differencesOnly}
-          onShowAllRows={() => setDifferencesOnly(false)}
+          lens="all"
+          differencesOnly={false}
         />
       )}
     </div>
