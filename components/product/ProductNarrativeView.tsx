@@ -119,7 +119,7 @@ export default function ProductNarrativeView({
           <div className="hs-kpi-value" style={{ fontSize: '1rem' }}>{narrative.commercial_readiness?.price_summary ?? '—'}</div>
         </div>
         <div className="hs-kpi">
-          <div className="hs-kpi-label">HealthStore status</div>
+          <div className="hs-kpi-label">NHS HealthStore status</div>
           <div className="hs-kpi-value" style={{ fontSize: '1rem' }}>{narrative.commercial_readiness?.commercial_status ?? 'Under review'}</div>
         </div>
       </div>
@@ -135,7 +135,7 @@ export default function ProductNarrativeView({
 
       {/* 1. THE PROBLEM — strong narrative */}
       <section id="problem" style={{ marginBottom: 40 }}>
-        <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: 12 }}>The problem this addresses</h2>
+        <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: 12 }}>The problem {app.app_name} addresses</h2>
         <div style={{ maxWidth: 720, lineHeight: 1.8, color: '#212b32', fontSize: '1.05rem' }}>
           <p>{narrative.decision_summary?.pathway_problem ?? app.target_problem_statement}</p>
           {app.why_it_matters_locally && (
@@ -146,7 +146,7 @@ export default function ProductNarrativeView({
 
       {/* 2. HOW IT HELPS — what the product does */}
       <section id="what-it-does" style={{ marginBottom: 40, borderTop: '1px solid #d8dde0', paddingTop: 32 }}>
-        <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: 12 }}>How {app.app_name} helps</h2>
+        <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: 12 }}>How {app.app_name} changes a treatment pathway</h2>
         {bullets.length > 0 ? (
           <ul style={{ margin: '0 0 16px', paddingLeft: 20, maxWidth: 720, lineHeight: 1.75, color: '#212b32', fontSize: '1.05rem' }}>
             {bullets.map((b) => <li key={b} style={{ marginBottom: 8 }}>{b}</li>)}
@@ -189,7 +189,7 @@ export default function ProductNarrativeView({
 
       {/* 3. PROJECTED IMPACT — the "so what?" section */}
       <section id="projected-impact" style={{ marginBottom: 40, borderTop: '1px solid #d8dde0', paddingTop: 32 }}>
-        <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: 8 }}>What this could mean for {context.geography_label}</h2>
+        <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: 8 }}>What using {app.app_name} could mean for {app.condition_tags?.includes('cardiac_rehab') ? 'cardiac' : 'COPD'} patients</h2>
         <p className="hs-section-note" style={{ marginBottom: 20 }}>
           Projections based on published evidence applied to your local eligible population. Not a guarantee — a defensible basis for a business case.
         </p>
@@ -215,7 +215,7 @@ export default function ProductNarrativeView({
                 })}
                 maxValue={Math.max(...quantifiedClaims.slice(0, 3).map(c => c.effect_central!)) * 1.3}
               />
-              <InsightCallout variant="good" title="So what does this mean?">
+              <InsightCallout variant="good" title="What this means">
                 {(() => {
                   const primary = quantifiedClaims[0]
                   const eligible = workspaceData.coverage_funnel.eligible
@@ -369,7 +369,7 @@ export default function ProductNarrativeView({
       <section id="assurance" style={{ marginBottom: 40, borderTop: '1px solid #d8dde0', paddingTop: 32 }}>
         <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: 8 }}>Assurance and evidence</h2>
         <p style={{ fontSize: 15, color: '#4c6272', maxWidth: 720, lineHeight: 1.7, marginBottom: 20 }}>
-          HealthStore has reviewed this product nationally. We certify our confidence in its assurance position based on supplier-provided documentation.
+          The NHS HealthStore has reviewed this product nationally. We certify our confidence in its assurance position based on supplier-provided documentation.
           Your local team retains responsibility for due diligence — we make that faster by providing access to source documents in your workspace once verified.
         </p>
 
@@ -396,7 +396,7 @@ export default function ProductNarrativeView({
                 <div key={d.domain} className="hs-card" style={{ borderTop: `3px solid ${statusColor}` }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                     <h3 style={{ margin: 0 }}>{d.domain}</h3>
-                    <span className="hs-tag" style={{ background: statusBg, color: statusColor }}>{d.status.replace(/_/g, ' ')}</span>
+                    <span className="hs-tag" style={{ background: statusBg, color: statusColor, whiteSpace: 'nowrap' }}>{d.status.replace(/_/g, ' ')}</span>
                   </div>
                   <p>{d.summary}</p>
                 </div>
@@ -481,7 +481,7 @@ export default function ProductNarrativeView({
           </div>
           <InsightCallout title="Supplier support included">
             The supplier provides onboarding, training materials, technical integration support and ongoing account management as part of the standard package.
-            HealthStore brokers the introduction and tracks mobilisation milestones.
+            The NHS HealthStore brokers the introduction and tracks mobilisation milestones.
           </InsightCallout>
         </section>
       )}
@@ -541,7 +541,7 @@ export default function ProductNarrativeView({
         <section id="commercial" style={{ marginBottom: 40, borderTop: '1px solid #d8dde0', paddingTop: 32 }}>
           <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: 8 }}>How to buy locally</h2>
           {narrative.commercial_readiness.healthstore_role && (
-            <InsightCallout title="HealthStore's role in procurement">
+            <InsightCallout title="The NHS HealthStore's role in procurement">
               {narrative.commercial_readiness.healthstore_role}
             </InsightCallout>
           )}
@@ -566,7 +566,7 @@ export default function ProductNarrativeView({
       <section style={{ textAlign: 'center', padding: '40px 0', borderTop: '1px solid #d8dde0' }}>
         <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: 8 }}>Ready to proceed?</h2>
         <p style={{ color: '#4c6272', marginBottom: 20, fontSize: 15 }}>
-          HealthStore can assess fit, build a business case, and support your local procurement route.
+          The NHS HealthStore can assess fit, build a business case, and support your local procurement route.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link href={`/products/${app.slug}/support?${qs}`} className="hs-btn hs-btn-primary">Get commissioning support</Link>

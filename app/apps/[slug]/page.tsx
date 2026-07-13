@@ -56,7 +56,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const app = getAppBySlug(slug)
-  return { title: app ? `${app.app_name} — HealthStore` : 'Not found' }
+  return { title: app ? `${app.app_name} — NHS HealthStore` : 'Not found' }
 }
 
 export default async function AppPage({
@@ -101,7 +101,7 @@ export default async function AppPage({
   const heroQuickFacts = showNarrativeSpine
     ? [
         { label: 'NICE guidance', value: heroNiceRefs.length > 0 ? heroNiceRefs[0].ref : null },
-        { label: 'HealthStore status', value: narrative.commercial_readiness?.commercial_status ?? 'Under review' },
+        { label: 'NHS HealthStore status', value: narrative.commercial_readiness?.commercial_status ?? 'Under review' },
       ].filter((f) => !!f.value)
     : []
 

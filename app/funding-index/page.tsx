@@ -2,7 +2,7 @@ import { getAllFunding, getAllApps } from '@/lib/data'
 import { FundingDirectoryCard } from '@/components/FundingDirectoryCard'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 
-export const metadata = { title: 'Funding index — HealthStore' }
+export const metadata = { title: 'Funding index — NHS HealthStore' }
 
 export default function FundingPage() {
   const funding = getAllFunding()
@@ -57,8 +57,7 @@ export default function FundingPage() {
           className="m-0 hs-measure leading-relaxed"
           style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}
         >
-          Funding opportunities and adoption support relevant to NHS commissioners procuring digital therapeutics.
-          Confirm current availability with sponsoring organisations before submitting business cases.
+          This Funding Index provides information on funding opportunities and integration support for NHS commissioners purchasing digital therapeutics (DTx). We encourage commissioners to confirm the availability of funding opportunities before submitting a business case applying for funding.
         </p>
       </div>
 

@@ -4,7 +4,7 @@ import type { CommissionerContext } from '@/lib/context/types'
 import { deriveAssuranceDomains } from '@/lib/content/assuranceDomains'
 import { getDeploymentRegister } from '@/lib/deploymentRegister'
 import { splitPdpEvidence } from '@/lib/pdpEvidence'
-import { pdpSectionTitle, resolvePdpLocalArea } from '@/lib/pdpSections'
+import { pdpSectionTitle, pdpPatientCohortLabel, resolvePdpLocalArea } from '@/lib/pdpSections'
 import type { PdpSectionId } from '@/lib/pdpSections'
 
 export type PdpOnThisPageLink = { id: string; label: string }
@@ -35,6 +35,7 @@ export function buildPdpOnThisPageLinks(input: {
         appName: app.app_name,
         areaLabel: localArea?.areaLabel,
         isExample: localArea?.isExample,
+        patientCohortLabel: pdpPatientCohortLabel(app.condition_tags),
       }),
     })
 

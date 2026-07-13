@@ -257,7 +257,7 @@ function AiAdvisorChat({ profile }: { profile: AiAdvisorClientProfile }) {
                 className="mt-8 hs-text-caption"
                 style={{ color: 'var(--text-muted)' }}
               >
-                Data sourced from HealthStore catalogue. Verify all information with
+                Data sourced from the NHS HealthStore catalogue. Verify all information with
                 suppliers before procurement decisions.
               </p>
             </div>
@@ -371,7 +371,7 @@ export default function AiAdvisorPanel({ open, onClose, profile }: Props) {
               className="truncate hs-text-label hs-font-bold"
               style={{ color: 'var(--text-primary)', fontFamily: 'Frutiger, Arial, sans-serif' }}
             >
-              HealthStore AI Advisor
+              NHS HealthStore AI Advisor
             </span>
             <button
               type="button"

@@ -3,7 +3,7 @@ import { getHomeNews } from '@/lib/data'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 import { formatHomeDate } from '@/components/home/formatDate'
 
-export const metadata = { title: 'News — HealthStore' }
+export const metadata = { title: 'News — NHS HealthStore' }
 
 export default function NewsPage() {
   const news = getHomeNews()

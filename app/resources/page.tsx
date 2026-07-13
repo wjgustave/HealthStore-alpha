@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 
-export const metadata = { title: 'Resource library — HealthStore' }
+export const metadata = { title: 'Resource library — NHS HealthStore' }
 
 const RESOURCES = [
   {

@@ -10,7 +10,7 @@ export default function HorizontalBarChart({
   maxValue,
   compareRows,
   compareLabel = 'Comparator',
-  primaryLabel = 'HealthStore route',
+  primaryLabel = 'NHS HealthStore route',
   ariaLabel,
 }: {
   rows: HorizontalBarRow[]

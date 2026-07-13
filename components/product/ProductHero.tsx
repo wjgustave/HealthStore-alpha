@@ -102,7 +102,7 @@ export default function ProductHero({
           <div className="hs-product-hero__demo-card hs-product-hero__demo-card--placeholder">
             <h2>Commissioner decision support</h2>
             <p>
-              HealthStore has nationally assured this product. Your local team still makes the procurement
+              The NHS HealthStore has nationally assured this product. Your local team still makes the procurement
               decision — we provide the evidence pack and route guidance.
             </p>
           </div>

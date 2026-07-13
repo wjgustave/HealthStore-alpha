@@ -9,7 +9,7 @@ export default function PdpExpressInterestCallout({ accent }: { accent: string }
           Want to find out more?
         </div>
         <p style={{ fontSize: 'var(--text-body)', color: 'rgba(255,255,255,0.9)', lineHeight: 1.6, margin: '0 0 16px', maxWidth: 640 }}>
-          HealthStore can assess fit, build a business case, and support your local procurement route.
+          The NHS HealthStore can assess fit, build a business case, and support your local procurement route.
         </p>
         <ExpressInterestWhiteButton accent={accent} />
       </div>

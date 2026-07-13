@@ -73,7 +73,7 @@ export default function PdpImplementation({
         </div>
         <p className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
           The supplier provides onboarding, training materials, technical integration support and ongoing account management as
-          part of the standard package. HealthStore brokers the introduction and tracks mobilisation milestones{impl.owner ? `, with the ${impl.owner} as the recommended local owner` : ''}.
+          part of the standard package. The NHS HealthStore brokers the introduction and tracks mobilisation milestones{impl.owner ? `, with the ${impl.owner} as the recommended local owner` : ''}.
         </p>
 
         {(impl.onboarding_steps?.length ?? 0) > 0 && (

@@ -49,7 +49,7 @@ export async function POST(req: Request) {
       decisionWindow: decisionWindow ?? null,
       additionalContext: additionalContext ?? null,
       status: 'submitted',
-      nextAction: 'HealthStore will confirm your request within 5 working days',
+      nextAction: 'The NHS HealthStore will confirm your request within 5 working days',
       ownerQueue: 'Commissioning support triage',
     })
   } catch {

@@ -11,7 +11,7 @@ import { getResolvedOrganisationProfile } from '@/lib/ai/organisationProfileReso
 import { getAllApps } from '@/lib/data'
 
 export const metadata: Metadata = {
-  title: 'HealthStore',
+  title: 'NHS HealthStore',
   description: 'Decision-support tool for NHS digital health technology procurement',
 }
 

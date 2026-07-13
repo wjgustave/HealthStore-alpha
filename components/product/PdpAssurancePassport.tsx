@@ -37,40 +37,41 @@ const STATUS_META: Record<
 
 /** NHS task-list status presentation — https://service-manual.nhs.uk/design-system/components/task-list */
 function TaskListStatus({ status, id }: { status: AssuranceDomainStatus; id: string }) {
+  const statusStyle = { whiteSpace: 'nowrap' as const }
   switch (status) {
     case 'verified_current':
       return (
-        <div className="nhsuk-task-list__status" id={id}>
-          <strong className="nhsuk-tag nhsuk-tag--green">Verified current</strong>
+        <div className="nhsuk-task-list__status" id={id} style={statusStyle}>
+          <strong className="nhsuk-tag nhsuk-tag--green" style={statusStyle}>Verified current</strong>
         </div>
       )
     case 'verified_review_due':
       return (
-        <div className="nhsuk-task-list__status" id={id}>
-          <strong className="nhsuk-tag nhsuk-tag--yellow">Review due</strong>
+        <div className="nhsuk-task-list__status" id={id} style={statusStyle}>
+          <strong className="nhsuk-tag nhsuk-tag--yellow" style={statusStyle}>Review due</strong>
         </div>
       )
     case 'declared_pending':
       return (
-        <div className="nhsuk-task-list__status" id={id}>
-          <strong className="nhsuk-tag nhsuk-tag--blue">Incomplete</strong>
+        <div className="nhsuk-task-list__status" id={id} style={statusStyle}>
+          <strong className="nhsuk-tag nhsuk-tag--blue" style={statusStyle}>Incomplete</strong>
         </div>
       )
     case 'incomplete':
       return (
-        <div className="nhsuk-task-list__status" id={id}>
-          <strong className="nhsuk-tag nhsuk-tag--red">Incomplete</strong>
+        <div className="nhsuk-task-list__status" id={id} style={statusStyle}>
+          <strong className="nhsuk-tag nhsuk-tag--red" style={statusStyle}>Incomplete</strong>
         </div>
       )
     case 'expired':
       return (
-        <div className="nhsuk-task-list__status" id={id}>
-          <strong className="nhsuk-tag nhsuk-tag--red">Expired</strong>
+        <div className="nhsuk-task-list__status" id={id} style={statusStyle}>
+          <strong className="nhsuk-tag nhsuk-tag--red" style={statusStyle}>Expired</strong>
         </div>
       )
     case 'not_applicable':
       return (
-        <div className="nhsuk-task-list__status nhsuk-task-list__status--cannot-start-yet" id={id}>
+        <div className="nhsuk-task-list__status nhsuk-task-list__status--cannot-start-yet" id={id} style={statusStyle}>
           Not applicable
         </div>
       )
@@ -120,7 +121,7 @@ export default function PdpAssurancePassport({
       id="assurance"
       shareKey="narrative-assurance"
       title={pdpSectionTitle('assurance')}
-      description="HealthStore has reviewed this product nationally. We certify our confidence in its assurance position based on supplier-provided documentation. Your local team retains responsibility for due diligence — we make that faster by providing access to source documents in your workspace once verified."
+      description="The NHS HealthStore has reviewed this product nationally. We certify our confidence in its assurance position based on supplier-provided documentation. Your local team retains responsibility for due diligence — we make that faster by providing access to source documents in your workspace once verified."
     >
       {speedNote && (
         <div className="mb-4">
@@ -178,7 +179,7 @@ export default function PdpAssurancePassport({
           <span className="hs-font-bold" style={{ color: '#212b32' }}>
             Assurance pack item
           </span>
-          <span className="hs-font-bold" style={{ color: '#212b32' }}>
+          <span className="hs-font-bold" style={{ color: '#212b32', whiteSpace: 'nowrap' }}>
             Status
           </span>
         </div>
@@ -227,7 +228,15 @@ export default function PdpAssurancePassport({
                     <td className="p-3" style={{ whiteSpace: 'nowrap' }}>
                       <span
                         className="hs-font-bold"
-                        style={{ background: m.bg, color: m.fg, border: m.border ? `1px solid ${m.border}` : undefined, borderRadius: 999, padding: '2px 10px' }}
+                        style={{
+                          background: m.bg,
+                          color: m.fg,
+                          border: m.border ? `1px solid ${m.border}` : undefined,
+                          borderRadius: 999,
+                          padding: '2px 10px',
+                          whiteSpace: 'nowrap',
+                          display: 'inline-block',
+                        }}
                       >
                         {m.label}
                       </span>

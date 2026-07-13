@@ -44,8 +44,8 @@ export default function AssurancePassport({ domains }: { domains: AssuranceDomai
           {domains.map((d) => (
             <tr key={d.domain} className="nhsuk-table__row">
               <td className="nhsuk-table__cell">{d.domain}</td>
-              <td className="nhsuk-table__cell">
-                <span className={STATUS_TAG[d.status]}>{STATUS_LABELS[d.status]}</span>
+              <td className="nhsuk-table__cell" style={{ whiteSpace: 'nowrap' }}>
+                <span className={STATUS_TAG[d.status]} style={{ whiteSpace: 'nowrap' }}>{STATUS_LABELS[d.status]}</span>
                 {d.review_due ? <div className="nhsuk-body-s">Review due: {d.review_due}</div> : null}
               </td>
               <td className="nhsuk-table__cell">

@@ -110,7 +110,7 @@ export default function AppShell({
               </ul>
               <div>
                 <p className="nhsuk-footer__copyright">
-                  HealthStore — prototype based on publicly available information as of March 2026.
+                  NHS HealthStore — prototype based on publicly available information as of March 2026.
                 </p>
               </div>
             </div>

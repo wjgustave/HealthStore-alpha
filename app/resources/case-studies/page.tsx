@@ -3,7 +3,7 @@ import { getHomeCaseStudies } from '@/lib/data'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 import { CaseStudyCard } from '@/components/home/CaseStudies'
 
-export const metadata = { title: 'Case studies — HealthStore' }
+export const metadata = { title: 'Case studies — NHS HealthStore' }
 
 export default function CaseStudiesPage() {
   const caseStudies = getHomeCaseStudies()

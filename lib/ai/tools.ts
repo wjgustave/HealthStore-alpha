@@ -1,5 +1,5 @@
 /**
- * GPT-5.4 function tool definitions for the HealthStore commissioner advisor.
+ * GPT-5.4 function tool definitions for the NHS HealthStore commissioner advisor.
  * Each tool maps to a server-side executor in toolExecutor.ts.
  */
 
@@ -8,7 +8,7 @@ export const aiTools = [
     type: 'function' as const,
     name: 'search_apps',
     description:
-      'Search the HealthStore catalogue for digital health apps. ' +
+      'Search the NHS HealthStore catalogue for digital health apps. ' +
       'Can filter by clinical condition, keyword, pathway tag, or outcome tag. ' +
       'Returns a summary list — use get_app_detail for full information on a specific app.',
     parameters: {
@@ -179,7 +179,7 @@ export const aiTools = [
     type: 'function' as const,
     name: 'get_enums',
     description:
-      'Look up the standard vocabulary and definitions used across the HealthStore. ' +
+      'Look up the standard vocabulary and definitions used across the NHS HealthStore. ' +
       'Includes pricing models, maturity levels, evidence strength tiers, ' +
       'supervision models, DTAC statuses, and confidence labels.',
     parameters: {

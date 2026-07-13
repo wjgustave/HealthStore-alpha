@@ -3,7 +3,7 @@ import { getServerContext } from '@/lib/context/serverContext'
 import { contextToSearchParams } from '@/lib/context/types'
 import { getAreaOpportunities, getAreaMeta, rankOpportunities, getSupportedConditions, getHorizonConditions } from '@/lib/domain/opportunities'
 
-export const metadata = { title: 'Local opportunities — HealthStore' }
+export const metadata = { title: 'Local opportunities — NHS HealthStore' }
 
 export default async function OpportunitiesOverviewPage({
   searchParams,
@@ -116,7 +116,7 @@ export default async function OpportunitiesOverviewPage({
         <section style={{ marginBottom: 40 }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: 8 }}>Future pathways</h2>
           <p style={{ fontSize: 14, color: '#4c6272', marginBottom: 12, maxWidth: 600 }}>
-            These conditions are on the HealthStore roadmap. Local data and product mapping will follow as NICE guidance and supplier readiness are confirmed.
+            These conditions are on the NHS HealthStore roadmap. Local data and product mapping will follow as NICE guidance and supplier readiness are confirmed.
           </p>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {horizon.map(c => (

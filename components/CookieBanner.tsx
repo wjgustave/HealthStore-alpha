@@ -23,7 +23,7 @@ export default function CookieBanner({
       data-nosnippet
       className="govuk-cookie-banner"
       role="region"
-      aria-label="Cookies on HealthStore"
+      aria-label="Cookies on NHS HealthStore"
     >
       <div className="govuk-cookie-banner__message">
         <div className="hs-page" style={{ paddingBlock: 'var(--space-5)' }}>
@@ -35,7 +35,7 @@ export default function CookieBanner({
               color: 'var(--nhs-dark)',
             }}
           >
-            Cookies on HealthStore
+            Cookies on NHS HealthStore
           </h2>
           <div
             className="space-y-4 mb-6 max-w-3xl"
@@ -46,7 +46,7 @@ export default function CookieBanner({
               use your account.
             </p>
             <p className="m-0">
-              We&apos;d also like to use analytics cookies so we can understand how to improve the HealthStore.
+              We&apos;d also like to use analytics cookies so we can understand how to improve the NHS HealthStore.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-4">

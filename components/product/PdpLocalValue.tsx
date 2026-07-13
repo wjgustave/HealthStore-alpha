@@ -3,7 +3,7 @@ import type { App } from '@/lib/data'
 import type { ProductNarrative } from '@/lib/content/productModel'
 import type { CommissionerContext } from '@/lib/context/types'
 import { contextToSearchParams } from '@/lib/context/types'
-import { pdpSectionTitle, resolvePdpLocalArea } from '@/lib/pdpSections'
+import { pdpSectionTitle, pdpPatientCohortLabel, resolvePdpLocalArea } from '@/lib/pdpSections'
 import { computeMycopdImpactMetrics } from '@/lib/localData/mycopdImpact'
 import { getDtxImpactRanges } from '@/lib/localData/workspaceData'
 import { PdpSection } from '@/components/PdpSection'
@@ -116,7 +116,12 @@ export default function PdpLocalValue({
       <PdpSection
         id="local-impact"
         shareKey="narrative-projected-impact"
-        title={pdpSectionTitle('local-impact', { appName: app.app_name, areaLabel, isExample })}
+        title={pdpSectionTitle('local-impact', {
+          appName: app.app_name,
+          areaLabel,
+          isExample,
+          patientCohortLabel: pdpPatientCohortLabel(app.condition_tags),
+        })}
         description="Projections are illustrative and based on published evidence applied to your NHSE average eligible cohort."
       >
         {mycopdImpact ? (
@@ -146,7 +151,7 @@ export default function PdpLocalValue({
             <div className="mt-4">
               <p className="nhsuk-body" style={{ margin: 0, color: 'var(--text-secondary)' }}>
                 <strong className="nhsuk-u-font-weight-bold" style={{ display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
-                  So what does this mean?
+                  What this means
                 </strong>
                 Evidence shows myCOPD can achieve a {mycopdImpact.gp.effectPct}% reduction in GP appointments. Applied to 75% of
                 a {ref.eligible_cohort.toLocaleString()} eligible patients cohort, that&apos;s approximately{' '}
@@ -186,7 +191,7 @@ export default function PdpLocalValue({
             <div className="mt-4">
               <p className="nhsuk-body" style={{ margin: 0, color: 'var(--text-secondary)' }}>
                 <strong className="nhsuk-u-font-weight-bold" style={{ display: 'block', marginBottom: 6, color: 'var(--text-primary)' }}>
-                  So what does this mean?
+                  What this means
                 </strong>
                 Monitoring roughly {monitored.toLocaleString()} high-risk patients (about half the high-risk COPD cohort in{' '}
                 {areaLabel}) could avoid on the order of {admLow.toLocaleString()}–{admHigh.toLocaleString()} emergency

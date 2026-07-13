@@ -82,7 +82,7 @@ export const commissioningCases = pgTable('commissioning_cases', {
   status: text('status').notNull().default('submitted'),
   nextAction: text('next_action')
     .notNull()
-    .default('HealthStore will confirm your request within 5 working days'),
+    .default('The NHS HealthStore will confirm your request within 5 working days'),
   ownerQueue: text('owner_queue').default('Commissioning support triage'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),

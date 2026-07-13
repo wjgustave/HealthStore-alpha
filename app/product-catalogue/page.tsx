@@ -3,8 +3,8 @@ import { getAllApps, getConditionAreas } from '@/lib/data'
 import AppsDiscoveryClient from '../apps/AppsDiscoveryClient'
 
 export const metadata = {
-  title: 'Product catalogue — HealthStore',
-  description: 'Browse clinically assured digital therapeutics in the HealthStore catalogue.',
+  title: 'Product catalogue — NHS HealthStore',
+  description: 'Browse clinically assured digital therapeutics in the NHS HealthStore catalogue.',
 }
 
 export default async function ProductCataloguePage({

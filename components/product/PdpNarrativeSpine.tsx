@@ -147,7 +147,7 @@ export default function PdpNarrativeSpine({
           {commercial.healthstore_role && (
             <div className="rounded-lg p-4 mb-4" style={{ background: '#E6F0FB', border: '1px solid var(--border)' }}>
               <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--text-primary)' }}>
-                HealthStore&rsquo;s role in procurement
+                The NHS HealthStore&rsquo;s role in procurement
               </div>
               <p className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
                 {commercial.healthstore_role}

@@ -72,24 +72,24 @@ export const LUSCII_NARRATIVE: ProductNarrative = {
   ],
   regulatory_position: {
     device_class: 'Medical device — Class IIa SaMD',
-    hira_status: 'HealthStore Independent Regulatory Assurance pack complete',
+    hira_status: 'NHS HealthStore Independent Regulatory Assurance pack complete',
     market_access: 'Documented UK market access with classification rationale on file',
-    assurance_speed_note: 'HealthStore runs national assurance once and your local team reuses the passport instead of repeating supplier checks.',
+    assurance_speed_note: 'The NHS HealthStore runs national assurance once and your local team reuses the passport instead of repeating supplier checks.',
   },
   assurance_domains: [
     { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG736 — recommended for use with evidence generation', verified_date: '2024-12', review_due: '2027-12' },
     { domain: 'Medical device regulation', status: 'verified_current', summary: 'Class IIa SaMD; HIRA evidence pack complete with documented classification rationale', verified_date: '2024-06' },
     { domain: 'Clinical safety', status: 'verified_review_due', summary: 'Supplier clinical safety case on file; local deployment safety pack provided', review_due: '2026-09', residual_action: 'Complete local clinical safety assessment before go-live' },
     { domain: 'Data protection and IG', status: 'verified_current', summary: 'DTAC complete; DPIA template available for local adoption', verified_date: '2024-04' },
-    { domain: 'Commercial readiness', status: 'verified_current', summary: 'HealthStore buyer pack with PSR evidence, price schedule and route note', verified_date: '2026-06' },
+    { domain: 'Commercial readiness', status: 'verified_current', summary: 'NHS HealthStore buyer pack with PSR evidence, price schedule and route note', verified_date: '2026-06' },
   ],
   commercial_readiness: {
     proposition_type: 'Service-led (software + 24/7 clinical hub)',
-    route_status: 'PSR route — HealthStore buyer pack for local provider selection',
-    commercial_status: 'HealthStore assurance complete; buyer selection pack ready',
+    route_status: 'PSR route — NHS HealthStore buyer pack for local provider selection',
+    commercial_status: 'NHS HealthStore assurance complete; buyer selection pack ready',
     buyer_pack_status: 'PSR evidence pack, price schedule and contract schedules available',
     price_summary: 'Pricing on application — contact supplier (figures pending verification)',
-    healthstore_role: 'HealthStore supports you through the purchase — from buyer pack and pricing to introductions and contract support. We handle the upfront assurance work so you can move faster.',
+    healthstore_role: 'The NHS HealthStore supports you through the purchase — from buyer pack and pricing to introductions and contract support. We handle the upfront assurance work so you can move faster.',
   },
   commissioner_economics: {
     headline: 'For 500 monitored patients, about £245k net economic value per year — mostly from freed acute capacity, with additional Green Book productivity and wellbeing gains.',
@@ -141,7 +141,7 @@ export const LUSCII_NARRATIVE: ProductNarrative = {
     prerequisites: ['Named clinical owner (respiratory consultant or advanced practitioner)', 'Hub capacity — existing virtual ward or commissioned service', 'Referral pathway and patient selection criteria agreed', 'Local clinical safety assessment completed', 'IG sign-off and DPA executed'],
     owner: 'ICB virtual ward / respiratory lead',
   },
-  publishing: { content_owner: 'HealthStore product team', review_date: '2026-06-25', next_review: '2026-09-25' },
+  publishing: { content_owner: 'NHS HealthStore product team', review_date: '2026-06-25', next_review: '2026-09-25' },
 }
 
 export const MYCOPD_NARRATIVE: ProductNarrative = {
@@ -213,22 +213,22 @@ export const MYCOPD_NARRATIVE: ProductNarrative = {
   ],
   regulatory_position: {
     device_class: 'Medical device — documented classification on file',
-    hira_status: 'HIRA evidence pack under HealthStore review',
+    hira_status: 'HIRA evidence pack under NHS HealthStore review',
     market_access: 'UK market access documented',
-    assurance_speed_note: 'HealthStore provides the assurance passport and local deployment safety templates — reducing duplicated local work.',
+    assurance_speed_note: 'The NHS HealthStore provides the assurance passport and local deployment safety templates — reducing duplicated local work.',
   },
   assurance_domains: [
     { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG736 and HTG718 EVA recommendations', verified_date: '2024-12' },
     { domain: 'Clinical safety', status: 'verified_current', summary: 'Supplier clinical safety case on file; local deployment pack provided', verified_date: '2025-01', residual_action: 'Local deployment safety sign-off required' },
-    { domain: 'Commercial readiness', status: 'verified_current', summary: 'HealthStore buyer pack with PA23/software route note and price schedule', verified_date: '2026-06' },
+    { domain: 'Commercial readiness', status: 'verified_current', summary: 'NHS HealthStore buyer pack with PA23/software route note and price schedule', verified_date: '2026-06' },
   ],
   commercial_readiness: {
     proposition_type: 'Software-led with optional clinical dashboard',
-    route_status: 'PA23 / software procurement route — HealthStore buyer pack attached',
-    commercial_status: 'HealthStore assurance complete; buyer selection pack ready',
+    route_status: 'PA23 / software procurement route — NHS HealthStore buyer pack attached',
+    commercial_status: 'NHS HealthStore assurance complete; buyer selection pack ready',
     buyer_pack_status: 'Core pack with route note, assurance passport and price schedule',
     price_summary: 'Indicative £120,000 annual licence (provider footprint)',
-    healthstore_role: 'HealthStore provides your buyer pack, pricing transparency, contract templates and hands-on support through the purchase process.',
+    healthstore_role: 'The NHS HealthStore provides your buyer pack, pricing transparency, contract templates and hands-on support through the purchase process.',
   },
   commissioner_economics: {
     headline: 'Crossing the discharge bundle tariff gateway is worth approximately £94,500 cash per year for 500 admissions. Adding readmission reduction, PR capacity release and Green Book benefits takes total economic value to £250k+.',
@@ -288,7 +288,7 @@ export const MYCOPD_NARRATIVE: ProductNarrative = {
     onboarding_ongoing_step: 'Ongoing account management',
     onboarding_note: 'Digital Health Advisors support patients throughout onboarding and ongoing use.',
   },
-  publishing: { content_owner: 'HealthStore product team', review_date: '2026-06-25', next_review: '2026-09-25' },
+  publishing: { content_owner: 'NHS HealthStore product team', review_date: '2026-06-25', next_review: '2026-09-25' },
 }
 
 const MYHEART_NARRATIVE: ProductNarrative = {
@@ -386,10 +386,10 @@ const MYHEART_NARRATIVE: ProductNarrative = {
     price_summary: '£50–£100 per patient pathway',
     proposition_type: 'Per-patient licence with unlimited access',
     route_status: 'Direct award or G-Cloud framework',
-    buyer_pack_status: 'Available from HealthStore',
-    healthstore_role: 'HealthStore provides the buyer pack, pricing, introductions and hands-on support through the purchase. We handle the national assurance so your local process is faster.',
+    buyer_pack_status: 'Available from the NHS HealthStore',
+    healthstore_role: 'The NHS HealthStore provides the buyer pack, pricing, introductions and hands-on support through the purchase. We handle the national assurance so your local process is faster.',
   },
-  publishing: { content_owner: 'HealthStore', review_date: '2026-06-25', next_review: '2026-09-25' },
+  publishing: { content_owner: 'NHS HealthStore', review_date: '2026-06-25', next_review: '2026-09-25' },
 }
 
 const JOINT_ACADEMY_NARRATIVE: ProductNarrative = {
@@ -482,7 +482,7 @@ const JOINT_ACADEMY_NARRATIVE: ProductNarrative = {
   assurance_domains: [
     { domain: 'Clinical safety (DCB0129)', status: 'verified_current', summary: 'Clinical safety case complete. CE marked Class I medical device. NICE HTG766 recommended.' },
     { domain: 'DTAC', status: 'verified_current', summary: 'DTAC assessment completed. Confirm current status with supplier before local procurement.' },
-    { domain: 'Information governance', status: 'verified_review_due', summary: 'Swedish-headquartered company. NHS login integration available. Confirm data residency and DPA terms for NHS use — HealthStore has reviewed and has documentation available in workspace.' },
+    { domain: 'Information governance', status: 'verified_review_due', summary: 'Swedish-headquartered company. NHS login integration available. Confirm data residency and DPA terms for NHS use — the NHS HealthStore has reviewed and has documentation available in workspace.' },
     { domain: 'Interoperability', status: 'verified_current', summary: 'API integration available. NHS login supported. Outcome data exportable for commissioner reporting.' },
   ],
   commercial_readiness: {
@@ -490,10 +490,10 @@ const JOINT_ACADEMY_NARRATIVE: ProductNarrative = {
     price_summary: '£200–£350 per patient pathway (12 weeks)',
     proposition_type: 'Per-patient programme fee (full clinical service included)',
     route_status: 'Direct award or AHSN-facilitated procurement',
-    buyer_pack_status: 'Available from HealthStore',
-    healthstore_role: 'HealthStore provides the buyer pack, pricing, introductions and hands-on purchase support. Several AHSNs have also facilitated local adoption.',
+    buyer_pack_status: 'Available from the NHS HealthStore',
+    healthstore_role: 'The NHS HealthStore provides the buyer pack, pricing, introductions and hands-on purchase support. Several AHSNs have also facilitated local adoption.',
   },
-  publishing: { content_owner: 'HealthStore', review_date: '2026-06-25', next_review: '2026-09-25' },
+  publishing: { content_owner: 'NHS HealthStore', review_date: '2026-06-25', next_review: '2026-09-25' },
 }
 
 export function getProductNarrative(slug: string): ProductNarrative | null {
@@ -530,10 +530,10 @@ export function buildNarrativeFromApp(app: {
     },
     what_it_does_bullets: [
       app.one_line_value_proposition ?? 'Structured digital support between appointments',
-      'Nationally assured through HealthStore before local adoption',
-      'HealthStore supports you through the purchase with buyer materials, pricing and introductions',
+      'Nationally assured through the NHS HealthStore before local adoption',
+      'The NHS HealthStore supports you through the purchase with buyer materials, pricing and introductions',
     ],
-    publishing: { content_owner: 'HealthStore catalogue', review_date: '2026-06-25', next_review: '2026-09-25' },
+    publishing: { content_owner: 'NHS HealthStore catalogue', review_date: '2026-06-25', next_review: '2026-09-25' },
   }
 }
 

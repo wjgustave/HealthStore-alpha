@@ -306,10 +306,10 @@ export default function WorkspaceClient({
       {activeTab === 'assurance' && (
         <section>
           <p style={{ fontSize: 15, color: '#212b32', lineHeight: 1.7, marginBottom: 8, maxWidth: 680 }}>
-            HealthStore has nationally reviewed the assurance position of each product in your estate. Below are supplier-provided documents for your local due diligence.
+            The NHS HealthStore has nationally reviewed the assurance position of each product in your estate. Below are supplier-provided documents for your local due diligence.
           </p>
           <p style={{ fontSize: 13, color: '#7a4800', marginBottom: 24 }}>
-            These documents are provided by the supplier and certified by HealthStore as current at the time of review. Your organisation retains clinical safety and IG accountability — these support, not replace, local governance.
+            These documents are provided by the supplier and certified by the NHS HealthStore as current at the time of review. Your organisation retains clinical safety and IG accountability — these support, not replace, local governance.
           </p>
           {liveDeployments.length === 0 ? (
             <InsightCallout title="No deployments">No active deployments to show assurance documents for.</InsightCallout>

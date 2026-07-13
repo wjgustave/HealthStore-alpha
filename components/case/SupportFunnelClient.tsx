@@ -183,7 +183,7 @@ export default function SupportFunnelClient({ productSlug, productName }: { prod
       <div className="hs-panel-success">
         <h2>Reference: {reference}</h2>
         <p>Your commissioning-support case has been created. No purchase or award has occurred.</p>
-        <p><strong>Next step:</strong> HealthStore will confirm your request within 5 working days.</p>
+        <p><strong>Next step:</strong> The NHS HealthStore will confirm your request within 5 working days.</p>
       </div>
       <Link href={`/workspace/cases/${reference}`} className="hs-btn hs-btn-primary">View case in workspace</Link>
     </QuestionPage>

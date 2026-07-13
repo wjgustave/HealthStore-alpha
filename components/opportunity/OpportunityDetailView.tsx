@@ -37,7 +37,7 @@ export default function OpportunityDetailView({
         <h1 style={{ fontSize: '1.6rem', fontWeight: 700, marginBottom: 12 }}>{condition.label}</h1>
         <div style={{ background: '#f0f4f5', border: '1px solid #d8dde0', borderRadius: 8, padding: 24 }}>
           <p style={{ color: '#4c6272', marginBottom: 16, lineHeight: 1.6, margin: 0 }}>
-            This pathway is on the HealthStore roadmap. Local data and assured product mapping will follow as NICE guidance and supplier readiness are confirmed.
+            This pathway is on the NHS HealthStore roadmap. Local data and assured product mapping will follow as NICE guidance and supplier readiness are confirmed.
           </p>
         </div>
       </>

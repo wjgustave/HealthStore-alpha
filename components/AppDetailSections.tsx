@@ -396,24 +396,53 @@ export function shouldShowDemoAccess(app: any) {
   return (app.demo_variants?.length > 0) || !!(app.demo_notes && String(app.demo_notes).trim())
 }
 
+const SUPPLIER_STUDIES_LINKS: Record<string, { href: string; label: string }> = {
+  luscii: {
+    href: 'https://luscii.co.uk/evidence#:~:text=Published%20Luscii%20Studies',
+    label: 'Published Luscii studies',
+  },
+  mycopd: {
+    href: 'https://mymhealth.com/studies',
+    label: 'My mHealth studies',
+  },
+  myheart: {
+    href: 'https://mymhealth.com/studies',
+    label: 'My mHealth studies',
+  },
+}
+
 export function DemoAccessSection({ app, accent }: { app: any; accent: string }) {
   const hasDemo = (app.demo_variants?.length > 0) || !!(app.demo_notes && String(app.demo_notes).trim())
-  if (!hasDemo) return null
+  const studiesLink = SUPPLIER_STUDIES_LINKS[app.slug]
+  if (!hasDemo && !studiesLink) return null
 
   return (
     <div>
       {app.demo_notes && (
         <p className="hs-text-label mb-4" style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>{app.demo_notes}</p>
       )}
-      {app.demo_variants?.length > 0 && (
+      {(app.demo_variants?.length > 0 || studiesLink) && (
         <ul className="space-y-2">
-          {app.demo_variants.map((d: any) => (
+          {app.demo_variants?.map((d: any) => (
             <li key={d.url}>
               <a href={d.url} target="_blank" rel="noopener noreferrer" className="hs-text-label hs-font-normal hover:underline" style={{ color: accent }}>
                 {d.label} (opens in a new tab)
               </a>
             </li>
           ))}
+          {studiesLink && (
+            <li>
+              <a
+                href={studiesLink.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hs-text-label hs-font-normal hover:underline"
+                style={{ color: accent }}
+              >
+                {studiesLink.label} (opens in a new tab)
+              </a>
+            </li>
+          )}
         </ul>
       )}
     </div>

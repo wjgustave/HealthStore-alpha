@@ -25,12 +25,27 @@ export type PdpSectionId =
   | 'resources'
 
 export type PdpSectionTitleContext = {
-  /** Product name, for titles that interpolate it (e.g. "How {app} helps"). */
+  /** Product name, for titles that interpolate it (e.g. "How {app} changes a treatment pathway"). */
   appName?: string
   /** Resolved local-area label for the projected-impact section. */
   areaLabel?: string
   /** Whether the local-value block is showing an example (no area set) cohort. */
   isExample?: boolean
+  /** Patient cohort noun for local-impact titles: "COPD" or "cardiac". */
+  patientCohortLabel?: 'COPD' | 'cardiac'
+}
+
+/**
+ * Maps product condition tags to the patient cohort noun used in local-impact titles.
+ * myHeart (cardiac_rehab) → cardiac; Luscii / myCOPD (copd) → COPD.
+ */
+export function pdpPatientCohortLabel(
+  conditionTags?: string[] | null,
+): 'COPD' | 'cardiac' | undefined {
+  if (!conditionTags?.length) return undefined
+  if (conditionTags.includes('cardiac_rehab')) return 'cardiac'
+  if (conditionTags.includes('copd')) return 'COPD'
+  return undefined
 }
 
 /**
@@ -38,15 +53,18 @@ export type PdpSectionTitleContext = {
  * section heading and its nav entry update together.
  */
 export function pdpSectionTitle(id: PdpSectionId, ctx: PdpSectionTitleContext = {}): string {
+  const appName = ctx.appName ?? 'this product'
   switch (id) {
     case 'the-problem':
-      return 'The problem this addresses'
+      return `The problem ${appName} addresses`
     case 'how-it-helps':
-      return `How ${ctx.appName} helps`
-    case 'local-impact':
-      return ctx.isExample
-        ? 'What this could mean for your COPD cohort'
-        : `What this could mean for ${ctx.areaLabel}`
+      return `How ${appName} changes a treatment pathway`
+    case 'local-impact': {
+      const cohort = ctx.patientCohortLabel
+      return cohort
+        ? `What using ${appName} could mean for ${cohort} patients`
+        : `What using ${appName} could mean for patients`
+    }
     case 'local-value-worth':
       return 'What it could be worth'
     case 'funding-levers':

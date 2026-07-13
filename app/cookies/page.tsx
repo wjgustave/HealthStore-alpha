@@ -3,8 +3,8 @@ import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 import ResetCookieConsentButton from '@/components/ResetCookieConsentButton'
 
 export const metadata: Metadata = {
-  title: 'Cookies — HealthStore',
-  description: 'How HealthStore uses cookies and similar technologies, including analytics with Hotjar.',
+  title: 'Cookies — NHS HealthStore',
+  description: 'How the NHS HealthStore uses cookies and similar technologies, including analytics with Hotjar.',
 }
 
 export default function CookiesPage() {

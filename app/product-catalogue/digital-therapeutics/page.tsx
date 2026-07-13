@@ -3,7 +3,7 @@ import { getAllApps } from '@/lib/data'
 import CatalogueClient from '../../apps/CatalogueClient'
 import CatalogueSkeleton from '../../apps/CatalogueSkeleton'
 
-export const metadata = { title: 'Digital therapeutics — HealthStore' }
+export const metadata = { title: 'Digital therapeutics — NHS HealthStore' }
 
 export default function DigitalTherapeuticsPage() {
   const apps = getAllApps()

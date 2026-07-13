@@ -34,7 +34,7 @@ export function AuthCard({
               <div className="mb-4 flex items-center gap-2">
                 <Image src="/logos/nhs-blue-alt.svg" alt="" width={90} height={36} className="flex-shrink-0" />
                 <span style={{ ...fr, fontWeight: 600, fontSize: 'var(--text-card-title)', color: '#003087' }}>
-                  HealthStore
+                  NHS HealthStore
                 </span>
               </div>
               {badge ? <span className="badge badge-blue">{badge}</span> : null}

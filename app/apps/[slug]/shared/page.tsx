@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const app = getAppBySlug(slug)
   return {
-    title: app ? `Shared view — ${app.app_name} — HealthStore` : 'Shared view — HealthStore',
+    title: app ? `Shared view — ${app.app_name} — NHS HealthStore` : 'Shared view — NHS HealthStore',
   }
 }
 
@@ -77,7 +77,7 @@ export default async function SharedProductPage({
     return (
       <ShareError
         title="Sign in required"
-        body="Shared product links are only available to signed-in HealthStore users. If you use multi-organisation sign-in, choose your commissioning organisation first."
+        body="Shared product links are only available to signed-in NHS HealthStore users. If you use multi-organisation sign-in, choose your commissioning organisation first."
       />
     )
   }

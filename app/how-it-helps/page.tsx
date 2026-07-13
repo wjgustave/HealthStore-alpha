@@ -5,7 +5,7 @@ export default function HowItHelpsPage() {
   return (
     <div className="hs-page">
       <PageBreadcrumb items={[{ label: 'How it works' }]} />
-      <h1 className="page-title-h1">How HealthStore helps</h1>
+      <h1 className="page-title-h1">How the NHS HealthStore helps</h1>
       <p className="hs-measure" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', marginBottom: 40 }}>
         A nationally governed assurance and commercial-readiness layer with local commissioning accountability.
       </p>

@@ -10,7 +10,7 @@ export default function NhsFooter({ isLoggedIn }: { isLoggedIn: boolean }) {
           {isLoggedIn && <Link href="/account/organisation" style={{ color: '#005eb8' }}>Account</Link>}
         </div>
         <p style={{ fontSize: 13, color: '#4c6272', margin: '0 0 8px' }}>
-          © Crown copyright. HealthStore prototype — illustrative data only.
+          © Crown copyright. NHS HealthStore prototype — illustrative data only.
         </p>
         <p style={{ fontSize: 12, color: '#768692', margin: 0 }}>
           Prototype service. Figures are illustrative unless labelled as observed operational data. Review date: June 2026.

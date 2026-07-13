@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { getHomeCampaigns } from '@/lib/data'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 
-export const metadata = { title: 'Campaigns and initiatives — HealthStore' }
+export const metadata = { title: 'Campaigns and initiatives — NHS HealthStore' }
 
 export default function CampaignsPage() {
   const campaigns = getHomeCampaigns()
