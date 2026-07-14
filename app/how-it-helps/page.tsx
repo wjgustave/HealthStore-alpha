@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 
 export default function HowItHelpsPage() {
@@ -40,10 +39,6 @@ export default function HowItHelpsPage() {
           </ul>
         </div>
       </section>
-
-      <div style={{ textAlign: 'center', marginTop: 40, paddingTop: 32, borderTop: '1px solid #d8dde0' }}>
-        <Link href="/start" className="hs-btn hs-btn-primary">Explore what could help my area</Link>
-      </div>
     </div>
   )
 }

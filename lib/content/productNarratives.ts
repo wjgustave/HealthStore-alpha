@@ -77,11 +77,11 @@ export const LUSCII_NARRATIVE: ProductNarrative = {
     assurance_speed_note: 'The NHS HealthStore runs national assurance once and your local team reuses the passport instead of repeating supplier checks.',
   },
   assurance_domains: [
-    { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG736 — recommended for use with evidence generation', verified_date: '2024-12', review_due: '2027-12' },
-    { domain: 'Medical device regulation', status: 'verified_current', summary: 'Class IIa SaMD; HIRA evidence pack complete with documented classification rationale', verified_date: '2024-06' },
-    { domain: 'Clinical safety', status: 'verified_review_due', summary: 'Supplier clinical safety case on file; local deployment safety pack provided', review_due: '2026-09', residual_action: 'Complete local clinical safety assessment before go-live' },
-    { domain: 'Data protection and IG', status: 'verified_current', summary: 'DTAC complete; DPIA template available for local adoption', verified_date: '2024-04' },
-    { domain: 'Commercial readiness', status: 'verified_current', summary: 'NHS HealthStore buyer pack with PSR evidence, price schedule and route note', verified_date: '2026-06' },
+    { domain: 'Clinical safety', status: 'verified_review_due', summary: 'DCB0129 on file; local deployment pack provided.', review_due: '2026-09', residual_action: 'Complete local clinical safety assessment before go-live' },
+    { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG736 EVA recommendations.', verified_date: '2024-12', review_due: '2027-12' },
+    { domain: 'Information governance and data protection', status: 'verified_current', summary: 'DTAC complete and on file, DPA available, DPIA template available, ISO 27001', verified_date: '2024-04' },
+    { domain: 'Interoperability', status: 'verified_current', summary: 'FHIR integration available. EMIS integration available. NHS Notify supported. API integration available. Outcome data exportable for commissioner reporting. Confirm local EPR integration requirements with supplier.' },
+    { domain: 'Commercial readiness pack', status: 'verified_current', summary: 'Includes PA23/software route note and price schedule.', verified_date: '2026-06' },
   ],
   commercial_readiness: {
     proposition_type: 'Service-led (software + 24/7 clinical hub)',
@@ -218,9 +218,11 @@ export const MYCOPD_NARRATIVE: ProductNarrative = {
     assurance_speed_note: 'The NHS HealthStore provides the assurance passport and local deployment safety templates — reducing duplicated local work.',
   },
   assurance_domains: [
-    { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG736 and HTG718 EVA recommendations', verified_date: '2024-12' },
-    { domain: 'Clinical safety', status: 'verified_current', summary: 'Supplier clinical safety case on file; local deployment pack provided', verified_date: '2025-01', residual_action: 'Local deployment safety sign-off required' },
-    { domain: 'Commercial readiness', status: 'verified_current', summary: 'NHS HealthStore buyer pack with PA23/software route note and price schedule', verified_date: '2026-06' },
+    { domain: 'Clinical safety', status: 'verified_current', summary: 'DCB0129 on file; local deployment pack provided.', verified_date: '2025-01', residual_action: 'Local deployment safety sign-off required' },
+    { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG736 EVA recommendations.', verified_date: '2024-12' },
+    { domain: 'Information governance and data protection', status: 'verified_current', summary: 'DTAC complete and on file, DPA available, DPIA template available, ISO 27001' },
+    { domain: 'Interoperability', status: 'verified_current', summary: 'FHIR integration available. EMIS integration available. NHS Notify supported. API integration available. Outcome data exportable for commissioner reporting. Confirm local EPR integration requirements with supplier.' },
+    { domain: 'Commercial readiness pack', status: 'verified_current', summary: 'Includes PA23/software route note and price schedule.', verified_date: '2026-06' },
   ],
   commercial_readiness: {
     proposition_type: 'Software-led with optional clinical dashboard',
@@ -376,10 +378,11 @@ const MYHEART_NARRATIVE: ProductNarrative = {
     ],
   },
   assurance_domains: [
-    { domain: 'Clinical safety (DCB0129)', status: 'verified_current', summary: 'Clinical safety case complete. Hazard log reviewed. Builds on my mhealth platform safety case (shared with myCOPD).' },
-    { domain: 'DTAC', status: 'verified_current', summary: 'DTAC assessment completed. NHS Digital confirmed.' },
-    { domain: 'Information governance', status: 'verified_current', summary: 'UK data hosting, ISO 27001, Data Processing Agreement available. Same infrastructure as myCOPD (established NHS relationship).' },
-    { domain: 'Interoperability', status: 'verified_review_due', summary: 'FHIR integration available. NHS login integration. Confirm local EPR integration requirements with supplier.' },
+    { domain: 'Clinical safety', status: 'verified_current', summary: 'DCB0129 on file; local deployment pack provided.' },
+    { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG764 EVA recommendations.' },
+    { domain: 'Information governance and data protection', status: 'verified_current', summary: 'DTAC complete and on file, DPA available, DPIA template available, ISO 27001' },
+    { domain: 'Interoperability', status: 'verified_review_due', summary: 'FHIR integration available. EMIS integration available. NHS Notify supported. API integration available. Outcome data exportable for commissioner reporting. Connects to Bluetooth devices (blood pressure monitors). Confirm local EPR integration requirements with supplier.' },
+    { domain: 'Commercial readiness pack', status: 'verified_current', summary: 'Includes PA23/software route note and price schedule.' },
   ],
   commercial_readiness: {
     commercial_status: 'Available',
@@ -480,10 +483,11 @@ const JOINT_ACADEMY_NARRATIVE: ProductNarrative = {
     ],
   },
   assurance_domains: [
-    { domain: 'Clinical safety (DCB0129)', status: 'verified_current', summary: 'Clinical safety case complete. CE marked Class I medical device. NICE HTG766 recommended.' },
-    { domain: 'DTAC', status: 'verified_current', summary: 'DTAC assessment completed. Confirm current status with supplier before local procurement.' },
-    { domain: 'Information governance', status: 'verified_review_due', summary: 'Swedish-headquartered company. NHS login integration available. Confirm data residency and DPA terms for NHS use — the NHS HealthStore has reviewed and has documentation available in workspace.' },
-    { domain: 'Interoperability', status: 'verified_current', summary: 'API integration available. NHS login supported. Outcome data exportable for commissioner reporting.' },
+    { domain: 'Clinical safety', status: 'verified_current', summary: 'DCB0129 on file; local deployment pack provided.' },
+    { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG766 EVA recommendations.' },
+    { domain: 'Information governance and data protection', status: 'verified_review_due', summary: 'DTAC complete and on file, DPA available, DPIA template available, ISO 27001' },
+    { domain: 'Interoperability', status: 'verified_current', summary: 'FHIR integration available. EMIS integration available. NHS Notify supported. API integration available. Outcome data exportable for commissioner reporting. Confirm local EPR integration requirements with supplier.' },
+    { domain: 'Commercial readiness pack', status: 'verified_current', summary: 'Includes PA23/software route note and price schedule.' },
   ],
   commercial_readiness: {
     commercial_status: 'Available',

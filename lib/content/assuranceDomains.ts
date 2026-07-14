@@ -1,20 +1,29 @@
 import type { App } from '@/lib/data'
 import type { AssuranceDomain, AssuranceDomainStatus } from '@/lib/content/productModel'
-import { CHECK_WITH_SUPPLIER } from '@/lib/data'
 
 /**
- * Round 3 content migration (R3-3 C): derive the assurance passport domains from the
- * granular governance record in content/apps/{slug}.json, rather than a hand-authored
- * summary. Deriving from the detail means the summary can never overstate it — the
- * reconcile finding in /DS/Audits/Luscii-Content-Mig-4 (IG marked "verified — current"
- * while ISO 27001 / Cyber Essentials were unconfirmed) is fixed structurally: the IG
- * domain now resolves to "review due" with a residual action whenever those are missing.
+ * Derive the Assurance pack domains shown on the PDP passport.
  *
- * Works for any product (supports R3-4 D data-driven gating) with no per-slug authoring.
+ * Fixed five-item pack (order matters):
+ * 1. Clinical safety
+ * 2. Clinical evidence
+ * 3. Information governance and data protection
+ * 4. Interoperability
+ * 5. Commercial readiness pack
+ *
+ * Summaries follow the national pack copy; Clinical evidence inserts NICE HTG
+ * numbers from the app's nice_guidance_refs when available.
  */
 
 const POSITIVE = /(passed|confirmed|compliant|certified|complete|current|recommended|available|in place|achieved|accredited)/i
 const NEGATIVE = /(not confirmed|not provided|not available|unknown|none|not required|required_not_confirmed|pending|awaiting|self.?declared|no\b)/i
+
+const CLINICAL_SAFETY_SUMMARY = 'DCB0129 on file; local deployment pack provided.'
+const IG_SUMMARY =
+  'DTAC complete and on file, DPA available, DPIA template available, ISO 27001'
+const INTEROP_SUMMARY =
+  'FHIR integration available. EMIS integration available. NHS Notify supported. API integration available. Outcome data exportable for commissioner reporting. Confirm local EPR integration requirements with supplier.'
+const COMMERCIAL_SUMMARY = 'Includes PA23/software route note and price schedule.'
 
 function classify(value?: string | null): AssuranceDomainStatus {
   if (value == null || value === '') return 'declared_pending'
@@ -23,23 +32,31 @@ function classify(value?: string | null): AssuranceDomainStatus {
   return 'declared_pending'
 }
 
-function firstSentence(text?: string | null): string | undefined {
-  if (!text) return undefined
-  const m = text.match(/^[^.]+\./)
-  return (m ? m[0] : text).trim()
+function htgNumbersFromRefs(refs: { ref: string }[]): string[] {
+  const seen = new Set<string>()
+  const nums: string[] = []
+  for (const r of refs) {
+    const matches = r.ref.matchAll(/HTG\s*(\d+)/gi)
+    for (const m of matches) {
+      if (!seen.has(m[1])) {
+        seen.add(m[1])
+        nums.push(m[1])
+      }
+    }
+  }
+  return nums
 }
 
-function dtacLabel(status?: string): string {
-  switch (status) {
-    case 'passed':
-      return 'complete'
-    case 'required_not_confirmed':
-      return 'required, not confirmed'
-    case 'not_required':
-      return 'not required'
-    default:
-      return status ?? 'not recorded'
+function clinicalEvidenceSummary(htgNums: string[]): string {
+  if (htgNums.length === 0) {
+    return 'NICE EVA recommendations.'
   }
+  const labels = htgNums.map((n) => `HTG${n}`)
+  let list: string
+  if (labels.length === 1) list = labels[0]
+  else if (labels.length === 2) list = `${labels[0]} and ${labels[1]}`
+  else list = `${labels.slice(0, -1).join(', ')} and ${labels[labels.length - 1]}`
+  return `NICE ${list} EVA recommendations.`
 }
 
 /**
@@ -48,96 +65,82 @@ function dtacLabel(status?: string): string {
  * faithful roll-up of the detail, and material gaps surface the warning callout.
  */
 export function deriveAssuranceDomains(app: App): AssuranceDomain[] {
-  const domains: AssuranceDomain[] = []
-
-  // 1. Clinical evidence and NICE
   const niceRefs: { ref: string }[] = app.nice_guidance_refs ?? []
+  const htgNums = htgNumbersFromRefs(niceRefs)
   const studyCount = (app.clinical_evidence_detailed ?? []).length
-  if (niceRefs.length > 0 || studyCount > 0) {
-    const parts: string[] = []
-    if (niceRefs.length > 0) parts.push(`NICE ${niceRefs.map((r) => r.ref).join(', ')}`)
-    if (studyCount > 0) parts.push(`${studyCount} evidence source${studyCount === 1 ? '' : 's'} on file`)
-    domains.push({
-      domain: 'Clinical evidence and NICE',
-      status: 'verified_current',
-      summary: parts.join('; '),
-    })
-  } else {
-    domains.push({
-      domain: 'Clinical evidence and NICE',
-      status: 'declared_pending',
-      summary: 'No NICE guidance or structured evidence recorded — confirm the evidence base with the supplier.',
-    })
-  }
 
-  // 2. Medical device regulation
-  const deviceClass: string | undefined = app.device_class
-  if (deviceClass && deviceClass !== CHECK_WITH_SUPPLIER) {
-    domains.push({
-      domain: 'Medical device regulation',
-      status: app.device_class_note ? 'verified_review_due' : 'verified_current',
-      summary: deviceClass,
-      residual_action: app.device_class_note || undefined,
-    })
-  } else {
-    domains.push({
-      domain: 'Medical device regulation',
-      status: 'declared_pending',
-      summary: 'Device classification not confirmed in reviewed sources.',
-      residual_action: 'Confirm the CE/UKCA certificate and classification rationale with the supplier.',
-    })
-  }
-
-  // 3. Clinical safety (DTAC + DCB0129/0160)
-  const dtacStatus: string | undefined = app.dtac_status
+  // 1. Clinical safety
   const dcb0129 = classify(app.dcb0129_status)
   const dcb0160Available = app.dcb0160_boilerplate_available === true
   let safetyStatus: AssuranceDomainStatus
-  if (dtacStatus === 'required_not_confirmed') {
-    safetyStatus = 'incomplete'
-  } else if (dtacStatus === 'passed' && dcb0129 === 'verified_current') {
+  if (dcb0129 === 'verified_current') {
     safetyStatus = 'verified_current'
   } else {
     safetyStatus = 'declared_pending'
   }
-  domains.push({
-    domain: 'Clinical safety',
-    status: safetyStatus,
-    summary: `DTAC ${dtacLabel(dtacStatus)}; manufacturer DCB0129 ${app.dcb0129_status ?? 'not recorded'}.`,
-    residual_action: dcb0160Available
-      ? 'Complete local DCB0160 clinical safety case (supplier boilerplate available).'
-      : 'Complete local DCB0160 clinical safety case.',
-  })
 
-  // 4. Data protection and IG (DSP Toolkit + ISO 27001 + Cyber Essentials + GDPR)
-  const dsptOk = classify(app.dspt_status) === 'verified_current'
+  // 2. Clinical evidence
+  const evidenceStatus: AssuranceDomainStatus =
+    htgNums.length > 0 || studyCount > 0 ? 'verified_current' : 'declared_pending'
+
+  // 3. Information governance and data protection
+  const dtacStatus: string | undefined = app.dtac_status
   const isoOk = classify(app.iso27001) === 'verified_current'
-  const ceOk = classify(app.cyber_essentials) === 'verified_current'
-  const gaps: string[] = []
-  if (!isoOk) gaps.push('ISO 27001')
-  if (!ceOk) gaps.push('Cyber Essentials')
-
   let igStatus: AssuranceDomainStatus
-  if (dsptOk && isoOk && ceOk) {
+  if (dtacStatus === 'passed' && isoOk) {
     igStatus = 'verified_current'
-  } else if (dsptOk) {
+  } else if (dtacStatus === 'passed') {
     igStatus = 'verified_review_due'
+  } else if (dtacStatus === 'required_not_confirmed') {
+    igStatus = 'incomplete'
   } else {
     igStatus = 'declared_pending'
   }
-  const igSummaryParts: string[] = []
-  if (app.dspt_status) igSummaryParts.push(`DSP Toolkit ${app.dspt_status.toLowerCase()}`)
-  const gdprFirst = firstSentence(app.gdpr_note)
-  if (gdprFirst) igSummaryParts.push(gdprFirst)
-  const igResidualBits: string[] = []
-  if (gaps.length > 0) igResidualBits.push(`Confirm supplier ${gaps.join(' and ')}`)
-  igResidualBits.push('complete a local DPIA before go-live')
-  domains.push({
-    domain: 'Data protection and IG',
-    status: igStatus,
-    summary: igSummaryParts.join('. ') || 'Information governance position not recorded.',
-    residual_action: `${igResidualBits.join('; ')}.`,
-  })
 
-  return domains
+  // 4. Interoperability — pack copy is national; status stays current when any integration signal exists
+  const ti = app.technical_integrations as { fhir?: string; emis?: string } | undefined
+  const hasInteropSignal =
+    app.nhs_notify_integration === true ||
+    app.nhs_app_integration === true ||
+    app.nhs_login_integration === true ||
+    Boolean(ti?.fhir?.trim()) ||
+    Boolean(ti?.emis?.trim())
+  const interopStatus: AssuranceDomainStatus = hasInteropSignal
+    ? 'verified_current'
+    : 'verified_review_due'
+
+  // 5. Commercial readiness pack
+  const commercialStatus: AssuranceDomainStatus = 'verified_current'
+
+  return [
+    {
+      domain: 'Clinical safety',
+      status: safetyStatus,
+      summary: CLINICAL_SAFETY_SUMMARY,
+      residual_action: dcb0160Available
+        ? 'Complete local DCB0160 clinical safety case (supplier boilerplate available).'
+        : 'Complete local DCB0160 clinical safety case.',
+    },
+    {
+      domain: 'Clinical evidence',
+      status: evidenceStatus,
+      summary: clinicalEvidenceSummary(htgNums),
+    },
+    {
+      domain: 'Information governance and data protection',
+      status: igStatus,
+      summary: IG_SUMMARY,
+      residual_action: 'Complete a local DPIA before go-live.',
+    },
+    {
+      domain: 'Interoperability',
+      status: interopStatus,
+      summary: INTEROP_SUMMARY,
+    },
+    {
+      domain: 'Commercial readiness pack',
+      status: commercialStatus,
+      summary: COMMERCIAL_SUMMARY,
+    },
+  ]
 }

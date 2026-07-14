@@ -584,7 +584,7 @@ export default async function AppPage({
             )}
 
             <div className="space-y-4">
-              {tabs.length > 0 && <PdpTabs tabs={tabs} />}
+              {slug !== 'myheart' && tabs.length > 0 && <PdpTabs tabs={tabs} />}
 
               {!showNarrativeSpine && (
               <PdpShareRegion shareKey="express-interest" label="Express interest callout" excludeFromShareUi>

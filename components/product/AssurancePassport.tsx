@@ -1,7 +1,7 @@
 import type { AssuranceDomain, AssuranceDomainStatus } from '@/lib/content/productModel'
 
 const STATUS_LABELS: Record<AssuranceDomainStatus, string> = {
-  verified_current: 'Verified — current',
+  verified_current: 'Available',
   verified_review_due: 'Verified — review due',
   declared_pending: 'Declared — verification pending',
   incomplete: 'Incomplete',

@@ -13,27 +13,14 @@ import { STORE_ACCENT } from '@/lib/storeAccent'
  *
  * Decisions (see /DS/Audits/Luscii-Content-Mig-4):
  *  - R3-1 A: rendered as an "Assurance" section in the narrative spine, after How-to-buy.
- *  - R3-2 D: NHS task list for domain status with the domain-by-domain detail in an expandable
- *            table, plus the material-gap callout (which stays visible, not behind the toggle).
+ *  - R3-2 D: NHS task list for domain status with domain-by-domain detail in the list hints.
  *  - R3-3 C: domains default to deriveAssuranceDomains(app) from granular JSON. When a
  *            curated narrative.assurance_domains list is authored (matt_demo parity —
  *            e.g. myCOPD), that list is used instead so the passport matches the gold
  *            standard table.
  *
- * Server component — no client boundary; the disclosure uses native <details>.
+ * Server component — no client boundary.
  */
-
-const STATUS_META: Record<
-  AssuranceDomainStatus,
-  { label: string; bg: string; fg: string; border?: string }
-> = {
-  verified_current: { label: 'Verified — current', bg: '#E6F2EA', fg: '#007F3B' },
-  verified_review_due: { label: 'Verified — review due', bg: '#F0F4F5', fg: '#425563' },
-  declared_pending: { label: 'Declared — pending', bg: '#FFF9EE', fg: '#7A4800', border: '#FFD37A' },
-  incomplete: { label: 'Incomplete', bg: '#FDECEA', fg: '#7A1210' },
-  expired: { label: 'Expired / superseded', bg: '#FDECEA', fg: '#7A1210' },
-  not_applicable: { label: 'Not applicable', bg: '#F0F4F5', fg: '#425563' },
-}
 
 /** NHS task-list status presentation — https://service-manual.nhs.uk/design-system/components/task-list */
 function TaskListStatus({ status, id }: { status: AssuranceDomainStatus; id: string }) {
@@ -42,7 +29,7 @@ function TaskListStatus({ status, id }: { status: AssuranceDomainStatus; id: str
     case 'verified_current':
       return (
         <div className="nhsuk-task-list__status" id={id} style={statusStyle}>
-          <strong className="nhsuk-tag nhsuk-tag--green" style={statusStyle}>Verified current</strong>
+          <strong className="nhsuk-tag nhsuk-tag--green" style={statusStyle}>Available</strong>
         </div>
       )
     case 'verified_review_due':
@@ -104,7 +91,11 @@ export default function PdpAssurancePassport({
 
   if (domains.length === 0 && !hasEvidence) return null
 
-  const material = domains.filter((d) => d.status === 'incomplete' || d.status === 'expired')
+  const INTEROP_DOMAIN = 'Interoperability'
+  const packDomains = domains.filter((d) => d.domain !== INTEROP_DOMAIN)
+  const interopDomain = domains.find((d) => d.domain === INTEROP_DOMAIN)
+
+  const material = packDomains.filter((d) => d.status === 'incomplete' || d.status === 'expired')
   const reg = narrative.regulatory_position
   const speedNote = reg?.assurance_speed_note
 
@@ -172,12 +163,12 @@ export default function PdpAssurancePassport({
       )}
 
       {/* R3-2 D: NHS task list for domain status (replaces compact chips) */}
-      {domains.length > 0 && (
+      {packDomains.length > 0 && (
       <>
       <div className="nhsuk-task-list" style={{ marginBottom: 0, marginTop: 40, listStyle: 'none', padding: 0 }}>
         <div className="flex justify-between gap-4" style={{ marginBottom: 0 }}>
           <span className="hs-font-bold" style={{ color: '#212b32' }}>
-            Assurance pack item
+            Assurance pack
           </span>
           <span className="hs-font-bold" style={{ color: '#212b32', whiteSpace: 'nowrap' }}>
             Status
@@ -185,7 +176,7 @@ export default function PdpAssurancePassport({
         </div>
       </div>
       <ul className="nhsuk-task-list" style={{ marginTop: 0 }}>
-        {domains.map((d, index) => {
+        {packDomains.map((d, index) => {
           const statusId = `assurance-${index + 1}-status`
           const hintId = `assurance-${index + 1}-hint`
           const hint = d.summary?.trim()
@@ -204,62 +195,21 @@ export default function PdpAssurancePassport({
           )
         })}
       </ul>
-
-      {/* R3-2 D: full detail behind a native disclosure */}
-      <details className="mt-4">
-        <summary style={{ cursor: 'pointer', fontSize: 'var(--text-label)', color: 'var(--nhs-blue)', fontWeight: 700 }}>
-          What is in the Assurance pack
-        </summary>
-        <div className="mt-3 hs-surface-card-sm bg-white rounded-lg border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-          <table className="w-full" style={{ borderCollapse: 'collapse', fontSize: 'var(--text-caption)' }}>
-            <thead>
-              <tr style={{ background: '#F0F4F5', textAlign: 'left' }}>
-                <th className="p-3 hs-font-bold" style={{ color: 'var(--text-muted)' }}>Domain</th>
-                <th className="p-3 hs-font-bold" style={{ color: 'var(--text-muted)' }}>Status</th>
-                <th className="p-3 hs-font-bold" style={{ color: 'var(--text-muted)' }}>Summary</th>
-              </tr>
-            </thead>
-            <tbody>
-              {domains.map((d) => {
-                const m = STATUS_META[d.status]
-                return (
-                  <tr key={d.domain} style={{ borderTop: '1px solid var(--border)', verticalAlign: 'top' }}>
-                    <td className="p-3 hs-font-bold" style={{ color: 'var(--text-secondary)' }}>{d.domain}</td>
-                    <td className="p-3" style={{ whiteSpace: 'nowrap' }}>
-                      <span
-                        className="hs-font-bold"
-                        style={{
-                          background: m.bg,
-                          color: m.fg,
-                          border: m.border ? `1px solid ${m.border}` : undefined,
-                          borderRadius: 999,
-                          padding: '2px 10px',
-                          whiteSpace: 'nowrap',
-                          display: 'inline-block',
-                        }}
-                      >
-                        {m.label}
-                      </span>
-                      {d.review_due && (
-                        <div className="mt-1" style={{ color: 'var(--text-muted)' }}>Review due: {d.review_due}</div>
-                      )}
-                    </td>
-                    <td className="p-3" style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                      {d.summary}
-                      {d.residual_action && (
-                        <div className="mt-1" style={{ color: '#7A4800' }}>
-                          <strong>Local action:</strong> {d.residual_action}
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-      </details>
       </>
+      )}
+
+      {interopDomain && (
+        <div
+          className="rounded-lg p-4 mt-4"
+          style={{ background: '#E6F0FB', border: '1px solid var(--border)' }}
+        >
+          <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--text-primary)' }}>
+            {interopDomain.domain}
+          </div>
+          <p className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
+            {interopDomain.summary}
+          </p>
+        </div>
       )}
 
       {/* Evidence half — "Clinical publications and evaluations" (matt_demo port). */}
