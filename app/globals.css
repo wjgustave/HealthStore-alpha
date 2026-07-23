@@ -223,6 +223,30 @@
   .hs-font-bold { font-weight: 600; }
 
   /**
+   * App shell: full-viewport column so the NHS footer background fills to the
+   * bottom of the window on short pages (no orphaned page-surface gap below).
+   */
+  .hs-app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .hs-app-shell__main {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+  .hs-app-shell__footer {
+    margin-top: auto;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .hs-app-shell__footer .nhsuk-footer-container {
+    flex: 1 0 auto;
+  }
+
+  /**
    * NHS layout: canonical page container. Keeps the app's wider ~1280px canvas
    * but applies NHS gutters (16px mobile → 32px desktop) and centres content.
    * Replaces the repeated `max-w-7xl mx-auto px-4 sm:px-6 py-10` wrapper.
@@ -521,6 +545,44 @@
   .app-card:hover {
     border-color: #AEB7BD;
     box-shadow: 0 4px 0 #AEB7BD;
+  }
+
+  /*
+   * Compact clickable card with right chevron — NHS “primary card with chevron”
+   * (service-manual.nhs.uk/design-system/components/card). Used for compact
+   * case-study previews on the home page. [Provenance: NHS]
+   */
+  .hs-card-chevron {
+    margin-bottom: 0;
+    min-height: 5.5rem;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .hs-card-chevron__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0 !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+  .hs-card-chevron__heading {
+    margin: 0;
+    min-width: 0;
+    flex: 1;
+  }
+  .hs-card-chevron__icon {
+    flex-shrink: 0;
+    fill: var(--nhs-blue);
+  }
+  /* Featured case study title: NHS blue link colour, no underline. */
+  .hs-case-study-featured__title-link {
+    text-decoration: none;
+  }
+  .hs-case-study-featured__title-link:hover {
+    text-decoration: underline;
   }
 
   /* NHS-blue primary button. NHS ships only a green action button, but this
@@ -1003,209 +1065,135 @@ a.hs-snapshot-strip__segment--link {
 }
 
 /*
- * Comparison tool — decision workspace, lens, diff toggle, summary.
- * (R7: the unused matrix / view-toggle layout and its styles were removed.)
+ * Comparison tool — NHS responsive tables (one per narrative section).
+ * Layout, stacking and typography come from the official nhsuk-table-responsive
+ * component (nhsuk-theme.generated.css); the overrides below are limited to
+ * long-prose comparison cells, product column heads, and value colour.
+ *
+ * Product strip and section tables share the same colgroup (18% label + equal
+ * product columns) and table-layout:fixed so logos line up with compare values.
  */
-.hs-compare-row__critical-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-}
-.hs-compare-row__critical-marker {
-  display: inline-block;
-  width: 0.375rem;
-  height: 0.375rem;
-  border-radius: 50%;
-  background: var(--nhs-blue);
-  flex-shrink: 0;
-}
-.hs-compare-panel {
-  padding: 1rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  background: #fff;
-}
-.hs-compare-panel--summary {
-  padding: 0.5rem 0;
-}
-.hs-compare-summary-row {
-  display: grid;
-  grid-template-columns: minmax(140px, 200px) 1fr;
-  gap: 0.75rem;
-  align-items: start;
-  padding: 0 1.25rem;
-  /* R7 RSP-03: scroll the summary columns horizontally rather than overflowing the page with 3-4 apps. */
-  overflow-x: auto;
-}
-.hs-compare-summary-row__spacer {
-  min-width: 0;
-}
-.hs-compare-summary-row__cells {
-  display: grid;
-  gap: 0;
-  min-width: 0;
-}
-.hs-compare-summary-row__cell {
-  min-width: 0;
-  padding: 0 0.875rem;
-}
-.hs-compare-summary-row__cell:first-child {
-  padding-left: 0;
-}
-.hs-compare-summary-row__cell:last-child {
-  padding-right: 0;
-}
-.hs-compare-workspace__controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem 1.5rem;
-}
-.hs-compare-lens {
-  margin: 0;
-  border: none;
-  padding: 0;
-  min-width: 0;
-  flex: 1 1 280px;
-}
-.hs-compare-lens__legend {
-  font-size: var(--text-caption);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
-}
-.hs-compare-lens__options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.hs-compare-lens__option {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  padding: 0.375rem 0.875rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  background: rgb(247, 249, 252);
-  font-size: var(--text-caption);
-  font-weight: 600;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-}
-.hs-compare-lens__option[data-active='true'] {
-  border-color: var(--nhs-blue);
-  background: #E6F0FB;
-  color: var(--nhs-dark);
-}
-.hs-compare-diff-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  font-size: var(--text-label);
-  font-weight: 600;
-  color: var(--text-secondary);
-  cursor: pointer;
-  user-select: none;
-}
-.hs-compare-diff-toggle__input {
-  width: 1.125rem;
-  height: 1.125rem;
-  accent-color: var(--nhs-blue);
-}
-.hs-compare-workspace__groups {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-.hs-compare-workspace__group {
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  background: #fff;
-  overflow: hidden;
-}
-.hs-compare-workspace__group--emphasized {
-  border-color: #A2C8E8;
-  box-shadow: 0 0 0 1px #E6F0FB;
-}
-.hs-compare-workspace__group-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.hs-compare-tables .nhsuk-table,
+.hs-compare-tables .nhsuk-table-responsive {
+  table-layout: fixed;
   width: 100%;
-  min-height: 3rem;
-  padding: 0.875rem 1.25rem;
+}
+.hs-compare-tables .nhsuk-table th,
+.hs-compare-tables .nhsuk-table td,
+.hs-compare-tables .nhsuk-table-responsive th,
+.hs-compare-tables .nhsuk-table-responsive td {
+  vertical-align: top;
+  overflow-wrap: break-word;
+}
+/* Dimension (row-label) column stays narrower than the product columns. */
+.hs-compare-tables .hs-compare-dimension-col {
+  width: 18%;
+  min-width: 130px;
+}
+/* Section captions (table titles) are grey; Compared condition stays black in CompareClient. */
+.hs-compare-tables .nhsuk-table__caption {
+  color: var(--text-secondary);
+}
+.hs-compare-clear-all {
   border: none;
-  background: #E8EDF3;
-  font-family: var(--font-display);
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--text-primary);
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--nhs-blue);
+  text-decoration: underline;
   cursor: pointer;
-  text-align: left;
 }
-.hs-compare-workspace__panel {
-  border-top: 1px solid var(--border);
-  /* R7 RSP-03: keep comparison columns at a readable width and scroll the whole panel together
-     (all rows stay aligned) instead of overflowing the page. */
-  overflow-x: auto;
+.hs-compare-clear-all:hover {
+  color: #7c2855;
+  text-decoration: none;
 }
-.hs-compare-workspace__row {
-  display: grid;
-  grid-template-columns: minmax(140px, 200px) 1fr;
-  gap: 0.75rem;
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid var(--border);
+.hs-compare-clear-all:focus {
+  background-color: #ffeb3b;
+  box-shadow: 0 -2px #ffeb3b, 0 4px #212b32;
+  outline: 4px solid transparent;
+  color: #212b32;
+  text-decoration: none;
 }
-.hs-compare-workspace__row:last-child {
-  border-bottom: none;
+/* Product names live in the strip above; keep each table's col headers for
+   screen readers only so they don't leave an empty visual band. */
+.hs-compare-tables .nhsuk-table-responsive > .nhsuk-table__head {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
 }
-.hs-compare-workspace__row--critical {
-  border-left: 3px solid var(--nhs-blue);
+/* Row labels and titles stay black; pulled comparison values are grey. */
+.hs-compare-tables .nhsuk-table__header {
+  color: var(--text-primary);
 }
-.hs-compare-workspace__row-label {
-  font-size: var(--text-label);
+.hs-compare-tables .hs-compare-value {
+  color: var(--text-secondary);
+}
+.hs-compare-product-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+}
+/* One step above body (16→19 / 19→22) — matches NHS heading-s scale. */
+.hs-compare-product-head__name {
+  font-size: 1.1875rem;
+  line-height: 1.42105;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: var(--text-muted);
+  color: var(--text-primary);
 }
-.hs-compare-workspace__row-cells {
-  display: grid;
-  gap: 0;
-  min-width: 0;
-}
-.hs-compare-workspace__cell {
-  min-width: 0;
-  padding: 0 0.875rem;
-}
-.hs-compare-workspace__cell:not(:first-child) {
-  border-left: 1px solid var(--border);
-}
-.hs-compare-workspace__cell:first-child {
-  padding-left: 0;
-}
-.hs-compare-workspace__cell:last-child {
-  padding-right: 0;
-}
-.hs-compare-workspace__footer {
-  margin-top: 1.5rem;
-}
-@media (max-width: 639px) {
-  .hs-compare-summary-row {
-    grid-template-columns: 1fr;
-    padding: 0 0.75rem;
+@media (min-width: 40.0625em) {
+  .hs-compare-product-head__name {
+    font-size: 1.375rem;
+    line-height: 1.36364;
   }
-  .hs-compare-summary-row__spacer {
-    display: none;
+}
+.hs-compare-product-head__remove {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: var(--text-caption);
+  font-weight: 400;
+  color: var(--nhs-blue);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.hs-compare-product-head__remove:hover {
+  text-decoration: none;
+}
+.hs-compare-product-page-link {
+  color: var(--nhs-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+.hs-compare-product-page-link:hover {
+  text-decoration: underline;
+}
+.hs-compare-product-page-link:visited {
+  color: var(--nhs-blue);
+}
+@media (max-width: 48.0525em) {
+  /* Stacked (mobile) blocks: long narrative values read left-aligned under the
+     repeated product-name heading, rather than the NHS default right-aligned
+     key/value pairs designed for short numeric data. */
+  .hs-compare-tables .nhsuk-table-responsive .nhsuk-table__body .nhsuk-table__row th,
+  .hs-compare-tables .nhsuk-table-responsive .nhsuk-table__body .nhsuk-table__row td {
+    display: block;
+    text-align: left;
   }
-  .hs-compare-workspace__row {
-    grid-template-columns: 1fr;
+  .hs-compare-tables .nhsuk-table-responsive .nhsuk-table__body .nhsuk-table__row th {
+    font-weight: 600;
+  }
+  .hs-compare-tables .nhsuk-table-responsive__heading {
+    display: block;
+    padding-right: 0;
+    color: var(--text-muted);
   }
 }
 
@@ -1421,7 +1409,15 @@ a.hs-snapshot-strip__segment--link {
   border-color: #AEB7BD;
   box-shadow: 0 4px 0 #AEB7BD;
 }
-.hs-pathway-btn strong { font-size: var(--text-body); }
+.hs-pathway-btn strong {
+  font-size: var(--text-body);
+  color: var(--nhs-blue);
+  text-decoration: underline;
+}
+.hs-pathway-btn:hover strong {
+  color: #7c2855;
+  text-decoration: none;
+}
 .hs-pathway-btn span { font-size: var(--text-caption); color: var(--text-secondary); }
 .hs-supported-pathways { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
 @media (max-width: 700px) {

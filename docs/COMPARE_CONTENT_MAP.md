@@ -1,127 +1,93 @@
 # Comparison tool content map
 
-Status: implementation reference. Companion to [COMPARE_RESTRUCTURE_PLAN.md](COMPARE_RESTRUCTURE_PLAN.md) and [PDP_CONTENT_MAP.md](PDP_CONTENT_MAP.md).
+Status: implementation reference for the NHS-table comparison page. Companion to [PDP_CONTENT_MAP.md](PDP_CONTENT_MAP.md).
 
-Maps every comparison row to a PDP content group, source field/formatter, persona relevance, decision-critical flag, and persona lens tags.
+The compare page renders **six captioned NHS responsive tables** (`nhsuk-table-responsive`), one per narrative section, with the selected products as columns and comparison dimensions as `scope="row"` headers. Section order mirrors the PDP narrative spine: what it is → evidence → NHS experience → running it locally → assurance → cost.
 
-## Empty-state token
+- Section/row definitions and all getters: `lib/compareNarrativeContent.ts` (`COMPARE_TABLE_SECTIONS`)
+- Table renderer: `components/compare/CompareNarrativeTables.tsx`
+- Page shell (intro, selected count, empty state): `app/compare/CompareClient.tsx`
 
-All compare cells use **`Check with supplier`** when data is absent (aligned with PDP sweep via `CHECK_WITH_SUPPLIER` in `lib/data.ts`). Legacy `NOT_STATED` constant in `lib/compareFieldFormat.ts` now resolves to this string.
+## Sourcing rule: narrative first, catalogue fallback
 
-## Decision snapshot (persistent band / cards)
+Every cell resolves in two steps:
 
-Not matrix rows — rendered by `CompareDecisionSnapshot` per product.
+1. **Curated narrative** — if `getProductNarrative(app.slug)` returns a `ProductNarrative` (currently Luscii, myCOPD, myHeart, Joint Academy), the row getter reads the curated field (often condensed to its first sentence — editorial truncation happens in the getter, not CSS).
+2. **Catalogue JSON fallback** — otherwise the getter falls back to the formatters in `lib/compareFieldFormat.ts`, so non-narrative products keep working.
 
-| Signal | PDP group | Source | Formatters |
-|--------|-----------|--------|------------|
-| Where it's live | Decision snapshot | `deployment_register[]` | `getWhereLiveSummary` |
-| Governance | Decision snapshot | `nice_guidance_refs`, `dtac_status`, `cyber_essentials` | `getCommissioningSnapshot` → regulation card |
-| Pricing model | Decision snapshot | `pricing_model`, `free_offer_flag` | `getCommissioningSnapshot` → cost card |
-| Integrations | Decision snapshot | `nhs_*_integration`, `technical_integrations` | `getCommissioningSnapshot` → interop card |
+### Empty-state token
 
-## Matrix / workspace rows
+Cells never render empty. Missing data renders **`Check with supplier`** (`CHECK_WITH_SUPPLIER` in `lib/data.ts`, re-exported as `NOT_STATED`) in `nhsuk-u-secondary-text-colour`.
 
-### 1. Overview & local fit
+### Statuses as NHS tags
 
-| Row key | Label | Source fields | Formatter | Personas | Decision-critical | Lens tags |
-|---------|-------|---------------|-----------|----------|-----------------|-----------|
-| `conditions` | Conditions | `condition_tags` | `formatConditionLabels` | Marci, Maisie | **Yes** | commissioner, clinical_safety |
-| `therapeutic` | Therapeutic purpose | `context_of_use.therapeutic_purpose`, `one_line_value_proposition` | `getTherapeuticPurpose` | Marci, Maisie | | commissioner, clinical_safety |
-| `pathways` | Clinical pathways | `context_of_use.pathways`, `pathway_tags` | `getClinicalPathways` | Marci, Maisie | | commissioner, clinical_safety |
-| `care_settings` | Care settings | `context_of_use.care_settings` | `getCareSettings` | Marci, Maisie | | commissioner, clinical_safety |
+Assurance pack items, evidence strength, deployment maturity and service wrap render as `nhsuk-tag` colour tags inside cells — the same presentation as the PDP assurance pack, so the two surfaces read as one system.
 
-### 2. Clinical evidence & outcomes
+## Table inventory
 
-| Row key | Label | Source fields | Formatter | Personas | Decision-critical | Lens tags |
-|---------|-------|---------------|-----------|----------|-----------------|-----------|
-| `evidence_excerpt` | Clinical evidence (summary) | `evidence_summary` | `getClinicalEvidenceExcerpt` | Marci, Joe, Maisie | | commissioner, clinical_safety |
-| `expected_benefit` | Expected benefit | `expected_benefit_note` | `getExpectedBenefit` | Marci, Joe, Hashem | | commissioner, finance_procurement |
-| `nice` | NICE guidance status | `nice_guidance_refs`, `context_of_use.nice_scope` | `getNiceGuidanceStatus` | Marci, Maisie | | commissioner, clinical_safety |
-| `evidence_strength` | Evidence strength | `evidence_strength` | `getEvidenceStrength` (badge) | Marci, Joe, Maisie | **Yes** | commissioner, clinical_safety |
+### 1. What it is and who it's for (`what-it-is`)
 
-### 3. Deployment & adoption
+| Row key | Label | Narrative source | Catalogue fallback |
+|---------|-------|------------------|--------------------|
+| `product_type` | Product type | `decision_summary.intervention_class` | `supervisionLabels[supervision_model]` |
+| `what_it_does` | What it does | `decision_summary.one_line_proposition` | `one_line_value_proposition` |
+| `problem` | Problem it addresses | first sentence of `decision_summary.pathway_problem` | first sentence of `target_problem_statement` |
+| `conditions` | Conditions | — | `condition_tags` via `formatConditionLabels` |
 
-| Row key | Label | Source fields | Formatter | Personas | Decision-critical | Lens tags |
-|---------|-------|---------------|-----------|----------|-----------------|-----------|
-| `where_live` | Where it's live | `deployment_register[]` | `getWhereLiveCompare` | Marci, Joe | **Yes** | commissioner |
-| `maturity` | Deployment maturity | `maturity_level` | `MaturityBadge` | Marci, Joe | | commissioner |
-| `onboarding` | Onboarding model | `onboarding_model`, `onboarding_detail` | `getOnboardingCompareLine` | Marci, Maisie | | commissioner, clinical_safety |
-| `service_wrap` | Service wrap | `service_wrap_included` | `getServiceWrapYn` (badge) | Marci, Hashem | | commissioner, finance_procurement |
+### 2. Evidence and expected impact (`evidence-impact`)
 
-### 4. Safety & governance
+| Row key | Label | Narrative source | Catalogue fallback |
+|---------|-------|------------------|--------------------|
+| `nice` | NICE guidance | `assurance_domains` → Clinical evidence summary (e.g. "NICE HTG736 EVA recommendations") | `getNiceGuidanceStatus` |
+| `headline_outcome` | Headline outcome | best `evidence_claims` entry (evaluated outcome with a metric, else first): claim + strength lead + year | `getClinicalEvidenceExcerpt` (200 chars) |
+| `evidence_strength` | Evidence strength | — | `evidence_strength` as NHS tag (strong=green, moderate=blue, else grey) |
+| `economic_value` | Expected economic value | first sentence of `commissioner_economics.headline` | `getExpectedBenefit` |
 
-| Row key | Label | Source fields | Formatter | Personas | Decision-critical | Lens tags |
-|---------|-------|---------------|-----------|----------|-----------------|-----------|
-| `dtac` | DTAC status | `dtac_status` | `DtacBadge` | Maisie, Deb, Sinead | **Yes** | clinical_safety, finance_procurement |
-| `dcb0129` | DCB0129 (manufacturer) | `dcb0129_status` | `pickStr` | Maisie, Deb | | clinical_safety |
-| `device_class` | Device class | `device_class` | `pickStr` | Maisie | | clinical_safety |
-| `assurance` | Cyber / ISO / DSPT | `cyber_essentials`, `iso27001`, `dspt_status` | `getAssuranceSummary` | Deb, Sinead | | clinical_safety, finance_procurement |
+### 3. NHS experience (`nhs-experience`)
 
-### 5. Commercial, cost & funding
+| Row key | Label | Narrative source | Catalogue fallback |
+|---------|-------|------------------|--------------------|
+| `where_live` | Where it's live | — | `getWhereLiveCompare` (`deployment_register`) |
+| `scale` | Scale in the NHS | top 2 `engagement_signals` ("value — metric") | `patients_covered_note` |
+| `maturity` | Deployment maturity | — | `maturity_level` as NHS tag (scaled=green, multi_site_live=blue, limited_live=orange) |
 
-| Row key | Label | Source fields | Formatter | Personas | Decision-critical | Lens tags |
-|---------|-------|---------------|-----------|----------|-----------------|-----------|
-| `pricing_model` | Pricing model | `pricing_model` | `getPricingModelDisplay` | Hashem, Marci | **Yes** | finance_procurement, commissioner |
-| `indicative_price` | Indicative price | `indicative_price_text` | `getIndicativePriceShort` | Hashem | | finance_procurement |
-| `funding` | Funding eligibility | `nhse_125k_eligible`, `nhse_125k_note` | `getFundingEligibility` | Joe, Hashem | | finance_procurement, commissioner |
+### 4. What it takes to run locally (`run-locally`)
 
-### 6. Technical & integration
+| Row key | Label | Narrative source | Catalogue fallback |
+|---------|-------|------------------|--------------------|
+| `clinical_model` | Clinical model | first sentence of `implementation.human_wrapper` | `getOnboardingCompareLine` |
+| `workforce` | Workforce | first sentence of `implementation.workforce` | first sentence of `local_wraparound_detail` |
+| `time_to_deploy` | Time to deploy | first sentence of `implementation.timescale` | Check with supplier |
+| `service_wrap` | Service wrap included | — | `service_wrap_included` as Yes (green) / No (grey) tag |
 
-| Row key | Label | Source fields | Formatter | Personas | Decision-critical | Lens tags |
-|---------|-------|---------------|-----------|----------|-----------------|-----------|
-| `nhs_integrations` | NHS integrations | `nhs_app_integration`, `nhs_login_integration`, `nhs_notify_integration` | `getNhsIntegrationsSummary` | Deb, Maisie | | clinical_safety |
-| `integrations` | FHIR / EMIS / hosting | `technical_integrations` | `getIntegrationsSummary` | Deb, Maisie | | clinical_safety |
-| `data_hosting` | Data hosting | `technical_integrations.data_hosting` | `getDataHosting` | Deb | | clinical_safety |
+### 5. Assurance pack (`assurance-pack`)
 
-## Decision-critical set
+The five standardised pack items as rows — same names, order and status vocabulary as the PDP passport (single source of truth: `lib/content/assuranceDomains.ts`):
 
-Highlighted in Variant A (left border + label marker). Default-open groups in Variant B:
+1. Clinical safety
+2. Clinical evidence
+3. Information governance and data protection
+4. Interoperability
+5. Commercial readiness pack
 
-- Conditions
-- Where it's live
-- Evidence strength
-- DTAC status
-- Pricing model
+Per app, domains resolve from `narrative.assurance_domains` when present, else `deriveAssuranceDomains(app)`. Status tags: `verified_current` → **Available** (green), `verified_review_due` → **Review due** (yellow), `declared_pending` → **Incomplete** (blue), `incomplete` → **Incomplete** (red), `expired` → **Expired** (red), `not_applicable` → **Not applicable** (grey).
 
-## Persona group priority (default / Commissioner lens)
+### 6. Cost and commercial route (`cost-commercial`)
 
-Order groups for Marci (primary commissioner):
+| Row key | Label | Narrative source | Catalogue fallback |
+|---------|-------|------------------|--------------------|
+| `indicative_cost` | Indicative cost | `commercial_readiness.price_summary` | `getIndicativePriceShort` |
+| `commercial_model` | Commercial model | `commercial_readiness.proposition_type` | `getPricingModelDisplay` |
+| `procurement_route` | Procurement route | `commercial_readiness.route_status` | Check with supplier |
+| `funding_levers` | Funding levers | top 3 `commissioner_economics.funding_levers` labels | `getFundingEligibility` |
+| `product_profile` | Product profile | — | link to `/apps/{slug}` |
 
-1. Overview & local fit
-2. Clinical evidence & outcomes
-3. Deployment & adoption
-4. Commercial, cost & funding
-5. Safety & governance
-6. Technical & integration
+## Responsive behaviour
 
-## Persona lens definitions
+`nhsuk-table-responsive` (compiled in `app/styles/nhsuk-theme.generated.css`) stacks each row into a labelled block under 768px; per-cell `nhsuk-table-responsive__heading` spans repeat the product name. Overrides in `app/globals.css` (`.hs-compare-tables`) keep long prose cells top-aligned and left-aligned on mobile (the NHS default right-aligns values, which suits short numeric data only), fix the table layout, and narrow the dimension column.
 
-| Lens id | Persona | Label | Emphasised groups (reordered to top) |
-|---------|---------|-------|--------------------------------------|
-| `all` | Marci (commissioner) | Show all | Overview → Clinical → Deployment → Commercial → Safety → Technical |
-| `clinical_safety` | Maisie (clinical lead / safety) | Clinical safety | Clinical → Safety → Deployment → Technical → Overview → Commercial |
-| `finance_procurement` | Hashem / Sinead (finance, procurement) | Finance & procurement | Commercial → Safety → Deployment → Clinical → Overview → Technical |
-| `ig_assurance` | Deb (IG / DPO) | Information governance & assurance | Safety → Technical → Deployment → Commercial → Clinical → Overview |
+## What was removed (July 2026 redesign)
 
-The `ig_assurance` lens reflects Deb's job: validate DTAC, Cyber Essentials, DSPT, ISO 27001, and GDPR (Safety & governance) plus data hosting and integration surface (Technical & integration) before sign-off. Tagged rows: `dtac`, `dcb0129`, `assurance` (Cyber / ISO / DSPT), `nhs_integrations`, `integrations` (FHIR / EMIS / hosting), `data_hosting`.
-
-Rows outside the lens still render when lens is not filtering — lens only **reorders and visually emphasises** groups (does not hide content).
-
-## Terminology alignment
-
-| Old (compare) | New (aligned with PDP) |
-|---------------|------------------------|
-| Adoption & assurance | Split into Deployment & adoption + Safety & governance |
-| Clinical context | Overview & local fit + Clinical evidence & outcomes |
-| Commercial & delivery | Commercial, cost & funding + Technical & integration |
-| Live ICB sites | Where it's live (`deployment_register`) |
-| Not stated | Check with supplier |
-| Interoperability (implicit) | Integrations (NHS + FHIR/EMIS) |
-
-## Mapping from old compare sections
-
-| Old section | New group(s) |
-|-------------|--------------|
-| Clinical context | Overview & local fit + Clinical evidence & outcomes |
-| Adoption & assurance | Deployment & adoption + Safety & governance |
-| Commercial & delivery | Commercial, cost & funding + Technical & integration |
+- The bespoke CSS-grid "decision workspace" (`CompareWorkspaceView`, `compareRowRenderers`, ~180 lines of `hs-compare-workspace*` CSS) — replaced by semantic tables.
+- Persona lenses and "differences only" filtering (`CompareLensControl`, `lib/compareConfig.ts`) — already hidden from the UI; deleted, not rebuilt. Git history preserves them.
+- Collapsible row groups — the re-edited content is ~25 purposeful rows across 6 flat captioned tables, so no open/close state is needed.

@@ -20,7 +20,7 @@
     </div>
 
     <div class="ds-meta-grid">
-      <div class="ds-meta"><div class="ds-meta__k">Canonical classes</div><div class="ds-meta__v"><code>.app-card</code>, <code>.hs-surface-card(-sm)</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Canonical classes</div><div class="ds-meta__v"><code>.app-card</code>, <code>.hs-card-chevron</code>, <code>.hs-surface-card(-sm)</code></div></div>
       <div class="ds-meta"><div class="ds-meta__k">Widget shell</div><div class="ds-meta__v"><code>components/ui/WidgetShell.tsx</code></div></div>
       <div class="ds-meta"><div class="ds-meta__k">Radius</div><div class="ds-meta__v"><code>--radius-card</code> · 0px (square)</div></div>
     </div>
@@ -44,6 +44,53 @@
       </div>
     </div>
 <pre class="ds-code"><code>&lt;article class="app-card bg-white border p-5"&gt; &hellip; &lt;/article&gt;</code></pre>
+
+    <h2>Clickable card with chevron</h2>
+    <p>
+      Compact NHS <a href="https://service-manual.nhs.uk/design-system/components/card">primary card with chevron</a>:
+      whole-card hit target, title on the left, chevron-right-circle icon middle-aligned on the right.
+      Body-s title size. Used for the three compact case-study previews on the home page.
+    </p>
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Component</div><div class="ds-meta__v"><code>components/ui/ClickableChevronCard.tsx</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Classes</div><div class="ds-meta__v"><code>.hs-card-chevron</code> + <code>.app-card</code> / <code>.nhsuk-card--clickable</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Used on</div><div class="ds-meta__v">Home &middot; Case studies band (compact cards)</div></div>
+    </div>
+    <div class="ds-example ds-example--surface">
+      <div style="display:flex;flex-direction:column;gap:16px;max-width:360px">
+        <div class="app-card hs-card-chevron">
+          <div class="hs-card-chevron__content">
+            <h3 class="hs-card-chevron__heading">
+              <a href="#">Virtual ward remote monitoring in Sunderland</a>
+            </h3>
+            <svg class="hs-card-chevron__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" focusable="false" aria-hidden="true">
+              <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="app-card hs-card-chevron">
+          <div class="hs-card-chevron__content">
+            <h3 class="hs-card-chevron__heading">
+              <a href="#">Digital cardiac rehab at Dorset County Hospital</a>
+            </h3>
+            <svg class="hs-card-chevron__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" focusable="false" aria-hidden="true">
+              <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;ClickableChevronCard href="/resources/case-studies/example" title="Virtual ward remote monitoring in Sunderland" /&gt;
+
+&lt;!-- Markup equivalent --&gt;
+&lt;div class="nhsuk-card nhsuk-card--clickable app-card hs-card-chevron"&gt;
+  &lt;div class="nhsuk-card__content hs-card-chevron__content"&gt;
+    &lt;h3 class="nhsuk-card__heading nhsuk-body-s nhsuk-u-font-weight-bold hs-card-chevron__heading"&gt;
+      &lt;a class="nhsuk-card__link" href="…"&gt;Title&lt;/a&gt;
+    &lt;/h3&gt;
+    &lt;svg class="nhsuk-icon nhsuk-icon--chevron-right-circle hs-card-chevron__icon" …&gt;…&lt;/svg&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
 
     <h2>Surface cards (static)</h2>
     <div class="ds-example ds-example--surface">
@@ -111,6 +158,7 @@
       <thead><tr><th>Surface</th><th>Definition</th></tr></thead>
       <tbody>
         <tr><td><code>.app-card</code></td><td>border + <code>--radius-card</code> (0), flat, hover border-colour</td></tr>
+        <tr><td><code>.hs-card-chevron</code></td><td>Compact clickable card with middle-aligned right chevron (NHS primary card with chevron)</td></tr>
         <tr><td><code>.hs-surface-card</code> / <code>-sm</code></td><td>bg + border + <code>--radius-card</code> (0), flat (no shadow)</td></tr>
         <tr><td><code>.hs-inset-card</code></td><td>White card with 8px NHS blue left keyline (NHS inset-text treatment)</td></tr>
         <tr><td><code>.hs-inset-card--transparent</code></td><td>Inset card with no background fill (stock NHS inset text)</td></tr>
@@ -119,7 +167,7 @@
       </tbody>
     </table>
 
-    <div class="ds-note ds-note--source">Source: <code>app/globals.css</code>; <code>components/ui/WidgetShell.tsx</code>; dashboard widgets, news/campaigns, case-study cards.</div>
+    <div class="ds-note ds-note--source">Source: <code>app/globals.css</code>; <code>components/ui/ClickableChevronCard.tsx</code>; <code>components/ui/WidgetShell.tsx</code>; dashboard widgets, news/campaigns, case-study cards.</div>
   </div>
   <script src="/DS/assets/ds.js" defer></script>
 </body>

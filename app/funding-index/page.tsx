@@ -17,11 +17,13 @@ export default function FundingPage() {
     sectionId,
     items,
     color,
+    showCount = true,
   }: {
     title: string
     sectionId: string
     items: typeof funding
     color: string
+    showCount?: boolean
   }) {
     if (!items.length) return null
     const headingId = `funding-section-${sectionId}`
@@ -35,9 +37,11 @@ export default function FundingPage() {
           >
             {title}
           </h2>
-          <span className="badge" style={{ background: color + '22', color }}>
-            {items.length}
-          </span>
+          {showCount && (
+            <span className="badge" style={{ background: color + '22', color }}>
+              {items.length}
+            </span>
+          )}
         </div>
         <div className="flex flex-col gap-6">
           {items.map(f => (
@@ -54,25 +58,16 @@ export default function FundingPage() {
       <div className="hs-section">
         <h1 className="page-title-h1">Funding index</h1>
         <p
-          className="m-0 hs-measure leading-relaxed"
+          className="m-0 leading-relaxed"
           style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}
         >
           This Funding Index provides information on funding opportunities and integration support for NHS commissioners purchasing digital therapeutics (DTx). We encourage commissioners to confirm the availability of funding opportunities before submitting a business case applying for funding.
         </p>
       </div>
 
-      <Section title="Currently open" sectionId="open" items={open} color="#007F3B" />
-      <Section title="Upcoming" sectionId="upcoming" items={upcoming} color="#7A4800" />
+      <Section title="Currently open" sectionId="open" items={open} color="#007F3B" showCount={false} />
+      <Section title="Upcoming" sectionId="upcoming" items={upcoming} color="#7A4800" showCount={false} />
       <Section title="Closed (confirm current status)" sectionId="closed" items={closed} color="#7A4800" />
-
-      <div
-        className="hs-surface-card mt-10 rounded-xl border p-6 hs-text-label"
-        style={{ borderColor: 'var(--border)', background: '#F0F4F5', color: 'var(--text-muted)', lineHeight: 1.6 }}
-      >
-        <strong style={{ color: 'var(--text-secondary)' }}>Disclaimer: </strong>
-        Funding information is based on publicly available information as of March 2026. Deadlines and eligibility criteria
-        change — verify with the sponsoring organisation before use in business cases.
-      </div>
     </div>
   )
 }

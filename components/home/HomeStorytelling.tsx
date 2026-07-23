@@ -89,7 +89,7 @@ export function HomeStorytelling() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-12 md:pt-14">
         <section className="hs-section">
           <h2 className="hs-section-title" style={{ fontSize: 'var(--text-section)' }}>What the NHS HealthStore addresses</h2>
-          <p className="hs-section-note hs-measure" style={{ fontSize: 'var(--text-body)' }}>
+          <p className="hs-section-note" style={{ fontSize: 'var(--text-body)' }}>
             It reduces the burden on local teams by doing nationally what would otherwise be repeated at every Integrated
             Care Board (ICB). Commissioners retain all commissioning, clinical safety and deployment accountability.
           </p>

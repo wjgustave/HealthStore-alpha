@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronRight } from 'lucide-react'
 import type { CaseStudy } from '@/lib/conceptHomeTypes'
+import { ClickableChevronCard } from '@/components/ui/ClickableChevronCard'
 
 const fr: CSSProperties = { fontFamily: 'Frutiger, Arial, sans-serif' }
 
@@ -105,8 +106,13 @@ function FeaturedCaseStudyCard({ study }: { study: CaseStudy }) {
       </div>
       <div className="shrink-0 bg-white px-6 py-6">
         <span className="badge badge-blue mb-2 inline-block">Featured</span>
-        <h3 className="hs-text-lede hs-font-bold leading-snug md:hs-text-section-alt" style={{ ...fr, color: 'var(--text-primary)' }}>
-          {study.title}
+        <h3 className="hs-text-lede hs-font-bold leading-snug md:hs-text-section-alt" style={fr}>
+          <ExternalOrInternalLink
+            href={study.href}
+            className="nhsuk-link nhsuk-link--no-visited-state hs-case-study-featured__title-link"
+          >
+            {study.title}
+          </ExternalOrInternalLink>
         </h3>
         {study.description ? (
           <p className="mt-2 mb-0 hs-text-label leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
@@ -118,26 +124,9 @@ function FeaturedCaseStudyCard({ study }: { study: CaseStudy }) {
   )
 }
 
-/** Compact, lower-prominence horizontal case study card for the home band sidebar. */
+/** Compact clickable case study card — NHS primary card with right chevron. */
 function CompactCaseStudyCard({ study }: { study: CaseStudy }) {
-  return (
-    <div className="app-card flex min-h-[5.5rem] w-full min-w-0 overflow-hidden">
-      <div className="relative w-24 shrink-0 overflow-hidden sm:w-28">
-        <Image
-          src={study.image}
-          alt={study.image_alt ?? ''}
-          fill
-          className="object-cover object-center"
-          sizes="112px"
-        />
-      </div>
-      <div className="flex min-w-0 flex-1 items-center bg-white px-4 py-4">
-        <span className="hs-text-label hs-font-bold leading-snug" style={{ ...fr, color: 'var(--text-primary)' }}>
-          {study.title}
-        </span>
-      </div>
-    </div>
-  )
+  return <ClickableChevronCard href={study.href} title={study.title} />
 }
 
 /** Full-width "Case studies" band for the public home — featured app card plus smaller previews, links to /case-studies. */

@@ -51,7 +51,7 @@ export default function AppShell({
   }
 
   return (
-    <>
+    <div className="hs-app-shell">
       <a href="#main-content" className="nhsuk-skip-link">Skip to main content</a>
       <ToastProvider>
         <CompareBasketProvider allApps={allApps}>
@@ -62,7 +62,7 @@ export default function AppShell({
                 isLoggedIn={showAuthChrome}
                 onOpenAiPanel={showAuthChrome && aiProfile ? () => setAiPanelOpen(true) : undefined}
               />
-              <main id="main-content" tabIndex={-1}>{children}</main>
+              <main id="main-content" className="hs-app-shell__main" tabIndex={-1}>{children}</main>
               {showAuthChrome && aiProfile && (
                 <AiAdvisorPanel
                   open={aiPanelOpen}
@@ -79,19 +79,13 @@ export default function AppShell({
       </ToastProvider>
       <BackToTop />
       <NhsFrontendInit />
-      {/* [Provenance: NHS] Official NHS Footer markup. */}
-      <footer role="contentinfo" className="mt-16">
+      {/* [Provenance: NHS] Official NHS Footer markup. Grows to fill remaining viewport. */}
+      <footer role="contentinfo" className="hs-app-shell__footer mt-16">
         <div className="nhsuk-footer-container">
           <div className="nhsuk-width-container">
             <h2 className="nhsuk-u-visually-hidden">Support links</h2>
             <div className="nhsuk-footer">
               <ul className="nhsuk-footer__list">
-                <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
-                  <Link className="nhsuk-footer__list-item-link" href="/product-catalogue">Product catalogue</Link>
-                </li>
-                <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
-                  <Link className="nhsuk-footer__list-item-link" href="/funding-index">Funding index</Link>
-                </li>
                 <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
                   <Link className="nhsuk-footer__list-item-link" href="/cookies">Cookies</Link>
                 </li>
@@ -117,6 +111,6 @@ export default function AppShell({
           </div>
         </div>
       </footer>
-    </>
+    </div>
   )
 }

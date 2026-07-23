@@ -38,25 +38,28 @@ function formatClosingSummary(f: FundingDirectoryRecord): string {
 }
 
 function LinkedCatalogueApps({ appTags, apps }: { appTags: string[]; apps: App[] }) {
-  if (!appTags.length) return null
+  const linked = appTags
+    .map(id => apps.find(a => a.id === id || a.slug === id))
+    .filter((app): app is App => Boolean(app))
+
+  if (linked.length === 0) return null
+
   return (
     <div className="border-t px-4 py-4 sm:px-6" style={{ borderColor: 'var(--border)', background: '#F0F4F5' }}>
       <p className="m-0 mb-2 hs-text-caption hs-font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
         Linked in this catalogue
       </p>
-      <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
-        {appTags.map(id => {
-          const app = apps.find(a => a.id === id || a.slug === id)
-          return app ? (
-            <Link
-              key={id}
-              href={`/apps/${app.slug}`}
-              className="badge badge-blue hover:underline"
-            >
-              {app.app_name}
-            </Link>
-          ) : null
-        })}
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 sm:justify-start">
+        {linked.map(app => (
+          <Link
+            key={app.id}
+            href={`/apps/${app.slug}`}
+            className="nhsuk-link nhsuk-link--no-visited-state"
+            style={{ textDecoration: 'none' }}
+          >
+            {app.app_name}
+          </Link>
+        ))}
       </div>
     </div>
   )
@@ -70,11 +73,13 @@ export function FundingDirectoryCard({ f, apps }: { f: FundingDirectoryRecord; a
     // [Provenance: NHS] NHS Card.
     <article aria-labelledby={titleId} className="nhsuk-card overflow-hidden">
       <div className="nhsuk-card__content">
-        <div className="mb-2 flex items-start justify-between gap-4">
-          <h3 id={titleId} className="nhsuk-card__heading m-0 flex-1 hs-text-body leading-snug">
+        <div className="mb-2">
+          <div className="mb-2 flex justify-end">
+            <FundingStatusBadge status={f.status} />
+          </div>
+          <h3 id={titleId} className="nhsuk-card__heading m-0 leading-snug" style={{ maxWidth: 'none' }}>
             {f.title}
           </h3>
-          <FundingStatusBadge status={f.status} />
         </div>
 
         {f.total_value ? (
@@ -112,12 +117,10 @@ export function FundingDirectoryCard({ f, apps }: { f: FundingDirectoryRecord; a
         {f.external_url ? (
           <a
             href={f.external_url}
-            target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 py-1 hs-text-label hs-font-bold transition-colors hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
             style={{ color: 'var(--nhs-blue)', outlineColor: 'var(--nhs-blue)' }}
           >
-            <span>{f.external_url_label ?? 'More information'} (opens in a new tab)</span>
+            <span>{f.external_url_label ?? 'More information'}</span>
           </a>
         ) : null}
       </div>

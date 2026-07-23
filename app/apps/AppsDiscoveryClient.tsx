@@ -6,22 +6,53 @@ import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 
 type ConditionArea = { id: string; label: string; colour: string; count: number; icon: string }
 
+type CatalogueApp = { condition_tags?: string[] }
+
+/** COPD and pulmonary rehab share one catalogue card (same as home storytelling). */
+const COPD_PATHWAY_IDS = new Set(['copd', 'pulmonary_rehab'])
+
+function mergeCopdAndPulmonaryRehab(
+  areas: ConditionArea[],
+  apps: CatalogueApp[] | undefined,
+): ConditionArea[] {
+  const withoutPr = areas.filter(c => c.id !== 'pulmonary_rehab')
+  const unionCount = Array.isArray(apps)
+    ? apps.filter(
+        a => Array.isArray(a.condition_tags) && a.condition_tags.some(t => COPD_PATHWAY_IDS.has(t)),
+      ).length
+    : undefined
+
+  return withoutPr.map(c => {
+    if (c.id !== 'copd') return c
+    return {
+      ...c,
+      label: 'COPD and pulmonary rehab',
+      count: unionCount ?? c.count,
+    }
+  })
+}
+
 export default function AppsDiscoveryClient({
   conditionAreas,
   totalAppCount,
+  apps,
 }: {
   conditionAreas: ConditionArea[]
-  /** Kept for callers that still pass catalogue apps; search is currently hidden. */
-  apps?: unknown[]
+  /** Used to compute the combined COPD / pulmonary rehab card count. */
+  apps?: CatalogueApp[]
   totalAppCount: number
 }) {
+  const mergedAreas = useMemo(
+    () => mergeCopdAndPulmonaryRehab(conditionAreas, apps),
+    [conditionAreas, apps],
+  )
   const availableConditions = useMemo(
-    () => conditionAreas.filter(c => c.count > 0),
-    [conditionAreas],
+    () => mergedAreas.filter(c => c.count > 0),
+    [mergedAreas],
   )
   const roadmapConditions = useMemo(
-    () => conditionAreas.filter(c => c.count === 0),
-    [conditionAreas],
+    () => mergedAreas.filter(c => c.count === 0),
+    [mergedAreas],
   )
 
   return (
@@ -54,9 +85,9 @@ export default function AppsDiscoveryClient({
                 {c.label}
               </div>
               <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', marginTop: 4 }}>
-                {c.count} {c.count === 1 ? 'app' : 'apps'}
+                {c.count} {c.count === 1 ? 'product' : 'products'}
               </div>
-              <span className="mt-2 inline-block hs-text-label hs-font-bold text-[var(--nhs-blue)] group-hover:underline">View apps</span>
+              <span className="mt-2 inline-block hs-text-label hs-font-bold text-[var(--nhs-blue)] underline">View products</span>
             </Link>
           ))}
         </div>

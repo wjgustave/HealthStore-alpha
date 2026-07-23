@@ -16,9 +16,20 @@ const supervisionOptions = Object.entries(supervisionLabels).map(([id, label]) =
 const conditionAreas = getConditionAreas()
 const conditionOptions = [
   { id: 'all', label: 'All conditions' },
-  ...conditionAreas.map(c => ({ id: c.id, label: c.label })),
+  ...conditionAreas
+    .filter(c => c.id !== 'pulmonary_rehab')
+    .map(c => ({
+      id: c.id,
+      label: c.id === 'copd' ? 'COPD and pulmonary rehab' : c.label,
+    })),
 ]
-const populatedConditionCount = conditionAreas.filter(c => c.count > 0).length
+function appMatchesCondition(app: App, conditionId: string): boolean {
+  if (conditionId === 'all') return true
+  if (conditionId === 'copd') {
+    return app.condition_tags.includes('copd') || app.condition_tags.includes('pulmonary_rehab')
+  }
+  return app.condition_tags.includes(conditionId)
+}
 
 /**
  * Nested facet accordion — mirrors GOV.UK `.app-c-filter-section` (details/summary
@@ -155,7 +166,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
     return apps
       .filter((app: App) => {
         if (supervision.length > 0 && !supervision.includes(app.supervision_model)) return false
-        if (condition !== 'all' && !app.condition_tags.includes(condition)) return false
+        if (condition !== 'all' && !appMatchesCondition(app, condition)) return false
         return true
       })
       .sort((a, b) => a.app_name.localeCompare(b.app_name))
@@ -178,9 +189,6 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
         <h1 className="page-title-h1">
           Digital therapeutics
         </h1>
-        <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
-          {apps.length} apps across {populatedConditionCount} conditions and pathways · Last reviewed March 2026
-        </p>
       </div>
 
       <div className="hs-catalogue-layout">

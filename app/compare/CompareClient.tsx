@@ -2,64 +2,16 @@
 import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import type { App } from '@/lib/data'
-import { STORE_ACCENT } from '@/lib/storeAccent'
 import { useCompareBasket } from '@/components/CompareBasketProvider'
 import {
   formatConditionLabels,
   sharedConditionTags,
 } from '@/lib/compareConditions'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
-import CompareWorkspaceView from '@/components/compare/CompareWorkspaceView'
+import CompareNarrativeTables from '@/components/compare/CompareNarrativeTables'
 
 type Props = { allApps: App[] }
-
-const LOGO_SIZE = 24
-
-/** Logo + name + remove, aligned to comparison columns below. */
-function CompareSummaryCard({
-  app,
-  onRemove,
-}: {
-  app: App
-  onRemove: () => void
-}) {
-  return (
-    <div className="flex items-center min-w-0">
-      <div className="flex items-center gap-2 min-w-0">
-        {app.logo_path ? (
-          <Image
-            src={app.logo_path}
-            alt=""
-            width={LOGO_SIZE}
-            height={LOGO_SIZE}
-            className="shrink-0 object-contain"
-            style={{ maxWidth: LOGO_SIZE, maxHeight: LOGO_SIZE }}
-          />
-        ) : (
-          <div className="shrink-0" style={{ width: LOGO_SIZE, height: LOGO_SIZE }} aria-hidden />
-        )}
-        <Link
-          href={`/apps/${app.slug}`}
-          className="min-w-0 hs-font-bold hs-text-label hover:underline truncate"
-          style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
-        >
-          {app.app_name}
-        </Link>
-      </div>
-      <button
-        type="button"
-        onClick={onRemove}
-        className="shrink-0 hs-text-caption hover:underline"
-        style={{ color: 'var(--nhs-blue)', marginLeft: '24px' }}
-        aria-label={`Remove ${app.app_name}`}
-      >
-        Remove
-      </button>
-    </div>
-  )
-}
 
 export default function CompareClient({ allApps }: Props) {
   const searchParams = useSearchParams()
@@ -84,79 +36,40 @@ export default function CompareClient({ allApps }: Props) {
       <div className="mb-8">
         <h1 className="page-title-h1">Comparison tool</h1>
         <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>
-          The comparison tool enables you to select up to four Digital Therapeutics (DTx) apps from the catalogue within the same condition area. Once you have selected the apps you would like to compare, choose ‘add to compare’. The NHS HealthStore will then compare your chosen apps and show you, where your app is live, its governance, pricing model, and integrations.
+          Select up to four digital therapeutics from the same condition area in the catalogue, then choose ‘add to compare’. The NHS HealthStore compares your selection side by side — what each product is, the evidence behind it, assurance, what it takes to work locally, NHS experience, and cost.
         </p>
       </div>
 
-      {selected.length > 0 && (
-        <>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-4">
-            <div>
-              <p className="hs-text-label" style={{ color: 'var(--text-muted)' }}>
-                {selected.length} DTx app{selected.length !== 1 ? 's' : ''} selected
-              </p>
-              {sharedTags.length > 0 && (
-                <p className="hs-text-label mt-1" style={{ color: 'var(--text-muted)' }}>
-                  Shared condition{sharedTags.length > 1 ? 's' : ''}:{' '}
-                  <span className="hs-font-normal" style={{ color: 'var(--text-secondary)' }}>
-                    {formatConditionLabels(sharedTags)}
-                  </span>
-                </p>
-              )}
-            </div>
-            <button
-              type="button"
-              onClick={() => clear()}
-              className="self-start hs-text-label rounded-md px-2 py-1 -mx-2 -my-1 transition-colors hover:bg-[#FEF2F2] hover:text-red-600 sm:shrink-0 min-h-[44px]"
-              style={{ color: 'var(--text-muted)' }}
-            >
-              Clear all
-            </button>
-          </div>
-
-          <div className="hs-compare-panel hs-compare-panel--summary mb-4">
-            <h2 className="sr-only">Selected DTx apps summary</h2>
-            <div className="hs-compare-summary-row">
-              <div className="hs-compare-summary-row__spacer" aria-hidden="true" />
-              <div
-                className="hs-compare-summary-row__cells"
-                style={{
-                  gridTemplateColumns: `repeat(${selected.length}, minmax(140px, 1fr))`,
-                }}
-              >
-                {selected.map((app) => (
-                  <div key={app.id} className="hs-compare-summary-row__cell">
-                    <CompareSummaryCard app={app} onRemove={() => remove(app.id)} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2 mb-6">
+        <h2 className="nhsuk-heading-xs nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-0">
+          Compared condition{sharedTags.length > 1 ? 's' : ''}:{' '}
+          {sharedTags.length > 0 ? formatConditionLabels(sharedTags) : 'None'}
+        </h2>
+        {selected.length > 0 && (
+          <button
+            type="button"
+            onClick={() => clear()}
+            className="hs-compare-clear-all shrink-0 min-h-[44px]"
+          >
+            Clear all
+          </button>
+        )}
+      </div>
 
       {selected.length === 0 ? (
-        <div className="hs-surface-card text-center py-16 px-4 rounded-xl bg-white border" style={{ borderColor: 'var(--border)' }}>
-          <div className="hs-text-section mb-4" aria-hidden>
-            ⚖️
-          </div>
-          <p className="hs-font-bold mb-4 max-w-lg mx-auto" style={{ color: 'var(--text-primary)' }}>
-            No DTx apps selected for the comparison tool. Browse the catalogue and add DTx apps to compare them side by side.
+        <div className="mt-8 border-t pt-8" style={{ borderColor: 'var(--border)' }}>
+          <p className="mb-4" style={{ color: 'var(--text-primary)' }}>
+            No products selected for the comparison tool. Browse the catalogue and add products to compare them side by side.
           </p>
           <Link
             href="/product-catalogue"
-            className="inline-flex items-center justify-center hs-text-label hs-font-bold rounded-lg px-6 py-4 min-h-[44px]"
-            style={{ background: STORE_ACCENT, color: '#fff' }}
+            className="nhsuk-link nhsuk-link--no-visited-state hs-text-body hs-font-bold"
           >
-            Product catalogue
+            Go to product catalogue
           </Link>
         </div>
       ) : (
-        <CompareWorkspaceView
-          selected={selected}
-          lens="all"
-          differencesOnly={false}
-        />
+        <CompareNarrativeTables selected={selected} onRemove={remove} />
       )}
     </div>
   )

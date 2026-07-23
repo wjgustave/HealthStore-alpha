@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, GitCompare } from 'lucide-react'
+import { GitCompare } from 'lucide-react'
 import { useCompareBasket } from '@/components/CompareBasketProvider'
 import { Button, type ButtonSize } from '@/components/ui/Button'
 
@@ -37,7 +37,7 @@ export function CompareToggleButton({
       pressed={added}
       borderless={borderless}
       size={size}
-      aria-label={added ? 'Remove from comparison tool' : 'Add to comparison tool'}
+      aria-label={added ? 'Remove from compare' : 'Add to compare'}
       aria-pressed={added}
       ariaDisabled={blocked}
       disabledReason={
@@ -52,10 +52,7 @@ export function CompareToggleButton({
     >
       <span className="inline-flex items-center justify-center gap-2">
         {added ? (
-          <>
-            <Check className="w-4 h-4 shrink-0" strokeWidth={2.5} aria-hidden />
-            Added
-          </>
+          'Remove from compare'
         ) : (
           <>
             <GitCompare className="w-4 h-4 shrink-0" aria-hidden />
