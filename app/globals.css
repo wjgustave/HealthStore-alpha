@@ -1064,6 +1064,15 @@ a.hs-snapshot-strip__segment--link {
   justify-content: flex-start;
 }
 
+/* NHS form controls have no background of their own, so the page's grey
+   --surface would show through. Fill them white (readOnly fields override
+   inline with grey). */
+.nhsuk-input,
+.nhsuk-select,
+.nhsuk-textarea {
+  background-color: #fff;
+}
+
 /*
  * Comparison tool — NHS responsive tables (one per narrative section).
  * Layout, stacking and typography come from the official nhsuk-table-responsive
@@ -1094,6 +1103,8 @@ a.hs-snapshot-strip__segment--link {
 .hs-compare-tables .nhsuk-table__caption {
   color: var(--text-secondary);
 }
+/* NHS-style link-as-button (shared: compare Clear all, EOI journey Change links). */
+.hs-link-button,
 .hs-compare-clear-all {
   border: none;
   background: none;
@@ -1103,10 +1114,12 @@ a.hs-snapshot-strip__segment--link {
   text-decoration: underline;
   cursor: pointer;
 }
+.hs-link-button:hover,
 .hs-compare-clear-all:hover {
   color: #7c2855;
   text-decoration: none;
 }
+.hs-link-button:focus,
 .hs-compare-clear-all:focus {
   background-color: #ffeb3b;
   box-shadow: 0 -2px #ffeb3b, 0 4px #212b32;

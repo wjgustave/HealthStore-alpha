@@ -4,13 +4,10 @@ import Link from 'next/link'
 import { getSession } from '@/lib/session'
 import { verifyProductShareToken } from '@/lib/productShareToken'
 import { sharedKeysWithVisibleContent } from '@/lib/pdpShareVisibility'
-import AppDetailClient from '../AppDetailClient'
 import PdpSharedProductBody from '../PdpSharedProductBody'
 import { SharedProductViewBanner } from '@/components/SharedProductViewBanner'
 import { STORE_ACCENT } from '@/lib/storeAccent'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
-import { getCommissioningContextLabel } from '@/lib/commissioningContextDisplay'
-import { getExpressionOfInterestPrefill } from '@/lib/expressionOfInterestPrefill'
 
 export const dynamic = 'force-dynamic'
 
@@ -117,16 +114,12 @@ export default async function SharedProductPage({
   const app = getAppBySlug(slug)
   if (!app) notFound()
 
-  const commissioningOrganisationLabel = getCommissioningContextLabel(session)
-  const contactPrefill = getExpressionOfInterestPrefill(session, commissioningOrganisationLabel)
-
   const allowedKeys = new Set(parsed.keys)
 
   const renderedKeys = sharedKeysWithVisibleContent(app, allowedKeys)
 
   if (renderedKeys.length === 0) {
     return (
-      <AppDetailClient app={app} contactPrefill={contactPrefill}>
         <div className="hs-page hs-pdp">
           <PageBreadcrumb
             items={[
@@ -159,12 +152,10 @@ export default async function SharedProductPage({
             </p>
           </div>
         </div>
-      </AppDetailClient>
     )
   }
 
   return (
-    <AppDetailClient app={app} contactPrefill={contactPrefill}>
       <div className="hs-page hs-pdp">
         <PageBreadcrumb
           items={[
@@ -176,6 +167,5 @@ export default async function SharedProductPage({
         <SharedProductViewBanner appName={app.app_name} slug={slug} renderedKeys={renderedKeys} />
         <PdpSharedProductBody app={app} allowedKeys={allowedKeys} />
       </div>
-    </AppDetailClient>
   )
 }

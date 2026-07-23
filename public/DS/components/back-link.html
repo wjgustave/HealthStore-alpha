@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Back link — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="back-link" data-ds-provenance="NHS">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Components <span class="ds-status ds-status--pending">Pending review</span></p>
+      <h1 class="ds-page-title">Back link</h1>
+      <p class="ds-lede">
+        The NHS <code>nhsuk-back-link</code>. Used at the top of every step of a multi-step journey
+        (see the Multi-step journey pattern) so users can move back one step without losing their answers.
+        Rendered as a <code>&lt;Link&gt;</code> when it navigates to a route, or a <code>&lt;button&gt;</code>
+        when it moves between in-page steps.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Component</div><div class="ds-meta__v"><code>components/eoi/ExpressInterestJourney.tsx</code> (<code>BackLink</code>)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">CSS</div><div class="ds-meta__v"><code>nhsuk-back-link</code> (nhsuk-frontend)</div></div>
+    </div>
+
+    <h2>Example</h2>
+    <div class="ds-example">
+      <a href="#" style="display:inline-flex;align-items:center;gap:2px;color:#005eb8;font-size:1rem;text-decoration:underline" onclick="return false">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="currentColor"><path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"/></svg>
+        Back
+      </a>
+    </div>
+<pre class="ds-code"><code>&lt;div class="nhsuk-back-link"&gt;
+  &lt;button type="button" class="nhsuk-back-link__link"&gt;
+    &lt;svg class="nhsuk-icon nhsuk-icon__chevron-left" &hellip;&gt;&lt;/svg&gt;
+    Back
+  &lt;/button&gt;
+&lt;/div&gt;</code></pre>
+
+    <h2>Behaviour &amp; accessibility</h2>
+    <ul>
+      <li>Every journey step gets a working back control — never a dead <code>href="#"</code>.</li>
+      <li>Going back preserves the user's answers (state is kept in the journey client).</li>
+      <li>If the user arrived via a Change link on Check your answers, back returns to Check your answers.</li>
+    </ul>
+
+    <div class="ds-note ds-note--source">Source: nhsuk-frontend back link, compiled into <code>app/styles/nhsuk-theme.generated.css</code>. First used by the Express interest journey.</div>
+  </div>
+  <script src="/DS/assets/ds.js"></script>
+</body>
+</html>

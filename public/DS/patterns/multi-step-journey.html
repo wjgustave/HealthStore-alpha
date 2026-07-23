@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Multi-step journey — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="multi-step-journey" data-ds-provenance="NHS">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Patterns <span class="ds-status ds-status--pending">Pending review</span></p>
+      <h1 class="ds-page-title">Multi-step journey</h1>
+      <p class="ds-lede">
+        The GOV.UK "question pages" pattern built from NHS components: one question per page, a
+        working back link on every step, error summary on validation failure, a Check your answers
+        page, and a green confirmation panel. First used by the Express interest journey on PDPs.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Reference</div><div class="ds-meta__v"><code>components/eoi/ExpressInterestJourney.tsx</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Route</div><div class="ds-meta__v"><code>/apps/[slug]/express-interest</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Provenance</div><div class="ds-meta__v">GOV.UK pattern, NHS components</div></div>
+    </div>
+
+    <h2>Step order (Express interest)</h2>
+    <ol>
+      <li><strong>Start</strong> — h1, <code>nhsuk-inset-text</code> ("not a purchase or procurement award"), Continue.</li>
+      <li><strong>Your details</strong> — <code>FormField</code> text inputs; required fields validated on Continue.</li>
+      <li><strong>Verify your email</strong> — interstitial with a prototype one-time code (123456) before the questions continue.</li>
+      <li><strong>What support do you need?</strong> — <code>nhsuk-checkboxes</code> in a fieldset whose legend is the page h1.</li>
+      <li><strong>Timing and context</strong> — <code>nhsuk-radios</code> for timeline plus optional inputs; all optional.</li>
+      <li><strong>Check your answers</strong> — <code>nhsuk-summary-list</code> with Change links back to each question; submits the expression of interest.</li>
+      <li><strong>Confirmation</strong> — <code>nhsuk-panel</code> plus "What happens next" and onward links.</li>
+    </ol>
+
+    <h2>Rules</h2>
+    <ul>
+      <li>One thing per page. The question is the <code>&lt;h1&gt;</code> (or the fieldset legend contains it).</li>
+      <li>Every step has a working back control that preserves answers; the first step's back link returns to the entry page (the PDP).</li>
+      <li>Validation runs on Continue. Failures render an <code>nhsuk-error-summary</code> (focused) plus per-field <code>nhsuk-error-message</code>.</li>
+      <li>Changing an answer from Check your answers returns the user to Check your answers afterwards, not the next step.</li>
+      <li>On step change, scroll to top and focus the heading so screen readers announce the new question.</li>
+      <li>Optional answers play back as "Not provided" on Check your answers.</li>
+      <li>Buttons use the NHS button (<code>components/ui/Button.tsx</code>); the whole journey is state-driven on one route.</li>
+    </ul>
+
+    <h2>Components used</h2>
+    <ul>
+      <li><a href="/DS/components/back-link.html">Back link</a></li>
+      <li><a href="/DS/components/error-summary.html">Error summary</a></li>
+      <li><a href="/DS/components/summary-list.html">Summary list</a></li>
+      <li><a href="/DS/components/panel.html">Confirmation panel</a></li>
+      <li><a href="/DS/components/forms.html">Forms &amp; inputs</a> (form groups, checkboxes, radios, inset text)</li>
+      <li><a href="/DS/components/buttons.html">Buttons</a></li>
+    </ul>
+
+    <div class="ds-note ds-note--source">Source: GOV.UK service manual question pages + NHS design system form components. Reference implementation: Express interest journey (<code>/apps/[slug]/express-interest</code>).</div>
+  </div>
+  <script src="/DS/assets/ds.js"></script>
+</body>
+</html>

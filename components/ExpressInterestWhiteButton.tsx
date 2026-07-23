@@ -1,18 +1,14 @@
-'use client'
+import Link from 'next/link'
 
-import { Button } from '@/components/ui/Button'
-
-/** White CTA in the coloured express-interest callout (PDP). Hero accent button is separate. */
-export function ExpressInterestWhiteButton({ accent: _accent }: { accent: string }) {
+/** White CTA in the coloured express-interest callout (PDP). Links to the express-interest journey. */
+export function ExpressInterestWhiteButton({ slug }: { slug: string }) {
   return (
-    <Button
-      variant="on-accent"
-      data-express-interest
-      size="none"
+    <Link
+      href={`/apps/${slug}/express-interest`}
+      className="nhsuk-button nhsuk-button--reverse mb-0 inline-flex items-center justify-center gap-2 align-top w-full sm:w-auto min-w-[200px] px-6 py-4 text-[var(--text-label)] no-underline"
       style={{ color: 'var(--text-primary)' }}
-      className="w-full sm:w-auto min-w-[200px] px-6 py-4 text-[var(--text-label)]"
     >
       Express interest
-    </Button>
+    </Link>
   )
 }

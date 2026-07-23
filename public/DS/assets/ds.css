@@ -342,6 +342,8 @@ a { color: var(--nhs-blue); }
 .ds-status--page { background: #EEF1F3; color: #2E3F4A; }
 .ds-status--provider { background: #EDE8F5; color: #1C003C; }
 .ds-status--orphan { background: #FEF5E6; color: #7A4800; }
+/* Newly documented items awaiting design review before being marked canonical. */
+.ds-status--pending { background: #FEF5E6; color: #7A4800; border: 1px solid #ffb81c; }
 
 /* Priority pills for backlog */
 .ds-prio { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-sm); }

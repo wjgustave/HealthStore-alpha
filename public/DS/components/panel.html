@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Confirmation panel — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="panel" data-ds-provenance="NHS">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Components <span class="ds-status ds-status--pending">Pending review</span></p>
+      <h1 class="ds-page-title">Confirmation panel</h1>
+      <p class="ds-lede">
+        The NHS <code>nhsuk-panel</code> (the GOV.UK confirmation panel, NHS-branded in green).
+        Used on the final page of a transaction to confirm success — for example when an
+        expression of interest has been received. Follow it with a "What happens next" section.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Used by</div><div class="ds-meta__v"><code>components/eoi/ExpressInterestJourney.tsx</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">CSS</div><div class="ds-meta__v"><code>nhsuk-panel</code> (nhsuk-frontend)</div></div>
+    </div>
+
+    <h2>Example</h2>
+    <div class="ds-example">
+      <div style="background:#007f3b;color:#fff;padding:28px;max-width:640px;text-align:center">
+        <h1 style="margin:0 0 12px;font-size:2rem;font-weight:700;color:#fff">Expression of interest received</h1>
+        <div style="font-size:1.375rem">Your expression of interest in Sleepio has been recorded</div>
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;div class="nhsuk-panel"&gt;
+  &lt;h1 class="nhsuk-panel__title"&gt;Expression of interest received&lt;/h1&gt;
+  &lt;div class="nhsuk-panel__body"&gt;
+    Your expression of interest in {product} has been recorded
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+    <h2>Content &amp; accessibility</h2>
+    <ul>
+      <li>Only use on confirmation pages, once per journey.</li>
+      <li>Keep the title short; put reference numbers or next steps in the body or below the panel.</li>
+      <li>Pair with a "What happens next" heading and onward links (e.g. View the EOI record).</li>
+      <li>Panel title is the page <code>&lt;h1&gt;</code> and receives focus when the step renders.</li>
+    </ul>
+
+    <div class="ds-note ds-note--source">Source: nhsuk-frontend panel, compiled into <code>app/styles/nhsuk-theme.generated.css</code>. First used by the Express interest journey.</div>
+  </div>
+  <script src="/DS/assets/ds.js"></script>
+</body>
+</html>

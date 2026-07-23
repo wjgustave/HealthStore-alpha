@@ -21,7 +21,6 @@ import {
   DtacBadge, MaturityBadge, EffortBadge,
   SupervisionBadge, ConditionTag, AlertBox
 } from '@/components/Badges'
-import AppDetailClient from './AppDetailClient'
 import { CompareToggleButton } from '@/components/CompareToggleButton'
 import { STORE_ACCENT } from '@/lib/storeAccent'
 import {
@@ -40,12 +39,8 @@ import { PdpTabs, type PdpTab } from '@/components/PdpTabs'
 import { PdpSharePrintProvider, PdpShareRegion } from '@/components/PdpSharePrintContext'
 import { DeviceClassDetails } from '@/components/DeviceClassDetails'
 import { EvidenceCard } from './pdpBlocks'
-import { Button } from '@/components/ui/Button'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 import PdpSupplierContactCard from '@/components/PdpSupplierContactCard'
-import { getSession } from '@/lib/session'
-import { getCommissioningContextLabel } from '@/lib/commissioningContextDisplay'
-import { getExpressionOfInterestPrefill } from '@/lib/expressionOfInterestPrefill'
 import PdpOnThisPage from '@/components/PdpOnThisPage'
 import { buildPdpOnThisPageLinks } from '@/lib/pdpOnThisPage'
 
@@ -78,10 +73,6 @@ export default async function AppPage({
   const commissionerContext = await getServerContext(
     typeof sp?.geo === 'string' ? sp : undefined
   )
-
-  const session = await getSession()
-  const commissioningOrganisationLabel = getCommissioningContextLabel(session)
-  const contactPrefill = getExpressionOfInterestPrefill(session, commissioningOrganisationLabel)
 
   const accent = STORE_ACCENT
   const showPdpFactsGrid = false
@@ -359,7 +350,6 @@ export default async function AppPage({
   })
 
   return (
-    <AppDetailClient app={app} contactPrefill={contactPrefill}>
       <div className="hs-pdp">
         <PdpSharePrintProvider>
         <div className="hs-pdp-top">
@@ -435,13 +425,12 @@ export default async function AppPage({
               )}
             </div>
             <div className="flex flex-wrap gap-4 items-center mt-8 mb-6">
-              <Button
-                data-express-interest
-                size="none"
-                className="shrink-0 px-6 py-4 hs-text-label hs-font-bold"
+              <Link
+                href={`/apps/${app.slug}/express-interest`}
+                className="nhsuk-button mb-0 inline-flex items-center justify-center gap-2 align-top shrink-0 px-6 py-4 hs-text-label hs-font-bold no-underline"
               >
                 Express interest
-              </Button>
+              </Link>
               <CompareToggleButton
                 appId={app.id}
                 solid
@@ -577,7 +566,7 @@ export default async function AppPage({
                 resources={showNarrativeSpine ? <PdpResources app={app} /> : undefined}
                 expressInterest={
                   <PdpShareRegion shareKey="express-interest" label="Express interest callout" excludeFromShareUi>
-                    <PdpExpressInterestCallout accent={accent} />
+                    <PdpExpressInterestCallout accent={accent} slug={app.slug} />
                   </PdpShareRegion>
                 }
               />
@@ -589,7 +578,7 @@ export default async function AppPage({
               {!showNarrativeSpine && (
               <PdpShareRegion shareKey="express-interest" label="Express interest callout" excludeFromShareUi>
               <div className="hs-surface-card-sm rounded-b-xl border overflow-hidden" style={{ borderColor: accent }}>
-                <PdpExpressInterestCallout accent={accent} />
+                <PdpExpressInterestCallout accent={accent} slug={app.slug} />
               </div>
               </PdpShareRegion>
               )}
@@ -600,6 +589,5 @@ export default async function AppPage({
         </div>
         </PdpSharePrintProvider>
       </div>
-    </AppDetailClient>
   )
 }

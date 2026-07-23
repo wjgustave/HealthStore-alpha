@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Summary list — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="summary-list" data-ds-provenance="NHS">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Components <span class="ds-status ds-status--pending">Pending review</span></p>
+      <h1 class="ds-page-title">Summary list</h1>
+      <p class="ds-lede">
+        The NHS <code>nhsuk-summary-list</code>. Used on "Check your answers" pages to play back the
+        user's answers as key–value rows, each with a Change action that returns to the relevant question.
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Used by</div><div class="ds-meta__v"><code>components/eoi/ExpressInterestJourney.tsx</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">CSS</div><div class="ds-meta__v"><code>nhsuk-summary-list</code> (nhsuk-frontend)</div></div>
+    </div>
+
+    <h2>Example</h2>
+    <div class="ds-example">
+      <dl style="margin:0;max-width:640px;font-size:1rem">
+        <div style="display:grid;grid-template-columns:1fr 2fr auto;gap:16px;padding:10px 0;border-bottom:1px solid #d8dde0">
+          <dt style="font-weight:700">Full name</dt><dd style="margin:0">J Smith</dd>
+          <dd style="margin:0"><a href="#" style="color:#005eb8" onclick="return false">Change</a></dd>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 2fr auto;gap:16px;padding:10px 0;border-bottom:1px solid #d8dde0">
+          <dt style="font-weight:700">Desired timeline</dt><dd style="margin:0">Within 3 months</dd>
+          <dd style="margin:0"><a href="#" style="color:#005eb8" onclick="return false">Change</a></dd>
+        </div>
+      </dl>
+    </div>
+<pre class="ds-code"><code>&lt;dl class="nhsuk-summary-list"&gt;
+  &lt;div class="nhsuk-summary-list__row"&gt;
+    &lt;dt class="nhsuk-summary-list__key"&gt;Full name&lt;/dt&gt;
+    &lt;dd class="nhsuk-summary-list__value"&gt;J Smith&lt;/dd&gt;
+    &lt;dd class="nhsuk-summary-list__actions"&gt;
+      &lt;button type="button" class="hs-link-button"&gt;
+        Change&lt;span class="nhsuk-u-visually-hidden"&gt; your details&lt;/span&gt;
+      &lt;/button&gt;
+    &lt;/dd&gt;
+  &lt;/div&gt;
+&lt;/dl&gt;</code></pre>
+
+    <h2>Behaviour &amp; accessibility</h2>
+    <ul>
+      <li>Change actions carry a visually hidden suffix so screen reader users know what they change.</li>
+      <li>Rows without an action use <code>nhsuk-summary-list__row--no-actions</code> (e.g. Product).</li>
+      <li>Empty optional answers read "Not provided" rather than being blank.</li>
+      <li>In-page journeys render Change as a <code>&lt;button class="hs-link-button"&gt;</code> (NHS link styling on a button element).</li>
+    </ul>
+
+    <div class="ds-note ds-note--source">Source: nhsuk-frontend summary list, compiled into <code>app/styles/nhsuk-theme.generated.css</code>. First used by the Express interest journey.</div>
+  </div>
+  <script src="/DS/assets/ds.js"></script>
+</body>
+</html>

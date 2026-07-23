@@ -58,6 +58,10 @@
         { key: 'tabs', label: 'Tabs', href: '/DS/components/tabs.html' },
         { key: 'navigation', label: 'Navigation', href: '/DS/components/navigation.html' },
         { key: 'forms', label: 'Forms & inputs', href: '/DS/components/forms.html' },
+        { key: 'back-link', label: 'Back link', href: '/DS/components/back-link.html' },
+        { key: 'error-summary', label: 'Error summary', href: '/DS/components/error-summary.html' },
+        { key: 'summary-list', label: 'Summary list', href: '/DS/components/summary-list.html' },
+        { key: 'panel', label: 'Confirmation panel', href: '/DS/components/panel.html' },
         { key: 'tables', label: 'Tables', href: '/DS/components/tables.html' },
         { key: 'toggles', label: 'Toggles & segmented', href: '/DS/components/toggles.html' },
         { key: 'modals', label: 'Modals & dialogs', href: '/DS/components/modals.html' },
@@ -70,6 +74,7 @@
         { key: 'product-detail', label: 'Product detail (PDP)', href: '/DS/patterns/product-detail.html' },
         { key: 'discovery', label: 'Discovery & catalogue', href: '/DS/patterns/discovery.html' },
         { key: 'compare', label: 'Comparison tool', href: '/DS/patterns/compare.html' },
+        { key: 'multi-step-journey', label: 'Multi-step journey', href: '/DS/patterns/multi-step-journey.html' },
         { key: 'dashboard', label: 'Dashboard', href: '/DS/patterns/dashboard.html' },
         { key: 'consent', label: 'Cookie consent', href: '/DS/patterns/consent.html' },
         { key: 'ai-advisor', label: 'AI advisor', href: '/DS/patterns/ai-advisor.html' }

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Error summary — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="error-summary" data-ds-provenance="NHS">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Components <span class="ds-status ds-status--pending">Pending review</span></p>
+      <h1 class="ds-page-title">Error summary</h1>
+      <p class="ds-lede">
+        The NHS <code>nhsuk-error-summary</code>. Shown at the top of a form page when validation fails,
+        listing each error as a link to the field. Used together with per-field
+        <code>nhsuk-error-message</code> (already part of <code>FormField</code>).
+      </p>
+    </div>
+
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Component</div><div class="ds-meta__v"><code>components/eoi/ExpressInterestJourney.tsx</code> (<code>ErrorSummary</code>)</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">CSS</div><div class="ds-meta__v"><code>nhsuk-error-summary</code> (nhsuk-frontend)</div></div>
+    </div>
+
+    <h2>Example</h2>
+    <div class="ds-example">
+      <div style="border:4px solid #d5281b;padding:16px 20px;max-width:560px">
+        <h2 style="color:#d5281b;font-size:1.25rem;font-weight:700;margin:0 0 8px">There is a problem</h2>
+        <ul style="margin:0;padding-left:20px">
+          <li><a href="#" style="color:#d5281b;font-weight:700" onclick="return false">Enter your full name</a></li>
+          <li><a href="#" style="color:#d5281b;font-weight:700" onclick="return false">Enter your NHS work email address</a></li>
+        </ul>
+      </div>
+    </div>
+<pre class="ds-code"><code>&lt;div class="nhsuk-error-summary" role="alert" aria-labelledby="error-summary-title" tabindex="-1"&gt;
+  &lt;h2 class="nhsuk-error-summary__title" id="error-summary-title"&gt;There is a problem&lt;/h2&gt;
+  &lt;div class="nhsuk-error-summary__body"&gt;
+    &lt;ul class="nhsuk-list nhsuk-error-summary__list"&gt;
+      &lt;li&gt;&lt;a href="#eoi-name"&gt;Enter your full name&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+    <h2>Behaviour &amp; accessibility</h2>
+    <ul>
+      <li><code>role="alert"</code> and programmatic focus (<code>tabindex="-1"</code>) when errors appear.</li>
+      <li>Each item links to the offending field by <code>id</code>.</li>
+      <li>Error message content follows the NHS content guide — say what happened and how to fix it, no full stops.</li>
+      <li>Pair with <code>nhsuk-form-group--error</code> and <code>nhsuk-error-message</code> on the field itself.</li>
+    </ul>
+
+    <div class="ds-note ds-note--source">Source: nhsuk-frontend error summary, compiled into <code>app/styles/nhsuk-theme.generated.css</code>. First used by the Express interest journey.</div>
+  </div>
+  <script src="/DS/assets/ds.js"></script>
+</body>
+</html>
