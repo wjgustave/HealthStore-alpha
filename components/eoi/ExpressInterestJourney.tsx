@@ -749,11 +749,6 @@ export default function ExpressInterestJourney({
               offer best practice and guidance for making the most of a commissioned DTx.
             </p>
             <p style={{ fontSize: 'var(--text-body)' }}>
-              <Link href="/resources" className="nhsuk-link nhsuk-link--no-visited-state">
-                Resource library
-              </Link>
-            </p>
-            <p style={{ fontSize: 'var(--text-body)' }}>
               <Link href={`/apps/${appSlug}`} className="nhsuk-link nhsuk-link--no-visited-state">
                 Return to {appName}
               </Link>
