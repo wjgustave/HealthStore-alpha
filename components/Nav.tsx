@@ -150,9 +150,9 @@ export default function Nav({
     },
     {
       id: 'catalogue',
-      href: '/product-catalogue',
+      href: '/catalogue',
       label: 'Product catalogue',
-      active: path === '/product-catalogue' || path.startsWith('/product-catalogue/') || path === '/apps' || path.startsWith('/apps/'),
+      active: path === '/catalogue' || path.startsWith('/catalogue/') || path.startsWith('/product-catalogue') || path === '/apps' || path.startsWith('/apps/'),
     },
     {
       id: 'compare',
@@ -172,9 +172,9 @@ export default function Nav({
     },
     {
       id: 'funding',
-      href: '/funding-index',
+      href: '/funding',
       label: 'Funding index',
-      active: path === '/funding-index' || path === '/funding',
+      active: path === '/funding' || path.startsWith('/funding-index'),
     },
     {
       id: 'resources',

@@ -3,7 +3,7 @@
     "headline": "Enabling the self-management of long-term health conditions",
     "subheadline": "The NHS HealthStore is a digital app that helps commissioners find NICE-approved apps they can recommend to their patients. It provides neutral, evidence-based intelligence on Digital Therapeutics (DTx), enabling commissioners to compare apps, decide on the best app for their patient, and commission with confidence.",
     "cta_label": "Browse all apps",
-    "cta_path": "/product-catalogue"
+    "cta_path": "/catalogue"
   },
   "value_props": [
     { "icon": "search", "title": "Faster down-selection", "description": "Filter by condition, NICE status, DTAC, supervision model and local effort — without trawling supplier websites." },

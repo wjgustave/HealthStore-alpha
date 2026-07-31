@@ -29,7 +29,7 @@ export default function LoginPage() {
 
       if (res.ok) {
         const data = await res.json()
-        const next = typeof data.redirect === 'string' ? data.redirect : '/product-catalogue'
+        const next = typeof data.redirect === 'string' ? data.redirect : '/catalogue'
         router.push(next)
         router.refresh()
       } else {

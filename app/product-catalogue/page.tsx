@@ -1,13 +1,7 @@
-import { redirect } from 'next/navigation'
-import { getAllApps, getConditionAreas } from '@/lib/data'
-import AppsDiscoveryClient from '../apps/AppsDiscoveryClient'
+import { permanentRedirect } from 'next/navigation'
 
-export const metadata = {
-  title: 'Product catalogue — NHS HealthStore',
-  description: 'Browse clinically assured digital therapeutics in the NHS HealthStore catalogue.',
-}
-
-export default async function ProductCataloguePage({
+/** Legacy `/product-catalogue` — redirects to `/catalogue`. */
+export default async function ProductCatalogueLegacyRedirect({
   searchParams,
 }: {
   searchParams: Promise<{ condition?: string; q?: string }>
@@ -17,10 +11,7 @@ export default async function ProductCataloguePage({
     const p = new URLSearchParams()
     if (sp.condition) p.set('condition', sp.condition)
     if (sp.q) p.set('q', sp.q)
-    redirect(`/product-catalogue/digital-therapeutics?${p.toString()}`)
+    permanentRedirect(`/catalogue/digital-therapeutics?${p.toString()}`)
   }
-
-  const conditionAreas = getConditionAreas()
-  const apps = getAllApps()
-  return <AppsDiscoveryClient conditionAreas={conditionAreas} apps={apps} totalAppCount={apps.length} />
+  permanentRedirect('/catalogue')
 }

@@ -14,5 +14,5 @@ export default async function ProductsConditionCatalogueLegacyRedirect({
     else p.set(key, val)
   }
   const s = p.toString()
-  permanentRedirect(s ? `/product-catalogue/digital-therapeutics?${s}` : '/product-catalogue/digital-therapeutics')
+  permanentRedirect(s ? `/catalogue/digital-therapeutics?${s}` : '/catalogue/digital-therapeutics')
 }

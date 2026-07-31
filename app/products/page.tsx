@@ -11,7 +11,7 @@ export default async function ProductsPageLegacyRedirect({
     const p = new URLSearchParams()
     if (sp.condition) p.set('condition', sp.condition)
     if (sp.q) p.set('q', sp.q)
-    permanentRedirect(`/product-catalogue/digital-therapeutics?${p.toString()}`)
+    permanentRedirect(`/catalogue/digital-therapeutics?${p.toString()}`)
   }
-  permanentRedirect('/product-catalogue')
+  permanentRedirect('/catalogue')
 }

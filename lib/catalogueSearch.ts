@@ -51,7 +51,7 @@ export function filterAppsBySearchQuery(apps: App[], q: string): App[] {
   return apps.filter((a: App) => ids.has(a.id))
 }
 
-/** Valid condition query for /product-catalogue/digital-therapeutics — only visible catalogue conditions or all. */
+/** Valid condition query for /catalogue/digital-therapeutics — only visible catalogue conditions or all. */
 export function parseBrowseConditionParam(param: string | null | undefined): string {
   if (!param || param === 'all') return 'all'
   // Pulmonary rehab is combined into the COPD pathway card / filter.

@@ -77,7 +77,7 @@ export default function AppsDiscoveryClient({
           {availableConditions.map(c => (
             <Link
               key={c.id}
-              href={`/product-catalogue/digital-therapeutics?condition=${encodeURIComponent(c.id)}`}
+              href={`/catalogue/digital-therapeutics?condition=${encodeURIComponent(c.id)}`}
               className="app-card group block p-6 text-left no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
               style={{ color: 'inherit', outlineColor: 'var(--nhs-blue)' }}
             >
@@ -93,7 +93,7 @@ export default function AppsDiscoveryClient({
         </div>
         <p className="mt-8">
           <Link
-            href="/product-catalogue/digital-therapeutics"
+            href="/catalogue/digital-therapeutics"
             className="hs-text-body hs-font-bold underline underline-offset-2"
             style={{ color: 'var(--nhs-blue)' }}
           >

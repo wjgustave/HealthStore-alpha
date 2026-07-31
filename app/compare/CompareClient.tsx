@@ -62,7 +62,7 @@ export default function CompareClient({ allApps }: Props) {
             No products selected for the comparison tool. Browse the catalogue and add products to compare them side by side.
           </p>
           <Link
-            href="/product-catalogue"
+            href="/catalogue"
             className="nhsuk-link nhsuk-link--no-visited-state hs-text-body hs-font-bold"
           >
             Go to product catalogue

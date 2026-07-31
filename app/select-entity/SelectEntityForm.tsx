@@ -27,7 +27,7 @@ export default function SelectEntityForm() {
         body: JSON.stringify({ entityId }),
       })
       if (res.ok) {
-        router.push('/product-catalogue')
+        router.push('/catalogue')
         router.refresh()
       } else {
         const data = await res.json()

@@ -357,8 +357,8 @@ export default async function AppPage({
         <PdpShareRegion shareKey="breadcrumb" label="Browse trail" excludeFromShareUi className="mb-4">
           <PageBreadcrumb
             items={[
-              { label: 'Product catalogue', href: '/product-catalogue' },
-              { label: 'Digital therapeutics', href: '/product-catalogue/digital-therapeutics' },
+              { label: 'Product catalogue', href: '/catalogue' },
+              { label: 'Digital therapeutics', href: '/catalogue/digital-therapeutics' },
               { label: app.app_name },
             ]}
           />

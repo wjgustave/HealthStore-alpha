@@ -95,7 +95,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
   const replaceBrowseUrl = useCallback(
     (nextCondition: string) => {
       const suffix = buildBrowseSearchParams(nextCondition, '')
-      router.replace(`/product-catalogue/digital-therapeutics${suffix}`, { scroll: false })
+      router.replace(`/catalogue/digital-therapeutics${suffix}`, { scroll: false })
     },
     [router],
   )
@@ -137,7 +137,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
     setDraftSupervision([])
     setCondition('all')
     setDraftCondition('all')
-    router.replace('/product-catalogue/digital-therapeutics', { scroll: false })
+    router.replace('/catalogue/digital-therapeutics', { scroll: false })
   }
 
   const activeFilters: { label: string; clear: () => void }[] = []
@@ -180,7 +180,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
     <div className="hs-page">
       <PageBreadcrumb
         items={[
-          { label: 'Product catalogue', href: '/product-catalogue' },
+          { label: 'Product catalogue', href: '/catalogue' },
           { label: 'Digital therapeutics' },
         ]}
       />
@@ -393,7 +393,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
             <Link href="/compare">Comparison tool</Link>
           </li>
           <li>
-            <Link href="/funding-index">Funding index</Link>
+            <Link href="/funding">Funding index</Link>
           </li>
           <li>
             <Link href="/resources/guidance">Guidance</Link>
