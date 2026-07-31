@@ -30,6 +30,7 @@ export default function AppShell({
 }) {
   const pathname = usePathname()
   const isLoginPage = pathname === '/login'
+  const isGatePage = pathname === '/gate'
   const [showClearData, setShowClearData] = useState(false)
   const [aiPanelOpen, setAiPanelOpen] = useState(false)
   /** Open-access treats everyone as able to use catalogue tools; hide auth/org chrome. */
@@ -39,7 +40,7 @@ export default function AppShell({
     !openAccess && isLoggedIn && commissioningContextLabel ? commissioningContextLabel : ''
 
   /** Auth routes render without global nav/footer but still need landmarks + skip link (WCAG 2.4.1, 1.3.1). */
-  if (isLoginPage && !openAccess) {
+  if (isGatePage || (isLoginPage && !openAccess)) {
     return (
       <>
         <a href="#main-content" className="nhsuk-skip-link">

@@ -2,9 +2,24 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getIronSession } from 'iron-session'
 import type { SessionData } from '@/lib/session'
 import { AUTH_DISABLED } from '@/lib/authMode'
+import { GATE_COOKIE, GATE_TOKEN } from '@/lib/siteGate'
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
+
+  // Site-wide password gate — runs before everything (including open-access mode).
+  const gateUnlocked = req.cookies.get(GATE_COOKIE)?.value === GATE_TOKEN
+  if (pathname === '/gate' || pathname === '/api/gate') {
+    if (pathname === '/gate' && gateUnlocked) {
+      return NextResponse.redirect(new URL('/', req.url))
+    }
+    return NextResponse.next()
+  }
+  if (!gateUnlocked) {
+    const gateUrl = new URL('/gate', req.url)
+    if (pathname !== '/') gateUrl.searchParams.set('next', pathname + req.nextUrl.search)
+    return NextResponse.redirect(gateUrl)
+  }
 
   // Open-access mode: skip auth gating; send auth/org routes back to the home page.
   if (AUTH_DISABLED) {
@@ -31,7 +46,7 @@ export async function middleware(req: NextRequest) {
       if (session.requiresCommissioningEntitySelection) {
         return NextResponse.redirect(new URL('/select-entity', req.url))
       }
-      return NextResponse.redirect(new URL('/product-catalogue', req.url))
+      return NextResponse.redirect(new URL('/catalogue', req.url))
     }
     return res
   }
@@ -47,11 +62,11 @@ export async function middleware(req: NextRequest) {
   }
 
   if (pathname === '/dashboard') {
-    return NextResponse.redirect(new URL('/product-catalogue', req.url))
+    return NextResponse.redirect(new URL('/catalogue', req.url))
   }
 
   if (pathname === '/select-entity' && !session.requiresCommissioningEntitySelection) {
-    return NextResponse.redirect(new URL('/product-catalogue', req.url))
+    return NextResponse.redirect(new URL('/catalogue', req.url))
   }
 
   if (session.requiresCommissioningEntitySelection && pathname !== '/select-entity') {
