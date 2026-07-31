@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NHS HealthStore — Site Information Architecture (Live Alpha)</title>
+<style>
+  /* ============================================================
+     NHS HealthStore — IA documentation
+     Print target: A4 landscape. Each <section class="sheet"> = one page.
+     Open in a browser and use the "Enable editing" button to make
+     quick text edits, then print to PDF (File → Print → Save as PDF).
+     ============================================================ */
+  :root {
+    --nhs-blue: #005eb8;
+    --nhs-dark-blue: #003087;
+    --nhs-bright-blue: #0072ce;
+    --nhs-aqua: #00a499;
+    --nhs-yellow: #ffeb3b;
+    --ink: #212b32;
+    --grey-1: #4c6272;
+    --grey-2: #aeb7bd;
+    --grey-3: #d8dde0;
+    --grey-4: #f0f4f5;
+    --white: #ffffff;
+    --warm-yellow: #fff9c4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #e9edf0; }
+  body {
+    font-family: "Frutiger", "Frutiger LT W01 55 Roman", "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+
+  /* ---- Sheet = one A4 landscape page ---- */
+  .sheet {
+    width: 297mm;
+    height: 209mm;
+    background: var(--white);
+    margin: 8mm auto;
+    padding: 14mm 16mm 12mm 16mm;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,.15);
+    display: flex;
+    flex-direction: column;
+  }
+  @page { size: A4 landscape; margin: 0; }
+  @media print {
+    html, body { background: var(--white); }
+    .sheet {
+      margin: 0; box-shadow: none;
+      page-break-after: always;
+      width: 297mm; height: 209mm;
+    }
+    .sheet:last-of-type { page-break-after: auto; }
+    .no-print { display: none !important; }
+  }
+
+  /* ---- Running header / footer on each sheet ---- */
+  .running-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 3px solid var(--nhs-blue);
+    padding-bottom: 3mm; margin-bottom: 6mm;
+    font-size: 8pt; color: var(--grey-1);
+    letter-spacing: .04em; text-transform: uppercase;
+  }
+  .running-head .doc { font-weight: 700; color: var(--nhs-blue); }
+  .running-foot {
+    margin-top: auto; padding-top: 3mm;
+    border-top: 1px solid var(--grey-3);
+    display: flex; justify-content: space-between;
+    font-size: 7.5pt; color: var(--grey-1);
+  }
+
+  h1 { font-size: 26pt; line-height: 1.15; color: var(--nhs-blue); font-weight: 700; }
+  h2 { font-size: 17pt; color: var(--nhs-blue); margin-bottom: 4mm; font-weight: 700; }
+  h3 { font-size: 11.5pt; color: var(--ink); margin-bottom: 2mm; }
+  p.lede { font-size: 12pt; color: var(--grey-1); max-width: 170mm; }
+  .kicker {
+    font-size: 9pt; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--nhs-bright-blue); font-weight: 700; margin-bottom: 2mm;
+  }
+
+  /* ---- Cover ---- */
+  .cover { background: linear-gradient(135deg, var(--nhs-dark-blue) 0%, var(--nhs-blue) 55%, var(--nhs-bright-blue) 100%); color: var(--white); }
+  .cover .running-head { border-color: rgba(255,255,255,.4); color: rgba(255,255,255,.8); }
+  .cover .running-head .doc { color: var(--white); }
+  .cover h1 { color: var(--white); font-size: 34pt; max-width: 200mm; }
+  .cover .subtitle { font-size: 14pt; margin-top: 5mm; color: rgba(255,255,255,.9); max-width: 180mm; }
+  .cover .meta-block {
+    margin-top: 14mm; display: grid; grid-template-columns: repeat(4, auto);
+    gap: 12mm; font-size: 9.5pt;
+  }
+  .cover .meta-block div span { display: block; }
+  .cover .meta-block .label { text-transform: uppercase; letter-spacing: .08em; font-size: 7.5pt; color: rgba(255,255,255,.7); margin-bottom: 1mm; }
+  .cover .meta-block .value { font-weight: 700; font-size: 11pt; }
+  .cover .running-foot { border-color: rgba(255,255,255,.35); color: rgba(255,255,255,.75); }
+  .nhs-lozenge {
+    display: inline-block; background: var(--white); color: var(--nhs-blue);
+    font-weight: 800; font-size: 16pt; padding: 1.5mm 4mm; border-radius: 2mm;
+    margin-bottom: 8mm; letter-spacing: .02em;
+  }
+  .scope-banner {
+    margin-top: 10mm; background: rgba(255,255,255,.14); border-left: 4px solid var(--nhs-yellow);
+    padding: 4mm 6mm; font-size: 10.5pt; max-width: 190mm; border-radius: 0 2mm 2mm 0;
+  }
+
+  /* ---- Contents ---- */
+  .toc { list-style: none; margin-top: 4mm; column-count: 1; max-width: 190mm; }
+  .toc li {
+    display: flex; align-items: baseline; gap: 4mm;
+    padding: 2.6mm 0; border-bottom: 1px dotted var(--grey-2);
+    font-size: 11.5pt;
+  }
+  .toc .num {
+    flex: 0 0 10mm; font-weight: 800; color: var(--nhs-blue); font-size: 12pt;
+  }
+  .toc .title { font-weight: 600; }
+  .toc .desc { color: var(--grey-1); font-size: 9pt; margin-left: auto; text-align: right; max-width: 90mm; }
+  .toc .pg { flex: 0 0 12mm; text-align: right; font-weight: 700; color: var(--grey-1); }
+
+  /* ---- Generic layout helpers ---- */
+  .cols { display: flex; gap: 8mm; flex: 1; min-height: 0; }
+  .col { flex: 1; min-width: 0; }
+  .note-card {
+    background: var(--grey-4); border-left: 4px solid var(--nhs-blue);
+    padding: 3.5mm 5mm; border-radius: 0 2mm 2mm 0; margin-bottom: 4mm; font-size: 9.5pt;
+  }
+  .note-card.warn { border-left-color: #ffb81c; background: #fff8e8; }
+  .note-card h3 { font-size: 9.5pt; text-transform: uppercase; letter-spacing: .06em; color: var(--grey-1); }
+  .tag {
+    display: inline-block; font-size: 7pt; font-weight: 700; letter-spacing: .05em;
+    padding: .6mm 2mm; border-radius: 999px; text-transform: uppercase; vertical-align: middle;
+  }
+  .tag.public { background: #e8f4ea; color: #00703c; border: 1px solid #00703c; }
+  .tag.util { background: var(--grey-4); color: var(--grey-1); border: 1px solid var(--grey-2); }
+  .tag.cta { background: #fff0f0; color: #d5281b; border: 1px solid #d5281b; }
+
+  /* ---- Sitemap tree (left-to-right) ---- */
+  .htree { flex: 1; display: flex; align-items: center; justify-content: flex-start; margin-top: 2mm; min-height: 0; }
+  .htree ul { list-style: none; display: flex; flex-direction: column; justify-content: center; }
+  .htree li {
+    display: flex; align-items: center; position: relative;
+    padding: 0.8mm 0 0.8mm 8mm;
+  }
+  /* stub from vertical spine to this node */
+  .htree li::before {
+    content: ''; position: absolute; left: 0; top: 50%;
+    width: 8mm; border-top: 1.5px solid var(--grey-2);
+  }
+  /* vertical spine segment */
+  .htree li::after {
+    content: ''; position: absolute; left: 0; top: 0; height: 100%;
+    border-left: 1.5px solid var(--grey-2);
+  }
+  .htree li:first-child::after { top: 50%; height: 50%; }
+  .htree li:last-child::after { height: 50%; }
+  .htree li:only-child::after { display: none; }
+  .htree > ul > li { padding-left: 0; }
+  .htree > ul > li::before, .htree > ul > li::after { display: none; }
+  /* link from parent node out to its children's spine */
+  .htree li > ul { margin-left: 8mm; position: relative; }
+  .htree li > ul::before {
+    content: ''; position: absolute; left: -8mm; top: 50%;
+    width: 8mm; border-top: 1.5px solid var(--grey-2);
+  }
+  .node {
+    border: 1.5px solid var(--nhs-blue); border-radius: 2mm; text-align: left;
+    background: var(--white); padding: 2mm 3mm; width: 38mm;
+    font-size: 8.5pt; line-height: 1.3; position: relative; z-index: 1;
+  }
+  .node .nm { font-weight: 700; color: var(--nhs-blue); display: block; font-size: 9pt; }
+  .node .url { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 6.5pt; color: var(--grey-1); display: block; margin-top: .8mm; overflow-wrap: break-word; }
+  .node.root { background: var(--nhs-blue); }
+  .node.root .nm, .node.root .url { color: var(--white); }
+  .node.hub { background: #e8f1fa; }
+  .node.detail { border-style: dashed; }
+  .node.utility { border-color: var(--grey-2); }
+  .node.utility .nm { color: var(--grey-1); }
+
+  /* ---- Nav wireframe ---- */
+  .wire {
+    border: 1.5px solid var(--grey-2); border-radius: 2mm; overflow: hidden;
+    font-size: 8.5pt; background: var(--white);
+  }
+  .wire .bar { background: var(--nhs-blue); color: var(--white); display: flex; align-items: center; gap: 4mm; padding: 2.5mm 4mm; }
+  .wire .bar .logo { font-weight: 800; background: var(--white); color: var(--nhs-blue); padding: .8mm 2mm; border-radius: 1mm; font-size: 8pt; }
+  .wire .bar .item { border-bottom: 2px solid transparent; padding-bottom: .5mm; }
+  .wire .phase { background: var(--grey-4); padding: 1.6mm 4mm; font-size: 7.5pt; color: var(--grey-1); border-bottom: 1px solid var(--grey-3); }
+  .wire .phase b { background: var(--nhs-blue); color: var(--white); padding: .3mm 1.6mm; border-radius: 999px; font-size: 6.5pt; margin-right: 1.5mm; }
+  .wire .body { padding: 5mm 4mm; color: var(--grey-2); font-size: 7.5pt; text-align: center; background: repeating-linear-gradient(-45deg, var(--white), var(--white) 4px, var(--grey-4) 4px, var(--grey-4) 8px); }
+  .wire .footer { background: var(--grey-4); border-top: 1px solid var(--grey-3); padding: 2mm 4mm; font-size: 7.5pt; color: var(--grey-1); }
+  .wire .banner { background: var(--warm-yellow); border-top: 2px solid #ffb81c; padding: 2mm 4mm; font-size: 7.5pt; }
+
+  /* ---- Tables ---- */
+  table.inv { width: 100%; border-collapse: collapse; font-size: 8pt; }
+  table.inv th {
+    background: var(--nhs-blue); color: var(--white); text-align: left;
+    padding: 1.8mm 2.5mm; font-size: 7.5pt; text-transform: uppercase; letter-spacing: .05em;
+  }
+  table.inv td { padding: 1.7mm 2.5mm; border-bottom: 1px solid var(--grey-3); vertical-align: top; }
+  table.inv tr:nth-child(even) td { background: var(--grey-4); }
+  table.inv code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 7pt; color: var(--nhs-dark-blue); }
+  table.inv.compact { font-size: 7.5pt; }
+  table.inv.compact td { padding: 1.3mm 2.2mm; }
+  table.inv.compact th { padding: 1.5mm 2.2mm; font-size: 7pt; }
+
+  /* ---- Flow diagrams ---- */
+  .flow { display: flex; align-items: stretch; gap: 0; margin: 3mm 0 5mm 0; }
+  .flow .step {
+    flex: 1; border: 1.5px solid var(--nhs-blue); border-radius: 2mm;
+    padding: 2.5mm 3mm; background: #e8f1fa; font-size: 8pt; min-width: 0;
+    display: flex; flex-direction: column;
+  }
+  .flow .step .st-title { font-weight: 700; color: var(--nhs-blue); font-size: 8.5pt; }
+  .flow .step .st-url { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 6.3pt; color: var(--grey-1); margin: .8mm 0; word-break: break-all; }
+  .flow .step .st-desc { font-size: 7.3pt; color: var(--ink); }
+  .flow .step.start { background: var(--nhs-blue); }
+  .flow .step.start .st-title, .flow .step.start .st-desc, .flow .step.start .st-url { color: var(--white); }
+  .flow .step.end { background: #e8f4ea; border-color: #00703c; }
+  .flow .step.end .st-title { color: #00703c; }
+  .flow .arrow {
+    flex: 0 0 8mm; display: flex; align-items: center; justify-content: center;
+    color: var(--nhs-blue); font-size: 12pt; font-weight: 700;
+  }
+  .flow .arrow span { line-height: 1; }
+  .flow-label { font-size: 7.5pt; color: var(--grey-1); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin-bottom: 1mm; }
+
+  /* ---- PDP anatomy ---- */
+  .anatomy { display: flex; gap: 8mm; flex: 1; min-height: 0; }
+  .anatomy .page-wire { flex: 0 0 92mm; border: 1.5px solid var(--grey-2); border-radius: 2mm; overflow: hidden; font-size: 7pt; display: flex; flex-direction: column; }
+  .anatomy .zone { padding: 2mm 3mm; border-bottom: 1px dashed var(--grey-3); position: relative; }
+  .anatomy .zone .z-label { position: absolute; right: 2mm; top: 1.2mm; background: var(--nhs-blue); color: var(--white); width: 4.5mm; height: 4.5mm; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 7pt; }
+  .anatomy .zone b { color: var(--nhs-blue); }
+  .anatomy .legend { flex: 1; }
+  .anatomy .legend ol { list-style: none; }
+  .anatomy .legend li { display: flex; gap: 3mm; margin-bottom: 2.6mm; font-size: 8.5pt; }
+  .anatomy .legend .dot { flex: 0 0 5.5mm; height: 5.5mm; border-radius: 50%; background: var(--nhs-blue); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 8pt; }
+
+  /* ---- Edit mode button (screen only) ---- */
+  .edit-toggle {
+    position: fixed; top: 10px; right: 14px; z-index: 999;
+    background: var(--nhs-blue); color: var(--white); border: none;
+    padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 700;
+    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    font-family: inherit;
+  }
+  .edit-toggle.on { background: #d5281b; }
+  body.editing .sheet { outline: 2px dashed var(--nhs-bright-blue); }
+
+  ul.plain { list-style: none; }
+  ul.plain li { padding-left: 5mm; position: relative; margin-bottom: 1.8mm; font-size: 9pt; }
+  ul.plain li::before { content: '—'; position: absolute; left: 0; color: var(--nhs-blue); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<button class="edit-toggle no-print" onclick="toggleEdit(this)">✎ Enable editing</button>
+
+<!-- ================= PAGE 1 · COVER ================= -->
+<section class="sheet cover">
+  <div class="running-head">
+    <span class="doc">Design documentation</span>
+    <span>UX &amp; Service Design</span>
+  </div>
+  <div style="margin-top:14mm;">
+    <span class="nhs-lozenge">NHS</span>
+    <div class="kicker" style="color:rgba(255,255,255,.85);">HealthStore · Alpha</div>
+    <h1>Site Information Architecture</h1>
+    <p class="subtitle">Sitemap, navigation model, page inventory and primary user flows for the NHS HealthStore alpha — documenting the service as it stands today.</p>
+    <div class="scope-banner">
+      <strong>Scope:</strong> This document describes <strong>live, user-visible functionality only</strong>, as observed in the current open-access alpha build. Features that are hidden, disabled or feature-flagged off are deliberately excluded.
+    </div>
+    <div class="meta-block">
+      <div><span class="label">Version</span><span class="value">1.0</span></div>
+      <div><span class="label">Date</span><span class="value">28 July 2026</span></div>
+      <div><span class="label">Status</span><span class="value">As-is snapshot</span></div>
+      <div><span class="label">Owner</span><span class="value">UX / Service Design</span></div>
+    </div>
+  </div>
+  <div class="running-foot">
+    <span>NHS HealthStore — Site Information Architecture v1.0</span>
+    <span>Page 1 of 9</span>
+  </div>
+</section>
+
+<!-- ================= PAGE 2 · CONTENTS ================= -->
+<section class="sheet">
+  <div class="running-head">
+    <span class="doc">NHS HealthStore · Site Information Architecture</span>
+    <span>Contents</span>
+  </div>
+  <h2>Contents</h2>
+  <ul class="toc">
+    <li><span class="num">01</span><span class="title">Scope &amp; approach</span><span class="desc">What this document covers, and what has been excluded</span><span class="pg">3</span></li>
+    <li><span class="num">02</span><span class="title">Sitemap</span><span class="desc">Full structural map of every live, reachable page</span><span class="pg">4</span></li>
+    <li><span class="num">03</span><span class="title">Global navigation model</span><span class="desc">Header, phase banner, footer and cookie consent</span><span class="pg">5</span></li>
+    <li><span class="num">04</span><span class="title">Page inventory</span><span class="desc">Every visible page: purpose, key content and primary actions</span><span class="pg">6</span></li>
+    <li><span class="num">05</span><span class="title">Primary user flow</span><span class="desc">Discover → assess → express interest (the core service journey)</span><span class="pg">7</span></li>
+    <li><span class="num">06</span><span class="title">Supporting flows</span><span class="desc">Compare products · explore funding · use the resource library</span><span class="pg">8</span></li>
+    <li><span class="num">07</span><span class="title">Product detail page anatomy</span><span class="desc">Section-by-section breakdown of the service's key template</span><span class="pg">9</span></li>
+  </ul>
+  <div class="note-card" style="margin-top:8mm; max-width:190mm;">
+    <h3>How to use this document</h3>
+    <p style="font-size:9pt;">Use pages 4–5 for structural conversations (what exists and how it is organised), page 6 for content and CTA audits, and pages 7–9 when discussing the commissioning journey with stakeholders. The HTML source of this document is editable — open it in a browser, click “Enable editing”, amend, and re-print to PDF.</p>
+  </div>
+  <div class="running-foot">
+    <span>NHS HealthStore — Site Information Architecture v1.0</span>
+    <span>Page 2 of 9</span>
+  </div>
+</section>
+
+<!-- ================= PAGE 3 · SCOPE ================= -->
+<section class="sheet">
+  <div class="running-head">
+    <span class="doc">NHS HealthStore · Site Information Architecture</span>
+    <span>01 · Scope &amp; approach</span>
+  </div>
+  <h2>01 · Scope &amp; approach</h2>
+  <div class="cols">
+    <div class="col">
+      <h3>What this document is</h3>
+      <p style="font-size:9.5pt; margin-bottom:4mm;">An as-is record of the NHS HealthStore alpha's information architecture, captured on 28 July 2026. It documents every page a user can actually reach through the live navigation and on-page links, the global navigation furniture, and the journeys those pages support.</p>
+      <h3>The service in one paragraph</h3>
+      <p style="font-size:9.5pt; margin-bottom:4mm;">HealthStore is a public, open-access storefront for NHS commissioners. It lets them browse an assured catalogue of digital therapeutics by care pathway, review detailed product profiles (evidence, commercial and implementation information), compare up to four products side by side, scan funding opportunities, read supporting guidance and case studies, and express interest in a product via a structured multi-step form. There is no purchase or checkout — “express interest” is the commercial front door.</p>
+      <h3>Method</h3>
+      <ul class="plain">
+        <li>Walked every navigation entry point and followed all on-page links from the live build.</li>
+        <li>Verified each page renders and is reachable without sign-in (the alpha runs in open access — no account is required and no sign-in is offered).</li>
+        <li>Cross-checked against the codebase to confirm nothing reachable was missed.</li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="note-card warn">
+        <h3>Explicitly out of scope</h3>
+        <p style="font-size:9pt;">Functionality that exists in the codebase but is currently <strong>hidden, disabled or unreachable</strong> is not documented here. This includes anything behind feature flags or auth gates, legacy URL redirects, and pages with no inbound links. If any of these are switched on, this document should be re-issued.</p>
+      </div>
+      <div class="note-card">
+        <h3>Conventions used</h3>
+        <p style="font-size:9pt; margin-bottom:2mm;">Throughout the document:</p>
+        <ul class="plain" style="font-size:8.5pt;">
+          <li><span class="tag public">Content</span>&nbsp; primary content page</li>
+          <li><span class="tag cta">Action</span>&nbsp; page containing the journey's key call to action or form</li>
+          <li><span class="tag util">Utility</span>&nbsp; policy / housekeeping page</li>
+          <li><code style="font-size:8pt;">/apps/[slug]</code> — square brackets denote a dynamic URL segment (one page template, many products)</li>
+        </ul>
+      </div>
+      <div class="note-card">
+        <h3>Counts at a glance</h3>
+        <ul class="plain" style="font-size:8.5pt;">
+          <li><strong>15</strong> distinct visible pages (13 static + 2 dynamic templates)</li>
+          <li><strong>5</strong> primary navigation items + logo home link</li>
+          <li><strong>1</strong> conversion journey (express interest)</li>
+          <li><strong>0</strong> pages requiring sign-in</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="running-foot">
+    <span>NHS HealthStore — Site Information Architecture v1.0</span>
+    <span>Page 3 of 9</span>
+  </div>
+</section>
+
+<!-- ================= PAGE 4 · SITEMAP ================= -->
+<section class="sheet">
+  <div class="running-head">
+    <span class="doc">NHS HealthStore · Site Information Architecture</span>
+    <span>02 · Sitemap</span>
+  </div>
+  <h2>02 · Sitemap — all live, reachable pages <span style="font-size:9.5pt; color:var(--grey-1); font-weight:400;">(reads left to right; top-level order mirrors the header navigation)</span></h2>
+  <div class="htree">
+    <ul>
+      <li>
+        <div class="node root"><span class="nm">Home</span><span class="url">/</span></div>
+        <ul>
+          <li>
+            <div class="node"><span class="nm">About / How it helps</span><span class="url">/about</span></div>
+          </li>
+          <li>
+            <div class="node hub"><span class="nm">Product catalogue</span><span class="url">/catalogue</span></div>
+            <ul>
+              <li>
+                <div class="node hub"><span class="nm">Digital therapeutics (filterable list)</span><span class="url">/catalogue/digital-therapeutics</span></div>
+                <ul>
+                  <li>
+                    <div class="node detail"><span class="nm">Product detail page</span><span class="url">/apps/[slug]</span></div>
+                    <ul>
+                      <li>
+                        <div class="node detail"><span class="nm">Express interest (multi-step form)</span><span class="url">/apps/[slug]/express-interest</span></div>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <div class="node"><span class="nm">Comparison tool</span><span class="url">/compare</span></div>
+          </li>
+          <li>
+            <div class="node"><span class="nm">Funding index</span><span class="url">/funding</span></div>
+          </li>
+          <li>
+            <div class="node hub"><span class="nm">Resource library</span><span class="url">/resources</span></div>
+            <ul>
+              <li><div class="node"><span class="nm">Guidance</span><span class="url">/resources/guidance</span></div></li>
+              <li><div class="node"><span class="nm">News</span><span class="url">/resources/news</span></div></li>
+              <li><div class="node"><span class="nm">Campaigns</span><span class="url">/resources/campaigns</span></div></li>
+              <li><div class="node"><span class="nm">Case studies</span><span class="url">/resources/case-studies</span></div></li>
+            </ul>
+          </li>
+          <li>
+            <div class="node utility"><span class="nm">Cookies</span><span class="url">/cookies</span></div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div style="display:flex; gap:6mm; font-size:8pt; color:var(--grey-1); margin-top:3mm;">
+    <span><span style="display:inline-block;width:4mm;height:2.6mm;background:var(--nhs-blue);border-radius:.8mm;vertical-align:middle;"></span> Entry point</span>
+    <span><span style="display:inline-block;width:4mm;height:2.6mm;background:#e8f1fa;border:1px solid var(--nhs-blue);border-radius:.8mm;vertical-align:middle;"></span> Hub (fans out to children)</span>
+    <span><span style="display:inline-block;width:4mm;height:2.6mm;background:var(--white);border:1px dashed var(--nhs-blue);border-radius:.8mm;vertical-align:middle;"></span> Dynamic template (one per product)</span>
+    <span><span style="display:inline-block;width:4mm;height:2.6mm;background:var(--white);border:1px solid var(--grey-2);border-radius:.8mm;vertical-align:middle;"></span> Utility (footer only)</span>
+  </div>
+  <div class="running-foot">
+    <span>NHS HealthStore — Site Information Architecture v1.0</span>
+    <span>Page 4 of 9</span>
+  </div>
+</section>
+
+<!-- ================= PAGE 5 · NAVIGATION MODEL ================= -->
+<section class="sheet">
+  <div class="running-head">
+    <span class="doc">NHS HealthStore · Site Information Architecture</span>
+    <span>03 · Global navigation model</span>
+  </div>
+  <h2>03 · Global navigation model</h2>
+  <div class="cols">
+    <div class="col" style="flex: 1.35;">
+      <div class="wire">
+        <div class="bar">
+          <span class="logo">NHS</span>
+          <span style="font-weight:700;">HealthStore</span>
+          <span style="flex:1;"></span>
+          <span class="item">About</span>
+          <span class="item">Product catalogue</span>
+          <span class="item">Comparison tool <span style="background:var(--white);color:var(--nhs-blue);border-radius:999px;padding:0 1.4mm;font-size:6.5pt;font-weight:800;">2</span></span>
+          <span class="item">Funding index</span>
+          <span class="item">Resource library</span>
+        </div>
+        <div class="phase"><b>ALPHA</b> This is a new service — your feedback will help us improve it.</div>
+        <div class="body">page content</div>
+        <div class="footer">Cookies</div>
+        <div class="banner">🍪 Cookie consent banner — shown until the visitor accepts or rejects analytics cookies. Links to the Cookies page.</div>
+      </div>
+      <p style="font-size:8pt; color:var(--grey-1); margin-top:2.5mm;">Global chrome as rendered on every page. On narrow viewports, overflow navigation items collapse into an NHS-pattern “More” dropdown — the link set is identical; there is no separate mobile menu structure.</p>
+    </div>
+    <div class="col">
+      <h3>Header — 5 items + home</h3>
+      <table class="inv" style="margin-bottom:4mm;">
+        <tr><th>Item</th><th>Destination</th><th>Behaviour</th></tr>
+        <tr><td>NHS logo / HealthStore</td><td><code>/</code></td><td>Always visible</td></tr>
+        <tr><td>About</td><td><code>/about</code></td><td>Always visible</td></tr>
+        <tr><td>Product catalogue</td><td><code>/catalogue</code></td><td>Always visible</td></tr>
+        <tr><td>Comparison tool</td><td><code>/compare</code></td><td>Shows a count badge when products are in the compare basket</td></tr>
+        <tr><td>Funding index</td><td><code>/funding</code></td><td>Always visible</td></tr>
+        <tr><td>Resource library</td><td><code>/resources</code></td><td>Always visible</td></tr>
+      </table>
+      <h3>Persistent furniture</h3>
+      <ul class="plain" style="font-size:8.5pt;">
+        <li><strong>Phase banner (Alpha)</strong> — sits directly beneath the header on every page, signalling service maturity.</li>
+        <li><strong>Footer</strong> — a single link: Cookies. Deliberately minimal for the alpha.</li>
+        <li><strong>Cookie consent banner</strong> — first-visit overlay for analytics consent; consent can be reset from the Cookies page.</li>
+      </ul>
+      <div class="note-card" style="margin-top:4mm;">
+        <h3>Design observation</h3>
+        <p style="font-size:8.5pt;">The whole service is open access: there is no sign-in, no account area, and therefore no logged-in/logged-out navigation states to design for in the current alpha.</p>
+      </div>
+    </div>
+  </div>
+  <div class="running-foot">
+    <span>NHS HealthStore — Site Information Architecture v1.0</span>
+    <span>Page 5 of 9</span>
+  </div>
+</section>
+
+<!-- ================= PAGE 6 · PAGE INVENTORY ================= -->
+<section class="sheet">
+  <div class="running-head">
+    <span class="doc">NHS HealthStore · Site Information Architecture</span>
+    <span>04 · Page inventory</span>
+  </div>
+  <h2>04 · Page inventory</h2>
+  <table class="inv compact">
+    <tr>
+      <th style="width:16%;">Page</th>
+      <th style="width:20%;">URL</th>
+      <th style="width:6%;">Type</th>
+      <th style="width:30%;">Purpose &amp; key content</th>
+      <th style="width:28%;">Primary user actions</th>
+    </tr>
+    <tr>
+      <td><strong>Home</strong></td><td><code>/</code></td><td><span class="tag public">Content</span></td>
+      <td>Landing page: value proposition hero, “how HealthStore works” storytelling, supported pathways, case-study highlights.</td>
+      <td>Find out more → About · pathway chips → filtered catalogue · see all case studies</td>
+    </tr>
+    <tr>
+      <td><strong>About / How it helps</strong></td><td><code>/about</code></td><td><span class="tag public">Content</span></td>
+      <td>Explains the service's value: assurance, accountability, impact modelling and the commercial route. Informational only.</td>
+      <td>Read; return via breadcrumb / global nav</td>
+    </tr>
+    <tr>
+      <td><strong>Product catalogue</strong></td><td><code>/catalogue</code></td><td><span class="tag public">Content</span></td>
+      <td>Catalogue hub: browse digital therapeutics by care pathway (condition cards with product counts) plus a “coming soon” roadmap strip.</td>
+      <td>Pick a condition → filtered list · Browse all products</td>
+    </tr>
+    <tr>
+      <td><strong>Digital therapeutics list</strong></td><td><code>/catalogue/digital-therapeutics</code></td><td><span class="tag public">Content</span></td>
+      <td>Search and filter the assured product list; product cards summarise each offer; related-content links in the sidebar.</td>
+      <td>Filter/search · View product details · Add to compare</td>
+    </tr>
+    <tr>
+      <td><strong>Product detail page</strong></td><td><code>/apps/[slug]</code></td><td><span class="tag cta">Action</span></td>
+      <td>The key template: hero and proposition, commissioning snapshot, then a ten-section narrative spine (problem → pathway change → local impact → funding → assurance → implementation → NHS experience → procurement → resources). See page 9 for full anatomy.</td>
+      <td><strong>Express interest</strong> · Add to compare · follow funding links · on-this-page navigation</td>
+    </tr>
+    <tr>
+      <td><strong>Express interest</strong></td><td><code>/apps/[slug]/express-interest</code></td><td><span class="tag cta">Action</span></td>
+      <td>Multi-step form capturing a commissioner's interest in a specific product — the service's conversion point.</td>
+      <td>Complete steps → submit → confirmation · links to guidance and back to product</td>
+    </tr>
+    <tr>
+      <td><strong>Comparison tool</strong></td><td><code>/compare</code></td><td><span class="tag public">Content</span></td>
+      <td>Side-by-side comparison table for up to 4 products added from the catalogue or product pages.</td>
+      <td>Remove products · Clear all · empty state links back to catalogue</td>
+    </tr>
+    <tr>
+      <td><strong>Funding index</strong></td><td><code>/funding</code></td><td><span class="tag public">Content</span></td>
+      <td>Directory of open, upcoming and closed funding opportunities relevant to catalogue products.</td>
+      <td>Open external funding links · jump to related product pages</td>
+    </tr>
+    <tr>
+      <td><strong>Resource library</strong></td><td><code>/resources</code></td><td><span class="tag public">Content</span></td>
+      <td>Hub for supporting content, fanning out to four collections.</td>
+      <td>Choose a collection (guidance / news / campaigns / case studies)</td>
+    </tr>
+    <tr>
+      <td><strong>Guidance · News · Campaigns · Case studies</strong></td><td><code>/resources/…</code> (4 pages)</td><td><span class="tag public">Content</span></td>
+      <td>Collection pages: commissioning guidance, service news, active campaigns, and real-world case studies referenced from the home page.</td>
+      <td>Read · cross-links between collections and back to home</td>
+    </tr>
+    <tr>
+      <td><strong>Cookies</strong></td><td><code>/cookies</code></td><td><span class="tag util">Utility</span></td>
+      <td>Cookie and analytics policy.</td>
+      <td>Reset cookie consent choice</td>
+    </tr>
+  </table>
+  <div class="running-foot">
+    <span>NHS HealthStore — Site Information Architecture v1.0</span>
+    <span>Page 6 of 9</span>
+  </div>
+</section>
+
+<!-- ================= PAGE 7 · PRIMARY FLOW ================= -->
+<section class="sheet">
+  <div class="running-head">
+    <span class="doc">NHS HealthStore · Site Information Architecture</span>
+    <span>05 · Primary user flow</span>
+  </div>
+  <h2>05 · Primary user flow — discover, assess, express interest</h2>
+  <p style="font-size:9.5pt; color:var(--grey-1); margin-bottom:5mm; max-width:230mm;">The core service journey for a commissioner. There is no basket or checkout — the expression of interest is the commercial hand-off, after which the conversation moves off-platform. Every step is reachable without an account.</p>
+
+  <div class="flow-label">Happy path</div>
+  <div class="flow">
+    <div class="step start"><span class="st-title">1 · Arrive</span><span class="st-url">/</span><span class="st-desc">Lands on home; understands the proposition; picks a care pathway chip or heads to the catalogue.</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step"><span class="st-title">2 · Browse</span><span class="st-url">/catalogue</span><span class="st-desc">Chooses a condition / pathway from the hub cards.</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step"><span class="st-title">3 · Filter</span><span class="st-url">/catalogue/digital-therapeutics</span><span class="st-desc">Searches and filters the assured list; scans product cards.</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step"><span class="st-title">4 · Assess</span><span class="st-url">/apps/[slug]</span><span class="st-desc">Reviews the product profile: evidence, commercial terms, implementation and NHS experience.</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step"><span class="st-title">5 · Act</span><span class="st-url">/apps/[slug]/express-interest</span><span class="st-desc">Completes the multi-step expression-of-interest form and submits.</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step end"><span class="st-title">6 · Confirmed</span><span class="st-url">(confirmation step)</span><span class="st-desc">Sees confirmation; signposted to guidance or back to the product page.</span></div>
+  </div>
+
+  <div class="flow-label" style="margin-top:4mm;">Common detours from step 4 (product detail page)</div>
+  <div class="cols" style="flex:0 0 auto;">
+    <div class="col">
+      <div class="flow">
+        <div class="step"><span class="st-title">Assess</span><span class="st-url">/apps/[slug]</span><span class="st-desc">Not ready to commit to one product.</span></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="step"><span class="st-title">Add to compare</span><span class="st-url">/compare</span><span class="st-desc">Shortlists up to 4 products; compares side by side; returns to the strongest candidate's page.</span></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="step end"><span class="st-title">Back to assess</span><span class="st-url">/apps/[slug]</span><span class="st-desc">Continues to express interest.</span></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="flow">
+        <div class="step"><span class="st-title">Assess</span><span class="st-url">/apps/[slug]</span><span class="st-desc">Needs to understand affordability first.</span></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="step"><span class="st-title">Check funding</span><span class="st-url">/funding</span><span class="st-desc">Reviews open and upcoming funding routes; follows external links for detail.</span></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="step end"><span class="st-title">Back to assess</span><span class="st-url">/apps/[slug]</span><span class="st-desc">Returns via the related product links.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note-card" style="margin-top:3mm; max-width:250mm;">
+    <h3>Service design note</h3>
+    <p style="font-size:8.5pt;">The journey is fully self-serve up to submission. The moment of hand-off (step 6) is the boundary of the digital service — follow-up currently happens outside HealthStore, which is worth making explicit in stakeholder conversations about scope.</p>
+  </div>
+  <div class="running-foot">
+    <span>NHS HealthStore — Site Information Architecture v1.0</span>
+    <span>Page 7 of 9</span>
+  </div>
+</section>
+
+<!-- ================= PAGE 8 · SUPPORTING FLOWS ================= -->
+<section class="sheet">
+  <div class="running-head">
+    <span class="doc">NHS HealthStore · Site Information Architecture</span>
+    <span>06 · Supporting flows</span>
+  </div>
+  <h2>06 · Supporting flows</h2>
+
+  <div class="flow-label">A — Compare shortlisted products (entered from catalogue, product pages, or header)</div>
+  <div class="flow">
+    <div class="step start"><span class="st-title">Catalogue or product page</span><span class="st-url">/catalogue/… or /apps/[slug]</span><span class="st-desc">Taps “Add to compare” on up to 4 products; header badge counts the basket.</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step"><span class="st-title">Comparison tool</span><span class="st-url">/compare</span><span class="st-desc">Reviews products side by side; removes items or clears all.</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step end"><span class="st-title">Product detail</span><span class="st-url">/apps/[slug]</span><span class="st-desc">Clicks through to the preferred product and continues the primary flow.</span></div>
+  </div>
+
+  <div class="flow-label" style="margin-top:5mm;">B — Explore funding (entered from header or product pages)</div>
+  <div class="flow">
+    <div class="step start"><span class="st-title">Funding index</span><span class="st-url">/funding</span><span class="st-desc">Scans opportunities grouped by open / upcoming / closed.</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step"><span class="st-title">Opportunity card</span><span class="st-url">(in page)</span><span class="st-desc">Reads eligibility and deadlines on the card.</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step"><span class="st-title">External funding source</span><span class="st-url">(external link)</span><span class="st-desc">Leaves the service for the full funding detail — a key off-platform touchpoint.</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step end"><span class="st-title">Related product</span><span class="st-url">/apps/[slug]</span><span class="st-desc">Or jumps straight to a product the funding applies to.</span></div>
+  </div>
+
+  <div class="flow-label" style="margin-top:5mm;">C — Learn and build confidence (entered from header, home, or catalogue sidebar)</div>
+  <div class="flow">
+    <div class="step start"><span class="st-title">Resource library</span><span class="st-url">/resources</span><span class="st-desc">Chooses a collection from the hub.</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step"><span class="st-title">Guidance</span><span class="st-url">/resources/guidance</span><span class="st-desc">Commissioning guidance; cross-links to case studies and news.</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step"><span class="st-title">Case studies</span><span class="st-url">/resources/case-studies</span><span class="st-desc">Real-world proof points (also surfaced on the home page).</span></div>
+    <div class="arrow"><span>→</span></div>
+    <div class="step end"><span class="st-title">Catalogue</span><span class="st-url">/catalogue</span><span class="st-desc">Confidence built, moves into the primary flow.</span></div>
+  </div>
+
+  <div class="note-card" style="margin-top:5mm; max-width:250mm;">
+    <h3>Pattern across all three flows</h3>
+    <p style="font-size:8.5pt;">Every supporting flow is designed to feed back into the primary flow at the product detail page or catalogue. The IA has a single centre of gravity — the product profile — which keeps the model simple to explain and test.</p>
+  </div>
+  <div class="running-foot">
+    <span>NHS HealthStore — Site Information Architecture v1.0</span>
+    <span>Page 8 of 9</span>
+  </div>
+</section>
+
+<!-- ================= PAGE 9 · PDP ANATOMY ================= -->
+<section class="sheet">
+  <div class="running-head">
+    <span class="doc">NHS HealthStore · Site Information Architecture</span>
+    <span>07 · Product detail page anatomy</span>
+  </div>
+  <h2>07 · Product detail page anatomy <span style="font-size:10pt; color:var(--grey-1); font-weight:400;">— the service's key template (<code style="font-size:9pt;">/apps/[slug]</code>), as live on myCOPD and Luscii</span></h2>
+  <div class="anatomy">
+    <div class="page-wire" style="flex: 0 0 118mm;">
+      <div class="zone" style="padding:1.4mm 3mm; background:var(--grey-4); color:var(--grey-1);">Breadcrumb: Product catalogue → Digital therapeutics → {product}</div>
+      <div class="zone" style="background:var(--nhs-blue); color:var(--white);"><span class="z-label" style="background:var(--white); color:var(--nhs-blue);">1</span><b style="color:var(--white);">Hero &amp; proposition</b><br>Product name, supplier, pathway tags, proposition, quick facts (NICE reference · assurance status)</div>
+      <div class="zone" style="background:#fff0f0;"><span class="z-label">2</span><b>Primary actions</b><br>Express interest (primary CTA) · Add to compare</div>
+      <div class="zone"><span class="z-label">3</span><b>Commissioning snapshot</b><br>Platform · Indicative cost · Technical integration · Live NHSE sites — each tile deep-links into the page</div>
+      <div style="display:flex; border-bottom:none; flex:1;">
+        <div style="flex:0 0 26mm; border-right:1px dashed var(--grey-3); padding:2mm 2.5mm; font-size:6.3pt; color:var(--grey-1); background:var(--grey-4);">
+          <span class="z-label" style="position:static; display:inline-flex; margin-bottom:1mm; background:var(--nhs-aqua);">A</span><br>
+          <b style="color:var(--ink);">“On this page”</b><br>side navigation<br>(links to sections 4–13)
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column;">
+          <div class="zone"><span class="z-label">4</span><b>The problem {product} addresses</b></div>
+          <div class="zone"><span class="z-label">5</span><b>How {product} changes a treatment pathway</b> — current vs with-product comparison</div>
+          <div class="zone"><span class="z-label">6</span><b>What using {product} could mean for COPD patients</b> — local impact charts</div>
+          <div class="zone"><span class="z-label">7</span><b>What it could be worth</b> — collapsible indicative financial context</div>
+          <div class="zone"><span class="z-label">8</span><b>Funding levers and tariff alignment</b></div>
+          <div class="zone"><span class="z-label">9</span><b>Assurance and evidence</b></div>
+          <div class="zone"><span class="z-label">10</span><b>Making it work at your site</b></div>
+          <div class="zone"><span class="z-label">11</span><b>NHS experience</b> — deployment register, case studies and evaluations</div>
+          <div class="zone" style="background:#fff0f0;"><span class="z-label">12</span><b>How to commission and procure</b> — ends with “Want to find out more?” Express interest callout</div>
+          <div class="zone" style="border-bottom:none;"><span class="z-label">13</span><b>Resources</b> — demo access; product videos where available</div>
+        </div>
+      </div>
+    </div>
+    <div class="legend">
+      <ol>
+        <li><span class="dot">1</span><span><strong>Hero &amp; proposition (1–2).</strong> What the product is, its assured status, and the two decisions we ask of the user — commit (express interest) or shortlist (compare) — before the long-form content begins.</span></li>
+        <li><span class="dot">3</span><span><strong>Commissioning snapshot.</strong> Four scannable tiles for time-poor commissioners; each deep-links to the relevant section (cost → how to commission, sites → NHS experience, demo → resources).</span></li>
+        <li><span class="dot" style="background:var(--nhs-aqua);">A</span><span><strong>“On this page” navigation.</strong> Sticky side navigation listing all ten narrative sections, so users can jump straight to funding or assurance — the two most-asked-about topics.</span></li>
+        <li><span class="dot">4</span><span><strong>Narrative spine (4–13).</strong> Sequenced to answer a commissioner's questions in the order they arise: what problem is this solving (4–5), what would it mean here (6–7), how is it paid for (8), is it safe (9), what does it take (10), who else has done it (11), how do I buy it (12), and where do I dig deeper (13).</span></li>
+        <li><span class="dot">12</span><span><strong>Second conversion point.</strong> The express-interest callout repeats at the end of “How to commission and procure”, catching users who arrive at commitment only after reading the full case.</span></li>
+      </ol>
+      <div class="note-card" style="margin-top:2mm;">
+        <h3>myCOPD vs Luscii — same template, content-level differences</h3>
+        <p style="font-size:8.5pt;">Both products render this exact structure. Differences are in content, not anatomy: myCOPD additionally shows a linked funding scheme (under 8), onboarding / ongoing-support steps (under 10) and product videos (under 13); Luscii additionally shows a technical integration tile (FHIR · EMIS) in the snapshot. Impact charts (6) are modelled per product. There are no detail tabs on either page.</p>
+      </div>
+    </div>
+  </div>
+  <div class="running-foot">
+    <span>NHS HealthStore — Site Information Architecture v1.0 · End of document</span>
+    <span>Page 9 of 9</span>
+  </div>
+</section>
+
+<script>
+  function toggleEdit(btn) {
+    const on = document.body.classList.toggle('editing');
+    document.body.contentEditable = on ? 'true' : 'false';
+    btn.textContent = on ? '✔ Editing on — click to lock' : '✎ Enable editing';
+    btn.classList.toggle('on', on);
+  }
+</script>
+</body>
+</html>

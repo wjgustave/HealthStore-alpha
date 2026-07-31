@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HealthStore — User flows (screen wireframes)</title>
+<style>
+  :root{
+    --nhs-blue:#005EB8; --nhs-dark:#003087; --nhs-green:#007F3B; --nhs-warm:#7A4800;
+    --nhs-red:#DA291C; --border:#AEB7BD; --line:#D8DDE0; --bg:#F0F4F5;
+    --text:#212B32; --muted:#4C6272; --off:#768692; --yellow:#FFEB3B;
+    --soft-blue:#E8F4FC; --soft-green:#E6F4EA; --soft-red:#FDEBEA; --soft-grey:#F5F5F5; --soft-amber:#FFF7E6;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:"Helvetica Neue",Arial,sans-serif; background:var(--bg); color:var(--text); overflow:hidden; height:100vh; display:flex; flex-direction:column;}
+
+  /* ── Top bar ── */
+  header.app{background:var(--nhs-blue); color:#fff; padding:10px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; z-index:30;}
+  header.app h1{font-size:15px; font-weight:700; margin-right:8px;}
+  .tabs{display:flex; gap:4px; flex-wrap:wrap;}
+  .tab{background:rgba(255,255,255,.12); color:#fff; border:0; padding:6px 12px; border-radius:4px; font-size:12.5px; cursor:pointer;}
+  .tab.active{background:#fff; color:var(--nhs-dark); font-weight:700;}
+  .spacer{flex:1;}
+  .toolbtn{background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.35); padding:5px 10px; border-radius:4px; font-size:12px; cursor:pointer;}
+  .toolbtn:hover{background:rgba(255,255,255,.25);}
+
+  .subbar{background:#fff; border-bottom:1px solid var(--line); padding:6px 16px; font-size:12px; color:var(--muted); display:flex; gap:18px; align-items:center; z-index:30;}
+  .subbar .legend{display:flex; gap:14px; align-items:center;}
+  .lg{display:inline-flex; align-items:center; gap:5px;}
+  .lg .sw{width:18px; height:0; border-top:2.5px solid var(--nhs-blue); display:inline-block;}
+  .lg .sw.off{border-top-style:dashed; border-top-color:var(--off);}
+  .lg .sw.ok{border-top-color:var(--nhs-green);}
+  .lg .ring{width:12px; height:12px; border:2px solid var(--nhs-blue); border-radius:3px; display:inline-block;}
+
+  /* ── Canvas ── */
+  #viewport{flex:1; position:relative; overflow:hidden; cursor:grab;}
+  #viewport.panning{cursor:grabbing;}
+  #world{position:absolute; top:0; left:0; width:6000px; height:3600px; transform-origin:0 0;
+    background-image:radial-gradient(circle, #c9d2d6 1px, transparent 1px); background-size:28px 28px;}
+  #edges{position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;}
+
+  /* ── Screen card ── */
+  .node{position:absolute; width:270px; user-select:none;}
+  .node .caption{font-size:12px; font-weight:700; color:var(--nhs-dark); margin-bottom:4px; display:flex; gap:6px; align-items:center;}
+  .node .caption .badge{font-size:9.5px; font-weight:700; padding:2px 6px; border-radius:3px; color:#fff; background:var(--nhs-blue); letter-spacing:.4px;}
+  .badge.start{background:var(--nhs-blue);} .badge.end{background:var(--nhs-green);}
+  .badge.offsvc{background:var(--off);} .badge.unhappy{background:var(--nhs-red);}
+  .badge.warn{background:var(--nhs-warm);} .badge.ok{background:var(--nhs-green);}
+  .frame{background:#fff; border:1.5px solid var(--border); border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(33,43,50,.10); cursor:move;}
+  .node.selected .frame{outline:2.5px solid var(--nhs-blue); outline-offset:2px;}
+  .chrome{background:var(--bg); border-bottom:1px solid var(--line); display:flex; align-items:center; gap:6px; padding:5px 8px;}
+  .dots{display:flex; gap:4px;}
+  .dots i{width:8px; height:8px; border-radius:50%; display:block;}
+  .dots i:nth-child(1){background:#FF5F57;} .dots i:nth-child(2){background:#FEBC2E;} .dots i:nth-child(3){background:#28C840;}
+  .urlbar{flex:1; background:#fff; border-radius:4px; font-size:9.5px; color:var(--muted); padding:2px 8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .content{padding:8px; min-height:120px; font-size:11px;}
+
+  /* wireframe atoms */
+  .w-nav{background:var(--nhs-blue); color:#fff; border-radius:3px; padding:4px 8px; display:flex; gap:8px; align-items:center; font-size:9px; margin-bottom:8px; flex-wrap:wrap;}
+  .w-nav b{font-size:9.5px; margin-right:4px;}
+  .w-nav span{opacity:.92;}
+  .w-nav span.on{background:var(--yellow); color:var(--text); padding:1px 4px; border-radius:2px; opacity:1; font-weight:700;}
+  .w-nav .cnt{background:var(--nhs-dark); border-radius:999px; min-width:14px; height:14px; display:inline-flex; align-items:center; justify-content:center; font-size:8.5px; font-weight:700;}
+  .w-h1{font-weight:700; font-size:13px; margin:2px 0 6px;}
+  .w-h2{font-weight:700; font-size:11px; margin:6px 0 4px;}
+  .w-crumb{font-size:8.5px; color:var(--muted); margin-bottom:4px;}
+  .w-line{height:5px; border-radius:2px; background:var(--line); margin:4px 0;}
+  .w-line.m{width:70%;} .w-line.s{width:45%;}
+  .w-btn{display:inline-block; background:var(--nhs-blue); color:#fff; font-size:9.5px; font-weight:700; border-radius:3px; padding:4px 9px; margin:3px 4px 3px 0;}
+  .w-btn.ghost{background:#fff; color:var(--nhs-blue); border:1px solid var(--nhs-blue);}
+  .w-btn.hot{box-shadow:0 0 0 2.5px #fff, 0 0 0 5px var(--nhs-blue);}
+  .w-btn.hot-green{box-shadow:0 0 0 2.5px #fff, 0 0 0 5px var(--nhs-green);}
+  .w-btn.hot-red{box-shadow:0 0 0 2.5px #fff, 0 0 0 5px var(--nhs-red);}
+  .w-field{margin:5px 0;}
+  .w-field label{display:block; font-size:8.5px; color:var(--muted); margin-bottom:2px;}
+  .w-field .in{border:1px solid var(--border); border-radius:3px; background:#fff; font-size:10px; padding:3px 6px; min-height:18px; color:var(--text);}
+  .w-card{border:1px solid var(--border); border-radius:4px; padding:6px 8px; margin:5px 0; background:#fff;}
+  .w-card.hl{background:var(--soft-blue); border-color:var(--nhs-blue); border-width:1.5px;}
+  .w-card .t{font-weight:700; font-size:10.5px;}
+  .w-card .d{font-size:8.5px; color:var(--muted);}
+  .w-inset{background:var(--soft-blue); border:1px solid var(--line); border-radius:4px; padding:6px 8px; font-size:9px; color:var(--muted); margin:5px 0;}
+  .w-toast{background:var(--soft-green); border:1px solid var(--nhs-green); color:var(--nhs-green); border-radius:4px; font-size:9px; padding:4px 8px; margin:5px 0;}
+  .w-alert{background:var(--soft-amber); border:1px solid var(--nhs-warm); border-radius:4px; padding:6px 8px; font-size:9px; margin:5px 0;}
+  .w-alert b{color:var(--nhs-warm); display:block; margin-bottom:2px; font-size:9.5px;}
+  .w-panel-ok{background:var(--soft-green); border:1.5px solid var(--nhs-green); border-radius:5px; padding:8px; margin:5px 0;}
+  .w-panel-ok .t{color:var(--nhs-green); font-weight:700; font-size:11px;}
+  .w-check{display:flex; gap:6px; align-items:center; font-size:9.5px; margin:4px 0;}
+  .w-check .bx{width:11px; height:11px; border:1.5px solid var(--nhs-blue); border-radius:2px; display:inline-flex; align-items:center; justify-content:center; font-size:8px; color:#fff; flex:none;}
+  .w-check.on .bx{background:var(--nhs-blue);}
+  .w-radio{display:flex; gap:6px; align-items:center; font-size:9.5px; margin:4px 0;}
+  .w-radio .rd{width:11px; height:11px; border:1.5px solid var(--nhs-blue); border-radius:50%; flex:none; position:relative;}
+  .w-radio.on .rd::after{content:""; position:absolute; inset:2px; border-radius:50%; background:var(--nhs-blue);}
+  .w-details{font-size:9px; color:var(--nhs-blue); margin-top:5px;}
+  .w-details.alarm{color:var(--nhs-red); font-weight:700; border:1.5px solid var(--nhs-red); border-radius:3px; padding:2px 5px; display:inline-block;}
+  .w-row{display:flex; gap:6px;}
+  .w-col{flex:1;}
+  .w-kv{border-bottom:1px solid var(--line); padding:3px 0; font-size:9px; display:flex; justify-content:space-between; gap:6px;}
+  .w-kv .k{color:var(--muted);} .w-kv .chg{color:var(--nhs-blue);}
+  .w-mail{background:var(--soft-grey); border-radius:4px; padding:6px; margin:4px 0;}
+  .w-mail .from{font-weight:700; font-size:10px;}
+  .w-mail .sub{font-size:8.5px; color:var(--muted);}
+  .w-mail.hl{background:var(--soft-blue); border:1.5px solid var(--nhs-blue);}
+  .w-code{display:inline-block; background:var(--soft-blue); border:1px solid var(--nhs-blue); color:var(--nhs-dark); font-weight:700; font-size:13px; padding:3px 12px; border-radius:4px; letter-spacing:2px; margin:4px 0;}
+  .offsvc-frame .chrome{background:#e2e5e7;}
+  .offsvc-frame{border-style:dashed; border-color:var(--off);}
+
+  /* note node */
+  .node.note-node{width:230px;}
+  .note{background:#FFF9C4; border:1px solid #E6D97A; border-radius:6px; padding:10px 12px; font-size:11.5px; box-shadow:0 2px 6px rgba(33,43,50,.12); cursor:move; min-height:56px; white-space:pre-wrap;}
+  .note:focus{outline:2px solid var(--nhs-blue);}
+  .note-red{background:var(--soft-red); border-color:var(--nhs-red);}
+  .note-blue{background:var(--soft-blue); border-color:var(--nhs-blue);}
+
+  .del{position:absolute; top:-8px; right:-8px; width:20px; height:20px; border-radius:50%; background:var(--nhs-red); color:#fff; border:2px solid #fff; font-size:11px; line-height:16px; text-align:center; cursor:pointer; display:none; z-index:5;}
+  .node:hover .del{display:block;}
+
+  .hint{position:absolute; bottom:14px; left:16px; background:#fff; border:1px solid var(--line); border-radius:6px; padding:8px 12px; font-size:11px; color:var(--muted); box-shadow:0 2px 8px rgba(33,43,50,.08); z-index:25; max-width:520px;}
+  .zoombox{position:absolute; bottom:14px; right:16px; display:flex; gap:6px; z-index:25;}
+  .zoombox button{width:34px; height:34px; border-radius:6px; border:1px solid var(--line); background:#fff; font-size:16px; cursor:pointer; color:var(--text);}
+  .zoombox .pct{min-width:56px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px solid var(--line); border-radius:6px; font-size:12px; color:var(--muted);}
+</style>
+</head>
+<body>
+
+<header class="app">
+  <h1>NHS HealthStore · User flows</h1>
+  <nav class="tabs" id="tabs"></nav>
+  <div class="spacer"></div>
+  <button class="toolbtn" id="addScreen">+ Screen</button>
+  <button class="toolbtn" id="addNote">+ Note</button>
+  <button class="toolbtn" id="fitBtn">Fit view</button>
+  <button class="toolbtn" id="resetBtn">Reset layout</button>
+  <button class="toolbtn" id="printBtn">Print / PDF</button>
+</header>
+
+<div class="subbar">
+  <span id="flowDesc"></span>
+  <span class="spacer"></span>
+  <span class="legend">
+    <span class="lg"><span class="sw"></span> interaction</span>
+    <span class="lg"><span class="sw ok"></span> success / resume</span>
+    <span class="lg"><span class="sw off"></span> off-service</span>
+    <span class="lg"><span class="ring"></span> control the user activates</span>
+  </span>
+</div>
+
+<div id="viewport">
+  <div id="world">
+    <svg id="edges"></svg>
+    <div id="nodes"></div>
+  </div>
+  <div class="hint">
+    <b>Drag</b> cards to rearrange · <b>Drag background</b> to pan · <b>Scroll / pinch</b> or buttons to zoom ·
+    <b>Double-click a note</b> to edit its text · Hover a card for <b>×</b> delete · Layout auto-saves in this browser.
+  </div>
+  <div class="zoombox">
+    <button id="zoomOut">−</button>
+    <span class="pct" id="zoomPct">100%</span>
+    <button id="zoomIn">+</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════ Wireframe snippet helpers (plain HTML strings) ═══════════════ */
+const nav = (active, cnt) => {
+  const items = ["About","Catalogue","Compare","Funding","Resources"];
+  return `<div class="w-nav"><b>NHS</b>HealthStore ${items.map(i =>
+    `<span class="${i===active?'on':''}">${i}${i==="Compare"&&cnt?` <span class="cnt">${cnt}</span>`:""}</span>`).join("")}</div>`;
+};
+const btn  = (label, cls="") => `<span class="w-btn ${cls}">${label}</span>`;
+const field= (label, val="") => `<div class="w-field"><label>${label}</label><div class="in">${val}</div></div>`;
+const lines= () => `<div class="w-line"></div><div class="w-line m"></div><div class="w-line s"></div>`;
+
+/* ═══════════════ Flow data ═══════════════
+   Each node: {id, x, y, kind:'screen'|'off'|'note', step, title, badge, badgeCls, url, html}
+   Each edge: {from, to, label, kind:'normal'|'ok'|'off'}                                  */
+const FLOWS = [
+{
+  id:"flow1", name:"1 · Home → EOI CTA",
+  desc:"How a commissioner reaches the Express interest journey. The EOI CTA lives on the product page, not the home page.",
+  nodes:[
+    {id:"home", x:60, y:120, kind:"screen", step:"1", title:"Home", url:"/",
+      html:`${nav()}<div style="background:var(--soft-blue);border-radius:4px;padding:8px;margin-bottom:6px">
+        <div class="w-h1">HealthStore</div>${lines()}${btn("Find out more")}</div>
+        <div class="w-h2">Pathways we support today</div>
+        <div class="w-card hl"><div class="t">COPD + pulmonary rehab</div><div class="d">NICE HTG736 · HTG718 — click card → catalogue</div></div>
+        <div class="w-card"><div class="t">Cardiac rehabilitation</div><div class="d">NICE HTG761</div></div>`},
+    {id:"cat", x:460, y:120, kind:"screen", step:"2", title:"Catalogue", url:"/catalogue/digital-therapeutics?condition=copd",
+      html:`${nav("Catalogue")}<div class="w-h1">Digital therapeutics</div>
+        <div class="w-crumb">Filter: COPD</div>
+        <div class="w-card hl"><div class="t">myCOPD</div><div class="d">Assured · COPD</div>${btn("View","hot")}${btn("Add to compare","ghost")}</div>
+        <div class="w-card"><div class="t">Luscii</div><div class="d">Assured · COPD</div>${btn("View","ghost")}${btn("Add to compare","ghost")}</div>`},
+    {id:"pdp", x:860, y:120, kind:"screen", step:"3", title:"Product page", badge:"EOI CTA", url:"/apps/mycopd",
+      html:`${nav("Catalogue")}<div class="w-crumb">Catalogue › Digital therapeutics</div>
+        <div class="w-h1">myCOPD</div>${lines()}
+        ${btn("Express interest","hot")}${btn("Add to compare","ghost")}
+        <div class="w-inset"><b style="color:var(--text)">Want to find out more?</b><br>Pathway fit · business case · procurement<br>${btn("Express interest")}</div>`},
+    {id:"eoi", x:1260, y:120, kind:"screen", step:"4", title:"EOI journey start", badge:"START", badgeCls:"start", url:"/apps/mycopd/express-interest",
+      html:`${nav()}<div class="w-crumb">‹ Back to myCOPD</div>
+        <div class="w-h1">Express interest in myCOPD</div>
+        <div class="w-inset">• Not a purchase or procurement award<br>• Takes about 2 minutes<br>• The team will contact you</div>
+        ${btn("Continue","hot-green")}`},
+    {id:"n1", x:460, y:470, kind:"note", noteCls:"note-blue",
+      text:"Alt route: header nav “Product catalogue” goes straight to the hub, then a condition into the filtered list."}
+  ],
+  edges:[
+    {from:"home", to:"cat", label:"Click COPD pathway card"},
+    {from:"cat", to:"pdp", label:"Click View"},
+    {from:"pdp", to:"eoi", label:"Click Express interest"}
+  ]
+},
+{
+  id:"flow2", name:"2 · EOI happy path",
+  desc:"Expression of interest form — 7 in-service steps plus the off-service email check for the one-time code (prototype OTP 123456).",
+  nodes:[
+    {id:"s1", x:40, y:110, kind:"screen", step:"1", title:"Start", url:"/apps/mycopd/express-interest",
+      html:`${nav()}<div class="w-h1">Express interest in myCOPD</div>
+        <div class="w-inset">Not a purchase · ~2 minutes · team will contact you</div>${btn("Continue","hot")}`},
+    {id:"s2", x:390, y:110, kind:"screen", step:"2", title:"Your details", url:"…/express-interest",
+      html:`${nav()}<div class="w-h1">Your details</div>
+        ${field("Full name","A. Commissioner")}${field("NHS work email","a.name@nhs.net")}
+        ${field("Role","Commissioner")}${field("Organisation / ICB","Example ICB")}${field("Phone (optional)")}
+        ${btn("Continue","hot")}`},
+    {id:"s3", x:740, y:110, kind:"screen", step:"3", title:"Verify your email", url:"…/express-interest",
+      html:`${nav()}<div class="w-h1">Verify your email</div>
+        <div class="w-crumb">We sent a code to a.name@nhs.net</div>
+        ${field("One-time code","123456")}${btn("Continue","hot-green")}
+        <div class="w-details">▸ I did not receive an email</div>`},
+    {id:"mail", x:740, y:500, kind:"off", step:"✉", title:"Email inbox", badge:"OFF-SERVICE", badgeCls:"offsvc", url:"nhs.net webmail — outside the service",
+      html:`<div class="w-mail hl"><div class="from">NHS HealthStore</div><div class="sub">Your one-time code</div>
+        <span class="w-code">123456</span></div>
+        <div class="w-crumb">1. Open work email → 2. Find the HealthStore message → 3. Copy code → 4. Return to HealthStore</div>`},
+    {id:"s4", x:1090, y:110, kind:"screen", step:"4", title:"Support needed", url:"…/express-interest",
+      html:`${nav()}<div class="w-h1">What support do you need?</div>
+        <div class="w-check on"><span class="bx">✓</span> Assess pathway fit</div>
+        <div class="w-check on"><span class="bx">✓</span> Build the business case</div>
+        <div class="w-check"><span class="bx"></span> Assurance pack</div>
+        <div class="w-check"><span class="bx"></span> Commercial route</div>
+        <div class="w-check"><span class="bx"></span> Implementation</div>
+        ${btn("Continue","hot")}`},
+    {id:"s5", x:1440, y:110, kind:"screen", step:"5", title:"Timing & context", url:"…/express-interest",
+      html:`${nav()}<div class="w-h1">Timing &amp; context</div>
+        <div class="w-crumb">All optional · no patient-identifiable information</div>
+        <div class="w-radio on"><span class="rd"></span> Within 3 months</div>
+        <div class="w-radio"><span class="rd"></span> 3–6 months</div>
+        <div class="w-radio"><span class="rd"></span> Exploring</div>
+        ${field("Population (optional)","≈ 500")}${btn("Continue","hot")}`},
+    {id:"s6", x:1790, y:110, kind:"screen", step:"6", title:"Check your answers", url:"…/express-interest",
+      html:`${nav()}<div class="w-h1">Check your answers</div>
+        <div class="w-kv"><span><span class="k">Name</span> · A. Commissioner</span><span class="chg">Change</span></div>
+        <div class="w-kv"><span><span class="k">Email</span> · a.name@nhs.net</span><span class="chg">Change</span></div>
+        <div class="w-kv"><span><span class="k">Support</span> · Fit, business case</span><span class="chg">Change</span></div>
+        <div class="w-kv"><span><span class="k">Timing</span> · Within 3 months</span><span class="chg">Change</span></div>
+        ${btn("Submit","hot-green")}`},
+    {id:"s7", x:2140, y:110, kind:"screen", step:"7", title:"Confirmation", badge:"END", badgeCls:"end", url:"…/express-interest",
+      html:`${nav()}<div class="w-panel-ok"><div class="t">✓ Expression of interest submitted</div>
+        <div style="font-size:10px;margin-top:3px">Reference: <b>HSC6589L</b></div>
+        <div class="w-crumb">We'll contact you within 5 working days</div></div>
+        <div class="w-crumb">Confirmation email sent (prototype)</div>
+        ${btn("Return to myCOPD","ghost")}`},
+    {id:"sys", x:2140, y:500, kind:"note", noteCls:"note-blue",
+      text:"System: Submit → POST /api/express-interest.\nSaved to the org's EOI record (/eoi-record) and dashboard EOI activity when signed in."}
+  ],
+  edges:[
+    {from:"s1", to:"s2", label:"Continue"},
+    {from:"s2", to:"s3", label:"Continue"},
+    {from:"s3", to:"mail", label:"Open email", kind:"off"},
+    {from:"mail", to:"s3", label:"Copy code & return", kind:"ok"},
+    {from:"s3", to:"s4", label:"Enter code → Continue", kind:"ok"},
+    {from:"s4", to:"s5", label:"Continue"},
+    {from:"s5", to:"s6", label:"Continue"},
+    {from:"s6", to:"s7", label:"Submit"}
+  ]
+},
+{
+  id:"flow3", name:"3 · EOI unhappy — no code",
+  desc:"The user completes their details but the one-time code never arrives. Recovery happens on the Verify step.",
+  nodes:[
+    {id:"u1", x:50, y:110, kind:"screen", step:"1", title:"Verify — stuck", badge:"UNHAPPY", badgeCls:"unhappy", url:"…/express-interest",
+      html:`${nav()}<div class="w-h1">Verify your email</div>
+        <div class="w-crumb">Code sent to a.name@nhs.net — nothing arrives</div>
+        ${field("One-time code","")}${btn("Continue","ghost")}
+        <div class="w-details alarm">▸ I did not receive an email</div>`},
+    {id:"u2", x:420, y:110, kind:"screen", step:"2", title:"Help panel open", badge:"HELP", badgeCls:"warn", url:"…/express-interest",
+      html:`${nav()}<div class="w-h1">Verify your email</div>${field("One-time code","")}
+        <div class="w-alert"><b>▾ I did not receive an email</b>
+        It can take a few minutes to arrive.<br>Check junk / spam for NHS HealthStore emails.<br>
+        You can request a new code after 30 seconds.<br><br>
+        ${btn("Resend code (28s)","ghost")}</div>`},
+    {id:"spam", x:800, y:420, kind:"off", step:"✉", title:"Junk / spam folder", badge:"OFF-SERVICE", badgeCls:"offsvc", url:"nhs.net webmail — junk folder",
+      html:`<div class="w-mail"><div class="from">Newsletter</div><div class="sub">…</div></div>
+        <div class="w-mail hl"><div class="from">NHS HealthStore</div><div class="sub">Your one-time code</div></div>
+        <div class="w-mail"><div class="from">Promo</div><div class="sub">…</div></div>
+        <div class="w-crumb">Found it? Copy the code and return. Not there? Go back and resend.</div>`},
+    {id:"u3", x:800, y:110, kind:"screen", step:"3", title:"After resend", url:"…/express-interest",
+      html:`${nav()}<div class="w-h1">Verify your email</div>
+        <div class="w-toast">We have sent a new code to a.name@nhs.net. In this prototype the code is still 123456.</div>
+        ${field("One-time code","123456")}${btn("Continue","hot-green")}
+        <div class="w-details">▸ I did not receive an email (resend available again after 30s)</div>`},
+    {id:"u4", x:1180, y:110, kind:"screen", step:"4", title:"Resume the form", badge:"RECOVERED", badgeCls:"ok", url:"…/express-interest",
+      html:`${nav()}<div class="w-h1">What support do you need?</div>
+        <div class="w-crumb">Back on the happy path (step 4 of the EOI form)</div>
+        <div class="w-check"><span class="bx"></span> Assess pathway fit</div>
+        <div class="w-check"><span class="bx"></span> Build the business case</div>
+        <div class="w-check"><span class="bx"></span> Assurance pack</div>
+        ${btn("Continue","ghost")}`},
+    {id:"wrong", x:420, y:470, kind:"screen", step:"!", title:"Wrong code entered", badge:"ERROR", badgeCls:"unhappy", url:"…/express-interest",
+      html:`${nav()}<div style="background:var(--soft-red);border:1.5px solid var(--nhs-red);border-radius:4px;padding:6px 8px;margin-bottom:6px">
+        <b style="color:var(--nhs-red);font-size:10px">There is a problem</b>
+        <div style="font-size:9px">Enter the correct one-time code</div></div>
+        ${field("One-time code","000000")}${btn("Continue","ghost")}
+        <div class="w-crumb">User can retry — no attempt limit in the prototype</div>`},
+    {id:"gaps", x:1180, y:470, kind:"note", noteCls:"note-red",
+      text:"Not in the service today:\n• No support email / phone or ticket route\n• No OTP expiry or attempt lockout\n• No skip-verify path\n• Resend is UI-only (no real email API); prototype code stays 123456"}
+  ],
+  edges:[
+    {from:"u1", to:"u2", label:"Open “I did not receive an email”"},
+    {from:"u2", to:"spam", label:"Check junk folder", kind:"off"},
+    {from:"u2", to:"u3", label:"Wait 30s → Resend code"},
+    {from:"spam", to:"u3", label:"Still nothing → resend", kind:"off"},
+    {from:"u3", to:"u4", label:"Enter code → Continue", kind:"ok"},
+    {from:"u1", to:"wrong", label:"Guessed code", kind:"off"},
+    {from:"wrong", to:"u2", label:"Needs help"}
+  ]
+},
+{
+  id:"flow4", name:"4 · Compare two products",
+  desc:"Home → open two COPD product pages → add both to the comparison basket → view them side by side.",
+  nodes:[
+    {id:"c1", x:40, y:110, kind:"screen", step:"1", title:"Home", url:"/",
+      html:`${nav()}<div style="background:var(--soft-blue);border-radius:4px;padding:8px;margin-bottom:6px">
+        <div class="w-h1">HealthStore</div>${lines()}</div>
+        <div class="w-h2">Pathways we support</div>
+        <div class="w-card hl"><div class="t">COPD + pulmonary rehab</div><div class="d">Click → filtered catalogue</div></div>`},
+    {id:"c2", x:390, y:110, kind:"screen", step:"2", title:"Catalogue", url:"/catalogue/digital-therapeutics?condition=copd",
+      html:`${nav("Catalogue")}<div class="w-h1">Digital therapeutics · COPD</div>
+        <div class="w-card hl"><div class="t">myCOPD</div>${btn("View","hot")}${btn("Add to compare","ghost")}</div>
+        <div class="w-card"><div class="t">Luscii</div>${btn("View","ghost")}${btn("Add to compare","ghost")}</div>`},
+    {id:"c3", x:740, y:110, kind:"screen", step:"3", title:"PDP · myCOPD", badge:"ADD 1", url:"/apps/mycopd",
+      html:`${nav("Catalogue")}<div class="w-h1">myCOPD</div>${lines()}
+        ${btn("Add to compare","hot")}${btn("Express interest","ghost")}
+        <div class="w-toast">Added to the comparison tool (1/4)</div>`},
+    {id:"c4", x:1090, y:110, kind:"screen", step:"4", title:"PDP · Luscii", badge:"ADD 2", url:"/apps/luscii",
+      html:`${nav("Catalogue",1)}<div class="w-h1">Luscii</div>${lines()}
+        ${btn("Add to compare","hot")}${btn("Express interest","ghost")}
+        <div class="w-toast">Added to the comparison tool (2/4)</div>`},
+    {id:"c5", x:1440, y:110, kind:"screen", step:"5", title:"Header nav", badge:"CTA", url:"(any page)",
+      html:`${nav("Compare",2)}
+        <div class="w-h2">User clicks “Comparison tool”</div>
+        <div class="w-crumb">The dark-blue badge shows 2 products selected. Works from any page — the basket persists.</div>`},
+    {id:"c6", x:1790, y:110, kind:"screen", step:"6", title:"Compare view", badge:"END", badgeCls:"end", url:"/compare?ids=mycopd,luscii",
+      html:`${nav("Compare",2)}<div class="w-h1">Comparison tool</div>
+        <div class="w-crumb">COPD · 2 products</div>
+        <div class="w-row">
+          <div class="w-col w-card"><div class="t">myCOPD</div>${lines()}<span style="font-size:8.5px;color:var(--nhs-blue)">Remove</span></div>
+          <div class="w-col w-card"><div class="t">Luscii</div>${lines()}<span style="font-size:8.5px;color:var(--nhs-blue)">Remove</span></div>
+        </div>`},
+    {id:"rules", x:740, y:500, kind:"note", noteCls:"note-blue",
+      text:"Basket rules:\n• Max 4 products · must share a condition tag (COPD↔COPD ok, COPD+cardiac blocked)\n• Stored in localStorage — persists across pages\n• Alt: add straight from catalogue cards without opening PDPs\n• Clear all with Undo on the compare page"}
+  ],
+  edges:[
+    {from:"c1", to:"c2", label:"Click COPD card"},
+    {from:"c2", to:"c3", label:"Click View"},
+    {from:"c3", to:"c4", label:"Back / open Luscii"},
+    {from:"c4", to:"c5", label:"Click Comparison tool", kind:"ok"},
+    {from:"c5", to:"c6", label:"Opens with both ids", kind:"ok"}
+  ]
+}
+];
+
+/* ═══════════════ State, persistence ═══════════════ */
+const LS_KEY = "hs-user-flows-v1";
+let store = {};
+try { store = JSON.parse(localStorage.getItem(LS_KEY) || "{}"); } catch(e){ store = {}; }
+const saveStore = () => localStorage.setItem(LS_KEY, JSON.stringify(store));
+
+let current = 0;
+let zoom = 1, panX = 0, panY = 0;
+let userAdds = 0;
+
+const $ = s => document.querySelector(s);
+const world = $("#world"), nodesEl = $("#nodes"), edgesEl = $("#edges"), viewport = $("#viewport");
+
+function flowState(){
+  const f = FLOWS[current];
+  if(!store[f.id]) store[f.id] = { pos:{}, added:[], removed:[], noteText:{} };
+  return store[f.id];
+}
+
+/* Effective node list = flow nodes (minus removed, with saved positions) + user-added */
+function getNodes(){
+  const f = FLOWS[current], st = flowState();
+  const base = f.nodes.filter(n => !st.removed.includes(n.id)).map(n => {
+    const o = Object.assign({}, n);
+    if(st.pos[n.id]){ o.x = st.pos[n.id].x; o.y = st.pos[n.id].y; }
+    if(o.kind === "note" && st.noteText[n.id] != null) o.text = st.noteText[n.id];
+    return o;
+  });
+  return base.concat(st.added.map(n => Object.assign({}, n)));
+}
+function getEdges(){
+  const st = flowState();
+  const alive = new Set(getNodes().map(n => n.id));
+  return FLOWS[current].edges.filter(e => alive.has(e.from) && alive.has(e.to));
+}
+
+/* ═══════════════ Render ═══════════════ */
+function render(){
+  const f = FLOWS[current];
+  $("#flowDesc").textContent = f.desc;
+  document.querySelectorAll(".tab").forEach((t,i)=>t.classList.toggle("active", i===current));
+  nodesEl.innerHTML = "";
+  for(const n of getNodes()) nodesEl.appendChild(buildNode(n));
+  drawEdges();
+}
+
+function buildNode(n){
+  const el = document.createElement("div");
+  el.className = "node" + (n.kind === "note" ? " note-node" : "");
+  el.style.left = n.x + "px";
+  el.style.top = n.y + "px";
+  el.dataset.id = n.id;
+
+  const del = document.createElement("span");
+  del.className = "del"; del.textContent = "×"; del.title = "Remove";
+  del.addEventListener("click", ev => { ev.stopPropagation(); removeNode(n.id); });
+  el.appendChild(del);
+
+  if(n.kind === "note"){
+    const nt = document.createElement("div");
+    nt.className = "note " + (n.noteCls || "");
+    nt.textContent = n.text || "Double-click to edit…";
+    nt.title = "Double-click to edit";
+    nt.addEventListener("dblclick", () => {
+      nt.contentEditable = "true"; nt.focus();
+      document.execCommand && document.execCommand("selectAll", false, null);
+    });
+    nt.addEventListener("blur", () => {
+      nt.contentEditable = "false";
+      setNoteText(n.id, nt.textContent);
+    });
+    el.appendChild(nt);
+  } else {
+    const cap = document.createElement("div");
+    cap.className = "caption";
+    cap.innerHTML = `<span>${n.step ? n.step + ". " : ""}${n.title}</span>` +
+      (n.badge ? `<span class="badge ${n.badgeCls||""}">${n.badge}</span>` : "");
+    el.appendChild(cap);
+
+    const fr = document.createElement("div");
+    fr.className = "frame" + (n.kind === "off" ? " offsvc-frame" : "");
+    fr.innerHTML = `<div class="chrome"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="urlbar">${n.url || ""}</span></div>
+      <div class="content">${n.html || '<div class="w-h1">New screen</div><div class="w-line"></div><div class="w-line m"></div><div class="w-line s"></div>'}</div>`;
+    el.appendChild(fr);
+  }
+  makeDraggable(el, n.id);
+  return el;
+}
+
+/* ═══════════════ Edges (SVG) ═══════════════ */
+function drawEdges(){
+  const colors = { normal:"#005EB8", ok:"#007F3B", off:"#768692" };
+  let svg = `<defs>`;
+  for(const [k,c] of Object.entries(colors)){
+    svg += `<marker id="ah-${k}" markerWidth="9" markerHeight="9" refX="7.5" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="${c}"/></marker>`;
+  }
+  svg += `</defs>`;
+  const nodePos = {};
+  document.querySelectorAll(".node").forEach(el => {
+    nodePos[el.dataset.id] = {
+      x: parseFloat(el.style.left), y: parseFloat(el.style.top),
+      w: el.offsetWidth, h: el.offsetHeight
+    };
+  });
+  for(const e of getEdges()){
+    const a = nodePos[e.from], b = nodePos[e.to];
+    if(!a || !b) continue;
+    const kind = e.kind || "normal";
+    const c = colors[kind];
+    // choose anchor sides based on relative position
+    const acx = a.x + a.w/2, acy = a.y + a.h/2;
+    const bcx = b.x + b.w/2, bcy = b.y + b.h/2;
+    let x1,y1,x2,y2;
+    const dx = bcx - acx, dy = bcy - acy;
+    if(Math.abs(dx) > Math.abs(dy)){
+      x1 = dx > 0 ? a.x + a.w + 3 : a.x - 3;  y1 = acy;
+      x2 = dx > 0 ? b.x - 3 : b.x + b.w + 3;  y2 = bcy;
+    } else {
+      x1 = acx; y1 = dy > 0 ? a.y + a.h + 3 : a.y - 3;
+      x2 = bcx; y2 = dy > 0 ? b.y - 3 : b.y + b.h + 3;
+    }
+    const mx = (x1+x2)/2, my = (y1+y2)/2;
+    const curve = Math.abs(dx) > Math.abs(dy)
+      ? `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`
+      : `M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`;
+    svg += `<path d="${curve}" fill="none" stroke="${c}" stroke-width="2.2"
+      ${kind==="off" ? 'stroke-dasharray="6 4"' : ""} marker-end="url(#ah-${kind})"/>`;
+    if(e.label){
+      const padW = e.label.length * 5.6 + 14;
+      svg += `<g><rect x="${mx-padW/2}" y="${my-19}" width="${padW}" height="17" rx="4"
+          fill="#fff" stroke="${c}" stroke-width="1"/>
+        <text x="${mx}" y="${my-7}" text-anchor="middle" font-size="10.5" fill="${c}"
+          font-family="Helvetica,Arial,sans-serif">${e.label}</text></g>`;
+    }
+  }
+  edgesEl.innerHTML = svg;
+}
+
+/* ═══════════════ Dragging nodes ═══════════════ */
+function makeDraggable(el, id){
+  let sx, sy, ox, oy, moved = false, dragging = false;
+  const target = el.querySelector(".frame") || el.querySelector(".note");
+  target.addEventListener("pointerdown", ev => {
+    if(ev.target.isContentEditable) return;
+    dragging = true; moved = false;
+    sx = ev.clientX; sy = ev.clientY;
+    ox = parseFloat(el.style.left); oy = parseFloat(el.style.top);
+    target.setPointerCapture(ev.pointerId);
+    ev.stopPropagation();
+  });
+  target.addEventListener("pointermove", ev => {
+    if(!dragging) return;
+    const nx = ox + (ev.clientX - sx)/zoom, ny = oy + (ev.clientY - sy)/zoom;
+    if(Math.abs(ev.clientX-sx) + Math.abs(ev.clientY-sy) > 3) moved = true;
+    el.style.left = nx + "px"; el.style.top = ny + "px";
+    drawEdges();
+  });
+  target.addEventListener("pointerup", ev => {
+    if(!dragging) return;
+    dragging = false;
+    if(moved) setPos(id, parseFloat(el.style.left), parseFloat(el.style.top));
+  });
+}
+
+function setPos(id, x, y){
+  const st = flowState();
+  const added = st.added.find(n => n.id === id);
+  if(added){ added.x = x; added.y = y; }
+  else st.pos[id] = {x, y};
+  saveStore();
+}
+function setNoteText(id, text){
+  const st = flowState();
+  const added = st.added.find(n => n.id === id);
+  if(added) added.text = text;
+  else st.noteText[id] = text;
+  saveStore();
+}
+function removeNode(id){
+  const st = flowState();
+  const ai = st.added.findIndex(n => n.id === id);
+  if(ai >= 0) st.added.splice(ai, 1);
+  else st.removed.push(id);
+  saveStore(); render();
+}
+
+/* ═══════════════ Pan & zoom ═══════════════ */
+function applyView(){
+  world.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+  $("#zoomPct").textContent = Math.round(zoom * 100) + "%";
+}
+viewport.addEventListener("pointerdown", ev => {
+  if(ev.target.closest(".node") || ev.target.closest(".hint") || ev.target.closest(".zoombox")) return;
+  viewport.classList.add("panning");
+  const sx = ev.clientX - panX, sy = ev.clientY - panY;
+  const move = e => { panX = e.clientX - sx; panY = e.clientY - sy; applyView(); };
+  const up = () => {
+    viewport.classList.remove("panning");
+    window.removeEventListener("pointermove", move);
+    window.removeEventListener("pointerup", up);
+  };
+  window.addEventListener("pointermove", move);
+  window.addEventListener("pointerup", up);
+});
+viewport.addEventListener("wheel", ev => {
+  ev.preventDefault();
+  if(ev.ctrlKey || ev.metaKey || Math.abs(ev.deltaY) > Math.abs(ev.deltaX)){
+    const rect = viewport.getBoundingClientRect();
+    const mx = ev.clientX - rect.left, my = ev.clientY - rect.top;
+    const factor = ev.deltaY < 0 ? 1.08 : 1/1.08;
+    const nz = Math.min(2.5, Math.max(0.25, zoom * factor));
+    panX = mx - (mx - panX) * (nz/zoom);
+    panY = my - (my - panY) * (nz/zoom);
+    zoom = nz; applyView();
+  } else {
+    panX -= ev.deltaX; applyView();
+  }
+}, {passive:false});
+$("#zoomIn").onclick = () => { zoom = Math.min(2.5, zoom * 1.2); applyView(); };
+$("#zoomOut").onclick = () => { zoom = Math.max(0.25, zoom / 1.2); applyView(); };
+
+function fitView(){
+  const ns = getNodes();
+  if(!ns.length) return;
+  // measure rendered extents
+  let maxX = 0, maxY = 0, minX = 1e9, minY = 1e9;
+  document.querySelectorAll(".node").forEach(el => {
+    const x = parseFloat(el.style.left), y = parseFloat(el.style.top);
+    minX = Math.min(minX, x); minY = Math.min(minY, y);
+    maxX = Math.max(maxX, x + el.offsetWidth);
+    maxY = Math.max(maxY, y + el.offsetHeight);
+  });
+  const vw = viewport.clientWidth, vh = viewport.clientHeight;
+  const pad = 60;
+  zoom = Math.min(2, Math.min(vw/(maxX-minX+pad*2), vh/(maxY-minY+pad*2)));
+  panX = pad*zoom - minX*zoom + (vw - (maxX-minX+pad*2)*zoom)/2;
+  panY = pad*zoom - minY*zoom;
+  applyView();
+}
+
+/* ═══════════════ Toolbar ═══════════════ */
+const tabsEl = $("#tabs");
+FLOWS.forEach((f, i) => {
+  const b = document.createElement("button");
+  b.className = "tab"; b.textContent = f.name;
+  b.onclick = () => { current = i; render(); fitView(); };
+  tabsEl.appendChild(b);
+});
+$("#addScreen").onclick = () => {
+  const st = flowState();
+  const id = "user-" + Date.now();
+  st.added.push({ id, x: 80 - panX/zoom + 40, y: 80 - panY/zoom + 40, kind:"screen",
+    step:"+", title:"New screen", url:"/path", html:"" });
+  saveStore(); render();
+};
+$("#addNote").onclick = () => {
+  const st = flowState();
+  const id = "user-" + Date.now();
+  st.added.push({ id, x: 120 - panX/zoom + 60, y: 140 - panY/zoom + 60, kind:"note",
+    text:"Double-click to edit this note…" });
+  saveStore(); render();
+};
+$("#resetBtn").onclick = () => {
+  if(!confirm("Reset this flow's layout, notes and added items?")) return;
+  delete store[FLOWS[current].id]; saveStore(); render(); fitView();
+};
+$("#fitBtn").onclick = fitView;
+$("#printBtn").onclick = () => window.print();
+
+/* ═══════════════ Init ═══════════════ */
+render();
+fitView();
+window.addEventListener("resize", drawEdges);
+</script>
+</body>
+</html>
