@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>T2 Content page — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="tpl-content-page">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Templates &middot; T2</p>
+      <h1 class="ds-page-title">Content page</h1>
+      <p class="ds-lede">
+        The workhorse template: breadcrumb, H1, intro paragraph, then stacked H2 prose sections. This is the page
+        type the Back Office team will create most often.
+      </p>
+    </div>
+
+    <h2>Pages using this template</h2>
+    <table class="ds-table">
+      <thead><tr><th>Route</th><th>H1</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>/about</code></td><td>How the NHS HealthStore helps</td><td></td></tr>
+        <tr><td><code>/cookies</code></td><td>Cookies</td><td>Denser legal prose + a reset-consent control</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Structure and content regions</h2>
+    <table class="ds-table">
+      <thead><tr><th style="width:26%">Region</th><th>Content</th><th style="width:20%">Who edits</th></tr></thead>
+      <tbody>
+        <tr><td>Breadcrumb</td><td>Ancestors only (current page not shown), derived from page position in the tree.</td><td><span class="badge badge-blue">Automatic</span></td></tr>
+        <tr><td>Page header</td><td>H1 + grey intro paragraph, constrained to a readable measure.</td><td><span class="badge badge-green">CMS editor</span></td></tr>
+        <tr><td>Body sections</td><td>Stacked H2 sections of rich text.</td><td><span class="badge badge-green">CMS editor</span></td></tr>
+        <tr><td>Inline functional widgets</td><td>e.g. the reset-consent button on Cookies. Rendered by the app, placed via a block.</td><td><span class="badge badge-amber">Developer block</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>Notes</h2>
+    <p>
+      A single <code>ContentPage</code> type with rich-text and panel blocks covers both pages today, and any future
+      &ldquo;flat&rdquo; page (accessibility statement, terms, contact).
+    </p>
+
+    <h3 style="color: var(--text-muted)">On template consolidation</h3>
+    <ul>
+      <li>If this template gains a &ldquo;card grid&rdquo; block, it can also absorb the <a href="/templates/hub.html">T3 Hub</a> template.</li>
+    </ul>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

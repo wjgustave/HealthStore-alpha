@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>T3 Hub — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="tpl-hub">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Templates &middot; T3</p>
+      <h1 class="ds-page-title">Hub (card grid)</h1>
+      <p class="ds-lede">
+        Landing page that routes users onwards: breadcrumb, H1, intro, then a grid of clickable cards.
+      </p>
+    </div>
+
+    <h2>Pages using this template</h2>
+    <table class="ds-table">
+      <thead><tr><th>Route</th><th>H1</th><th>Cards</th></tr></thead>
+      <tbody>
+        <tr><td><code>/catalogue</code></td><td>Product catalogue</td><td>&ldquo;Care pathways&rdquo; clickable cards (title + product count) linking to the filtered listing, plus a &ldquo;coming soon&rdquo; grid of non-clickable roadmap cards</td></tr>
+        <tr><td><code>/resources</code></td><td>Resource library</td><td>Four resource clickable cards (title + description)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Structure and content regions</h2>
+    <table class="ds-table">
+      <thead><tr><th style="width:26%">Region</th><th>Content</th><th style="width:20%">Who edits</th></tr></thead>
+      <tbody>
+        <tr><td>Breadcrumb + page header</td><td>H1 + grey intro paragraph.</td><td><span class="badge badge-green">CMS editor</span></td></tr>
+        <tr><td>Card grid</td><td>Clickable cards in the catalogue <code>app-card</code> style: NHS-blue underlined title, supporting line in secondary text. 2&ndash;3 columns responsive.</td><td><span class="badge badge-green">CMS editor</span> (title, description, destination)</td></tr>
+        <tr><td>Counts / derived labels</td><td>Product counts on catalogue cards come from the product data, not editors.</td><td><span class="badge badge-blue">Automatic</span></td></tr>
+        <tr><td>Secondary sections</td><td>Optional extras: &ldquo;See all products&rdquo; link line, roadmap (&ldquo;coming soon&rdquo;) card grid.</td><td><span class="badge badge-green">CMS editor</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>Notes</h2>
+    <p>
+      One <code>HubPage</code> type with an orderable list of card entries (label, description, link) covers both
+      pages. Card destinations can be internal page choosers so links stay valid as the tree changes. The catalogue
+      hub's pathway counts should be computed from the product index at render time.
+    </p>
+
+    <h3 style="color: var(--text-muted)">On template consolidation</h3>
+    <ul>
+      <li>Optional: implement the card grid as a StreamField block on <a href="/templates/content-page.html">T2 Content page</a> and drop this template entirely. Trade-off: simpler template count vs a laxer content model.</li>
+    </ul>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

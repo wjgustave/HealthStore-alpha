@@ -5,22 +5,22 @@ export const metadata = { title: 'Resource library — NHS HealthStore' }
 
 const RESOURCES = [
   {
-    href: '/resources/guidance',
+    href: '#',
     title: 'Guidance and evidence',
     description: 'Evidence standards, buyer guidance and methods for commissioning digital therapeutics.',
   },
   {
-    href: '/resources/news',
-    title: 'News',
-    description: 'Curated updates for commissioners: policy, guidance and system context.',
+    href: '#',
+    title: 'Digital commissioning toolkits',
+    description: 'Practical materials to plan, mobilise and evaluate digital therapeutic deployments.',
   },
   {
-    href: '/resources/campaigns',
+    href: '#',
     title: 'Campaigns',
     description: 'National and regional programmes relevant to digital health commissioning.',
   },
   {
-    href: '/resources/case-studies',
+    href: '#',
     title: 'Case studies',
     description: 'Real-world deployment stories and outcomes from NHS settings.',
   },
@@ -36,22 +36,32 @@ export default function ResourcesPage() {
           className="m-0 hs-measure leading-relaxed"
           style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}
         >
-          Guidance, news, campaigns and case studies to support commissioning decisions.
+          Guidance, digital commissioning toolkits, campaigns and case studies to support commissioning decisions.
         </p>
       </div>
 
       <ul className="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2">
         {RESOURCES.map(item => (
-          <li key={item.href}>
+          <li key={item.title} className="min-h-0">
             <Link
               href={item.href}
-              className="hs-surface-card-sm block h-full p-6 no-underline transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-              style={{ outlineColor: 'var(--nhs-blue)', color: 'inherit' }}
+              className="app-card group flex h-full min-h-0 flex-col p-6 text-left no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+              style={{ color: 'inherit', outlineColor: 'var(--nhs-blue)' }}
             >
-              <h2 className="m-0 hs-text-card-title-sm hs-font-bold" style={{ color: 'var(--nhs-blue)' }}>
+              <h2
+                className="m-0 hs-font-bold underline underline-offset-2"
+                style={{
+                  fontFamily: 'Frutiger, Arial, sans-serif',
+                  fontSize: 'var(--text-card-title-sm)',
+                  color: 'var(--nhs-blue)',
+                }}
+              >
                 {item.title}
               </h2>
-              <p className="mt-2 mb-0 hs-text-label leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              <p
+                className="mb-0 mt-2 leading-relaxed"
+                style={{ fontSize: 'var(--text-body)', color: 'var(--text-primary)', lineHeight: 1.55 }}
+              >
                 {item.description}
               </p>
             </Link>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>T7 EOI (Form) — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="tpl-eoi-form">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Templates &middot; T7</p>
+      <h1 class="ds-page-title">EOI (Form)</h1>
+      <p class="ds-lede">
+      Transactional flow: Starting with one question per screen, progressing grouped question screens as transaction
+      progresses, a check-answers step, then confirmation.
+      </p>
+    </div>
+
+    <h2>Pages using this template</h2>
+    <p>Each step is its own route under <code>/apps/[slug]/express-interest</code>:</p>
+    <table class="ds-table">
+      <thead><tr><th>Route</th><th>Step</th></tr></thead>
+      <tbody>
+        <tr><td><code>/apps/[slug]/express-interest</code></td><td>Start</td></tr>
+        <tr><td><code>&hellip;/details</code></td><td>Your details</td></tr>
+        <tr><td><code>&hellip;/verify</code></td><td>Verify email</td></tr>
+        <tr><td><code>&hellip;/support</code></td><td>What support do you need</td></tr>
+        <tr><td><code>&hellip;/timing</code></td><td>Timing and context</td></tr>
+        <tr><td><code>&hellip;/check-answers</code></td><td>Check your answers</td></tr>
+        <tr><td><code>&hellip;/confirmation</code></td><td>Confirmation of submission</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Structure and content regions</h2>
+    <table class="ds-table">
+      <thead><tr><th style="width:26%">Region</th><th>Content</th><th style="width:20%">Who edits</th></tr></thead>
+      <tbody>
+        <tr><td>Question page</td><td>Back link, H1 question, hint text, single input group (radios / text / fieldset), Continue button. Form components with error summary on validation failure.</td><td><span class="badge badge-green">CMS editor</span></td></tr>
+        <tr><td>Check answers</td><td>Summary list with change links back into individual steps.</td><td><span class="badge badge-amber">App</span></td></tr>
+        <tr><td>Confirmation</td><td>Confirmation panel, what-happens-next copy, onward links.</td><td><span class="badge badge-green">CMS editor</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>Notes</h2>
+    <p>
+      <strong>Wagtail consideration note:</strong> Each step is its own route, but the flow itself stays in application code: validation, step guards, answer
+      state and email verification are logic, not content. The question copy, hints and confirmation text are what
+      the Back Office team edits (per the CMS editor tags above) &mdash; expose these as editable strings/snippets
+      rather than modelling the steps as CMS pages. Wagtail&rsquo;s form builder is not a good fit for multi-step
+      verified journeys.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

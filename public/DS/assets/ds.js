@@ -37,6 +37,8 @@
     },
     {
       title: 'Styles',
+      collapsible: true,
+      storageKey: 'ds-nav-styles',
       items: [
         { key: 'colour', label: 'Colour', href: '/DS/styles/colour.html' },
         { key: 'typography', label: 'Typography', href: '/DS/styles/typography.html' },
@@ -48,6 +50,8 @@
     },
     {
       title: 'Components',
+      collapsible: true,
+      storageKey: 'ds-nav-components',
       items: [
         { key: 'badges-tags', label: 'Badges & tags', href: '/DS/components/badges-tags.html' },
         { key: 'buttons', label: 'Buttons', href: '/DS/components/buttons.html' },
@@ -70,6 +74,8 @@
     },
     {
       title: 'Patterns',
+      collapsible: true,
+      storageKey: 'ds-nav-patterns',
       items: [
         { key: 'product-detail', label: 'Product detail (PDP)', href: '/DS/patterns/product-detail.html' },
         { key: 'discovery', label: 'Discovery & catalogue', href: '/DS/patterns/discovery.html' },
@@ -78,6 +84,22 @@
         { key: 'dashboard', label: 'Dashboard', href: '/DS/patterns/dashboard.html' },
         { key: 'consent', label: 'Cookie consent', href: '/DS/patterns/consent.html' },
         { key: 'ai-advisor', label: 'AI advisor', href: '/DS/patterns/ai-advisor.html' }
+      ]
+    },
+    {
+      title: 'Templates',
+      collapsible: true,
+      storageKey: 'ds-nav-templates',
+      items: [
+        { key: 'templates', label: 'Overview', href: '/templates/index.html' },
+        { key: 'tpl-home', label: 'T1 Home', href: '/templates/home.html' },
+        { key: 'tpl-content-page', label: 'T2 Content page', href: '/templates/content-page.html' },
+        { key: 'tpl-hub', label: 'T3 Hub (card grid)', href: '/templates/hub.html' },
+        { key: 'tpl-directory', label: 'T4 Directory / listing', href: '/templates/directory.html' },
+        { key: 'tpl-product-listing', label: 'T5 Product listing', href: '/templates/product-listing.html' },
+        { key: 'tpl-product-detail', label: 'T6 Product detail page', href: '/templates/product-detail.html' },
+        { key: 'tpl-eoi-form', label: 'T7 EOI (Form)', href: '/templates/eoi-form.html' },
+        { key: 'tpl-utility', label: 'T8 Comparison tool', href: '/templates/utility.html' }
       ]
     },
     {
@@ -113,20 +135,30 @@
     return frag;
   }
 
-  function auditsActive(activeKey) {
-    if (activeKey === 'audits') return true;
-    return AUDITS.some(function (item) { return item.key === activeKey; });
+  /** True when the active page lives inside this group (hub or item). */
+  function groupActive(group, activeKey) {
+    if (group.hub && group.hub.key === activeKey) return true;
+    return group.items.some(function (item) { return item.key === activeKey; });
   }
+
+  /* Pages under /templates are a sibling site: their side nav shows only the
+     Templates group, rendered flat (no collapse) since it is the sole section. */
+  var TEMPLATES_ONLY = window.location.pathname.indexOf('/templates/') === 0 ||
+    window.location.pathname === '/templates';
 
   function buildSidenav(activeKey) {
     var nav = el('nav', { class: 'ds-sidenav', 'aria-label': 'Design system sections' });
-    NAV.forEach(function (group) {
-      var g = el('div', { class: 'ds-sidenav__group' + (group.collapsible ? ' ds-sidenav__group--collapsible' : '') });
+    var groups = TEMPLATES_ONLY
+      ? NAV.filter(function (group) { return group.title === 'Templates'; })
+      : NAV;
+    groups.forEach(function (group) {
+      var collapsible = group.collapsible && !TEMPLATES_ONLY;
+      var g = el('div', { class: 'ds-sidenav__group' + (collapsible ? ' ds-sidenav__group--collapsible' : '') });
 
-      if (group.collapsible) {
+      if (collapsible) {
         var stored = null;
         try { stored = localStorage.getItem(group.storageKey); } catch (e) { /* ignore */ }
-        var isOpen = stored === '1' || (stored !== '0' && auditsActive(activeKey));
+        var isOpen = stored === '1' || (stored !== '0' && groupActive(group, activeKey));
 
         var head = el('div', { class: 'ds-sidenav__collapsible-head' });
         var toggle = el('button', {

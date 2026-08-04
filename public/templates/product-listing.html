@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>T5 Product listing — HealthStore Design System</title>
+  <link rel="stylesheet" href="/DS/assets/ds.css">
+</head>
+<body>
+  <div id="ds-root" data-ds-page="tpl-product-listing">
+    <div class="ds-page-header">
+      <p class="ds-eyebrow">Templates &middot; T5</p>
+      <h1 class="ds-page-title">Product listing</h1>
+      <p class="ds-lede">
+        The searchable, filterable catalogue results page. Mostly rendered from product records.
+      </p>
+    </div>
+
+    <h2>Pages using this template</h2>
+    <table class="ds-table">
+      <thead><tr><th>Route</th><th>H1</th></tr></thead>
+      <tbody>
+        <tr><td><code>/catalogue/digital-therapeutics</code> (+ filter query)</td><td>Digital therapeutics</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Structure and content regions</h2>
+    <table class="ds-table">
+      <thead><tr><th style="width:26%">Region</th><th>Content</th><th style="width:20%">Who edits</th></tr></thead>
+      <tbody>
+        <tr><td>Breadcrumb + page header</td><td>H1 + intro line.</td><td><span class="badge badge-green">CMS editor</span> (intro copy only)</td></tr>
+        <tr><td>Filter panel</td><td>Condition, evidence, and other filters; active filter pills; result count announced to screen readers.</td><td><span class="badge badge-amber">App</span></td></tr>
+        <tr><td>Result cards</td><td>Product cards: logo, name, supplier, product proposition, condition tags, badges, &ldquo;View product details&rdquo; button, compare toggle.</td><td><span class="badge badge-blue">Product records</span></td></tr>
+        <tr><td>Empty state</td><td>&ldquo;No apps match your filters&rdquo; card.</td><td><span class="badge badge-amber">App</span></td></tr>
+        <tr><td>(<strong>TBC</strong>) Related content sidenav</td><td>Related-navigation list.</td><td><span class="badge badge-green">CMS editor</span> (link list)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Notes</h2>
+    <p>
+      <strong>Wagtail consideration note:</strong> In a Wagtail build this is a routable index page over the product
+      page type (T6), with filtering handled in the view. The editable surface is small: intro copy and the
+      related-content link list. Everything else derives from product data, so no Back Office authoring
+      happens here.
+    </p>
+  </div>
+  <script src="/DS/assets/ds.js" defer></script>
+</body>
+</html>

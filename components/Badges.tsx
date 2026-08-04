@@ -132,11 +132,11 @@ export function EditorialEvidenceMetaRow({
 
 export function FundingStatusBadge({ status }: { status: string }) {
   const labels: Record<string, string> = {
-    open: 'Open',
+    open: 'Live',
     closed: 'Closed',
     closed_confirm: 'Closed – confirm',
-    upcoming: 'Upcoming',
-    periodic: 'Upcoming',
+    upcoming: 'Future',
+    periodic: 'Future',
   }
   const isUpcoming = status === 'upcoming' || status === 'periodic'
   const colour: TagColour = status === 'open' ? 'green' : isUpcoming ? 'orange' : 'grey'

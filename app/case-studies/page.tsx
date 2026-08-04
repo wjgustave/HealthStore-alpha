@@ -1,6 +1,6 @@
 import { permanentRedirect } from 'next/navigation'
 
-/** Legacy `/case-studies` route — Case studies now lives in the Resource library. */
+/** Legacy `/case-studies` — page is hidden; send to Resource library. */
 export default function CaseStudiesPageLegacyRedirect() {
-  permanentRedirect('/resources/case-studies')
+  permanentRedirect('/resources')
 }

@@ -396,10 +396,10 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
             <Link href="/funding">Funding index</Link>
           </li>
           <li>
-            <Link href="/resources/guidance">Guidance</Link>
+            <Link href="/resources">Resource library</Link>
           </li>
           <li>
-            <Link href="/how-it-helps">How it works</Link>
+            <Link href="/about">How it works</Link>
           </li>
           <li>
             <Link href="/resources">Resource library</Link>

@@ -1,4 +1,4 @@
-import { getAllFunding, getAllApps } from '@/lib/data'
+import { getAllFunding } from '@/lib/data'
 import { FundingDirectoryCard } from '@/components/FundingDirectoryCard'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 
@@ -6,51 +6,12 @@ export const metadata = { title: 'Funding index — NHS HealthStore' }
 
 export default function FundingPage() {
   const funding = getAllFunding()
-  const apps = getAllApps()
 
-  const open = funding.filter(f => f.status === 'open')
-  const upcoming = funding.filter(f => f.status === 'upcoming' || f.status === 'periodic')
+  // Live (open) and Future (upcoming/periodic) share one unheaded list; closed stays under its own heading.
+  const active = funding.filter(
+    f => f.status === 'open' || f.status === 'upcoming' || f.status === 'periodic',
+  )
   const closed = funding.filter(f => f.status === 'closed' || f.status === 'closed_confirm')
-
-  function Section({
-    title,
-    sectionId,
-    items,
-    color,
-    showCount = true,
-  }: {
-    title: string
-    sectionId: string
-    items: typeof funding
-    color: string
-    showCount?: boolean
-  }) {
-    if (!items.length) return null
-    const headingId = `funding-section-${sectionId}`
-    return (
-      <section className="hs-section-lg" aria-labelledby={headingId}>
-        <div className="mb-6 flex items-center gap-4">
-          <h2
-            id={headingId}
-            className="hs-text-section-alt hs-font-bold"
-            style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
-          >
-            {title}
-          </h2>
-          {showCount && (
-            <span className="badge" style={{ background: color + '22', color }}>
-              {items.length}
-            </span>
-          )}
-        </div>
-        <div className="flex flex-col gap-6">
-          {items.map(f => (
-            <FundingDirectoryCard key={f.id} f={f} apps={apps} />
-          ))}
-        </div>
-      </section>
-    )
-  }
 
   return (
     <div className="hs-page">
@@ -65,9 +26,37 @@ export default function FundingPage() {
         </p>
       </div>
 
-      <Section title="Currently open" sectionId="open" items={open} color="#007F3B" showCount={false} />
-      <Section title="Upcoming" sectionId="upcoming" items={upcoming} color="#7A4800" showCount={false} />
-      <Section title="Closed (confirm current status)" sectionId="closed" items={closed} color="#7A4800" />
+      {active.length > 0 && (
+        <section className="hs-section-lg" aria-label="Funding opportunities">
+          <div className="flex flex-col gap-6">
+            {active.map(f => (
+              <FundingDirectoryCard key={f.id} f={f} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {closed.length > 0 && (
+        <section className="hs-section-lg" aria-labelledby="funding-section-closed">
+          <div className="mb-6 flex items-center gap-4">
+            <h2
+              id="funding-section-closed"
+              className="hs-text-section-alt hs-font-bold"
+              style={{ fontFamily: 'Frutiger, Arial, sans-serif', color: 'var(--text-primary)' }}
+            >
+              Closed (confirm current status)
+            </h2>
+            <span className="badge" style={{ background: '#7A480022', color: '#7A4800' }}>
+              {closed.length}
+            </span>
+          </div>
+          <div className="flex flex-col gap-6">
+            {closed.map(f => (
+              <FundingDirectoryCard key={f.id} f={f} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   )
 }

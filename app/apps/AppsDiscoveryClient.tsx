@@ -71,7 +71,7 @@ export default function AppsDiscoveryClient({
           className="mb-4 hs-font-bold"
           style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-section-alt)', color: 'var(--text-primary)' }}
         >
-          Digital therapeutics
+          Care pathways
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {availableConditions.map(c => (
@@ -81,13 +81,15 @@ export default function AppsDiscoveryClient({
               className="app-card group block p-6 text-left no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
               style={{ color: 'inherit', outlineColor: 'var(--nhs-blue)' }}
             >
-              <div className="hs-font-bold" style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-card-title-sm)', color: 'var(--text-primary)' }}>
+              <div
+                className="hs-font-bold underline underline-offset-2"
+                style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-card-title-sm)', color: 'var(--nhs-blue)' }}
+              >
                 {c.label}
               </div>
-              <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)', marginTop: 4 }}>
+              <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-secondary)', marginTop: 4 }}>
                 {c.count} {c.count === 1 ? 'product' : 'products'}
               </div>
-              <span className="mt-2 inline-block hs-text-label hs-font-bold text-[var(--nhs-blue)] underline">View products</span>
             </Link>
           ))}
         </div>
@@ -97,11 +99,11 @@ export default function AppsDiscoveryClient({
             className="hs-text-body hs-font-bold underline underline-offset-2"
             style={{ color: 'var(--nhs-blue)' }}
           >
-            Browse all products
+            See all products in the catalogue
           </Link>
           <span style={{ fontSize: 'var(--text-label)', color: 'var(--text-muted)' }}>
             {' '}
-            · {totalAppCount} digital therapeutics
+            · {totalAppCount} {totalAppCount === 1 ? 'product' : 'products'}
           </span>
         </p>
       </section>

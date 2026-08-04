@@ -1,5 +1,4 @@
-import Link from 'next/link'
-import { FundingStatusBadge, ConditionTag } from '@/components/Badges'
+import { ConditionTag } from '@/components/Badges'
 import type { App } from '@/lib/data'
 import { isVisibleCondition } from '@/lib/visibleConditions'
 
@@ -37,35 +36,7 @@ function formatClosingSummary(f: FundingDirectoryRecord): string {
   return 'Ongoing — confirm with sponsor'
 }
 
-function LinkedCatalogueApps({ appTags, apps }: { appTags: string[]; apps: App[] }) {
-  const linked = appTags
-    .map(id => apps.find(a => a.id === id || a.slug === id))
-    .filter((app): app is App => Boolean(app))
-
-  if (linked.length === 0) return null
-
-  return (
-    <div className="border-t px-4 py-4 sm:px-6" style={{ borderColor: 'var(--border)', background: '#F0F4F5' }}>
-      <p className="m-0 mb-2 hs-text-caption hs-font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
-        Linked in this catalogue
-      </p>
-      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 sm:justify-start">
-        {linked.map(app => (
-          <Link
-            key={app.id}
-            href={`/apps/${app.slug}`}
-            className="nhsuk-link nhsuk-link--no-visited-state"
-            style={{ textDecoration: 'none' }}
-          >
-            {app.app_name}
-          </Link>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-export function FundingDirectoryCard({ f, apps }: { f: FundingDirectoryRecord; apps: App[] }) {
+export function FundingDirectoryCard({ f }: { f: FundingDirectoryRecord; apps?: App[] }) {
   const titleId = `funding-title-${f.id}`
   const metaLine = `${f.sponsoring_body || 'Sponsor not stated'} · ${formatClosingSummary(f)}`
 
@@ -74,9 +45,6 @@ export function FundingDirectoryCard({ f, apps }: { f: FundingDirectoryRecord; a
     <article aria-labelledby={titleId} className="nhsuk-card overflow-hidden">
       <div className="nhsuk-card__content">
         <div className="mb-2">
-          <div className="mb-2 flex justify-end">
-            <FundingStatusBadge status={f.status} />
-          </div>
           <h3 id={titleId} className="nhsuk-card__heading m-0 leading-snug" style={{ maxWidth: 'none' }}>
             {f.title}
           </h3>
@@ -124,9 +92,6 @@ export function FundingDirectoryCard({ f, apps }: { f: FundingDirectoryRecord; a
           </a>
         ) : null}
       </div>
-
-      <LinkedCatalogueApps appTags={f.app_tags ?? []} apps={apps} />
     </article>
   )
 }
-

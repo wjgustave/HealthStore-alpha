@@ -146,7 +146,7 @@ export default function Nav({
       id: 'about',
       href: '/about',
       label: 'About',
-      active: path === '/about' || path.startsWith('/how-it-helps'),
+      active: path === '/about',
     },
     {
       id: 'catalogue',

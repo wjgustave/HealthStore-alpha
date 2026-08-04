@@ -1,6 +1,6 @@
 import { permanentRedirect } from 'next/navigation'
 
-/** Legacy `/campaigns` route — Campaigns now lives in the Resource library. */
+/** Legacy `/campaigns` — page is hidden; send to Resource library. */
 export default function CampaignsPageLegacyRedirect() {
-  permanentRedirect('/resources/campaigns')
+  permanentRedirect('/resources')
 }

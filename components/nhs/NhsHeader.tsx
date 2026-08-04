@@ -7,11 +7,10 @@ import { useState } from 'react'
 import { useCompareBasket } from '@/components/CompareBasketProvider'
 
 const NAV_ITEMS = [
-  { href: '/opportunities', label: 'Explore local need', match: (p: string) => p.startsWith('/opportunities') || p.startsWith('/start') },
   { href: '/catalogue', label: 'Products', match: (p: string) => p.startsWith('/catalogue') || p.startsWith('/product-catalogue') || p.startsWith('/products') || p.startsWith('/apps') },
   { href: '/compare', label: 'Compare', match: (p: string) => p.startsWith('/compare') },
-  { href: '/how-it-helps', label: 'How it works', match: (p: string) => p.startsWith('/how-it-helps') },
-  { href: '/resources/guidance', label: 'Guidance', match: (p: string) => p.startsWith('/resources/guidance') || p === '/resources/case-studies' || p === '/resources/news' },
+  { href: '/about', label: 'How it works', match: (p: string) => p.startsWith('/about') },
+  { href: '/resources', label: 'Guidance', match: (p: string) => p.startsWith('/resources') },
 ]
 
 export default function NhsHeader({
