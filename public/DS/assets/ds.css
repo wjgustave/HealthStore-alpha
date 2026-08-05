@@ -265,6 +265,16 @@ a { color: var(--nhs-blue); }
 
 .ds-content h2 { font-size: var(--text-section); margin: 48px 0 8px; }
 .ds-content h2:first-of-type { margin-top: 8px; }
+.ds-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 48px 0 8px;
+}
+.ds-heading-row:first-of-type { margin-top: 8px; }
+.ds-heading-row h2 { margin: 0; }
 .ds-content h3 { font-size: var(--text-card-title-sm); margin: 32px 0 8px; }
 .ds-content h4 { font-size: var(--text-body); margin: 24px 0 6px; }
 .ds-content p { max-width: 72ch; }
@@ -403,6 +413,7 @@ a { color: var(--nhs-blue); }
 .badge-teal { background: #d0e6e7; color: #0b4144; }
 .badge-prototype { background: #cecece; color: #0b0c0c; }
 .badge-blue-solid { background: var(--nhs-blue); color: #fff; }
+.badge-black { background: #0b0c0c; color: #fff; }
 .badge-condition { background: #d2e2f1; color: #0f385c; }
 .badge-topic { background: #cecece; color: #0b0c0c; }
 .effort-low { background: #cfe4dc; color: #083d29; }
