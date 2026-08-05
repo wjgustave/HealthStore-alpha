@@ -22,16 +22,16 @@
       <div class="ds-meta"><div class="ds-meta__k">Number of screens</div><div class="ds-meta__v">10 pages</div></div>
       <div class="ds-meta"><div class="ds-meta__k">Template families</div><div class="ds-meta__v">8 proposed templates</div></div>
       <div class="ds-meta"><div class="ds-meta__k">CMS-authored</div><div class="ds-meta__v">5 templates the Back Office team would edit</div></div>
-      <div class="ds-meta"><div class="ds-meta__k">Data / app driven</div><div class="ds-meta__v">3 templates rendered from product data or app logic</div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Data / site functionality</div><div class="ds-meta__v">3 templates rendered from product data or site functionality</div></div>
     </div>
     <p>
-      The 10 screens collapse into <strong>8 template families</strong>. Of those,
-      <strong>5 are CMS content templates</strong> (Home, Content page, Hub, Directory, Product detail page) —
-      the pages the Back Office team would create and edit as part of their general tasks. The Product detail page
-      is the hybrid of the set: a data-backed Wagtail page type whose product proposition and content narrative are
-      CMS-edited alongside the structured product record. The remaining 3 are driven by product data or app
-      functionality: the flows and tools stay in application code, with copy exposed as CMS-editable strings where
-      the tags on each template page indicate.
+      The 10 screens collapse into <strong>8 templates</strong>. Of those,
+      <strong>5 are CMS content templates</strong>, (Home, Content page, Hub, Directory, Product detail page)
+      the pages the Back Office team would create and edit as part of their general tasks. Current thinking is the
+      Product detail page will be a hybrid of the set: a data-backed Wagtail page type whose product proposition and
+      content narrative are CMS-edited alongside the structured product record. The remaining 3 are driven by product
+      data or website functionality: the flows and tools stay in site code, with copy exposed as CMS-editable strings
+      where the tags on each template page indicate.
     </p>
 
     <h2>Template inventory</h2>
@@ -73,12 +73,12 @@
         <tr>
           <td><a href="/templates/eoi-form.html">T7 &middot; EOI (Form)</a></td>
           <td><code>/apps/[slug]/express-interest/*</code> (start, details, verify, support, timing, check-answers, confirmation)</td>
-          <td><span class="badge badge-amber">App</span> form flow; copy CMS-editable</td>
+          <td><span class="badge badge-amber">site functionality</span> form flow; copy CMS-editable</td>
         </tr>
         <tr>
           <td><a href="/templates/utility.html">T8 &middot; Comparison tool</a></td>
           <td><code>/compare</code></td>
-          <td><span class="badge badge-amber">App</span> tool, outside CMS</td>
+          <td><span class="badge badge-amber">site functionality</span> tool, outside CMS</td>
         </tr>
       </tbody>
     </table>
