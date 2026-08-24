@@ -682,7 +682,7 @@ function TagEditor({
           size="none"
           onClick={addDraft}
           aria-label={addLabel}
-          className="flex-shrink-0 p-2"
+          className="max-sm:!w-auto max-sm:!mt-0 max-sm:!mb-0 flex-shrink-0 p-2"
         >
           <Plus className="h-4 w-4" aria-hidden />
         </Button>

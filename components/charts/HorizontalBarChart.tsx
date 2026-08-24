@@ -5,6 +5,10 @@ export type HorizontalBarRow = {
   color?: string
 }
 
+/**
+ * Horizontal bars as HTML (not SVG), so labels stay real text at SM sizes.
+ * Stacks label / track / value below 640px — same pattern as myCOPD BeforeAfterImpact.
+ */
 export default function HorizontalBarChart({
   rows,
   maxValue,
@@ -12,6 +16,7 @@ export default function HorizontalBarChart({
   compareLabel = 'Comparator',
   primaryLabel = 'NHS HealthStore route',
   ariaLabel,
+  showRowText = true,
 }: {
   rows: HorizontalBarRow[]
   maxValue?: number
@@ -19,50 +24,69 @@ export default function HorizontalBarChart({
   compareLabel?: string
   primaryLabel?: string
   ariaLabel: string
+  /** When false, only the tracks render — use when a title and figure already sit around the bar. */
+  showRowText?: boolean
 }) {
   const max = maxValue ?? Math.max(...rows.map((r) => r.value), ...(compareRows?.map((r) => r.value) ?? [0]), 1)
-  const chartWidth = 480
-  const labelWidth = 180
-  const startX = labelWidth + 14
-  const rowHeight = 44
 
   return (
-    <div className="hs-chart-wrap">
-      <svg className="hs-chart" viewBox={`0 0 ${startX + chartWidth + 80} ${rows.length * rowHeight + 48}`} role="img" aria-label={ariaLabel}>
-        {rows.map((row, i) => {
-          const y = 24 + i * rowHeight
-          const w = (row.value / max) * chartWidth
-          const compare = compareRows?.[i]
-          const cw = compare ? (compare.value / max) * chartWidth : 0
-          return (
-            <g key={row.label}>
-              <text x={labelWidth} y={y + 15} textAnchor="end" fill="#4c6272" fontSize={16}>
-                {row.label}
-              </text>
-              <rect x={startX} y={y} width={w} height={20} rx={3} fill={row.color ?? '#005eb8'} />
-              <text x={startX + w + 8} y={y + 15} fill="#212b32" fontSize={18} fontWeight={600}>
-                {row.displayValue ?? `${row.value}%`}
-              </text>
-              {compare ? (
-                <>
-                  <rect x={startX} y={y + 24} width={cw} height={14} rx={2} fill="#41b6e6" />
-                  <text x={startX + cw + 8} y={y + 35} fill="#4c6272" fontSize={16}>
-                    {compare.displayValue ?? `${compare.value}%`}
-                  </text>
-                </>
+    <div className="hs-hbar">
+      {rows.map((row, i) => {
+        const compare = compareRows?.[i]
+        const widthPct = max > 0 ? Math.min(100, (row.value / max) * 100) : 0
+        const comparePct = compare && max > 0 ? Math.min(100, (compare.value / max) * 100) : 0
+        const valueText = row.displayValue ?? `${row.value}%`
+        return (
+          <div key={row.label} className="hs-hbar__group">
+            <div className={`hs-hbar__row${showRowText ? '' : ' hs-hbar__row--track-only'}`}>
+              {showRowText ? <span className="hs-hbar__label">{row.label}</span> : null}
+              <div
+                className="hs-hbar__track"
+                role="img"
+                aria-label={showRowText ? `${row.label} ${valueText}` : ariaLabel}
+              >
+                <div
+                  className="hs-hbar__bar"
+                  style={{
+                    width: `${widthPct}%`,
+                    background: row.color ?? 'var(--nhs-blue)',
+                  }}
+                />
+              </div>
+              {showRowText ? (
+                <span className="hs-hbar__value">{valueText}</span>
               ) : null}
-            </g>
-          )
-        })}
-        {compareRows ? (
-          <g transform={`translate(${startX}, ${rows.length * rowHeight + 28})`}>
-            <rect x={0} y={0} width={14} height={14} fill="#005eb8" />
-            <text x={22} y={12} fontSize={16} fill="#4c6272">{primaryLabel}</text>
-            <rect x={160} y={0} width={14} height={14} fill="#41b6e6" />
-            <text x={182} y={12} fontSize={16} fill="#4c6272">{compareLabel}</text>
-          </g>
-        ) : null}
-      </svg>
+            </div>
+            {compare ? (
+              <div className="hs-hbar__row hs-hbar__row--compare">
+                <span className="hs-hbar__label">{compare.label}</span>
+                <div className="hs-hbar__track">
+                  <div
+                    className="hs-hbar__bar hs-hbar__bar--compare"
+                    style={{
+                      width: `${comparePct}%`,
+                      background: compare.color ?? '#41b6e6',
+                    }}
+                  />
+                </div>
+                <span className="hs-hbar__value">{compare.displayValue ?? `${compare.value}%`}</span>
+              </div>
+            ) : null}
+          </div>
+        )
+      })}
+      {compareRows ? (
+        <div className="hs-chart-legend">
+          <span>
+            <i style={{ background: 'var(--nhs-blue)' }} aria-hidden />
+            {primaryLabel}
+          </span>
+          <span>
+            <i style={{ background: '#41b6e6' }} aria-hidden />
+            {compareLabel}
+          </span>
+        </div>
+      ) : null}
     </div>
   )
 }

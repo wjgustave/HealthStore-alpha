@@ -141,7 +141,7 @@ export default function ClearDataModal({ open, onClose }: Props) {
             </strong>{' '}
             for your entire organisation. This action cannot be undone.
           </p>
-          <div className="flex gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <Button variant="destructive" onClick={handleConfirm} className="flex-1">
               Yes, clear data
             </Button>
@@ -203,7 +203,7 @@ export default function ClearDataModal({ open, onClose }: Props) {
               </p>
             </div>
           </div>
-          <div className="flex gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <Button onClick={handleConfirm} className="flex-1">
               Try again
             </Button>

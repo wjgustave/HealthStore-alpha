@@ -175,7 +175,11 @@ function CompareSectionTable({
       </thead>
       <tbody className="nhsuk-table__body">
         {section.rows.map((row) => (
-          <tr key={row.key} className="nhsuk-table__row" role="row">
+          <tr
+            key={row.key}
+            className={`nhsuk-table__row${row.key === 'product_profile' ? ' hs-compare-row--product-page' : ''}`}
+            role="row"
+          >
             <th scope="row" className="nhsuk-table__header" role="rowheader">
               {row.label}
             </th>

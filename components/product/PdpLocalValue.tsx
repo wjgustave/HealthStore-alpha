@@ -9,7 +9,8 @@ import { getDtxImpactRanges } from '@/lib/localData/workspaceData'
 import { PdpSection } from '@/components/PdpSection'
 import { IndicativeFinancialContextSection } from '@/components/AppDetailSections'
 import MycopdImpactCharts from '@/components/product/MycopdImpactCharts'
-import { HorizontalBarChart, InsightCallout } from '@/components/charts'
+import LusciiImpactCharts from '@/components/product/LusciiImpactCharts'
+import { InsightCallout } from '@/components/charts'
 
 /**
  * Round 2 content migration (quantified value) — Luscii pilot.
@@ -161,28 +162,16 @@ export default function PdpLocalValue({
           </>
         ) : (
           <>
-            <div className="hs-chart-panel">
-              <h3>
-                Based on {ref.eligible_cohort.toLocaleString()} eligible patients enrolled with a 75% uptake.
-              </h3>
-              <HorizontalBarChart
-                ariaLabel={`Projected annual events avoided in ${areaLabel}`}
-                maxValue={Math.max(admHigh, aeHigh) * 1.25}
-                rows={[
-                  {
-                    label: 'Emergency admissions',
-                    value: admHigh,
-                    displayValue: `${admLow.toLocaleString()}–${admHigh.toLocaleString()} fewer / yr`,
-                  },
-                  {
-                    label: 'A&E attendances',
-                    value: aeHigh,
-                    displayValue: `${aeLow.toLocaleString()}–${aeHigh.toLocaleString()} fewer / yr`,
-                    color: '#0072ce',
-                  },
-                ]}
-              />
-            </div>
+            <LusciiImpactCharts
+              eligibleLabel={ref.eligible_cohort.toLocaleString()}
+              areaLabel={areaLabel}
+              admLow={admLow}
+              admHigh={admHigh}
+              aeLow={aeLow}
+              aeHigh={aeHigh}
+              admToday={ref.annual_admissions}
+              aeToday={ref.annual_ae_attendances}
+            />
             <div className="grid gap-4 sm:grid-cols-3 mt-4">
               <Tile value={monitored.toLocaleString()} label="Monitored cohort" sub={`~50% of ${highRisk.toLocaleString()} high-risk`} />
               <Tile value={`${admLow.toLocaleString()}–${admHigh.toLocaleString()}`} label="Admissions avoided / yr" sub={`vs ${(ref.annual_admissions ?? 0).toLocaleString()} today`} />

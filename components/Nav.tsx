@@ -215,45 +215,42 @@ export default function Nav({
 
   const measure = useCallback(() => {
     const list = listRef.current
+    const more = moreRef.current
     if (!list) return
 
-    // Reveal all primary items so widths are measurable (hidden → offsetWidth 0).
-    for (const id of primaryIds.split('|')) {
+    document.body.classList.add('js-enabled')
+
+    const ids = primaryIds.split('|').filter(Boolean)
+
+    const setItemHidden = (id: string, hidden: boolean) => {
       const el = itemRefs.current.get(id)
-      if (el) {
-        el.hidden = false
-        el.style.display = ''
-      }
+      if (el) el.hidden = hidden
     }
-    if (moreRef.current) {
-      moreRef.current.hidden = false
-      moreRef.current.style.display = ''
-      moreRef.current.classList.add('nhsuk-mobile-menu-container--visible')
+    const setMoreHidden = (hidden: boolean) => {
+      if (!more) return
+      more.hidden = hidden
+      more.classList.toggle('nhsuk-mobile-menu-container--visible', !hidden)
+    }
+    const rowOverflows = () => list.scrollWidth - list.clientWidth > 1
+
+    // Reveal every primary item. Hide More first so we can see whether the
+    // full set fits on one row (Notify / nhsuk-frontend header behaviour).
+    for (const id of ids) setItemHidden(id, false)
+    setMoreHidden(true)
+
+    if (!rowOverflows()) {
+      setOverflowIds(prev => (prev.length === 0 ? prev : []))
+      setMoreOpen(false)
+      return
     }
 
-    const available = list.clientWidth
-    const moreWidth = moreRef.current?.offsetWidth ?? 72
-    const widths: { id: string; width: number }[] = []
-    for (const id of primaryIds.split('|')) {
-      const el = itemRefs.current.get(id)
-      if (el) widths.push({ id, width: el.offsetWidth })
-    }
-
-    let used = 0
+    // Reserve More, then hide items from the right until nothing is clipped.
+    setMoreHidden(false)
     const overflow: string[] = []
-    for (const item of widths) {
-      if (used + item.width > available - moreWidth) overflow.push(item.id)
-      else used += item.width
-    }
-
-    if (overflow.length === 0) {
-      // Fits without More — confirm without reserving More width.
-      used = widths.reduce((s, w) => s + w.width, 0)
-      if (used <= available) {
-        setOverflowIds(prev => (prev.length === 0 ? prev : []))
-        setMoreOpen(false)
-        return
-      }
+    for (let i = ids.length - 1; i >= 0 && rowOverflows(); i -= 1) {
+      const id = ids[i]
+      setItemHidden(id, true)
+      overflow.unshift(id)
     }
 
     setOverflowIds(prev => {
@@ -263,6 +260,7 @@ export default function Nav({
   }, [primaryIds])
 
   useLayoutEffect(() => {
+    document.body.classList.add('js-enabled')
     measure()
   }, [measure, path, count, isLoggedIn])
 
@@ -274,9 +272,11 @@ export default function Nav({
     window.addEventListener('resize', onResize)
     const ro = listRef.current ? new ResizeObserver(onResize) : null
     if (listRef.current && ro) ro.observe(listRef.current)
+    const fontsReady = document.fonts?.ready?.then(onResize)
     return () => {
       window.removeEventListener('resize', onResize)
       ro?.disconnect()
+      void fontsReady
     }
   }, [measure])
 
@@ -285,8 +285,15 @@ export default function Nav({
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') setMoreOpen(false)
     }
+    function onPointer(e: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) setMoreOpen(false)
+    }
     document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
+    document.addEventListener('mousedown', onPointer)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('mousedown', onPointer)
+    }
   }, [moreOpen])
 
   // Push page content down while More is open (NHS WCAG: do not cover content).
@@ -304,6 +311,7 @@ export default function Nav({
   const overflowSet = new Set(overflowIds)
   const moreVisible = overflowIds.length > 0
   const overflowEntries = primaryEntries.filter(e => overflowSet.has(e.id))
+  const moreHasCurrent = overflowEntries.some(e => e.active)
 
   return (
     <header className="nhsuk-header" role="banner">
@@ -354,7 +362,7 @@ export default function Nav({
             >
               <button
                 type="button"
-                className={`nhsuk-header__menu-toggle nhsuk-header__navigation-link${moreVisible ? ' nhsuk-header__menu-toggle--visible' : ''}`}
+                className={`nhsuk-header__menu-toggle nhsuk-header__navigation-link${moreVisible ? ' nhsuk-header__menu-toggle--visible' : ''}${moreHasCurrent ? ' hs-nav-more--current' : ''}`}
                 id="toggle-menu"
                 aria-expanded={moreOpen}
                 aria-controls={menuId}

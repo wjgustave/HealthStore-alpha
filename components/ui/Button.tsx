@@ -41,7 +41,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   align?: 'center' | 'start'
   /** Square 40x40 icon button (bespoke). */
   iconOnly?: boolean
-  /** Full-width. */
+  /** Full-width at every breakpoint. Default is full-width below `sm` (640px). */
   block?: boolean
   /** Pill / fully rounded (FABs, toggles — bespoke). */
   pill?: boolean
@@ -142,6 +142,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   // aria-disabled only applies when not natively disabled/busy.
   const softDisabled = ariaDisabled && !disabled && !loading
   const isNativeDisabled = disabled || loading
+  // Action buttons fill the viewport below `sm`. Icon-only and `size="sm"` chrome
+  // stay hug-content so toolbar / header rows do not stack as full-width slabs.
+  // Tight bottom margin on small screens clears the 4px NHS press shadow.
+  const widthClass = iconOnly || size === 'sm' ? undefined : block ? 'w-full' : 'max-sm:w-full'
+  const smSpaceClass = widthClass ? 'max-sm:mb-2' : undefined
 
   // NHS button path (primary / secondary / destructive / on-accent), unless it's
   // an icon-only control which has no NHS equivalent.
@@ -154,7 +159,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         'mb-0 inline-flex items-center gap-2 align-top',
         size !== 'md' && SIZE[size],
         align === 'start' ? 'justify-start text-left' : 'justify-center text-center',
-        block && 'w-full',
+        widthClass,
+        smSpaceClass,
         (softDisabled || isNativeDisabled) && 'nhsuk-button--disabled',
         className,
       )
@@ -165,7 +171,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         iconOnly ? 'h-10 w-10 min-h-10 p-0' : SIZE[size],
         RADIUS[resolvedRadius],
         bespokeVariantClasses(variant, pressed, borderless),
-        block && 'w-full',
+        widthClass,
+        smSpaceClass,
         className,
       )
 

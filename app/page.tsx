@@ -17,7 +17,7 @@ export default async function HomePage() {
   return (
     <div>
       <section
-        className="relative overflow-hidden"
+        className="relative overflow-x-hidden overflow-y-visible"
         style={{ background: 'var(--nhs-blue)' }}
       >
         <div
@@ -51,7 +51,7 @@ export default async function HomePage() {
             >
               {dash.hero.subheadline}
             </p>
-            <Link href="/about" className="nhsuk-button nhsuk-button--reverse">
+            <Link href="/about" className="nhsuk-button nhsuk-button--reverse max-sm:mb-2 max-sm:w-full">
               Find out more
             </Link>
           </div>

@@ -65,7 +65,7 @@ function SavedAppCard({ app, onRemove, removing }: { app: App; onRemove: () => v
           {app.one_line_value_proposition}
         </p>
 
-        <div className="mt-auto grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <div className="mt-auto grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4">
           <Link
             href={`/apps/${app.slug}`}
             className="block rounded-lg py-4 text-center hs-text-label hs-font-bold transition-colors hover:!bg-[#004B8C]"

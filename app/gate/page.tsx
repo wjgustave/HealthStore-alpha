@@ -152,7 +152,7 @@ export default function GatePage() {
                   style={{ maxWidth: '20rem' }}
                 />
               </div>
-              <button className="nhsuk-button" type="submit" disabled={loading} data-module="nhsuk-button">
+              <button className="nhsuk-button max-sm:mb-2 max-sm:w-full" type="submit" disabled={loading} data-module="nhsuk-button">
                 {loading ? 'Checking…' : 'Continue'}
               </button>
             </form>

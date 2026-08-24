@@ -272,7 +272,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
               </FilterSection>
 
               <div className="hs-filter-panel__actions">
-                <button type="submit" className="nhsuk-button mb-0">
+                <button type="submit" className="nhsuk-button mb-0 max-sm:mb-2 max-sm:w-full">
                   Apply filters
                 </button>
                 {(draftCondition !== 'all' || draftSupervision.length > 0) && (
@@ -368,7 +368,7 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
                   <div className="grid grid-cols-1 gap-2">
                     <Link
                       href={`/apps/${app.slug}`}
-                      className="nhsuk-button mb-0 inline-flex w-full items-center justify-center gap-2 py-4 text-center align-top no-underline hs-text-label hs-font-bold"
+                      className="nhsuk-button mb-0 inline-flex w-full items-center justify-center gap-2 py-4 text-center align-top no-underline hs-text-label hs-font-bold max-sm:mb-2"
                     >
                       View product details
                     </Link>

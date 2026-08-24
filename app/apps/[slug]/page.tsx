@@ -370,7 +370,7 @@ export default async function AppPage({
           description="Supplier, proposition, and actions."
           className="mb-4"
         >
-        <div className="overflow-hidden">
+        <div className="overflow-visible">
             <div className="flex flex-col gap-6 items-start lg:flex-row lg:items-start lg:justify-between lg:gap-10">
               <div className="flex-1 w-full min-w-0">
                 <div className="flex items-start gap-4 mb-2">
@@ -424,10 +424,10 @@ export default async function AppPage({
                 </aside>
               )}
             </div>
-            <div className="flex flex-wrap gap-4 items-center mt-8 mb-6">
+            <div className="mt-8 mb-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
               <Link
                 href={`/apps/${app.slug}/express-interest`}
-                className="nhsuk-button mb-0 inline-flex items-center justify-center gap-2 align-top shrink-0 px-6 py-4 hs-text-label hs-font-bold no-underline"
+                className="nhsuk-button mb-0 inline-flex items-center justify-center gap-2 align-top max-sm:mb-2 max-sm:w-full px-6 py-4 hs-text-label hs-font-bold no-underline"
               >
                 Express interest
               </Link>
@@ -435,7 +435,7 @@ export default async function AppPage({
                 appId={app.id}
                 solid
                 size="none"
-                className="shrink-0 px-6 py-4 hs-text-label hs-font-bold"
+                className="px-6 py-4 hs-text-label hs-font-bold"
               />
             </div>
         </div>

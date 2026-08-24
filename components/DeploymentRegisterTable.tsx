@@ -118,15 +118,10 @@ export function DeploymentRegisterTable({ rows }: { rows: DeploymentRow[] }) {
         </table>
       </div>
 
-      <ul className="space-y-4 sm:hidden">
+      <ul className="hs-deploy-sites m-0 list-none space-y-4 p-0 sm:hidden">
         {rows.map((r, i) => {
-          const meta = statusMeta(r.status)
           return (
-            <li
-              key={i}
-              className="border p-4"
-              style={{ borderColor: 'var(--border)', borderLeft: `4px solid ${meta.fg}`, background: '#fff' }}
-            >
+            <li key={i} className="p-4">
               <div className="mb-2 flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <div className="hs-font-bold" style={{ color: 'var(--text-primary)' }}>{r.site}</div>

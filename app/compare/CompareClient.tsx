@@ -40,7 +40,7 @@ export default function CompareClient({ allApps }: Props) {
         </p>
       </div>
 
-      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2 mb-6">
+      <div className="hs-compare-toolbar flex flex-wrap items-baseline gap-x-4 gap-y-2 mb-6">
         <h2 className="nhsuk-heading-xs nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-0">
           Compared condition{sharedTags.length > 1 ? 's' : ''}:{' '}
           {sharedTags.length > 0 ? formatConditionLabels(sharedTags) : 'None'}

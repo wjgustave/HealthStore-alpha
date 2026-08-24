@@ -13,6 +13,7 @@ describe('chart components', () => {
       />,
     )
     expect(html).toContain('role="img"')
+    expect(html).toContain('aria-label="Admissions 40%"')
     expect(html).toContain('Admissions')
     expect(html).toContain('40%')
   })
