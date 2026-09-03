@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import Link from 'next/link'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
+import { ClickableChevronCard } from '@/components/ui/ClickableChevronCard'
 
 type ConditionArea = { id: string; label: string; colour: string; count: number; icon: string }
 
@@ -73,26 +74,20 @@ export default function AppsDiscoveryClient({
         >
           Care pathways
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
           {availableConditions.map(c => (
-            <Link
-              key={c.id}
-              href={`/catalogue/digital-therapeutics?condition=${encodeURIComponent(c.id)}`}
-              className="app-card group block p-6 text-left no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-              style={{ color: 'inherit', outlineColor: 'var(--nhs-blue)' }}
-            >
-              <div
-                className="hs-font-bold underline underline-offset-2"
-                style={{ fontFamily: 'Frutiger, Arial, sans-serif', fontSize: 'var(--text-card-title-sm)', color: 'var(--nhs-blue)' }}
-              >
-                {c.label}
-              </div>
-              <div style={{ fontSize: 'var(--text-label)', color: 'var(--text-secondary)', marginTop: 4 }}>
-                {c.count} {c.count === 1 ? 'product' : 'products'}
-              </div>
-            </Link>
+            <li key={c.id} className="flex min-h-0">
+              <ClickableChevronCard
+                variant="primary"
+                href={`/catalogue/digital-therapeutics?condition=${encodeURIComponent(c.id)}`}
+                title={c.label}
+                description={`${c.count} ${c.count === 1 ? 'product' : 'products'}`}
+                headingLevel={3}
+                className="w-full"
+              />
+            </li>
           ))}
-        </div>
+        </ul>
         <p className="mt-8">
           <Link
             href="/catalogue/digital-therapeutics"

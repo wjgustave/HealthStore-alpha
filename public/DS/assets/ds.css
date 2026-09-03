@@ -492,6 +492,93 @@ a { color: var(--nhs-blue); }
   height: 24px;
 }
 
+/*
+ * Primary clickable card (taller, description + blue chevron) — NHS services pattern.
+ * [Provenance: NHS] Mirrors nhsuk-frontend `.nhsuk-card__content--primary`.
+ * Used on catalogue pathway cards and the resource library.
+ */
+.nhsuk-card {
+  background: #fff;
+  border: 1px solid #d8dde0;
+  position: relative;
+  width: 100%;
+}
+.nhsuk-card--clickable {
+  border-bottom-width: 4px;
+}
+.nhsuk-card__content {
+  padding: 24px;
+  position: relative;
+}
+.nhsuk-card__content--primary {
+  padding-right: 75px;
+  height: 100%;
+  min-height: 7rem;
+}
+.nhsuk-card__content--primary .nhsuk-icon {
+  display: block;
+  width: 27px;
+  height: 27px;
+  fill: var(--nhs-blue);
+  margin-top: -13px;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  right: 24px;
+}
+.nhsuk-card__heading {
+  margin: 0 0 8px;
+}
+.nhsuk-card__heading a,
+.nhsuk-card__link {
+  color: var(--nhs-blue);
+  text-decoration: underline;
+}
+.nhsuk-card__heading a:hover,
+.nhsuk-card__link:hover {
+  color: #7c2855;
+  text-decoration: none;
+}
+.nhsuk-card__description {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.nhsuk-card-group {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+}
+.nhsuk-card-group__item {
+  display: flex;
+  list-style-type: none;
+  margin-bottom: 16px;
+}
+.nhsuk-grid-column-one-half {
+  width: 100%;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+@media (min-width: 641px) {
+  .nhsuk-card__content { padding: 32px; }
+  .nhsuk-card__content--primary { padding-right: 83px; }
+  .nhsuk-card__content--primary .nhsuk-icon { right: 32px; }
+  .nhsuk-grid-column-one-half { width: 50%; }
+}
+.nhsuk-grid-row {
+  margin: 0 -8px;
+}
+.nhsuk-heading-m {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.33333;
+  margin: 0 0 8px;
+}
+
+
 /* Inset card — NHS inset-text treatment (8px blue keyline) on a white card.
    [Provenance: NHS inset text] */
 .hs-inset-card {

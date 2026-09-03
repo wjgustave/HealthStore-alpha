@@ -9,3 +9,14 @@ out
 tsconfig.tsbuildinfo
 .cursor/
 .vercel
+
+# macOS Finder duplicate copies (e.g. "foo 2.tsx")
+* 2.*
+
+# Local leftovers — deleted from the live compare/EOI UI; do not commit
+app/apps/\[slug\]/AppDetailClient.tsx
+components/ExpressInterestModal.tsx
+components/compare/CompareLensControl.tsx
+components/compare/CompareWorkspaceView.tsx
+components/compare/compareRowRenderers.tsx
+lib/compareConfig.ts

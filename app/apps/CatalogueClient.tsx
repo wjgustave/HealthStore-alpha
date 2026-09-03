@@ -191,8 +191,6 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
         </h1>
       </div>
 
-      <div className="hs-catalogue-layout">
-      <div className="hs-catalogue-layout__main">
       {/*
         GOV.UK filter-panel interaction (gov.uk/search/all):
         - Header row: expandable "Filter" link + result count
@@ -381,32 +379,6 @@ export default function CatalogueClient({ apps }: { apps: App[] }) {
           })}
         </div>
       )}
-      </div>
-
-      {/* Related content — GOV.UK related-navigation pattern (gov.uk/personal-tax-account). */}
-      <aside className="hs-related-nav" aria-labelledby="related-content-heading">
-        <h2 id="related-content-heading" className="hs-related-nav__heading">
-          Related content
-        </h2>
-        <ul className="hs-related-nav__list">
-          <li>
-            <Link href="/compare">Comparison tool</Link>
-          </li>
-          <li>
-            <Link href="/funding">Funding index</Link>
-          </li>
-          <li>
-            <Link href="/resources">Resource library</Link>
-          </li>
-          <li>
-            <Link href="/about">How it works</Link>
-          </li>
-          <li>
-            <Link href="/resources">Resource library</Link>
-          </li>
-        </ul>
-      </aside>
-      </div>
     </div>
   )
 }

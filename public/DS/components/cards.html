@@ -20,13 +20,13 @@
     </div>
 
     <div class="ds-meta-grid">
-      <div class="ds-meta"><div class="ds-meta__k">Canonical classes</div><div class="ds-meta__v"><code>.app-card</code>, <code>.hs-card-chevron</code>, <code>.hs-surface-card(-sm)</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Canonical classes</div><div class="ds-meta__v"><code>.app-card</code>, <code>.hs-card-chevron</code>, <code>.nhsuk-card__content--primary</code>, <code>.hs-surface-card(-sm)</code></div></div>
       <div class="ds-meta"><div class="ds-meta__k">Widget shell</div><div class="ds-meta__v"><code>components/ui/WidgetShell.tsx</code></div></div>
       <div class="ds-meta"><div class="ds-meta__k">Radius</div><div class="ds-meta__v"><code>--radius-card</code> · 0px (square)</div></div>
     </div>
 
     <h2>App card (interactive)</h2>
-    <p>The clickable product card used in the catalogue and saved apps. Hover shows a blue border (no lift).</p>
+    <p>The product result card used in digital therapeutics browse and saved apps (logo, badges, CTAs). Hover shows a blue border (no lift). Distinct from the pathway/resource navigation cards below.</p>
     <div class="ds-example ds-example--surface">
       <div class="app-card" style="max-width:340px;background:#fff;border:1px solid var(--border);border-radius:0;padding:20px;cursor:pointer">
         <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
@@ -45,14 +45,82 @@
     </div>
 <pre class="ds-code"><code>&lt;article class="app-card bg-white border p-5"&gt; &hellip; &lt;/article&gt;</code></pre>
 
-    <h2>Clickable card with chevron</h2>
+    <h2>Primary clickable card (with description + blue chevron)</h2>
     <p>
-      Compact NHS <a href="https://service-manual.nhs.uk/design-system/components/card">primary card with chevron</a>:
-      whole-card hit target, title on the left, chevron-right-circle icon middle-aligned on the right.
+      Taller NHS <a href="https://service-manual.nhs.uk/design-system/components/card">primary clickable card</a>
+      matching <a href="https://www.nhs.uk/nhs-services/">nhs.uk/nhs-services</a>:
+      whole-card hit target, title, supporting description, and a blue chevron-right-circle vertically centred on the right.
+      Use for pathway / topic navigation (catalogue care pathways, resource library).
+    </p>
+    <div class="ds-meta-grid">
+      <div class="ds-meta"><div class="ds-meta__k">Component</div><div class="ds-meta__v"><code>ClickableChevronCard</code> · <code>variant=&quot;primary&quot;</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Classes</div><div class="ds-meta__v"><code>.nhsuk-card--clickable</code> + <code>.nhsuk-card__content--primary</code> + <code>.app-card</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Used on</div><div class="ds-meta__v">Catalogue pathways · Resource library</div></div>
+    </div>
+    <div class="ds-example ds-example--surface">
+      <ul class="nhsuk-grid-row nhsuk-card-group" style="list-style:none;padding:0;margin:0">
+        <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable app-card" style="margin-bottom:0;min-height:11rem;height:100%">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-m">
+                <a class="nhsuk-card__link" href="#">COPD and pulmonary rehab</a>
+              </h3>
+              <p class="nhsuk-card__description">4 products</p>
+              <svg class="nhsuk-icon" xmlns="http://www.w3.org/2000/svg" width="27" height="27" aria-hidden="true" focusable="false">
+                <circle cx="13.333" cy="13.333" r="13.333" fill=""></circle>
+                <g fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2.667">
+                  <path d="M15.438 13l-3.771 3.771"></path>
+                  <path d="M11.667 9.229L15.438 13"></path>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable app-card" style="margin-bottom:0;min-height:11rem;height:100%">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-m">
+                <a class="nhsuk-card__link" href="#">Training and guidance</a>
+              </h3>
+              <p class="nhsuk-card__description">Core training materials and guidance for recommending and deploying digital therapeutics.</p>
+              <svg class="nhsuk-icon" xmlns="http://www.w3.org/2000/svg" width="27" height="27" aria-hidden="true" focusable="false">
+                <circle cx="13.333" cy="13.333" r="13.333" fill=""></circle>
+                <g fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2.667">
+                  <path d="M15.438 13l-3.771 3.771"></path>
+                  <path d="M11.667 9.229L15.438 13"></path>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+<pre class="ds-code"><code>&lt;ClickableChevronCard
+  variant="primary"
+  href="/catalogue/digital-therapeutics?condition=copd"
+  title="COPD and pulmonary rehab"
+  description="4 products"
+  headingLevel={3}
+/&gt;
+
+&lt;!-- Markup equivalent --&gt;
+&lt;div class="nhsuk-card nhsuk-card--clickable app-card" style="min-height:11rem"&gt;
+  &lt;div class="nhsuk-card__content nhsuk-card__content--primary"&gt;
+    &lt;h3 class="nhsuk-card__heading nhsuk-heading-m"&gt;
+      &lt;a class="nhsuk-card__link" href="…"&gt;Title&lt;/a&gt;
+    &lt;/h3&gt;
+    &lt;p class="nhsuk-card__description"&gt;Supporting text&lt;/p&gt;
+    &lt;svg class="nhsuk-icon" …&gt;…&lt;/svg&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+    <h2>Compact clickable card with chevron</h2>
+    <p>
+      Compact NHS primary card with chevron: whole-card hit target, title on the left, chevron middle-aligned on the right.
       Body-s title size. Used for the three compact case-study previews on the home page.
     </p>
     <div class="ds-meta-grid">
-      <div class="ds-meta"><div class="ds-meta__k">Component</div><div class="ds-meta__v"><code>components/ui/ClickableChevronCard.tsx</code></div></div>
+      <div class="ds-meta"><div class="ds-meta__k">Component</div><div class="ds-meta__v"><code>ClickableChevronCard</code> · <code>variant=&quot;compact&quot;</code> (default)</div></div>
       <div class="ds-meta"><div class="ds-meta__k">Classes</div><div class="ds-meta__v"><code>.hs-card-chevron</code> + <code>.app-card</code> / <code>.nhsuk-card--clickable</code></div></div>
       <div class="ds-meta"><div class="ds-meta__k">Used on</div><div class="ds-meta__v">Home &middot; Case studies band (compact cards)</div></div>
     </div>
@@ -158,7 +226,8 @@
       <thead><tr><th>Surface</th><th>Definition</th></tr></thead>
       <tbody>
         <tr><td><code>.app-card</code></td><td>border + <code>--radius-card</code> (0), flat, hover border-colour</td></tr>
-        <tr><td><code>.hs-card-chevron</code></td><td>Compact clickable card with middle-aligned right chevron (NHS primary card with chevron)</td></tr>
+        <tr><td><code>.nhsuk-card__content--primary</code></td><td>Taller clickable card with description + vertically centred blue chevron (catalogue pathways, resource library)</td></tr>
+        <tr><td><code>.hs-card-chevron</code></td><td>Compact clickable card with middle-aligned right chevron (home case-study previews)</td></tr>
         <tr><td><code>.hs-surface-card</code> / <code>-sm</code></td><td>bg + border + <code>--radius-card</code> (0), flat (no shadow)</td></tr>
         <tr><td><code>.hs-inset-card</code></td><td>White card with 8px NHS blue left keyline (NHS inset-text treatment)</td></tr>
         <tr><td><code>.hs-inset-card--transparent</code></td><td>Inset card with no background fill (stock NHS inset text)</td></tr>

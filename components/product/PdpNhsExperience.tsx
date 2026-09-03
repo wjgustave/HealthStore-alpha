@@ -1,5 +1,4 @@
 import { PdpSection } from '@/components/PdpSection'
-import { pdpSectionTitle } from '@/lib/pdpSections'
 import { DeploymentRegisterTable } from '@/components/DeploymentRegisterTable'
 import { CaseStudyCards } from '@/components/AppDetailSections'
 import { getDeploymentRegister } from '@/lib/deploymentRegister'
@@ -24,12 +23,14 @@ import { splitPdpEvidence } from '@/lib/pdpEvidence'
 
 /** Map a real_world evidence record onto the case-study card shape. */
 function evidenceToCaseStudy(s: any) {
+  const caveats = [s.study_limitation, s.data_quality_note].filter(Boolean)
   return {
     title: s.ref,
     type_label: s.type_label ?? undefined,
     setting: s.setting,
     sample_size: s.n ?? undefined,
     outcome: s.key_results,
+    caveat: caveats.length > 0 ? caveats.join(' ') : undefined,
     source: s.source_label ?? undefined,
   }
 }
@@ -51,21 +52,27 @@ export default function PdpNhsExperience({ app }: { app: any }) {
     <PdpSection
       id="nhs-experience"
       shareKey="narrative-nhs-experience"
-      title={pdpSectionTitle('nhs-experience')}
-      description={`Where ${app.app_name} is deployed across the NHS today, and where case studies and evaluations have taken place.`}
+      title="NHS experience"
+      description="Where this product is deployed across the NHS today, plus named case studies and evaluations."
     >
       {hasRegister && (
-        <div>
+        <div className={hasCases ? 'mb-8' : ''}>
           <DeploymentRegisterTable rows={rows} />
         </div>
       )}
 
       {hasCases && (
         <div>
-          <h3 className="hs-pdp-subheading hs-font-bold mb-1" style={{ fontSize: 'var(--text-card-title-sm)' }}>
+          <h3 className="hs-font-bold mb-1" style={{ fontSize: 'var(--text-card-title-sm)', color: 'var(--text-secondary)' }}>
             Case studies and evaluations
           </h3>
-          <CaseStudyCards caseStudies={caseStudies} plainCards />
+          <p className="hs-text-caption mb-0 p-2 rounded" style={{ background: '#E6F0FB', color: '#003087', lineHeight: 1.5 }}>
+            <strong>Commissioner note:</strong>{' '}
+            Case studies and service evaluations are illustrative local reports and may not meet the same
+            standard as peer-reviewed trials. See the formal record in the{' '}
+            <a href="#assurance" className="hs-font-bold underline" style={{ color: '#003087' }}>Assurance and evidence</a> section.
+          </p>
+          <CaseStudyCards caseStudies={caseStudies} />
         </div>
       )}
     </PdpSection>

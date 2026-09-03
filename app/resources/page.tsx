@@ -1,28 +1,38 @@
-import Link from 'next/link'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
+import { ClickableChevronCard } from '@/components/ui/ClickableChevronCard'
 
 export const metadata = { title: 'Resource library — NHS HealthStore' }
 
 const RESOURCES = [
   {
-    href: '#',
-    title: 'Guidance and evidence',
-    description: 'Evidence standards, buyer guidance and methods for commissioning digital therapeutics.',
+    href: '/resources/guidance',
+    title: 'Training and guidance',
+    description: 'Core training materials and guidance for recommending and deploying digital therapeutics.',
+  },
+  {
+    href: '/resources/preparing-to-recommend',
+    title: 'Preparing to recommend a DTx',
+    description: 'What to check before recommending a digital therapeutic — suitability, pathway fit and local readiness.',
+  },
+  {
+    href: '/resources/prior-to-appointment',
+    title: 'Prior to patient appointment',
+    description: 'Preparation steps before the consultation, including patient information and enrolment readiness.',
+  },
+  {
+    href: '/resources/during-appointment',
+    title: 'During patient appointment',
+    description: 'How to introduce, explain and enrol a patient onto a digital therapeutic in clinic.',
+  },
+  {
+    href: '/resources/after-appointment',
+    title: 'After a patient appointment',
+    description: 'Follow-up actions after enrolment — documentation, support contacts and early engagement checks.',
   },
   {
     href: '#',
-    title: 'Digital commissioning toolkits',
-    description: 'Practical materials to plan, mobilise and evaluate digital therapeutic deployments.',
-  },
-  {
-    href: '#',
-    title: 'Campaigns',
-    description: 'National and regional programmes relevant to digital health commissioning.',
-  },
-  {
-    href: '#',
-    title: 'Case studies',
-    description: 'Real-world deployment stories and outcomes from NHS settings.',
+    title: 'Long-term management of a DTx',
+    description: 'Ongoing monitoring, review and pathway management once a digital therapeutic is in use.',
   },
 ] as const
 
@@ -36,35 +46,22 @@ export default function ResourcesPage() {
           className="m-0 hs-measure leading-relaxed"
           style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}
         >
-          Guidance, digital commissioning toolkits, campaigns and case studies to support commissioning decisions.
+          Training and practical guidance for recommending, enrolling and managing digital therapeutics with patients.
         </p>
       </div>
 
-      <ul className="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2">
+      {/* NHS secondary cards — same pattern as nhs.uk/nhs-services Urgent / Mental health / Vaccination */}
+      <ul className="m-0 grid list-none grid-cols-1 gap-x-6 gap-y-12 p-0 sm:grid-cols-2 lg:grid-cols-3">
         {RESOURCES.map(item => (
-          <li key={item.title} className="min-h-0">
-            <Link
+          <li key={item.title} className="flex h-full min-h-0">
+            <ClickableChevronCard
+              variant="secondary"
               href={item.href}
-              className="app-card group flex h-full min-h-0 flex-col p-6 text-left no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-              style={{ color: 'inherit', outlineColor: 'var(--nhs-blue)' }}
-            >
-              <h2
-                className="m-0 hs-font-bold underline underline-offset-2"
-                style={{
-                  fontFamily: 'Frutiger, Arial, sans-serif',
-                  fontSize: 'var(--text-card-title-sm)',
-                  color: 'var(--nhs-blue)',
-                }}
-              >
-                {item.title}
-              </h2>
-              <p
-                className="mb-0 mt-2 leading-relaxed"
-                style={{ fontSize: 'var(--text-body)', color: 'var(--text-primary)', lineHeight: 1.55 }}
-              >
-                {item.description}
-              </p>
-            </Link>
+              title={item.title}
+              description={item.description}
+              headingLevel={2}
+              className="flex h-full w-full flex-col"
+            />
           </li>
         ))}
       </ul>

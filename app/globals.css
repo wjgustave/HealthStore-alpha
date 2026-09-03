@@ -648,6 +648,38 @@
     flex-shrink: 0;
     fill: var(--nhs-blue);
   }
+
+  /*
+   * Secondary clickable card (resource library) — transparent, bottom-border only.
+   * NHS stretch-link ::before stops at the padding edge, so the 4px bottom border
+   * is outside the hit target. Extend the overlay and darken the border on
+   * hover / keyboard focus so it behaves like a primary clickable card.
+   * [Provenance: NHS card — nhs.uk/nhs-services secondary cards]
+   */
+  .nhsuk-card--clickable.nhsuk-card--secondary {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transition: border-bottom-color 0.15s ease;
+  }
+  .nhsuk-card--clickable.nhsuk-card--secondary .nhsuk-card__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .nhsuk-card--clickable.nhsuk-card--secondary .nhsuk-card__link::before,
+  .nhsuk-card--clickable.nhsuk-card--secondary .nhsuk-card__heading a::before {
+    /* Cover the bottom border so hover/click reach the visible edge */
+    bottom: -4px;
+  }
+  .nhsuk-card--clickable.nhsuk-card--secondary:hover,
+  .nhsuk-card--clickable.nhsuk-card--secondary:focus-within {
+    border-bottom-color: #AEB7BD; /* nhsuk-grey-3 — same as primary clickable hover */
+  }
+  .nhsuk-card--clickable.nhsuk-card--secondary:active {
+    border-bottom-color: #AEB7BD;
+  }
+
   /* Featured case study title: NHS blue link colour, no underline. */
   .hs-case-study-featured__title-link {
     text-decoration: none;

@@ -23,7 +23,7 @@
       <li><strong>Breadcrumb</strong> &mdash; Home / Find apps / [product].</li>
       <li><strong>Hero</strong> &mdash; logo, name, supplier, value proposition, trimmed signal badges, one primary <strong>Express interest</strong> CTA + a quiet Save / Compare / Share utility cluster.</li>
       <li><strong>Decision snapshot strip</strong> &mdash; persistent 4-up summary (platform, indicative cost, integration capability, live deployments).</li>
-      <li><strong>On this page</strong> &mdash; sticky sidebar nav (left on desktop) with anchor links to narrative and reference sections.</li>
+      <li><strong>On this page</strong> &mdash; sticky sidebar nav (right on desktop) with anchor links to narrative and reference sections.</li>
       <li><strong>Narrative spine</strong> &mdash; for curated products: problem &rarr; how it helps &rarr; local value &rarr; how to buy &rarr; assurance &rarr; making it work &rarr; <strong>NHS experience</strong> (deployment register + case studies, moved out of the tabs to avoid duplication).</li>
       <li><strong>Tabs</strong> &mdash; Evidence, Deployment &amp; adoption, Commercial, Technical &amp; integration.</li>
       <li><strong>Sidebar</strong> &mdash; supplier contact, demo access, share/print.</li>
@@ -61,14 +61,14 @@
     </div>
 
     <h2>Decision snapshot strip</h2>
-    <p>The persistent commissioning summary (<code>PdpCommissioningSnapshot</code>). Four equal segments so width stays stable even when funding is absent. Each segment is styled as an <strong>NHS primary card (non-clickable)</strong>: white fill, 1px <code>--border</code> outline, square corners. Segment headings that deep-link into a detail section (Indicative cost, Technical integration, Live NHSE sites) are rendered as <strong>links in NHS blue</strong> (<code>--nhs-blue</code>) — colour reserved for interactive text.</p>
+    <p>The persistent commissioning summary (<code>PdpCommissioningSnapshot</code>). Four equal segments so width stays stable even when funding is absent.</p>
     <div class="ds-example ds-example--surface">
       <div class="hs-decision-snapshot" style="border-radius:0">
         <div class="hs-snapshot-strip__grid">
-          <div class="hs-snapshot-strip__segment"><h2 class="hs-snapshot-strip__heading"><a class="hs-snapshot-strip__heading-link" href="#ds-main">Indicative cost</a></h2><div class="hs-snapshot-strip__body"><span class="badge badge-grey">Contact supplier</span></div></div>
-          <div class="hs-snapshot-strip__segment"><h2 class="hs-snapshot-strip__heading"><a class="hs-snapshot-strip__heading-link" href="#ds-main">Technical integration</a></h2><div class="hs-snapshot-strip__body"><span class="badge badge-green">NHS App · FHIR</span></div></div>
-          <div class="hs-snapshot-strip__segment"><h2 class="hs-snapshot-strip__heading"><a class="hs-snapshot-strip__heading-link" href="#ds-main">Live NHSE sites</a></h2><div class="hs-snapshot-strip__body"><span class="badge badge-blue">5 ICBs</span></div></div>
-          <div class="hs-snapshot-strip__segment"><h2 class="hs-snapshot-strip__heading">Funding</h2><div class="hs-snapshot-strip__body"><span class="badge badge-green">2 opportunities</span></div></div>
+          <div class="hs-snapshot-strip__segment"><p class="hs-snapshot-strip__heading">Indicative cost</p><div class="hs-snapshot-strip__body"><span class="badge badge-grey">Contact supplier</span></div></div>
+          <div class="hs-snapshot-strip__segment"><p class="hs-snapshot-strip__heading">Evidence</p><div class="hs-snapshot-strip__body"><span class="badge badge-green">Strong</span></div></div>
+          <div class="hs-snapshot-strip__segment"><p class="hs-snapshot-strip__heading">Where it's live</p><div class="hs-snapshot-strip__body"><span class="badge badge-blue">5 ICBs</span></div></div>
+          <div class="hs-snapshot-strip__segment"><p class="hs-snapshot-strip__heading">Funding</p><div class="hs-snapshot-strip__body"><span class="badge badge-green">2 opportunities</span></div></div>
         </div>
       </div>
     </div>
@@ -83,6 +83,9 @@
     </p>
     <div class="ds-example ds-example--surface">
       <div class="hs-pdp-with-sidebar" style="max-width:48rem">
+        <div class="hs-pdp-with-sidebar__main">
+          <p class="ds-u-mt0 ds-u-muted" style="font-size:.85rem">Main column — narrative spine, tabs, express interest.</p>
+        </div>
         <aside class="hs-pdp-with-sidebar__aside">
           <nav class="hs-on-this-page" aria-label="On this page">
             <strong class="hs-on-this-page__title">On this page</strong>
@@ -95,9 +98,6 @@
             </ul>
           </nav>
         </aside>
-        <div class="hs-pdp-with-sidebar__main">
-          <p class="ds-u-mt0 ds-u-muted" style="font-size:.85rem">Main column — narrative spine, tabs, express interest.</p>
-        </div>
       </div>
     </div>
 
