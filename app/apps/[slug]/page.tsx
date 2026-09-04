@@ -41,7 +41,7 @@ import { DeviceClassDetails } from '@/components/DeviceClassDetails'
 import { EvidenceCard } from './pdpBlocks'
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
 import PdpSupplierContactCard from '@/components/PdpSupplierContactCard'
-import PdpOnThisPage from '@/components/PdpOnThisPage'
+import PdpSectionSwitcher from '@/components/PdpSectionSwitcher'
 import { buildPdpOnThisPageLinks } from '@/lib/pdpOnThisPage'
 
 export async function generateStaticParams() {
@@ -546,14 +546,9 @@ export default async function AppPage({
         </div>
 
         <div className="hs-page">
-        <div className={onThisPageLinks.length >= 2 ? 'hs-pdp-with-sidebar' : undefined}>
-          {onThisPageLinks.length >= 2 ? (
-            <aside className="hs-pdp-with-sidebar__aside">
-              <PdpOnThisPage links={onThisPageLinks} title={app.app_name} />
-            </aside>
-          ) : null}
-
-          <div className="hs-pdp-with-sidebar__main">
+        {(() => {
+          const pdpMain = (
+            <>
             {showNarrativeSpine && (
               <PdpNarrativeSpine
                 app={app}
@@ -584,8 +579,19 @@ export default async function AppPage({
               )}
 
             </div>
-          </div>
-        </div>
+            </>
+          )
+
+          if (onThisPageLinks.length >= 2) {
+            return (
+              <PdpSectionSwitcher links={onThisPageLinks} title={app.app_name}>
+                {pdpMain}
+              </PdpSectionSwitcher>
+            )
+          }
+
+          return <div className="hs-pdp-with-sidebar__main">{pdpMain}</div>
+        })()}
         </div>
         </PdpSharePrintProvider>
       </div>

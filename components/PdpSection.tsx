@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { PdpSectionPanel } from '@/components/PdpActiveSection'
 import { PdpShareRegion } from '@/components/PdpSharePrintContext'
 
 /**
@@ -24,21 +25,23 @@ export function PdpSection({
   className?: string
 }) {
   return (
-    <PdpShareRegion shareKey={shareKey} label={label ?? title} description={description} className={`mb-14 ${className}`.trim()}>
-      <section id={id}>
-        <h2
-          className={`hs-pdp-heading hs-font-bold leading-snug ${description ? 'mb-1' : 'mb-4'}`}
-          style={{ fontSize: 'var(--text-section-alt)', color: 'var(--text-primary)' }}
-        >
-          {title}
-        </h2>
-        {description ? (
-          <p className="mb-4 hs-text-label leading-normal" style={{ color: 'var(--text-muted)' }}>
-            {description}
-          </p>
-        ) : null}
-        <div>{children}</div>
-      </section>
-    </PdpShareRegion>
+    <PdpSectionPanel id={id}>
+      <PdpShareRegion shareKey={shareKey} label={label ?? title} description={description} className={`mb-14 ${className}`.trim()}>
+        <section id={id}>
+          <h2
+            className={`hs-pdp-heading hs-font-bold leading-snug ${description ? 'mb-1' : 'mb-4'}`}
+            style={{ fontSize: 'var(--text-section-alt)', color: 'var(--text-primary)' }}
+          >
+            {title}
+          </h2>
+          {description ? (
+            <p className="mb-4 hs-text-label leading-normal" style={{ color: 'var(--text-muted)' }}>
+              {description}
+            </p>
+          ) : null}
+          <div>{children}</div>
+        </section>
+      </PdpShareRegion>
+    </PdpSectionPanel>
   )
 }

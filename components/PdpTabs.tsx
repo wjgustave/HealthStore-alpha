@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import { flushSync } from 'react-dom'
+import { usePdpActiveSection } from '@/components/PdpActiveSection'
 import { usePdpSharePrintOptional } from '@/components/PdpSharePrintContext'
 
 export type PdpTab = {
@@ -22,6 +23,8 @@ export function PdpTabs({ tabs }: { tabs: PdpTab[] }) {
 
   const ctx = usePdpSharePrintOptional()
   const printing = (ctx?.printLayout.mode ?? 'none') !== 'none'
+  const activeSection = usePdpActiveSection()
+  const sectionSwitching = activeSection != null
 
   const anchorHashes = useMemo(
     () => new Set(tabs.flatMap(t => t.anchors ?? [])),
@@ -34,10 +37,11 @@ export function PdpTabs({ tabs }: { tabs: PdpTab[] }) {
   )
 
   const scrollToHash = useCallback((hash: string) => {
+    if (sectionSwitching) return
     requestAnimationFrame(() => {
       document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     })
-  }, [])
+  }, [sectionSwitching])
 
   const activateForHash = useCallback(() => {
     const hash = window.location.hash.replace(/^#/, '')
@@ -49,14 +53,22 @@ export function PdpTabs({ tabs }: { tabs: PdpTab[] }) {
   }, [tabForHash, scrollToHash])
 
   useEffect(() => {
+    if (!activeSection) return
+    const match = tabForHash(activeSection)
+    if (match) setActive(match.id)
+  }, [activeSection, tabForHash])
+
+  useEffect(() => {
+    if (sectionSwitching) return
     activateForHash()
     window.addEventListener('hashchange', activateForHash)
     return () => window.removeEventListener('hashchange', activateForHash)
-  }, [activateForHash])
+  }, [activateForHash, sectionSwitching])
 
   // Snapshot deep-links use plain <a href="#…">; intercept so the target tab opens
   // before scroll (content lives inside hidden panels) and same-hash re-clicks work.
   useEffect(() => {
+    if (sectionSwitching) return
     function onAnchorClick(event: MouseEvent) {
       if (event.defaultPrevented || event.button !== 0) return
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
@@ -76,7 +88,7 @@ export function PdpTabs({ tabs }: { tabs: PdpTab[] }) {
     }
     document.addEventListener('click', onAnchorClick)
     return () => document.removeEventListener('click', onAnchorClick)
-  }, [anchorHashes, tabForHash, scrollToHash])
+  }, [anchorHashes, tabForHash, scrollToHash, sectionSwitching])
 
   function focusTab(index: number) {
     const clamped = (index + tabs.length) % tabs.length

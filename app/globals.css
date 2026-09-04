@@ -969,11 +969,6 @@
   gap: 1.5rem 2rem;
   align-items: start;
 }
-@media (max-width: 639px) {
-  .hs-pdp-with-sidebar__aside {
-    display: none;
-  }
-}
 @media (min-width: 1024px) {
   .hs-pdp-with-sidebar {
     grid-template-columns: 14rem minmax(0, 1fr);
@@ -985,6 +980,24 @@
 }
 .hs-pdp-with-sidebar__main {
   min-width: 0;
+}
+.hs-pdp-section-switcher {
+  scroll-margin-top: 1rem;
+}
+.hs-pdp-section-switcher .nhsuk-tabs__title,
+.hs-pdp-section-switcher .nhsuk-tabs__list {
+  display: none;
+}
+.hs-pdp-section-switcher .hs-pdp-heading {
+  margin-top: 0;
+}
+.hs-pdp-section-switcher .hs-pdp-spine-group:not(:has([data-pdp-section-id]:not([hidden]))) {
+  display: none;
+}
+@media print {
+  .hs-pdp-section-switcher [data-pdp-section-id][hidden] {
+    display: block !important;
+  }
 }
 
 /**
@@ -1039,14 +1052,14 @@
  * Sections carry mb-14 (56px) below their content; the divider then gets the
  * section gap above the next title. [Provenance: GOV.UK] section break pattern.
  */
-.hs-pdp-spine > * + * {
+.hs-pdp-spine > :not([hidden]) ~ :not([hidden]) {
   border-top: 2px solid var(--border);
   padding-top: var(--section-gap);
 }
 /* Same divider between sub-sections rendered inside a single spine slot
    (e.g. PdpLocalValue: projected impact + economics). The optional context
    <p> is skipped — only the second PdpSection wrapper (div + div) gets a rule. */
-.hs-pdp-spine-group > div + div {
+.hs-pdp-spine-group > :not([hidden]) ~ :not([hidden]) {
   border-top: 2px solid var(--border);
   padding-top: var(--section-gap);
 }

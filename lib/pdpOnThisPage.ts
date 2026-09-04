@@ -10,8 +10,8 @@ import type { PdpSectionId } from '@/lib/pdpSections'
 export type PdpOnThisPageLink = { id: string; label: string }
 
 /**
- * Builds anchor links for the PDP "On this page" nav — narrative spine sections first,
- * then reference tab sections with stable ids (deep-linkable via PdpTabs hash handling).
+ * Builds section ids/labels for the PDP "On this page" nav — narrative spine first,
+ * then reference tab sections with stable ids (deep-linkable via hash).
  */
 export function buildPdpOnThisPageLinks(input: {
   app: App
