@@ -8,7 +8,7 @@ export function ExpressInterestWhiteButton({ slug }: { slug: string }) {
       className="nhsuk-button nhsuk-button--reverse mb-0 inline-flex items-center justify-center gap-2 align-top w-full sm:w-auto min-w-[200px] max-sm:mb-2 px-6 py-4 text-[var(--text-label)] no-underline"
       style={{ color: 'var(--text-primary)' }}
     >
-      Express interest
+      Get in touch
     </Link>
   )
 }

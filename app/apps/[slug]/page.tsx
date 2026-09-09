@@ -429,7 +429,7 @@ export default async function AppPage({
                 href={`/apps/${app.slug}/express-interest`}
                 className="nhsuk-button mb-0 inline-flex items-center justify-center gap-2 align-top max-sm:mb-2 max-sm:w-full px-6 py-4 hs-text-label hs-font-bold no-underline"
               >
-                Express interest
+                Get in touch
               </Link>
               <CompareToggleButton
                 appId={app.id}
