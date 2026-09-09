@@ -215,8 +215,9 @@ function renderGridCard(card: CommissioningSnapshotCard) {
 }
 
 /**
- * Persistent commissioning decision snapshot — governance, pricing model, integration,
+ * Persistent commissioning decision snapshot — governance, platform, integration,
  * where it's live (grid); funding opportunities full-width below when present.
+ * Indicative cost is omitted from the PDP snapshot.
  */
 export function PdpCommissioningSnapshot({
   cards,
@@ -233,7 +234,7 @@ export function PdpCommissioningSnapshot({
   return (
     <section className="m-0" aria-label="Commissioning snapshot">
       <div className="hs-snapshot-strip__grid">
-        {cards.filter(card => card.kind !== 'regulation').map(card => renderGridCard(card))}
+        {cards.filter(card => card.kind !== 'regulation' && card.kind !== 'cost').map(card => renderGridCard(card))}
         <PdpWhereLiveSegment app={whereLiveApp} href={whereLiveHref} />
       </div>
       {fundingCard ? (
