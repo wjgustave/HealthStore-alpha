@@ -320,11 +320,11 @@ export default function Nav({
           <Link
             className="nhsuk-header__link nhsuk-header__link--service"
             href="/"
-            aria-label="NHS HealthStore homepage"
+            aria-label="NHS Commissioning Store homepage"
             onClick={e => flashFocusThenBlur(e.currentTarget, e.detail === 0)}
           >
             {NHS_LOGO}
-            <span className="nhsuk-header__service-name">NHS HealthStore</span>
+            <span className="nhsuk-header__service-name">NHS Commissioning Store</span>
           </Link>
         </div>
       </div>
