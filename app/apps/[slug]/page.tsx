@@ -15,7 +15,6 @@ import PdpFundingLevers from '@/components/product/PdpFundingLevers'
 import { getServerContext } from '@/lib/context/serverContext'
 import { PdpCommissioningSnapshot } from '@/components/PdpCommissioningSnapshot'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import Image from 'next/image'
 import {
   DtacBadge, MaturityBadge, EffortBadge,
@@ -85,16 +84,6 @@ export default async function AppPage({
   const showNarrativeSpine = getProductNarrative(slug) != null
   const heroProposition =
     (showNarrativeSpine && narrative.decision_summary?.one_line_proposition) || app.one_line_value_proposition
-
-  // R4-3 B: hero quick-facts stack (NICE guidance / HealthStore status),
-  // rendered vertically on the right of the hero for curated products.
-  const heroNiceRefs = app.nice_guidance_refs ?? []
-  const heroQuickFacts = showNarrativeSpine
-    ? [
-        { label: 'NICE guidance', value: heroNiceRefs.length > 0 ? heroNiceRefs[0].ref : null },
-        { label: 'NHS HealthStore status', value: narrative.commercial_readiness?.commercial_status ?? 'Under review' },
-      ].filter((f) => !!f.value)
-    : []
 
   const linkedFundingIds = app.linked_funding_ids ?? app.funding_ids ?? []
   const showIndicativeFinancialInTab = !(showNarrativeSpine && (app.condition_tags?.includes('copd') ?? false))
@@ -371,66 +360,37 @@ export default async function AppPage({
           className="mb-4"
         >
         <div className="overflow-visible">
-            <div className="flex flex-col gap-6 items-start lg:flex-row lg:items-start lg:justify-between lg:gap-10">
-              <div className="flex-1 w-full min-w-0">
-                <div className="flex items-start gap-4 mb-2">
-                  {app.logo_path && (
-                    <Image src={app.logo_path} alt={`${app.app_name} logo`} width={48} height={48}
-                      className="rounded-lg flex-shrink-0" />
-                  )}
-                  <div>
-                    <h1 className="page-title-h1 mb-1">{app.app_name}</h1>
-                    <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{app.supplier_name}</p>
-                  </div>
+            <div className="w-full min-w-0">
+              <div className="flex items-start gap-4 mb-2">
+                {app.logo_path && (
+                  <Image src={app.logo_path} alt={`${app.app_name} logo`} width={48} height={48}
+                    className="rounded-lg flex-shrink-0" />
+                )}
+                <div>
+                  <h1 className="page-title-h1 mb-1">{app.app_name}</h1>
+                  <p style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)' }}>{app.supplier_name}</p>
                 </div>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {(app.condition_tags ?? []).map((t: string) => (
-                    <ConditionTag key={t} tag={t} />
-                  ))}
-                  {app.supervision_model ? <SupervisionBadge model={app.supervision_model} /> : null}
-                  <MaturityBadge level={app.maturity_level} hideEstablished />
-                  {app.content_confidence && app.content_confidence !== 'Confirmed' && (
-                    <span className={`badge ${app.content_confidence === 'Supplier-reported' ? 'badge-blue' : 'badge-amber'}`}>
-                      {app.content_confidence}
-                    </span>
-                  )}
-                </div>
-                <p
-                  className="min-w-0 max-w-[640px] mb-4"
-                  style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}
-                >
-                  {heroProposition}
-                </p>
               </div>
-              {heroQuickFacts.length > 0 && (
-                <aside
-                  className="w-full lg:w-56 shrink-0 lg:border-l lg:pl-6 flex flex-col gap-4"
-                  style={{ borderColor: 'var(--border)' }}
-                  aria-label="Product quick facts"
-                >
-                  {heroQuickFacts.map((f) => (
-                    <div key={f.label}>
-                      <div
-                        className="hs-text-caption hs-font-bold uppercase tracking-wide mb-1"
-                        style={{ color: 'var(--text-muted)' }}
-                      >
-                        {f.label}
-                      </div>
-                      <div className="hs-text-label hs-font-bold" style={{ color: 'var(--text-secondary)', lineHeight: 1.4 }}>
-                        {f.value}
-                      </div>
-                    </div>
-                  ))}
-                </aside>
-              )}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {(app.condition_tags ?? []).map((t: string) => (
+                  <ConditionTag key={t} tag={t} />
+                ))}
+                {app.supervision_model ? <SupervisionBadge model={app.supervision_model} /> : null}
+                <MaturityBadge level={app.maturity_level} hideEstablished />
+                {app.content_confidence && app.content_confidence !== 'Confirmed' && (
+                  <span className={`badge ${app.content_confidence === 'Supplier-reported' ? 'badge-blue' : 'badge-amber'}`}>
+                    {app.content_confidence}
+                  </span>
+                )}
+              </div>
+              <p
+                className="min-w-0 max-w-[640px] mb-4"
+                style={{ fontSize: 'var(--text-body)', lineHeight: 1.7, color: 'var(--text-secondary)' }}
+              >
+                {heroProposition}
+              </p>
             </div>
             <div className="mt-8 mb-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-              <Link
-                href={`/apps/${app.slug}/express-interest`}
-                className="nhsuk-button mb-0 inline-flex items-center justify-center gap-2 align-top max-sm:mb-2 max-sm:w-full px-6 py-4 hs-text-label hs-font-bold no-underline"
-              >
-                Get in touch
-              </Link>
               <CompareToggleButton
                 appId={app.id}
                 solid
