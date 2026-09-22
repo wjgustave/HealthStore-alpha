@@ -20,6 +20,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCompareBasket } from '@/components/CompareBasketProvider'
 import { AUTH_DISABLED } from '@/lib/authMode'
+import { isSupplierOnboardPath } from '@/lib/supplierOnboarding'
 import PhaseBanner from '@/components/PhaseBanner'
 
 const NHS_LOGO = (
@@ -313,6 +314,10 @@ export default function Nav({
   const overflowEntries = primaryEntries.filter(e => overflowSet.has(e.id))
   const moreHasCurrent = overflowEntries.some(e => e.active)
 
+  // Supplier onboarding is a focused journey: NHS header without the navigation row
+  // (the official header supports this "no navigation" variant).
+  const hideNavigation = isSupplierOnboardPath(path)
+
   return (
     <header className="nhsuk-header" role="banner">
       <div className="nhsuk-header__container">
@@ -329,6 +334,7 @@ export default function Nav({
         </div>
       </div>
 
+      {!hideNavigation && (
       <div className="nhsuk-navigation-container">
         <nav
           ref={navRef}
@@ -390,6 +396,7 @@ export default function Nav({
           </ul>
         </nav>
       </div>
+      )}
 
       {/* GOV.UK: phase banner sits inside <header>, after service navigation. */}
       <PhaseBanner tag="Alpha" />

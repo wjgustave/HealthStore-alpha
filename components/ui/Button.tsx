@@ -29,6 +29,8 @@ export type ButtonVariant =
   | 'destructive'
   | 'on-accent'
   | 'toggle'
+  /** Official NHS green action button — reserved for final confirm/submit actions. */
+  | 'confirm'
 
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'none'
 export type ButtonRadius = 'md' | 'lg' | 'xl' | 'pill'
@@ -68,6 +70,7 @@ const NHS_VARIANT: Partial<Record<ButtonVariant, string>> = {
   secondary: 'nhsuk-button nhsuk-button--secondary',
   destructive: 'nhsuk-button nhsuk-button--warning',
   'on-accent': 'nhsuk-button nhsuk-button--reverse',
+  confirm: 'nhsuk-button hs-button--confirm',
 }
 
 // Paddings use NHS spacing steps (8/16/24px); min-height holds the 44px touch target.

@@ -1,0 +1,33 @@
+// NHS.UK frontend v10 gap-fill components.
+//
+// The app compiles nhsuk-frontend v9 (see nhsuk-theme.scss). Some components
+// only exist in v10 — currently File upload
+// (https://service-manual.nhs.uk/design-system/components/file-upload, requires
+// 10.6.1). Rather than a whole-site major upgrade, v10 is installed under the
+// `nhsuk-frontend-v10` alias and only the missing components are compiled here.
+//
+// Provenance: NHS (official v10 SCSS, unmodified).
+//
+// `nhsuk-exports` is pre-seeded with the shared modules the file upload
+// `@forward`s (button, label, hint, error-message) so their v10 CSS is NOT
+// emitted and cannot override the v9 styles already on the page. Only
+// `.nhsuk-file-upload*` rules are output.
+//
+// Build: `npm run build:ds-css` compiles this with
+// node_modules/nhsuk-frontend-v10/dist on the Sass load path.
+
+@use "nhsuk/core/settings" with (
+  $nhsuk-font: "Frutiger",
+  $nhsuk-include-font-face: false
+);
+
+@use "nhsuk/core/tools/exports" with (
+  $imported-modules: (
+    "nhsuk/components/button",
+    "nhsuk/components/label",
+    "nhsuk/components/hint",
+    "nhsuk/components/error-message",
+  )
+);
+
+@use "nhsuk/components/file-upload";

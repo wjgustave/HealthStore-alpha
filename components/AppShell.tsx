@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import type { App } from '@/lib/data'
 import Nav from './Nav'
@@ -14,6 +14,8 @@ import ClearDataModal from './ClearDataModal'
 import AiAdvisorPanel, { type AiAdvisorClientProfile } from './ai/AiAdvisorPanel'
 import NhsFrontendInit from '@/components/nhs/NhsFrontendInit'
 import { AUTH_DISABLED } from '@/lib/authMode'
+import { SUPPLIER_ONBOARD_BASE_PATH, isSupplierOnboardPath } from '@/lib/supplierOnboarding'
+import { clearOnboardingProgress } from '@/components/supplier-onboard/useOnboardingProgress'
 
 export default function AppShell({
   children,
@@ -29,8 +31,10 @@ export default function AppShell({
   aiProfile?: AiAdvisorClientProfile | null
 }) {
   const pathname = usePathname()
+  const router = useRouter()
   const isLoginPage = pathname === '/login'
   const isGatePage = pathname === '/gate'
+  const isSupplierOnboard = isSupplierOnboardPath(pathname)
   const [showClearData, setShowClearData] = useState(false)
   const [aiPanelOpen, setAiPanelOpen] = useState(false)
   /** Open-access treats everyone as able to use catalogue tools; hide auth/org chrome. */
@@ -99,6 +103,22 @@ export default function AppShell({
                       style={{ background: 'none', border: 0, cursor: 'pointer' }}
                     >
                       Manage data
+                    </button>
+                  </li>
+                )}
+                {isSupplierOnboard && (
+                  <li className="nhsuk-footer__list-item nhsuk-footer-default__list-item">
+                    {/* Prototype control: wipes saved onboarding answers and task statuses. */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        clearOnboardingProgress()
+                        router.push(SUPPLIER_ONBOARD_BASE_PATH)
+                      }}
+                      className="nhsuk-footer__list-item-link nhsuk-u-padding-0"
+                      style={{ background: 'none', border: 0, cursor: 'pointer' }}
+                    >
+                      Clear data
                     </button>
                   </li>
                 )}

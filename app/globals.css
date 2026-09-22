@@ -8,6 +8,7 @@
 
 @import "tailwindcss";
 @import "./styles/nhsuk-theme.generated.css" layer(nhs);
+@import "./styles/nhsuk-v10-gaps.generated.css" layer(nhs); /* NHS v10-only components (File upload) */
 @import "./styles/govuk-gaps.generated.css" layer(govuk);
 
 @source "../app/**/*.tsx";
@@ -693,15 +694,31 @@
      shape/behaviour (4px corners, 4px press-shadow, yellow focus from the nhs
      layer) and only recolour the primary variant. Secondary (grey), warning
      (red) and reverse (white) variants keep their NHS defaults. */
-  .nhsuk-button:not(.nhsuk-button--secondary):not(.nhsuk-button--warning):not(.nhsuk-button--reverse) {
+  .nhsuk-button:not(.nhsuk-button--secondary):not(.nhsuk-button--warning):not(.nhsuk-button--reverse):not(.hs-button--confirm) {
     background-color: var(--nhs-blue);
     box-shadow: 0 4px 0 var(--nhs-dark);
     color: #fff;
   }
-  .nhsuk-button:not(.nhsuk-button--secondary):not(.nhsuk-button--warning):not(.nhsuk-button--reverse):hover {
+  .nhsuk-button:not(.nhsuk-button--secondary):not(.nhsuk-button--warning):not(.nhsuk-button--reverse):not(.hs-button--confirm):hover {
     background-color: #004b8c;
   }
-  .nhsuk-button:not(.nhsuk-button--secondary):not(.nhsuk-button--warning):not(.nhsuk-button--reverse):active {
+  .nhsuk-button:not(.nhsuk-button--secondary):not(.nhsuk-button--warning):not(.nhsuk-button--reverse):not(.hs-button--confirm):active {
+    box-shadow: none;
+  }
+
+  /* Confirm — restores the official NHS green action button (nhsuk-frontend
+     defaults: #007f3b, hover #00662f, shadow #00401e) for final "Confirm and
+     submit" actions, where the blue recolour above would otherwise apply. */
+  .nhsuk-button.hs-button--confirm {
+    background-color: var(--nhs-green);
+    box-shadow: 0 4px 0 #00401e;
+    color: #fff;
+  }
+  .nhsuk-button.hs-button--confirm:hover {
+    background-color: #00662f;
+  }
+  .nhsuk-button.hs-button--confirm:active {
+    background-color: #00401e;
     box-shadow: none;
   }
 
