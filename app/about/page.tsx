@@ -1,4 +1,5 @@
 import { PageBreadcrumb } from '@/components/PageBreadcrumb'
+import { LOCAL_ASSURANCE_SENTENCE } from '@/lib/content/productNarratives'
 
 const h2Style = {
   fontSize: 'var(--text-section-alt)',
@@ -14,17 +15,23 @@ export default function AboutPage() {
       <PageBreadcrumb items={[{ label: 'How it works' }]} />
       <h1 className="page-title-h1">How the NHS HealthStore helps</h1>
       <p className="hs-measure" style={{ fontSize: 'var(--text-body)', color: 'var(--text-muted)', marginBottom: 40 }}>
-        A nationally governed assurance and commercial-readiness layer with local commissioning accountability.
+        We bring supplier evidence, NICE recommendations and commercial support together in one place.
+        Commissioners retain all commissioning, clinical safety, assurance and deployment accountability.
       </p>
 
       <div className="hs-measure" style={{ display: 'grid', gap: 32 }}>
         <section>
-          <h2 style={h2Style}>Assurance Pack</h2>
-          <p style={{ lineHeight: 1.6 }}>Evidence, device regulation, IG assessment — maintained centrally so you don&apos;t duplicate work.</p>
+          <h2 style={h2Style}>Assurance support</h2>
+          <p style={{ lineHeight: 1.6 }}>
+            We centrally hold supplier assurance evidence — completed DTAC, accessibility audit, security
+            certifications and more - which are reviewed and monitored for expiry. {LOCAL_ASSURANCE_SENTENCE}
+          </p>
         </section>
         <section>
           <h2 style={h2Style}>Accountability stays local</h2>
-          <p style={{ lineHeight: 1.6 }}>Clinical safety, procurement, deployment and governance remain your responsibility.</p>
+          <p style={{ lineHeight: 1.6 }}>
+            Clinical safety, local assurance, procurement, deployment and governance remain your responsibility.
+          </p>
         </section>
         <section>
           <h2 style={h2Style}>Impact modelling</h2>

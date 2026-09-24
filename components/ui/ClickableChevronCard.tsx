@@ -16,7 +16,7 @@ import Link from 'next/link'
  */
 
 /** Compact case-study style: filled path chevron. */
-function ChevronRightCircleCompact({ className }: { className?: string }) {
+export function ChevronRightCircleCompact({ className }: { className?: string }) {
   return (
     <svg
       className={className ?? 'nhsuk-icon nhsuk-icon--chevron-right-circle hs-card-chevron__icon'}

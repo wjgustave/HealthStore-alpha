@@ -4,8 +4,8 @@ import { ProcessSteps } from '@/components/storytelling'
 
 const WHAT_WE_DO = [
   {
-    title: 'Assurance and certification',
-    body: 'Each product is reviewed against clinical safety, information governance, interoperability and evidence standards — national assurance that underpins your local due diligence.',
+    title: 'Assurance support',
+    body: 'We centrally hold supplier assurance evidence — completed DTAC, accessibility audit, security certifications and more - which are reviewed and monitored for expiry. We make assurance easier and faster by providing access to source documents in your workspace once verified for your local assurance purposes.',
   },
   {
     title: 'Opportunity identification',
@@ -49,7 +49,7 @@ const HOW_IT_WORKS = [
             >
               <path d="M12 2a10 10 0 0 0-10 9h11.7l-4-4a1 1 0 0 1 1.5-1.4l5.6 5.7a1 1 0 0 1 0 1.4l-5.6 5.7a1 1 0 0 1-1.5 0 1 1 0 0 1 0-1.4l4-4H2A10 10 0 1 0 12 2z" />
             </svg>
-            <span className="nhsuk-action-link__text">Digital commissioning toolkits</span>
+            <span className="nhsuk-action-link__text">Deployment toolkit</span>
           </Link>
         </span>
       </>
@@ -57,7 +57,7 @@ const HOW_IT_WORKS = [
     media: <Image src="/images/how-it-works-step-1.png" alt="" width={1024} height={829} className="hs-step__img" />,
   },
   {
-    title: 'Explore and compare assured products',
+    title: 'Explore and compare products',
     description: 'Side-by-side comparison of products for your pathway: evidence, service model, cost, implementation burden and route to buy.',
     media: <Image src="/images/how-it-works-step-2.png" alt="" width={1024} height={829} className="hs-step__img" />,
   },
@@ -90,8 +90,9 @@ export function HomeStorytelling() {
         <section className="hs-section">
           <h2 className="hs-section-title" style={{ fontSize: 'var(--text-section)' }}>What the NHS HealthStore addresses</h2>
           <p className="hs-section-note" style={{ fontSize: 'var(--text-body)' }}>
-            It reduces the burden on local teams by doing nationally what would otherwise be repeated at every Integrated
-            Care Board (ICB). Commissioners retain all commissioning, clinical safety and deployment accountability.
+            It reduces the burden on local teams by bringing supplier evidence, NICE recommendations and commercial
+            support together in one place. Commissioners retain all commissioning, clinical safety, assurance and
+            deployment accountability.
           </p>
           <div className="hs-card-grid">
             {WHAT_WE_DO.map((item) => (
@@ -115,7 +116,7 @@ export function HomeStorytelling() {
         <section className="hs-section">
           <h2 className="hs-section-title" style={{ fontSize: 'var(--text-section)' }}>Conditions and pathways we currently support</h2>
           <p className="hs-section-note hs-measure">
-            Condition pathways with NICE Health Technology Guidance, nationally assured products and full local
+            Condition pathways with NICE Health Technology Guidance, verified supplier evidence and full local
             opportunity data.
           </p>
           <div className="hs-supported-pathways">

@@ -51,6 +51,17 @@ export interface EvidenceClaim {
   beneficiary?: string
 }
 
+/**
+ * A single evidence item held for an assurance domain (e.g. "ICO registration — ZA000000,
+ * expires 14 May 2027").
+ */
+export interface AssuranceEvidenceItem {
+  label: string
+  value: string
+  /** @deprecated No longer rendered; kept optional for any residual data. */
+  placeholder?: boolean
+}
+
 export interface AssuranceDomain {
   domain: string
   status: AssuranceDomainStatus
@@ -58,6 +69,7 @@ export interface AssuranceDomain {
   verified_date?: string
   review_due?: string
   residual_action?: string
+  items?: AssuranceEvidenceItem[]
 }
 
 export interface EconomicScenario {
@@ -114,9 +126,28 @@ export interface ProductNarrative {
   }
   regulatory_position?: {
     device_class: string
-    hira_status: string
-    market_access: string
+    /** Deprecated — the HealthStore does not run national regulatory assurance. Kept optional for legacy data. */
+    hira_status?: string
+    market_access?: string
     assurance_speed_note: string
+    /** NICE HealthTech guidance the product is recommended in. */
+    nice?: {
+      /** e.g. "NICE HTG736" */
+      ref: string
+      url: string
+      /** e.g. "Recommended for use during evidence generation (early value assessment)" */
+      status: string
+      /** NICE "Last reviewed" date, e.g. "3 February 2026" */
+      last_updated: string
+    }
+    /** MHRA Public Access Registration Database (PARD) manufacturer record. */
+    mhra_pard?: {
+      url: string
+      /** Brand/trade name as registered on PARD, e.g. "Luscii Vitals" */
+      registered_name: string
+    }
+    /** DTAC — form complete and evidence provided. */
+    dtac_complete?: boolean
   }
   commissioner_economics?: {
     headline: string

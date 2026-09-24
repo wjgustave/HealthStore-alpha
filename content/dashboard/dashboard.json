@@ -1,7 +1,7 @@
 {
   "hero": {
     "headline": "Enabling the self-management of long-term health conditions",
-    "subheadline": "The NHS HealthStore is a digital app that helps commissioners find NICE-approved apps they can recommend to their patients. It provides neutral, evidence-based intelligence on Digital Therapeutics (DTx), enabling commissioners to compare apps, decide on the best app for their patient, and commission with confidence.",
+    "subheadline": "The NHS Commissioning store is part of the HealthStore service. It helps commissioners find NICE recommended apps they can recommend to their patients. It provides neutral, evidence-based intelligence on Digital Therapeutics (DTx), enabling commissioners to compare apps, decide on the best app for their patient, and commission with confidence.",
     "cta_label": "Browse all apps",
     "cta_path": "/catalogue"
   },

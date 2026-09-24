@@ -1,6 +1,6 @@
+import type { ReactNode } from 'react'
 import type { App } from '@/lib/data'
 import type { ProductNarrative } from '@/lib/content/productModel'
-import type { AssuranceDomainStatus } from '@/lib/content/productModel'
 import { PdpSection } from '@/components/PdpSection'
 import { pdpSectionTitle } from '@/lib/pdpSections'
 import { deriveAssuranceDomains } from '@/lib/content/assuranceDomains'
@@ -18,52 +18,12 @@ import { STORE_ACCENT } from '@/lib/storeAccent'
  *            curated narrative.assurance_domains list is authored (matt_demo parity —
  *            e.g. myCOPD), that list is used instead so the passport matches the gold
  *            standard table.
+ *  - Sep 2026 Assurance feedback: the HealthStore does not run national assurance or
+ *            certify products. Domains follow the DTAC layout and list the supplier
+ *            evidence held.
  *
  * Server component — no client boundary.
  */
-
-/** NHS task-list status presentation — https://service-manual.nhs.uk/design-system/components/task-list */
-function TaskListStatus({ status, id }: { status: AssuranceDomainStatus; id: string }) {
-  const statusStyle = { whiteSpace: 'nowrap' as const }
-  switch (status) {
-    case 'verified_current':
-      return (
-        <div className="nhsuk-task-list__status" id={id} style={statusStyle}>
-          <strong className="nhsuk-tag nhsuk-tag--green" style={statusStyle}>Available</strong>
-        </div>
-      )
-    case 'verified_review_due':
-      return (
-        <div className="nhsuk-task-list__status" id={id} style={statusStyle}>
-          <strong className="nhsuk-tag nhsuk-tag--yellow" style={statusStyle}>Review due</strong>
-        </div>
-      )
-    case 'declared_pending':
-      return (
-        <div className="nhsuk-task-list__status" id={id} style={statusStyle}>
-          <strong className="nhsuk-tag nhsuk-tag--blue" style={statusStyle}>Incomplete</strong>
-        </div>
-      )
-    case 'incomplete':
-      return (
-        <div className="nhsuk-task-list__status" id={id} style={statusStyle}>
-          <strong className="nhsuk-tag nhsuk-tag--red" style={statusStyle}>Incomplete</strong>
-        </div>
-      )
-    case 'expired':
-      return (
-        <div className="nhsuk-task-list__status" id={id} style={statusStyle}>
-          <strong className="nhsuk-tag nhsuk-tag--red" style={statusStyle}>Expired</strong>
-        </div>
-      )
-    case 'not_applicable':
-      return (
-        <div className="nhsuk-task-list__status nhsuk-task-list__status--cannot-start-yet" id={id} style={statusStyle}>
-          Not applicable
-        </div>
-      )
-  }
-}
 
 export default function PdpAssurancePassport({
   app,
@@ -91,33 +51,74 @@ export default function PdpAssurancePassport({
 
   if (domains.length === 0 && !hasEvidence) return null
 
+  // Commercial readiness is no longer part of the assurance pack (pending commercial team
+  // review) — guard against legacy data that still carries it.
   const INTEROP_DOMAIN = 'Interoperability'
-  const packDomains = domains.filter((d) => d.domain !== INTEROP_DOMAIN)
+  const packDomains = domains.filter((d) => d.domain !== INTEROP_DOMAIN && !/commercial/i.test(d.domain))
   const interopDomain = domains.find((d) => d.domain === INTEROP_DOMAIN)
 
   const material = packDomains.filter((d) => d.status === 'incomplete' || d.status === 'expired')
   const reg = narrative.regulatory_position
   const speedNote = reg?.assurance_speed_note
 
-  const regFacts = reg
-    ? [
-        { label: 'Device classification', value: reg.device_class },
-        { label: 'HIRA status', value: reg.hira_status },
-        { label: 'Market access', value: reg.market_access },
-      ].filter((f) => !!f.value)
-    : []
+  const linkStyle = { color: STORE_ACCENT }
+  const regFacts: { label: string; value: ReactNode }[] = []
+  if (reg?.nice) {
+    regFacts.push({
+      label: 'NICE recommendation',
+      value: (
+        <>
+          <a href={reg.nice.url} target="_blank" rel="noopener noreferrer" className="nhsuk-link" style={linkStyle}>
+            {reg.nice.ref}
+          </a>
+          <span className="block">Last updated {reg.nice.last_updated}</span>
+        </>
+      ),
+    })
+  }
+  if (reg?.device_class) {
+    regFacts.push({
+      label: 'Medical device classification',
+      value: (
+        <>
+          <span className="block">{reg.device_class}</span>
+          {reg.mhra_pard && (
+            <a href={reg.mhra_pard.url} target="_blank" rel="noopener noreferrer" className="nhsuk-link" style={linkStyle}>
+              MHRA PARD record
+            </a>
+          )}
+        </>
+      ),
+    })
+  }
+  if (reg && reg.dtac_complete !== undefined) {
+    regFacts.push({
+      label: 'DTAC status',
+      value: reg.dtac_complete ? (
+        <>
+          <strong className="nhsuk-tag nhsuk-tag--green">Complete</strong>
+          <span className="block mt-1">Evidence provided</span>
+        </>
+      ) : (
+        <>
+          <strong className="nhsuk-tag nhsuk-tag--grey">Not complete</strong>
+          <span className="block mt-1">Evidence not provided</span>
+        </>
+      ),
+    })
+  }
 
   return (
     <PdpSection
       id="assurance"
       shareKey="narrative-assurance"
       title={pdpSectionTitle('assurance')}
-      description="The NHS HealthStore has reviewed this product nationally. We certify our confidence in its assurance position based on supplier-provided documentation. Your local team retains responsibility for due diligence — we make that faster by providing access to source documents in your workspace once verified."
+      description="Your local team retains responsibility for due diligence — we make that faster by providing access to source documents in your workspace once verified."
     >
       {speedNote && (
         <div className="mb-4">
           <div className="hs-font-bold hs-text-label mb-1" style={{ color: 'var(--text-primary)' }}>
-            What our assurance pack saves you
+            How we support your local assurance
           </div>
           <p className="hs-text-label" style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
             {speedNote}
@@ -170,16 +171,13 @@ export default function PdpAssurancePassport({
           <span className="hs-font-bold" style={{ color: '#212b32' }}>
             Assurance pack
           </span>
-          <span className="hs-font-bold" style={{ color: '#212b32', whiteSpace: 'nowrap' }}>
-            Status
-          </span>
         </div>
       </div>
       <ul className="nhsuk-task-list" style={{ marginTop: 0 }}>
         {packDomains.map((d, index) => {
-          const statusId = `assurance-${index + 1}-status`
           const hintId = `assurance-${index + 1}-hint`
           const hint = d.summary?.trim()
+          const items = d.items ?? []
           return (
             <li key={d.domain} className="nhsuk-task-list__item">
               <div className="nhsuk-task-list__name-and-hint">
@@ -189,8 +187,21 @@ export default function PdpAssurancePassport({
                     {hint}
                   </div>
                 )}
+                {items.length > 0 && (
+                  <dl
+                    className="hs-text-label"
+                    style={{ margin: '8px 0 0', color: 'var(--text-secondary)', lineHeight: 1.5 }}
+                    aria-label={`${d.domain} evidence held`}
+                  >
+                    {items.map((item) => (
+                      <div key={item.label} style={{ display: 'flex', flexWrap: 'wrap', gap: '0 6px' }}>
+                        <dt style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{item.label}:</dt>
+                        <dd style={{ margin: 0 }}>{item.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
               </div>
-              <TaskListStatus status={d.status} id={statusId} />
             </li>
           )
         })}

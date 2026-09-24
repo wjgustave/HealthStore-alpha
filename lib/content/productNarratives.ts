@@ -1,4 +1,46 @@
 import type { ProductNarrative } from './productModel'
+import { dtacPack } from './assuranceDomains'
+
+/**
+ * Assurance position wording (Assurance team feedback, Sep 2026). The NHS HealthStore does
+ * not run national assurance or certify products — it provides verified supplier source
+ * documents for the commissioner's local assurance.
+ */
+export const LOCAL_ASSURANCE_SENTENCE =
+  'We make assurance easier and faster by providing access to source documents in your workspace once verified for your local assurance purposes.'
+
+export const ASSURANCE_SUPPORT_NOTE =
+  'We make it faster by providing access to source documents in your workspace once verified for your local assurance purposes.'
+
+/** NICE status and "Last reviewed" dates checked on nice.org.uk, September 2026. */
+const EVA_STATUS = 'Recommended for use in the NHS during the evidence generation period (early value assessment)'
+
+const NICE_HTG736 = {
+  ref: 'NICE HTG736',
+  url: 'https://www.nice.org.uk/guidance/htg736',
+  status: EVA_STATUS,
+  last_updated: '3 February 2026',
+}
+
+const NICE_HTG761 = {
+  ref: 'NICE HTG761',
+  url: 'https://www.nice.org.uk/guidance/htg761',
+  status: EVA_STATUS,
+  last_updated: '4 December 2025',
+}
+
+const NICE_HTG766 = {
+  ref: 'NICE HTG766',
+  url: 'https://www.nice.org.uk/guidance/htg766',
+  status: EVA_STATUS,
+  last_updated: '22 January 2026',
+}
+
+/** MHRA PARD records (pard.mhra.gov.uk), checked September 2026. */
+const MY_MHEALTH_PARD = {
+  url: 'https://pard.mhra.gov.uk/manufacturer-details/13445',
+  registered_name: 'my mhealth self management platform',
+}
 
 export const LUSCII_NARRATIVE: ProductNarrative = {
   decision_summary: {
@@ -71,25 +113,37 @@ export const LUSCII_NARRATIVE: ProductNarrative = {
     },
   ],
   regulatory_position: {
-    device_class: 'Medical device — Class IIa SaMD',
-    hira_status: 'NHS HealthStore Independent Regulatory Assurance pack complete',
-    market_access: 'Documented UK market access with classification rationale on file',
-    assurance_speed_note: 'The NHS HealthStore runs national assurance once and your local team reuses the passport instead of repeating supplier checks.',
+    device_class: 'Class IIa medical device',
+    assurance_speed_note: ASSURANCE_SUPPORT_NOTE,
+    nice: { ...NICE_HTG736 },
+    mhra_pard: { url: 'https://pard.mhra.gov.uk/manufacturer-details/31696', registered_name: 'Luscii Vitals' },
+    dtac_complete: true,
   },
-  assurance_domains: [
-    { domain: 'Clinical safety', status: 'verified_review_due', summary: 'DCB0129 on file; local deployment pack provided.', review_due: '2026-09', residual_action: 'Complete local clinical safety assessment before go-live' },
-    { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG736 EVA recommendations.', verified_date: '2024-12', review_due: '2027-12' },
-    { domain: 'Information governance and data protection', status: 'verified_current', summary: 'DTAC complete and on file, DPA available, DPIA template available, ISO 27001', verified_date: '2024-04' },
-    { domain: 'Interoperability', status: 'verified_current', summary: 'FHIR integration available. EMIS integration available. NHS Notify supported. API integration available. Outcome data exportable for commissioner reporting. Confirm local EPR integration requirements with supplier.' },
-    { domain: 'Commercial readiness pack', status: 'verified_current', summary: 'Includes PA23/software route note and price schedule.', verified_date: '2026-06' },
-  ],
+  // DTAC-ordered assurance pack — see docs/assurance-feedback-before-after.md.
+  assurance_domains: dtacPack({
+    deviceStatus: 'Medical device — Class IIa SaMD',
+    clinicalSafety: {
+      review_due: '2026-09',
+      residual_action: 'Complete local clinical safety assessment before go-live',
+    },
+    dataProtectionVerified: '2024-04',
+    cyberEssentials: 'Not confirmed in reviewed sources',
+    iso27001: 'Certified',
+    nice: 'NICE HTG736 EVA recommendations.',
+    niceVerified: '2024-12',
+    niceReviewDue: '2027-12',
+    dtacForm: {
+      summary: 'DTAC completed April 2024 — confirmed in G-Cloud 14 Service Definition.',
+      verified_date: '2024-04',
+    },
+  }),
   commercial_readiness: {
     proposition_type: 'Service-led (software + 24/7 clinical hub)',
     route_status: 'PSR route — NHS HealthStore buyer pack for local provider selection',
-    commercial_status: 'NHS HealthStore assurance complete; buyer selection pack ready',
+    commercial_status: 'Buyer selection pack ready',
     buyer_pack_status: 'PSR evidence pack, price schedule and contract schedules available',
     price_summary: 'Pricing on application — contact supplier (figures pending verification)',
-    healthstore_role: 'The NHS HealthStore supports you through the purchase — from buyer pack and pricing to introductions and contract support. We handle the upfront assurance work so you can move faster.',
+    healthstore_role: `The NHS HealthStore supports you through the purchase — from buyer pack and pricing to introductions and contract support. ${LOCAL_ASSURANCE_SENTENCE}`,
   },
   commissioner_economics: {
     headline: 'For 500 monitored patients, about £245k net economic value per year — mostly from freed acute capacity, with additional Green Book productivity and wellbeing gains.',
@@ -212,25 +266,32 @@ export const MYCOPD_NARRATIVE: ProductNarrative = {
     },
   ],
   regulatory_position: {
-    device_class: 'Medical device — documented classification on file',
-    hira_status: 'HIRA evidence pack under NHS HealthStore review',
-    market_access: 'UK market access documented',
-    assurance_speed_note: 'The NHS HealthStore provides the assurance passport and local deployment safety templates — reducing duplicated local work.',
+    device_class: 'Class I medical device',
+    assurance_speed_note: ASSURANCE_SUPPORT_NOTE,
+    nice: { ...NICE_HTG736 },
+    mhra_pard: { ...MY_MHEALTH_PARD },
+    dtac_complete: true,
   },
-  assurance_domains: [
-    { domain: 'Clinical safety', status: 'verified_current', summary: 'DCB0129 on file; local deployment pack provided.', verified_date: '2025-01', residual_action: 'Local deployment safety sign-off required' },
-    { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG736 EVA recommendations.', verified_date: '2024-12' },
-    { domain: 'Information governance and data protection', status: 'verified_current', summary: 'DTAC complete and on file, DPA available, DPIA template available, ISO 27001' },
-    { domain: 'Interoperability', status: 'verified_current', summary: 'FHIR integration available. EMIS integration available. NHS Notify supported. API integration available. Outcome data exportable for commissioner reporting. Confirm local EPR integration requirements with supplier.' },
-    { domain: 'Commercial readiness pack', status: 'verified_current', summary: 'Includes PA23/software route note and price schedule.', verified_date: '2026-06' },
-  ],
+  // DTAC-ordered assurance pack — see docs/assurance-feedback-before-after.md.
+  assurance_domains: dtacPack({
+    deviceStatus: 'Medical device — Class I SaMD',
+    clinicalSafety: { verified_date: '2025-01', residual_action: 'Local deployment safety sign-off required' },
+    cyberEssentials: 'Held, expires 30 November 2026',
+    iso27001: 'Not confirmed in reviewed sources',
+    nice: 'NICE HTG736 EVA recommendations.',
+    niceVerified: '2024-12',
+    dtacForm: {
+      summary:
+        'Central DTAC completion is over 3 years old. Updated DTAC form (February 2026) applies from April 2026 — request the current form from the supplier.',
+    },
+  }),
   commercial_readiness: {
     proposition_type: 'Software-led with optional clinical dashboard',
     route_status: 'PA23 / software procurement route — NHS HealthStore buyer pack attached',
-    commercial_status: 'NHS HealthStore assurance complete; buyer selection pack ready',
+    commercial_status: 'Buyer selection pack ready',
     buyer_pack_status: 'Core pack with route note, assurance passport and price schedule',
     price_summary: 'Indicative £120,000 annual licence (provider footprint)',
-    healthstore_role: 'The NHS HealthStore provides your buyer pack, pricing transparency, contract templates and hands-on support through the purchase process.',
+    healthstore_role: `The NHS HealthStore provides your buyer pack, pricing transparency, contract templates and hands-on support through the purchase process. ${LOCAL_ASSURANCE_SENTENCE}`,
   },
   commissioner_economics: {
     headline: 'Crossing the discharge bundle tariff gateway is worth approximately £94,500 cash per year for 500 admissions. Adding readmission reduction, PR capacity release and Green Book benefits takes total economic value to £250k+.',
@@ -377,20 +438,30 @@ const MYHEART_NARRATIVE: ProductNarrative = {
       'Outcome reporting agreement with supplier',
     ],
   },
-  assurance_domains: [
-    { domain: 'Clinical safety', status: 'verified_current', summary: 'DCB0129 on file; local deployment pack provided.' },
-    { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG764 EVA recommendations.' },
-    { domain: 'Information governance and data protection', status: 'verified_current', summary: 'DTAC complete and on file, DPA available, DPIA template available, ISO 27001' },
-    { domain: 'Interoperability', status: 'verified_review_due', summary: 'FHIR integration available. EMIS integration available. NHS Notify supported. API integration available. Outcome data exportable for commissioner reporting. Connects to Bluetooth devices (blood pressure monitors). Confirm local EPR integration requirements with supplier.' },
-    { domain: 'Commercial readiness pack', status: 'verified_current', summary: 'Includes PA23/software route note and price schedule.' },
-  ],
+  regulatory_position: {
+    device_class: 'Class I medical device',
+    assurance_speed_note: ASSURANCE_SUPPORT_NOTE,
+    nice: { ...NICE_HTG761 },
+    mhra_pard: { ...MY_MHEALTH_PARD },
+    dtac_complete: true,
+  },
+  assurance_domains: dtacPack({
+    deviceStatus: 'Medical device — Class I SaMD',
+    nice: 'NICE HTG761 EVA recommendations.',
+    interop: {
+      summary:
+        'FHIR integration available. EMIS integration available. NHS Notify supported. API integration available. Outcome data exportable for commissioner reporting. Connects to Bluetooth devices (blood pressure monitors). Confirm local EPR integration requirements with supplier.',
+    },
+    cyberEssentials: 'Not confirmed in reviewed sources',
+    iso27001: 'Certified',
+  }),
   commercial_readiness: {
     commercial_status: 'Available',
     price_summary: '£50–£100 per patient pathway',
     proposition_type: 'Per-patient licence with unlimited access',
     route_status: 'Direct award or G-Cloud framework',
     buyer_pack_status: 'Available from the NHS HealthStore',
-    healthstore_role: 'The NHS HealthStore provides the buyer pack, pricing, introductions and hands-on support through the purchase. We handle the national assurance so your local process is faster.',
+    healthstore_role: `The NHS HealthStore provides the buyer pack, pricing, introductions and hands-on support through the purchase. ${LOCAL_ASSURANCE_SENTENCE}`,
   },
   publishing: { content_owner: 'NHS HealthStore', review_date: '2026-06-25', next_review: '2026-09-25' },
 }
@@ -482,13 +553,20 @@ const JOINT_ACADEMY_NARRATIVE: ProductNarrative = {
       'Commissioner reporting cadence agreed (quarterly recommended)',
     ],
   },
-  assurance_domains: [
-    { domain: 'Clinical safety', status: 'verified_current', summary: 'DCB0129 on file; local deployment pack provided.' },
-    { domain: 'Clinical evidence', status: 'verified_current', summary: 'NICE HTG766 EVA recommendations.' },
-    { domain: 'Information governance and data protection', status: 'verified_review_due', summary: 'DTAC complete and on file, DPA available, DPIA template available, ISO 27001' },
-    { domain: 'Interoperability', status: 'verified_current', summary: 'FHIR integration available. EMIS integration available. NHS Notify supported. API integration available. Outcome data exportable for commissioner reporting. Confirm local EPR integration requirements with supplier.' },
-    { domain: 'Commercial readiness pack', status: 'verified_current', summary: 'Includes PA23/software route note and price schedule.' },
-  ],
+  regulatory_position: {
+    device_class: 'Class I medical device',
+    assurance_speed_note: ASSURANCE_SUPPORT_NOTE,
+    nice: { ...NICE_HTG766 },
+    mhra_pard: { url: 'https://pard.mhra.gov.uk/manufacturer-details/131215', registered_name: 'Joint Academy' },
+    dtac_complete: true,
+  },
+  assurance_domains: dtacPack({
+    deviceStatus: 'Medical device — Class I SaMD',
+    nice: 'NICE HTG766 EVA recommendations.',
+    dtacForm: { summary: 'DTAC on file; refreshed form due — request the current version from the supplier.' },
+    cyberEssentials: 'Not confirmed in reviewed sources',
+    iso27001: 'Certified',
+  }),
   commercial_readiness: {
     commercial_status: 'Available',
     price_summary: '£200–£350 per patient pathway (12 weeks)',

@@ -26,13 +26,13 @@
   "referral_modes": [
     "clinician_referral"
   ],
-  "one_line_value_proposition": "NICE HTG764-recommended app-based cardiac rehabilitation platform from DDM Health — one of four platforms with direct CV event risk reduction evidence, DTAC completed, ORCHA 97% rated, and CE marked as a medical device.",
+  "one_line_value_proposition": "NICE HTG761-recommended app-based cardiac rehabilitation platform from DDM Health — one of four platforms with direct CV event risk reduction evidence, DTAC completed, ORCHA 97% rated, and CE marked as a medical device.",
   "why_it_matters_locally": "HeartBuddy is a mobile app offering personalised education, exercise programmes, health tracking and psychosocial support across multiple cardiac conditions. Built on the broader Gro Health platform which is already NICE-recommended for weight management and has DTAC completion, it provides a mature technical foundation with strong assurance credentials.",
   "target_problem_statement": "Low CR uptake, limited access to personalised cardiac rehabilitation across heart failure, post-MI and AF pathways, and need for a digital CR option with DTAC completion.",
   "nice_guidance_refs": [
     {
-      "ref": "NICE HTG764",
-      "url": "https://www.nice.org.uk/guidance/htg764",
+      "ref": "NICE HTG761",
+      "url": "https://www.nice.org.uk/guidance/htg761",
       "type": "EVA",
       "date": "December 2025",
       "note": "Conditionally recommended — one of four platforms with direct clinical evidence"
@@ -43,8 +43,8 @@
   "evidence_strength_rationale": "NICE prioritised one UK real-world service evaluation, not an RCT or controlled study. Engagement/follow-up looked promising, but evidence remains early/submitted, short-term and weakly comparative.",
   "clinical_evidence_detailed": [
     {
-      "id": "nice-htg764-heartbuddy",
-      "ref": "NICE EVA HTG764 — Gro Health HeartBuddy assessment",
+      "id": "nice-htg761-heartbuddy",
+      "ref": "NICE EVA HTG761 — Gro Health HeartBuddy assessment",
       "type": "nice_assessment",
       "type_label": "NICE EVA technology assessment",
       "authors": "NICE External Assessment Group",
@@ -59,7 +59,7 @@
       "url_doi": null,
       "url_pubmed": null,
       "url_pmc": null,
-      "url_full_text": "https://www.nice.org.uk/guidance/htg764",
+      "url_full_text": "https://www.nice.org.uk/guidance/htg761",
       "url_trial_reg": null,
       "url_case_study": null,
       "n": null,
@@ -98,7 +98,7 @@
       "peer_reviewed": null,
       "coi": null,
       "data_quality_flag": true,
-      "data_quality_note": "Study referenced in NICE HTG764 but full details not publicly accessible. Verify with DDM Health and NICE for the underlying study."
+      "data_quality_note": "Study referenced in NICE HTG761 but full details not publicly accessible. Verify with DDM Health and NICE for the underlying study."
     },
     {
       "id": "gro-health-weight-management",
@@ -177,13 +177,13 @@
       "url_doi": null,
       "url_pubmed": null,
       "url_pmc": null,
-      "url_full_text": "https://www.nice.org.uk/guidance/htg764",
+      "url_full_text": "https://www.nice.org.uk/guidance/htg761",
       "url_trial_reg": null,
       "url_case_study": null,
       "n": null,
       "setting": "England — health economics model",
       "key_results": "EAG model found digital cardiac rehabilitation platforms (including HeartBuddy) cost-saving compared with conventional rehabilitation.",
-      "study_limitation": "Generic model across all HTG764 platforms. Not HeartBuddy-specific cost-effectiveness data.",
+      "study_limitation": "Generic model across all HTG761 platforms. Not HeartBuddy-specific cost-effectiveness data.",
       "peer_reviewed": true,
       "coi": false,
       "data_quality_flag": false,
@@ -293,7 +293,7 @@
     ],
     "therapeutic_purpose": "Personalised education, exercise programmes, health tracking, dietary support, medication adherence, psychosocial support",
     "hcp_involvement": "Minimal — self-management app with initial clinical assessment",
-    "nice_scope": "NICE HTG764 — conditionally recommended during 3-year evidence generation period"
+    "nice_scope": "NICE HTG761 — conditionally recommended during 3-year evidence generation period"
   },
   "demo_variants": [
     {
@@ -306,6 +306,6 @@
   "supplier_contact_email": "info@ddm.health",
   "supplier_contact_name": "DDM Health",
   "last_reviewed_date": "2026-03-18",
-  "source_summary": "NICE HTG764, DDM Health website, ORCHA rating, DTAC certification announcement.",
+  "source_summary": "NICE HTG761, DDM Health website, ORCHA rating, DTAC certification announcement.",
   "confidence_note": "DTAC completed (refresh required). CE marked medical device. HeartBuddy-specific cardiac rehab evidence is emerging. Verify all details with DDM Health before procurement."
 }

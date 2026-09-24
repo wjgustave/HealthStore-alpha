@@ -1,7 +1,7 @@
 import type { App } from '@/lib/data'
 import type { AssuranceDomain, AssuranceDomainStatus, ProductNarrative } from '@/lib/content/productModel'
 import { getProductNarrative } from '@/lib/content/productNarratives'
-import { deriveAssuranceDomains } from '@/lib/content/assuranceDomains'
+import { DTAC_DOMAIN, deriveAssuranceDomains } from '@/lib/content/assuranceDomains'
 import { getDeploymentRegister } from '@/lib/deploymentRegister'
 import {
   NOT_STATED,
@@ -107,7 +107,7 @@ function getConditionsAndPathways(app: App): CompareCell {
 
 function getNiceGuidanceCell(app: App): CompareCell {
   const n = narrativeFor(app)
-  const evidenceDomain = n?.assurance_domains?.find((d) => d.domain === 'Clinical evidence')
+  const evidenceDomain = n?.assurance_domains?.find((d) => d.domain === DTAC_DOMAIN.nice)
   return text(pickStr(evidenceDomain?.summary, getNiceGuidanceStatus(app)))
 }
 
@@ -172,15 +172,18 @@ function getServiceWrapCell(app: App): CompareCell {
 /* ------------------------------------------------------------------ */
 
 /**
- * Pack items for compare — Interoperability last so commercial readiness sits
- * with the other pack statuses before the integration detail.
+ * Pack items for compare — DTAC order, matching the PDP assurance pack
+ * (see lib/content/assuranceDomains.ts). Commercial readiness is no longer
+ * part of the pack.
  */
 export const ASSURANCE_PACK_ITEMS = [
-  'Clinical safety',
-  'Clinical evidence',
-  'Information governance and data protection',
-  'Commercial readiness pack',
-  'Interoperability',
+  DTAC_DOMAIN.clinicalSafety,
+  DTAC_DOMAIN.dataProtection,
+  DTAC_DOMAIN.technicalSecurity,
+  DTAC_DOMAIN.interoperability,
+  DTAC_DOMAIN.usability,
+  DTAC_DOMAIN.nice,
+  DTAC_DOMAIN.dtacForm,
 ] as const
 
 const ASSURANCE_STATUS_META: Record<AssuranceDomainStatus, { label: string; colour: CompareTagColour }> = {

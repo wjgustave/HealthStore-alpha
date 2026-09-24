@@ -26,13 +26,13 @@
   "referral_modes": [
     "clinician_referral"
   ],
-  "one_line_value_proposition": "NICE HTG764-recommended digital adaptation of the NIHR-funded REACH-HF programme — the only heart failure-specific CR platform with a multicentre RCT evidence base and built-in caregiver support.",
+  "one_line_value_proposition": "NICE HTG761-recommended digital adaptation of the NIHR-funded REACH-HF programme — the only heart failure-specific CR platform with a multicentre RCT evidence base and built-in caregiver support.",
   "why_it_matters_locally": "Heart failure patients are significantly underserved by conventional cardiac rehabilitation. D REACH-HF provides a home-based, facilitated 12-week programme specifically designed for heart failure (HFrEF and HFpEF), with a unique Family and Friends Resource for caregivers. The paper-based REACH-HF programme has strong NIHR-funded RCT evidence showing superior quality of life outcomes.",
   "target_problem_statement": "Very low CR uptake in heart failure patients, limited HF-specific CR programmes, and lack of structured support for caregivers of heart failure patients.",
   "nice_guidance_refs": [
     {
-      "ref": "NICE HTG764",
-      "url": "https://www.nice.org.uk/guidance/htg764",
+      "ref": "NICE HTG761",
+      "url": "https://www.nice.org.uk/guidance/htg761",
       "type": "EVA",
       "date": "December 2025",
       "note": "Conditionally recommended — evidence for non-digital REACH-HF; digital version evidence generation underway"
@@ -160,7 +160,7 @@
     ],
     "therapeutic_purpose": "Structured 12-week facilitated programme: exercise, education, progress tracking, caregiver support via Family and Friends Resource",
     "hcp_involvement": "Active — trained facilitators deliver the programme with face-to-face and telephone contact",
-    "nice_scope": "NICE HTG764 — conditionally recommended during 3-year evidence generation period"
+    "nice_scope": "NICE HTG761 — conditionally recommended during 3-year evidence generation period"
   },
   "clinical_evidence_detailed": [
     {
@@ -338,8 +338,8 @@
       "data_quality_note": null
     },
     {
-      "id": "nice-htg764-dreachhf",
-      "ref": "NICE EVA HTG764 — Digital platforms to support cardiac rehabilitation",
+      "id": "nice-htg761-dreachhf",
+      "ref": "NICE EVA HTG761 — Digital platforms to support cardiac rehabilitation",
       "type": "nice_assessment",
       "type_label": "NICE EVA guidance",
       "authors": "NICE External Assessment Group",
@@ -354,7 +354,7 @@
       "url_doi": null,
       "url_pubmed": null,
       "url_pmc": null,
-      "url_full_text": "https://www.nice.org.uk/guidance/htg764",
+      "url_full_text": "https://www.nice.org.uk/guidance/htg761",
       "url_trial_reg": null,
       "url_case_study": null,
       "n": null,
@@ -365,8 +365,8 @@
       "coi": false,
       "data_quality_flag": false,
       "data_quality_note": null,
-      "source_label": "NICE HTG764",
-      "source_url": "https://www.nice.org.uk/guidance/htg764"
+      "source_label": "NICE HTG761",
+      "source_url": "https://www.nice.org.uk/guidance/htg761"
     },
     {
       "id": "d-reach-hf-evidence-gap",
@@ -403,6 +403,6 @@
   "supplier_contact_email": "info@healthandcareinnovations.com",
   "supplier_contact_name": "Health & Care Innovations Ltd",
   "last_reviewed_date": "2026-03-18",
-  "source_summary": "NICE HTG764, NIHR REACH-HF programme, Dalal et al. 2021, van Beurden et al. 2025, SCOT:REACH-HF (EJCN 2023).",
+  "source_summary": "NICE HTG761, NIHR REACH-HF programme, Dalal et al. 2021, van Beurden et al. 2025, SCOT:REACH-HF (EJCN 2023).",
   "confidence_note": "Strong evidence exists for the paper-based REACH-HF programme. The digital adaptation (D REACH-HF) does not yet have completed RCT evidence. DTAC approval must be obtained. Verify all details before procurement."
 }

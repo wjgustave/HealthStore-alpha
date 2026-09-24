@@ -25,13 +25,13 @@
   "referral_modes": [
     "clinician_referral"
   ],
-  "one_line_value_proposition": "NICE HTG764-recommended wearable-based cardiac rehabilitation with direct RCT evidence of CV event risk reduction — using patented physical activity analytics, dedicated mentoring, and deployment across 13 NHS ICS regions.",
+  "one_line_value_proposition": "NICE HTG761-recommended wearable-based cardiac rehabilitation with direct RCT evidence of CV event risk reduction — using patented physical activity analytics, dedicated mentoring, and deployment across 13 NHS ICS regions.",
   "why_it_matters_locally": "KiActiv uses a proprietary wearable device to collect minute-by-minute physical activity data, combined with dedicated mentor support over a 12-week programme. With deployment across 13 NHS ICS regions and an RCT presented at the European Society of Cardiology Congress, it offers a data-rich approach to CR with broad NHS adoption.",
   "target_problem_statement": "Low CR uptake, limited objective physical activity measurement in CR programmes, and lack of personalised activity-based rehabilitation outside centre-based settings.",
   "nice_guidance_refs": [
     {
-      "ref": "NICE HTG764",
-      "url": "https://www.nice.org.uk/guidance/htg764",
+      "ref": "NICE HTG761",
+      "url": "https://www.nice.org.uk/guidance/htg761",
       "type": "EVA",
       "date": "December 2025",
       "note": "Conditionally recommended — one of four platforms with direct CV event risk reduction evidence"
@@ -133,8 +133,8 @@
       "source_url": null
     },
     {
-      "id": "nice-htg764-kiactiv",
-      "ref": "NICE EVA HTG764 — KiActiv assessment",
+      "id": "nice-htg761-kiactiv",
+      "ref": "NICE EVA HTG761 — KiActiv assessment",
       "type": "nice_assessment",
       "type_label": "NICE EVA technology assessment",
       "authors": "NICE External Assessment Group",
@@ -149,7 +149,7 @@
       "url_doi": null,
       "url_pubmed": null,
       "url_pmc": null,
-      "url_full_text": "https://www.nice.org.uk/guidance/htg764",
+      "url_full_text": "https://www.nice.org.uk/guidance/htg761",
       "url_trial_reg": null,
       "url_case_study": null,
       "n": null,
@@ -178,13 +178,13 @@
       "url_doi": null,
       "url_pubmed": null,
       "url_pmc": null,
-      "url_full_text": "https://www.nice.org.uk/guidance/htg764",
+      "url_full_text": "https://www.nice.org.uk/guidance/htg761",
       "url_trial_reg": null,
       "url_case_study": null,
       "n": null,
       "setting": "England — health economics model",
       "key_results": "EAG model found digital cardiac rehabilitation platforms (including KiActiv) cost-saving compared with conventional rehabilitation. KiActiv reports 46,456 additional hours of physical activity above baseline across all participants, with improved QoL, mental wellbeing, and reduced GP/hospital visits.",
-      "study_limitation": "Generic model across all HTG764 platforms. Aggregate activity hours figure is supplier-reported, not independently verified.",
+      "study_limitation": "Generic model across all HTG761 platforms. Aggregate activity hours figure is supplier-reported, not independently verified.",
       "peer_reviewed": true,
       "coi": false,
       "data_quality_flag": false,
@@ -402,7 +402,7 @@
     ],
     "therapeutic_purpose": "Wearable-based physical activity monitoring with personalised feedback, mentor support, and educational signposting",
     "hcp_involvement": "Minimal — clinician refers and confirms eligibility; KiActiv manages programme delivery",
-    "nice_scope": "NICE HTG764 — conditionally recommended during 3-year evidence generation period"
+    "nice_scope": "NICE HTG761 — conditionally recommended during 3-year evidence generation period"
   },
   "demo_variants": [
     {
@@ -415,6 +415,6 @@
   "supplier_contact_email": "nhs@kiactiv.com",
   "supplier_contact_name": "KiActiv NHS team",
   "last_reviewed_date": "2026-03-18",
-  "source_summary": "NICE HTG764, ESC Congress presentation (European Heart Journal), Liverpool NHS CR pilot, Health Innovation East, kiactiv.com/our-evidence.",
+  "source_summary": "NICE HTG761, ESC Congress presentation (European Heart Journal), Liverpool NHS CR pilot, Health Innovation East, kiactiv.com/our-evidence.",
   "confidence_note": "Content based on NICE guidance and publicly available information. DTAC approval must be obtained. Verify all details with Ki Performance Lifestyle Ltd before procurement."
 }

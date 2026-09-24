@@ -25,19 +25,19 @@
   "referral_modes": [
     "clinician_referral"
   ],
-  "one_line_value_proposition": "NICE HTG764-recommended web-based cardiac rehabilitation platform with direct RCT evidence of secondary CV event risk reduction — developed by NHS clinicians and reaching patients who would not attend conventional CR.",
+  "one_line_value_proposition": "NICE HTG761-recommended web-based cardiac rehabilitation platform with direct RCT evidence of secondary CV event risk reduction — developed by NHS clinicians and reaching patients who would not attend conventional CR.",
   "why_it_matters_locally": "Cardiac rehabilitation uptake remains well below NHS targets, with many patients unable or unwilling to attend face-to-face sessions. Activate Your Heart is part of the i-IMPACT platform at UHL and demonstrated that 90% of pilot patients would not have attended conventional CR, showing the platform reaches an otherwise unreachable population.",
   "target_problem_statement": "Low cardiac rehabilitation uptake, limited face-to-face CR capacity, and inability to reach patients who decline or cannot attend centre-based programmes.",
   "nice_guidance_refs": [
     {
-      "ref": "NICE HTG764",
-      "url": "https://www.nice.org.uk/guidance/htg764",
+      "ref": "NICE HTG761",
+      "url": "https://www.nice.org.uk/guidance/htg761",
       "type": "EVA",
       "date": "December 2025",
       "note": "Conditionally recommended — digital platforms to support cardiac rehabilitation"
     }
   ],
-  "evidence_summary": "Two RCTs evaluating exercise capacity, cardiovascular risk factors and health-related quality of life. One of four HTG764 platforms with direct clinical evidence suggesting potential reduction in secondary CV event risk. Pilot of 68 patients showed 90% would not have attended conventional CR. NICE EAG economic model found the platform cost-saving vs conventional rehabilitation.",
+  "evidence_summary": "Two RCTs evaluating exercise capacity, cardiovascular risk factors and health-related quality of life. One of four HTG761 platforms with direct clinical evidence suggesting potential reduction in secondary CV event risk. Pilot of 68 patients showed 90% would not have attended conventional CR. NICE EAG economic model found the platform cost-saving vs conventional rehabilitation.",
   "evidence_strength": "moderate",
   "evidence_strength_rationale": "Two UK RCTs plus one pilot were prioritised by NICE; the Devi RCT showed short-term physical-activity/QoL benefits. Follow-up was short, uptake/completion evidence varied, and implementation maturity did not reach 4.5.",
   "case_studies": [
@@ -151,7 +151,7 @@
     ],
     "therapeutic_purpose": "Structured home-based cardiac rehabilitation with personalised exercise plans, education and clinician-monitored symptom tracking",
     "hcp_involvement": "Active — initial face-to-face assessment required, ongoing dashboard monitoring, Ask the Expert communication",
-    "nice_scope": "NICE HTG764 — conditionally recommended during 3-year evidence generation period"
+    "nice_scope": "NICE HTG761 — conditionally recommended during 3-year evidence generation period"
   },
   "clinical_evidence_detailed": [
     {
@@ -176,12 +176,12 @@
       "url_case_study": null,
       "n": null,
       "setting": "University Hospitals of Leicester NHS Trust / Coventry University",
-      "key_results": "RCT evaluating exercise capacity, cardiovascular risk factors and health-related quality of life. One of four HTG764 platforms with direct clinical evidence suggesting potential reduction in secondary CV event risk.",
+      "key_results": "RCT evaluating exercise capacity, cardiovascular risk factors and health-related quality of life. One of four HTG761 platforms with direct clinical evidence suggesting potential reduction in secondary CV event risk.",
       "study_limitation": "Publication details not publicly confirmed. Verify with UHL for full citation.",
       "peer_reviewed": null,
       "coi": null,
       "data_quality_flag": false,
-      "data_quality_note": "Referenced in NICE HTG764 assessment but full publication details not available in the dossier."
+      "data_quality_note": "Referenced in NICE HTG761 assessment but full publication details not available in the dossier."
     },
     {
       "id": "ayh-rct-2",
@@ -210,7 +210,7 @@
       "peer_reviewed": null,
       "coi": null,
       "data_quality_flag": false,
-      "data_quality_note": "Referenced in NICE HTG764 assessment but full publication details not available in the dossier."
+      "data_quality_note": "Referenced in NICE HTG761 assessment but full publication details not available in the dossier."
     },
     {
       "id": "ayh-shine-pilot",
@@ -242,8 +242,8 @@
       "data_quality_note": null
     },
     {
-      "id": "nice-htg764-ayh",
-      "ref": "NICE EVA HTG764 — Digital platforms to support cardiac rehabilitation",
+      "id": "nice-htg761-ayh",
+      "ref": "NICE EVA HTG761 — Digital platforms to support cardiac rehabilitation",
       "type": "nice_assessment",
       "type_label": "NICE EVA guidance",
       "authors": "NICE External Assessment Group",
@@ -258,7 +258,7 @@
       "url_doi": null,
       "url_pubmed": null,
       "url_pmc": null,
-      "url_full_text": "https://www.nice.org.uk/guidance/htg764",
+      "url_full_text": "https://www.nice.org.uk/guidance/htg761",
       "url_trial_reg": null,
       "url_case_study": null,
       "n": null,
@@ -269,8 +269,8 @@
       "coi": false,
       "data_quality_flag": false,
       "data_quality_note": null,
-      "source_label": "NICE HTG764",
-      "source_url": "https://www.nice.org.uk/guidance/htg764"
+      "source_label": "NICE HTG761",
+      "source_url": "https://www.nice.org.uk/guidance/htg761"
     },
     {
       "id": "ayh-uhl-service",
@@ -313,6 +313,6 @@
   "supplier_contact_email": "activateyourheart@uhl-tr.nhs.uk",
   "supplier_contact_name": "UHL Cardiac Rehabilitation Service",
   "last_reviewed_date": "2026-03-18",
-  "source_summary": "NICE HTG764, Health Foundation Shine programme case study, activateyourheart.org.uk.",
+  "source_summary": "NICE HTG761, Health Foundation Shine programme case study, activateyourheart.org.uk.",
   "confidence_note": "Content based on NICE guidance and publicly available information. DTAC approval must be obtained before commissioning. Verify all details with UHL before procurement."
 }

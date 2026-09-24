@@ -26,12 +26,12 @@
     "clinician_referral"
   ],
   "one_line_value_proposition": "A home-based cardiac rehabilitation app — patients complete Phase III and IV rehab from home with exercise prescription, and the clinical team monitors progress remotely.",
-  "why_it_matters_locally": "myHeart has the largest documented NHS deployment among HTG764-recommended platforms, with over 20,800 UK users since 2018. The Dorset County Hospital case study demonstrated 70% CR uptake, surpassing the 2028 NHS Long-Term Plan target. Built on the my mhealth platform (which also powers myCOPD), it benefits from an established NHS relationship and DTAC completion.",
+  "why_it_matters_locally": "myHeart has the largest documented NHS deployment among HTG761-recommended platforms, with over 20,800 UK users since 2018. The Dorset County Hospital case study demonstrated 70% CR uptake, surpassing the 2028 NHS Long-Term Plan target. Built on the my mhealth platform (which also powers myCOPD), it benefits from an established NHS relationship and DTAC completion.",
   "target_problem_statement": "Low national CR uptake rates, limited capacity for home-based CR delivery, and the 2028 NHS Long-Term Plan target to increase CR uptake to 85%.",
   "nice_guidance_refs": [
     {
-      "ref": "NICE HTG764",
-      "url": "https://www.nice.org.uk/guidance/htg764",
+      "ref": "NICE HTG761",
+      "url": "https://www.nice.org.uk/guidance/htg761",
       "type": "EVA",
       "date": "December 2025",
       "note": "Conditionally recommended, one of four platforms with direct clinical evidence"
@@ -195,8 +195,8 @@
       "source_url": null
     },
     {
-      "id": "nice-htg764-myheart",
-      "ref": "NICE EVA HTG764, myHeart assessment",
+      "id": "nice-htg761-myheart",
+      "ref": "NICE EVA HTG761, myHeart assessment",
       "type": "nice_assessment",
       "type_label": "NICE EVA technology assessment",
       "authors": "NICE External Assessment Group",
@@ -211,7 +211,7 @@
       "url_doi": null,
       "url_pubmed": null,
       "url_pmc": null,
-      "url_full_text": "https://www.nice.org.uk/guidance/htg764",
+      "url_full_text": "https://www.nice.org.uk/guidance/htg761",
       "url_trial_reg": null,
       "url_case_study": null,
       "n": null,
@@ -240,13 +240,13 @@
       "url_doi": null,
       "url_pubmed": null,
       "url_pmc": null,
-      "url_full_text": "https://www.nice.org.uk/guidance/htg764",
+      "url_full_text": "https://www.nice.org.uk/guidance/htg761",
       "url_trial_reg": null,
       "url_case_study": null,
       "n": null,
       "setting": "England, health economics model",
       "key_results": "EAG model found digital cardiac rehabilitation platforms (including myHeart) cost-saving compared with conventional rehabilitation. 275,000+ rehabilitation/education sessions delivered in 2020 across the mymhealth platform.",
-      "study_limitation": "Generic model across all HTG764 platforms. Session count is platform-wide (includes myCOPD and other products), not myHeart-specific.",
+      "study_limitation": "Generic model across all HTG761 platforms. Session count is platform-wide (includes myCOPD and other products), not myHeart-specific.",
       "peer_reviewed": true,
       "coi": false,
       "data_quality_flag": true,
@@ -426,7 +426,7 @@
     ],
     "therapeutic_purpose": "Personalised exercise, 50+ educational videos, symptom tracking, activity diary, medication diary, ECG/ECHO tracking, psychosocial support, clinician remote monitoring",
     "hcp_involvement": "Active — clinician app for remote monitoring, messaging, and patient management",
-    "nice_scope": "NICE HTG764, conditionally recommended during 3-year evidence generation period"
+    "nice_scope": "NICE HTG761, conditionally recommended during 3-year evidence generation period"
   },
   "demo_variants": [
     {
@@ -444,6 +444,6 @@
   "supplier_contact_email": "nhs@mymhealth.com",
   "supplier_contact_name": "my mhealth NHS team",
   "last_reviewed_date": "2026-03-18",
-  "source_summary": "NICE HTG764, UH Derby & Burton evaluation, Dorset County Hospital case study, mymhealth.com/studies, CUOREMA Eurostars announcement.",
-  "confidence_note": "myHeart has the largest documented NHS deployment among HTG764 platforms. DTAC completed (refresh required). Verify current assurance and pricing with my mhealth before procurement."
+  "source_summary": "NICE HTG761, UH Derby & Burton evaluation, Dorset County Hospital case study, mymhealth.com/studies, CUOREMA Eurostars announcement.",
+  "confidence_note": "myHeart has the largest documented NHS deployment among HTG761 platforms. DTAC completed (refresh required). Verify current assurance and pricing with my mhealth before procurement."
 }

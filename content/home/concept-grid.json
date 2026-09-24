@@ -7,15 +7,6 @@
   },
   "promos": [
     {
-      "id": "dtx-ready",
-      "variant": "navy",
-      "title": "Check if your ICB is DTx delivery ready",
-      "description": "Self-assessment themes for governance, workforce and data before scaling digital therapeutics.",
-      "href": "https://www.england.nhs.uk/",
-      "image": "/images/home/promo-icb-dtx-ready.png",
-      "image_alt": "Clinician supporting a patient — human connection in a medical consultation"
-    },
-    {
       "id": "patient-help",
       "variant": "purple",
       "title": "How digital therapeutics can help your patients",

@@ -25,13 +25,13 @@
   "referral_modes": [
     "clinician_referral"
   ],
-  "one_line_value_proposition": "NICE HTG764-recommended digital edition of the Heart Manual — described by the AHA as 'perhaps the most extensively studied self-management book for patients recovering from acute MI,' with 500+ peer-reviewed citations since 1992.",
+  "one_line_value_proposition": "NICE HTG761-recommended digital edition of the Heart Manual — described by the AHA as 'perhaps the most extensively studied self-management book for patients recovering from acute MI,' with 500+ peer-reviewed citations since 1992.",
   "why_it_matters_locally": "The paper-based Heart Manual is the most extensively studied post-MI self-management programme globally, with foundational Lancet RCT evidence and AHA endorsement. The Digital Heart Manual brings this into a web-based format, maintaining facilitator-led delivery while expanding access. The paper version already serves approximately 14,000 patients/year in the UK.",
   "target_problem_statement": "Low CR uptake among post-MI and post-revascularisation patients, limited face-to-face CR capacity, and geographic barriers to centre-based programmes.",
   "nice_guidance_refs": [
     {
-      "ref": "NICE HTG764",
-      "url": "https://www.nice.org.uk/guidance/htg764",
+      "ref": "NICE HTG761",
+      "url": "https://www.nice.org.uk/guidance/htg761",
       "type": "EVA",
       "date": "December 2025",
       "note": "Conditionally recommended — evidence for non-digital Heart Manual; digital version evidence generation underway"
@@ -160,7 +160,7 @@
     ],
     "therapeutic_purpose": "Structured home-based CR: exercise guide, education, diet, medication and psychological support",
     "hcp_involvement": "Active — specialist-trained facilitators deliver the programme",
-    "nice_scope": "NICE HTG764 — conditionally recommended during 3-year evidence generation period"
+    "nice_scope": "NICE HTG761 — conditionally recommended during 3-year evidence generation period"
   },
   "clinical_evidence_detailed": [
     {
@@ -425,8 +425,8 @@
       "data_quality_note": null
     },
     {
-      "id": "nice-htg764-dhm",
-      "ref": "NICE EVA HTG764 — Digital platforms to support cardiac rehabilitation",
+      "id": "nice-htg761-dhm",
+      "ref": "NICE EVA HTG761 — Digital platforms to support cardiac rehabilitation",
       "type": "nice_assessment",
       "type_label": "NICE EVA guidance",
       "authors": "NICE External Assessment Group",
@@ -441,7 +441,7 @@
       "url_doi": null,
       "url_pubmed": null,
       "url_pmc": null,
-      "url_full_text": "https://www.nice.org.uk/guidance/htg764",
+      "url_full_text": "https://www.nice.org.uk/guidance/htg761",
       "url_trial_reg": null,
       "url_case_study": null,
       "n": null,
@@ -452,8 +452,8 @@
       "coi": false,
       "data_quality_flag": false,
       "data_quality_note": null,
-      "source_label": "NICE HTG764",
-      "source_url": "https://www.nice.org.uk/guidance/htg764"
+      "source_label": "NICE HTG761",
+      "source_url": "https://www.nice.org.uk/guidance/htg761"
     },
     {
       "id": "nacr-2016",
@@ -525,6 +525,6 @@
   "supplier_contact_email": "heartmanual@nhslothian.scot.nhs.uk",
   "supplier_contact_name": "NHS Lothian Heart Manual Department",
   "last_reviewed_date": "2026-03-18",
-  "source_summary": "NICE HTG764, Lewin et al. Lancet 1992, Jolly et al. 2009, Dalal et al. 2007, Taylor et al. 2006, Clark et al. 2011, Deighan et al. 2017, AHA/AACVPR/ACC 2019.",
+  "source_summary": "NICE HTG761, Lewin et al. Lancet 1992, Jolly et al. 2009, Dalal et al. 2007, Taylor et al. 2006, Clark et al. 2011, Deighan et al. 2017, AHA/AACVPR/ACC 2019.",
   "confidence_note": "The paper-based Heart Manual has one of the strongest evidence bases in CR. The digital version has limited direct evidence — evidence generation is underway. DTAC approval must be obtained. Verify all details with NHS Lothian."
 }

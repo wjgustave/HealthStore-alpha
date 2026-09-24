@@ -369,15 +369,16 @@ export default function ProductNarrativeView({
       <section id="assurance" style={{ marginBottom: 40, borderTop: '1px solid #d8dde0', paddingTop: 32 }}>
         <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: 8 }}>Assurance and evidence</h2>
         <p style={{ fontSize: 15, color: '#4c6272', maxWidth: 720, lineHeight: 1.7, marginBottom: 20 }}>
-          The NHS HealthStore has reviewed this product nationally. We certify our confidence in its assurance position based on supplier-provided documentation.
           Your local team retains responsibility for due diligence — we make that faster by providing access to source documents in your workspace once verified.
         </p>
 
         {narrative.regulatory_position && (
           <div style={{ background: '#f0f6fc', borderRadius: 8, padding: '16px 20px', border: '1px solid #d8dde0', marginBottom: 20 }}>
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 14 }}><strong>Device classification:</strong> {narrative.regulatory_position.device_class}</span>
-              <span style={{ fontSize: 14 }}><strong>HIRA:</strong> {narrative.regulatory_position.hira_status}</span>
+              <span style={{ fontSize: 14 }}><strong>Medical device status:</strong> {narrative.regulatory_position.device_class}</span>
+              {narrative.regulatory_position.hira_status && (
+                <span style={{ fontSize: 14 }}><strong>HIRA:</strong> {narrative.regulatory_position.hira_status}</span>
+              )}
             </div>
             {narrative.regulatory_position.assurance_speed_note && (
               <p style={{ margin: '8px 0 0', fontSize: 14, color: '#4c6272' }}>{narrative.regulatory_position.assurance_speed_note}</p>
