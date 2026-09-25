@@ -15,6 +15,7 @@ import PdpFundingLevers from '@/components/product/PdpFundingLevers'
 import { getServerContext } from '@/lib/context/serverContext'
 import { PdpCommissioningSnapshot } from '@/components/PdpCommissioningSnapshot'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import Image from 'next/image'
 import {
   DtacBadge, MaturityBadge, EffortBadge,
@@ -391,6 +392,12 @@ export default async function AppPage({
               </p>
             </div>
             <div className="mt-8 mb-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+              <Link
+                href={`/apps/${app.slug}/express-interest`}
+                className="nhsuk-button mb-0 inline-flex items-center justify-center gap-2 align-top max-sm:mb-2 max-sm:w-full px-6 py-4 hs-text-label hs-font-bold no-underline"
+              >
+                Get in touch
+              </Link>
               <CompareToggleButton
                 appId={app.id}
                 solid
