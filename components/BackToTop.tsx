@@ -43,8 +43,23 @@ export default function BackToTop() {
       aria-label="Back to top"
       className="fixed bottom-6 right-6 z-50 max-sm:hidden gap-2 px-4 py-2 hs-text-label shadow-md"
     >
-      <span aria-hidden>↑</span>
       Back to top
+      <svg
+        aria-hidden
+        focusable="false"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={3}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="shrink-0"
+      >
+        <path d="M12 20V4" />
+        <path d="M5 11l7-7 7 7" />
+      </svg>
     </Button>
   )
 }
