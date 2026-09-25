@@ -1,6 +1,6 @@
 import { ConditionTag } from '@/components/Badges'
 import type { App } from '@/lib/data'
-import { isVisibleCondition } from '@/lib/visibleConditions'
+import { isFundingCondition } from '@/lib/visibleConditions'
 
 /** Shape of rows in `content/funding/funding.json` used by the funding directory. */
 export type FundingDirectoryRecord = {
@@ -70,7 +70,7 @@ export function FundingDirectoryCard({ f }: { f: FundingDirectoryRecord; apps?: 
 
         <div className="mb-4 flex flex-wrap gap-1">
           {f.condition_tags
-            .filter(isVisibleCondition)
+            .filter(isFundingCondition)
             .map(t => (
               <ConditionTag key={t} tag={t} />
             ))}
